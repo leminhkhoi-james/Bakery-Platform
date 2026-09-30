@@ -1,0 +1,463 @@
+@import "tailwindcss";
+
+@theme {
+  --color-wine: #9f1e31;
+  --color-wine-dark: #741329;
+
+  /* Logo Matched Palette: Deep Chocolate Brown #2C120A, Soft Dusty Rose Pink #BA5D67, Ivory Cream #FCF9F6 */
+  --color-primary: #2C120A;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1E0B05;
+  --color-on-primary-container: #F8ECE8;
+  --color-primary-fixed: #F7EBE6;
+  --color-primary-fixed-dim: #E7C6BB;
+  --color-on-primary-fixed: #1E0B05;
+  --color-on-primary-fixed-variant: #4A261B;
+
+  --color-secondary: #BA5D67;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #F6E2E5;
+  --color-on-secondary-container: #4D121B;
+  --color-secondary-fixed: #F7D6DA;
+  --color-secondary-fixed-dim: #EAA9B2;
+  --color-on-secondary-fixed: #3B0E14;
+  --color-on-secondary-fixed-variant: #7A323B;
+
+  --color-tertiary: #A94B56;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #F8E5E8;
+  --color-on-tertiary-container: #4A121A;
+  --color-tertiary-fixed: #F9E1E4;
+  --color-tertiary-fixed-dim: #E5B7BD;
+  --color-on-tertiary-fixed: #380C11;
+  --color-on-tertiary-fixed-variant: #6A2830;
+
+  --color-background: #FCF9F6;
+  --color-on-background: #1E0C06;
+
+  --color-surface: #FCF9F6;
+  --color-on-surface: #1E0C06;
+  --color-surface-dim: #F0E6DD;
+  --color-surface-bright: #FCF9F6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #F8F2EB;
+  --color-surface-container: #F3E9E0;
+  --color-surface-container-high: #EDE0D5;
+  --color-surface-container-highest: #E5D5C8;
+  --color-surface-variant: #EBE0D5;
+  --color-on-surface-variant: #3A231A;
+  --color-inverse-surface: #1E0C06;
+  --color-inverse-on-surface: #F8F2EB;
+  --color-inverse-primary: #E8C8BE;
+
+  --color-outline: #6E4D41;
+  --color-outline-variant: #C2ACA3;
+  --color-surface-tint: #BA5D67;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-margin: 3rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+
+  --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-headline: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-body: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-label: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+}
+
+@layer base {
+
+  *,
+  ::before,
+  ::after {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+}
+
+@layer utilities {
+
+  /* Typography Utilities from Stitch */
+  .font-display-lg,
+  .font-headline-lg,
+  .font-headline-md,
+  .font-headline-sm,
+  .font-display-lg-mobile,
+  .font-headline-lg-mobile {
+    font-family: var(--font-headline);
+    font-weight: 700;
+  }
+
+  .font-body-lg,
+  .font-body-md,
+  .font-body-sm,
+  .font-label-lg,
+  .font-label-md,
+  .font-label-sm {
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  .text-display-lg {
+    font-size: 64px;
+    line-height: 76px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-lg-mobile {
+    font-size: 42px;
+    line-height: 52px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-headline-lg {
+    font-size: 46px;
+    line-height: 56px;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+
+  .text-headline-lg-mobile {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 700;
+  }
+
+  .text-headline-md {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 700;
+  }
+
+  .text-headline-sm {
+    font-size: 25px;
+    line-height: 32px;
+    font-weight: 700;
+  }
+
+  .text-body-lg {
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .text-body-md {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 600;
+  }
+
+  .text-body-sm {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 600;
+  }
+
+  .text-label-lg {
+    font-size: 17px;
+    line-height: 22px;
+    letter-spacing: 0.02em;
+    font-weight: 700;
+  }
+
+  .text-label-md {
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+    font-weight: 700;
+  }
+
+  .text-label-sm {
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+}
+
+/* Material Symbols configuration */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Savouré Bakery Signature Typography Utilities */
+.font-savoure {
+  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+  letter-spacing: normal !important;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+/* CakeMatch Theme System */
+:root {
+  --wine: #9f1e31;
+  --wine-dark: #741329;
+  --pink: #ffc6db;
+  --pink-light: #ffe2e9;
+  --cream: #fff4e9;
+  --paper: #fffaf3;
+  --teal: #6fb9c6;
+  --teal-soft: #d7e9e7;
+  --butter: #ffe4a6;
+  --ink: #52202b;
+  --border: 2px solid var(--wine);
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.bg-paper {
+  background-color: var(--paper);
+}
+
+.bg-pink-light {
+  background-color: var(--pink-light);
+}
+
+.bg-teal-soft {
+  background-color: var(--teal-soft);
+}
+
+.text-wine {
+  color: var(--wine);
+}
+
+.text-wine-dark {
+  color: var(--wine-dark);
+}
+
+.border-wine {
+  border-color: var(--wine);
+}
+
+.check-band {
+  border-top: 7px solid var(--wine);
+  border-bottom: 7px solid var(--wine);
+  height: 48px;
+  background: repeating-conic-gradient(var(--wine) 0 25%, #fff6eb 0 50%) 0 0 / 32px 32px;
+}
+
+.scallop-edge-bottom {
+  position: relative;
+}
+
+.scallop-edge-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 13px;
+  background: radial-gradient(circle at 12px 0, var(--paper) 11px, transparent 12px) 0 0 / 24px 13px repeat-x;
+  filter: drop-shadow(0 2px 0 var(--wine));
+  pointer-events: none;
+  z-index: 20;
+}
+
+.scallop-edge-top {
+  position: relative;
+}
+
+.scallop-edge-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  height: 13px;
+  background: radial-gradient(circle at 12px 13px, var(--paper) 11px, transparent 12px) 0 0 / 24px 13px repeat-x;
+  filter: drop-shadow(0 -2px 0 var(--wine-dark));
+  pointer-events: none;
+  z-index: 20;
+}
+
+.cakematch-btn {
+  min-height: 48px;
+  border: 2px solid var(--wine);
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fffaf2;
+  padding: 11px 23px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  box-shadow: 3px 4px 0 #6d1b2c;
+  transition: transform .18s, box-shadow .18s, background .18s;
+  cursor: pointer;
+}
+
+.cakematch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 6px 0 #6d1b2c;
+  background: #b8273b;
+}
+
+.cakematch-btn-secondary {
+  min-height: 48px;
+  border: 2px solid var(--wine);
+  border-radius: 999px;
+  color: var(--wine);
+  background: var(--paper);
+  padding: 11px 23px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  box-shadow: 3px 4px 0 #e5aabc;
+  transition: transform .18s, box-shadow .18s, background .18s;
+  cursor: pointer;
+}
+
+.cakematch-btn-secondary:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.dotted-frame-badge {
+  display: inline-block;
+  background: var(--paper);
+  border: 2px solid var(--wine);
+  outline: 3px dotted var(--pink);
+  outline-offset: 5px;
+  border-radius: 50px;
+  padding: 8px 25px;
+  margin-bottom: 13px;
+  color: var(--wine);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dome-cake-card {
+  background: var(--paper);
+  border: 2px solid var(--wine);
+  border-radius: 165px 165px 18px 18px;
+  overflow: hidden;
+  box-shadow: 6px 7px 0 #efb5c5;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.dome-cake-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 12px 0 #efb5c5;
+}
+
+.retro-shop-ticket {
+  border: 3px solid var(--wine);
+  border-radius: 18px;
+  background: var(--paper);
+  padding: 36px 35px;
+  box-shadow: 9px 9px 0 #f2a9c0;
+  transform: rotate(2deg);
+}
+
+.striped-hero-bg {
+  background: repeating-linear-gradient(90deg, #d8eae7 0, #d8eae7 62px, #fff6ec 62px, #fff6ec 124px);
+}
+
+.striped-idea-bg {
+  background: repeating-linear-gradient(90deg, #d8e9e6 0, #d8e9e6 76px, #fff5eb 76px, #fff5eb 152px);
+}
+
+/* Kawaii Cloud & Booth Decor Patterns */
+.pattern-dots-mint {
+  background-color: #6fb9c6;
+  background-image: radial-gradient(#ffffff 22%, transparent 22%);
+  background-size: 14px 14px;
+}
+
+.pattern-dots-pink {
+  background-color: #ffbad1;
+  background-image: radial-gradient(#ffffff 20%, transparent 20%);
+  background-size: 14px 14px;
+}
+
+.pattern-stripes-pink {
+  background: repeating-linear-gradient(-45deg,
+      #ffc6db,
+      #ffc6db 10px,
+      #fff0f3 10px,
+      #fff0f3 20px);
+}
+
+.pattern-gingham-red {
+  background-color: #fff4e9;
+  background-image:
+    linear-gradient(45deg, rgba(159, 30, 49, 0.35) 25%, transparent 25%, transparent 75%, rgba(159, 30, 49, 0.35) 75%),
+    linear-gradient(45deg, rgba(159, 30, 49, 0.35) 25%, transparent 25%, transparent 75%, rgba(159, 30, 49, 0.35) 75%);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.sunburst-bg {
+  background: #fff7ea;
+  background-image: repeating-conic-gradient(from 0deg at 50% 248px,
+      #fff7ea 0deg 12deg,
+      #fce7d2 12deg 24deg);
+}
+
+/* Full-Page Section Snap Scroll (Strictly scoped ONLY to Home Page) */
+html.snap-scroll-active,
+html:has(.home-page-wrapper) {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+html.snap-scroll-active .snap-section,
+html:has(.home-page-wrapper) .snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scroll-margin-top: 5.5rem;
+  min-height: calc(100vh - 5.5rem);
+  box-sizing: border-box;
+}
+
+/* Footer sits naturally at bottom of page with natural content height */
+html.snap-scroll-active footer,
+html:has(.home-page-wrapper) footer {
+  scroll-snap-align: start;
+  scroll-margin-top: 5.5rem;
+  min-height: auto !important;
+}

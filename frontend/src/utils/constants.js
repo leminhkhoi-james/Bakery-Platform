@@ -1,0 +1,22 @@
+/**
+ * SweetCake Shared Constants
+ */
+
+export const ORDER_STATUS = {
+    NEW: 'NEW',
+    CONFIRMED: 'CONFIRMED',
+    PROCESSING: 'PROCESSING',
+    BAKING: 'BAKING',
+    READY: 'READY',
+    DELIVERING: 'DELIVERING',
+    COMPLETED: 'COMPLETED',
+    CANCELLED: 'CANCELLED',
+}
+
+export const RFQ_STATUS = {
+    OPEN: 'OPEN',
+    QUOTED: 'QUOTED',
+    ACCEPTED: 'ACCEPTED',
+    REJECTED: 'REJECTED',
+    CANCELLED: 'CANCELLED',
+}
