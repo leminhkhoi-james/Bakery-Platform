@@ -1,0 +1,111 @@
+erDiagram
+    CAKE_REQUESTS {
+        uuid id PK
+        uuid customer_id "External Identity reference"
+        uuid target_bakery_id "Optional external Bakery reference"
+        uuid base_product_id "Optional external Bakery reference"
+        uuid selected_design_id "External Cake AI reference"
+        varchar request_type
+        varchar title
+        text description
+        varchar occasion
+        int serving_size
+        decimal budget_min
+        decimal budget_max
+        timestamptz needed_at
+        varchar delivery_district
+        varchar delivery_city
+        varchar status
+        timestamptz offer_deadline
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    REQUEST_IMAGES {
+        uuid id PK
+        uuid cake_request_id FK
+        varchar object_key
+        varchar media_type
+        int display_order
+        timestamptz created_at
+    }
+
+    CAKE_PREFERENCES {
+        uuid cake_request_id PK, FK
+        varchar cake_size
+        varchar cake_shape
+        varchar flavor
+        varchar filling
+        varchar frosting
+        varchar color_palette
+        text decoration_notes
+        text allergy_notes
+        jsonb extra_options
+    }
+
+    REQUEST_OPTION_SELECTIONS {
+        uuid id PK
+        uuid cake_request_id FK
+        uuid option_group_id "External Bakery reference"
+        uuid option_value_id "External Bakery reference"
+        varchar group_name_snapshot
+        varchar value_name_snapshot
+        int quantity
+    }
+
+    REQUEST_STATUS_HISTORY {
+        uuid id PK
+        uuid cake_request_id FK
+        varchar from_status
+        varchar to_status
+        uuid changed_by "External Identity reference"
+        text reason
+        timestamptz changed_at
+    }
+
+    OFFERS {
+        uuid id PK
+        uuid cake_request_id FK
+        uuid bakery_id "External Bakery reference"
+        text message
+        decimal cake_price
+        decimal delivery_fee
+        decimal add_on_total
+        decimal total_price
+        timestamptz estimated_completion_at
+        timestamptz expires_at
+        varchar status
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    OFFER_ITEMS {
+        uuid id PK
+        uuid offer_id FK
+        uuid add_on_id "Optional external Bakery reference"
+        varchar item_name_snapshot
+        text description_snapshot
+        int quantity
+        decimal unit_price
+        decimal line_total
+    }
+
+    OFFER_STATUS_HISTORY {
+        uuid id PK
+        uuid offer_id FK
+        varchar from_status
+        varchar to_status
+        uuid changed_by "External Identity reference"
+        text reason
+        timestamptz changed_at
+    }
+
+    CAKE_REQUESTS ||--o{ REQUEST_IMAGES : includes
+    CAKE_REQUESTS ||--o| CAKE_PREFERENCES : specifies
+    CAKE_REQUESTS ||--o{ REQUEST_OPTION_SELECTIONS : selects
+    CAKE_REQUESTS ||--o{ REQUEST_STATUS_HISTORY : tracks
+    CAKE_REQUESTS ||--o{ OFFERS : receives
+    OFFERS ||--o{ OFFER_ITEMS : contains
+    OFFERS ||--o{ OFFER_STATUS_HISTORY : tracks

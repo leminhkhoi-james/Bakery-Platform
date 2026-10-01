@@ -1,0 +1,75 @@
+erDiagram
+    SUBSCRIPTION_PLANS {
+        uuid id PK
+        varchar code UK
+        varchar name
+        text description
+        decimal monthly_price
+        varchar currency
+        int billing_period_months
+        varchar status
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    PLAN_FEATURES {
+        uuid plan_id PK, FK
+        varchar feature_code PK
+        varchar feature_value
+    }
+
+    SUBSCRIPTION_ORDERS {
+        uuid id PK
+        varchar order_number UK
+        uuid bakery_id "External Bakery reference"
+        uuid plan_id FK
+        uuid requested_by_user_id "External Identity reference"
+        varchar plan_name_snapshot
+        int billing_period_months
+        decimal total_amount
+        varchar currency
+        varchar status
+        timestamptz expires_at
+        timestamptz completed_at
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    BAKERY_PAYMENTS {
+        uuid id PK
+        uuid subscription_order_id FK
+        uuid submitted_by_user_id "External Identity reference"
+        varchar payment_method
+        varchar payment_reference UK
+        varchar proof_object_key
+        decimal amount
+        varchar currency
+        varchar status
+        uuid reviewed_by_admin_id "External Identity reference"
+        text review_note
+        timestamptz submitted_at
+        timestamptz reviewed_at
+    }
+
+    BAKERY_SUBSCRIPTIONS {
+        uuid id PK
+        uuid bakery_id "External Bakery reference"
+        uuid plan_id FK
+        uuid source_order_id UK, FK
+        varchar status
+        timestamptz period_start
+        timestamptz period_end
+        timestamptz activated_at
+        timestamptz cancelled_at
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    SUBSCRIPTION_PLANS ||--o{ PLAN_FEATURES : includes
+    SUBSCRIPTION_PLANS ||--o{ SUBSCRIPTION_ORDERS : selected_in
+    SUBSCRIPTION_ORDERS ||--o{ BAKERY_PAYMENTS : records
+    SUBSCRIPTION_ORDERS ||--o| BAKERY_SUBSCRIPTIONS : activates
+    SUBSCRIPTION_PLANS ||--o{ BAKERY_SUBSCRIPTIONS : grants

@@ -1,0 +1,141 @@
+erDiagram
+    BAKERIES {
+        uuid id PK
+        varchar name
+        text description
+        varchar phone_number
+        varchar email
+        varchar logo_object_key
+        varchar cover_object_key
+        varchar status
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    BAKERY_MEMBERS {
+        uuid id PK
+        uuid bakery_id FK
+        uuid user_id "External Identity reference"
+        varchar member_role
+        varchar status
+        timestamptz joined_at
+    }
+
+    BAKERY_ADDRESSES {
+        uuid id PK
+        uuid bakery_id FK
+        varchar address_line
+        varchar ward
+        varchar district
+        varchar city
+        decimal latitude
+        decimal longitude
+        boolean is_primary
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    SERVICE_AREAS {
+        uuid id PK
+        uuid bakery_id FK
+        varchar city
+        varchar district
+        decimal delivery_fee
+        decimal minimum_order
+        boolean active
+    }
+
+    BUSINESS_HOURS {
+        uuid id PK
+        uuid bakery_id FK
+        smallint day_of_week
+        time opens_at
+        time closes_at
+        boolean closed
+    }
+
+    ADD_ONS {
+        uuid id PK
+        uuid bakery_id FK
+        varchar name
+        text description
+        varchar category
+        decimal price
+        varchar image_object_key
+        boolean active
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    PRODUCT_CATEGORIES {
+        uuid id PK
+        uuid bakery_id FK
+        varchar name
+        varchar slug
+        int display_order
+        boolean active
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    PRODUCTS {
+        uuid id PK
+        uuid bakery_id FK
+        uuid category_id FK
+        varchar name
+        varchar slug
+        text description
+        decimal base_price
+        varchar status
+        boolean customizable
+        int default_serving_size
+        int minimum_notice_hours
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    PRODUCT_IMAGES {
+        uuid id PK
+        uuid product_id FK
+        varchar object_key
+        varchar media_type
+        int display_order
+        boolean is_primary
+        timestamptz created_at
+    }
+
+    PRODUCT_OPTION_GROUPS {
+        uuid id PK
+        uuid product_id FK
+        varchar name
+        varchar selection_type
+        boolean required
+        int minimum_selections
+        int maximum_selections
+        int display_order
+    }
+
+    PRODUCT_OPTION_VALUES {
+        uuid id PK
+        uuid option_group_id FK
+        varchar name
+        text description
+        decimal price_adjustment
+        boolean active
+        int display_order
+    }
+
+    BAKERIES ||--o{ BAKERY_MEMBERS : has
+    BAKERIES ||--o{ BAKERY_ADDRESSES : operates_at
+    BAKERIES ||--o{ SERVICE_AREAS : delivers_to
+    BAKERIES ||--o{ BUSINESS_HOURS : opens_during
+    BAKERIES ||--o{ ADD_ONS : provides
+    BAKERIES ||--o{ PRODUCT_CATEGORIES : organizes
+    BAKERIES ||--o{ PRODUCTS : publishes
+    PRODUCT_CATEGORIES o|--o{ PRODUCTS : classifies
+    PRODUCTS ||--o{ PRODUCT_IMAGES : displays
+    PRODUCTS ||--o{ PRODUCT_OPTION_GROUPS : configures
+    PRODUCT_OPTION_GROUPS ||--|{ PRODUCT_OPTION_VALUES : offers

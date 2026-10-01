@@ -1,0 +1,59 @@
+erDiagram
+    CONVERSATIONS {
+        uuid id PK
+        uuid cake_request_id "External Marketplace reference"
+        uuid order_id "Optional external Order reference"
+        uuid customer_id "External Identity reference"
+        uuid bakery_id "External Bakery reference"
+        varchar status
+        timestamptz last_message_at
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    CONVERSATION_PARTICIPANTS {
+        uuid id PK
+        uuid conversation_id FK
+        uuid user_id "External Identity reference"
+        varchar participant_type
+        timestamptz joined_at
+        timestamptz left_at
+        timestamptz last_read_at
+    }
+
+    MESSAGES {
+        uuid id PK
+        uuid conversation_id FK
+        uuid sender_participant_id FK
+        uuid client_message_id UK
+        varchar message_type
+        text content
+        timestamptz edited_at
+        timestamptz deleted_at
+        timestamptz created_at
+    }
+
+    MESSAGE_ATTACHMENTS {
+        uuid id PK
+        uuid message_id FK
+        varchar object_key
+        varchar original_file_name
+        varchar media_type
+        bigint file_size
+        int display_order
+    }
+
+    MESSAGE_RECEIPTS {
+        uuid message_id PK, FK
+        uuid participant_id PK, FK
+        timestamptz delivered_at
+        timestamptz read_at
+    }
+
+    CONVERSATIONS ||--|{ CONVERSATION_PARTICIPANTS : includes
+    CONVERSATIONS ||--o{ MESSAGES : contains
+    CONVERSATION_PARTICIPANTS ||--o{ MESSAGES : sends
+    MESSAGES ||--o{ MESSAGE_ATTACHMENTS : attaches
+    MESSAGES ||--o{ MESSAGE_RECEIPTS : has
+    CONVERSATION_PARTICIPANTS ||--o{ MESSAGE_RECEIPTS : receives
