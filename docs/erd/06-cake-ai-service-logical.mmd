@@ -1,0 +1,51 @@
+erDiagram
+    GENERATION_JOBS {
+        uuid id PK
+        uuid customer_id "External Identity reference"
+        uuid cake_request_id "External Marketplace reference"
+        varchar status
+        varchar model_name
+        jsonb generation_parameters
+        text error_message
+        timestamptz started_at
+        timestamptz completed_at
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    SOURCE_IMAGES {
+        uuid id PK
+        uuid generation_job_id FK
+        varchar object_key
+        varchar media_type
+        int display_order
+        timestamptz created_at
+    }
+
+    PROMPT_REVISIONS {
+        uuid id PK
+        uuid generation_job_id FK
+        int revision_number
+        text prompt_text
+        text negative_prompt
+        uuid created_by "External Identity reference"
+        timestamptz created_at
+    }
+
+    GENERATED_DESIGNS {
+        uuid id PK
+        uuid generation_job_id FK
+        uuid prompt_revision_id FK
+        varchar image_object_key
+        varchar thumbnail_object_key
+        bigint random_seed
+        jsonb model_metadata
+        varchar moderation_status
+        timestamptz created_at
+    }
+
+    GENERATION_JOBS ||--o{ SOURCE_IMAGES : uses
+    GENERATION_JOBS ||--|{ PROMPT_REVISIONS : contains
+    GENERATION_JOBS ||--o{ GENERATED_DESIGNS : produces
+    PROMPT_REVISIONS ||--o{ GENERATED_DESIGNS : generates

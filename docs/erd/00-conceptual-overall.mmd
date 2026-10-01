@@ -1,0 +1,41 @@
+erDiagram
+    USER ||--o{ BAKERY_MEMBERSHIP : has
+    BAKERY ||--|{ BAKERY_MEMBERSHIP : has
+
+    BAKERY ||--o{ PRODUCT : publishes
+    PRODUCT ||--o{ PRODUCT_OPTION : offers
+    BAKERY ||--o{ ADD_ON : provides
+
+    USER ||--o{ CAKE_REQUEST : creates
+    CAKE_REQUEST ||--o{ REQUEST_IMAGE : includes
+    CAKE_REQUEST ||--o{ CAKE_DESIGN : generates
+    PRODUCT o|--o{ CAKE_REQUEST : may_be_base_for
+
+    BAKERY ||--o{ OFFER : submits
+    CAKE_REQUEST ||--o{ OFFER : receives
+    OFFER ||--o{ OFFER_ITEM : contains
+    ADD_ON o|--o{ OFFER_ITEM : may_reference
+
+    OFFER ||--o| CUSTOMER_ORDER : becomes
+    USER ||--o{ CUSTOMER_ORDER : places
+    BAKERY ||--o{ CUSTOMER_ORDER : fulfills
+    CUSTOMER_ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT o|--o{ ORDER_ITEM : may_source
+
+    CAKE_REQUEST ||--o{ CONVERSATION : discusses
+    CUSTOMER_ORDER o|--o{ CONVERSATION : may_continue_in
+    USER ||--o{ CONVERSATION : starts
+    BAKERY ||--o{ CONVERSATION : participates_in
+    CONVERSATION ||--o{ MESSAGE : contains
+    USER ||--o{ MESSAGE : sends
+
+    CUSTOMER_ORDER ||--o| ORDER_REVIEW : may_receive
+    USER ||--o{ ORDER_REVIEW : writes
+
+    CAKE_REQUEST o|--o| CAKE_DESIGN : selects
+
+    SUBSCRIPTION_PLAN ||--o{ SUBSCRIPTION_ORDER : selected_in
+    BAKERY ||--o{ SUBSCRIPTION_ORDER : places
+    SUBSCRIPTION_ORDER ||--o{ BAKERY_PAYMENT : receives
+    SUBSCRIPTION_ORDER ||--o| BAKERY_SUBSCRIPTION : activates
+    BAKERY ||--o{ BAKERY_SUBSCRIPTION : has

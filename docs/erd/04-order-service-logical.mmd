@@ -1,0 +1,77 @@
+erDiagram
+    CUSTOMER_ORDERS {
+        uuid id PK
+        varchar order_number UK
+        uuid customer_id "External Identity reference"
+        uuid bakery_id "External Bakery reference"
+        uuid cake_request_id "Optional external Marketplace reference"
+        uuid offer_id UK "Optional external Marketplace reference"
+        varchar order_source
+        varchar customer_name_snapshot
+        varchar customer_phone_snapshot
+        varchar bakery_name_snapshot
+        decimal subtotal
+        decimal delivery_fee
+        decimal total_amount
+        varchar currency
+        varchar status
+        timestamptz needed_at
+        timestamptz accepted_at
+        timestamptz completed_at
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    ORDER_ITEMS {
+        uuid id PK
+        uuid order_id FK
+        uuid source_product_id "Optional external Bakery reference"
+        uuid source_offer_item_id "Optional external Marketplace reference"
+        varchar item_type
+        varchar name_snapshot
+        text description_snapshot
+        jsonb configuration_snapshot
+        int quantity
+        decimal unit_price
+        decimal line_total
+    }
+
+    DELIVERY_ADDRESS_SNAPSHOTS {
+        uuid order_id PK, FK
+        varchar recipient_name
+        varchar recipient_phone
+        varchar address_line
+        varchar ward
+        varchar district
+        varchar city
+        decimal latitude
+        decimal longitude
+        text delivery_note
+    }
+
+    ORDER_STATUS_HISTORY {
+        uuid id PK
+        uuid order_id FK
+        varchar from_status
+        varchar to_status
+        uuid changed_by "External Identity reference"
+        text note
+        timestamptz changed_at
+    }
+
+    ORDER_REVIEWS {
+        uuid order_id PK, FK
+        uuid customer_id "External Identity reference"
+        smallint rating
+        text comment
+        varchar status
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+
+    CUSTOMER_ORDERS ||--|{ ORDER_ITEMS : contains
+    CUSTOMER_ORDERS ||--|| DELIVERY_ADDRESS_SNAPSHOTS : ships_to
+    CUSTOMER_ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
+    CUSTOMER_ORDERS ||--o| ORDER_REVIEWS : may_receive
