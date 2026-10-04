@@ -61,7 +61,16 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
     }
   }
 
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('explore_initial_category')
+      if (saved) {
+        localStorage.removeItem('explore_initial_category')
+        return saved
+      }
+    } catch (e) {}
+    return 'all'
+  })
 
   const filteredCakes = INITIAL_CAKES.filter((cake) => {
     const matchesSearch =
@@ -821,11 +830,12 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
                   return (
                     <article
                       key={cake.id}
-                      className="group bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                      className="group bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-[#f0e6e8]"
                     >
                       <div>
+                        {/* Image */}
                         <div
-                          className="relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-surface-container mb-3 cursor-pointer"
+                          className="relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-[#faf8f8] mb-4 cursor-pointer"
                           onClick={() => onNavigate && onNavigate('product-detail', cakeToOrder)}
                         >
                           <img
@@ -833,41 +843,29 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             src={cake.image}
                           />
-                          {/* Badges */}
-                          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 items-start">
-                            {cake.badges && cake.badges.map((badge, idx) => (
-                              <span
-                                key={badge}
-                                className={`font-label-sm text-[10px] px-2.5 py-0.5 rounded-full font-bold shadow-sm ${idx === 0
-                                    ? 'bg-secondary text-on-secondary text-[11px]'
-                                    : 'bg-surface/90 backdrop-blur-md text-primary font-semibold'
-                                  }`}
-                              >
-                                {badge}
+                          {/* Single Clean Badge */}
+                          {cake.badges && cake.badges.length > 0 && (
+                            <div className="absolute top-3 left-3">
+                              <span className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-[11px] font-bold text-[#9f1e31] shadow-sm flex items-center gap-1 border border-[#9f1e31]/10">
+                                <span className="material-symbols-outlined text-[14px]">
+                                  {cake.badges[0].toLowerCase().includes('bán chạy') || cake.badges[0].toLowerCase().includes('hot') ? 'local_fire_department' : 'stars'}
+                                </span>
+                                {cake.badges[0]}
                               </span>
-                            ))}
-                          </div>
-
-                          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-                            <span className="bg-primary/80 backdrop-blur-md text-on-primary text-[11px] font-label-sm px-2 py-0.5 rounded-md">
-                              {currentSize ? currentSize.size : cake.sizeSpec}
-                            </span>
-                          </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Vendor Info */}
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className="w-4 h-4 rounded-full bg-secondary/20 flex items-center justify-center text-[9px] font-bold text-secondary">
-                            {cake.vendorInitial || 'SC'}
-                          </span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                        <div className="mb-1">
+                          <span className="font-body-sm text-xs text-[#8c7b7d]">
                             {cake.vendor}
                           </span>
                         </div>
 
                         {/* Cake Title */}
                         <h3
-                          className="font-headline-sm text-[18px] leading-snug text-primary font-semibold group-hover:text-secondary transition-colors line-clamp-2 cursor-pointer"
+                          className="font-headline-sm text-[18px] leading-snug text-[#9f1e31] font-bold group-hover:text-[#b8273b] transition-colors line-clamp-2 cursor-pointer mb-3"
                           onClick={() => onNavigate && onNavigate('product-detail', cakeToOrder)}
                         >
                           {cake.title}
@@ -875,21 +873,9 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
 
                         {/* Size Selector */}
                         {cake.sizes && cake.sizes.length > 0 && (
-                          <div className="mt-2.5 pt-2 border-t border-dashed border-outline-variant/30">
-                            <div className="flex items-center justify-between gap-1 mb-1.5">
-                              <span className="text-[11px] font-label-md text-on-surface-variant font-medium flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-secondary">
-                                  straighten
-                                </span>
-                                Chọn size:
-                              </span>
-                              {currentSize?.guests && (
-                                <span className="text-[10px] text-secondary font-medium">
-                                  {currentSize.guests}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex flex-wrap gap-1.5">
+                          <div className="mb-4">
+                            <div className="text-[11px] text-[#8c7b7d] mb-2">Kích thước</div>
+                            <div className="flex flex-wrap gap-2">
                               {cake.sizes.map((s) => {
                                 const isSelected = currentSize?.size === s.size
                                 return (
@@ -903,51 +889,39 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
                                         [cake.id]: s.size,
                                       }))
                                     }}
-                                    className={`px-2 py-0.5 text-[11px] rounded-lg font-medium transition-all cursor-pointer ${isSelected
-                                        ? 'bg-secondary text-on-secondary font-bold shadow-xs'
-                                        : 'bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary'
-                                      }`}
+                                    className={`px-3 py-1.5 text-[12px] rounded-lg font-semibold transition-all cursor-pointer border ${
+                                      isSelected
+                                        ? 'border-[#9f1e31] bg-[#9f1e31]/5 text-[#9f1e31]'
+                                        : 'border-[#e6d8da] bg-transparent text-[#705a5d] hover:border-[#9f1e31]/50'
+                                    }`}
                                   >
-                                    {s.size}
+                                    {s.size.replace('Size ', '')}
                                   </button>
                                 )
                               })}
                             </div>
+                            {currentSize?.guests && (
+                              <div className="mt-2 text-[11px] text-[#a9999a]">
+                                Phù hợp {currentSize.guests.replace(' người', '')} người
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
 
                       {/* Price & Actions */}
-                      <div className="pt-3 mt-2 border-t-0 flex items-center justify-between gap-2">
-                        <div className="flex flex-col">
-                          <span className="font-headline-sm text-headline-sm text-secondary font-bold">
-                            {currentPrice.toLocaleString('vi-VN')}đ
-                          </span>
-                        </div>
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        <span className="font-headline-sm text-xl text-[#9f1e31] font-extrabold">
+                          {currentPrice.toLocaleString('vi-VN')} đ
+                        </span>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => onAddToCart && onAddToCart(cakeToOrder)}
-                            className="p-2 rounded-full bg-surface-container hover:bg-surface-container-high text-primary hover:text-secondary transition-colors cursor-pointer"
-                            title="Thêm vào giỏ hàng"
-                          >
-                            <span className="material-symbols-outlined text-lg">
-                              add_shopping_cart
-                            </span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleQuickBiddingOrder(cakeToOrder)}
-                            className="px-3.5 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary transition-all shadow-sm cursor-pointer flex items-center gap-1"
-                            title="Đặt nhanh để chuyển thẳng sang sàn đấu giá nhận báo giá từ các tiệm bánh"
-                          >
-                            <span className="material-symbols-outlined text-[15px]">
-                              bolt
-                            </span>
-                            <span>Đặt nhanh</span>
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickBiddingOrder(cakeToOrder)}
+                          className="px-5 py-2 rounded-lg bg-[#9f1e31] text-white font-bold text-[13px] hover:bg-[#851829] transition-all shadow-sm cursor-pointer"
+                        >
+                          Đặt bánh
+                        </button>
                       </div>
                     </article>
                   )

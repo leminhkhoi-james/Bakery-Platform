@@ -107,7 +107,7 @@ export const BestSellersSection = ({ onAddToCart, onNavigate }) => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       src={cake.image}
                     />
-                    <span className="absolute top-3 left-3 bg-[#9f1e31] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                    <span className="absolute top-8 left-1/2 -translate-x-1/2 bg-[#9f1e31] text-white text-[11px] font-bold px-4 py-1.5 rounded-full shadow-sm whitespace-nowrap z-10">
                       {cake.tag || 'Hot'}
                     </span>
                   </div>

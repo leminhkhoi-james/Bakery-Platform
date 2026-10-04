@@ -21,7 +21,7 @@ export const HomePage = ({ onAddToCart, onNavigate }) => {
         <HeroSection onNavigate={onNavigate} />
 
         {/* 2. CATEGORY SHOWCASE */}
-        <CategoryBentoSection />
+        <CategoryBentoSection onNavigate={onNavigate} />
 
         {/* 3. BEST SELLERS SECTION */}
         <BestSellersSection onAddToCart={onAddToCart} onNavigate={onNavigate} />

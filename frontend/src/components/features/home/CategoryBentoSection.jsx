@@ -1,7 +1,7 @@
 import { BENTO_CATEGORIES } from '../../../mockData/customer/cakes.js'
 import ScrollReveal from '../../common/ScrollReveal.jsx'
 
-export const CategoryBentoSection = () => {
+export const CategoryBentoSection = ({ onNavigate }) => {
   return (
     <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#fff7ed] bg-[radial-gradient(#f4c7c9_1.7px,transparent_1.7px)] bg-[size:24px_24px] border-b-2 border-wine" id="danh-muc-banh">
       <div className="max-w-[1220px] mx-auto px-6 text-center">
@@ -26,9 +26,6 @@ export const CategoryBentoSection = () => {
                     alt={cat.title}
                     src={cat.image}
                   />
-                  <span className="absolute top-4 left-4 bg-paper/90 border border-wine text-wine font-extrabold text-xs uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
-                    {cat.tag}
-                  </span>
                 </div>
 
                 <div className="p-6 flex-1 flex flex-col justify-between bg-paper">
@@ -42,8 +39,23 @@ export const CategoryBentoSection = () => {
                   </div>
 
                   <a
-                    className="inline-flex items-center gap-1 text-wine font-extrabold text-base hover:text-[#b8273b] transition-colors group/link"
-                    href="/explore"
+                    className="inline-flex items-center gap-1 text-wine font-extrabold text-base hover:text-[#b8273b] transition-colors group/link cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      let catMatch = 'all'
+                      if (cat.id === 'bento-1') catMatch = 'Bánh Kem Sinh Nhật'
+                      else if (cat.id === 'bento-2') catMatch = 'Bánh Cưới (Wedding)'
+                      else if (cat.id === 'bento-3') catMatch = 'Bánh Mousse'
+                      else if (cat.id === 'bento-4') catMatch = 'Bánh Trung Thu & Quà Tặng'
+                      else if (cat.id === 'bento-5') catMatch = 'Bánh Tạo Hình 3D'
+                      
+                      localStorage.setItem('explore_initial_category', catMatch)
+                      if (onNavigate) {
+                        onNavigate('explore')
+                      } else {
+                        window.location.href = '/explore'
+                      }
+                    }}
                   >
                     <span className="hover:underline">Khám phá danh mục này</span>
                     <span className="material-symbols-outlined text-base no-underline transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">arrow_outward</span>

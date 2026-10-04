@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 import { CUSTOMER_NAV_LINKS } from '../../mockData/shared/navigation.js'
 
@@ -9,6 +9,39 @@ export const Header = ({
 }) => {
   const [searchValue, setSearchValue] = useState('')
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [scrolledActiveTab, setScrolledActiveTab] = useState(activeTab)
+
+  useEffect(() => {
+    setScrolledActiveTab(activeTab)
+    if (activeTab !== 'home') return
+
+    const handleScroll = () => {
+      const sections = [
+        { id: 'cho-tiem-banh', tab: 'stores' },
+        { id: 'cach-hoat-dong', tab: 'ai-studio' },
+        { id: 'tao-banh-theo-y', tab: 'ai-studio' },
+        { id: 'mau-banh-ban-chay', tab: 'explore' },
+        { id: 'danh-muc-banh', tab: 'explore' }
+      ]
+
+      let currentTab = 'home'
+      for (const { id, tab } of sections) {
+        const el = document.getElementById(id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= window.innerHeight / 2.5) {
+            currentTab = tab
+            break
+          }
+        }
+      }
+      setScrolledActiveTab(currentTab)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [activeTab])
 
   const handleNav = (e, path) => {
     e.preventDefault()
@@ -53,8 +86,8 @@ export const Header = ({
         <nav className="hidden lg:flex items-center gap-2 font-savoure">
           {CUSTOMER_NAV_LINKS.map((link) => {
             const isTabActive =
-              activeTab === link.route ||
-              (link.activeAliases && link.activeAliases.includes(activeTab))
+              scrolledActiveTab === link.route ||
+              (link.activeAliases && link.activeAliases.includes(scrolledActiveTab))
 
             return (
               <a

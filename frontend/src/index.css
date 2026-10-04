@@ -83,11 +83,11 @@
   --spacing-gutter: 1.5rem;
   --spacing-gutter-mobile: 1rem;
 
-  --font-display: 'Playfair Display', serif;
-  --font-headline: 'Playfair Display', serif;
+  --font-display: 'Baloo 2', cursive, sans-serif;
+  --font-headline: 'Baloo 2', cursive, sans-serif;
   --font-body: 'Quicksand', sans-serif;
   --font-label: 'Quicksand', sans-serif;
-  --font-cormorant: 'Playfair Display', serif;
+  --font-cormorant: 'Baloo 2', cursive, sans-serif;
   --font-sans: 'Quicksand', sans-serif;
 }
 
@@ -232,7 +232,12 @@
 
 /* Savouré Bakery Signature Typography Utilities */
 .font-savoure {
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+  font-family: 'Baloo 2', cursive, sans-serif;
+  letter-spacing: normal !important;
+}
+
+.font-sweetcake {
+  font-family: 'Dancing Script', cursive;
   letter-spacing: normal !important;
 }
 

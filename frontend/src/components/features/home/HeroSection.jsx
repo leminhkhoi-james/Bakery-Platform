@@ -71,10 +71,7 @@ export const HeroSection = ({ onNavigate }) => {
               <div className="relative z-30 -mb-5 px-8 py-3 bg-[#fffaf3] border-4 border-wine rounded-3xl shadow-[0_4px_0_#741329] flex items-center justify-center">
                 <div className="absolute -inset-1.5 border border-dashed border-wine rounded-3xl pointer-events-none"></div>
                 <div className="text-center px-6">
-                  <span className="text-xs uppercase tracking-widest text-wine font-bold block">
-                    ♥ PETIT PÂTISSERIE ♥
-                  </span>
-                  <h2 className="font-savoure text-3xl md:text-5xl text-wine font-bold tracking-wide drop-shadow-xs">
+                  <h2 className="font-sweetcake text-3xl md:text-5xl text-wine font-bold tracking-wide drop-shadow-xs">
                     SweetCake
                   </h2>
                 </div>
@@ -187,11 +184,11 @@ export const HeroSection = ({ onNavigate }) => {
               </div>
 
               {/* Manga Speech Bubbles (Positioned right next to the cat inside the kiosk frame) */}
-              <div className="absolute right-3 sm:right-6 md:right-12 lg:right-18 top-1 sm:top-2 z-30 flex flex-col gap-2.5 max-w-[185px] sm:max-w-[220px] md:max-w-[250px] transform translate-x-1 sm:translate-x-2">
+              <div className="absolute right-0 sm:right-2 md:right-4 lg:right-8 top-1 sm:top-2 z-30 flex flex-col gap-2.5 max-w-[185px] sm:max-w-[220px] md:max-w-[250px] transform translate-x-4 sm:translate-x-6">
                 <div className="relative bg-white border-2 border-wine rounded-2xl p-2.5 sm:p-3 shadow-[3px_3px_0_#9f1e31]">
                   <p className="text-[11px] sm:text-xs md:text-sm font-bold leading-snug text-wine">
                     Chào mừng bạn đến với{' '}
-                    <span className="font-savoure text-sm sm:text-base md:text-lg block text-wine tracking-wide font-extrabold">
+                    <span className="font-sweetcake text-sm sm:text-base md:text-lg block text-wine tracking-wide font-extrabold">
                       SweetCake
                     </span>
                   </p>
@@ -261,37 +258,16 @@ export const HeroSection = ({ onNavigate }) => {
 
           </div>
 
-          {/* Floral Meadow Garland Footer */}
-          <div className="w-full mt-6 bg-[#A9CA69] border-t-4 border-b-2 border-wine py-4 px-4 sm:px-8 select-none shadow-sm">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-              {/* Left Flower Bouquet Cluster */}
-              <div className="flex items-center gap-3 text-2xl">
-                <div className="flex items-center gap-1.5 bg-[#FFF9E6] border-2 border-wine px-3.5 py-1 rounded-full text-xs font-bold text-wine shadow-[2px_2px_0_#9f1e31]">
-                  <span className="text-base">🌼</span>
-                  <span>Hoa Cúc Đồng Nội</span>
-                </div>
-                <span className="text-xl">🌸</span>
-                <span className="text-xl">🌻</span>
-                <span className="text-xl">🌷</span>
-              </div>
-
-              {/* Center Copyright Tag */}
-              <div className="text-center font-bold text-xs text-wine tracking-wide">
-                © 2026 SUGARY SPARKS • TIỆM BÁNH THỦ CÔNG KAWAII VINTAGE
-              </div>
-
-              {/* Right Flower Bouquet Cluster */}
-              <div className="flex items-center gap-3 text-2xl">
-                <span className="text-xl">🌷</span>
-                <span className="text-xl">🌻</span>
-                <span className="text-xl">🌸</span>
-                <div className="flex items-center gap-1.5 bg-[#FFF9E6] border-2 border-wine px-3.5 py-1 rounded-full text-xs font-bold text-wine shadow-[2px_2px_0_#9f1e31]">
-                  <span className="text-base">✨</span>
-                  <span>Ngọt Ngào Từng Khoảnh Khắc</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Classic Checkered Bakery Footer */}
+          <div 
+            className="w-full mt-6 h-8 border-t-[3px] border-b-[3px] border-[#9f1e31] shadow-sm"
+            style={{
+              backgroundColor: '#fffaf3',
+              backgroundImage: 'conic-gradient(#9f1e31 90deg, transparent 90deg 180deg, #9f1e31 180deg 270deg, transparent 270deg)',
+              backgroundSize: '24px 24px',
+              backgroundPosition: '0 0'
+            }}
+          ></div>
         </div>
       </section>
 
@@ -356,7 +332,7 @@ export const HeroSection = ({ onNavigate }) => {
                       onNavigate && onNavigate('bidding')
                     }}
                   >
-                    <span>Đăng yêu cầu đấu giá</span>
+                    <span>Nhận báo giá từ các tiệm</span>
                     <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_outward</span>
                   </a>
                 </div>
