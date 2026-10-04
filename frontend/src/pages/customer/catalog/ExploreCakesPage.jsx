@@ -216,24 +216,24 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
   }
 
   return (
-    <div className="w-full bg-surface min-h-[calc(100vh-20rem)]">
+    <div className="w-full striped-candy-bg min-h-[calc(100vh-20rem)]">
       <div className="flex flex-col w-full">
         {/* BREADCRUMB & PAGE INTRO SECTION */}
         <section className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-6 pb-4">
           {/* Page Title & Editorial Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md border-b-0 pb-2">
-            <div className="max-w-3xl">
-              <span className="font-label-md text-label-md uppercase tracking-widest text-secondary font-semibold">
+            <div className="max-w-4xl">
+              <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm mb-2 border border-outline-variant/30">
                 Bộ Sưu Tập Đa Tiệm Nghệ Nhân
               </span>
-              <h1 className="font-headline-lg text-headline-lg text-primary mt-1 tracking-tight">
-                Khám Phá &amp; Đặt Bánh Kem Nghệ Nhân
+              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary mt-1 tracking-tight drop-shadow-sm">
+                Khám Phá & Đặt Bánh Kem Nghệ Nhân
               </h1>
             </div>
           </div>
 
           {/* FILTER BAR & QUICK SORT CONTROLS & CATEGORIES */}
-          <div className="mt-6 bg-surface-container-low rounded-2xl p-space-md shadow-sm flex flex-col gap-space-md">
+          <div className="mt-6 bg-surface/60 backdrop-blur-md rounded-2xl p-space-md shadow-sm flex flex-col gap-space-md border border-outline-variant/20">
             <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
               {/* Search Bar */}
               <div className="relative flex-1 max-w-xl">

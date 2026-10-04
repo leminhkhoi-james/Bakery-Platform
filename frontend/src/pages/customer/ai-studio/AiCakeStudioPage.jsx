@@ -240,7 +240,7 @@ export const AiCakeStudioPage = ({
       : uploadedImages[0]?.url || AI_RENDER_IMAGES[0]
 
   return (
-    <div className="w-full bg-surface">
+    <div className="w-full striped-candy-bg">
       <div className="flex flex-col w-full">
         {/* Ambient Glows */}
         <div className="relative w-full overflow-hidden">
@@ -252,17 +252,17 @@ export const AiCakeStudioPage = ({
             <div className="flex flex-col gap-3 mb-8 md:mb-10">
               <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
                 <div className="max-w-3xl">
-                  <span className="font-label-md text-label-md uppercase tracking-widest text-secondary font-semibold block mb-1">
+                  <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm mb-2 border border-outline-variant/30">
                     SWEETAI STUDIO
                   </span>
-                  <h1 className="font-headline-lg text-[30px] sm:text-[36px] lg:text-[40px] text-primary font-bold tracking-tight leading-tight flex items-center gap-2.5">
+                  <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary font-bold tracking-tight leading-tight flex items-center gap-2.5 drop-shadow-sm">
                     <span>Thiết Kế Bánh</span>
-                    <span className="text-secondary text-[26px] sm:text-[32px] italic">✨</span>
+                    <span className="text-secondary text-3xl sm:text-4xl lg:text-[44px] italic">✨</span>
                   </h1>
                 </div>
 
                 {/* Mode Switcher Tabs */}
-                <div className="flex items-center p-1.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 shadow-xs shrink-0 self-start lg:self-end">
+                <div className="flex items-center p-1.5 rounded-2xl bg-surface/60 backdrop-blur-md border border-outline-variant/30 shadow-xs shrink-0 self-start lg:self-end">
                   <button
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-label-md text-label-md transition-all cursor-pointer ${designMode === 'ai'
                         ? 'bg-primary text-on-primary font-bold shadow-sm'

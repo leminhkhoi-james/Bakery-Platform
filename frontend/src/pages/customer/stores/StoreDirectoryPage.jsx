@@ -50,14 +50,14 @@ export const StoreDirectoryPage = ({
   }
 
   return (
-    <div className="w-full bg-surface min-h-screen">
+    <div className="w-full striped-candy-bg min-h-screen">
       {/* Top Hero Section */}
-      <div className="bg-gradient-to-b from-primary/5 via-surface to-surface border-b border-outline-variant/10 py-6 sm:py-8 px-4 sm:px-6 lg:px-12">
+      <div className="bg-transparent border-b border-outline-variant/10 py-6 sm:py-8 px-4 sm:px-6 lg:px-12">
         <div className="max-w-[1600px] mx-auto flex flex-col gap-6">
           {/* Heading */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-bold">
+              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary font-bold tracking-tight drop-shadow-sm">
                 Danh Sách Cửa Hàng Bánh
               </h1>
             </div>

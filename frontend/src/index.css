@@ -4,26 +4,30 @@
   --color-wine: #9f1e31;
   --color-wine-dark: #741329;
 
-  /* Logo Matched Palette: Deep Chocolate Brown #2C120A, Soft Dusty Rose Pink #BA5D67, Ivory Cream #FCF9F6 */
-  --color-primary: #2C120A;
+  /* Synchronized with Homepage Kawaii Vintage Palette */
+  --color-primary: #9f1e31;
+  /* wine */
   --color-on-primary: #ffffff;
-  --color-primary-container: #1E0B05;
-  --color-on-primary-container: #F8ECE8;
-  --color-primary-fixed: #F7EBE6;
-  --color-primary-fixed-dim: #E7C6BB;
-  --color-on-primary-fixed: #1E0B05;
-  --color-on-primary-fixed-variant: #4A261B;
+  --color-primary-container: #741329;
+  /* wine-dark */
+  --color-on-primary-container: #ffc6db;
+  --color-primary-fixed: #ffc6db;
+  --color-primary-fixed-dim: #ffe2e9;
+  --color-on-primary-fixed: #52202b;
+  --color-on-primary-fixed-variant: #741329;
 
-  --color-secondary: #BA5D67;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #F6E2E5;
-  --color-on-secondary-container: #4D121B;
-  --color-secondary-fixed: #F7D6DA;
-  --color-secondary-fixed-dim: #EAA9B2;
-  --color-on-secondary-fixed: #3B0E14;
-  --color-on-secondary-fixed-variant: #7A323B;
+  --color-secondary: #6fb9c6;
+  /* teal */
+  --color-on-secondary: #1E0C06;
+  --color-secondary-container: #d7e9e7;
+  /* teal-soft */
+  --color-on-secondary-container: #1E0C06;
+  --color-secondary-fixed: #d7e9e7;
+  --color-secondary-fixed-dim: #6fb9c6;
+  --color-on-secondary-fixed: #1E0C06;
+  --color-on-secondary-fixed-variant: #1E0C06;
 
-  --color-tertiary: #A94B56;
+  --color-tertiary: #BA5D67;
   --color-on-tertiary: #ffffff;
   --color-tertiary-container: #F8E5E8;
   --color-on-tertiary-container: #4A121A;
@@ -32,27 +36,37 @@
   --color-on-tertiary-fixed: #380C11;
   --color-on-tertiary-fixed-variant: #6A2830;
 
-  --color-background: #FCF9F6;
-  --color-on-background: #1E0C06;
+  --color-background: #fff4e9;
+  /* cream */
+  --color-on-background: #52202b;
+  /* ink */
 
-  --color-surface: #FCF9F6;
-  --color-on-surface: #1E0C06;
-  --color-surface-dim: #F0E6DD;
-  --color-surface-bright: #FCF9F6;
+  --color-surface: #fff4e9;
+  /* cream */
+  --color-on-surface: #52202b;
+  /* ink */
+  --color-surface-dim: #fff0f3;
+  --color-surface-bright: #fffaf3;
+  /* paper */
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #F8F2EB;
-  --color-surface-container: #F3E9E0;
-  --color-surface-container-high: #EDE0D5;
-  --color-surface-container-highest: #E5D5C8;
-  --color-surface-variant: #EBE0D5;
-  --color-on-surface-variant: #3A231A;
-  --color-inverse-surface: #1E0C06;
-  --color-inverse-on-surface: #F8F2EB;
-  --color-inverse-primary: #E8C8BE;
+  --color-surface-container-low: #fffaf3;
+  /* paper */
+  --color-surface-container: #ffe4a6;
+  /* butter */
+  --color-surface-container-high: #ffe2e9;
+  /* pink-light */
+  --color-surface-container-highest: #ffc6db;
+  /* pink */
+  --color-surface-variant: #ffe2e9;
+  --color-on-surface-variant: #741329;
+  --color-inverse-surface: #52202b;
+  --color-inverse-on-surface: #fffaf3;
+  --color-inverse-primary: #ffc6db;
 
-  --color-outline: #6E4D41;
-  --color-outline-variant: #C2ACA3;
-  --color-surface-tint: #BA5D67;
+  --color-outline: #9f1e31;
+  /* wine */
+  --color-outline-variant: #e5aabc;
+  --color-surface-tint: #9f1e31;
 
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
@@ -69,14 +83,18 @@
   --spacing-gutter: 1.5rem;
   --spacing-gutter-mobile: 1rem;
 
-  --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
-  --font-headline: 'Cormorant Garamond', 'Playfair Display', serif;
-  --font-body: 'Cormorant Garamond', 'Playfair Display', serif;
-  --font-label: 'Cormorant Garamond', 'Playfair Display', serif;
-  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-display: 'Playfair Display', serif;
+  --font-headline: 'Playfair Display', serif;
+  --font-body: 'Quicksand', sans-serif;
+  --font-label: 'Quicksand', sans-serif;
+  --font-cormorant: 'Playfair Display', serif;
+  --font-sans: 'Quicksand', sans-serif;
 }
 
 @layer base {
+  body {
+    font-family: var(--font-sans);
+  }
 
   *,
   ::before,
@@ -88,7 +106,7 @@
   input,
   textarea,
   select {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans);
     font-variant-numeric: lining-nums tabular-nums;
     font-feature-settings: "lnum" 1, "tnum" 1;
   }
@@ -420,6 +438,25 @@
       #ffc6db 10px,
       #fff0f3 10px,
       #fff0f3 20px);
+}
+
+.striped-candy-bg {
+  /* Dreamy fairy-tale landscape background */
+  background-color: var(--color-surface);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-surface) 40%, transparent), color-mix(in srgb, var(--color-surface) 60%, transparent)),
+    url('/images/fairy-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.striped-candy-blue-bg {
+  background: repeating-linear-gradient(90deg, #d8eae7 0, #d8eae7 62px, #fff6ec 62px, #fff6ec 124px);
+}
+
+.striped-candy-pink-bg {
+  background: repeating-linear-gradient(90deg, #ffe2e9 0, #ffe2e9 62px, #fff6ec 62px, #fff6ec 124px);
 }
 
 .pattern-gingham-red {

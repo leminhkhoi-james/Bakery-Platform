@@ -20,7 +20,7 @@ export const STORES = [
     deliverySla: 'Giao xe lạnh 4°C - 6°C chuyên dụng • Nhận đơn trước 4H',
     escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
     image:
-      'https://lh3.googleusercontent.com/aida/AEtjO1UW-Pqje1qQ27WocOmEF6z8uQbX4Pu7dER_Li586FmA7D-SZPtELbM4diNLey0TATd7BWeyBRVp0BJyiwRQ_Yj2o8ZvjU1gga_5DYXFHmRARECApBa-Pknbu-F_C4RsJvPsxZur94CVef_-mhMUtBA5pqCBm39qRgn4zALShBi4iNWkPvOaQa9bTIcfaPbq4eDVHCaFKq1lgnsEbgULw4G-0rsbYDlzqjGcSoKiajpNsUeCjPnRs_qaS3o',
+      'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=400&auto=format&fit=crop',
     perk: 'Bảo hiểm dáng bánh 100%',
     popularCake: 'Bánh Mousse Trái Cây & Bánh Kem 2 Tầng Cưới',
   },
@@ -41,7 +41,7 @@ export const STORES = [
     deliverySla: 'Giao hỏa tốc 2H - 3H • Xe máy thùng chống sốc & xe lạnh',
     escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBwa0x2Pq4PQpZabCVw-oPcl9Kx3AjY8Se4w5V-yM-Cwjrjxd8jba5hv0SPnDkxM_eLtOKLaCNuUDDl6uyQ3slRL0zdoHgazEbhQZgxplLn5ErWpu6LuqSG2cmZUHp2Nrju8F1zOHGfkAEVgsYsLzhyRxlWHDt4rfoMRrrml9EHVVSLAZOB7ORzGf7oOQ614QKeV2tziVXLp5eM7BTdXQBgQysd-nJGwi2Xbb1EPsZ3vM92r3FrOp0B',
+      'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=400&auto=format&fit=crop',
     perk: 'Nhận đơn gấp 2H',
     popularCake: 'Bánh Pikachu 3D, Bánh Sinh Nhật Tạo Hình Hoạt Họa',
   },
@@ -62,7 +62,7 @@ export const STORES = [
     deliverySla: 'Xe lạnh chuyên dụng riêng • Nhân viên hỗ trợ setup bàn tiệc tận nơi',
     escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAbKBS4iuDLDnNj39sedRAM0tSTf90WV0cMtcL1D83J6gCbPWydfHBUx5Vm4AG2wdIJMx0mqVbO5FFktujBONg-xMsmbOSQ-XXqnuTzs_g6OFMgViOgssR3DE9ttoSgkr1Shnt27IVsGw4mZqhmg6xb23szp3_uMuwaK1KAfJwvX-iELmSlnPOkMeTrzZIMJPvIe7VjLNP4s2781KDXemDfKkBVq2wtMqZS8e_AAubIg9VZCOc8z-A4',
+      'https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=400&auto=format&fit=crop',
     perk: 'Bảo hành bàn tiệc & Thử vị tận nơi',
     popularCake: 'Bánh Cưới Hoàng Gia Dát Vàng, Bánh Thôi Nôi Thơ Mộng',
   },
@@ -83,7 +83,7 @@ export const STORES = [
     deliverySla: 'Giao hàng xe lạnh 4°C • Kèm thiệp thư pháp viết tay',
     escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDrd6k8AxdXIpcvUew_MOuWPXERmixyGoGEMSbfRrr2D_NjHNcEfpwO6YmdXvHeBa1Z2RngGb9XmrNj0ZOGL3sN-FAYCvXwCJJKfU7Yp8EabBcjG9dEXYq4nYAN23G4LYhRnmY1pXcqZzK_SmfHOwjKhFKTwsm8fdLQNSiVRu6hg9u1GLpNlwMR4ddt5aAHza-WulOSntXT0apE-cvO0trXucNDl7cTwV9HkUHIgfK-5Y15ik_vKmN4',
+      'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=400&auto=format&fit=crop',
     perk: 'Trái cây hữu cơ tươi mới trong ngày',
     popularCake: 'Bánh Kem Bắp Phô Mai & Bánh Dâu Tây Tuyết Trắng',
   },
@@ -104,7 +104,7 @@ export const STORES = [
     deliverySla: 'Giao chuẩn từng phút • Tặng kèm dao nĩa gỗ tự hủy cao cấp',
     escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDOuoB1YkEmcnOu28QdxPh8PrBoZw6WU8gax7ow8hE0gMD6xJ8-R_v1vTHO8r0X4m7p__Ja6LLbbgOKpgDK9a-iBDe36sW5Kbq37nXat7eOjQN9RbziT_MUglfGzAF5XDVob0D3S9d0eqeXMfCKWxkxg1LH2324NgXF33F6nf9zmR782zUPGa_CIU_2kIs3d5txJsLeo9K8YcqSs-yUpUrdr6QGU1APz3q6SawD_IxKK_RPdwKcy0pM',
+      'https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=400&auto=format&fit=crop',
     perk: 'Bánh ăn kiêng ít ngọt chuẩn 100%',
     popularCake: 'Bánh Mousse Bơ Hạt Dẻ Keto, Bánh Carrot Cake Thuần Chay',
   },
@@ -132,7 +132,7 @@ export const PARTNER_BAKERIES = [
     perk: 'Xe lạnh 4°C - 6°C',
     perkIcon: 'ac_unit',
     image:
-      'https://lh3.googleusercontent.com/aida/AEtjO1UW-Pqje1qQ27WocOmEF6z8uQbX4Pu7dER_Li586FmA7D-SZPtELbM4diNLey0TATd7BWeyBRVp0BJyiwRQ_Yj2o8ZvjU1gga_5DYXFHmRARECApBa-Pknbu-F_C4RsJvPsxZur94CVef_-mhMUtBA5pqCBm39qRgn4zALShBi4iNWkPvOaQa9bTIcfaPbq4eDVHCaFKq1lgnsEbgULw4G-0rsbYDlzqjGcSoKiajpNsUeCjPnRs_qaS3o',
+      'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=400&auto=format&fit=crop',
   },
   {
     id: 2,
@@ -152,7 +152,7 @@ export const PARTNER_BAKERIES = [
     perk: 'Nhận đơn gấp 3H',
     perkIcon: 'bolt',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBwa0x2Pq4PQpZabCVw-oPcl9Kx3AjY8Se4w5V-yM-Cwjrjxd8jba5hv0SPnDkxM_eLtOKLaCNuUDDl6uyQ3slRL0zdoHgazEbhQZgxplLn5ErWpu6LuqSG2cmZUHp2Nrju8F1zOHGfkAEVgsYsLzhyRxlWHDt4rfoMRrrml9EHVVSLAZOB7ORzGf7oOQ614QKeV2tziVXLp5eM7BTdXQBgQysd-nJGwi2Xbb1EPsZ3vM92r3FrOp0B',
+      'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=400&auto=format&fit=crop',
   },
   {
     id: 3,
@@ -172,6 +172,6 @@ export const PARTNER_BAKERIES = [
     perk: 'Bảo hành bàn tiệc',
     perkIcon: 'verified_user',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAbKBS4iuDLDnNj39sedRAM0tSTf90WV0cMtcL1D83J6gCbPWydfHBUx5Vm4AG2wdIJMx0mqVbO5FFktujBONg-xMsmbOSQ-XXqnuTzs_g6OFMgViOgssR3DE9ttoSgkr1Shnt27IVsGw4mZqhmg6xb23szp3_uMuwaK1KAfJwvX-iELmSlnPOkMeTrzZIMJPvIe7VjLNP4s2781KDXemDfKkBVq2wtMqZS8e_AAubIg9VZCOc8z-A4',
+      'https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=400&auto=format&fit=crop',
   },
 ];

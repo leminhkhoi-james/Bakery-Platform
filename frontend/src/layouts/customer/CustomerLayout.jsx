@@ -6,7 +6,7 @@ export default function CustomerLayout({ children, cartCount, activeTab, onNavig
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col justify-between">
       <Header cartCount={cartCount} activeTab={activeTab} onNavigate={onNavigate} />
-      <main className="pt-24 sm:pt-28 flex-1">{children}</main>
+      <main className="flex-1 w-full flex flex-col">{children}</main>
       <Footer onNavigate={onNavigate} />
     </div>
   )

@@ -237,7 +237,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
   const galleryPhotos = ORDER_GALLERY_PHOTOS
 
   return (
-    <div className="w-full bg-surface min-h-screen">
+    <div className="w-full striped-candy-bg min-h-screen">
       <div className="flex flex-col w-full">
         {/* Subtle Ambient Glow Ornaments */}
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-space-md pb-space-xl">
@@ -249,7 +249,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md relative z-10">
               <div className="flex flex-col gap-space-xs">
                 <div className="flex flex-wrap items-center gap-space-sm">
-                  <h1 className="font-headline-md text-headline-md text-primary tracking-tight">
+                  <h1 className="font-headline-md text-3xl sm:text-4xl text-primary tracking-tight drop-shadow-sm">
                     Mã đơn: {orderId}
                   </h1>
                   <span className="px-3 py-1 rounded-full bg-secondary/15 text-secondary font-bold text-xs flex items-center gap-1 border border-secondary/30">

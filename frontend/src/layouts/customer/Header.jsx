@@ -18,11 +18,11 @@ export const Header = ({
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#fffaf3] shadow-xs">
+    <header className="sticky top-0 left-0 right-0 z-50 bg-surface shadow-xs flex flex-col">
       {/* TOP POLKA DOT SCALLOP CURTAIN RIBBON (Placed ABOVE menu items) */}
       <div className="relative w-full overflow-hidden select-none z-10">
         {/* Polka Dot Pink Curtain Ribbon */}
-        <div className="h-4 w-full bg-[#ffc6db] pattern-dots-pink border-b border-wine"></div>
+        <div className="h-4 w-full bg-primary-fixed pattern-dots-pink border-b border-primary"></div>
 
         {/* White Pearl Scallop Ruffle Edge */}
         <div
@@ -61,8 +61,8 @@ export const Header = ({
                 key={link.id}
                 className={`px-4 py-1.5 rounded-full text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                   isTabActive
-                    ? 'bg-[#9f1e31] text-white font-extrabold shadow-md scale-[1.02]'
-                    : 'text-[#9f1e31] hover:text-[#b8273b] hover:bg-[#ffe2e9]/60'
+                    ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
+                    : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
                 }`}
                 href={link.href}
                 onClick={(e) => handleNav(e, link.route)}
@@ -72,9 +72,9 @@ export const Header = ({
                     {link.icon}
                   </span>
                 )}
-                <span className={isTabActive ? 'text-white' : 'text-[#9f1e31]'}>{link.label}</span>
+                <span className={isTabActive ? 'text-on-primary' : 'text-primary'}>{link.label}</span>
                 {link.badge && (
-                  <span className={isTabActive ? "bg-white text-[#9f1e31] font-bold text-xs px-2 py-0.5 rounded-full border border-wine/30" : "bg-[#ffc6db] text-wine font-bold text-xs px-2 py-0.5 rounded-full border border-wine/30"}>
+                  <span className={isTabActive ? "bg-white text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30" : "bg-primary-fixed text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30"}>
                     {link.badge}
                   </span>
                 )}
@@ -87,11 +87,11 @@ export const Header = ({
         <div className="flex items-center gap-4">
           {/* Quick Search */}
           <div className="relative hidden md:block w-48 xl:w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-wine text-lg">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
               search
             </span>
             <input
-              className="w-full pl-9 pr-4 py-1.5 rounded-full bg-[#fff4e9] border border-wine/30 focus:border-wine focus:bg-white text-sm text-wine placeholder:text-wine/60 transition-all outline-none font-bold"
+              className="w-full pl-9 pr-4 py-1.5 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-sm text-primary placeholder:text-primary/60 transition-all outline-none font-bold"
               placeholder="Tìm bánh, tiệm bánh..."
               type="text"
               value={searchValue}
@@ -107,14 +107,14 @@ export const Header = ({
           {/* Cart Icon Button */}
           <button
             aria-label="Xem giỏ hàng bánh kem"
-            className="p-2.5 rounded-full bg-[#fff4e9] hover:bg-[#ffe2e9] text-wine border border-wine/30 transition-colors relative cursor-pointer"
+            className="p-2.5 rounded-full bg-surface hover:bg-primary-fixed-dim text-primary border border-primary/30 transition-colors relative cursor-pointer"
             onClick={(e) => handleNav(e, 'cart')}
           >
             <span className="material-symbols-outlined text-xl">
               shopping_bag
             </span>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-wine text-white text-xs font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
+              <span className="absolute -top-1 -right-1 bg-primary text-on-primary text-xs font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
                 {cartCount}
               </span>
             )}
@@ -124,7 +124,7 @@ export const Header = ({
           <div className="relative">
             <button
               aria-label="Tài khoản khách hàng"
-              className="p-1 rounded-full border-2 border-wine/40 hover:border-wine transition-colors cursor-pointer"
+              className="p-1 rounded-full border-2 border-primary/40 hover:border-primary transition-colors cursor-pointer"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             >
               <img
@@ -136,10 +136,10 @@ export const Header = ({
 
             {/* Profile Dropdown Menu */}
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-[#fffaf3] shadow-xl border-2 border-wine py-2 z-50">
-                <div className="px-4 py-3 border-b border-wine/20">
-                  <p className="font-savoure text-lg text-wine font-bold">Hân Mai</p>
-                  <p className="text-wine/70 text-xs truncate font-bold">hanmai.sweetcake@example.com</p>
+              <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
+                <div className="px-4 py-3 border-b border-primary/20">
+                  <p className="font-savoure text-lg text-primary font-bold">Hân Mai</p>
+                  <p className="text-primary/70 text-xs truncate font-bold">hanmai.sweetcake@example.com</p>
                 </div>
 
                 <div className="py-1">
@@ -148,9 +148,9 @@ export const Header = ({
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'profile')
                     }}
-                    className="w-full px-4 py-2.5 text-left text-sm text-wine font-bold hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary font-bold hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-lg text-wine">person</span>
+                    <span className="material-symbols-outlined text-lg text-primary">person</span>
                     <span>Hồ sơ &amp; Đơn hàng của tôi</span>
                   </button>
 
@@ -159,9 +159,9 @@ export const Header = ({
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'tracking')
                     }}
-                    className="w-full px-4 py-2.5 text-left text-sm text-wine font-bold hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary font-bold hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-lg text-wine">local_shipping</span>
+                    <span className="material-symbols-outlined text-lg text-primary">local_shipping</span>
                     <span>Theo dõi đơn làm bánh</span>
                   </button>
 
@@ -170,20 +170,20 @@ export const Header = ({
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'bidding')
                     }}
-                    className="w-full px-4 py-2.5 text-left text-sm text-wine font-bold hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary font-bold hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-lg text-wine">request_quote</span>
+                    <span className="material-symbols-outlined text-lg text-primary">request_quote</span>
                     <span>Báo giá đang so sánh</span>
                   </button>
                 </div>
 
-                <div className="border-t border-wine/20 pt-1">
+                <div className="border-t border-primary/20 pt-1">
                   <button
                     onClick={(e) => {
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'vendor-dashboard')
                     }}
-                    className="w-full px-4 py-2.5 text-left text-xs font-extrabold text-wine hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2.5 text-left text-xs font-extrabold text-primary hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-base">storefront</span>
                     <span>Cổng Tiệm bánh (Vendor Hub)</span>
@@ -194,7 +194,7 @@ export const Header = ({
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'admin-dashboard')
                     }}
-                    className="w-full px-4 py-2.5 text-left text-xs font-extrabold text-wine hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2.5 text-left text-xs font-extrabold text-primary hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-base">shield_person</span>
                     <span>Quản trị viên (Master Admin)</span>
@@ -205,7 +205,7 @@ export const Header = ({
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'login')
                     }}
-                    className="w-full px-4 py-2 text-left text-xs font-bold text-red-600 hover:bg-[#ffe2e9] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs font-bold text-error hover:bg-error-container flex items-center gap-2 cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-base">logout</span>
                     <span>Đăng xuất</span>
@@ -217,14 +217,20 @@ export const Header = ({
         </div>
       </div>
 
-      {/* SVG Scalloped Wave Border at Bottom of Header (Pure SVG Wavy Line, No Straight Horizontal Line underneath) */}
-      <div
-        className="w-full h-3 relative z-20 pointer-events-none -mb-3"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M 0 0 Q 6 11.5 12 11.5 Q 18 11.5 24 0 Z' fill='%23fffaf3'/%3E%3Cpath d='M 0 0 Q 6 11.5 12 11.5 Q 18 11.5 24 0' fill='none' stroke='%239f1e31' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")`,
-          backgroundSize: '24px 12px'
-        }}
-      ></div>
+      {/* SVG Scalloped Wave Border at Bottom of Header */}
+      <div className="w-full h-3 relative z-20 shrink-0 -mb-3">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="wave-pattern-header" x="0" y="0" width="24" height="12" patternUnits="userSpaceOnUse">
+              {/* Fill the area ABOVE the wave with the header's surface color to block background from leaking up */}
+              <path d="M 0 0 Q 6 11.5 12 11.5 Q 18 11.5 24 0 Z" className="fill-surface" />
+              {/* Draw the red wave stroke */}
+              <path d="M 0 0 Q 6 11.5 12 11.5 Q 18 11.5 24 0" fill="none" className="stroke-primary" strokeWidth="1.5" strokeLinecap="round" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#wave-pattern-header)" />
+        </svg>
+      </div>
     </header>
   )
 }

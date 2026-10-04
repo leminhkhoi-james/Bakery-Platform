@@ -95,7 +95,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
   }
 
   return (
-    <div className="w-full bg-surface flex-1 min-h-screen">
+    <div className="w-full striped-candy-bg flex-1 min-h-screen">
       <div className="flex flex-col w-full">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-8 w-full">
           {/* Top Context & Action Bar */}

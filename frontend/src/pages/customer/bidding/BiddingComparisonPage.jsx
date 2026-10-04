@@ -392,7 +392,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
   }
 
   return (
-    <div className="w-full bg-surface min-h-screen pb-20">
+    <div className="w-full striped-candy-bg min-h-screen pb-20">
       <div className="flex flex-col w-full">
         {/* Ambient Glow Element */}
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-6">

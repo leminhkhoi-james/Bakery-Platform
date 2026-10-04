@@ -274,7 +274,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
   }
 
   return (
-    <div className="w-full bg-background min-h-[calc(100vh-20rem)] pb-16">
+    <div className="w-full striped-candy-bg min-h-[calc(100vh-20rem)] pb-16">
       {/* Toast Feedback Notification */}
       {toastFeedback && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary text-on-primary px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">

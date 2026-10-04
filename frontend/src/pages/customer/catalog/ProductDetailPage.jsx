@@ -101,7 +101,7 @@ export const ProductDetailPage = ({
   }
 
   return (
-    <div className="w-full bg-background min-h-[calc(100vh-20rem)]">
+    <div className="w-full striped-candy-bg min-h-[calc(100vh-20rem)]">
       <div className="flex flex-col w-full">
         {/* Ambient Glow */}
         <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-6 pb-20 overflow-hidden">
@@ -110,7 +110,7 @@ export const ProductDetailPage = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-12 mt-8 items-start">
             {/* LEFT COLUMN: Curated Gallery */}
             <div className="lg:col-span-6 space-y-4">
-              <div className="relative rounded-2xl overflow-hidden bg-surface-container-low shadow-xl shadow-primary/5 group">
+              <div className="relative rounded-2xl overflow-hidden bg-surface/60 backdrop-blur-md border border-outline-variant/20 shadow-xl shadow-primary/5 group">
                 {/* Floating Badges */}
                 <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
                   <span className="bg-secondary text-on-secondary px-3 py-1 rounded-full font-label-sm tracking-wider uppercase shadow-md flex items-center gap-1.5">
@@ -173,16 +173,16 @@ export const ProductDetailPage = ({
               {/* Header & Title Area */}
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-label-md tracking-wider uppercase text-secondary font-bold">
+                  <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm border border-outline-variant/30">
                     Signature Entremet Collection
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                  <span className="text-xs text-on-surface-variant">
+                  <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">
                     Bánh Sinh Nhật Nghệ Thuật
                   </span>
                 </div>
 
-                <h1 className="font-headline-lg text-primary tracking-tight">
+                <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary tracking-tight drop-shadow-sm">
                   Velvet Raspberry Bliss
                 </h1>
 

@@ -336,10 +336,10 @@ export const CartCheckoutPage = ({
   }
 
   return (
-    <div className="w-full bg-background min-h-[calc(100vh-20rem)] flex-1">
+    <div className="w-full striped-candy-bg min-h-[calc(100vh-20rem)] flex-1">
       <div className="flex flex-col w-full">
         {/* Top Hero Banner */}
-        <div className="relative w-full overflow-hidden bg-surface-container-low py-8 sm:py-10 px-margin shadow-sm border-b border-outline-variant/20">
+        <div className="relative w-full overflow-hidden bg-surface/60 backdrop-blur-md py-8 sm:py-10 px-margin shadow-sm border-b border-outline-variant/20">
           <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-secondary-fixed/40 blur-3xl pointer-events-none"></div>
           <div className="absolute left-10 -bottom-16 w-80 h-80 rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none"></div>
           
