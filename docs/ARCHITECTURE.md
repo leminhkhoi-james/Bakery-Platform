@@ -7,10 +7,11 @@ MSS Bakery Platform là marketplace kết nối khách hàng với nhiều tiệ
 thống hỗ trợ mua bánh có sẵn, đặt bánh custom qua yêu cầu và offer, chat theo
 ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thuê nền tảng.
 
-> **Trạng thái hiện tại:** repository mới có một Spring Boot bootstrap module và
-> thiết kế database/Flyway cho bảy bounded context. Sơ đồ dưới đây mô tả kiến
-> trúc microservices mục tiêu đã được chốt trong tài liệu dự án; các service,
-> API Gateway, frontend và tích hợp ngoài chưa được scaffold trong source code.
+> **Trạng thái hiện tại:** backend đã được scaffold thành Maven multi-module với
+> bảy domain service và một API Gateway độc lập. Mỗi module hiện mới có Spring
+> Boot application, package xương sống, feature context và smoke test; business
+> implementation, persistence, security, gateway routing, frontend và tích hợp
+> ngoài vẫn chưa được triển khai.
 
 ---
 
@@ -221,7 +222,7 @@ lập:
 ```text
 Bakery Platform/
 ├── backend/
-│   ├── pom.xml                         # Parent/aggregator sau khi tách module
+│   ├── pom.xml                         # Parent/aggregator
 │   ├── identity-service/
 │   ├── bakery-service/
 │   ├── marketplace-service/
@@ -386,14 +387,18 @@ Dependency rules:
 
 ### Current Repository State
 
-- `backend/` mới là một Spring Boot 4.1.1 application bootstrap dùng Java 21.
-- `pom.xml` hiện chỉ có core starter và test starter; JPA, Security, Resource
-  Server, Flyway, PostgreSQL driver và module service chưa được thêm.
-- Chưa có controller, feature package, API Gateway, frontend hoặc integration.
+- `backend/` là Maven reactor dùng Java 21 và Spring Boot 4.1.1, gồm bảy domain
+  service cùng một API Gateway build/test độc lập.
+- Các module đã có application class, package xương sống, package feature bám
+  theo API contract, `CONTEXT.md` và application-context smoke test.
+- Module hiện chỉ có core starter và test starter; JPA, Security, Resource
+  Server, Flyway, PostgreSQL driver và gateway routing dependency chưa được thêm.
+- Chưa có controller, service/repository/entity/DTO nghiệp vụ, frontend hoặc
+  integration thực tế.
 - Database design đã có 7 PostgreSQL schema sets, 44 tables, Flyway-compatible
   DDL, seed reference data và 8 Mermaid ERD files.
-- `docs/API_SPEC.md`, `docs/PROJECT-STATUS.md`, ADR và module `CONTEXT.md` chưa
-  tồn tại tại thời điểm tài liệu này được tạo.
+- API contract mục tiêu nằm tại `docs/API_SPEC.md`; tiến độ được theo dõi trong
+  `docs/PROJECT-STATUS.md`. ADR vẫn chưa được tạo.
 
 ### Target MVP
 
@@ -421,8 +426,9 @@ Dependency rules:
 
 ## Related Documents
 
+- [API specification](API_SPEC.md)
+- [Project status](PROJECT-STATUS.md)
 - [Database design](DATABASE.md)
 - [ERD index](erd/README.md)
 - [PostgreSQL migration guide](../database/postgresql/README.md)
 - [Project rules](../.codex-rules/project-rules.md)
-
