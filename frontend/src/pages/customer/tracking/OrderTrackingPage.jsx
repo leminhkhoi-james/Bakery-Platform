@@ -249,7 +249,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md relative z-10">
               <div className="flex flex-col gap-space-xs">
                 <div className="flex flex-wrap items-center gap-space-sm">
-                  <h1 className="font-headline-md text-3xl sm:text-4xl text-primary tracking-tight drop-shadow-sm">
+                  <h1 className="font-headline-md text-2xl sm:text-3xl lg:text-[34px] text-primary font-bold tracking-normal">
                     Mã đơn: {orderId}
                   </h1>
                   <span className="px-3 py-1 rounded-full bg-secondary/15 text-secondary font-bold text-xs flex items-center gap-1 border border-secondary/30">

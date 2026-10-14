@@ -57,7 +57,7 @@ export const StoreDirectoryPage = ({
           {/* Heading */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary font-bold tracking-tight drop-shadow-sm">
+              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary font-bold tracking-normal">
                 Danh Sách Cửa Hàng Bánh
               </h1>
             </div>

@@ -30,7 +30,7 @@ export default function AdminHeader({
   }
 
   return (
-    <header className="fixed top-0 left-0 md:left-72 right-0 h-20 bg-[#fbf9f5]/90 backdrop-blur-xl z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-[0_1px_8px_rgba(45,30,24,0.04)] border-b border-outline-variant/20 gap-3">
+    <header className="fixed top-0 left-0 md:left-72 right-0 h-20 bg-surface/90 backdrop-blur-xl z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-[0_1px_8px_rgba(45,30,24,0.03)] border-b border-outline-variant/30 gap-3">
       {/* Left Section: Mobile toggle, Back button, Title & Subtitle */}
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         {/* Mobile Hamburger Button */}

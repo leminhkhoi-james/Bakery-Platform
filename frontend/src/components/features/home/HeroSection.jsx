@@ -5,7 +5,7 @@ export const HeroSection = ({ onNavigate }) => {
     <>
       <section className="snap-section relative w-full overflow-hidden sunburst-bg -mt-24 sm:-mt-28 pt-24 sm:pt-28 border-b-2 border-wine scroll-mt-24 min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
         {/* Background Radial Glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_248px,rgba(255,250,235,0.4),transparent_70%)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_248px,rgba(255,255,255,0.75),transparent_70%)] pointer-events-none"></div>
 
         {/* ==========================================
             PART 1: KAWAII VINTAGE BAKERY KIOSK STAGE

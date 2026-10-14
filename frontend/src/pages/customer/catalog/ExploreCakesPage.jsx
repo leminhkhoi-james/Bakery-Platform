@@ -235,7 +235,7 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
               <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm mb-2 border border-outline-variant/30">
                 Bộ Sưu Tập Đa Tiệm Nghệ Nhân
               </span>
-              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary mt-1 tracking-tight drop-shadow-sm">
+              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary mt-1 font-bold tracking-normal">
                 Khám Phá & Đặt Bánh Kem Nghệ Nhân
               </h1>
             </div>

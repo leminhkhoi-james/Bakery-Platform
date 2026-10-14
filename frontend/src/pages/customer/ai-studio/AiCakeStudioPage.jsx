@@ -255,9 +255,9 @@ export const AiCakeStudioPage = ({
                   <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm mb-2 border border-outline-variant/30">
                     SWEETAI STUDIO
                   </span>
-                  <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary font-bold tracking-tight leading-tight flex items-center gap-2.5 drop-shadow-sm">
+                  <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary font-bold tracking-normal leading-tight flex items-center gap-2.5">
                     <span>Thiết Kế Bánh</span>
-                    <span className="text-secondary text-3xl sm:text-4xl lg:text-[44px] italic">✨</span>
+                    <span className="text-secondary text-3xl sm:text-4xl lg:text-[40px] italic">✨</span>
                   </h1>
                 </div>
 

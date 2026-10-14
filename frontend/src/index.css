@@ -1,77 +1,77 @@
 @import "tailwindcss";
 
 @theme {
-  --color-wine: #9f1e31;
-  --color-wine-dark: #741329;
+  --color-wine: #6b212e;
+  --color-wine-dark: #4f1722;
 
-  /* Synchronized with Homepage Kawaii Vintage Palette */
-  --color-primary: #9f1e31;
-  /* wine */
+  /* French Haute Pâtisserie Palette (Warm Truffle & Caramel Gold) */
+  --color-primary: #6b212e;
+  /* Deep Warm Truffle / Bordeaux */
   --color-on-primary: #ffffff;
-  --color-primary-container: #741329;
-  /* wine-dark */
-  --color-on-primary-container: #ffc6db;
-  --color-primary-fixed: #ffc6db;
-  --color-primary-fixed-dim: #ffe2e9;
-  --color-on-primary-fixed: #52202b;
-  --color-on-primary-fixed-variant: #741329;
+  --color-primary-container: #4f1722;
+  /* Dark Truffle */
+  --color-on-primary-container: #f5dcd7;
+  --color-primary-fixed: #f5dcd7;
+  --color-primary-fixed-dim: #f0eae5;
+  --color-on-primary-fixed: #331017;
+  --color-on-primary-fixed-variant: #521c25;
 
-  --color-secondary: #6fb9c6;
-  /* teal */
-  --color-on-secondary: #1E0C06;
-  --color-secondary-container: #d7e9e7;
-  /* teal-soft */
-  --color-on-secondary-container: #1E0C06;
-  --color-secondary-fixed: #d7e9e7;
-  --color-secondary-fixed-dim: #6fb9c6;
-  --color-on-secondary-fixed: #1E0C06;
-  --color-on-secondary-fixed-variant: #1E0C06;
+  --color-secondary: #b87328;
+  /* French Caramel Gold */
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f6ece0;
+  /* Soft Caramel Foam */
+  --color-on-secondary-container: #4a2807;
+  --color-secondary-fixed: #f6ece0;
+  --color-secondary-fixed-dim: #e8d7c4;
+  --color-on-secondary-fixed: #381e05;
+  --color-on-secondary-fixed-variant: #5c350e;
 
-  --color-tertiary: #BA5D67;
+  --color-tertiary: #8a5749;
+  /* Warm Praline / Cocoa */
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #F8E5E8;
-  --color-on-tertiary-container: #4A121A;
-  --color-tertiary-fixed: #F9E1E4;
-  --color-tertiary-fixed-dim: #E5B7BD;
-  --color-on-tertiary-fixed: #380C11;
-  --color-on-tertiary-fixed-variant: #6A2830;
+  --color-tertiary-container: #f5ebe7;
+  --color-on-tertiary-container: #3a1d17;
+  --color-tertiary-fixed: #f5ebe7;
+  --color-tertiary-fixed-dim: #e5d3cd;
+  --color-on-tertiary-fixed: #2e1610;
+  --color-on-tertiary-fixed-variant: #522b22;
 
-  --color-background: #fff4e9;
-  /* cream */
-  --color-on-background: #52202b;
-  /* ink */
+  --color-background: #fffdfa;
+  /* Luminous Warm Milk White */
+  --color-on-background: #241815;
+  /* Deep Warm Espresso */
 
-  --color-surface: #fff4e9;
-  /* cream */
-  --color-on-surface: #52202b;
-  /* ink */
-  --color-surface-dim: #fff0f3;
-  --color-surface-bright: #fffaf3;
-  /* paper */
+  --color-surface: #fffdfa;
+  /* Luminous Warm Milk White */
+  --color-on-surface: #241815;
+  /* Deep Warm Espresso */
+  --color-surface-dim: #fbf5ed;
+  --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #fffaf3;
-  /* paper */
-  --color-surface-container: #ffe4a6;
-  /* butter */
-  --color-surface-container-high: #ffe2e9;
-  /* pink-light */
-  --color-surface-container-highest: #ffc6db;
-  /* pink */
-  --color-surface-variant: #ffe2e9;
-  --color-on-surface-variant: #741329;
-  --color-inverse-surface: #52202b;
-  --color-inverse-on-surface: #fffaf3;
-  --color-inverse-primary: #ffc6db;
+  --color-surface-container-low: #fdfaf5;
+  /* Paper Clean */
+  --color-surface-container: #f7f0e6;
+  /* Calming warm neutral cream */
+  --color-surface-container-high: #f0e6d8;
+  --color-surface-container-highest: #e8dcce;
+  --color-surface-variant: #f3e9dc;
+  --color-on-surface-variant: #695e57;
+  /* Sophisticated warm taupe slate */
+  --color-inverse-surface: #291d1a;
+  --color-inverse-on-surface: #fffdfa;
+  --color-inverse-primary: #f5dcd7;
 
-  --color-outline: #9f1e31;
-  /* wine */
-  --color-outline-variant: #e5aabc;
-  --color-surface-tint: #9f1e31;
+  --color-outline: #8c7e75;
+  /* Neutral warm taupe for labels/icons */
+  --color-outline-variant: #ebdcd0;
+  /* Subtle warm borders */
+  --color-surface-tint: #6b212e;
 
-  --color-error: #ba1a1a;
+  --color-error: #b91c1c;
   --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-error-container: #fee2e2;
+  --color-on-error-container: #7f1d1d;
 
   --spacing-space-xs: 0.25rem;
   --spacing-space-sm: 0.5rem;
@@ -83,17 +83,21 @@
   --spacing-gutter: 1.5rem;
   --spacing-gutter-mobile: 1rem;
 
-  --font-display: 'Baloo 2', cursive, sans-serif;
-  --font-headline: 'Baloo 2', cursive, sans-serif;
-  --font-body: 'Quicksand', sans-serif;
-  --font-label: 'Quicksand', sans-serif;
-  --font-cormorant: 'Baloo 2', cursive, sans-serif;
-  --font-sans: 'Quicksand', sans-serif;
+  --font-display: 'Quicksand', 'Nunito', sans-serif;
+  --font-headline: 'Quicksand', 'Nunito', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
 }
 
 @layer base {
   body {
     font-family: var(--font-sans);
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   *,
@@ -114,7 +118,7 @@
 
 @layer utilities {
 
-  /* Typography Utilities from Stitch */
+  /* Typography Utilities - Scaled down for sleek, clean, modern UI */
   .font-display-lg,
   .font-headline-lg,
   .font-headline-md,
@@ -127,89 +131,93 @@
 
   .font-body-lg,
   .font-body-md,
-  .font-body-sm,
+  .font-body-sm {
+    font-family: var(--font-body);
+    font-weight: 400;
+  }
+
   .font-label-lg,
   .font-label-md,
   .font-label-sm {
-    font-family: var(--font-body);
+    font-family: var(--font-label);
     font-weight: 600;
   }
 
   .text-display-lg {
-    font-size: 64px;
-    line-height: 76px;
+    font-size: 32px;
+    line-height: 40px;
     letter-spacing: -0.02em;
     font-weight: 700;
   }
 
   .text-display-lg-mobile {
-    font-size: 42px;
-    line-height: 52px;
+    font-size: 24px;
+    line-height: 32px;
     letter-spacing: -0.01em;
     font-weight: 700;
   }
 
   .text-headline-lg {
-    font-size: 46px;
-    line-height: 56px;
+    font-size: 22px;
+    line-height: 30px;
     letter-spacing: -0.015em;
     font-weight: 700;
   }
 
   .text-headline-lg-mobile {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 18px;
+    line-height: 26px;
     font-weight: 700;
   }
 
   .text-headline-md {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 18px;
+    line-height: 26px;
     font-weight: 700;
   }
 
   .text-headline-sm {
-    font-size: 25px;
-    line-height: 32px;
-    font-weight: 700;
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 600;
   }
 
   .text-body-lg {
-    font-size: 20px;
-    line-height: 30px;
-    font-weight: 600;
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 400;
   }
 
   .text-body-md {
-    font-size: 18px;
-    line-height: 26px;
-    font-weight: 600;
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 400;
   }
 
   .text-body-sm {
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
   }
 
   .text-label-lg {
-    font-size: 17px;
-    line-height: 22px;
-    letter-spacing: 0.02em;
-    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    font-weight: 600;
   }
 
   .text-label-md {
-    font-size: 15px;
-    line-height: 18px;
-    letter-spacing: 0.03em;
-    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    font-weight: 600;
   }
 
   .text-label-sm {
-    font-size: 14px;
-    line-height: 16px;
-    letter-spacing: 0.04em;
+    font-size: 11px;
+    line-height: 15px;
+    letter-spacing: 0.02em;
     font-weight: 600;
   }
 }
@@ -232,7 +240,7 @@
 
 /* Savouré Bakery Signature Typography Utilities */
 .font-savoure {
-  font-family: 'Baloo 2', cursive, sans-serif;
+  font-family: 'Quicksand', 'Nunito', sans-serif;
   letter-spacing: normal !important;
 }
 
@@ -248,17 +256,17 @@
 
 /* CakeMatch Theme System */
 :root {
-  --wine: #9f1e31;
-  --wine-dark: #741329;
-  --pink: #ffc6db;
-  --pink-light: #ffe2e9;
-  --cream: #fff4e9;
-  --paper: #fffaf3;
+  --wine: #6b212e;
+  --wine-dark: #4f1722;
+  --pink: #ffb8ce;
+  --pink-light: #fff0f5;
+  --cream: #fffdf9;
+  --paper: #ffffff;
   --teal: #6fb9c6;
-  --teal-soft: #d7e9e7;
-  --butter: #ffe4a6;
-  --ink: #52202b;
-  --border: 2px solid var(--wine);
+  --teal-soft: #e4f4f7;
+  --butter: #fff2cc;
+  --ink: #2b1810;
+  --border: 1.5px solid #ebd8cb;
 }
 
 .bg-cream {
@@ -290,10 +298,10 @@
 }
 
 .check-band {
-  border-top: 7px solid var(--wine);
-  border-bottom: 7px solid var(--wine);
+  border-top: 4px solid var(--wine);
+  border-bottom: 4px solid var(--wine);
   height: 48px;
-  background: repeating-conic-gradient(var(--wine) 0 25%, #fff6eb 0 50%) 0 0 / 32px 32px;
+  background: repeating-conic-gradient(var(--wine) 0 25%, #fffdfa 0 50%) 0 0 / 32px 32px;
 }
 
 .scallop-edge-bottom {
@@ -332,10 +340,10 @@
 
 .cakematch-btn {
   min-height: 48px;
-  border: 2px solid var(--wine);
+  border: 1.5px solid var(--wine);
   border-radius: 999px;
   background: var(--wine);
-  color: #fffaf2;
+  color: #ffffff;
   padding: 11px 23px;
   font-weight: 700;
   display: inline-flex;
@@ -343,23 +351,23 @@
   justify-content: center;
   gap: 10px;
   white-space: nowrap;
-  box-shadow: 3px 4px 0 #6d1b2c;
+  box-shadow: 0 4px 12px rgba(107, 33, 46, 0.16);
   transition: transform .18s, box-shadow .18s, background .18s;
   cursor: pointer;
 }
 
 .cakematch-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 3px 6px 0 #6d1b2c;
-  background: #b8273b;
+  box-shadow: 0 6px 18px rgba(107, 33, 46, 0.22);
+  background: #7d2938;
 }
 
 .cakematch-btn-secondary {
   min-height: 48px;
-  border: 2px solid var(--wine);
+  border: 1.5px solid #ded7ce;
   border-radius: 999px;
   color: var(--wine);
-  background: var(--paper);
+  background: #ffffff;
   padding: 11px 23px;
   font-weight: 700;
   display: inline-flex;
@@ -367,22 +375,23 @@
   justify-content: center;
   gap: 10px;
   white-space: nowrap;
-  box-shadow: 3px 4px 0 #e5aabc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: transform .18s, box-shadow .18s, background .18s;
   cursor: pointer;
 }
 
 .cakematch-btn-secondary:hover {
-  background: #ffffff;
+  background: #faf7f2;
+  border-color: var(--wine);
   transform: translateY(-2px);
 }
 
 .dotted-frame-badge {
   display: inline-block;
   background: var(--paper);
-  border: 2px solid var(--wine);
-  outline: 3px dotted var(--pink);
-  outline-offset: 5px;
+  border: 1.5px solid var(--wine);
+  outline: 2px dotted var(--pink);
+  outline-offset: 4px;
   border-radius: 50px;
   padding: 8px 25px;
   margin-bottom: 13px;
@@ -395,36 +404,36 @@
 
 .dome-cake-card {
   background: var(--paper);
-  border: 2px solid var(--wine);
+  border: 1.5px solid #e6ded5;
   border-radius: 165px 165px 18px 18px;
   overflow: hidden;
-  box-shadow: 6px 7px 0 #efb5c5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transition: transform .2s, box-shadow .2s;
 }
 
 .dome-cake-card:hover {
   transform: translateY(-5px);
-  box-shadow: 6px 12px 0 #efb5c5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .retro-shop-ticket {
-  border: 3px solid var(--wine);
+  border: 2px solid var(--wine);
   border-radius: 18px;
   background: var(--paper);
   padding: 36px 35px;
-  box-shadow: 9px 9px 0 #f2a9c0;
-  transform: rotate(2deg);
+  box-shadow: 0 8px 24px rgba(107, 33, 46, 0.12);
+  transform: rotate(1deg);
 }
 
 .striped-hero-bg {
-  background: repeating-linear-gradient(90deg, #d8eae7 0, #d8eae7 62px, #fff6ec 62px, #fff6ec 124px);
+  background: repeating-linear-gradient(90deg, #fcf7f0 0, #fcf7f0 62px, #fffdfa 62px, #fffdfa 124px);
 }
 
 .striped-idea-bg {
-  background: repeating-linear-gradient(90deg, #d8e9e6 0, #d8e9e6 76px, #fff5eb 76px, #fff5eb 152px);
+  background: repeating-linear-gradient(90deg, #fdf9f2 0, #fdf9f2 76px, #ffffff 76px, #ffffff 152px);
 }
 
-/* Kawaii Cloud & Booth Decor Patterns */
+/* Kawaii Cloud & Booth Decor Patterns (Fresh Sweet Bakery Palette) */
 .pattern-dots-mint {
   background-color: #6fb9c6;
   background-image: radial-gradient(#ffffff 22%, transparent 22%);
@@ -432,17 +441,17 @@
 }
 
 .pattern-dots-pink {
-  background-color: #ffbad1;
+  background-color: #ffb8ce;
   background-image: radial-gradient(#ffffff 20%, transparent 20%);
   background-size: 14px 14px;
 }
 
 .pattern-stripes-pink {
   background: repeating-linear-gradient(-45deg,
-      #ffc6db,
-      #ffc6db 10px,
-      #fff0f3 10px,
-      #fff0f3 20px);
+      #ffccd9,
+      #ffccd9 10px,
+      #fff5f8 10px,
+      #fff5f8 20px);
 }
 
 .striped-candy-bg {
@@ -457,27 +466,27 @@
 }
 
 .striped-candy-blue-bg {
-  background: repeating-linear-gradient(90deg, #d8eae7 0, #d8eae7 62px, #fff6ec 62px, #fff6ec 124px);
+  background: repeating-linear-gradient(90deg, #edf7f9 0, #edf7f9 62px, #fffdfa 62px, #fffdfa 124px);
 }
 
 .striped-candy-pink-bg {
-  background: repeating-linear-gradient(90deg, #ffe2e9 0, #ffe2e9 62px, #fff6ec 62px, #fff6ec 124px);
+  background: repeating-linear-gradient(90deg, #fdf2f5 0, #fdf2f5 62px, #fffdfa 62px, #fffdfa 124px);
 }
 
 .pattern-gingham-red {
-  background-color: #fff4e9;
+  background-color: #fffdfa;
   background-image:
-    linear-gradient(45deg, rgba(159, 30, 49, 0.35) 25%, transparent 25%, transparent 75%, rgba(159, 30, 49, 0.35) 75%),
-    linear-gradient(45deg, rgba(159, 30, 49, 0.35) 25%, transparent 25%, transparent 75%, rgba(159, 30, 49, 0.35) 75%);
+    linear-gradient(45deg, rgba(107, 33, 46, 0.08) 25%, transparent 25%, transparent 75%, rgba(107, 33, 46, 0.08) 75%),
+    linear-gradient(45deg, rgba(107, 33, 46, 0.08) 25%, transparent 25%, transparent 75%, rgba(107, 33, 46, 0.08) 75%);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 }
 
 .sunburst-bg {
-  background: #fff7ea;
+  background: #ffffff;
   background-image: repeating-conic-gradient(from 0deg at 50% 248px,
-      #fff7ea 0deg 12deg,
-      #fce7d2 12deg 24deg);
+      #ffffff 0deg 12deg,
+      #fff8ee 12deg 24deg);
 }
 
 /* Full-Page Section Snap Scroll (Strictly scoped ONLY to Home Page) */

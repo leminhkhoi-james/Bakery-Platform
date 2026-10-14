@@ -279,9 +279,9 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
             {/* 1. TOP KPIS (4 CHỈ SỐ THEO YÊU CẦU) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {/* KPI 1 */}
-              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/20 shadow-xs flex items-center justify-between">
+              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/30 shadow-xs flex items-center justify-between">
                 <div>
-                  <span className="font-label-sm text-label-sm text-outline font-semibold uppercase tracking-wider block">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold uppercase tracking-wider block">
                     Tổng đơn hôm nay
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
@@ -289,80 +289,80 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                     <span className="font-label-sm text-[11px] text-secondary font-bold">+4 mới</span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary">
+                <div className="w-10 h-10 rounded-xl bg-secondary-container/60 border border-secondary/20 flex items-center justify-center text-secondary">
                   <span className="material-symbols-outlined text-xl">receipt_long</span>
                 </div>
               </div>
 
               {/* KPI 2: Cần ra lò trong 2h tới (Giúp bếp trưởng biết đơn gấp) */}
-              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-rose-200 bg-rose-50/40 shadow-xs flex items-center justify-between">
-                <div>
-                  <span className="font-label-sm text-label-sm text-rose-800 font-bold uppercase tracking-wider block flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-rose-200/70 shadow-xs flex items-center justify-between">
+                <div className="min-w-0 pr-2">
+                  <span className="font-label-sm text-[11px] sm:text-label-sm text-rose-800 font-semibold uppercase tracking-wider block flex items-center gap-1.5 whitespace-nowrap truncate">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0"></span>
                     Cần ra lò trong 2h tới
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
-                    <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-rose-700">4 bánh gấp</span>
+                    <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-rose-800">4 bánh gấp</span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700">
+                <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-700">
                   <span className="material-symbols-outlined text-xl">alarm</span>
                 </div>
               </div>
 
               {/* KPI 3: Đang trên đường giao */}
-              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/20 shadow-xs flex items-center justify-between">
+              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/30 shadow-xs flex items-center justify-between">
                 <div>
-                  <span className="font-label-sm text-label-sm text-outline font-semibold uppercase tracking-wider block">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold uppercase tracking-wider block">
                     Đang trên đường giao
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
                     <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-primary">5 xe lạnh</span>
-                    <span className="font-label-sm text-[11px] text-emerald-700 font-semibold">Đúng giờ</span>
+                    <span className="font-label-sm text-[11px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">Đúng giờ</span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary">
+                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-700">
                   <span className="material-symbols-outlined text-xl">local_shipping</span>
                 </div>
               </div>
 
               {/* KPI 4: Tỷ lệ đúng giờ (Điểm uy tín) */}
-              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/20 shadow-xs flex items-center justify-between">
+              <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-outline-variant/30 shadow-xs flex items-center justify-between">
                 <div>
-                  <span className="font-label-sm text-label-sm text-outline font-semibold uppercase tracking-wider block">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold uppercase tracking-wider block">
                     Tỷ lệ giao đúng giờ
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
-                    <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-emerald-700">99.2%</span>
+                    <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-emerald-800">99.2%</span>
                     <span className="font-label-sm text-[11px] text-on-surface-variant font-medium">Uy tín 5★</span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center">
                   <span className="material-symbols-outlined text-xl">verified</span>
                 </div>
               </div>
             </div>
 
             {/* 2. CẢNH BÁO ĐƠN TRỄ DEADLINE (THÔNG BÁO GẤP) */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-3 h-3 rounded-full bg-rose-600 animate-ping shrink-0"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
                 <span className="font-bold text-amber-950">
                   🔴 Cảnh báo tiến độ: Bánh Pikachu (#ORD-2025-9982) cần giao lúc 15:30. Khách vừa
-                  chốt báo giá, tiệm cần bấm "Xác nhận nhận đơn" ngay!
+                  chốt báo giá, tiệm cần bấm &quot;Xác nhận nhận đơn&quot; ngay!
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => handleConfirmOrder(orders.pending[0])}
-                className="px-3.5 py-1.5 rounded-xl bg-secondary text-on-secondary font-bold text-xs shadow-xs hover:bg-secondary-fixed transition-colors cursor-pointer shrink-0"
+                className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-container text-white font-bold text-xs shadow-xs transition-colors cursor-pointer shrink-0"
               >
                 Xác nhận nhận đơn ngay
               </button>
             </div>
 
             {/* 3. BỘ LỌC & TÌM KIẾM */}
-            <div className="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/20 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div className="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               {/* Search Box */}
               <div className="relative flex-1 max-w-md">
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
@@ -373,7 +373,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm theo mã đơn (#ORD), tên khách, SĐT, tên bánh..."
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-surface-container-low border border-outline-variant/30 text-xs text-primary focus:outline-none focus:border-secondary"
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-surface-container-low border border-outline-variant/40 text-xs text-on-surface placeholder:text-outline/70 focus:outline-none focus:border-secondary"
                 />
               </div>
 
@@ -394,7 +394,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                     className={`px-3 py-1.5 rounded-xl font-medium transition-all text-xs cursor-pointer whitespace-nowrap ${
                       selectedFilter === tab.id
                         ? 'bg-primary text-on-primary font-bold shadow-xs'
-                        : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant border border-outline-variant/20'
+                        : 'bg-surface-container-lowest hover:bg-surface-container-low text-on-surface-variant border border-outline-variant/40'
                     }`}
                   >
                     {tab.label}
@@ -432,7 +432,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <span className="font-mono text-[11px] font-bold text-secondary">
                           {order.id}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-bold font-label-sm">
+                        <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200/70 text-[10px] font-bold font-label-sm">
                           Đã cọc Escrow
                         </span>
                       </div>
@@ -465,14 +465,14 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => handleRejectOrder(order)}
-                          className="py-1.5 px-2 rounded-lg bg-surface-container hover:bg-rose-100 hover:text-rose-800 text-[11px] font-semibold text-on-surface-variant transition-colors cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-surface-container-low hover:bg-rose-50 hover:text-rose-800 text-[11px] font-semibold text-on-surface-variant border border-outline-variant/30 transition-colors cursor-pointer"
                         >
                           Từ chối
                         </button>
                         <button
                           type="button"
                           onClick={() => handleConfirmOrder(order)}
-                          className="py-1.5 px-2 rounded-lg bg-primary hover:bg-secondary text-on-primary text-[11px] font-bold shadow-xs transition-colors cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-[11px] font-bold shadow-xs transition-colors cursor-pointer"
                         >
                           Xác nhận nhận
                         </button>
@@ -512,7 +512,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <span className="font-mono text-[11px] font-bold text-secondary">
                           {order.id}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-surface-container text-[10px] font-medium text-on-surface-variant font-label-sm">
+                        <span className="px-2 py-0.5 rounded bg-surface-container-low border border-outline-variant/30 text-[10px] font-medium text-on-surface-variant font-label-sm">
                           {order.sizeSpec}
                         </span>
                       </div>
@@ -543,7 +543,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                       <button
                         type="button"
                         onClick={() => handleStartBaking(order)}
-                        className="w-full py-2 px-3 rounded-lg bg-secondary hover:bg-secondary-fixed text-on-secondary hover:text-primary text-xs font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full py-2 px-3 rounded-lg bg-secondary hover:bg-secondary/90 text-white text-xs font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-sm">soup_kitchen</span>
                         <span>Bắt đầu nướng bánh</span>
@@ -644,7 +644,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => setQcOrder(order)}
-                          className="py-1.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-[11px] font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-xs text-secondary">
                             photo_camera
@@ -654,7 +654,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => handleFinishBaking(order)}
-                          className="py-1.5 px-2 rounded-lg bg-primary hover:bg-secondary text-on-primary text-[11px] font-bold shadow-xs transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-[11px] font-bold shadow-xs transition-colors flex items-center justify-center gap-1 cursor-pointer"
                         >
                           <span>Xong &amp; Đóng hộp</span>
                         </button>
@@ -694,7 +694,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <span className="font-mono text-[11px] font-bold text-secondary">
                           {order.id}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-[10px] font-bold font-label-sm">
+                        <span className="px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 text-[10px] font-bold font-label-sm">
                           {order.tempC || '4.5°C'}
                         </span>
                       </div>
@@ -714,9 +714,9 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
 
                       {/* Thông tin tài xế & xe */}
                       <div className="p-2 rounded-lg bg-surface-container-low text-[11px] space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-outline">Tài xế:</span>
-                          <span className="font-semibold text-primary">
+                        <div className="flex justify-between items-center gap-1">
+                          <span className="text-outline shrink-0">Tài xế:</span>
+                          <span className="font-semibold text-primary truncate text-right">
                             {order.driverName} ({order.vanCode})
                           </span>
                         </div>
@@ -731,7 +731,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => setDriverOrder(order)}
-                          className="py-1.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-[11px] font-semibold flex items-center justify-center gap-1 cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 text-[11px] font-semibold flex items-center justify-center gap-1 cursor-pointer transition-colors"
                         >
                           <span className="material-symbols-outlined text-xs text-secondary">
                             near_me
@@ -741,7 +741,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => showToast(`Đang kết nối gọi tài xế: ${order.driverPhone}`)}
-                          className="py-1.5 px-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-[11px] font-semibold flex items-center justify-center gap-1 cursor-pointer"
+                          className="py-1.5 px-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 text-[11px] font-semibold flex items-center justify-center gap-1 cursor-pointer transition-colors"
                         >
                           <span className="material-symbols-outlined text-xs text-secondary">
                             call
@@ -755,7 +755,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => handleDeliverSuccess(order)}
-                          className="py-1.5 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-xs"
+                          className="py-1.5 px-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-xs"
                         >
                           <span className="material-symbols-outlined text-xs">done_all</span>
                           <span>Đã giao thành công</span>
@@ -763,7 +763,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => handleDeliverFailed(order)}
-                          className="py-1.5 px-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-xs"
+                          className="py-1.5 px-2 rounded-lg bg-rose-700 hover:bg-rose-800 text-white text-[11px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-xs"
                         >
                           <span className="material-symbols-outlined text-xs">cancel</span>
                           <span>Giao thất bại</span>
@@ -804,7 +804,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         <span className="font-mono text-[11px] font-bold text-secondary">
                           {order.id}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-0.5 font-label-sm">
+                        <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold flex items-center gap-0.5 font-label-sm">
                           <span className="material-symbols-outlined text-[12px]">lock_open</span>
                           Escrow mở khóa
                         </span>
@@ -823,7 +823,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                         </p>
                       </div>
 
-                      <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/60 text-xs">
+                      <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs">
                         <div className="text-[11px] text-emerald-800">Thực nhận về ví tiệm:</div>
                         <div className="text-sm font-bold text-emerald-900 mt-0.5">
                           {formatVND(order.netPayout || Math.round(order.price * 0.95))}
@@ -836,7 +836,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                       <button
                         type="button"
                         onClick={() => setTimelineOrder(order)}
-                        className="w-full py-1.5 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-[11px] font-semibold transition-colors cursor-pointer"
+                        className="w-full py-1.5 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary border border-outline-variant/30 text-[11px] font-semibold transition-colors cursor-pointer"
                       >
                         Xem dòng tiền &amp; Timeline
                       </button>

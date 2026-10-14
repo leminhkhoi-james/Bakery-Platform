@@ -182,7 +182,7 @@ export const ProductDetailPage = ({
                   </span>
                 </div>
 
-                <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[44px] text-primary tracking-tight drop-shadow-sm">
+                <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[38px] text-primary font-bold tracking-normal">
                   Velvet Raspberry Bliss
                 </h1>
 

@@ -256,40 +256,40 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
 
             {/* HEADER TITLE & GLOBAL ACTIONS */}
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
-              <div className="flex flex-col gap-space-xs">
-                <div className="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm uppercase tracking-widest text-xs font-bold">
-                  <span className="material-symbols-outlined text-[16px]">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-secondary uppercase tracking-widest text-[11px] font-bold">
+                  <span className="material-symbols-outlined text-[15px]">
                     menu_book
                   </span>
                   <span>Catalog &amp; Formula Management</span>
                 </div>
-                <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight text-2xl sm:text-3xl">
+                <h1 className="font-headline-lg text-xl sm:text-2xl font-bold text-primary tracking-tight">
                   Quản lý Thực đơn &amp; Mẫu bánh thủ công
                 </h1>
-                <p className="font-body-md text-body-md text-on-surface-variant max-w-3xl text-xs sm:text-sm">
+                <p className="text-xs sm:text-sm text-on-surface-variant max-w-2xl font-normal leading-relaxed">
                   Quản lý danh sách mẫu bánh signature, cấu hình kích thước (size), giá niêm yết, thời gian nướng chuẩn bị và kích hoạt hiển thị trực tiếp trên sàn Sweet Cake.
                 </p>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center flex-wrap gap-space-sm shrink-0">
+              <div className="flex items-center flex-wrap gap-2 shrink-0">
                 <button
-                  className="inline-flex items-center gap-1.5 px-space-md py-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-lg text-label-lg shadow-sm transition-all text-xs cursor-pointer border border-outline-variant/30"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-container-lowest hover:bg-surface-container text-on-surface shadow-xs transition-all text-xs font-semibold cursor-pointer border border-outline-variant/30"
                   onClick={() => showToast('Đã đồng bộ kiểm tra kho nguyên liệu trứng, bơ và Mascarpone!')}
                   type="button"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-secondary">
+                  <span className="material-symbols-outlined text-[16px] text-secondary">
                     sync
                   </span>
                   <span>Đồng bộ nguyên liệu</span>
                 </button>
 
                 <button
-                  className="inline-flex items-center gap-1.5 px-space-md py-2.5 rounded-xl bg-primary hover:bg-secondary text-on-primary font-label-lg text-label-lg shadow-[0_8px_24px_-4px_rgba(45,30,24,0.18)] transition-all text-xs cursor-pointer font-bold"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary hover:bg-primary-container text-on-primary shadow-xs transition-all text-xs cursor-pointer font-bold"
                   onClick={handleOpenCreateDrawer}
                   type="button"
                 >
-                  <span className="material-symbols-outlined text-[20px]">
+                  <span className="material-symbols-outlined text-[17px]">
                     add_circle
                   </span>
                   <span>+ Thêm mẫu bánh mới</span>
@@ -300,118 +300,118 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
             {/* OVERVIEW METRIC KPI CARDS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
               {/* KPI 1 */}
-              <div className="p-space-md rounded-2xl bg-surface-container-lowest shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] flex flex-col justify-between gap-space-md transition-all hover:shadow-[0_12px_28px_-6px_rgba(45,30,24,0.08)] border border-outline-variant/20">
+              <div className="p-4 rounded-2xl bg-surface-container-lowest shadow-xs flex flex-col justify-between gap-3 transition-all hover:shadow-sm border border-outline-variant/20">
                 <div className="flex items-center justify-between">
-                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline text-xs">
+                  <span className="uppercase tracking-wider text-outline text-[11px] font-semibold">
                     Tổng mẫu bánh Catalog
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-secondary-container/60 text-secondary flex items-center justify-center border border-secondary/20">
                     <span className="material-symbols-outlined text-[18px]">
                       cake
                     </span>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline-lg text-headline-lg text-primary text-3xl font-bold">
+                  <span className="text-2xl font-bold text-primary">
                     {cakes.length}
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant text-xs">
+                  <span className="text-on-surface-variant text-xs font-medium">
                     mẫu bánh
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-secondary text-xs">
                   <span className="w-2 h-2 rounded-full bg-secondary"></span>
-                  <span className="font-body-sm text-body-sm font-medium">
+                  <span className="font-normal text-xs">
                     {cakes.filter((c) => c.isOpenForSale).length} mẫu đang mở bán trực tuyến
                   </span>
                 </div>
               </div>
 
               {/* KPI 2 */}
-              <div className="p-space-md rounded-2xl bg-surface-container-lowest shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] flex flex-col justify-between gap-space-md transition-all hover:shadow-[0_12px_28px_-6px_rgba(45,30,24,0.08)] border border-outline-variant/20">
+              <div className="p-4 rounded-2xl bg-surface-container-lowest shadow-xs flex flex-col justify-between gap-3 transition-all hover:shadow-sm border border-outline-variant/20">
                 <div className="flex items-center justify-between">
-                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline text-xs">
+                  <span className="uppercase tracking-wider text-outline text-[11px] font-semibold">
                     Bán chạy nhất tuần qua
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200">
                     <span className="material-symbols-outlined text-[18px]">
                       local_fire_department
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-headline-sm text-headline-sm text-primary truncate text-base font-bold">
+                  <span className="text-sm sm:text-base font-bold text-primary truncate">
                     Velvet Raspberry Bliss
                   </span>
-                  <span className="font-label-md text-label-md text-secondary font-semibold text-xs">
+                  <span className="text-secondary font-semibold text-xs">
                     64 đơn hoàn tất
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-outline text-xs">
+                <div className="flex items-center gap-1 text-on-surface-variant text-xs">
                   <span className="material-symbols-outlined text-[16px] text-secondary">
                     trending_up
                   </span>
-                  <span className="font-body-sm text-body-sm">
+                  <span className="font-normal text-xs">
                     +18% so với tuần trước
                   </span>
                 </div>
               </div>
 
               {/* KPI 3 */}
-              <div className="p-space-md rounded-2xl bg-surface-container-lowest shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] flex flex-col justify-between gap-space-md transition-all hover:shadow-[0_12px_28px_-6px_rgba(45,30,24,0.08)] border border-outline-variant/20">
+              <div className="p-4 rounded-2xl bg-surface-container-lowest shadow-xs flex flex-col justify-between gap-3 transition-all hover:shadow-sm border border-outline-variant/20">
                 <div className="flex items-center justify-between">
-                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline text-xs">
+                  <span className="uppercase tracking-wider text-outline text-[11px] font-semibold">
                     Mẫu bánh Custom Base
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-secondary-container/60 text-secondary flex items-center justify-center border border-secondary/20">
                     <span className="material-symbols-outlined text-[18px]">
                       palette
                     </span>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline-lg text-headline-lg text-primary text-3xl font-bold">
+                  <span className="text-2xl font-bold text-primary">
                     12
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant text-xs">
+                  <span className="text-on-surface-variant text-xs font-medium">
                     mẫu phối AI
                   </span>
                 </div>
                 <div className="flex items-center gap-1 text-on-surface-variant text-xs">
-                  <span className="material-symbols-outlined text-[16px] text-primary">
+                  <span className="material-symbols-outlined text-[16px] text-secondary">
                     auto_fix_high
                   </span>
-                  <span className="font-body-sm text-body-sm">
+                  <span className="font-normal text-xs">
                     Sẵn sàng cá nhân hóa ảnh vẽ
                   </span>
                 </div>
               </div>
 
               {/* KPI 4 */}
-              <div className="p-space-md rounded-2xl bg-surface-container-lowest shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] flex flex-col justify-between gap-space-md transition-all hover:shadow-[0_12px_28px_-6px_rgba(45,30,24,0.08)] border border-outline-variant/20">
+              <div className="p-4 rounded-2xl bg-surface-container-lowest shadow-xs flex flex-col justify-between gap-3 transition-all hover:shadow-sm border border-outline-variant/20">
                 <div className="flex items-center justify-between">
-                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline text-xs">
+                  <span className="uppercase tracking-wider text-outline text-[11px] font-semibold">
                     Tạm hết nguyên liệu / Ẩn
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-error-container text-on-error-container flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center border border-rose-100">
                     <span className="material-symbols-outlined text-[18px]">
                       inventory_2
                     </span>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline-lg text-headline-lg text-error text-3xl font-bold">
+                  <span className="text-2xl font-bold text-rose-800">
                     0{cakes.filter((c) => !c.isOpenForSale).length}
                   </span>
-                  <span className="font-label-md text-label-md text-error font-medium text-xs">
+                  <span className="text-rose-700 font-medium text-xs">
                     mẫu tạm ẩn
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-error text-xs">
+                <div className="flex items-center gap-1 text-rose-700 text-xs">
                   <span className="material-symbols-outlined text-[16px]">
                     info
                   </span>
-                  <span className="font-body-sm text-body-sm truncate">
+                  <span className="truncate font-normal text-xs">
                     Cần nhập mâm xôi &amp; Mascarpone
                   </span>
                 </div>

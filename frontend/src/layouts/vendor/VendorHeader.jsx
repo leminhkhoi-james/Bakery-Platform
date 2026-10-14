@@ -26,7 +26,7 @@ export default function VendorHeader({
   }
 
   return (
-    <header className="fixed top-0 left-0 md:left-72 right-0 h-20 bg-[#fbf9f5]/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(45,30,24,0.04)] z-30 border-b border-outline-variant/20 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 md:left-72 right-0 h-20 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(45,30,24,0.03)] z-30 border-b border-outline-variant/30 flex items-center justify-between px-4 sm:px-6 lg:px-8">
       {/* Left Section: Mobile toggle, Back button, Title & Subtitle */}
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         {/* Mobile Hamburger Button */}
@@ -56,7 +56,7 @@ export default function VendorHeader({
               {title}
             </h1>
             {contextBadge && (
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-label-md font-semibold bg-secondary-fixed/40 text-on-secondary-fixed border border-secondary/20 shrink-0">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-label-md font-semibold bg-secondary-container/60 text-on-secondary-container border border-secondary/20 shrink-0">
                 {contextBadge}
               </span>
             )}

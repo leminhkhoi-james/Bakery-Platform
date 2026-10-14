@@ -70,11 +70,11 @@ export default function AdminSidebar({
   ]
 
   const sidebarContent = (
-    <aside className="w-72 h-full bg-[#fbf9f5] border-r border-outline-variant/20 flex flex-col justify-between py-6 px-4 select-none">
+    <aside className="w-72 h-full bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between py-6 px-3 select-none">
       {/* Top Branding & Main Navigation */}
       <div>
         {/* Brand Logo & Admin Badge */}
-        <div className="px-3 mb-8">
+        <div className="px-3 mb-6">
           <div className="flex items-center justify-between">
             <BrandLogo onClick={() => handleNav('home')} />
             {onCloseMobile && (
@@ -86,11 +86,11 @@ export default function AdminSidebar({
               </button>
             )}
           </div>
-          <div className="flex items-center gap-2 mt-3 px-3 py-1.5 rounded-xl bg-secondary-fixed/30 border border-secondary/20">
+          <div className="flex items-center gap-2 mt-3 px-3 py-1.5 rounded-xl bg-secondary-container/60 border border-secondary/20">
             <span className="material-symbols-outlined text-secondary text-sm">
               verified
             </span>
-            <span className="text-xs font-label-md font-bold text-on-secondary-fixed tracking-wide uppercase">
+            <span className="text-xs font-label-md font-bold text-on-secondary-container tracking-wide uppercase">
               MASTER ADMIN
             </span>
           </div>
@@ -105,25 +105,27 @@ export default function AdminSidebar({
               <button
                 key={item.id}
                 onClick={() => handleNav(item.route)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-label-lg text-sm transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-primary text-on-primary font-bold shadow-md shadow-primary/10'
+                    ? 'bg-primary text-on-primary font-semibold shadow-sm shadow-primary/20'
                     : 'text-on-surface-variant hover:bg-surface-container hover:text-primary'
                 }`}
               >
-                <div className="flex items-center gap-3 min-w-0 pr-2">
+                <div className="flex items-center gap-2.5 min-w-0 pr-1">
                   <span
-                    className={`material-symbols-outlined text-xl shrink-0 ${
-                      isActive ? 'text-secondary' : 'text-outline'
+                    className={`material-symbols-outlined text-[20px] shrink-0 ${
+                      isActive ? 'text-amber-200' : 'text-outline'
                     }`}
                   >
                     {item.icon}
                   </span>
-                  <span className="truncate whitespace-nowrap">{item.label}</span>
+                  <span className="whitespace-nowrap text-[13.5px] font-medium tracking-tight truncate">
+                    {item.label}
+                  </span>
                 </div>
                 {item.badge && (
                   <span
-                    className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive
                         ? 'bg-on-primary/20 text-on-primary'
                         : 'bg-secondary-fixed text-on-secondary-fixed'
