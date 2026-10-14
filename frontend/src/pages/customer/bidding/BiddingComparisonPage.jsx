@@ -394,45 +394,59 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
   return (
     <div className="w-full striped-candy-bg min-h-screen pb-20">
       <div className="flex flex-col w-full">
+        {/* PAGE INTRO HEADER (Standardized across Explore, AI Studio, Stores) */}
+        <section className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-6 pb-2">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+            <div>
+              <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm mb-2 border border-outline-variant/30">
+                Sàn Đấu Thầu &amp; So Sánh Giá
+              </span>
+              <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary mt-1 font-bold tracking-normal">
+                Sàn So Sánh Báo Giá Mẫu Bánh
+              </h1>
+            </div>
+          </div>
+        </section>
+
         {/* Ambient Glow Element */}
-        <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-6">
+        <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-3">
           <div className="absolute top-12 left-1/3 w-96 h-96 rounded-full bg-secondary/5 blur-3xl pointer-events-none -z-10"></div>
           <div className="absolute top-48 right-12 w-80 h-80 rounded-full bg-tertiary-fixed/30 blur-3xl pointer-events-none -z-10"></div>
 
           {/* ========================================================================= */}
           {/* 1. SCENARIO TESTER BAR (Cho phép bấm thử trực tiếp các flow) */}
           {/* ========================================================================= */}
-          <div className="mb-6 p-4.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="w-9 h-9 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center font-bold text-base shrink-0">
-                <span className="material-symbols-outlined text-xl">tune</span>
+          <div className="mb-6 p-3.5 sm:p-4 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-sm">
+            <div className="flex items-center gap-2.5">
+              <span className="w-8 h-8 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center font-bold text-sm shrink-0">
+                <span className="material-symbols-outlined text-lg">tune</span>
               </span>
               <div>
-                <h4 className="font-label-md text-sm sm:text-base font-bold text-primary flex items-center gap-2">
+                <h4 className="font-label-md text-xs sm:text-sm font-bold text-primary flex items-center gap-2">
                   <span>Bảng Chuyển Kịch Bản Thử Nghiệm</span>
-                  <span className="bg-secondary-fixed text-on-secondary-fixed text-xs px-2 py-0.5 rounded-full font-bold">Môi trường thử nghiệm</span>
+                  <span className="bg-secondary-fixed text-on-secondary-fixed text-[11px] px-2 py-0.5 rounded-full font-bold">Môi trường thử nghiệm</span>
                 </h4>
-                <p className="text-xs sm:text-sm text-on-surface-variant font-medium mt-0.5">
+                <p className="text-[11px] sm:text-xs text-on-surface-variant font-medium mt-0.5">
                   Bấm để chuyển đổi nhanh giữa các trường hợp thực tế
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 text-sm font-bold">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
               <button
-                className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'QUOTED' || currentStatus === 'OPEN'
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'QUOTED' || currentStatus === 'OPEN'
                     ? 'bg-secondary text-on-secondary shadow-sm font-bold'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
                   }`}
                 onClick={handleResetFlow}
                 type="button"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 1. Đang có báo giá
               </button>
 
               <button
-                className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'EXPIRED'
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'EXPIRED'
                     ? 'bg-amber-600 text-white shadow-sm font-bold'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
                   }`}
@@ -446,12 +460,12 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 }}
                 type="button"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
                 2. Quá 48h chưa ai nhận
               </button>
 
               <button
-                className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${declinedBidIds.length > 0
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${declinedBidIds.length > 0
                     ? 'bg-rose-600 text-white shadow-sm font-bold'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
                   }`}
@@ -464,12 +478,12 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 }}
                 type="button"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                <span className="w-2 h-2 rounded-full bg-rose-400"></span>
                 3. Tiệm từ chối
               </button>
 
               <button
-                className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'CLOSED'
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'CLOSED'
                     ? 'bg-slate-700 text-white shadow-sm font-bold'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
                   }`}
@@ -483,12 +497,12 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 }}
                 type="button"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                <span className="w-2 h-2 rounded-full bg-slate-400"></span>
                 4. Quá 7 ngày không chọn
               </button>
 
               <button
-                className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'CANCELLED'
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${currentStatus === 'CANCELLED'
                     ? 'bg-red-700 text-white shadow-sm font-bold'
                     : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
                   }`}
@@ -502,7 +516,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 }}
                 type="button"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                <span className="w-2 h-2 rounded-full bg-red-400"></span>
                 5. Khách hủy đơn
               </button>
             </div>
@@ -511,7 +525,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
           {/* ========================================================================= */}
           {/* 1.1 VISUAL 8-STEP WORKFLOW STATE MACHINE PROGRESS BAR */}
           {/* ========================================================================= */}
-          <div className="mb-6 p-5 rounded-2xl bg-surface-container-lowest border border-outline-variant/20 shadow-sm overflow-x-auto">
+          <div className="mb-6 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/20 shadow-sm overflow-x-auto">
             <div className="flex items-center min-w-[750px] justify-between relative">
               {STEPS.map((step, idx) => {
                 const stepKeys = STEPS.map((s) => s.key)
@@ -522,19 +536,19 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 return (
                   <div key={step.key} className="flex flex-col items-center text-center relative z-10 flex-1 px-1">
                     <div
-                      className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all mb-1.5 ${isCurrent
-                          ? 'bg-secondary text-on-secondary shadow-md ring-4 ring-secondary/20 scale-110 font-bold'
+                      className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all mb-1.5 ${isCurrent
+                          ? 'bg-secondary text-on-secondary shadow-md ring-4 ring-secondary/20 scale-105 font-bold'
                           : isPassed
                             ? 'bg-emerald-700 text-white font-bold'
                             : 'bg-surface-container-highest text-on-surface-variant font-bold border border-outline-variant/40'
                         }`}
                     >
-                      <span className="material-symbols-outlined text-xl">
+                      <span className="material-symbols-outlined text-lg">
                         {isPassed ? 'check' : step.icon}
                       </span>
                     </div>
                     <span
-                      className={`text-xs sm:text-sm font-bold tracking-tight ${isCurrent
+                      className={`text-xs font-bold tracking-tight whitespace-nowrap ${isCurrent
                           ? 'text-secondary'
                           : isPassed
                             ? 'text-emerald-800'
@@ -543,7 +557,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                     >
                       {step.label}
                     </span>
-                    <span className="text-xs text-on-surface-variant font-medium mt-0.5 truncate max-w-[100px]">
+                    <span className="text-[11px] text-on-surface-variant font-medium mt-0.5 truncate max-w-[120px]">
                       {step.desc}
                     </span>
                   </div>
@@ -806,103 +820,103 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
               {/* Right: Request Brief, Requirements & Target Constraints */}
               <div className="lg:col-span-8 flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-sm uppercase tracking-wide font-bold">
+                      <span className="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-xs uppercase tracking-wider font-bold">
                         Yêu Cầu Báo Giá
                       </span>
-                      <span className="px-3 py-1.5 rounded-full bg-surface-container font-label-md text-sm text-primary font-bold">
+                      <span className="px-2.5 py-1 rounded-full bg-surface-container font-label-md text-xs text-primary font-bold">
                         Trạng thái: {STATUS_VN_MAP[currentStatus] || currentStatus}
                       </span>
                     </div>
-                    <span className="font-label-md text-sm text-on-surface-variant font-bold">
+                    <span className="font-label-md text-xs text-on-surface-variant font-semibold">
                       {rfqData.id || '#RFQ-2025-8892'}
                     </span>
                   </div>
 
-                  <h1 className="font-headline-md text-2xl sm:text-3xl text-primary font-bold leading-tight mb-4">
+                  <h2 className="font-headline-md text-xl sm:text-2xl text-primary font-bold leading-snug mb-3.5">
                     {rfqData.title || 'Bánh Sinh Nhật Pikachu 2 Tầng Cho Bé'}
-                  </h1>
+                  </h2>
 
                   {/* Metadata Metrics Grid (3 thông số cốt lõi: Tên bánh, Budget 1 triệu, Need 20/10) */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 sm:p-5 rounded-2xl bg-surface-container-low mb-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-surface-container-low mb-5">
                     <div>
-                      <div className="flex items-center gap-1.5 font-label-md text-sm text-on-surface-variant font-bold mb-1">
-                        <span className="material-symbols-outlined text-[18px]">
+                      <div className="flex items-center gap-1.5 font-label-md text-xs text-on-surface-variant font-bold mb-1 uppercase tracking-wider">
+                        <span className="material-symbols-outlined text-[16px]">
                           payments
                         </span>
                         <span>Ngân sách</span>
                       </div>
-                      <div className="font-headline-sm text-xl sm:text-2xl text-secondary font-bold">
+                      <div className="font-headline-sm text-lg sm:text-xl text-secondary font-bold">
                         {rfqData.budget
                           ? rfqData.budget.toLocaleString('vi-VN')
                           : '1.000.000'}
-                        <span className="text-base font-normal text-on-surface-variant">
+                        <span className="text-sm font-normal text-on-surface-variant ml-0.5">
                           đ
                         </span>
                       </div>
-                      <span className="text-xs sm:text-sm text-on-surface-variant font-medium">
+                      <span className="text-xs text-on-surface-variant font-medium">
                         Khách mong muốn
                       </span>
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-1.5 font-label-md text-sm text-on-surface-variant font-bold mb-1">
-                        <span className="material-symbols-outlined text-[18px]">
+                      <div className="flex items-center gap-1.5 font-label-md text-xs text-on-surface-variant font-bold mb-1 uppercase tracking-wider">
+                        <span className="material-symbols-outlined text-[16px]">
                           event
                         </span>
                         <span>Ngày cần</span>
                       </div>
-                      <div className="font-headline-sm text-base sm:text-lg text-primary font-bold">
+                      <div className="font-headline-sm text-sm sm:text-base text-primary font-bold">
                         {rfqData.needDate || 'Hôm nay (20/09/2026)'}
                       </div>
-                      <div className="font-body-sm text-xs sm:text-sm text-secondary font-semibold mt-0.5">
+                      <div className="font-body-sm text-xs text-secondary font-semibold mt-0.5">
                         {rfqData.deliveryTimeSlot || '15:30 - 16:30'}
                       </div>
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-1.5 font-label-md text-sm text-on-surface-variant font-bold mb-1">
-                        <span className="material-symbols-outlined text-[18px]">
+                      <div className="flex items-center gap-1.5 font-label-md text-xs text-on-surface-variant font-bold mb-1 uppercase tracking-wider">
+                        <span className="material-symbols-outlined text-[16px]">
                           pin_drop
                         </span>
                         <span>Địa điểm nhận</span>
                       </div>
-                      <div className="font-headline-sm text-base sm:text-lg text-primary font-bold truncate">
+                      <div className="font-headline-sm text-sm sm:text-base text-primary font-bold truncate">
                         {rfqData.deliveryAddress || 'Quận 1, TP.HCM'}
                       </div>
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-1.5 font-label-md text-sm text-on-surface-variant font-bold mb-1">
-                        <span className="material-symbols-outlined text-[18px]">
+                      <div className="flex items-center gap-1.5 font-label-md text-xs text-on-surface-variant font-bold mb-1 uppercase tracking-wider">
+                        <span className="material-symbols-outlined text-[16px]">
                           cake
                         </span>
                         <span>Yêu cầu chữ viết</span>
                       </div>
-                      <div className="font-headline-sm text-base sm:text-lg text-primary font-bold truncate">
+                      <div className="font-headline-sm text-sm sm:text-base text-primary font-bold truncate">
                         {rfqData.cakeMessage || 'Happy Birthday!'}
                       </div>
-                      <div className="font-body-sm text-xs sm:text-sm text-on-surface-variant font-medium mt-0.5">
+                      <div className="font-body-sm text-xs text-on-surface-variant font-medium mt-0.5">
                         Viết kem socola đỏ
                       </div>
                     </div>
                   </div>
 
                   {/* Customer Note Sent to Bakeries Box */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 mb-5 flex items-start gap-3.5 shadow-xs animate-in fade-in">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-900 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="material-symbols-outlined text-2xl">
+                  <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 mb-4 flex items-start gap-3 shadow-xs animate-in fade-in">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-900 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="material-symbols-outlined text-lg">
                         edit_note
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="font-label-md text-sm font-bold text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="font-label-md text-xs font-bold text-amber-950 uppercase tracking-wider flex items-center gap-1.5">
                           Ghi chú của khách hàng gửi đến các tiệm
                         </span>
                       </div>
-                      <p className="text-sm sm:text-base text-amber-950 leading-relaxed font-medium italic">
+                      <p className="text-xs sm:text-sm text-amber-950 leading-relaxed font-medium italic">
                         "{rfqData.customerNote || 'Bánh cho tiệc sinh nhật 7 tuổi bé Minh Khang, làm cốt Chiffon vani ít ngọt 30%, bé hơi nhạy cảm với socola đắng nên dùng socola sữa tạo hình Pikachu giúp em nhé. Giao thùng xe lạnh đúng hẹn.'}"
                       </p>
                     </div>
@@ -983,7 +997,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                   </span>
                 )}
               </div>
-              <h2 className="font-headline-lg text-headline-lg text-primary leading-tight">
+              <h2 className="font-headline-lg text-2xl sm:text-3xl text-primary font-bold leading-tight">
                 Danh Sách Báo Giá Từ Các Tiệm Bánh
               </h2>
             </div>
@@ -991,9 +1005,9 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
             {/* Quick Sorting */}
             <div className="flex items-center p-1 rounded-full bg-surface-container-high self-start md:self-auto">
               <button
-                className={`px-4 py-1.5 rounded-full font-label-sm text-label-sm transition-all cursor-pointer ${activeFilter === 'all'
+                className={`px-3.5 py-1.5 rounded-full font-label-sm text-xs transition-all cursor-pointer ${activeFilter === 'all'
                     ? 'bg-surface-container-lowest text-primary shadow-sm font-bold'
-                    : 'text-on-surface-variant hover:text-primary'
+                    : 'text-on-surface-variant hover:text-primary font-medium'
                   }`}
                 onClick={() => setActiveFilter('all')}
                 type="button"
@@ -1001,9 +1015,9 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 Tất cả (3 tiệm)
               </button>
               <button
-                className={`px-4 py-1.5 rounded-full font-label-sm text-label-sm transition-all cursor-pointer ${activeFilter === 'lowest'
+                className={`px-3.5 py-1.5 rounded-full font-label-sm text-xs transition-all cursor-pointer ${activeFilter === 'lowest'
                     ? 'bg-surface-container-lowest text-primary shadow-sm font-bold'
-                    : 'text-on-surface-variant hover:text-primary'
+                    : 'text-on-surface-variant hover:text-primary font-medium'
                   }`}
                 onClick={() => setActiveFilter('lowest')}
                 type="button"
@@ -1011,9 +1025,9 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 Giá thấp nhất
               </button>
               <button
-                className={`px-4 py-1.5 rounded-full font-label-sm text-label-sm transition-all cursor-pointer ${activeFilter === 'fastest'
+                className={`px-3.5 py-1.5 rounded-full font-label-sm text-xs transition-all cursor-pointer ${activeFilter === 'fastest'
                     ? 'bg-surface-container-lowest text-primary shadow-sm font-bold'
-                    : 'text-on-surface-variant hover:text-primary'
+                    : 'text-on-surface-variant hover:text-primary font-medium'
                   }`}
                 onClick={() => setActiveFilter('fastest')}
                 type="button"
