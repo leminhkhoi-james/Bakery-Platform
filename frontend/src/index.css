@@ -85,6 +85,8 @@
 
   --font-display: 'Quicksand', 'Nunito', sans-serif;
   --font-headline: 'Quicksand', 'Nunito', sans-serif;
+  --font-fraunces: 'Fraunces', serif;
+  --font-serif: 'Fraunces', serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
   --font-label: 'Plus Jakarta Sans', sans-serif;
   --font-cormorant: 'Cormorant Garamond', serif;
@@ -124,7 +126,10 @@
   .font-headline-md,
   .font-headline-sm,
   .font-display-lg-mobile,
-  .font-headline-lg-mobile {
+  .font-headline-lg-mobile,
+  .font-headline,
+  .font-display,
+  .font-fraunces {
     font-family: var(--font-headline);
     font-weight: 700;
   }
@@ -242,6 +247,10 @@
 .font-savoure {
   font-family: 'Quicksand', 'Nunito', sans-serif;
   letter-spacing: normal !important;
+}
+
+.font-fraunces {
+  font-family: 'Fraunces', serif;
 }
 
 .font-sweetcake {
@@ -456,12 +465,12 @@
 
 .striped-candy-bg {
   /* Dreamy fairy-tale landscape background */
-  background-color: var(--color-surface);
+  background-color: #fff4e9;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-surface) 40%, transparent), color-mix(in srgb, var(--color-surface) 60%, transparent)),
+    linear-gradient(rgba(255, 244, 233, 0.25), rgba(255, 244, 233, 0.45)),
     url('/images/fairy-bg.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   background-attachment: fixed;
 }
 
@@ -471,6 +480,13 @@
 
 .striped-candy-pink-bg {
   background: repeating-linear-gradient(90deg, #fdf2f5 0, #fdf2f5 62px, #fffdfa 62px, #fffdfa 124px);
+}
+
+.striped-assurance-bg {
+  background-color: #fff7ee;
+  background-image:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 214, 226, 0.4) 0%, transparent 75%),
+    repeating-linear-gradient(90deg, #fff0e4 0px, #fff0e4 54px, #fffaf4 54px, #fffaf4 108px);
 }
 
 .pattern-gingham-red {

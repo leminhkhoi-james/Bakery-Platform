@@ -114,9 +114,13 @@ export default function VendorHeader({
           title="Cài đặt thông tin tiệm bánh"
         >
           <img
-            src="https://lh3.googleusercontent.com/aida/AEtjO1UW-Pqje1qQ27WocOmEF6z8uQbX4Pu7dER_Li586FmA7D-SZPtELbM4diNLey0TATd7BWeyBRVp0BJyiwRQ_Yj2o8ZvjU1gga_5DYXFHmRARECApBa-Pknbu-F_C4RsJvPsxZur94CVef_-mhMUtBA5pqCBm39qRgn4zALShBi4iNWkPvOaQa9bTIcfaPbq4eDVHCaFKq1lgnsEbgULw4G-0rsbYDlzqjGcSoKiajpNsUeCjPnRs_qaS3o"
+            src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80"
             alt="La Crème Pâtisserie"
             className="w-8 h-8 rounded-full object-cover border border-secondary/40 group-hover:scale-105 transition-transform"
+            onError={(e) => {
+              e.target.onerror = null
+              e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+            }}
           />
           <div className="hidden xl:block text-left leading-tight">
             <p className="font-label-md text-xs font-bold text-primary group-hover:text-secondary transition-colors">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { INITIAL_CAKES } from '../../../mockData/customer/cakes.js'
 import { useAppData } from '../../../context/AppDataContext.jsx'
 
@@ -72,6 +72,27 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
     return 'all'
   })
 
+  useEffect(() => {
+    const handleCategoryEvent = (e) => {
+      const cat = e.detail?.category
+      if (cat) {
+        setSelectedCategory(cat)
+        setActivePage(1)
+        const gridEl = document.getElementById('cakeGridContainer')
+        if (gridEl) {
+          gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      }
+    }
+
+    window.addEventListener('sweetcake_filter_category', handleCategoryEvent)
+    return () => {
+      window.removeEventListener('sweetcake_filter_category', handleCategoryEvent)
+    }
+  }, [])
+
   const filteredCakes = INITIAL_CAKES.filter((cake) => {
     const matchesSearch =
       searchTerm === '' ||
@@ -87,7 +108,16 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
     const matchesCategory =
       selectedCategory === 'all' ||
       cake.category === selectedCategory ||
-      (selectedCategory === 'Bánh Kem Sinh Nhật' && (!cake.category || cake.category === 'Bánh Kem Sinh Nhật'))
+      (selectedCategory === 'Bánh Kem Sinh Nhật' && (!cake.category || cake.category === 'Bánh Kem Sinh Nhật')) ||
+      (selectedCategory === 'Bánh Cưới (Wedding)' && (cake.category === 'Bánh Cưới (Wedding)' || (cake.title && cake.title.toLowerCase().includes('cưới')))) ||
+      (selectedCategory === 'Bánh Mousse' && (cake.category === 'Bánh Mousse' || cake.category === 'Bánh Tiramisu')) ||
+      (selectedCategory === 'Mousse & Tiramisu' && (cake.category === 'Bánh Mousse' || cake.category === 'Bánh Tiramisu' || (cake.title && (cake.title.toLowerCase().includes('mousse') || cake.title.toLowerCase().includes('tiramisu'))))) ||
+      (selectedCategory === 'Cupcakes & Macarons' && (cake.category === 'Bánh Su Kem' || cake.category === 'Bánh Tráng Miệng & Cookie' || (cake.title && (cake.title.toLowerCase().includes('cupcake') || cake.title.toLowerCase().includes('macaron'))))) ||
+      (selectedCategory === 'Bánh Su Kem' && (cake.category === 'Bánh Su Kem' || (cake.title && (cake.title.toLowerCase().includes('su kem') || cake.title.toLowerCase().includes('choux'))))) ||
+      (selectedCategory === 'Bánh Tráng Miệng & Cookie' && (cake.category === 'Bánh Tráng Miệng & Cookie' || (cake.title && (cake.title.toLowerCase().includes('macaron') || cake.title.toLowerCase().includes('cookie') || cake.title.toLowerCase().includes('tráng miệng'))))) ||
+      (selectedCategory === 'Bánh Nướng & Viennoiserie' && (cake.category === 'Bánh Nướng & Viennoiserie' || (cake.title && (cake.title.toLowerCase().includes('croissant') || cake.title.toLowerCase().includes('nướng') || cake.title.toLowerCase().includes('bơ tỏi'))))) ||
+      (selectedCategory === 'Bánh nướng Viennoiserie' && (cake.category === 'Bánh Nướng & Viennoiserie' || cake.category === 'Bánh Tráng Miệng & Cookie' || (cake.title && (cake.title.toLowerCase().includes('croissant') || cake.title.toLowerCase().includes('nướng') || cake.title.toLowerCase().includes('tart'))))) ||
+      (selectedCategory === 'Đồ Uống & Trà' && (cake.category === 'Đồ Uống & Trà' || (cake.title && (cake.title.toLowerCase().includes('trà') || cake.title.toLowerCase().includes('uống') || cake.title.toLowerCase().includes('tea')))))
 
     const matchesThemes =
       selectedThemes.length === 0 ||
@@ -405,7 +435,9 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
                     { id: 'Bánh Trung Thu & Quà Tặng', label: '🥮 Bánh Trung Thu & Quà Tặng', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Trung Thu & Quà Tặng').length },
                     { id: 'Bánh Flan Gato', label: '🍮 Bánh Flan Gato', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Flan Gato').length },
                     { id: 'Bánh Cheesecake & Tart', label: '🧀 Cheesecake & Tart', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Cheesecake & Tart').length },
-                    { id: 'Bánh Tráng Miệng & Cookie', label: '🍪 Tráng Miệng & Cookie', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Tráng Miệng & Cookie').length },
+                    { id: 'Bánh Tráng Miệng & Cookie', label: '🍪 Tráng Miệng & Macarons (Kèm bánh)', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Tráng Miệng & Cookie' || (c.title && c.title.toLowerCase().includes('macaron'))).length },
+                    { id: 'Bánh Nướng & Viennoiserie', label: '🥐 Bánh Nướng & Viennoiserie (Khai vị mặn)', count: INITIAL_CAKES.filter(c => c.category === 'Bánh Nướng & Viennoiserie' || (c.title && c.title.toLowerCase().includes('croissant'))).length },
+                    { id: 'Đồ Uống & Trà', label: '🫖 Đồ Uống & Trà Thượng Hạng', count: INITIAL_CAKES.filter(c => c.category === 'Đồ Uống & Trà' || (c.title && c.title.toLowerCase().includes('trà'))).length },
                   ].map((cat) => {
                     const isSelected = selectedCategory === cat.id
                     return (
@@ -915,13 +947,34 @@ export const ExploreCakesPage = ({ onAddToCart, onNavigate }) => {
                           {currentPrice.toLocaleString('vi-VN')} đ
                         </span>
 
-                        <button
-                          type="button"
-                          onClick={() => handleQuickBiddingOrder(cakeToOrder)}
-                          className="px-5 py-2 rounded-lg bg-[#9f1e31] text-white font-bold text-[13px] hover:bg-[#851829] transition-all shadow-sm cursor-pointer"
-                        >
-                          Đặt bánh
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          {/* Nút thêm vào giỏ hàng */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (onAddToCart) {
+                                onAddToCart(cakeToOrder)
+                              }
+                            }}
+                            className="w-9 h-9 rounded-lg border-2 border-[#9f1e31] bg-white text-[#9f1e31] hover:bg-[#9f1e31] hover:text-white active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-xs group/cart shrink-0"
+                            title="Thêm vào giỏ hàng"
+                            aria-label="Thêm vào giỏ hàng"
+                          >
+                            <span className="material-symbols-outlined text-[19px] transition-transform group-hover/cart:scale-110">
+                              add_shopping_cart
+                            </span>
+                          </button>
+
+                          {/* Nút Đặt bánh */}
+                          <button
+                            type="button"
+                            onClick={() => handleQuickBiddingOrder(cakeToOrder)}
+                            className="px-4 py-2 rounded-lg bg-[#9f1e31] text-white font-bold text-[13px] hover:bg-[#851829] active:scale-95 transition-all shadow-sm cursor-pointer whitespace-nowrap flex items-center gap-1.5"
+                          >
+                            <span>Đặt bánh</span>
+                          </button>
+                        </div>
                       </div>
                     </article>
                   )

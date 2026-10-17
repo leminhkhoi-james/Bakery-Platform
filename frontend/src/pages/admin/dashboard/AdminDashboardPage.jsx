@@ -493,9 +493,6 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                         Đơn Hàng Giá Trị &amp; Giám Sát Escrow Vault
                       </h2>
                     </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">
-                      Dòng tiền ký quỹ an toàn bảo chứng trước khi bàn giao bánh tiệc
-                    </p>
                   </div>
 
                 </div>

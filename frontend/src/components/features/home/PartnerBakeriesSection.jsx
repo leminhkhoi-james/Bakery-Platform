@@ -123,13 +123,9 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
                       </p>
                     </div>
 
-                    <div className="pt-2.5 border-t border-wine/10 flex items-center justify-between">
-                      <span className="text-xs text-wine font-bold flex items-center gap-1">
-                        <span className="material-symbols-outlined text-sm">{bakery.perkIcon || 'verified'}</span>
-                        {bakery.perk}
-                      </span>
+                    <div className="pt-2.5 border-t border-wine/10 flex items-center justify-end">
                       <a
-                        className="text-wine font-extrabold text-xs underline underline-offset-4 hover:text-[#b8273b] transition-colors"
+                        className="text-wine font-extrabold text-xs underline underline-offset-4 hover:text-[#b8273b] transition-colors inline-flex items-center gap-1"
                         href="/explore"
                         onClick={(e) => {
                           e.preventDefault()
@@ -137,7 +133,7 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
                         }}
                       >
                         <span className="hover:underline">Xem Menu</span>
-                        <span className="material-symbols-outlined text-xs inline-block align-middle ml-0.5 no-underline">arrow_outward</span>
+                        <span className="material-symbols-outlined text-xs no-underline">arrow_outward</span>
                       </a>
                     </div>
                   </div>

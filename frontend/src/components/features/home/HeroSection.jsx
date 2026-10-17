@@ -41,11 +41,12 @@ export const HeroSection = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Top Right Cloud Cluster (White + Star) */}
+            {/* Top Right Cloud Cluster (Pink Dots + Star) */}
             <div className="absolute top-2 -right-18 sm:-right-32 md:-right-48 lg:-right-60 pointer-events-none select-none z-0 scale-75 sm:scale-90 md:scale-100 opacity-95">
               <div className="relative w-52 h-28">
-                <div className="absolute inset-0 rounded-full bg-white border-2 border-wine pattern-dots-pink shadow-[2px_2px_0_#9f1e31] opacity-90"></div>
-                <div className="absolute -top-6 right-10 w-24 h-24 rounded-full bg-white border-t-2 border-r-2 border-wine"></div>
+                <div className="absolute inset-0 rounded-full pattern-dots-pink border-2 border-wine shadow-[2px_2px_0_#9f1e31]"></div>
+                <div className="absolute -top-4 left-8 w-20 h-20 rounded-full pattern-dots-pink border-t-2 border-l-2 border-wine"></div>
+                <div className="absolute -top-6 right-8 w-24 h-24 rounded-full pattern-dots-pink border-t-2 border-r-2 border-wine"></div>
                 <div className="absolute bottom-2 left-6 text-sm text-wine font-bold">★</div>
               </div>
             </div>

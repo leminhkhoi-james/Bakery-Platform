@@ -532,55 +532,6 @@ export const VendorBespokeQuoteSubmitPage = ({ onNavigate, rfqData = null }) => 
                     </div>
                   </div>
 
-                  {/* 3. CAM KẾT DỊCH VỤ */}
-                  <div className="space-y-3 pt-2 border-t border-outline-variant/15">
-                    <div className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-primary text-on-primary text-xs font-bold flex items-center justify-center">
-                        3
-                      </span>
-                      <h3 className="font-headline-sm text-sm font-bold text-primary uppercase tracking-wider">
-                        Cam Kết Dịch Vụ
-                      </h3>
-                    </div>
-
-                    <div className="space-y-2 text-xs">
-                      <label className="flex items-center gap-2.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={commitOnTime}
-                          onChange={(e) => setCommitOnTime(e.target.checked)}
-                          className="w-4 h-4 accent-secondary rounded cursor-pointer"
-                        />
-                        <span className="font-semibold text-primary">
-                          ✓ Giao đúng giờ (Cam kết đúng 15:30 ngày 25/10)
-                        </span>
-                      </label>
-
-                      <label className="flex items-center gap-2.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={commitCoolShipping}
-                          onChange={(e) => setCommitCoolShipping(e.target.checked)}
-                          className="w-4 h-4 accent-secondary rounded cursor-pointer"
-                        />
-                        <span className="font-semibold text-primary">
-                          ✓ Xe lạnh / Thùng bảo quản chuyên dụng (Không chảy kem, không xô lệch)
-                        </span>
-                      </label>
-
-                      <label className="flex items-center gap-2.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={commitMoneyBack}
-                          onChange={(e) => setCommitMoneyBack(e.target.checked)}
-                          className="w-4 h-4 accent-secondary rounded cursor-pointer"
-                        />
-                        <span className="font-semibold text-primary">
-                          ✓ Hoàn tiền 100% nếu bánh bị hỏng dáng hoặc sai yêu cầu cốt bánh
-                        </span>
-                      </label>
-                    </div>
-                  </div>
 
                   {/* 4. HÀNH ĐỘNG GỬI BÁO GIÁ */}
                   <div className="pt-4 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4">

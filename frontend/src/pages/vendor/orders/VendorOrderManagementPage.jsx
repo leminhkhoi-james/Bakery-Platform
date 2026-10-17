@@ -286,7 +286,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
                     <span className="font-headline-lg text-2xl sm:text-3xl font-bold text-primary">23 đơn</span>
-                    <span className="font-label-sm text-[11px] text-secondary font-bold">+4 mới</span>
+                    
                   </div>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-secondary-container/60 border border-secondary/20 flex items-center justify-center text-secondary">
@@ -673,7 +673,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse"></span>
                     <h3 className="font-headline-sm text-xs font-bold text-primary uppercase tracking-wider">
-                      4. Đang giao xe lạnh
+                      4. Đang giao
                     </h3>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-surface-container text-xs font-bold text-primary">

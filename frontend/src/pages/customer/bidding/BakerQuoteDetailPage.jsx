@@ -285,7 +285,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKDb3oYQNxybrSUkMXkgogzAgrJam-Bkt_zRDFaHyzJd7H858SUdul6WsSTatwiahG-AwWImb7zsKL0wTUBhhcWk_5gidtFz-MKXqbbES-6sHew8mISbXADdYkyNDd7jW3HNR3B00OmSXahVWuI0JP2Qo0SXi8vKuY_SNSX_viZMs5h4IALcF4by-wMeTHMMKrxRRsql3Ao1DGC-hi-QJYo1FJGAJEhlrvmc6twk_Em2e7KRecQdG7"
                       />
-                      <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-surface font-label-sm text-label-sm font-semibold">
+                      <div className="absolute inset-0 bg-black/30 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-label-sm text-label-sm font-semibold">
                         Đơn tháng 9
                       </div>
                     </div>
@@ -296,7 +296,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCE1WrnvXAKKQv8N3WUjZc_ID0zMgGI1OCcUuTZ_PCMfYBUwYEdd_2u6V01sa2j623Q5GLRunXeoNt5kebIN8yYhLDl9ZwdMVeeDFK9tHOHxkkyPv4F4DM2Y1gZaZwZotMkoLAPuQEyfl4nw_vff5sjGEb1bIOJqetb2nxkf4nm0VKlQVJLTzjUZ2Pofj9MilCwfeJEiWJRlqHFgYEkp0h8y_PWdjdsO-vBi7OrtzkGQ069ajD6RJt"
                       />
-                      <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-surface font-label-sm text-label-sm font-semibold">
+                      <div className="absolute inset-0 bg-black/30 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-label-sm text-label-sm font-semibold">
                         Đơn tháng 10
                       </div>
                     </div>
@@ -307,7 +307,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJg1MtLulzRtvSodXHeRZ4FBIbkzA1S9GM988R1hsSpVx95Vni1fMmP-Jwfk6pFM4OB3X-iaxmTttVQIWEpnKlwXT2KIjn7r5cuI0h1M2lPeJT8vYLj-Ve0XmzH5xhP3mZEIRa-DxdQEdCL1UoNfYqAcX3dRjdW5tbT2Ey1s4TZY8Me9_6NZU7O7mJ9KeFkWbXy5NIpdnWbnL1lyADMUVeD4VbL4VD8haHVve0JFfxDMpxqQGFm9qJ"
                       />
-                      <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-surface font-label-sm text-label-sm font-semibold">
+                      <div className="absolute inset-0 bg-black/30 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-label-sm text-label-sm font-semibold">
                         Đơn tiệc sự kiện
                       </div>
                     </div>
@@ -674,7 +674,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 1: Escrow Deposit Confirmation */}
       {isEscrowModalOpen && (
-        <div className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-[0_24px_48px_rgba(45,30,24,0.2)] border border-outline-variant/30 relative">
             <button
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant cursor-pointer transition-colors"
@@ -766,7 +766,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 2: Chat Directly with Pastry Chef Minh Vu */}
       {isChatOpen && (
-        <div className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full h-[540px] flex flex-col shadow-2xl border border-outline-variant/30 overflow-hidden">
             {/* Header */}
             <div className="p-4 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/20">
@@ -854,7 +854,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 3: Yêu Cầu Điều Chỉnh Báo Giá */}
       {isAdjustModalOpen && (
-        <div className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 relative">
             <button
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant cursor-pointer transition-colors"

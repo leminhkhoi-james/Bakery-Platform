@@ -72,6 +72,78 @@ export const INITIAL_CAKES = [
     "category": "Bánh Mousse"
   },
   {
+    "id": "macarons-6",
+    "title": "Hộp 6 Macarons Pháp Signature",
+    "price": 210000,
+    "basePrice": 210000,
+    "sizes": [
+      { "size": "Hộp 6 chiếc", "guests": "1 - 2 người", "price": 210000 },
+      { "size": "Hộp 12 chiếc", "guests": "3 - 5 người", "price": 390000 }
+    ],
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBmsVzjTjx0IXkjIOk52xFfrpv7TjI9az2jX1gpiVBfsVk2CkwVOuzGJu2GoliiJ6a6O9yypqJ83qKQlQVNLqVf9t515O2kFPLLmEAXvtMtSbVcPq6V7SNOBSegKib2_tZYTL4Hdg1kAxjPhT4fH_HLAFVDiK0CBqS360SilhLUzy1_YHqUQy2i8SjUdCIGx7j421dsrFO4NO5DsrTotFAbAPz2m_ZBZvNN0mj7q0WXaAS2__WF23w5",
+    "badges": ["Kèm bánh", "Macarons & Petit Fours"],
+    "tag": "Kèm bánh",
+    "description": "Vỏ giòn tan bọc nhân ganache phúc bồn tử, hạt dẻ cười & socola đen 70%. Món tráng miệng kèm hoàn hảo cho mọi buổi tiệc ngọt.",
+    "sizeSpec": "Hộp 6 chiếc • 6 vị cao cấp",
+    "vendor": "La Crème Pâtisserie",
+    "vendorInitial": "LC",
+    "rating": 4.9,
+    "reviewCount": 86,
+    "deliveryTime": "fast",
+    "category": "Bánh Tráng Miệng & Cookie",
+    "theme": "vintage",
+    "occasion": "family",
+    "color": "pink"
+  },
+  {
+    "id": "rose-earl-grey",
+    "title": "Trà Bá Tước Hoa Hồng (Rose Earl Grey)",
+    "price": 140000,
+    "basePrice": 140000,
+    "sizes": [
+      { "size": "Ấm tiêu chuẩn", "guests": "2 - 3 tách", "price": 140000 },
+      { "size": "Bình tiệc lớn", "guests": "4 - 6 tách", "price": 220000 }
+    ],
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCcfE9YSBTHUb99bzqofhGfVJEQW64jE8HJVFnGdD55k9Yg01-B-cQ3ce2DHaGZAyuKhXivzLyb0magKWKG9izSgODiGPQKs2HCj-800Og19xIkV_DOGtgpQwzLqOkxBaNVroLz3H9hFc-tpYqlcCNCQVDqDj6X6L8BUrXWPORrcvzCSYOGtuwBg3XlcyluMCP6wyySl5rGhZ3vJK_4ubOL_sXo0pdp7OcEBSQOmbocaKorPANho-EO",
+    "badges": ["Đồ uống hoàn hảo", "Trà Ceylon Bergamot"],
+    "tag": "Đồ uống hoàn hảo",
+    "description": "Trà lá Ceylon thượng hạng ướp tinh dầu cam Bergamot và nụ hoa hồng Pháp thơm ngát, cân bằng vị ngọt béo của bánh kem.",
+    "sizeSpec": "Ấm pha tươi • 2-3 tách",
+    "vendor": "SweetCake Haute Pâtisserie",
+    "vendorInitial": "SC",
+    "rating": 5.0,
+    "reviewCount": 64,
+    "deliveryTime": "fast",
+    "category": "Đồ Uống & Trà",
+    "theme": "natural",
+    "occasion": "family",
+    "color": "yellow"
+  },
+  {
+    "id": "croissant-black-garlic",
+    "title": "Croissant Bơ Tỏi Đen Lên Men",
+    "price": 65000,
+    "basePrice": 65000,
+    "sizes": [
+      { "size": "1 chiếc", "guests": "1 người", "price": 65000 },
+      { "size": "Set 3 chiếc", "guests": "2 - 3 người", "price": 180000 }
+    ],
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuB6sr1ww3fZYNJ8fP2QVl7ECqdcrKDwOnqolqWUh-UgHuPUnm67IBf-Ol0LjLpxWrUckcW813lCxabs8m21-PpPSW8aXadmDSk6tIY6eXxKJR1tNu4sRt-ZcofnnbCoFwSAe6eno7ZWdtoekCZIqLdC7upija1gpHG1sIxTccPupZvikAWilcF1apCwjSbG5q9JqUTPZ5YcGlCWmTF2jGXdB0-0h8yfcZ8QeWsPrBt9mvzH21CWQ9ZW",
+    "badges": ["Khai vị mặn", "Bánh nướng Viennoiserie"],
+    "tag": "Khai vị mặn",
+    "description": "Bánh nướng ngàn lớp thơm nức từ bơ tươi kết hợp sốt tỏi đen cân bằng vị giác, món khai vị chuẩn vị tiệc ngọt phong cách Pháp.",
+    "sizeSpec": "1 chiếc chuẩn vị • Bơ Pháp AOP",
+    "vendor": "Artisan Sweet Atelier",
+    "vendorInitial": "AS",
+    "rating": 4.8,
+    "reviewCount": 92,
+    "deliveryTime": "fast",
+    "category": "Bánh Nướng & Viennoiserie",
+    "theme": "vintage",
+    "occasion": "family",
+    "color": "yellow"
+  },
+  {
     "id": "best-seller-4",
     "title": "Truffle Dark Chocolate 70%",
     "price": 550000,
@@ -6894,6 +6966,8 @@ export const TRENDING_FILTER_TAGS = [
   'Bánh Trung Thu & Quà Tặng',
   'Bánh Flan Gato',
   'Bánh Cheesecake & Tart',
-  'Bánh Tráng Miệng & Cookie'
+  'Bánh Tráng Miệng & Cookie',
+  'Bánh Nướng & Viennoiserie',
+  'Đồ Uống & Trà'
 ];
 export const TRENDING_CAKES = INITIAL_CAKES;

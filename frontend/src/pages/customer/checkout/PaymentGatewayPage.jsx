@@ -95,7 +95,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
   }
 
   return (
-    <div className="w-full bg-background min-h-[calc(100vh-20rem)] flex-1">
+    <div className="w-full striped-candy-bg min-h-screen flex-1">
       <div className="flex flex-col w-full">
         <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-8 md:py-12">
           {/* TOP TRACKER & STATUS BAR */}
@@ -1213,9 +1213,9 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
       {/* Payment Verified Success Modal */}
       {paymentSuccess && (
-        <div className="fixed inset-0 z-50 bg-primary/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 text-center relative">
-            <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mx-auto shadow-sm">
+        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-stone-200/80 text-center relative">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
               <span className="material-symbols-outlined text-3xl">
                 check_circle
               </span>
@@ -1228,13 +1228,13 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
               <h3 className="font-headline-sm text-primary text-2xl mt-1 font-bold">
                 Xác Nhận Thành Công!
               </h3>
-              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                Sweet Cake đã nhận được thanh toán <strong>{totalAmount.toLocaleString('vi-VN')} VNĐ</strong>{' '}
+              <p className="text-xs text-stone-600 mt-1.5 leading-relaxed">
+                Sweet Cake đã nhận được thanh toán <strong className="text-primary">{totalAmount.toLocaleString('vi-VN')} VNĐ</strong>{' '}
                 cho đơn hàng <strong>{orderId}</strong> (Xưởng: {bakeryName}).
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-surface-container-low text-xs text-on-surface-variant text-left space-y-1.5 border border-outline-variant/20">
+            <div className="p-4 rounded-xl bg-stone-50 text-xs text-stone-600 text-left space-y-1.5 border border-stone-200/80">
               <div className="flex justify-between">
                 <span>Cổng thanh toán:</span>
                 <span className="font-bold text-primary">
@@ -1261,7 +1261,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
             <div className="flex gap-3 pt-2">
               <button
-                className="flex-1 py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-sm font-semibold transition-colors cursor-pointer"
+                className="flex-1 py-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-label-md text-sm font-semibold transition-colors cursor-pointer"
                 onClick={() => {
                   setPaymentSuccess(false)
                   onNavigate && onNavigate('home')
@@ -1271,7 +1271,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
                 Về Trang Chủ
               </button>
               <button
-                className="flex-1 py-3 rounded-xl bg-primary hover:bg-secondary text-on-primary font-label-md text-sm font-bold transition-all shadow cursor-pointer"
+                className="flex-1 py-3 rounded-xl bg-primary hover:bg-[#b32638] text-white font-label-md text-sm font-bold transition-all shadow-md cursor-pointer"
                 onClick={() => {
                   setPaymentSuccess(false)
                   onNavigate && onNavigate('tracking')
@@ -1287,8 +1287,8 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
       {/* Payment Failed Modal */}
       {paymentFailed && (
-        <div className="fixed inset-0 z-50 bg-primary/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-rose-200 text-center relative">
+        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-rose-200 text-center relative">
             <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto shadow-sm">
               <span className="material-symbols-outlined text-3xl">
                 error_med
@@ -1302,7 +1302,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
               <h3 className="font-headline-sm text-primary text-2xl mt-1 font-bold">
                 Giao Dịch Bị Từ Chối
               </h3>
-              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
+              <p className="text-xs text-stone-600 mt-1.5 leading-relaxed">
                 Tài khoản ngân hàng / ví điện tử của bạn không thể trừ tiền hoặc hết thời gian xác thực (Timeout). Đơn hàng <strong>{orderId}</strong> chưa được ký quỹ.
               </p>
             </div>
@@ -1318,14 +1318,14 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
             <div className="flex gap-3 pt-2">
               <button
-                className="flex-1 py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-sm font-semibold transition-colors cursor-pointer"
+                className="flex-1 py-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-label-md text-sm font-semibold transition-colors cursor-pointer"
                 onClick={() => setPaymentFailed(false)}
                 type="button"
               >
                 Đóng
               </button>
               <button
-                className="flex-1 py-3 rounded-xl bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-sm font-bold transition-all shadow cursor-pointer"
+                className="flex-1 py-3 rounded-xl bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-sm font-bold transition-all shadow-md cursor-pointer"
                 onClick={() => {
                   setPaymentFailed(false)
                   handleVerifyPayment()

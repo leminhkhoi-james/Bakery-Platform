@@ -518,7 +518,7 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
                       <th className="py-4 px-space-md">Thời gian làm bánh</th>
                       <th className="py-4 px-space-md">Đã Bán</th>
                       <th className="py-4 px-space-md text-center">Trạng thái sàn</th>
-                      <th className="py-4 px-space-md text-right">Thao tác</th>
+                      <th className="py-4 px-space-md text-center">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-surface-container font-body-md text-body-md text-on-surface text-xs">
@@ -652,10 +652,10 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
                           </td>
 
                           {/* Col 6: Action Buttons */}
-                          <td className="py-space-md px-space-md align-middle text-right">
-                            <div className="flex items-center justify-end gap-1.5">
+                          <td className="py-space-md px-space-md align-middle text-center">
+                            <div className="flex flex-col items-center justify-center gap-1.5 w-fit mx-auto">
                               <button
-                                className="p-2 rounded-lg bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface-variant transition-colors cursor-pointer"
+                                className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface-variant transition-colors cursor-pointer flex items-center justify-center shadow-xs"
                                 onClick={() => handleOpenEditDrawer(cake)}
                                 title="Chỉnh sửa chi tiết"
                                 type="button"
@@ -665,7 +665,7 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
                                 </span>
                               </button>
                               <button
-                                className="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors cursor-pointer"
+                                className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors cursor-pointer flex items-center justify-center shadow-xs"
                                 onClick={() => onNavigate && onNavigate('explore')}
                                 title="Xem trên sàn Sweet Cake"
                                 type="button"
@@ -675,7 +675,7 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
                                 </span>
                               </button>
                               <button
-                                className="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors cursor-pointer"
+                                className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors cursor-pointer flex items-center justify-center shadow-xs"
                                 onClick={() => handleCloneCake(cake)}
                                 title="Nhân bản mẫu mới"
                                 type="button"
@@ -685,7 +685,7 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
                                 </span>
                               </button>
                               <button
-                                className="p-2 rounded-lg bg-surface-container-low hover:bg-error-container hover:text-on-error-container text-outline transition-colors cursor-pointer"
+                                className="w-8 h-8 rounded-lg bg-surface-container-low hover:bg-error-container hover:text-on-error-container text-outline transition-colors cursor-pointer flex items-center justify-center shadow-xs"
                                 onClick={() => handleDeleteCake(cake.id)}
                                 title="Xóa mẫu"
                                 type="button"

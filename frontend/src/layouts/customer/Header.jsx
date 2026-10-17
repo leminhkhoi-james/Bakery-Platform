@@ -89,6 +89,162 @@ export const Header = ({
               scrolledActiveTab === link.route ||
               (link.activeAliases && link.activeAliases.includes(scrolledActiveTab))
 
+            if (link.id === 'explore') {
+              return (
+                <div key={link.id} className="relative group/menu">
+                  <a
+                    className={`px-4 py-1.5 rounded-full text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isTabActive
+                        ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
+                        : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
+                    }`}
+                    href={link.href}
+                    onClick={(e) => handleNav(e, link.route)}
+                  >
+                    <span>{link.label}</span>
+                    <span className="material-symbols-outlined text-sm transition-transform duration-200 group-hover/menu:rotate-180">
+                      expand_more
+                    </span>
+                  </a>
+
+                  {/* Mega Dropdown Menu for Thực đơn bánh & Gợi ý tiệc */}
+                  <div className="absolute left-0 top-full pt-2 opacity-0 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:pointer-events-auto transition-all duration-200 z-50">
+                    <div className="bg-surface rounded-2xl shadow-2xl border-2 border-primary/20 p-5 w-[540px] grid grid-cols-2 gap-4">
+                      {/* Left: Danh mục bánh tiệc */}
+                      <div className="space-y-2 border-r border-primary/10 pr-4">
+                        <span className="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">cake</span>
+                          Các loại bánh tiệc
+                        </span>
+                        <div className="space-y-1">
+                          {[
+                            { label: 'Bánh Kem Sinh Nhật', cat: 'Bánh Kem Sinh Nhật' },
+                            { label: 'Bánh Cưới Nghệ Thuật', cat: 'Bánh Cưới (Wedding)' },
+                            { label: 'Mousse & Tiramisu', cat: 'Bánh Mousse' },
+                            { label: 'Cheesecake & Tart', cat: 'Bánh Cheesecake & Tart' },
+                            { label: 'Bánh Tạo Hình 3D', cat: 'Bánh Tạo Hình 3D' },
+                          ].map((item) => (
+                            <button
+                              key={item.cat}
+                              className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-primary-fixed-dim text-xs font-bold text-primary flex items-center justify-between transition-colors cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                try {
+                                  localStorage.setItem('explore_initial_category', item.cat)
+                                } catch (err) {}
+                                window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: item.cat } }))
+                                handleNav(e, 'explore')
+                              }}
+                            >
+                              <span>{item.label}</span>
+                              <span className="material-symbols-outlined text-xs text-primary/40">chevron_right</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right: Gợi ý kết hợp cùng tiệc ngọt (Đúng vị trí!) */}
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">auto_awesome</span>
+                          Gợi ý cùng tiệc ngọt
+                        </span>
+                        <div className="space-y-1.5">
+                          <button
+                            className="w-full text-left p-1.5 rounded-xl hover:bg-primary-fixed-dim transition-colors flex items-center gap-2.5 cursor-pointer group/item"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              try {
+                                localStorage.setItem('explore_initial_category', 'Bánh Tráng Miệng & Cookie')
+                              } catch (err) {}
+                              window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: 'Bánh Tráng Miệng & Cookie' } }))
+                              handleNav(e, 'explore')
+                            }}
+                          >
+                            <img
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsVzjTjx0IXkjIOk52xFfrpv7TjI9az2jX1gpiVBfsVk2CkwVOuzGJu2GoliiJ6a6O9yypqJ83qKQlQVNLqVf9t515O2kFPLLmEAXvtMtSbVcPq6V7SNOBSegKib2_tZYTL4Hdg1kAxjPhT4fH_HLAFVDiK0CBqS360SilhLUzy1_YHqUQy2i8SjUdCIGx7j421dsrFO4NO5DsrTotFAbAPz2m_ZBZvNN0mj7q0WXaAS2__WF23w5"
+                              alt="Macarons"
+                              className="w-10 h-10 rounded-lg object-cover shrink-0 border border-primary/20"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <span className="text-[10px] bg-secondary/15 text-secondary px-1.5 py-0.5 rounded font-bold">Kèm bánh</span>
+                              <p className="text-xs font-bold text-primary truncate group-hover/item:text-secondary">Hộp 6 Macarons Pháp</p>
+                              <p className="text-[11px] font-bold text-secondary">210.000₫</p>
+                            </div>
+                          </button>
+
+                          <button
+                            className="w-full text-left p-1.5 rounded-xl hover:bg-primary-fixed-dim transition-colors flex items-center gap-2.5 cursor-pointer group/item"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              try {
+                                localStorage.setItem('explore_initial_category', 'Đồ Uống & Trà')
+                              } catch (err) {}
+                              window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: 'Đồ Uống & Trà' } }))
+                              handleNav(e, 'explore')
+                            }}
+                          >
+                            <img
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcfE9YSBTHUb99bzqofhGfVJEQW64jE8HJVFnGdD55k9Yg01-B-cQ3ce2DHaGZAyuKhXivzLyb0magKWKG9izSgODiGPQKs2HCj-800Og19xIkV_DOGtgpQwzLqOkxBaNVroLz3H9hFc-tpYqlcCNCQVDqDj6X6L8BUrXWPORrcvzCSYOGtuwBg3XlcyluMCP6wyySl5rGhZ3vJK_4ubOL_sXo0pdp7OcEBSQOmbocaKorPANho-EO"
+                              alt="Rose Earl Grey Tea"
+                              className="w-10 h-10 rounded-lg object-cover shrink-0 border border-primary/20"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <span className="text-[10px] bg-secondary/15 text-secondary px-1.5 py-0.5 rounded font-bold">Đồ uống</span>
+                              <p className="text-xs font-bold text-primary truncate group-hover/item:text-secondary">Trà Bá Tước Hoa Hồng</p>
+                              <p className="text-[11px] font-bold text-secondary">140.000₫</p>
+                            </div>
+                          </button>
+
+                          <button
+                            className="w-full text-left p-1.5 rounded-xl hover:bg-primary-fixed-dim transition-colors flex items-center gap-2.5 cursor-pointer group/item"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              try {
+                                localStorage.setItem('explore_initial_category', 'Bánh Nướng & Viennoiserie')
+                              } catch (err) {}
+                              window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: 'Bánh Nướng & Viennoiserie' } }))
+                              handleNav(e, 'explore')
+                            }}
+                          >
+                            <img
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6sr1ww3fZYNJ8fP2QVl7ECqdcrKDwOnqolqWUh-UgHuPUnm67IBf-Ol0LjLpxWrUckcW813lCxabs8m21-PpPSW8aXadmDSk6tIY6eXxKJR1tNu4sRt-ZcofnnbCoFwSAe6eno7ZWdtoekCZIqLdC7upija1gpHG1sIxTccPupZvikAWilcF1apCwjSbG5q9JqUTPZ5YcGlCWmTF2jGXdB0-0h8yfcZ8QeWsPrBt9mvzH21CWQ9ZW"
+                              alt="Croissant"
+                              className="w-10 h-10 rounded-lg object-cover shrink-0 border border-primary/20"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <span className="text-[10px] bg-secondary/15 text-secondary px-1.5 py-0.5 rounded font-bold">Khai vị mặn</span>
+                              <p className="text-xs font-bold text-primary truncate group-hover/item:text-secondary">Croissant Bơ Tỏi Đen</p>
+                              <p className="text-[11px] font-bold text-secondary">65.000₫</p>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Bottom link to view full menu */}
+                      <div className="col-span-2 pt-2 border-t border-primary/10 flex items-center justify-between">
+                        <span className="text-[11px] text-primary/70 font-bold">Khám phá hơn 100+ mẫu bánh thủ công</span>
+                        <button
+                          className="text-xs font-bold text-secondary hover:underline flex items-center gap-1 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            try {
+                              localStorage.setItem('explore_initial_category', 'all')
+                            } catch (err) {}
+                            window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: 'all' } }))
+                            handleNav(e, 'explore')
+                          }}
+                        >
+                          <span>Xem tất cả thực đơn</span>
+                          <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+
             return (
               <a
                 key={link.id}

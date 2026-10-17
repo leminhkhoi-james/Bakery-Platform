@@ -774,16 +774,15 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     src={rfqData.image}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                </div>
 
-                  <div className="absolute bottom-3 left-3 right-3 text-on-primary">
-                    <p className="font-label-sm text-label-sm text-primary-fixed-dim uppercase tracking-wider">
-                      Bản Vẽ Đăng Sàn Marketplace
-                    </p>
-                    <h4 className="font-headline-sm text-[17px] leading-tight text-surface-container-lowest font-semibold">
-                      {rfqData.conceptTitle || 'Pikachu Cake (Bánh 2 Tầng)'}
-                    </h4>
-                  </div>
+                <div>
+                  <p className="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">
+                    Bản Vẽ Đăng Sàn Marketplace
+                  </p>
+                  <h4 className="font-headline-sm text-lg leading-tight text-primary font-bold mt-0.5">
+                    {rfqData.conceptTitle || 'Pikachu Cake (Bánh 2 Tầng)'}
+                  </h4>
                 </div>
 
                 {/* Quick Spec Badges */}
@@ -1062,7 +1061,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
                 <div
                   key={bid.id}
                   className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-7 transition-all border ${isDeclined
-                      ? 'bg-surface-container/40 border-outline-variant/20 opacity-60 grayscale-[40%]'
+                      ? 'bg-surface-container-lowest border-rose-300 shadow-md'
                       : isAcceptedThis
                         ? 'bg-surface-container-lowest border-secondary shadow-xl ring-2 ring-secondary'
                         : 'bg-surface-container-lowest border-outline-variant/30 shadow-md hover:shadow-lg'

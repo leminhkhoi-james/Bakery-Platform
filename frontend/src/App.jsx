@@ -56,6 +56,12 @@ function App() {
     'san-pham': 'explore',
     'tat-ca-banh': 'explore',
 
+    // Product Detail
+    'product-detail': 'product-detail',
+    'product': 'product-detail',
+    'chi-tiet-banh': 'product-detail',
+    'chi-tiet-san-pham': 'product-detail',
+
     // Store Directory
     'danh-sach-cua-hang': 'stores',
     'cua-hang': 'stores',

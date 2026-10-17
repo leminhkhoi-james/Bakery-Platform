@@ -1,8 +1,13 @@
-import { PRODUCT_GALLERY_IMAGES as GALLERY_IMAGES, PRODUCT_SIZES as SIZES } from '../../../mockData/customer/cakes.js'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { INITIAL_CAKES } from '../../../mockData/customer/cakes.js'
 import { useAppData } from '../../../context/AppDataContext.jsx'
 
-
+const DEFAULT_SIZES = [
+  { size: '14cm', guests: '2 - 4 người', price: 480000 },
+  { size: '16cm', guests: '4 - 6 người', price: 620000 },
+  { size: '18cm', guests: '6 - 8 người', price: 780000 },
+  { size: '20cm', guests: '8 - 12 người', price: 950000 },
+]
 
 export const ProductDetailPage = ({
   cake,
@@ -10,9 +15,32 @@ export const ProductDetailPage = ({
   onNavigate,
 }) => {
   const { addRfq } = useAppData()
-  const cakeSizes = cake?.sizes && cake.sizes.length > 0 ? cake.sizes : SIZES
-  const initialIndex = cake?.selectedSize
-    ? cakeSizes.findIndex((s) => s.size === cake.selectedSize)
+
+  // Resolve current cake from props or session storage or fallback to first cake
+  const currentCake = cake || (() => {
+    try {
+      const saved = sessionStorage.getItem('sweetcake_current_cake')
+      if (saved) return JSON.parse(saved)
+    } catch (e) {}
+    return INITIAL_CAKES[0]
+  })()
+
+  // Persist current cake whenever it changes
+  useEffect(() => {
+    if (cake) {
+      try {
+        sessionStorage.setItem('sweetcake_current_cake', JSON.stringify(cake))
+      } catch (e) {}
+    }
+  }, [cake])
+
+  const cakeSizes =
+    currentCake?.sizes && currentCake.sizes.length > 0
+      ? currentCake.sizes
+      : DEFAULT_SIZES
+
+  const initialIndex = currentCake?.selectedSize
+    ? cakeSizes.findIndex((s) => s.size === currentCake.selectedSize)
     : -1
 
   const [selectedImage, setSelectedImage] = useState(0)
@@ -29,8 +57,39 @@ export const ProductDetailPage = ({
   const [activeTab, setActiveTab] = useState('taste')
   const [showSizeGuide, setShowSizeGuide] = useState(false)
 
+  // Build dynamic gallery images list from cake data
+  const galleryImages = (() => {
+    const list = []
+    if (currentCake?.image) {
+      list.push({ url: currentCake.image, alt: currentCake.title || 'Ảnh sản phẩm' })
+    }
+    if (Array.isArray(currentCake?.photos)) {
+      currentCake.photos.forEach((p, idx) => {
+        if (p && p !== currentCake?.image) {
+          list.push({ url: p, alt: `${currentCake.title || 'Bánh'} - Góc ${idx + 1}` })
+        }
+      })
+    }
+    if (list.length === 0) {
+      list.push({
+        url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBqCnNzWb3HUU-YJC5WxTrl2XI81RrUNfbLCXPBMI64sLCXe9g-teVTMYn0z6NK0p1zckyZhHQGiw6WybGMJDQJxgMf_WVPgMhMV8i9G3MgL1L_mMpdZwq-tJYXiQPe3lUIHZJW9PIMN7ekWUc1Dc7DcXGASCWzTeUAfMsN00vLBH0wqr3rE4I8obYgxGylNvtqKuH6vpdIVvdUkwkyV25lhRtwQGAsmrCC5im5QqGJ0ES4ibTm31XI',
+        alt: currentCake?.title || 'Bánh nghệ nhân',
+      })
+    }
+    return list
+  })()
+
+  // Reset selected image and size index when viewing a different cake
+  useEffect(() => {
+    setSelectedImage(0)
+    const initIdx = currentCake?.selectedSize
+      ? cakeSizes.findIndex((s) => s.size === currentCake.selectedSize)
+      : -1
+    setSelectedSizeIndex(initIdx >= 0 ? initIdx : 0)
+  }, [currentCake?.id])
+
   // Calculations
-  const currentBasePrice = cakeSizes[selectedSizeIndex]?.price || cake?.price || 480000
+  const currentBasePrice = cakeSizes[selectedSizeIndex]?.price || currentCake?.price || 480000
   const addonsTotal =
     (addonGoldCandle ? 15000 : 0) + (addonPartyHat ? 25000 : 0)
   const unitPrice = currentBasePrice + addonsTotal
@@ -40,13 +99,13 @@ export const ProductDetailPage = ({
     const chosenSize = cakeSizes[selectedSizeIndex]
     const selectedSizeLabel = chosenSize
       ? `Size ${chosenSize.size} • ${chosenSize.guests}`
-      : (cake?.sizeSpec || 'Size tiêu chuẩn')
+      : (currentCake?.sizeSpec || 'Size tiêu chuẩn')
 
     if (onAddToCart) {
       onAddToCart({
-        id: cake?.id || 'velvet-raspberry-bliss',
-        title: cake?.title || 'Velvet Raspberry Bliss',
-        image: cake?.image || (cake?.photos && cake?.photos[0]) || GALLERY_IMAGES[0]?.url,
+        id: currentCake?.id || 'cake-item',
+        title: currentCake?.title || 'Bánh Kem Nghệ Nhân',
+        image: currentCake?.image || galleryImages[0]?.url,
         selectedSize: chosenSize?.size || 'Tiêu chuẩn',
         sizeSpec: selectedSizeLabel,
         sweetness:
@@ -70,14 +129,14 @@ export const ProductDetailPage = ({
     const chosenSize = cakeSizes[selectedSizeIndex]
     const selectedSizeLabel = chosenSize
       ? `Size ${chosenSize.size} • ${chosenSize.guests}`
-      : (cake?.sizeSpec || 'Size 18cm • 6-8 người')
+      : (currentCake?.sizeSpec || 'Size tiêu chuẩn')
 
     if (onAddToCart) {
       onAddToCart({
-        id: cake?.id || 'velvet-raspberry-bliss',
-        title: cake?.title || 'Velvet Raspberry Bliss',
-        image: cake?.image || (cake?.photos && cake?.photos[0]) || GALLERY_IMAGES[0]?.url,
-        selectedSize: chosenSize?.size || '18cm',
+        id: currentCake?.id || 'cake-item',
+        title: currentCake?.title || 'Bánh Kem Nghệ Nhân',
+        image: currentCake?.image || galleryImages[0]?.url,
+        selectedSize: chosenSize?.size || 'Tiêu chuẩn',
         sizeSpec: selectedSizeLabel,
         sweetness:
           sweetness === 'french'
@@ -127,45 +186,48 @@ export const ProductDetailPage = ({
                   </span>
                 </div>
 
-
                 {/* Main Image Frame */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden cursor-zoom-in bg-surface-container">
+                <div className="relative aspect-[4/5] w-full overflow-hidden cursor-zoom-in bg-surface-container rounded-2xl">
                   <img
-                    alt={GALLERY_IMAGES[selectedImage]?.alt}
+                    alt={galleryImages[selectedImage]?.alt || currentCake?.title}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                     id="main-product-image"
-                    src={GALLERY_IMAGES[selectedImage]?.url}
+                    src={galleryImages[selectedImage]?.url || currentCake?.image}
+                    onError={(e) => {
+                      if (currentCake?.image && e.currentTarget.src !== currentCake.image) {
+                        e.currentTarget.src = currentCake.image
+                      }
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                 </div>
               </div>
 
               {/* Thumbnail Gallery Strip */}
-              <div className="grid grid-cols-4 gap-3">
-                {GALLERY_IMAGES.slice(1).map((item, idx) => {
-                  const actualIndex = idx + 1
-                  const isActive = selectedImage === actualIndex
-                  return (
-                    <button
-                      key={item.url}
-                      className={`aspect-square rounded-xl overflow-hidden bg-surface-container p-0.5 transition-all cursor-pointer ${
-                        isActive
-                          ? 'ring-2 ring-secondary opacity-100'
-                          : 'opacity-70 hover:opacity-100'
-                      }`}
-                      onClick={() => setSelectedImage(actualIndex)}
-                      type="button"
-                    >
-                      <img
-                        alt={item.alt}
-                        className="w-full h-full object-cover rounded-lg"
-                        src={item.url}
-                      />
-                    </button>
-                  )
-                })}
-              </div>
-
+              {galleryImages.length > 1 && (
+                <div className="grid grid-cols-4 gap-3">
+                  {galleryImages.map((item, idx) => {
+                    const isActive = selectedImage === idx
+                    return (
+                      <button
+                        key={idx}
+                        className={`aspect-square rounded-xl overflow-hidden bg-surface-container p-0.5 transition-all cursor-pointer border ${
+                          isActive
+                            ? 'ring-2 ring-primary border-primary opacity-100 shadow-sm'
+                            : 'opacity-70 hover:opacity-100 border-outline-variant/30'
+                        }`}
+                        onClick={() => setSelectedImage(idx)}
+                        type="button"
+                      >
+                        <img
+                          alt={item.alt}
+                          className="w-full h-full object-cover rounded-lg"
+                          src={item.url}
+                        />
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
 
             {/* RIGHT COLUMN: Product Details, Configurator & Ordering */}
@@ -174,18 +236,17 @@ export const ProductDetailPage = ({
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="inline-block px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full font-label-md text-xs uppercase tracking-widest text-primary font-bold shadow-sm border border-outline-variant/30">
-                    Signature Entremet Collection
+                    {currentCake?.category || 'Bánh Nghệ Nhân'}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
                   <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">
-                    Bánh Sinh Nhật Nghệ Thuật
+                    {currentCake?.vendor || 'SweetCake Haute Pâtisserie'}
                   </span>
                 </div>
 
                 <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[38px] text-primary font-bold tracking-normal">
-                  Velvet Raspberry Bliss
+                  {currentCake?.title || 'Velvet Raspberry Bliss'}
                 </h1>
-
               </div>
 
               {/* Pricing Block */}
@@ -200,7 +261,7 @@ export const ProductDetailPage = ({
                     </span>
                   </div>
                   <p className="font-body-sm text-xs text-on-surface-variant mt-0.5">
-                    Giá bao gồm hộp quà signature ép kim &amp; nến cơ bản
+                    {currentCake?.description || 'Giá bao gồm hộp quà signature ép kim & nến cơ bản'}
                   </p>
                 </div>
               </div>
@@ -599,8 +660,8 @@ export const ProductDetailPage = ({
           </div>
 
           {/* TABS SECTION: Editorial Deep Dive */}
-          <div className="mt-20">
-            <div className="border-b border-outline-variant/30 flex items-center gap-8 overflow-x-auto no-scrollbar">
+          <div className="mt-16 bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-rose-200/80">
+            <div className="border-b border-rose-200/70 pb-1 flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar">
               {[
                 { id: 'taste', label: 'Cấu trúc & Hương vị' },
                 { id: 'ingredients', label: 'Nguyên liệu tuyển chọn' },
@@ -608,15 +669,18 @@ export const ProductDetailPage = ({
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  className={`pb-4 font-headline-sm text-lg font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                  className={`pb-4 font-headline text-lg sm:text-xl font-bold transition-all whitespace-nowrap cursor-pointer relative ${
                     activeTab === tab.id
-                      ? 'text-primary border-b-2 border-primary'
-                      : 'text-on-surface-variant hover:text-primary'
+                      ? 'text-primary'
+                      : 'text-stone-500 hover:text-primary'
                   }`}
                   onClick={() => setActiveTab(tab.id)}
                   type="button"
                 >
-                  {tab.label}
+                  <span>{tab.label}</span>
+                  {activeTab === tab.id && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                  )}
                 </button>
               ))}
             </div>
@@ -626,73 +690,75 @@ export const ProductDetailPage = ({
               {/* Tab 1: Taste & Structure Architecture */}
               {activeTab === 'taste' && (
                 <div className="tab-panel block" id="tab-taste">
-                  <div className="max-w-4xl space-y-5">
-                    <h3 className="font-headline-md text-primary">
-                      Vũ điệu chua ngọt đánh thức mọi giác quan
-                    </h3>
-                    <p className="font-body-md text-on-surface-variant leading-relaxed">
-                      Velvet Raspberry Bliss là một tác phẩm haute pâtisserie đỉnh cao
-                      kết hợp sự xốp mịn nồng nàn của cốt bánh chiffon nhung đỏ hữu
-                      cơ, đan xen cùng các lớp mứt quả phúc bồn tử tươi tự nấu thanh
-                      mát và kem tươi Mascarpone ngọt dịu. Mỗi miếng bánh tan êm dịu,
-                      không gắt, để lại hậu vị ngọt ngào tinh khiết.
-                    </p>
+                  <div className="max-w-4xl space-y-6">
+                    <div className="bg-rose-50/70 border border-rose-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+                      <h3 className="font-headline text-primary text-xl md:text-2xl font-bold">
+                        Vũ điệu chua ngọt đánh thức mọi giác quan
+                      </h3>
+                      <p className="font-body text-stone-700 leading-relaxed mt-2 text-sm sm:text-base">
+                        Velvet Raspberry Bliss là một tác phẩm haute pâtisserie đỉnh cao
+                        kết hợp sự xốp mịn nồng nàn của cốt bánh chiffon nhung đỏ hữu
+                        cơ, đan xen cùng các lớp mứt quả phúc bồn tử tươi tự nấu thanh
+                        mát và kem tươi Mascarpone ngọt dịu. Mỗi miếng bánh tan êm dịu,
+                        không gắt, để lại hậu vị ngọt ngào tinh khiết.
+                      </p>
+                    </div>
 
-                    <div className="space-y-3 pt-2">
-                      <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-secondary/15 text-secondary flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div className="bg-white hover:bg-rose-50/50 p-4 sm:p-5 rounded-2xl border-2 border-rose-200/80 hover:border-primary/40 flex items-start gap-4 transition-all shadow-sm hover:shadow-md">
+                        <span className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
                           1
                         </span>
-                        <div>
-                          <h4 className="font-label-md text-on-surface font-bold">
+                        <div className="flex-1">
+                          <h4 className="font-headline text-primary font-bold text-sm sm:text-base">
                             Lớp phủ trên cùng (Top Crown)
                           </h4>
-                          <p className="font-body-sm text-xs text-on-surface-variant">
+                          <p className="font-body text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
                             Phúc bồn tử tươi organic mọng nước điểm xuyết lá vàng ăn
                             được 24K và hoa thảo mộc thơm nhẹ.
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-secondary/15 text-secondary flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="bg-white hover:bg-rose-50/50 p-4 sm:p-5 rounded-2xl border-2 border-rose-200/80 hover:border-primary/40 flex items-start gap-4 transition-all shadow-sm hover:shadow-md">
+                        <span className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
                           2
                         </span>
-                        <div>
-                          <h4 className="font-label-md text-on-surface font-bold">
+                        <div className="flex-1">
+                          <h4 className="font-headline text-primary font-bold text-sm sm:text-base">
                             Lớp kem Mascarpone Vanilla Chantilly
                           </h4>
-                          <p className="font-body-sm text-xs text-on-surface-variant">
+                          <p className="font-body text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
                             Kem phô mai béo ngậy thanh khiết từ Ý đánh bông nhẹ nhàng
                             với hạt vani Madagascar nguyên chất.
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-secondary/15 text-secondary flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="bg-white hover:bg-rose-50/50 p-4 sm:p-5 rounded-2xl border-2 border-rose-200/80 hover:border-primary/40 flex items-start gap-4 transition-all shadow-sm hover:shadow-md">
+                        <span className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
                           3
                         </span>
-                        <div>
-                          <h4 className="font-label-md text-on-surface font-bold">
+                        <div className="flex-1">
+                          <h4 className="font-headline text-primary font-bold text-sm sm:text-base">
                             Lớp mứt Mâm Xôi Coulis tự nấu
                           </h4>
-                          <p className="font-body-sm text-xs text-on-surface-variant">
+                          <p className="font-body text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
                             Mứt cô đặc từ quả mâm xôi chín mọng nấu chậm với cốt chanh
                             vàng Pháp, giữ nguyên tép quả tự nhiên.
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-secondary/15 text-secondary flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="bg-white hover:bg-rose-50/50 p-4 sm:p-5 rounded-2xl border-2 border-rose-200/80 hover:border-primary/40 flex items-start gap-4 transition-all shadow-sm hover:shadow-md">
+                        <span className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
                           4
                         </span>
-                        <div>
-                          <h4 className="font-label-md text-on-surface font-bold">
+                        <div className="flex-1">
+                          <h4 className="font-headline text-primary font-bold text-sm sm:text-base">
                             Cốt bánh Red Velvet Chiffon ẩm mượt
                           </h4>
-                          <p className="font-body-sm text-xs text-on-surface-variant">
+                          <p className="font-body text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
                             Bột cacao nguyên chất kết hợp bơ sữa lên men tự nhiên,
                             tạo cấu trúc xốp nhẹ như mây.
                           </p>
@@ -707,45 +773,45 @@ export const ProductDetailPage = ({
               {activeTab === 'ingredients' && (
                 <div className="tab-panel block" id="tab-ingredients">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-surface-container p-6 rounded-2xl space-y-3">
-                      <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-secondary">
+                    <div className="bg-white hover:bg-rose-50/40 border-2 border-rose-200/80 hover:border-primary/30 p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-primary">
                         <span className="material-symbols-outlined text-2xl">
                           nutrition
                         </span>
                       </div>
-                      <h4 className="font-headline-sm text-primary text-base">
+                      <h4 className="font-headline text-primary text-base font-bold">
                         Bơ Elle &amp; Vire Normandy
                       </h4>
-                      <p className="font-body-sm text-on-surface-variant leading-relaxed">
+                      <p className="font-body text-stone-600 text-sm leading-relaxed">
                         Được nhập khẩu nguyên khối từ vùng đồng cỏ Normandy trứ danh nước
                         Pháp, mang lại mùi thơm béo ngậy đặc trưng không thể nhầm lẫn.
                       </p>
                     </div>
 
-                    <div className="bg-surface-container p-6 rounded-2xl space-y-3">
-                      <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-secondary">
+                    <div className="bg-white hover:bg-rose-50/40 border-2 border-rose-200/80 hover:border-primary/30 p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-primary">
                         <span className="material-symbols-outlined text-2xl">spa</span>
                       </div>
-                      <h4 className="font-headline-sm text-primary text-base">
+                      <h4 className="font-headline text-primary text-base font-bold">
                         Mâm xôi tươi Đà Lạt Farm
                       </h4>
-                      <p className="font-body-sm text-on-surface-variant leading-relaxed">
+                      <p className="font-body text-stone-600 text-sm leading-relaxed">
                         Canh tác hữu cơ không phân hóa học, thu hoạch đúng độ chín lúc
                         rạng đông để quả giữ nguyên vị giòn ngọt thanh và vị chua mọng
                         nước.
                       </p>
                     </div>
 
-                    <div className="bg-surface-container p-6 rounded-2xl space-y-3">
-                      <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-secondary">
+                    <div className="bg-white hover:bg-rose-50/40 border-2 border-rose-200/80 hover:border-primary/30 p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-primary">
                         <span className="material-symbols-outlined text-2xl">
                           psychiatry
                         </span>
                       </div>
-                      <h4 className="font-headline-sm text-primary text-base">
+                      <h4 className="font-headline text-primary text-base font-bold">
                         Vani Bourbon Madagascar
                       </h4>
-                      <p className="font-body-sm text-on-surface-variant leading-relaxed">
+                      <p className="font-body text-stone-600 text-sm leading-relaxed">
                         Chiết xuất trực tiếp từ quả vani đen nguyên chất hạt mịn, tạo
                         chiều sâu mùi thơm quý phái ngập tràn mà hương liệu nhân tạo
                         không bao giờ đạt được.
@@ -758,15 +824,15 @@ export const ProductDetailPage = ({
               {/* Tab 3: Storage & Slicing Tips */}
               {activeTab === 'storage' && (
                 <div className="tab-panel block" id="tab-storage">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-container-low p-6 rounded-2xl">
-                    <div className="space-y-4">
-                      <h4 className="font-headline-sm text-primary text-base flex items-center gap-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                    <div className="bg-white border-2 border-rose-200/80 rounded-2xl p-6 shadow-sm space-y-4">
+                      <h4 className="font-headline text-primary text-base font-bold flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary">
                           ac_unit
                         </span>
                         Hướng dẫn bảo quản
                       </h4>
-                      <ul className="space-y-2 text-on-surface-variant font-body-sm">
+                      <ul className="space-y-2.5 text-stone-600 font-body text-sm">
                         <li className="flex items-start gap-2">
                           <span className="material-symbols-outlined text-secondary text-sm shrink-0 mt-1">
                             check_circle
@@ -798,14 +864,14 @@ export const ProductDetailPage = ({
                       </ul>
                     </div>
 
-                    <div className="space-y-4">
-                      <h4 className="font-headline-sm text-primary text-base flex items-center gap-2">
+                    <div className="bg-white border-2 border-rose-200/80 rounded-2xl p-6 shadow-sm space-y-4">
+                      <h4 className="font-headline text-primary text-base font-bold flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary">
                           tips_and_updates
                         </span>
                         Bí quyết cắt lát bánh phẳng mịn
                       </h4>
-                      <ul className="space-y-2 text-on-surface-variant font-body-sm">
+                      <ul className="space-y-2.5 text-stone-600 font-body text-sm">
                         <li className="flex items-start gap-2">
                           <span className="material-symbols-outlined text-secondary text-sm shrink-0 mt-1">
                             arrow_right
@@ -838,8 +904,6 @@ export const ProductDetailPage = ({
                   </div>
                 </div>
               )}
-
-
             </div>
           </div>
 
@@ -859,6 +923,10 @@ export const ProductDetailPage = ({
                 href="/explore"
                 onClick={(e) => {
                   e.preventDefault()
+                  try {
+                    localStorage.setItem('explore_initial_category', 'Đồ Uống & Trà')
+                  } catch (err) {}
+                  window.dispatchEvent(new CustomEvent('sweetcake_filter_category', { detail: { category: 'Đồ Uống & Trà' } }))
                   onNavigate && onNavigate('explore')
                 }}
               >
@@ -1060,25 +1128,28 @@ export const ProductDetailPage = ({
           </div>
 
           {/* CUSTOM BESPOKE CAKE CALLOUT BANNER */}
-          <div className="mt-20 relative rounded-3xl overflow-hidden bg-primary-container text-on-primary p-8 md:p-12 shadow-2xl">
-            <div className="relative z-10 max-w-2xl space-y-4">
-              <div className="inline-flex items-center gap-2 bg-secondary/30 text-secondary-container px-3.5 py-1 rounded-full text-xs font-label-md uppercase tracking-wider">
-                <span className="material-symbols-outlined text-xs">
-                  auto_awesome
-                </span>
-                Dịch vụ Bespoke Atelier
+          <div className="mt-20 relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#9e2a44] via-[#bd3d58] to-[#d4536f] text-white p-8 md:p-12 shadow-2xl border border-white/20">
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 lg:gap-10">
+              <div className="flex-1 max-w-3xl xl:max-w-4xl space-y-3">
+                <div className="inline-flex items-center gap-2 bg-white/20 text-white px-3.5 py-1 rounded-full text-xs font-label-md uppercase tracking-wider backdrop-blur-sm border border-white/30">
+                  <span className="material-symbols-outlined text-xs">
+                    auto_awesome
+                  </span>
+                  Dịch vụ Bespoke Atelier
+                </div>
+                <h3 className="font-headline-lg text-white leading-tight text-xl md:text-2xl font-bold">
+                  Bạn muốn tùy chỉnh một chiếc bánh hoàn toàn độc bản?
+                </h3>
+                <p className="font-body-md text-pink-100 leading-relaxed text-sm md:text-base">
+                  Từ bánh cưới nhiều tầng, trang trí fondant thủ công, vị bánh riêng theo
+                  cung hoàng đạo hoặc hoa tươi nhập khẩu cao cấp – nghệ nhân bánh ngọt tại
+                  Sweet Cake sẵn sàng lắng nghe câu chuyện của bạn.
+                </p>
               </div>
-              <h3 className="font-headline-lg text-primary-fixed leading-tight">
-                Bạn muốn tùy chỉnh một chiếc bánh hoàn toàn độc bản?
-              </h3>
-              <p className="font-body-md text-primary-fixed-dim leading-relaxed text-sm">
-                Từ bánh cưới nhiều tầng, trang trí fondant thủ công, vị bánh riêng theo
-                cung hoàng đạo hoặc hoa tươi nhập khẩu cao cấp – nghệ nhân bánh ngọt tại
-                Sweet Cake sẵn sàng lắng nghe câu chuyện của bạn.
-              </p>
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+
+              <div className="shrink-0 flex items-center">
                 <a
-                  className="bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container px-6 py-3 rounded-xl font-label-lg font-bold transition-all flex items-center gap-2 shadow-lg active:scale-95 cursor-pointer"
+                  className="bg-white text-primary hover:bg-pink-50 hover:text-[#9e2a44] px-7 py-3.5 rounded-xl font-label-lg font-bold transition-all flex items-center gap-2.5 shadow-lg active:scale-95 cursor-pointer whitespace-nowrap"
                   href="/ai-studio"
                   onClick={(e) => {
                     e.preventDefault()
@@ -1091,7 +1162,7 @@ export const ProductDetailPage = ({
               </div>
             </div>
             {/* Decorative Graphic Glow inside banner */}
-            <div className="absolute -right-16 -bottom-16 w-80 h-80 rounded-full bg-secondary/15 blur-3xl pointer-events-none"></div>
+            <div className="absolute -right-16 -bottom-16 w-80 h-80 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
           </div>
         </div>
 

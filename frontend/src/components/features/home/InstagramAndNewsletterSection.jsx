@@ -51,8 +51,8 @@ export const InstagramAndNewsletterSection = () => {
                 alt={post.alt}
                 src={post.image}
               />
-              <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary cursor-pointer">
-                <span className="material-symbols-outlined text-2xl text-secondary-fixed">
+              <div className="absolute inset-0 bg-black/30 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white cursor-pointer">
+                <span className="material-symbols-outlined text-2xl text-white">
                   favorite
                 </span>
               </div>

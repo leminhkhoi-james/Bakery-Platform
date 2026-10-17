@@ -1593,7 +1593,7 @@ export const CartCheckoutPage = ({
 
       {/* MODAL: Order Placement Success & VietQR Confirmation */}
       {isOrderSuccessModalOpen && (
-        <div className="fixed inset-0 z-50 bg-primary/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 text-center relative">
             <button
               type="button"

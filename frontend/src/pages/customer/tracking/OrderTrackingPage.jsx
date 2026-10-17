@@ -391,31 +391,38 @@ export const OrderTrackingPage = ({ onNavigate }) => {
               <div className="flex flex-wrap items-center gap-1.5 p-1 bg-surface-container rounded-xl text-xs font-semibold">
                 <span className="text-[11px] text-outline px-2 hidden md:inline">Demo chặng:</span>
                 <button
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${trackingStage === 4
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${!orderCancelStatus && trackingStage === 4
                       ? 'bg-secondary text-on-secondary shadow-sm font-bold'
                       : 'hover:bg-surface-container-high text-on-surface-variant'
                     }`}
-                  onClick={() => setTrackingStage(4)}
+                  onClick={() => {
+                    setOrderCancelStatus(null)
+                    setTrackingStage(4)
+                  }}
                   type="button"
                 >
                   1. Làm bánh
                 </button>
                 <button
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${trackingStage === 5
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${!orderCancelStatus && trackingStage === 5
                       ? 'bg-secondary text-on-secondary shadow-sm font-bold'
                       : 'hover:bg-surface-container-high text-on-surface-variant'
                     }`}
-                  onClick={() => setTrackingStage(5)}
+                  onClick={() => {
+                    setOrderCancelStatus(null)
+                    setTrackingStage(5)
+                  }}
                   type="button"
                 >
                   2. Xe lạnh
                 </button>
                 <button
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${trackingStage === 6
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${!orderCancelStatus && trackingStage === 6
                       ? 'bg-secondary text-on-secondary shadow-sm font-bold'
                       : 'hover:bg-surface-container-high text-on-surface-variant'
                     }`}
                   onClick={() => {
+                    setOrderCancelStatus(null)
                     setTrackingStage(6)
                     markOrderAsDelivered()
                     if (!hasReviewed) setIsReviewModalOpen(true)
@@ -452,18 +459,19 @@ export const OrderTrackingPage = ({ onNavigate }) => {
               <div className="min-w-[760px]">
                 {/* Progress Line Background */}
                 <div className="relative flex items-center justify-between">
-                  <div className="absolute left-8 right-8 top-5 h-1 bg-surface-container rounded-full -z-0"></div>
-                  <div
-                    className="absolute left-8 top-5 h-1 bg-secondary rounded-full -z-0 transition-all duration-700"
-                    style={{
-                      width:
-                        trackingStage === 4
-                          ? '62%'
-                          : trackingStage === 5
-                            ? '82%'
-                            : '100%',
-                    }}
-                  ></div>
+                  <div className="absolute left-16 right-16 top-5 h-1 bg-surface-container rounded-full z-0 overflow-hidden">
+                    <div
+                      className="h-full bg-secondary rounded-full transition-all duration-700"
+                      style={{
+                        width:
+                          trackingStage === 4
+                            ? '60%'
+                            : trackingStage === 5
+                              ? '80%'
+                              : '100%',
+                      }}
+                    ></div>
+                  </div>
 
                   {/* Step 1 */}
                   <div className="flex flex-col items-center text-center relative z-10 w-32">
@@ -520,9 +528,9 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                   </div>
 
                   {/* Step 4 */}
-                  <div className="flex flex-col items-center text-center relative z-10 w-36">
+                  <div className="flex flex-col items-center text-center relative z-10 w-32">
                     {trackingStage === 4 ? (
-                      <div className="w-11 h-11 rounded-full bg-primary-container text-secondary-fixed-dim flex items-center justify-center shadow-lg mb-space-xs ring-4 ring-secondary/20 animate-bounce">
+                      <div className="w-11 h-11 rounded-full bg-primary text-white flex items-center justify-center shadow-lg mb-space-xs ring-4 ring-primary/20 animate-bounce">
                         <span className="material-symbols-outlined text-2xl">
                           oven_gen
                         </span>
@@ -534,10 +542,10 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                         </span>
                       </div>
                     )}
-                    <span className="font-label-md text-label-md font-bold text-secondary">
+                    <span className="font-label-md text-label-md font-bold text-primary">
                       Làm Bánh
                     </span>
-                    <span className="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full font-bold">
+                    <span className={`font-label-sm text-label-sm ${trackingStage === 4 ? 'bg-primary/10 text-primary font-bold' : 'text-secondary font-semibold'} px-2 py-0.5 rounded-full`}>
                       {trackingStage === 4 ? 'Đang chế tác' : 'Đã hoàn thành'}
                     </span>
                     <span className="font-body-sm text-body-sm text-primary font-semibold mt-0.5">
@@ -548,7 +556,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                   {/* Step 5 */}
                   <div className={`flex flex-col items-center text-center relative z-10 w-32 ${trackingStage < 5 ? 'opacity-60' : ''}`}>
                     {trackingStage === 5 ? (
-                      <div className="w-11 h-11 rounded-full bg-primary-container text-secondary-fixed-dim flex items-center justify-center shadow-lg mb-space-xs ring-4 ring-secondary/20 animate-bounce">
+                      <div className="w-11 h-11 rounded-full bg-primary text-white flex items-center justify-center shadow-lg mb-space-xs ring-4 ring-primary/20 animate-bounce">
                         <span className="material-symbols-outlined text-2xl">
                           local_shipping
                         </span>
@@ -569,7 +577,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                     <span className="font-label-md text-label-md font-bold text-primary">
                       Giao Hàng
                     </span>
-                    <span className={`font-label-sm text-label-sm ${trackingStage === 5 ? 'bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full font-bold' : 'text-outline'}`}>
+                    <span className={`font-label-sm text-label-sm ${trackingStage === 5 ? 'bg-primary/10 text-primary font-bold' : trackingStage > 5 ? 'text-secondary font-semibold' : 'text-outline'} px-2 py-0.5 rounded-full`}>
                       {trackingStage === 5 ? 'Đang giao 4.8°C' : trackingStage > 5 ? 'Đã tới nơi' : 'Xe lạnh 4-6°C'}
                     </span>
                     <span className="font-body-sm text-body-sm text-outline mt-0.5">
@@ -773,10 +781,10 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                 </div>
 
                 {/* Route Visualization Graphic */}
-                <div className="relative w-full h-56 bg-surface-container rounded-2xl overflow-hidden mb-space-md flex items-center justify-center border border-outline-variant/20">
+                <div className="relative w-full h-56 bg-surface-container-low rounded-2xl overflow-hidden mb-space-md flex items-center justify-center border border-outline-variant/20 shadow-xs">
                   {/* Simulated Map Texture Background */}
                   <div
-                    className="w-full h-full bg-[radial-gradient(#d2c3be_1px,transparent_1px)] [background-size:16px_16px] bg-surface-container-high opacity-70"
+                    className="w-full h-full bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:16px_16px] opacity-40 bg-gradient-to-br from-amber-50/30 via-surface-container-lowest to-sky-50/40"
                     data-location="Landmark 81, Ho Chi Minh City"
                   ></div>
 
@@ -789,47 +797,47 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                     <path
                       d="M 50 110 C 130 110, 180 50, 260 50 S 330 30, 350 40"
                       fill="none"
-                      stroke="#D48C95"
+                      stroke="#0891b2"
                       strokeDasharray="6,4"
                       strokeLinecap="round"
                       strokeWidth="3"
                     />
-                    <circle cx="50" cy="110" fill="#4A2218" r="6" />
-                    <circle cx="230" cy="53" fill="#D48C95" r="8" />
+                    <circle cx="50" cy="110" fill="#059669" r="6" stroke="#ffffff" strokeWidth="2" />
+                    <circle cx="230" cy="53" fill="#0284c7" r="7" stroke="#ffffff" strokeWidth="2" />
                     <circle
                       className="animate-ping"
                       cx="230"
                       cy="53"
-                      fill="#F7D6DA"
-                      opacity="0.75"
-                      r="12"
+                      fill="#38bdf8"
+                      opacity="0.6"
+                      r="14"
                     />
-                    <circle cx="350" cy="40" fill="#ba1a1a" r="6" />
+                    <circle cx="350" cy="40" fill="#0891b2" r="7" stroke="#ffffff" strokeWidth="2" />
                   </svg>
 
                   {/* Map Route Overlays & Path Details */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent flex flex-col justify-between p-space-md text-on-primary">
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/60 via-transparent to-surface-container-lowest/30 flex flex-col justify-between p-space-md">
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-space-xs bg-primary/90 px-space-sm py-1 rounded-xl backdrop-blur-sm shadow">
-                        <span className="material-symbols-outlined text-secondary-container text-sm">
+                      <div className="flex items-center gap-space-xs bg-surface-container-lowest/95 text-on-surface px-3 py-1.5 rounded-xl backdrop-blur-md shadow-sm border border-outline-variant/30 text-xs font-semibold">
+                        <span className="material-symbols-outlined text-emerald-600 text-sm">
                           my_location
                         </span>
-                        <span className="font-label-sm text-label-sm">
+                        <span>
                           Điểm đi: La Crème (128 Lê Lợi, Q.1)
                         </span>
                       </div>
-                      <div className="flex items-center gap-space-xs bg-primary/90 px-space-sm py-1 rounded-xl backdrop-blur-sm shadow">
-                        <span className="material-symbols-outlined text-secondary-fixed text-sm">
+                      <div className="flex items-center gap-space-xs bg-surface-container-lowest/95 text-on-surface px-3 py-1.5 rounded-xl backdrop-blur-md shadow-sm border border-outline-variant/30 text-xs font-semibold">
+                        <span className="material-symbols-outlined text-secondary text-sm">
                           location_on
                         </span>
-                        <span className="font-label-sm text-label-sm">
+                        <span>
                           Điểm đến: Tháp Opal, Saigon Pearl, Bình Thạnh
                         </span>
                       </div>
                     </div>
 
                     {/* Estimated Path Card */}
-                    <div className="bg-surface-container-lowest/95 backdrop-blur-md p-space-sm rounded-xl text-primary flex items-center justify-between shadow-lg border border-outline-variant/30">
+                    <div className="bg-surface-container-lowest/95 backdrop-blur-md p-space-sm rounded-xl text-on-surface flex items-center justify-between shadow-lg border border-outline-variant/30">
                       <div className="flex items-center gap-space-sm">
                         <div className="w-10 h-10 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary shrink-0 shadow-sm">
                           <span className="material-symbols-outlined text-xl">
@@ -837,7 +845,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                           </span>
                         </div>
                         <div>
-                          <p className="font-label-md text-label-md font-bold text-primary">
+                          <p className="font-label-md text-label-md font-bold text-on-surface">
                             Xe Van Chuyên Dụng: Suzuki Carry 51D-892.44
                           </p>
                           <p className="font-body-sm text-body-sm text-on-surface-variant text-xs">
@@ -857,11 +865,10 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                   </div>
                 </div>
 
-                {/* Driver Profile & Telemetry Sensor Triad */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-space-sm mb-space-md">
-                  {/* Driver Card */}
-                  <div className="bg-surface-container-low p-space-sm rounded-xl flex items-center gap-space-sm border border-outline-variant/10">
-                    <div className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary-container font-bold text-lg overflow-hidden shrink-0">
+                {/* Driver Profile */}
+                <div className="mb-space-md bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between gap-space-sm border border-outline-variant/10">
+                  <div className="flex items-center gap-space-sm">
+                    <div className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-lg overflow-hidden shrink-0">
                       <span className="material-symbols-outlined text-3xl text-primary">
                         sports_motorsports
                       </span>
@@ -870,62 +877,18 @@ export const OrderTrackingPage = ({ onNavigate }) => {
                       <span className="font-label-md text-label-md font-bold text-primary truncate">
                         Nguyễn Văn Hùng
                       </span>
-                      <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 text-xs">
-                      </span>
-                      <a
-                        className="font-label-sm text-label-sm text-secondary font-semibold hover:underline text-xs"
-                        href="tel:0901234567"
-                      >
-                        Gọi điện tài xế (0901 234 567)
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Telemetry 1: Temp Sensor */}
-                  <div className="bg-surface-container-low p-space-sm rounded-xl flex flex-col justify-between border border-outline-variant/10">
-                    <div className="flex items-center justify-between text-on-surface-variant">
-                      <span className="font-label-sm text-label-sm">
-                        Nhiệt độ thùng lạnh
-                      </span>
-                      <span className="material-symbols-outlined text-secondary text-lg">
-                        ac_unit
-                      </span>
-                    </div>
-                    <div className="flex items-baseline gap-space-xs mt-1">
-                      <span className="font-headline-md text-headline-md text-primary font-bold">
-                        {temperature}°C
-                      </span>
-                      <span className="font-label-sm text-label-sm text-emerald-700 font-semibold">
-                        Tối ưu (4-6°C)
-                      </span>
-                    </div>
-                    <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-1">
-                      <div
-                        className="bg-secondary h-full rounded-full transition-all duration-500"
-                        style={{ width: `${Math.min(100, (temperature / 8) * 100)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Telemetry 2: Anti-tilt Shock Sensor */}
-                  <div className="bg-surface-container-low p-space-sm rounded-xl flex flex-col justify-between border border-outline-variant/10">
-                    <div className="flex items-center justify-between text-on-surface-variant">
-                      <span className="font-label-sm text-label-sm">
-                        Cảm biến chống rung chấn
-                      </span>
-                      <span className="material-symbols-outlined text-secondary text-lg">
-                        vibration
-                      </span>
-                    </div>
-                    <div className="flex items-baseline gap-space-xs mt-1">
-                      <span className="font-headline-md text-headline-md text-primary font-bold">
-                        {vibration}G
-                      </span>
-                      <span className="font-label-sm text-label-sm text-secondary font-semibold">
-                        An toàn tối đa
+                      <span className="font-body-sm text-body-sm text-on-surface-variant text-xs">
+                        Tài xế giao nhận chuyên dụng
                       </span>
                     </div>
                   </div>
+                  <a
+                    className="px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/90 text-on-secondary font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
+                    href="tel:0901234567"
+                  >
+                    <span className="material-symbols-outlined text-sm">call</span>
+                    Gọi điện tài xế (0901 234 567)
+                  </a>
                 </div>
 
                 {/* Delivery Timeframes Details */}
@@ -1134,7 +1097,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 1: Chef Jean-Luc Direct Messaging */}
       {isChefChatOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col max-h-[85vh]">
             {/* Header */}
             <div className="bg-primary-container text-on-primary-container p-4 flex items-center justify-between">
@@ -1212,7 +1175,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 2: Change Delivery Time */}
       {isChangeTimeModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1287,7 +1250,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 3: Edit Plaque Inscription */}
       {isEditPlaqueModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1359,7 +1322,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 4: VAT Invoice Quick View */}
       {isVatModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-lg w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div className="flex items-center gap-2">
@@ -1436,7 +1399,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 5: Full 6-Photo Workshop History Gallery */}
       {isGalleryOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             <div className="p-4 bg-primary text-on-primary flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -1510,10 +1473,10 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 6: Customer Order Completion & View History Modal */}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             {/* Modal Header */}
-            <div className="p-5 bg-gradient-to-r from-primary to-surface-container-high text-on-primary flex items-center justify-between">
+            <div className="p-5 bg-gradient-to-r from-[#9e2a44] to-[#c74c66] text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-secondary text-white flex items-center justify-center shadow-md">
                   <span
@@ -1617,7 +1580,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 7: Cancel Order & Escrow Refund Modal */}
       {isCancelEscrowModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             <div className="p-5 bg-gradient-to-r from-rose-900 to-rose-700 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">

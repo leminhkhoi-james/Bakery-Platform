@@ -15,7 +15,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
     try {
       const saved = localStorage.getItem('sweetcake_accepted_bid')
       if (saved) return JSON.parse(saved)
-    } catch {}
+    } catch { }
     return null
   })
 
@@ -23,7 +23,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
     try {
       const saved = localStorage.getItem('sweetcake_active_rfq')
       if (saved) return JSON.parse(saved)
-    } catch {}
+    } catch { }
     return null
   })
 
@@ -68,12 +68,20 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
         })
         return combined
       }
-    } catch {}
+    } catch { }
     return defaultPast
   })
 
   // User Profile State
-  const [userProfile, setUserProfile] = useState(DEFAULT_CUSTOMER_PROFILE)
+  const [userProfile, setUserProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sweetcake_user_profile')
+      if (saved) {
+        return { ...DEFAULT_CUSTOMER_PROFILE, ...JSON.parse(saved) }
+      }
+    } catch { }
+    return DEFAULT_CUSTOMER_PROFILE
+  })
 
   // Saved Addresses
   const [addresses, setAddresses] = useState(DEFAULT_SAVED_ADDRESSES)
@@ -222,7 +230,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
           return combined
         })
       }
-    } catch {}
+    } catch { }
   }, [])
 
   const handleCompleteCurrentOrder = () => {
@@ -248,7 +256,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
       let list = existing ? JSON.parse(existing) : []
       list = [newCompleted, ...list.filter((o) => o.id !== currentOrderId)]
       localStorage.setItem('sweetcake_completed_orders', JSON.stringify(list))
-    } catch {}
+    } catch { }
 
     setDeliveryStatus('COMPLETED')
     setCompletedOrders((prev) => [
@@ -302,7 +310,11 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
                     <img
                       alt="Khách hàng Mai An"
                       className="w-full h-full object-cover"
-                      src="https://lh3.googleusercontent.com/aida/AEtjO1VT5URbmJEvZBX1TjmxImJwK_osZ6biB1P_DejTWKq44VWCJp159R5LrIDl0ocXUFTIFZl4xJx2ytEZsaUEAlJjKqr-7Ifk2DCUMhTO52eKD28pkfnhUC4fPCwNWkgZp93H-WlYjftqsxYPa-Qjcx2IASGxAXrwFtYPcEPo0zKCa6DBwFmixLws_w2wueivUQvC3JbGrbKOFd8XwtQPkXlfa_1QiEjevzMJakPohX-dNwsP6ctfp2Dldnc"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZPxXa22XB0i3Vu6CEjC4sV8mvBIFb0EQEZcnrvSuK1DEWprPNIp8PkP71WcMVzOLDX6K-Jt8VTcnRELtaaMv9rnSZgPT4TmpW-whaHgBMbbNYkdUSCvSRluMe7lpAnau4QdozHVyKUzc-cOkYvDDtR1JZmBfJhvyyBetI1iwKFIecoBb2W-UPkWCRuIRrrqOITaESSKPbN_PRkwFhA-JKj3ye8RLhRYTIvA4UBkobMHm1hSVvheCw"
+                      onError={(e) => {
+                        e.target.onerror = null
+                        e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+                      }}
                     />
                   </div>
                 </div>
@@ -388,100 +400,93 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
                 <div className="space-y-1 pt-1 border-t border-outline-variant/10">
                   <button
-                    className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl font-label-md transition-all cursor-pointer ${
-                      activeSideTab === 'orders'
+                    className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl font-label-md transition-all cursor-pointer ${activeSideTab === 'orders'
                         ? 'bg-primary text-on-primary shadow-[0_4px_12px_rgba(45,30,24,0.15)] font-bold'
                         : 'hover:bg-surface-container text-on-surface'
-                    }`}
+                      }`}
                     onClick={() => setActiveSideTab('orders')}
                     type="button"
                   >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`material-symbols-outlined ${
-                        activeSideTab === 'orders'
-                          ? 'text-secondary-fixed'
-                          : 'text-on-surface-variant'
-                      }`}
-                    >
-                      cake
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`material-symbols-outlined ${activeSideTab === 'orders'
+                            ? 'text-secondary-fixed'
+                            : 'text-on-surface-variant'
+                          }`}
+                      >
+                        cake
+                      </span>
+                      <span>Lịch sử đơn bánh &amp; Giao nhận</span>
+                    </div>
+                    <span className="bg-secondary text-on-secondary text-xs px-2 py-0.5 rounded-full font-bold">
+                      1 đang giao
                     </span>
-                    <span>Lịch sử đơn bánh &amp; Giao nhận</span>
-                  </div>
-                  <span className="bg-secondary text-on-secondary text-xs px-2 py-0.5 rounded-full font-bold">
-                    1 đang giao
-                  </span>
-                </button>
+                  </button>
 
-                <button
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-label-md transition-colors cursor-pointer ${
-                    activeSideTab === 'addresses'
-                      ? 'bg-primary text-on-primary shadow-sm font-bold'
-                      : 'hover:bg-surface-container text-on-surface'
-                  }`}
-                  onClick={() => setActiveSideTab('addresses')}
-                  type="button"
-                >
-                  <div className="flex items-center gap-3 text-on-surface-variant">
-                    <span
-                      className={`material-symbols-outlined ${
-                        activeSideTab === 'addresses' ? 'text-secondary-fixed' : ''
+                  <button
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-label-md transition-colors cursor-pointer ${activeSideTab === 'addresses'
+                        ? 'bg-primary text-on-primary shadow-sm font-bold'
+                        : 'hover:bg-surface-container text-on-surface'
                       }`}
-                    >
-                      place
-                    </span>
-                    <span
-                      className={
-                        activeSideTab === 'addresses'
-                          ? 'text-on-primary'
-                          : 'text-on-surface'
-                      }
-                    >
-                      Sổ địa chỉ nhận tiệc
-                    </span>
-                  </div>
-                  <span
-                    className={`text-xs ${
-                      activeSideTab === 'addresses'
-                        ? 'text-primary-fixed-dim'
-                        : 'text-on-surface-variant'
-                    } font-body-sm`}
+                    onClick={() => setActiveSideTab('addresses')}
+                    type="button"
                   >
-                    {addresses.length} địa chỉ
-                  </span>
-                </button>
+                    <div className="flex items-center gap-3 text-on-surface-variant">
+                      <span
+                        className={`material-symbols-outlined ${activeSideTab === 'addresses' ? 'text-secondary-fixed' : ''
+                          }`}
+                      >
+                        place
+                      </span>
+                      <span
+                        className={
+                          activeSideTab === 'addresses'
+                            ? 'text-on-primary'
+                            : 'text-on-surface'
+                        }
+                      >
+                        Sổ địa chỉ nhận tiệc
+                      </span>
+                    </div>
+                    <span
+                      className={`text-xs ${activeSideTab === 'addresses'
+                          ? 'text-primary-fixed-dim'
+                          : 'text-on-surface-variant'
+                        } font-body-sm`}
+                    >
+                      {addresses.length} địa chỉ
+                    </span>
+                  </button>
 
-                <button
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-label-md transition-colors cursor-pointer ${
-                    activeSideTab === 'security'
-                      ? 'bg-primary text-on-primary shadow-sm font-bold'
-                      : 'hover:bg-surface-container text-on-surface'
-                  }`}
-                  onClick={() => setActiveSideTab('security')}
-                  type="button"
-                >
-                  <div className="flex items-center gap-3 text-on-surface-variant">
-                    <span
-                      className={`material-symbols-outlined ${
-                        activeSideTab === 'security' ? 'text-secondary-fixed' : ''
+                  <button
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-label-md transition-colors cursor-pointer ${activeSideTab === 'security'
+                        ? 'bg-primary text-on-primary shadow-sm font-bold'
+                        : 'hover:bg-surface-container text-on-surface'
                       }`}
-                    >
-                      security
+                    onClick={() => setActiveSideTab('security')}
+                    type="button"
+                  >
+                    <div className="flex items-center gap-3 text-on-surface-variant">
+                      <span
+                        className={`material-symbols-outlined ${activeSideTab === 'security' ? 'text-secondary-fixed' : ''
+                          }`}
+                      >
+                        security
+                      </span>
+                      <span
+                        className={
+                          activeSideTab === 'security'
+                            ? 'text-on-primary'
+                            : 'text-on-surface'
+                        }
+                      >
+                        Cài đặt &amp; Mật khẩu
+                      </span>
+                    </div>
+                    <span className="material-symbols-outlined text-base text-on-surface-variant">
+                      chevron_right
                     </span>
-                    <span
-                      className={
-                        activeSideTab === 'security'
-                          ? 'text-on-primary'
-                          : 'text-on-surface'
-                      }
-                    >
-                      Cài đặt &amp; Mật khẩu
-                    </span>
-                  </div>
-                  <span className="material-symbols-outlined text-base text-on-surface-variant">
-                    chevron_right
-                  </span>
-                </button>
+                  </button>
                 </div>
               </div>
 
@@ -507,18 +512,16 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
                   {addresses.map((addr) => (
                     <div
                       key={addr.id}
-                      className={`p-3.5 rounded-xl bg-surface-container-lowest text-xs space-y-1 shadow-sm border ${
-                        addr.isDefault
+                      className={`p-3.5 rounded-xl bg-surface-container-lowest text-xs space-y-1 shadow-sm border ${addr.isDefault
                           ? 'border-secondary/40'
                           : 'border-outline-variant/20'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-label-md font-semibold text-primary flex items-center gap-1.5">
                           <span
-                            className={`w-2 h-2 rounded-full ${
-                              addr.isDefault ? 'bg-secondary' : 'bg-outline-variant'
-                            }`}
+                            className={`w-2 h-2 rounded-full ${addr.isDefault ? 'bg-secondary' : 'bg-outline-variant'
+                              }`}
                           ></span>{' '}
                           {addr.title}
                         </span>
@@ -747,20 +750,18 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
                     {addresses.map((addr) => (
                       <div
                         key={addr.id}
-                        className={`p-5 rounded-2xl bg-surface-container-low border transition-all space-y-3 ${
-                          addr.isDefault
+                        className={`p-5 rounded-2xl bg-surface-container-low border transition-all space-y-3 ${addr.isDefault
                             ? 'border-secondary/50 shadow-sm'
                             : 'border-outline-variant/20'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-label-md font-bold text-primary flex items-center gap-1.5 text-sm">
                             <span
-                              className={`w-2.5 h-2.5 rounded-full ${
-                                addr.isDefault
+                              className={`w-2.5 h-2.5 rounded-full ${addr.isDefault
                                   ? 'bg-secondary'
                                   : 'bg-outline-variant'
-                              }`}
+                                }`}
                             ></span>
                             {addr.title}
                           </span>
@@ -805,30 +806,27 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
                   {/* Filter Tabs */}
                   <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none font-label-md text-sm">
                     <button
-                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${
-                        orderFilter === 'delivering'
+                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${orderFilter === 'delivering'
                           ? 'bg-primary text-on-primary shadow-sm font-semibold'
                           : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant'
-                      }`}
+                        }`}
                       onClick={() => setOrderFilter('delivering')}
                       type="button"
                     >
                       <span
-                        className={`w-2 h-2 rounded-full ${
-                          isCurrentOrderDelivered
+                        className={`w-2 h-2 rounded-full ${isCurrentOrderDelivered
                             ? 'bg-outline-variant'
                             : 'bg-secondary animate-pulse'
-                        }`}
+                          }`}
                       ></span>
                       Đang chuẩn bị &amp; Giao ({isCurrentOrderDelivered ? 0 : 1})
                     </button>
 
                     <button
-                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${
-                        orderFilter === 'completed'
+                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1.5 cursor-pointer ${orderFilter === 'completed'
                           ? 'bg-primary text-on-primary shadow-sm font-semibold'
                           : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant'
-                      }`}
+                        }`}
                       onClick={() => setOrderFilter('completed')}
                       type="button"
                     >
@@ -839,11 +837,10 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
                     </button>
 
                     <button
-                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1 cursor-pointer ${
-                        orderFilter === 'bespoke'
+                      className={`px-4 py-2 rounded-full shrink-0 transition-all flex items-center gap-1 cursor-pointer ${orderFilter === 'bespoke'
                           ? 'bg-primary text-on-primary shadow-sm font-semibold'
                           : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant'
-                      }`}
+                        }`}
                       onClick={() => setOrderFilter('bespoke')}
                       type="button"
                     >
@@ -1534,19 +1531,17 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
               {chefMessages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`flex flex-col ${
-                    msg.sender === 'user' ? 'items-end' : 'items-start'
-                  }`}
+                  className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'
+                    }`}
                 >
                   <span className="text-[10px] text-outline mb-0.5">
                     {msg.time}
                   </span>
                   <div
-                    className={`p-3 rounded-2xl max-w-[85%] leading-relaxed ${
-                      msg.sender === 'user'
+                    className={`p-3 rounded-2xl max-w-[85%] leading-relaxed ${msg.sender === 'user'
                         ? 'bg-primary text-on-primary rounded-tr-none'
                         : 'bg-surface text-primary rounded-tl-none border border-outline-variant/20 shadow-sm'
-                    }`}
+                      }`}
                   >
                     {msg.text}
                   </div>

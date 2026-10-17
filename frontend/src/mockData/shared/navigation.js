@@ -39,11 +39,12 @@ export const CUSTOMER_NAV_LINKS = [
 
 export const FOOTER_DATA = {
   categories: [
-    { label: 'Bánh kem sinh nhật', route: 'explore' },
-    { label: 'Bánh cưới nghệ thuật', route: 'explore' },
-    { label: 'Mousse & Tiramisu', route: 'explore' },
-    { label: 'Cupcakes & Macarons', route: 'explore' },
-    { label: 'Bánh nướng Viennoiserie', route: 'explore' },
+    { label: 'Bánh kem sinh nhật', route: 'explore', category: 'Bánh Kem Sinh Nhật' },
+    { label: 'Bánh cưới nghệ thuật', route: 'explore', category: 'Bánh Cưới (Wedding)' },
+    { label: 'Mousse & Tiramisu', route: 'explore', category: 'Bánh Mousse' },
+    { label: 'Cupcakes & Macarons (Kèm bánh)', route: 'explore', category: 'Cupcakes & Macarons' },
+    { label: 'Bánh nướng Viennoiserie (Khai vị mặn)', route: 'explore', category: 'Bánh Nướng & Viennoiserie' },
+    { label: 'Đồ uống & Trà hoa thượng hạng', route: 'explore', category: 'Đồ Uống & Trà' },
   ],
   supportLinks: [
     {

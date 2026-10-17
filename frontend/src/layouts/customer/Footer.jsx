@@ -12,6 +12,26 @@ export const Footer = ({ onNavigate }) => {
     setIsPolicyOpen(true)
   }
 
+  const handleCategoryClick = (categoryKey) => {
+    const targetCat = categoryKey || 'all'
+    try {
+      localStorage.setItem('explore_initial_category', targetCat)
+    } catch (e) {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('sweetcake_filter_category', {
+          detail: { category: targetCat },
+        })
+      )
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    if (onNavigate) {
+      onNavigate('explore')
+    }
+  }
+
   return (
     <footer className="scroll-mt-24 w-full bg-[#fffaf3] text-wine border-t-4 border-wine relative z-20 font-savoure">
       {/* Top Decorator: Vintage Polka Dot Scallop Ribbon Trim at Top of Footer */}
@@ -53,18 +73,24 @@ export const Footer = ({ onNavigate }) => {
 
           {/* Menu Categories */}
           <div className="space-y-3">
-            <h3 className="font-savoure text-wine text-lg sm:text-xl font-bold border-b border-wine/20 pb-2">
-              Thực đơn nổi bật
+            <h3 
+              className="font-savoure text-wine text-lg sm:text-xl font-bold border-b border-wine/20 pb-2 cursor-pointer hover:text-[#b8273b] transition-colors flex items-center justify-between group"
+              onClick={() => handleCategoryClick('all')}
+              title="Khám phá tất cả mẫu bánh"
+            >
+              <span>Thực đơn nổi bật</span>
+              <span className="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">arrow_forward</span>
             </h3>
             <ul className="space-y-2 text-sm text-wine font-bold">
               {FOOTER_DATA.categories.map((item, idx) => (
                 <li
                   key={idx}
-                  className="hover:text-[#b8273b] hover:translate-x-1 transition-all cursor-pointer flex items-center gap-1.5"
-                  onClick={() => onNavigate && onNavigate(item.route)}
+                  className="hover:text-[#b8273b] hover:translate-x-1.5 transition-all cursor-pointer flex items-center gap-1.5 group"
+                  onClick={() => handleCategoryClick(item.category || item.label)}
+                  title={`Lọc bánh: ${item.label}`}
                 >
-                  <span className="text-xs text-wine/60">✦</span>
-                  <span>{item.label}</span>
+                  <span className="text-xs text-wine/60 group-hover:text-primary transition-colors">✦</span>
+                  <span className="hover:underline">{item.label}</span>
                 </li>
               ))}
             </ul>

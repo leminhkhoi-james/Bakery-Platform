@@ -31,7 +31,7 @@ export default function BrandLogo({
       <img
         src={brandLogoImg}
         alt="SweetCake Logo"
-        className={`${currentHeightClass} w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] filter drop-shadow-[0_2px_4px_rgba(84,40,26,0.06)]`}
+        className={`${currentHeightClass} w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] filter drop-shadow-[0_2px_4px_rgba(159,30,49,0.08)]`}
         onError={(e) => {
           // Fallback to public path if bundler import fails
           e.currentTarget.src = '/brand-logo.png'
