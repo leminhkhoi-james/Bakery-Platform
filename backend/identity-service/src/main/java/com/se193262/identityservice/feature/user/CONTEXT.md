@@ -6,8 +6,10 @@ User profiles, platform roles and administrative user management.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+User, customer profile and platform-role persistence needed by authentication
+is implemented. Registration creates an active customer with the `CUSTOMER`
+role and default `vi` profile. Profile editing, address management and admin
+user-management endpoints remain pending.
 
 ## Boundary
 

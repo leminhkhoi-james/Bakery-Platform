@@ -8,10 +8,10 @@ thống hỗ trợ mua bánh có sẵn, đặt bánh custom qua yêu cầu và o
 ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thuê nền tảng.
 
 > **Trạng thái hiện tại:** backend đã được scaffold thành Maven multi-module với
-> bảy domain service và một API Gateway độc lập. Mỗi module hiện mới có Spring
-> Boot application, package xương sống, feature context và smoke test; business
-> implementation, persistence, security, gateway routing, frontend và tích hợp
-> ngoài vẫn chưa được triển khai.
+> bảy domain service và một API Gateway độc lập. Identity Service đã triển khai
+> persistence cho authentication, RS256 JWT/JWK, refresh rotation và RBAC nền
+> tảng; các domain feature, resource-server ở service còn lại, gateway routing,
+> frontend và tích hợp ngoài vẫn chưa được triển khai.
 
 ---
 
@@ -391,8 +391,9 @@ Dependency rules:
   service cùng một API Gateway build/test độc lập.
 - Các module đã có application class, package xương sống, package feature bám
   theo API contract, `CONTEXT.md` và application-context smoke test.
-- Module hiện chỉ có core starter và test starter; JPA, Security, Resource
-  Server, Flyway, PostgreSQL driver và gateway routing dependency chưa được thêm.
+- Identity Service đã có JPA, Flyway, PostgreSQL, Security Resource Server và
+  Testcontainers. Các module còn lại vẫn chỉ có core/test starter; gateway
+  routing dependency chưa được thêm.
 - Chưa có controller, service/repository/entity/DTO nghiệp vụ, frontend hoặc
   integration thực tế.
 - Database design đã có 7 PostgreSQL schema sets, 44 tables, Flyway-compatible

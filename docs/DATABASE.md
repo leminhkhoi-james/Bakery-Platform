@@ -351,5 +351,9 @@ private Map<String, Object> configurationSnapshot;
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).
 - `V1__init_schema.sql` chỉ chứa DDL của đúng một service.
 - `V2__seed_reference_data.sql` chỉ seed dữ liệu danh mục ổn định.
+- Identity Service đóng gói bản sao V1/V2 tại
+  `backend/identity-service/src/main/resources/db/migration`; test build kiểm tra
+  bản runtime này luôn khớp byte-content (không tính line ending) với nguồn
+  canonical trong `database/postgresql/identity-service`.
 - Không sửa migration đã chạy ở môi trường dùng chung; tạo `V3`, `V4`, ... cho
   mọi thay đổi tiếp theo.

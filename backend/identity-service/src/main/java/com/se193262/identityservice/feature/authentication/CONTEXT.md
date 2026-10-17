@@ -6,8 +6,13 @@ Registration, login, token refresh and token revocation.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Implemented registration, login, current-user lookup, refresh-token rotation,
+logout, RS256 access-token issuing/validation and public JWK discovery. Refresh
+tokens are opaque and only their SHA-256 hashes are stored. Reuse of a rotated
+token revokes all remaining refresh sessions for that user.
+
+Service-token claim validation and internal route authorization are defined,
+but service-token issuance is deferred until internal HTTP clients are built.
 
 ## Boundary
 

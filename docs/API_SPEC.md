@@ -3,8 +3,9 @@
 > Contract API mục tiêu cho MSS Bakery Platform MVP. Cập nhật file này mỗi khi
 > endpoint, DTO, validation, authorization hoặc business invariant thay đổi.
 >
-> **Implementation status:** đây là đặc tả thiết kế; repository hiện chưa
-> scaffold các microservice và endpoint bên dưới.
+> **Implementation status:** đây là contract mục tiêu. Các microservice đã được
+> scaffold và Identity authentication endpoints đã được triển khai; phần lớn
+> domain endpoints bên dưới vẫn đang chờ implementation.
 
 ---
 
@@ -36,10 +37,18 @@ Access token có hạn 15 phút và chứa tối thiểu:
   "sub": "4ccca4ab-50a8-4d37-9a25-d95450f7b77f",
   "email": "customer@example.com",
   "roles": ["CUSTOMER"],
+  "token_type": "user",
+  "iss": "bakery-platform-identity",
+  "aud": ["bakery-platform-api"],
   "iat": 1790848800,
-  "exp": 1790849700
+  "exp": 1790849700,
+  "jti": "17f3bb35-635a-4c77-8448-24473ae69b43"
 }
 ```
+
+Access token được ký bằng RS256. Public JWK Set được công bố tại
+`GET /.well-known/jwks.json`; endpoint này trả JWK chuẩn, không dùng
+`ApiResponse<T>` và không bao giờ chứa private RSA parameters.
 
 Refresh token có hạn 7 ngày, chỉ được truyền bằng cookie:
 
@@ -59,6 +68,11 @@ Platform roles:
 
 Bakery membership roles `OWNER`, `MANAGER`, `STAFF` được Bakery Service kiểm
 tra bổ sung; chúng không thay thế platform roles.
+
+Service JWT dùng `token_type=service`, audience là service đích và claim
+`scope` theo chuẩn OAuth2 dạng chuỗi phân cách bằng khoảng trắng. Identity
+Service hiện validate/enforce contract này; cơ chế cấp service token được triển
+khai cùng internal HTTP clients ở hạng mục sau.
 
 ---
 
@@ -1670,6 +1684,7 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 
 | Method | Endpoint | Access | Description |
 |---|---|---|---|
+| GET | `/.well-known/jwks.json` | Public | Identity public JWK Set |
 | POST | `/auth/register` | Public | Register customer |
 | POST | `/auth/login` | Public | Login and set refresh cookie |
 | POST | `/auth/refresh` | Public + cookie | Rotate refresh token |
