@@ -200,47 +200,39 @@ export default function AdminUsersPage({ onNavigate }) {
       />
 
       {/* MAIN SHELL */}
-      <div className="md:pl-72 flex-1">
+      <div className="md:pl-64 flex-1">
         <AdminHeader
-          title="Quản Lý Người Dùng & KYC"
-          subtitle="Quản lý thông tin tài khoản Khách hàng, Tiệm bánh đối tác & phân quyền hệ thống"
-          contextBadge="2,840 Tài khoản"
+          title="Người dùng"
+          contextBadge="2.840"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Tra cứu User, Tiệm bánh, Mã đơn #ORD..."
+          searchPlaceholder="Tìm người dùng..."
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+          topActions={
+            <button
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary transition-all font-label-md text-xs shadow-sm font-semibold"
+              type="button"
+              onClick={() => setShowAddUserModal(true)}
+            >
+              <span className="material-symbols-outlined text-[17px] text-secondary-fixed">
+                person_add
+              </span>
+              <span>Thêm người dùng</span>
+            </button>
+          }
         />
 
         {/* MAIN BODY CONTENT */}
-        <main className="w-full pt-24 min-h-screen bg-background pb-16">
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-4 space-y-6">
-            {/* Top Section: Quick Actions */}
-            <div className="flex flex-col xl:flex-row xl:items-center justify-end gap-4 mb-4">
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2 xl:pt-0">
-
-
-                <button
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary transition-all font-label-md text-label-md shadow-[0_8px_20px_-4px_rgba(45,30,24,0.18)] font-semibold"
-                  type="button"
-                  onClick={() => setShowAddUserModal(true)}
-                >
-                  <span className="material-symbols-outlined text-[19px] text-secondary-fixed">
-                    person_add
-                  </span>
-                  <span>+ Thêm Người Dùng Thủ Công</span>
-                </button>
-              </div>
-            </div>
-
+        <main className="w-full pt-16 min-h-screen bg-background pb-8">
+          <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 py-2 space-y-3">
             {/* KPI METRIC OVERVIEW CARDS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
               {/* Card 1: Tổng tài khoản hoạt động */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
-                      Tổng tài khoản hoạt động
+                      Tài khoản hoạt động
                     </span>
                     <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
                       48.920
@@ -255,11 +247,11 @@ export default function AdminUsersPage({ onNavigate }) {
               </div>
 
               {/* Card 2: Khách Đặt Lại Thường Xuyên */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
-                      Khách Đặt Thường Xuyên
+                      Khách thường xuyên
                     </span>
                     <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
                       6.840
@@ -275,11 +267,11 @@ export default function AdminUsersPage({ onNavigate }) {
               </div>
 
               {/* Card 3: Tỷ Lệ Mua Lại (Repeat) */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
-                      Tỷ Lệ Mua Lại (Repeat)
+                      Tỷ lệ mua lại
                     </span>
                     <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
                       68.4%
@@ -295,11 +287,11 @@ export default function AdminUsersPage({ onNavigate }) {
               </div>
 
               {/* Card 4: Báo cáo & Tạm Khóa */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
-                      Báo cáo & Tạm Khóa
+                      Cảnh báo
                     </span>
                     <span className="font-headline-md text-headline-md text-error font-bold mt-1 block font-serif">
                       18
@@ -325,7 +317,7 @@ export default function AdminUsersPage({ onNavigate }) {
                   </span>
                   <input
                     className="w-full pl-11 pr-4 py-2.5 bg-surface-container-low text-on-surface placeholder:text-outline text-body-sm rounded-xl focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium"
-                    placeholder="Tìm theo họ tên, email, số điện thoại, mã khách hàng (#CUST-...)"
+                    placeholder="Tìm tên, email hoặc mã..."
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}

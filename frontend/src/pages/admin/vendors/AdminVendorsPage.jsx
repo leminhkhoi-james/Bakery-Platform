@@ -218,60 +218,51 @@ export default function AdminVendorsPage({ onNavigate }) {
       />
 
       {/* MAIN SHELL */}
-      <div className="md:pl-72 flex-1">
+      <div className="md:pl-64 flex-1">
         <AdminHeader
-          title="Duyệt Tiệm Bánh & Thẩm Định"
-          subtitle="Thẩm định chứng nhận ATTP, tiêu chuẩn xưởng & cấp phép đối tác"
-          contextBadge="14 chờ duyệt"
+          title="Tiệm bánh"
+          contextBadge="14 chờ"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Tra cứu User, Tiệm bánh, Mã đơn #ORD..."
+          searchPlaceholder="Tìm tiệm bánh..."
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+          topActions={
+            <>
+              <button
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all shadow-sm font-label-md text-xs font-semibold"
+                onClick={() => {
+                  const urgent = vendors.find((v) => v.id === 'VEND-88') || vendors[1]
+                  handleOpenDrawer(urgent)
+                }}
+                type="button"
+              >
+                <span className="material-symbols-outlined text-[17px]">verified</span>
+                <span>Duyệt hồ sơ (14)</span>
+              </button>
+              <button
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container text-primary-fixed hover:bg-primary transition-all shadow-sm font-label-md text-xs font-semibold"
+                type="button"
+                onClick={() => setShowInviteModal(true)}
+              >
+                <span className="material-symbols-outlined text-[17px] text-secondary-fixed">
+                  add_business
+                </span>
+                <span>Mời tiệm bánh</span>
+              </button>
+            </>
+          }
         />
 
         {/* MAIN BODY CONTENT */}
-        <main className="w-full pt-24 min-h-screen bg-background pb-16">
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-4 space-y-6">
-            {/* Top Command & Action Section */}
-            <section className="flex flex-col xl:flex-row xl:items-center justify-end gap-6 pb-2">
-              <div className="flex flex-wrap items-center gap-3">
-
-
-                <button
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all shadow-md font-label-lg text-label-lg font-semibold relative text-xs"
-                  onClick={() => {
-                    const urgent = vendors.find((v) => v.id === 'VEND-88') || vendors[1]
-                    handleOpenDrawer(urgent)
-                  }}
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">
-                    verified
-                  </span>
-                  <span>Duyệt Hồ Sơ Đang Chờ (14)</span>
-                  <span className="w-2 h-2 rounded-full bg-surface-bright animate-ping"></span>
-                </button>
-
-                <button
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-primary-container text-primary-fixed hover:bg-primary transition-all shadow-md font-label-lg text-label-lg font-semibold text-xs"
-                  type="button"
-                  onClick={() => setShowInviteModal(true)}
-                >
-                  <span className="material-symbols-outlined text-[18px] text-secondary-fixed">
-                    add_business
-                  </span>
-                  <span>+ Mời Tiệm Bánh Mới</span>
-                </button>
-              </div>
-            </section>
-
+        <main className="w-full pt-16 min-h-screen bg-background pb-8">
+          <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 py-2 space-y-3">
             {/* KPI METRIC BENTO CARDS */}
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-8">
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pb-4">
               {/* Metric 1 */}
-              <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
+              <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
                   <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                    Tổng Tiệm Hoạt Động
+                    Tiệm hoạt động
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
                     <span className="material-symbols-outlined text-[20px]">
@@ -292,10 +283,10 @@ export default function AdminVendorsPage({ onNavigate }) {
               </div>
 
               {/* Metric 2 */}
-              <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
+              <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
                   <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                    Thẩm Định Chờ Duyệt
+                    Chờ duyệt
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
                     <span className="material-symbols-outlined text-[20px]">
@@ -316,10 +307,10 @@ export default function AdminVendorsPage({ onNavigate }) {
               </div>
 
               {/* Metric 3 */}
-              <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
+              <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
                   <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                    Chuẩn 5 Sao Pâtisserie
+                    Đánh giá tốt
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-secondary">
                     <span className="material-symbols-outlined text-[20px]">
@@ -340,10 +331,10 @@ export default function AdminVendorsPage({ onNavigate }) {
               </div>
 
               {/* Metric 4 */}
-              <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
+              <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
                   <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                    Giao Đúng Hạn Chuẩn Lạnh
+                    Giao đúng hạn
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
                     <span className="material-symbols-outlined text-[20px]">
@@ -396,7 +387,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
-                  <span>Chờ Phê Duyệt / Thẩm Định</span>
+                  <span>Chờ duyệt</span>
                   <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-secondary text-on-secondary font-bold">
                     14
                   </span>
@@ -409,7 +400,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
-                  <span>Cần Bổ Sung Giấy Tờ</span>
+                  <span>Thiếu hồ sơ</span>
                   <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-error-container text-on-error-container font-bold">
                     7
                   </span>

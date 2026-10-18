@@ -5,7 +5,7 @@ import React, { useState } from 'react'
  * Standardized across all Admin pages, 100% identical to VendorHeader
  */
 export default function AdminHeader({
-  title = 'Trung Tâm Điều Hành Master Admin',
+  title = 'Tổng quan',
   subtitle,
   contextBadge,
   backButton,
@@ -13,10 +13,11 @@ export default function AdminHeader({
   showSearch = true,
   searchQuery = '',
   onSearchChange,
-  searchPlaceholder = 'Tra cứu User, Tiệm bánh, Mã đơn #ORD...',
+  searchPlaceholder = 'Tìm kiếm...',
   selectedCluster,
   onClusterChange,
   onToggleMobileSidebar,
+  topActions,
 }) {
   const [internalCluster, setInternalCluster] = useState('all')
   const cluster = selectedCluster !== undefined ? selectedCluster : internalCluster
@@ -30,7 +31,7 @@ export default function AdminHeader({
   }
 
   return (
-    <header className="fixed top-0 left-0 md:left-72 right-0 h-20 bg-surface/90 backdrop-blur-xl z-30 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-[0_1px_8px_rgba(45,30,24,0.03)] border-b border-outline-variant/30 gap-3">
+    <header className="fixed top-0 left-0 md:left-64 right-0 h-16 bg-surface/90 backdrop-blur-xl z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between shadow-[0_1px_8px_rgba(45,30,24,0.03)] border-b border-outline-variant/30 gap-3">
       {/* Left Section: Mobile toggle, Back button, Title & Subtitle */}
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         {/* Mobile Hamburger Button */}
@@ -77,6 +78,12 @@ export default function AdminHeader({
 
       {/* Right Section: Search / Actions, Cluster Filter, Notifications, Profile */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {topActions && (
+          <div className="hidden lg:flex items-center gap-2 mr-1">
+            {topActions}
+          </div>
+        )}
+
         {/* Search bar if enabled */}
         {showSearch && onSearchChange && (
           <div className="relative hidden md:block w-48 lg:w-64">
@@ -138,7 +145,7 @@ export default function AdminHeader({
         <div className="flex items-center gap-2 pl-2 border-l border-outline-variant/30">
           <div className="relative ring-2 ring-rose-400/40 rounded-full p-0.5">
             <img
-              alt="Elena Vũ - Super Administrator"
+              alt="Elena Vũ"
               className="w-8 h-8 rounded-full object-cover"
               src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80"
               onError={(e) => {
@@ -151,7 +158,7 @@ export default function AdminHeader({
           <div className="hidden xl:block text-left leading-tight">
             <p className="font-label-md text-xs font-bold text-primary">Elena Vũ</p>
             <p className="font-body-sm text-[11px] text-rose-700 font-semibold">
-              Super Admin
+              Admin
             </p>
           </div>
         </div>
@@ -159,4 +166,3 @@ export default function AdminHeader({
     </header>
   )
 }
-

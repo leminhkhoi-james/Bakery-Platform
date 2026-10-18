@@ -202,77 +202,65 @@ export const AdminDashboardPage = ({ onNavigate }) => {
       />
 
       {/* ================= MAIN WRAPPER ================= */}
-      <div className="md:pl-72 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         {/* TOP FIXED ADMIN HEADER */}
         <AdminHeader
           title="Trung Tâm Điều Hành"
-          subtitle="Giám sát chỉ số GMV, điều phối dòng tiền & chỉ số vận hành sàn SweetCake"
-          contextBadge="Master Admin"
+          contextBadge="Admin"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           selectedCluster={selectedCluster}
           onClusterChange={setSelectedCluster}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+          topActions={
+            <div className="inline-flex p-1 bg-surface-container rounded-xl shadow-sm text-xs">
+              {[
+                { id: 'today', label: 'Hôm nay' },
+                { id: '7days', label: '7 ngày qua' },
+                { id: 'month', label: 'Tháng 10/2025' },
+                { id: 'quarter', label: 'Quý này' },
+              ].map((period) => (
+                <button
+                  key={period.id}
+                  className={`px-3 py-1.5 rounded-lg font-label-md text-label-md transition-colors cursor-pointer ${
+                    selectedTimePeriod === period.id
+                      ? 'bg-primary text-on-primary font-semibold shadow-sm'
+                      : 'text-on-surface-variant hover:text-primary'
+                  }`}
+                  onClick={() => setSelectedTimePeriod(period.id)}
+                  type="button"
+                >
+                  {period.label}
+                </button>
+              ))}
+              <button
+                className="px-2.5 py-1.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center cursor-pointer"
+                onClick={() => showToast('Mở bộ lọc thời gian nâng cao')}
+                type="button"
+                title="Bộ lọc thời gian"
+              >
+                <span className="material-symbols-outlined text-[16px]">calendar_today</span>
+              </button>
+            </div>
+          }
         />
 
         {/* MAIN PAGE BODY */}
-        <main className="relative pt-24 w-full bg-background min-h-screen pb-16">
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-4 space-y-8">
-            {/* ================= TOP HEADER / CONTROL STRIP ================= */}
-            <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-2 pb-2">
-              <div className="space-y-1">
-                <p className="text-xs font-label-md text-on-surface-variant font-medium">
-                  Cập nhật thời gian thực từ mạng lưới 24 xưởng bánh toàn quốc
-                </p>
-              </div>
-
-              {/* Time Filtering & Batch Export Actions */}
-              <div className="flex flex-wrap items-center gap-3 self-start lg:self-auto">
-                <div className="inline-flex p-1 bg-surface-container rounded-xl shadow-sm text-xs">
-                  {[
-                    { id: 'today', label: 'Hôm nay' },
-                    { id: '7days', label: '7 ngày qua' },
-                    { id: 'month', label: 'Tháng 10/2025' },
-                    { id: 'quarter', label: 'Quý này' },
-                  ].map((period) => (
-                    <button
-                      key={period.id}
-                      className={`px-3.5 py-1.5 rounded-lg font-label-md text-label-md transition-colors cursor-pointer ${selectedTimePeriod === period.id
-                        ? 'bg-primary text-on-primary font-semibold shadow-sm'
-                        : 'text-on-surface-variant hover:text-primary'
-                        }`}
-                      onClick={() => setSelectedTimePeriod(period.id)}
-                      type="button"
-                    >
-                      {period.label}
-                    </button>
-                  ))}
-                  <button
-                    className="px-2.5 py-1.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center cursor-pointer"
-                    onClick={() => showToast('Mở bộ lọc thời gian nâng cao')}
-                    type="button"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">
-                      calendar_today
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
+        <main className="relative pt-16 w-full bg-background min-h-screen pb-8">
+          <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 py-2 space-y-3">
             {/* ================= 4 PRIMARY KPI METRIC CARDS ================= */}
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
               {/* KPI 1: DOANH THU & GMV */}
               <div
                 onClick={() => onNavigate && onNavigate('admin-orders')}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-                title="Bấm để xem chi tiết Đơn hàng & Escrow Vault"
+                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+                title="Mở đơn hàng"
               >
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary-fixed/20 rounded-full blur-2xl group-hover:scale-125 transition-transform"></div>
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
-                      Doanh Thu &amp; Tài Chính
+                      Doanh thu
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
@@ -282,10 +270,10 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                     {currentMetrics.gmv}
                   </p>
                   <p className="font-label-md text-label-md text-on-surface-variant mt-0.5 text-xs">
-                    Tổng GMV giao dịch toàn sàn
+                    GMV toàn sàn
                   </p>
                 </div>
-                <div className="mt-6 pt-4 space-y-2.5 bg-surface-container-low/70 rounded-xl p-3.5 text-xs border border-outline-variant/10">
+                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-xs border border-outline-variant/10">
                   <div className="flex items-center justify-between text-body-sm font-body-sm">
                     <span className="text-on-surface-variant">Phí sàn (5% Net Fee):</span>
                     <span className="font-bold text-primary">{currentMetrics.fee}</span>
@@ -295,7 +283,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                       <span className="material-symbols-outlined text-[15px] text-secondary">
                         lock
                       </span>
-                      Ký quỹ Escrow Vault:
+                      Ký quỹ:
                     </span>
                     <span className="font-bold text-secondary">382.400.000₫</span>
                   </div>
@@ -306,13 +294,13 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               {/* KPI 2: ĐƠN HÀNG TOÀN SÀN */}
               <div
                 onClick={() => onNavigate && onNavigate('admin-orders')}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-                title="Bấm để xem chi tiết Đơn hàng & Escrow Vault"
+                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+                title="Mở đơn hàng"
               >
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
-                      Đơn Hàng Toàn Sàn
+                      Đơn hàng
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
@@ -323,9 +311,9 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                   </p>
                 </div>
                 {/* Realtime stages */}
-                <div className="mt-6 pt-4 space-y-2 bg-surface-container-low/70 rounded-xl p-3.5 text-xs border border-outline-variant/10">
+                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-xs border border-outline-variant/10">
                   <div className="flex justify-between items-center text-body-sm font-body-sm">
-                    <span className="text-on-surface-variant">Hôm nay đang xử lý:</span>
+                    <span className="text-on-surface-variant">Đang xử lý:</span>
                     <span className="font-bold text-primary">186 đơn</span>
                   </div>
                   <div className="grid grid-cols-4 gap-1 text-center font-label-sm text-label-sm pt-1">
@@ -352,13 +340,13 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               {/* KPI 3: TIỆM BÁNH ĐỐI TÁC */}
               <div
                 onClick={() => onNavigate && onNavigate('admin-vendors')}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-                title="Bấm để vào Quản lý Tiệm bánh & Duyệt xưởng"
+                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+                title="Mở tiệm bánh"
               >
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
-                      Mạng Lưới Tiệm &amp; Xưởng
+                      Tiệm bánh
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
@@ -371,7 +359,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                     </span>
                   </p>
                   <p className="font-label-md text-label-md text-on-surface-variant mt-0.5 text-xs">
-                    Tiêu chuẩn Haute Pâtisserie Atelier
+                    Đang hoạt động
                   </p>
                 </div>
               </div>
@@ -379,8 +367,8 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               {/* KPI 4: NGƯỜI DÙNG & TÍCH CỰC */}
               <div
                 onClick={() => onNavigate && onNavigate('admin-users')}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-                title="Bấm để vào Quản trị Người dùng"
+                className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-secondary/40 border border-outline-variant/20 transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+                title="Mở người dùng"
               >
                 <div>
                   <div className="flex items-center justify-between">

@@ -211,29 +211,28 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
       />
 
       {/* MAIN SHELL */}
-      <div className="md:pl-72 flex-1">
+      <div className="md:pl-64 flex-1">
         <AdminHeader
-          title="Đơn Hàng & Giám Sát Escrow"
-          subtitle="Giám sát quy trình khóa cọc, thanh toán bảo hộ & đối soát giải ngân 100%"
-          contextBadge="Escrow Vault Active"
+          title="Đơn hàng"
+          contextBadge="Escrow"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Tra cứu User, Tiệm bánh, Mã đơn #ORD..."
+          searchPlaceholder="Tìm đơn hàng..."
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
         />
 
         {/* MAIN BODY CONTENT */}
-        <main className="w-full pt-24 min-h-screen bg-background pb-16">
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-4 space-y-6">
+        <main className="w-full pt-16 min-h-screen bg-background pb-8">
+          <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 py-2 space-y-3">
 
             {/* 2. Thẻ KPI Đơn Hàng & Ký Quỹ Escrow (4 metrics cards) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
               {/* Card 1: Tổng Đơn Hàng */}
-              <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
+              <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                      Tổng Đơn Trong Tháng
+                      Đơn trong tháng
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
                       <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
@@ -254,11 +253,11 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </div>
 
               {/* Card 2: Escrow Vault */}
-              <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
+              <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                      Ký Quỹ Tạm Khóa (Escrow Vault)
+                      Ký quỹ
                     </span>
                     <div className="flex items-baseline gap-1 mt-1">
                       <span className="font-headline-md text-2xl text-primary tracking-tight font-serif font-bold">
@@ -279,18 +278,18 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </div>
 
               {/* Card 3: Xe Lạnh Chuyên Dụng */}
-              <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
+              <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                      Đang Giao Xe Lạnh 4°C - 6°C
+                      Đang giao
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
                       <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
                         48
                       </span>
                       <span className="font-label-md text-xs text-on-surface-variant">
-                        xe trực tuyến
+                        xe
                       </span>
                     </div>
                   </div>
@@ -304,11 +303,11 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </div>
 
               {/* Card 4: Khiếu Nại & SLA */}
-              <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
+              <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
-                      Cần Hỗ Trợ / Khiếu Nại
+                      Cần hỗ trợ
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
                       <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
@@ -352,7 +351,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
-                  <span>Đang Nướng & Tạo Hình</span>
+                  <span>Đang làm</span>
                   <span className="px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[11px] font-bold">
                     54
                   </span>
@@ -381,7 +380,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
-                  <span>Đã Bàn Giao & Nghiệm Thu</span>
+                  <span>Đã giao</span>
                   <span className="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-[11px] font-bold">
                     28
                   </span>
