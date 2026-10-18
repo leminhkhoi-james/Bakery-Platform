@@ -49,7 +49,7 @@ export default function AdminHeader({
         {backButton && (
           <button
             onClick={backButton.onClick}
-            className="flex items-center gap-1 text-sm font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer p-1.5 rounded-lg hover:bg-surface-container shrink-0"
+            className="flex items-center gap-1 text-admin-body font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer p-1.5 rounded-lg hover:bg-surface-container shrink-0"
           >
             <span className="material-symbols-outlined text-lg">arrow_back</span>
             <span className="hidden sm:inline">{backButton.label || 'Quay lại'}</span>
@@ -59,17 +59,17 @@ export default function AdminHeader({
         {/* Title Group */}
         <div className="truncate">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="font-headline-sm text-lg sm:text-xl font-bold text-primary truncate">
+            <h1 className="font-headline-sm text-admin-title font-bold text-primary truncate">
               {title}
             </h1>
             {contextBadge && (
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-label-md font-semibold bg-secondary-fixed/40 text-on-secondary-fixed border border-secondary/20 shrink-0">
+              <span className="px-2.5 py-0.5 rounded-full text-admin-body font-label-md font-semibold bg-secondary-fixed/40 text-on-secondary-fixed border border-secondary/20 shrink-0">
                 {contextBadge}
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="font-body-sm text-xs text-outline hidden sm:block truncate mt-0.5">
+            <p className="font-body-sm text-admin-body text-outline hidden sm:block truncate mt-0.5">
               {subtitle}
             </p>
           )}
@@ -91,7 +91,7 @@ export default function AdminHeader({
               search
             </span>
             <input
-              className="w-full pl-9 pr-8 py-2 bg-surface-container-low border-none rounded-xl font-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all text-xs"
+              className="w-full pl-9 pr-8 py-2 bg-surface-container-low border-none rounded-xl font-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all text-admin-body"
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={searchPlaceholder}
               type="text"
@@ -116,7 +116,7 @@ export default function AdminHeader({
               near_me
             </span>
             <select
-              className="bg-transparent border-none font-label-md text-on-surface-variant focus:outline-none cursor-pointer text-xs"
+              className="bg-transparent border-none font-label-md text-on-surface-variant focus:outline-none cursor-pointer text-admin-body"
               onChange={(e) => handleClusterChange(e.target.value)}
               value={cluster}
             >
@@ -156,8 +156,8 @@ export default function AdminHeader({
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-surface"></span>
           </div>
           <div className="hidden xl:block text-left leading-tight">
-            <p className="font-label-md text-xs font-bold text-primary">Elena Vũ</p>
-            <p className="font-body-sm text-[11px] text-rose-700 font-semibold">
+            <p className="font-label-md text-admin-body font-bold text-primary">Elena Vũ</p>
+            <p className="font-body-sm text-admin-body text-rose-700 font-semibold">
               Admin
             </p>
           </div>

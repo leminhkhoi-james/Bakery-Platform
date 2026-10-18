@@ -180,14 +180,14 @@ export default function AdminUsersPage({ onNavigate }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   return (
-    <div className="bg-background font-body text-body-md text-on-surface antialiased min-h-screen">
+    <div className="bg-background font-body text-admin-body text-on-surface antialiased min-h-screen">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-secondary/40 animate-bounce">
           <span className="material-symbols-outlined text-secondary-fixed text-xl">
             check_circle
           </span>
-          <span className="text-sm font-medium">{toastMessage}</span>
+          <span className="text-admin-body font-medium">{toastMessage}</span>
         </div>
       )}
 
@@ -203,6 +203,7 @@ export default function AdminUsersPage({ onNavigate }) {
       <div className="md:pl-64 flex-1">
         <AdminHeader
           title="Người dùng"
+          showSearch={false}
           contextBadge="2.840"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -210,7 +211,7 @@ export default function AdminUsersPage({ onNavigate }) {
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
           topActions={
             <button
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary transition-all font-label-md text-xs shadow-sm font-semibold"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary transition-all font-label-md text-admin-body shadow-sm font-semibold"
               type="button"
               onClick={() => setShowAddUserModal(true)}
             >
@@ -231,10 +232,10 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
+                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-admin-body">
                       Tài khoản hoạt động
                     </span>
-                    <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
+                    <span className="font-headline-md text-admin-metric text-primary font-bold mt-1 block font-serif">
                       48.920
                     </span>
                   </div>
@@ -250,10 +251,10 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
+                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-admin-body">
                       Khách thường xuyên
                     </span>
-                    <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
+                    <span className="font-headline-md text-admin-metric text-primary font-bold mt-1 block font-serif">
                       6.840
                     </span>
                   </div>
@@ -270,10 +271,10 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
+                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-admin-body">
                       Tỷ lệ mua lại
                     </span>
-                    <span className="font-headline-md text-headline-md text-primary font-bold mt-1 block font-serif">
+                    <span className="font-headline-md text-admin-metric text-primary font-bold mt-1 block font-serif">
                       68.4%
                     </span>
                   </div>
@@ -290,10 +291,10 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-outline-variant/20 relative overflow-hidden group hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-xs">
+                    <span className="font-label-sm uppercase tracking-widest text-on-surface-variant/80 block font-semibold text-admin-body">
                       Cảnh báo
                     </span>
-                    <span className="font-headline-md text-headline-md text-error font-bold mt-1 block font-serif">
+                    <span className="font-headline-md text-admin-metric text-error font-bold mt-1 block font-serif">
                       18
                     </span>
                   </div>
@@ -316,7 +317,7 @@ export default function AdminUsersPage({ onNavigate }) {
                     search
                   </span>
                   <input
-                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container-low text-on-surface placeholder:text-outline text-body-sm rounded-xl focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium"
+                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container-low text-on-surface placeholder:text-outline text-admin-body rounded-xl focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium"
                     placeholder="Tìm tên, email hoặc mã..."
                     type="text"
                     value={searchQuery}
@@ -339,13 +340,13 @@ export default function AdminUsersPage({ onNavigate }) {
                   {/* Tier Filter */}
                   <div className="relative">
                     <select
-                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-admin-body rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
                       value={tierFilter}
                       onChange={(e) => setTierFilter(e.target.value)}
                     >
                       <option value="">Phân loại: Tất cả</option>
                       <option value="diamond">Khách Doanh Nghiệp</option>
-                      <option value="gold">Khách Đặt Tiệc Sự Kiện</option>
+                      <option value="gold">Khách đặt tiệc</option>
                       <option value="silver">Khách Cá Nhân</option>
                       <option value="standard">Khách Hàng Mới</option>
                     </select>
@@ -357,13 +358,13 @@ export default function AdminUsersPage({ onNavigate }) {
                   {/* Account Status Filter */}
                   <div className="relative">
                     <select
-                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-admin-body rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
                     >
                       <option value="">Trạng thái: Tất cả</option>
-                      <option value="active">Đang hoạt động (Active)</option>
-                      <option value="suspended">Đang tạm khóa (Suspended)</option>
+                      <option value="active">Hoạt động</option>
+                      <option value="suspended">Tạm khóa</option>
                     </select>
                     <span className="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
                       expand_more
@@ -373,11 +374,11 @@ export default function AdminUsersPage({ onNavigate }) {
                   {/* Spending Tier Filter */}
                   <div className="relative">
                     <select
-                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-admin-body rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
                       value={spendingFilter}
                       onChange={(e) => setSpendingFilter(e.target.value)}
                     >
-                      <option value="">Chi tiêu: Tất cả GMV</option>
+                      <option value="">Chi tiêu: Tất cả</option>
                       <option value="under1">Dưới 1.000.000đ</option>
                       <option value="1to5">1.000.000đ - 5.000.000đ</option>
                       <option value="5to20">5.000.000đ - 20.000.000đ</option>
@@ -391,7 +392,7 @@ export default function AdminUsersPage({ onNavigate }) {
                   {/* Sorting Filter */}
                   <div className="relative">
                     <select
-                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                      className="appearance-none pl-3.5 pr-8 py-2.5 bg-surface-container-low text-on-surface font-label-md text-admin-body rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                     >
@@ -425,42 +426,39 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[1100px]">
                   <thead>
-                    <tr className="bg-surface-container-low/70 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+                    <tr className="bg-surface-container-low/70 text-on-surface-variant font-label-sm text-admin-body uppercase tracking-wider">
                       <th className="py-4 px-6 font-semibold">
-                        Khách Hàng & Thông Tin
+                        Khách hàng
                       </th>
 
                       <th className="py-4 px-4 font-semibold text-right">
-                        Tổng Đơn & GMV
+                        Đơn / Chi tiêu
                       </th>
                       <th className="py-4 px-4 font-semibold">
-                        Đơn Gần Nhất & Mẫu Bánh
+                        Đơn gần nhất
                       </th>
                       <th className="py-4 px-4 font-semibold">Trạng Thái</th>
                       <th className="py-4 px-4 font-semibold text-center">
-                        Uy Tín Sàn
+                        Uy tín
                       </th>
                       <th className="py-4 px-6 font-semibold text-right">
                         Thao Tác
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-body-sm font-body-sm divide-y divide-surface-container-low">
+                  <tbody className="text-admin-body font-body-sm divide-y divide-surface-container-low">
                     {filteredUsers.length === 0 ? (
                       <tr>
                         <td colSpan={6} className="py-12 text-center">
                           <span className="material-symbols-outlined text-4xl text-on-surface-variant/50 mb-2">
                             person_search
                           </span>
-                          <p className="text-body-md font-semibold text-primary">
-                            Không tìm thấy tài khoản nào khớp với bộ lọc
-                          </p>
-                          <p className="text-body-sm text-on-surface-variant mt-1">
-                            Thử điều chỉnh lại từ khóa hoặc xóa bớt tiêu chí lọc.
+                          <p className="text-admin-body font-semibold text-primary">
+                            Không tìm thấy người dùng
                           </p>
                           <button
                             onClick={handleResetFilters}
-                            className="mt-4 px-4 py-2 bg-primary text-on-primary rounded-xl text-sm font-semibold hover:bg-secondary transition-colors"
+                            className="mt-4 px-4 py-2 bg-primary text-on-primary rounded-xl text-admin-body font-semibold hover:bg-secondary transition-colors"
                           >
                             Xóa bộ lọc
                           </button>
@@ -499,11 +497,11 @@ export default function AdminUsersPage({ onNavigate }) {
                                 </div>
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-2">
-                                    <span className="font-label-lg text-label-lg font-bold text-primary group-hover:text-secondary transition-colors">
+                                    <span className="font-label-lg text-admin-body font-bold text-primary group-hover:text-secondary transition-colors">
                                       {user.name}
                                     </span>
                                     <span
-                                      className={`font-label-sm text-[10px] px-1.5 py-0.5 font-mono rounded ${isSuspended
+                                      className={`font-label-sm text-admin-body px-1.5 py-0.5 font-mono rounded ${isSuspended
                                           ? 'bg-error-container text-error'
                                           : 'bg-surface-container text-on-surface-variant'
                                         }`}
@@ -512,7 +510,7 @@ export default function AdminUsersPage({ onNavigate }) {
                                     </span>
                                   </div>
                                   <span
-                                    className={`block font-label-sm text-xs font-mono mt-0.5 ${isSuspended
+                                    className={`block font-label-sm text-admin-body font-mono mt-0.5 ${isSuspended
                                         ? 'text-error font-medium'
                                         : 'text-outline'
                                       }`}
@@ -531,7 +529,7 @@ export default function AdminUsersPage({ onNavigate }) {
                                 {user.gmvFormatted}
                               </div>
                               <span
-                                className={`font-label-sm text-xs ${isSuspended
+                                className={`font-label-sm text-admin-body ${isSuspended
                                     ? 'text-error font-medium'
                                     : 'text-secondary font-semibold'
                                   }`}
@@ -544,13 +542,13 @@ export default function AdminUsersPage({ onNavigate }) {
                             <td className="py-4 px-4">
                               <div className="max-w-[220px]">
                                 <span
-                                  className={`font-label-md text-xs font-semibold block truncate ${isSuspended ? 'text-error' : 'text-primary'
+                                  className={`font-label-md text-admin-body font-semibold block truncate ${isSuspended ? 'text-error' : 'text-primary'
                                     }`}
                                 >
                                   {user.recentCake}
                                 </span>
                                 <span
-                                  className={`font-label-sm text-[11px] flex items-center gap-1 mt-0.5 ${isSuspended
+                                  className={`font-label-sm text-admin-body flex items-center gap-1 mt-0.5 ${isSuspended
                                       ? 'text-error/80'
                                       : 'text-on-surface-variant'
                                     }`}
@@ -569,14 +567,14 @@ export default function AdminUsersPage({ onNavigate }) {
                             {/* Trạng Thái */}
                             <td className="py-4 px-4">
                               {user.status === 'active' ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm text-xs font-semibold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm text-admin-body font-semibold">
                                   <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-                                  Active
+                                  Hoạt động
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-error font-label-sm text-xs font-bold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-error font-label-sm text-admin-body font-bold">
                                   <span className="w-2 h-2 rounded-full bg-error"></span>
-                                  Suspended
+                                  Tạm khóa
                                 </span>
                               )}
                             </td>
@@ -585,7 +583,7 @@ export default function AdminUsersPage({ onNavigate }) {
                             <td className="py-4 px-4 text-center">
                               <div className="inline-flex flex-col items-center">
                                 <span
-                                  className={`font-label-md text-xs font-bold ${user.trustScore >= 90
+                                  className={`font-label-md text-admin-body font-bold ${user.trustScore >= 90
                                       ? 'text-primary'
                                       : 'text-error'
                                     }`}
@@ -593,7 +591,7 @@ export default function AdminUsersPage({ onNavigate }) {
                                   {user.trustScore} / 100
                                 </span>
                                 <span
-                                  className={`font-label-sm text-[10px] font-medium ${user.trustScore >= 95
+                                  className={`font-label-sm text-admin-body font-medium ${user.trustScore >= 95
                                       ? 'text-secondary'
                                       : user.trustScore >= 90
                                         ? 'text-on-surface-variant'
@@ -609,7 +607,7 @@ export default function AdminUsersPage({ onNavigate }) {
                             <td className="py-4 px-6 text-right">
                               <div className="flex items-center justify-end gap-1.5">
                                 <button
-                                  className="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-sm text-xs font-semibold transition-all"
+                                  className="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-sm text-admin-body font-semibold transition-all"
                                   title="Xem hồ sơ chi tiết"
                                   type="button"
                                   onClick={() => setSelectedUser(user)}
@@ -651,7 +649,7 @@ export default function AdminUsersPage({ onNavigate }) {
               <div className="p-4 bg-surface-container-low/40 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-surface-container-high/60">
                 {/* Status & Showing Info */}
                 <div className="flex items-center gap-4">
-                  <span className="font-body-sm text-xs text-on-surface-variant">
+                  <span className="font-body-sm text-admin-body text-on-surface-variant">
                     Hiển thị{' '}
                     <span className="font-semibold text-primary">
                       1 - {filteredUsers.length}
@@ -661,10 +659,10 @@ export default function AdminUsersPage({ onNavigate }) {
                     khách hàng
                   </span>
                   <div className="hidden md:flex items-center gap-2">
-                    <span className="font-label-sm text-outline text-xs">
+                    <span className="font-label-sm text-outline text-admin-body">
                       Số dòng:
                     </span>
-                    <select className="bg-surface-container-lowest font-label-sm text-xs px-2.5 py-1 rounded-lg text-on-surface focus:outline-none cursor-pointer border border-surface-container-high">
+                    <select className="bg-surface-container-lowest font-label-sm text-admin-body px-2.5 py-1 rounded-lg text-on-surface focus:outline-none cursor-pointer border border-surface-container-high">
                       <option value="10">10 / trang</option>
                       <option value="25">25 / trang</option>
                       <option value="50">50 / trang</option>
@@ -675,7 +673,7 @@ export default function AdminUsersPage({ onNavigate }) {
                 {/* Pagination Buttons */}
                 <div className="flex items-center gap-1.5">
                   <button
-                    className="px-3 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-xs disabled:opacity-40 disabled:cursor-not-allowed transition-all border border-surface-container-high"
+                    className="px-3 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-admin-body disabled:opacity-40 disabled:cursor-not-allowed transition-all border border-surface-container-high"
                     disabled
                     type="button"
                   >
@@ -685,34 +683,34 @@ export default function AdminUsersPage({ onNavigate }) {
                     Trước
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-sm text-xs font-bold flex items-center justify-center shadow-sm"
+                    className="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-sm text-admin-body font-bold flex items-center justify-center shadow-sm"
                     type="button"
                   >
                     1
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-xs font-medium flex items-center justify-center transition-all border border-surface-container-high"
+                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-admin-body font-medium flex items-center justify-center transition-all border border-surface-container-high"
                     type="button"
                   >
                     2
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-xs font-medium flex items-center justify-center transition-all border border-surface-container-high"
+                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-admin-body font-medium flex items-center justify-center transition-all border border-surface-container-high"
                     type="button"
                   >
                     3
                   </button>
-                  <span className="px-1 text-outline font-label-sm text-xs">
+                  <span className="px-1 text-outline font-label-sm text-admin-body">
                     ...
                   </span>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-xs font-medium flex items-center justify-center transition-all border border-surface-container-high"
+                    className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant font-label-sm text-admin-body font-medium flex items-center justify-center transition-all border border-surface-container-high"
                     type="button"
                   >
                     489
                   </button>
                   <button
-                    className="px-3 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-sm text-xs transition-all border border-surface-container-high font-medium"
+                    className="px-3 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-sm text-admin-body transition-all border border-surface-container-high font-medium"
                     type="button"
                   >
                     Tiếp theo
@@ -744,21 +742,21 @@ export default function AdminUsersPage({ onNavigate }) {
                       alt={selectedUser.name}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-bold text-xl text-primary bg-surface-container-high">
+                    <div className="w-full h-full flex items-center justify-center font-bold text-admin-body text-primary bg-surface-container-high">
                       {selectedUser.avatarInitials}
                     </div>
                   )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-headline-sm text-xl font-bold font-serif">
+                    <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
                       {selectedUser.name}
                     </h3>
-                    <span className="text-xs px-2 py-0.5 rounded bg-surface-container-lowest/20 font-mono">
+                    <span className="text-admin-body px-2 py-0.5 rounded bg-surface-container-lowest/20 font-mono">
                       #{selectedUser.id}
                     </span>
                   </div>
-                  <p className="text-body-sm text-secondary-fixed text-xs mt-0.5">
+                  <p className="text-admin-body text-secondary-fixed  mt-0.5">
                     {selectedUser.phone} • {selectedUser.location}
                   </p>
                 </div>
@@ -776,26 +774,26 @@ export default function AdminUsersPage({ onNavigate }) {
               {/* Metrics strip */}
               <div className="grid grid-cols-3 gap-3 p-4 bg-surface-container rounded-2xl">
                 <div>
-                  <p className="text-xs text-on-surface-variant font-medium">
-                    Tổng chi tiêu GMV
+                  <p className="text-admin-body text-on-surface-variant font-medium">
+                    Tổng chi tiêu
                   </p>
-                  <p className="font-headline-sm text-lg font-bold text-primary font-serif mt-0.5">
+                  <p className="font-headline-sm text-admin-body font-bold text-primary font-serif mt-0.5">
                     {selectedUser.gmvFormatted}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-on-surface-variant font-medium">
+                  <p className="text-admin-body text-on-surface-variant font-medium">
                     Đơn hàng hoàn tất
                   </p>
-                  <p className="font-headline-sm text-lg font-bold text-secondary font-serif mt-0.5">
+                  <p className="font-headline-sm text-admin-body font-bold text-secondary font-serif mt-0.5">
                     {selectedUser.ordersCount} đơn
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-on-surface-variant font-medium">
-                    Điểm uy tín Escrow
+                  <p className="text-admin-body text-on-surface-variant font-medium">
+                    Điểm uy tín
                   </p>
-                  <p className="font-headline-sm text-lg font-bold text-emerald-700 font-serif mt-0.5">
+                  <p className="font-headline-sm text-admin-body font-bold text-emerald-700 font-serif mt-0.5">
                     {selectedUser.trustScore} / 100
                   </p>
                 </div>
@@ -803,29 +801,29 @@ export default function AdminUsersPage({ onNavigate }) {
 
               {/* Profile Details */}
               <div className="space-y-3">
-                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-body-sm">
+                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-admin-body">
                   <span className="text-on-surface-variant">Phân loại khách hàng:</span>
-                  <span className="font-bold text-primary px-3 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs">
+                  <span className="font-bold text-primary px-3 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-admin-body">
                     {selectedUser.tierLabel}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-body-sm">
+                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-admin-body">
                   <span className="text-on-surface-variant">Địa chỉ mặc định:</span>
                   <span className="font-medium text-primary">
                     {selectedUser.location}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-body-sm">
+                <div className="flex justify-between items-center py-2 border-b border-surface-container-high text-admin-body">
                   <span className="text-on-surface-variant">Đơn bánh gần nhất:</span>
                   <span className="font-medium text-secondary">
                     {selectedUser.recentCake} ({selectedUser.recentDate})
                   </span>
                 </div>
-                <div className="py-2 text-body-sm">
+                <div className="py-2 text-admin-body">
                   <span className="text-on-surface-variant block mb-1">
-                    Ghi chú khẩu vị & Hành vi:
+                    Ghi chú:
                   </span>
-                  <div className="p-3 bg-surface-container rounded-xl text-primary font-medium text-xs">
+                  <div className="p-3 bg-surface-container rounded-xl text-primary font-medium text-admin-body">
                     {selectedUser.tasteNotes}
                   </div>
                 </div>
@@ -838,14 +836,14 @@ export default function AdminUsersPage({ onNavigate }) {
                   onClick={() => {
                     handleToggleStatus(selectedUser.id)
                   }}
-                  className={`px-4 py-2.5 rounded-xl font-label-md text-xs font-bold transition-all ${selectedUser.status === 'suspended'
+                  className={`px-4 py-2.5 rounded-xl font-label-md text-admin-body font-bold transition-all ${selectedUser.status === 'suspended'
                       ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                       : 'bg-error-container hover:bg-error text-on-error-container hover:text-white'
                     }`}
                 >
                   {selectedUser.status === 'suspended'
-                    ? 'Mở Khóa Tài Khoản Này'
-                    : 'Tạm Khóa Tài Khoản (Vi Phạm)'}
+                    ? 'Mở khóa tài khoản'
+                    : 'Tạm khóa tài khoản'}
                 </button>
 
                 <div className="flex items-center gap-2">
@@ -853,7 +851,7 @@ export default function AdminUsersPage({ onNavigate }) {
                   <button
                     type="button"
                     onClick={() => setSelectedUser(null)}
-                    className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary font-label-md text-xs font-bold"
+                    className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary font-label-md text-admin-body font-bold"
                   >
                     Đóng
                   </button>
@@ -878,12 +876,9 @@ export default function AdminUsersPage({ onNavigate }) {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-headline-sm text-lg font-bold font-serif">
-                    Thêm Người Dùng Thủ Công
+                  <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                    Thêm người dùng
                   </h3>
-                  <p className="text-body-sm text-secondary-fixed text-xs">
-                    Khởi tạo tài khoản khách hàng hoặc thành viên trực tiếp
-                  </p>
                 </div>
               </div>
               <button
@@ -896,8 +891,8 @@ export default function AdminUsersPage({ onNavigate }) {
 
             <form onSubmit={handleAddUserSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
-                  Họ và tên khách hàng *
+                <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
+                  Họ và tên *
                 </label>
                 <input
                   type="text"
@@ -907,14 +902,14 @@ export default function AdminUsersPage({ onNavigate }) {
                   onChange={(e) =>
                     setNewUser({ ...newUser, name: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
-                    Địa chỉ Email *
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
+                    Email *
                   </label>
                   <input
                     type="email"
@@ -924,11 +919,11 @@ export default function AdminUsersPage({ onNavigate }) {
                     onChange={(e) =>
                       setNewUser({ ...newUser, email: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
                     Số điện thoại
                   </label>
                   <input
@@ -938,13 +933,13 @@ export default function AdminUsersPage({ onNavigate }) {
                     onChange={(e) =>
                       setNewUser({ ...newUser, phone: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
                   Khu vực giao tiệc
                 </label>
                 <select
@@ -952,7 +947,7 @@ export default function AdminUsersPage({ onNavigate }) {
                   onChange={(e) =>
                     setNewUser({ ...newUser, location: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary/40 cursor-pointer"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40 cursor-pointer"
                 >
                   <option value="Quận 1, TP.HCM">Quận 1, TP.HCM</option>
                   <option value="Quận 3, TP.HCM">Quận 3, TP.HCM</option>
@@ -967,13 +962,13 @@ export default function AdminUsersPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setShowAddUserModal(false)}
-                  className="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-admin-body font-semibold"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary text-xs font-bold shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary text-admin-body font-bold shadow-md"
                 >
                   Tạo Tài Khoản
                 </button>
@@ -996,8 +991,8 @@ export default function AdminUsersPage({ onNavigate }) {
                 <span className="material-symbols-outlined text-secondary-fixed text-lg">
                   tune
                 </span>
-                <h3 className="font-headline-sm text-base font-bold font-serif">
-                  Bộ Lọc Nâng Cao Khách Hàng
+                <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                  Bộ lọc nâng cao
                 </h3>
               </div>
               <button
@@ -1008,9 +1003,9 @@ export default function AdminUsersPage({ onNavigate }) {
               </button>
             </div>
 
-            <div className="p-5 space-y-4 text-body-sm">
+            <div className="p-5 space-y-4 text-admin-body">
               <div>
-                <label className="block text-xs font-bold text-primary mb-1">
+                <label className="block text-admin-body font-bold text-primary mb-1">
                   Độ uy tín tối thiểu
                 </label>
                 <input
@@ -1020,7 +1015,7 @@ export default function AdminUsersPage({ onNavigate }) {
                   defaultValue="90"
                   className="w-full accent-secondary"
                 />
-                <div className="flex justify-between text-[11px] text-on-surface-variant mt-1">
+                <div className="flex justify-between text-admin-body text-on-surface-variant mt-1">
                   <span>0 (Tất cả)</span>
                   <span>50 (Trung bình)</span>
                   <span className="font-bold text-secondary">
@@ -1030,10 +1025,10 @@ export default function AdminUsersPage({ onNavigate }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-primary mb-1">
+                <label className="block text-admin-body font-bold text-primary mb-1">
                   Số đơn hoàn tất tối thiểu
                 </label>
-                <select className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-xs">
+                <select className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body">
                   <option value="any">Bất kỳ số lượng đơn</option>
                   <option value="1">Ít nhất 1 đơn</option>
                   <option value="5">Từ 5 đơn trở lên</option>
@@ -1042,10 +1037,10 @@ export default function AdminUsersPage({ onNavigate }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-primary mb-1">
-                  Khu vực giao bánh tập trung
+                <label className="block text-admin-body font-bold text-primary mb-1">
+                  Khu vực giao bánh
                 </label>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-2 gap-2 text-admin-body">
                   <label className="flex items-center gap-2 p-2 bg-surface-container rounded-lg cursor-pointer">
                     <input type="checkbox" defaultChecked className="accent-secondary" />
                     <span>TP. Hồ Chí Minh</span>
@@ -1069,7 +1064,7 @@ export default function AdminUsersPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setShowAdvancedFilterModal(false)}
-                  className="px-4 py-2 rounded-xl bg-surface-container-high text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-surface-container-high text-admin-body font-semibold"
                 >
                   Đóng
                 </button>
@@ -1079,7 +1074,7 @@ export default function AdminUsersPage({ onNavigate }) {
                     showToast('Đã áp dụng bộ lọc nâng cao.')
                     setShowAdvancedFilterModal(false)
                   }}
-                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-secondary"
+                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-admin-body font-bold hover:bg-secondary"
                 >
                   Áp Dụng
                 </button>

@@ -198,14 +198,14 @@ export default function AdminVendorsPage({ onNavigate }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   return (
-    <div className="bg-background font-body text-body-md text-on-surface antialiased min-h-screen">
+    <div className="bg-background font-body text-admin-body text-on-surface antialiased min-h-screen">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-secondary/40 animate-bounce">
           <span className="material-symbols-outlined text-secondary-fixed text-xl">
             check_circle
           </span>
-          <span className="text-sm font-medium">{toastMessage}</span>
+          <span className="text-admin-body font-medium">{toastMessage}</span>
         </div>
       )}
 
@@ -221,6 +221,7 @@ export default function AdminVendorsPage({ onNavigate }) {
       <div className="md:pl-64 flex-1">
         <AdminHeader
           title="Tiệm bánh"
+          showSearch={false}
           contextBadge="14 chờ"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -229,7 +230,7 @@ export default function AdminVendorsPage({ onNavigate }) {
           topActions={
             <>
               <button
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all shadow-sm font-label-md text-xs font-semibold"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all shadow-sm font-label-md text-admin-body font-semibold"
                 onClick={() => {
                   const urgent = vendors.find((v) => v.id === 'VEND-88') || vendors[1]
                   handleOpenDrawer(urgent)
@@ -240,7 +241,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                 <span>Duyệt hồ sơ (14)</span>
               </button>
               <button
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container text-primary-fixed hover:bg-primary transition-all shadow-sm font-label-md text-xs font-semibold"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-container text-primary-fixed hover:bg-primary transition-all shadow-sm font-label-md text-admin-body font-semibold"
                 type="button"
                 onClick={() => setShowInviteModal(true)}
               >
@@ -261,7 +262,7 @@ export default function AdminVendorsPage({ onNavigate }) {
               {/* Metric 1 */}
               <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
-                  <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                  <span className="font-label-md text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                     Tiệm hoạt động
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
@@ -271,10 +272,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="font-display-lg text-display-lg text-primary leading-none tracking-tight font-serif font-bold">
+                  <span className="font-display-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                     348
                   </span>
-                  <span className="font-label-md text-xs text-secondary font-semibold ml-1">
+                  <span className="font-label-md text-admin-body text-secondary font-semibold ml-1">
                     tiệm
                   </span>
                 </div>
@@ -285,7 +286,7 @@ export default function AdminVendorsPage({ onNavigate }) {
               {/* Metric 2 */}
               <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
-                  <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                  <span className="font-label-md text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                     Chờ duyệt
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
@@ -295,10 +296,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="font-display-lg text-display-lg text-secondary leading-none tracking-tight font-serif font-bold">
+                  <span className="font-display-lg text-admin-metric text-secondary tracking-tight font-serif font-bold">
                     14
                   </span>
-                  <span className="font-label-md text-xs text-on-surface-variant font-medium ml-1">
+                  <span className="font-label-md text-admin-body text-on-surface-variant font-medium ml-1">
                     xưởng nộp
                   </span>
                 </div>
@@ -309,7 +310,7 @@ export default function AdminVendorsPage({ onNavigate }) {
               {/* Metric 3 */}
               <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
-                  <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                  <span className="font-label-md text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                     Đánh giá tốt
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-secondary">
@@ -319,10 +320,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="font-display-lg text-display-lg text-primary leading-none tracking-tight font-serif font-bold">
+                  <span className="font-display-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                     92.0
                   </span>
-                  <span className="font-headline-sm text-headline-sm text-primary leading-none font-bold">
+                  <span className="font-headline-sm text-admin-body text-primary leading-none font-bold">
                     %
                   </span>
                 </div>
@@ -333,7 +334,7 @@ export default function AdminVendorsPage({ onNavigate }) {
               {/* Metric 4 */}
               <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5 border border-outline-variant/20">
                 <div className="flex items-start justify-between mb-2">
-                  <span className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                  <span className="font-label-md text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                     Giao đúng hạn
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
@@ -343,10 +344,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="font-display-lg text-display-lg text-primary leading-none tracking-tight font-serif font-bold">
+                  <span className="font-display-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                     99.1
                   </span>
-                  <span className="font-headline-sm text-headline-sm text-primary leading-none font-bold">
+                  <span className="font-headline-sm text-admin-body text-primary leading-none font-bold">
                     %
                   </span>
                 </div>
@@ -362,58 +363,58 @@ export default function AdminVendorsPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('all')}
-                  className={`px-4 py-2 rounded-full font-label-md text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${activeTab === 'all'
+                  className={`px-4 py-2 rounded-full font-label-md text-admin-body font-semibold whitespace-nowrap transition-all shadow-sm ${activeTab === 'all'
                     ? 'bg-primary-container text-on-primary font-bold'
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
-                  Tất Cả Tiệm (348)
+                  Tất cả (348)
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('active')}
-                  className={`px-4 py-2 rounded-full font-label-md text-xs font-semibold whitespace-nowrap transition-all ${activeTab === 'active'
+                  className={`px-4 py-2 rounded-full font-label-md text-admin-body font-semibold whitespace-nowrap transition-all ${activeTab === 'active'
                     ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
-                  Đang Hoạt Động (324)
+                  Hoạt động (324)
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('pending')}
-                  className={`px-4 py-2 rounded-full font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeTab === 'pending'
+                  className={`px-4 py-2 rounded-full font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeTab === 'pending'
                     ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
                   <span>Chờ duyệt</span>
-                  <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-secondary text-on-secondary font-bold">
+                  <span className="px-1.5 py-0.5 text-admin-body rounded-full bg-secondary text-on-secondary font-bold">
                     14
                   </span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('needs_info')}
-                  className={`px-4 py-2 rounded-full font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeTab === 'needs_info'
+                  className={`px-4 py-2 rounded-full font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeTab === 'needs_info'
                     ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
                   <span>Thiếu hồ sơ</span>
-                  <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-error-container text-on-error-container font-bold">
+                  <span className="px-1.5 py-0.5 text-admin-body rounded-full bg-error-container text-on-error-container font-bold">
                     7
                   </span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('suspended')}
-                  className={`px-4 py-2 rounded-full font-label-md text-xs font-semibold whitespace-nowrap transition-all ${activeTab === 'suspended'
+                  className={`px-4 py-2 rounded-full font-label-md text-admin-body font-semibold whitespace-nowrap transition-all ${activeTab === 'suspended'
                     ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                     : 'bg-white border border-outline-variant/20 text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                     }`}
                 >
-                  Tạm Ngưng Nhận Đơn (3)
+                  Tạm ngưng (3)
                 </button>
               </div>
 
@@ -425,8 +426,8 @@ export default function AdminVendorsPage({ onNavigate }) {
                     search
                   </span>
                   <input
-                    className="w-full pl-10 pr-4 py-2 bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-sm text-xs rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
-                    placeholder="Tìm theo tên tiệm, Bếp trưởng đại diện, #VEND-..., SĐT..."
+                    className="w-full pl-10 pr-4 py-2 bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-sm text-admin-body rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                    placeholder="Tìm tên tiệm, bếp trưởng, mã, SĐT..."
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -446,11 +447,11 @@ export default function AdminVendorsPage({ onNavigate }) {
                 {/* Region Select */}
                 <div className="md:col-span-3">
                   <select
-                    className="w-full px-3 py-2 bg-surface-container-lowest text-on-surface font-label-md text-xs rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all cursor-pointer font-medium border-none shadow-sm"
+                    className="w-full px-3 py-2 bg-surface-container-lowest text-on-surface font-label-md text-admin-body rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all cursor-pointer font-medium border-none shadow-sm"
                     value={regionFilter}
                     onChange={(e) => setRegionFilter(e.target.value)}
                   >
-                    <option value="">Tất cả khu vực (TP.HCM & Hà Nội)</option>
+                    <option value="">Tất cả khu vực</option>
                     <option value="q1">Quận 1, TP.HCM</option>
                     <option value="q2">Quận 2 Thảo Điền, TP.HCM</option>
                     <option value="q3">Quận 3, TP.HCM</option>
@@ -462,11 +463,11 @@ export default function AdminVendorsPage({ onNavigate }) {
                 {/* Specialization Filter */}
                 <div className="md:col-span-3">
                   <select
-                    className="w-full px-3 py-2 bg-surface-container-lowest text-on-surface font-label-md text-xs rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all cursor-pointer font-medium border-none shadow-sm"
+                    className="w-full px-3 py-2 bg-surface-container-lowest text-on-surface font-label-md text-admin-body rounded-xl focus:outline-none focus:ring-1 focus:ring-secondary/40 transition-all cursor-pointer font-medium border-none shadow-sm"
                     value={specialtyFilter}
                     onChange={(e) => setSpecialtyFilter(e.target.value)}
                   >
-                    <option value="">Tất cả chuyên môn pâtisserie</option>
+                    <option value="">Tất cả chuyên môn</option>
                     <option value="couture">Bánh Cưới Haute Couture</option>
                     <option value="ai-3d">Bánh Kem AI 3D & Fondant</option>
                     <option value="french">Mousse & Bánh Lạnh Pháp</option>
@@ -496,21 +497,21 @@ export default function AdminVendorsPage({ onNavigate }) {
               <div className="w-full overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[1100px]">
                   <thead>
-                    <tr className="bg-surface-container-low text-on-surface-variant font-label-sm text-xs uppercase tracking-wider">
+                    <tr className="bg-surface-container-low text-on-surface-variant font-label-sm text-admin-body uppercase tracking-wider">
                       <th className="py-3 px-6 font-semibold">
-                        Xưởng Bánh & Thương Hiệu
+                        Tiệm bánh
                       </th>
                       <th className="py-3 px-4 font-semibold">
-                        Phân Loại & Chuyên Môn
+                        Chuyên môn
                       </th>
                       <th className="py-3 px-4 font-semibold">
-                        Hồ Sơ Pháp Lý & ATTP
+                        Pháp lý / ATTP
                       </th>
                       <th className="py-3 px-4 font-semibold text-right">
-                        Doanh Số Tháng
+                        Doanh số tháng
                       </th>
                       <th className="py-3 px-4 font-semibold text-center">
-                        Tỷ Lệ SLA
+                        Đúng hạn
                       </th>
                       <th className="py-3 px-4 font-semibold">Trạng Thái</th>
                       <th className="py-3 px-6 font-semibold text-center">
@@ -518,19 +519,19 @@ export default function AdminVendorsPage({ onNavigate }) {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-surface-container-low text-body-sm font-body-sm">
+                  <tbody className="divide-y divide-surface-container-low text-admin-body font-body-sm">
                     {filteredVendors.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="py-12 text-center">
                           <span className="material-symbols-outlined text-4xl text-on-surface-variant/50 mb-2">
                             store_mall_directory
                           </span>
-                          <p className="text-body-md font-semibold text-primary">
-                            Không tìm thấy xưởng bánh nào khớp với bộ lọc
+                          <p className="text-admin-body font-semibold text-primary">
+                            Không tìm thấy tiệm bánh
                           </p>
                           <button
                             onClick={handleResetFilters}
-                            className="mt-3 px-4 py-1.5 bg-primary text-on-primary rounded-xl text-xs font-semibold hover:bg-secondary"
+                            className="mt-3 px-4 py-1.5 bg-primary text-on-primary rounded-xl text-admin-body font-semibold hover:bg-secondary"
                           >
                             Xóa bộ lọc
                           </button>
@@ -562,7 +563,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                                 />
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-1.5">
-                                    <span className="font-headline-sm text-sm font-bold text-primary truncate font-serif">
+                                    <span className="font-headline-sm text-admin-body font-bold text-primary truncate font-serif">
                                       {vendor.name}
                                     </span>
                                     {vendor.verified && (
@@ -574,12 +575,12 @@ export default function AdminVendorsPage({ onNavigate }) {
                                       </span>
                                     )}
                                     {vendor.isUrgent && (
-                                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-secondary text-on-secondary uppercase shrink-0">
+                                      <span className="px-1.5 py-0.5 rounded text-admin-body font-bold bg-secondary text-on-secondary uppercase shrink-0">
                                         Gấp
                                       </span>
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-2 font-label-sm text-xs text-on-surface-variant">
+                                  <div className="flex items-center gap-2 font-label-sm text-admin-body text-on-surface-variant">
                                     <span className="text-secondary font-semibold font-mono">
                                       #{vendor.id}
                                     </span>
@@ -595,7 +596,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                             {/* Phân Loại & Chuyên Môn */}
                             <td className="py-4 px-4">
                               <span
-                                className={`inline-block px-2.5 py-1 rounded-full font-label-sm text-[11px] font-semibold mb-1 ${vendor.categoryType === 'couture'
+                                className={`inline-block px-2.5 py-1 rounded-full font-label-sm text-admin-body font-semibold mb-1 ${vendor.categoryType === 'couture'
                                   ? 'bg-primary-fixed text-on-primary-fixed'
                                   : vendor.categoryType === 'french'
                                     ? 'bg-tertiary-fixed text-on-tertiary-fixed'
@@ -606,7 +607,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                               >
                                 {vendor.categoryTag}
                               </span>
-                              <div className="font-body-sm text-xs text-on-surface-variant">
+                              <div className="font-body-sm text-admin-body text-on-surface-variant">
                                 {vendor.specialty}
                               </div>
                             </td>
@@ -615,7 +616,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                             <td className="py-4 px-4">
                               <div className="flex flex-col gap-1 items-start">
                                 <span
-                                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-label-sm text-[11px] font-semibold ${isNeedsInfo
+                                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-label-sm text-admin-body font-semibold ${isNeedsInfo
                                     ? 'bg-error-container text-on-error-container'
                                     : 'bg-secondary-fixed text-on-secondary-fixed'
                                     }`}
@@ -630,7 +631,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                                   <span>{vendor.legalBadge}</span>
                                 </span>
                                 <span
-                                  className={`font-label-sm text-[11px] ${isNeedsInfo
+                                  className={`font-label-sm text-admin-body ${isNeedsInfo
                                     ? 'text-error font-semibold'
                                     : 'text-on-surface-variant'
                                     }`}
@@ -642,10 +643,10 @@ export default function AdminVendorsPage({ onNavigate }) {
 
                             {/* Doanh Số Tháng */}
                             <td className="py-4 px-4 text-right">
-                              <div className="font-label-lg text-sm font-bold text-primary font-serif">
+                              <div className="font-label-lg text-admin-body font-bold text-primary font-serif">
                                 {vendor.revenueFormatted}
                               </div>
-                              <div className="font-label-sm text-xs text-on-surface-variant flex items-center justify-end gap-1">
+                              <div className="font-label-sm text-admin-body text-on-surface-variant flex items-center justify-end gap-1">
                                 {vendor.ordersCount > 0 ? (
                                   <>
                                     <span>{vendor.ordersCount} đơn</span>
@@ -664,15 +665,15 @@ export default function AdminVendorsPage({ onNavigate }) {
                             <td className="py-4 px-4 text-center">
                               {vendor.ordersCount > 0 ? (
                                 <>
-                                  <div className="font-label-md text-xs font-semibold text-primary">
+                                  <div className="font-label-md text-admin-body font-semibold text-primary">
                                     {vendor.slaOnTime}
                                   </div>
-                                  <div className="font-label-sm text-[11px] text-on-surface-variant">
+                                  <div className="font-label-sm text-admin-body text-on-surface-variant">
                                     {vendor.cancellationRate}
                                   </div>
                                 </>
                               ) : (
-                                <span className="font-label-sm text-[11px] px-2 py-0.5 rounded bg-surface-container font-medium text-on-surface-variant">
+                                <span className="font-label-sm text-admin-body px-2 py-0.5 rounded bg-surface-container font-medium text-on-surface-variant">
                                   {vendor.slaOnTime}
                                 </span>
                               )}
@@ -681,22 +682,22 @@ export default function AdminVendorsPage({ onNavigate }) {
                             {/* Trạng Thái */}
                             <td className="py-4 px-4">
                               {vendor.status === 'active' ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-semibold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-semibold">
                                   <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
                                   <span>{vendor.statusLabel}</span>
                                 </span>
                               ) : isPending ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-semibold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-semibold">
                                   <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
                                   <span>{vendor.statusLabel}</span>
                                 </span>
                               ) : isNeedsInfo ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-xs font-semibold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-admin-body font-semibold">
                                   <span className="w-1.5 h-1.5 rounded-full bg-outline"></span>
                                   <span>{vendor.statusLabel}</span>
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-error font-label-sm text-xs font-semibold">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-error font-label-sm text-admin-body font-semibold">
                                   <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
                                   <span>{vendor.statusLabel}</span>
                                 </span>
@@ -709,7 +710,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                                 {isPending ? (
                                   <>
                                     <button
-                                      className="px-2.5 py-1 rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all font-label-sm text-xs font-semibold shadow-sm"
+                                      className="px-2.5 py-1 rounded-lg bg-secondary text-on-secondary hover:bg-on-secondary-container transition-all font-label-sm text-admin-body font-semibold shadow-sm"
                                       onClick={() => handleApproveVendor(vendor.id)}
                                       type="button"
                                     >
@@ -731,7 +732,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                                 ) : isNeedsInfo ? (
                                   <>
                                     <button
-                                      className="px-2.5 py-1 rounded-lg bg-surface-container text-primary hover:bg-surface-container-high transition-all font-label-sm text-xs font-semibold"
+                                      className="px-2.5 py-1 rounded-lg bg-surface-container text-primary hover:bg-surface-container-high transition-all font-label-sm text-admin-body font-semibold"
                                       type="button"
                                       onClick={() =>
                                         showToast(`Đã gửi SMS yêu cầu bổ sung ảnh bếp cho ${vendor.name}`)
@@ -805,7 +806,7 @@ export default function AdminVendorsPage({ onNavigate }) {
 
               {/* PAGINATION & SUMMARY FOOTER */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 bg-surface-container-low border-t border-surface-container-high/60">
-                <div className="font-body-sm text-xs text-on-surface-variant">
+                <div className="font-body-sm text-admin-body text-on-surface-variant">
                   Hiển thị{' '}
                   <span className="font-semibold text-on-surface">
                     1 - {filteredVendors.length}
@@ -825,28 +826,28 @@ export default function AdminVendorsPage({ onNavigate }) {
                     </span>
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-sm text-xs font-semibold"
+                    className="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-sm text-admin-body font-semibold"
                     type="button"
                   >
                     1
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-xs font-semibold transition-colors"
+                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-admin-body font-semibold transition-colors"
                     type="button"
                   >
                     2
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-xs font-semibold transition-colors"
+                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-admin-body font-semibold transition-colors"
                     type="button"
                   >
                     3
                   </button>
-                  <span className="px-1 text-outline font-label-sm text-xs">
+                  <span className="px-1 text-outline font-label-sm text-admin-body">
                     ...
                   </span>
                   <button
-                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-xs font-semibold transition-colors"
+                    className="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm text-admin-body font-semibold transition-colors"
                     type="button"
                   >
                     58
@@ -883,17 +884,17 @@ export default function AdminVendorsPage({ onNavigate }) {
             <div className="p-6 bg-surface-container-low flex items-start justify-between shrink-0 border-b border-surface-container-high">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-semibold">
+                  <span className="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-semibold">
                     Thẩm Định Thực Tế Bếp
                   </span>
-                  <span className="text-secondary font-label-sm text-xs font-bold font-mono">
+                  <span className="text-secondary font-label-sm text-admin-body font-bold font-mono">
                     #{selectedVendorForDrawer?.id}
                   </span>
                 </div>
-                <h2 className="font-headline-md text-xl text-primary font-serif font-bold">
+                <h2 className="font-headline-md text-admin-heading text-primary font-serif font-bold">
                   {selectedVendorForDrawer?.name}
                 </h2>
-                <p className="font-body-sm text-xs text-on-surface-variant mt-0.5">
+                <p className="font-body-sm text-admin-body text-on-surface-variant mt-0.5">
                   {selectedVendorForDrawer?.location} • Hồ sơ xin mở gian hàng bánh
                   cưới cao cấp
                 </p>
@@ -910,14 +911,14 @@ export default function AdminVendorsPage({ onNavigate }) {
             </div>
 
             {/* Drawer Content Body */}
-            <div className="p-6 space-y-6 flex-1 text-body-sm">
+            <div className="p-6 space-y-6 flex-1 text-admin-body">
               {/* Section: Visual Verification Photos */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-headline-sm text-base text-primary font-bold font-serif">
-                    Ảnh Kiểm Định Cơ Sở & Lò Nướng
+                  <h3 className="font-headline-sm text-admin-heading text-primary font-bold font-serif">
+                    Ảnh cơ sở
                   </h3>
-                  <span className="font-label-sm text-xs text-secondary font-medium">
+                  <span className="font-label-sm text-admin-body text-secondary font-medium">
                     Chụp GPS & Timestamp 2 giờ trước
                   </span>
                 </div>
@@ -928,10 +929,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrd6k8AxdXIpcvUew_MOuWPXERmixyGoGEMSbfRrr2D_NjHNcEfpwO6YmdXvHeBa1Z2RngGb9XmrNj0ZOGL3sN-FAYCvXwCJJKfU7Yp8EabBcjG9dEXYq4nYAN23G4LYhRnmY1pXcqZzK_SmfHOwjKhFKTwsm8fdLQNSiVRu6hg9u1GLpNlwMR4ddt5aAHza-WulOSntXT0apE-cvO0trXucNDl7cTwV9HkUHIgfK-5Y15ik_vKmN4"
                       alt="Buồng Nướng Công Nghiệp"
                     />
-                    <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary font-label-md text-xs font-semibold">
+                    <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary font-label-md text-admin-body font-semibold">
                       Buồng Nướng Công Nghiệp
                     </div>
-                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-primary/80 backdrop-blur-md text-on-primary font-label-sm text-[10px]">
+                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-primary/80 backdrop-blur-md text-on-primary font-label-sm text-admin-body">
                       Lò Salva Tây Ban Nha
                     </div>
                   </div>
@@ -941,10 +942,10 @@ export default function AdminVendorsPage({ onNavigate }) {
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZg77AfnTaX4peI3YynMee-I-DcrPyvFY3H0GoucHiBopkRC1ptttt5oVT3RVJOBA00DkaxeO9qQplvKHjruVLhzIzJ6dwM5Sigxpwx88ezXEfuOevJrCBs8nUjDJ7EyNiWtBbBGIO0Ymr-iWlU7u9TJDRdfbfWzdkbBfkUt6gKDvLSSJzQJNFJSvLzbsU6TXlzXAbAeXx-FHC4Bdf7kDCHXhK8Vudtd8z21EMQ9vDUfR6eN1W0Hc0"
                       alt="Phòng Lạnh Ráp Bánh Cưới"
                     />
-                    <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary font-label-md text-xs font-semibold">
+                    <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary font-label-md text-admin-body font-semibold">
                       Phòng Lạnh Ráp Bánh Cưới
                     </div>
-                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-primary/80 backdrop-blur-md text-on-primary font-label-sm text-[10px]">
+                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-primary/80 backdrop-blur-md text-on-primary font-label-sm text-admin-body">
                       Buồng lạnh 16°C
                     </div>
                   </div>
@@ -953,8 +954,8 @@ export default function AdminVendorsPage({ onNavigate }) {
 
               {/* Section: Compliance Checklist */}
               <div className="space-y-3">
-                <h3 className="font-headline-sm text-base text-primary font-bold font-serif">
-                  Danh Sách Tiêu Chuẩn Thẩm Định
+                <h3 className="font-headline-sm text-admin-heading text-primary font-bold font-serif">
+                  Hồ sơ thẩm định
                 </h3>
                 <div className="space-y-2">
                   {/* Item 1 */}
@@ -964,15 +965,15 @@ export default function AdminVendorsPage({ onNavigate }) {
                         verified
                       </span>
                       <div>
-                        <div className="font-label-md text-xs text-on-surface font-bold">
-                          Giấy Chứng Nhận Cơ Sở Đủ Điều Kiện ATTP
+                        <div className="font-label-md text-admin-body text-on-surface font-bold">
+                          Giấy chứng nhận ATTP
                         </div>
-                        <div className="font-body-sm text-[11px] text-on-surface-variant">
+                        <div className="font-body-sm text-admin-body text-on-surface-variant">
                           Cấp bởi Ban Quản lý ATTP TP.HCM • Còn hạn đến 11/2026
                         </div>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-bold">
+                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-bold">
                       Hợp lệ 100%
                     </span>
                   </div>
@@ -984,15 +985,15 @@ export default function AdminVendorsPage({ onNavigate }) {
                         verified
                       </span>
                       <div>
-                        <div className="font-label-md text-xs text-on-surface font-bold">
-                          Bằng Cấp Bếp Trưởng Điều Hành
+                        <div className="font-label-md text-admin-body text-on-surface font-bold">
+                          Bằng cấp bếp trưởng
                         </div>
-                        <div className="font-body-sm text-[11px] text-on-surface-variant">
+                        <div className="font-body-sm text-admin-body text-on-surface-variant">
                           Diplôme de Pâtisserie • Chef Monique (Paris)
                         </div>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-bold">
+                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-bold">
                       Đã xác minh
                     </span>
                   </div>
@@ -1004,15 +1005,15 @@ export default function AdminVendorsPage({ onNavigate }) {
                         check_circle
                       </span>
                       <div>
-                        <div className="font-label-md text-xs text-on-surface font-bold">
-                          Quy Trình Kiểm Soát Thùng Lạnh Giao Hàng
+                        <div className="font-label-md text-admin-body text-on-surface font-bold">
+                          Kiểm soát nhiệt độ giao hàng
                         </div>
-                        <div className="font-body-sm text-[11px] text-on-surface-variant">
+                        <div className="font-body-sm text-admin-body text-on-surface-variant">
                           Thiết bị giám sát nhiệt độ IoT gắn trong thùng giao bánh cưới
                         </div>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-bold">
+                    <span className="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-admin-body font-bold">
                       Đã cấu hình
                     </span>
                   </div>
@@ -1022,20 +1023,18 @@ export default function AdminVendorsPage({ onNavigate }) {
               {/* Section: Take Rate & Escrow Agreement */}
               <div className="p-4 rounded-2xl bg-surface-container space-y-2 border border-surface-container-high">
                 <div className="flex items-center justify-between">
-                  <span className="font-label-md text-xs font-bold text-primary">
-                    Biểu Phí Sàn & Ký Quỹ Escrow
+                  <span className="font-label-md text-admin-body font-bold text-primary">
+                    Phí sàn & Ký quỹ
                   </span>
-                  <span className="font-label-sm text-xs text-secondary font-bold font-mono">
-                    Standard Tier: {selectedVendorForDrawer?.takeRate || '5.0%'}
+                  <span className="font-label-sm text-admin-body text-secondary font-bold font-mono">
+                    {selectedVendorForDrawer?.takeRate || '5.0%'}
                   </span>
                 </div>
-                <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  Tiệm đã đồng ý giữ khoản ký quỹ cam kết chất lượng{' '}
+                <p className="font-body-sm text-admin-body text-on-surface-variant leading-relaxed">
+                  Ký quỹ cam kết chất lượng:{' '}
                   <strong className="text-primary">
                     {selectedVendorForDrawer?.escrowDeposit || '15.000.000đ'}
-                  </strong>{' '}
-                  trong Escrow Vault Sweet Cake nhằm đảm bảo không trễ giờ tiệc
-                  cưới của khách hàng.
+                  </strong>
                 </p>
               </div>
             </div>
@@ -1043,29 +1042,29 @@ export default function AdminVendorsPage({ onNavigate }) {
             {/* Drawer Footer Actions */}
             <div className="p-6 bg-surface-container-low flex items-center justify-end gap-3 shrink-0 border-t border-surface-container-high">
               <button
-                className="px-4 py-2.5 rounded-xl bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-lg text-xs font-semibold"
+                className="px-4 py-2.5 rounded-xl bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-lg text-admin-body font-semibold"
                 onClick={handleCloseDrawer}
                 type="button"
               >
-                Đóng Xem Thử
+                Đóng
               </button>
               <button
-                className="px-4 py-2.5 rounded-xl bg-error-container text-on-error-container hover:opacity-90 transition-opacity font-label-lg text-xs font-semibold"
+                className="px-4 py-2.5 rounded-xl bg-error-container text-on-error-container hover:opacity-90 transition-opacity font-label-lg text-admin-body font-semibold"
                 onClick={() =>
                   handleReAuditVendor(selectedVendorForDrawer?.id)
                 }
                 type="button"
               >
-                Yêu Cầu Thẩm Tra Lại
+                Thẩm tra lại
               </button>
               <button
-                className="px-5 py-2.5 rounded-xl bg-primary-container text-on-primary hover:bg-primary transition-colors font-label-lg text-xs font-bold shadow-md"
+                className="px-5 py-2.5 rounded-xl bg-primary-container text-on-primary hover:bg-primary transition-colors font-label-lg text-admin-body font-bold shadow-md"
                 onClick={() =>
                   handleApproveVendor(selectedVendorForDrawer?.id)
                 }
                 type="button"
               >
-                Phê Duyệt Mở Sàn Ngay
+                Phê duyệt
               </button>
             </div>
           </div>
@@ -1086,12 +1085,9 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-headline-sm text-lg font-bold font-serif">
-                    Mời Tiệm Bánh Đối Tác Mới
+                  <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                    Mời tiệm bánh
                   </h3>
-                  <p className="text-body-sm text-secondary-fixed text-xs">
-                    Gửi thư mời gia nhập mạng lưới Haute Pâtisserie
-                  </p>
                 </div>
               </div>
               <button
@@ -1102,10 +1098,10 @@ export default function AdminVendorsPage({ onNavigate }) {
               </button>
             </div>
 
-            <form onSubmit={handleInviteSubmit} className="p-6 space-y-4 text-body-sm">
+            <form onSubmit={handleInviteSubmit} className="p-6 space-y-4 text-admin-body">
               <div>
-                <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
-                  Tên thương hiệu tiệm / Xưởng bánh *
+                <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
+                  Tên tiệm bánh *
                 </label>
                 <input
                   type="text"
@@ -1115,13 +1111,13 @@ export default function AdminVendorsPage({ onNavigate }) {
                   onChange={(e) =>
                     setInviteData({ ...inviteData, name: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
                     Bếp trưởng đại diện
                   </label>
                   <input
@@ -1131,12 +1127,12 @@ export default function AdminVendorsPage({ onNavigate }) {
                     onChange={(e) =>
                       setInviteData({ ...inviteData, chef: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
-                    Số điện thoại liên hệ *
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
+                    Số điện thoại *
                   </label>
                   <input
                     type="tel"
@@ -1146,14 +1142,14 @@ export default function AdminVendorsPage({ onNavigate }) {
                     onChange={(e) =>
                       setInviteData({ ...inviteData, phone: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
                     Chuyên môn chính
                   </label>
                   <select
@@ -1164,7 +1160,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                         specialty: e.target.value,
                       })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-secondary/40 cursor-pointer"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40 cursor-pointer"
                   >
                     <option value="Bánh Cưới Haute Couture">
                       Bánh Cưới Haute Couture
@@ -1184,7 +1180,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                  <label className="block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider">
                     Khu vực xưởng bánh
                   </label>
                   <input
@@ -1197,7 +1193,7 @@ export default function AdminVendorsPage({ onNavigate }) {
                         location: e.target.value,
                       })
                     }
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-secondary/40"
+                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none focus:ring-1 focus:ring-secondary/40"
                   />
                 </div>
               </div>
@@ -1206,15 +1202,15 @@ export default function AdminVendorsPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setShowInviteModal(false)}
-                  className="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-admin-body font-semibold"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary text-xs font-bold shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-secondary text-admin-body font-bold shadow-md"
                 >
-                  Gửi Thư Mời & Khởi Tạo
+                  Gửi lời mời
                 </button>
               </div>
             </form>
@@ -1233,8 +1229,8 @@ export default function AdminVendorsPage({ onNavigate }) {
                 <span className="material-symbols-outlined text-secondary-fixed text-lg">
                   percent
                 </span>
-                <h3 className="font-headline-sm text-base font-bold font-serif">
-                  Cấu Hình Biểu Phí Sàn
+                <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                  Phí sàn
                 </h3>
               </div>
               <button
@@ -1245,24 +1241,24 @@ export default function AdminVendorsPage({ onNavigate }) {
               </button>
             </div>
 
-            <form onSubmit={handleSaveFeeRate} className="p-5 space-y-4 text-body-sm">
+            <form onSubmit={handleSaveFeeRate} className="p-5 space-y-4 text-admin-body">
               <div>
-                <p className="font-bold text-primary text-sm">
+                <p className="font-bold text-primary text-admin-body">
                   {selectedVendorForFee.name}
                 </p>
-                <p className="text-xs text-on-surface-variant font-mono">
+                <p className="text-admin-body text-on-surface-variant font-mono">
                   Mã đối tác: #{selectedVendorForFee.id}
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-primary mb-1">
-                  Mức phí sàn áp dụng (Net Take Rate)
+                <label className="block text-admin-body font-bold text-primary mb-1">
+                  Mức phí áp dụng
                 </label>
                 <select
                   value={newFeeRate}
                   onChange={(e) => setNewFeeRate(e.target.value)}
-                  className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-xs focus:outline-none"
+                  className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body focus:outline-none"
                 >
                   <option value="3.5%">3.5% (Ưu đãi Đối tác Chiến lược)</option>
                   <option value="5.0%">5.0% (Mặc định Tiêu chuẩn Toàn sàn)</option>
@@ -1271,22 +1267,21 @@ export default function AdminVendorsPage({ onNavigate }) {
                 </select>
               </div>
 
-              <div className="p-3 bg-surface-container rounded-xl text-[11px] text-on-surface-variant leading-relaxed">
-                Biểu phí sẽ áp dụng tự động trong Escrow Vault khi khách hàng
-                chốt thanh toán các đơn hàng mới của tiệm.
+              <div className="p-3 bg-surface-container rounded-xl text-admin-body text-on-surface-variant leading-relaxed">
+                Áp dụng cho đơn hàng mới của tiệm.
               </div>
 
               <div className="pt-3 flex items-center justify-end gap-2 border-t border-surface-container-high">
                 <button
                   type="button"
                   onClick={() => setSelectedVendorForFee(null)}
-                  className="px-4 py-2 rounded-xl bg-surface-container-high text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-surface-container-high text-admin-body font-semibold"
                 >
                   Đóng
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-secondary"
+                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-admin-body font-bold hover:bg-secondary"
                 >
                   Lưu Cấu Hình
                 </button>

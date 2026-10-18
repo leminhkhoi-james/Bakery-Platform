@@ -181,14 +181,14 @@ export const AdminDashboardPage = ({ onNavigate }) => {
   const currentMetrics = periodMetrics[selectedTimePeriod] || periodMetrics.month
 
   return (
-    <div className="min-h-screen bg-background font-body-md text-body-md text-on-surface antialiased flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+    <div className="min-h-screen bg-background font-body-md text-admin-body text-on-surface antialiased flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
       {/* Toast Alert */}
       {toastMsg && (
         <div className="fixed bottom-8 right-8 z-50 bg-primary text-on-primary px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce">
           <span className="material-symbols-outlined text-secondary text-xl">
             check_circle
           </span>
-          <span className="font-label-md text-sm font-semibold">{toastMsg}</span>
+          <span className="font-label-md text-admin-body font-semibold">{toastMsg}</span>
         </div>
       )}
 
@@ -205,7 +205,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
       <div className="md:pl-64 flex flex-col min-h-screen">
         {/* TOP FIXED ADMIN HEADER */}
         <AdminHeader
-          title="Trung Tâm Điều Hành"
+          title="Tổng quan"
           contextBadge="Admin"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -213,7 +213,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
           onClusterChange={setSelectedCluster}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
           topActions={
-            <div className="inline-flex p-1 bg-surface-container rounded-xl shadow-sm text-xs">
+            <div className="inline-flex p-1 bg-surface-container rounded-xl shadow-sm text-admin-body">
               {[
                 { id: 'today', label: 'Hôm nay' },
                 { id: '7days', label: '7 ngày qua' },
@@ -222,7 +222,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               ].map((period) => (
                 <button
                   key={period.id}
-                  className={`px-3 py-1.5 rounded-lg font-label-md text-label-md transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg font-label-md text-admin-body transition-colors cursor-pointer ${
                     selectedTimePeriod === period.id
                       ? 'bg-primary text-on-primary font-semibold shadow-sm'
                       : 'text-on-surface-variant hover:text-primary'
@@ -234,7 +234,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                 </button>
               ))}
               <button
-                className="px-2.5 py-1.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg font-label-md text-admin-body text-on-surface-variant hover:text-primary transition-colors flex items-center cursor-pointer"
                 onClick={() => showToast('Mở bộ lọc thời gian nâng cao')}
                 type="button"
                 title="Bộ lọc thời gian"
@@ -259,26 +259,26 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary-fixed/20 rounded-full blur-2xl group-hover:scale-125 transition-transform"></div>
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-secondary font-bold  flex items-center gap-1">
                       Doanh thu
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
                     </span>
                   </div>
-                  <p className="font-headline-md text-headline-md text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
+                  <p className="font-headline-md text-admin-metric text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
                     {currentMetrics.gmv}
                   </p>
-                  <p className="font-label-md text-label-md text-on-surface-variant mt-0.5 text-xs">
+                  <p className="font-label-md text-admin-body text-on-surface-variant mt-0.5 ">
                     GMV toàn sàn
                   </p>
                 </div>
-                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-xs border border-outline-variant/10">
-                  <div className="flex items-center justify-between text-body-sm font-body-sm">
-                    <span className="text-on-surface-variant">Phí sàn (5% Net Fee):</span>
+                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-admin-body border border-outline-variant/10">
+                  <div className="flex items-center justify-between text-admin-body font-body-sm">
+                    <span className="text-on-surface-variant">Phí sàn (5%):</span>
                     <span className="font-bold text-primary">{currentMetrics.fee}</span>
                   </div>
-                  <div className="flex items-center justify-between text-body-sm font-body-sm">
+                  <div className="flex items-center justify-between text-admin-body font-body-sm">
                     <span className="text-on-surface-variant flex items-center gap-1">
                       <span className="material-symbols-outlined text-[15px] text-secondary">
                         lock
@@ -299,39 +299,39 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-secondary font-bold  flex items-center gap-1">
                       Đơn hàng
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
                     </span>
                   </div>
-                  <p className="font-headline-md text-headline-md text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
+                  <p className="font-headline-md text-admin-metric text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
                     {currentMetrics.orders}
                   </p>
                 </div>
                 {/* Realtime stages */}
-                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-xs border border-outline-variant/10">
-                  <div className="flex justify-between items-center text-body-sm font-body-sm">
+                <div className="mt-4 pt-3 space-y-2 bg-surface-container-low/70 rounded-xl p-3 text-admin-body border border-outline-variant/10">
+                  <div className="flex justify-between items-center text-admin-body font-body-sm">
                     <span className="text-on-surface-variant">Đang xử lý:</span>
                     <span className="font-bold text-primary">186 đơn</span>
                   </div>
-                  <div className="grid grid-cols-4 gap-1 text-center font-label-sm text-label-sm pt-1">
+                  <div className="grid grid-cols-4 gap-1 text-center font-label-sm text-admin-body pt-1">
                     <div className="bg-surface-container-highest/60 rounded p-1">
                       <p className="font-bold text-primary">32</p>
-                      <p className="text-[10px] text-on-surface-variant">Chờ duyệt</p>
+                      <p className="text-admin-body text-on-surface-variant">Chờ duyệt</p>
                     </div>
                     <div className="bg-secondary-fixed/40 rounded p-1">
                       <p className="font-bold text-secondary">54</p>
-                      <p className="text-[10px] text-on-surface-variant">Baking</p>
+                      <p className="text-admin-body text-on-surface-variant">Baking</p>
                     </div>
                     <div className="bg-sky-100 rounded p-1">
                       <p className="font-bold text-sky-800">48</p>
-                      <p className="text-[10px] text-on-surface-variant">Xe lạnh</p>
+                      <p className="text-admin-body text-on-surface-variant">Xe lạnh</p>
                     </div>
                     <div className="bg-emerald-100 rounded p-1">
                       <p className="font-bold text-emerald-800">52</p>
-                      <p className="text-[10px] text-on-surface-variant">Đã giao</p>
+                      <p className="text-admin-body text-on-surface-variant">Đã giao</p>
                     </div>
                   </div>
                 </div>
@@ -345,20 +345,20 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-secondary font-bold  flex items-center gap-1">
                       Tiệm bánh
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
                     </span>
                   </div>
-                  <p className="font-headline-md text-headline-md text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
+                  <p className="font-headline-md text-admin-metric text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
                     348{' '}
-                    <span className="font-sans text-body-lg font-normal text-on-surface-variant text-sm">
-                      tiệm active
+                    <span className="font-sans text-admin-body font-normal text-on-surface-variant ">
+                      tiệm
                     </span>
                   </p>
-                  <p className="font-label-md text-label-md text-on-surface-variant mt-0.5 text-xs">
+                  <p className="font-label-md text-admin-body text-on-surface-variant mt-0.5 ">
                     Đang hoạt động
                   </p>
                 </div>
@@ -372,21 +372,21 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold text-xs flex items-center gap-1">
-                      Cộng Đồng Khách Hàng
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-secondary font-bold  flex items-center gap-1">
+                      Người dùng
                       <span className="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">
                         arrow_forward
                       </span>
                     </span>
                   </div>
-                  <p className="font-headline-md text-headline-md text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
+                  <p className="font-headline-md text-admin-metric text-primary mt-2 font-serif font-bold group-hover:text-secondary transition-colors">
                     48.920{' '}
-                    <span className="font-sans text-body-lg font-normal text-on-surface-variant text-sm">
+                    <span className="font-sans text-admin-body font-normal text-on-surface-variant ">
                       tài khoản
                     </span>
                   </p>
-                  <p className="font-label-md text-label-md text-on-surface-variant mt-0.5 text-xs">
-                    MAU Hoạt động: 31.400 người
+                  <p className="font-label-md text-admin-body text-on-surface-variant mt-0.5 ">
+                    Hoạt động tháng: 31.400
                   </p>
                 </div>
               </div>
@@ -397,12 +397,9 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               <div className="bg-white rounded-2xl p-7 shadow-sm border border-outline-variant/20">
                 <div className="flex items-center justify-between pb-3">
                   <div>
-                    <h2 className="font-headline-sm text-headline-sm text-primary font-serif">
-                      Cơ Cấu Danh Mục &amp; AI
+                    <h2 className="font-headline-sm text-admin-heading text-primary font-serif">
+                      Doanh thu theo danh mục
                     </h2>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 text-xs">
-                      Phân bổ tỷ trọng doanh thu thực tế theo dòng sản phẩm
-                    </p>
                   </div>
                   <span className="material-symbols-outlined text-secondary">pie_chart</span>
                 </div>
@@ -410,12 +407,12 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                 {/* Category Progress Bars */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
                   <div>
-                    <div className="flex justify-between items-center text-body-sm font-body-sm mb-1.5 text-xs">
+                    <div className="flex justify-between items-center text-admin-body font-body-sm mb-1.5 ">
                       <span className="font-medium text-primary flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-secondary"></span> Sinh nhật &amp; Tạo hình 3D
                       </span>
                       <span className="font-bold text-primary">
-                        38% <span className="text-on-surface-variant font-normal text-[10px]">(944tr)</span>
+                        38% <span className="text-on-surface-variant font-normal text-admin-body">(944tr)</span>
                       </span>
                     </div>
                     <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
@@ -424,12 +421,12 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-center text-body-sm font-body-sm mb-1.5 text-xs">
+                    <div className="flex justify-between items-center text-admin-body font-body-sm mb-1.5 ">
                       <span className="font-medium text-primary flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-primary-container"></span> Bánh Cưới Haute Couture
+                        <span className="w-2 h-2 rounded-full bg-primary-container"></span> Bánh cưới
                       </span>
                       <span className="font-bold text-primary">
-                        24% <span className="text-on-surface-variant font-normal text-[10px]">(596tr)</span>
+                        24% <span className="text-on-surface-variant font-normal text-admin-body">(596tr)</span>
                       </span>
                     </div>
                     <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
@@ -438,12 +435,12 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-center text-body-sm font-body-sm mb-1.5 text-xs">
+                    <div className="flex justify-between items-center text-admin-body font-body-sm mb-1.5 ">
                       <span className="font-medium text-primary flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-secondary-container"></span> Bento Mini Hàn Quốc
+                        <span className="w-2 h-2 rounded-full bg-secondary-container"></span> Bento
                       </span>
                       <span className="font-bold text-primary">
-                        20% <span className="text-on-surface-variant font-normal text-[10px]">(497tr)</span>
+                        20% <span className="text-on-surface-variant font-normal text-admin-body">(497tr)</span>
                       </span>
                     </div>
                     <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
@@ -452,12 +449,12 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-center text-body-sm font-body-sm mb-1.5 text-xs">
+                    <div className="flex justify-between items-center text-admin-body font-body-sm mb-1.5 ">
                       <span className="font-medium text-primary flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-surface-tint"></span> Mousse &amp; Bánh lạnh Pháp
+                        <span className="w-2 h-2 rounded-full bg-surface-tint"></span> Mousse &amp; bánh lạnh
                       </span>
                       <span className="font-bold text-primary">
-                        18% <span className="text-on-surface-variant font-normal text-[10px]">(447tr)</span>
+                        18% <span className="text-on-surface-variant font-normal text-admin-body">(447tr)</span>
                       </span>
                     </div>
                     <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
@@ -477,8 +474,8 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                       <span className="material-symbols-outlined text-secondary text-[22px]">
                         shield_with_heart
                       </span>
-                      <h2 className="font-headline-sm text-headline-sm text-primary font-serif">
-                        Đơn Hàng Giá Trị &amp; Giám Sát Escrow Vault
+                      <h2 className="font-headline-sm text-admin-heading text-primary font-serif">
+                        Đơn hàng giá trị cao
                       </h2>
                     </div>
                   </div>
@@ -489,19 +486,19 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider bg-surface-container/80 rounded-lg text-[10px]">
+                      <tr className="font-label-sm text-admin-body text-on-surface-variant uppercase tracking-wider bg-surface-container/80 rounded-lg ">
                         <th className="py-3 px-3.5 rounded-l-lg">Mã Đơn / Khách hàng</th>
-                        <th className="py-3 px-3">Xưởng Chế Tác</th>
-                        <th className="py-3 px-3">Giá Trị Đơn</th>
-                        <th className="py-3 px-3">Trạng Thái Escrow</th>
+                        <th className="py-3 px-3">Tiệm bánh</th>
+                        <th className="py-3 px-3">Giá trị</th>
+                        <th className="py-3 px-3">Ký quỹ</th>
                         <th className="py-3 px-3 rounded-r-lg text-right">Thao Tác</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-surface-container-high text-body-sm font-body-sm text-xs">
+                    <tbody className="divide-y divide-surface-container-high text-admin-body font-body-sm ">
                       {filteredEscrowOrders.length === 0 ? (
                         <tr>
                           <td colSpan={5} className="py-6 text-center text-on-surface-variant">
-                            Không tìm thấy đơn hàng ký quỹ nào phù hợp.
+                            Không tìm thấy đơn hàng
                           </td>
                         </tr>
                       ) : (
@@ -516,13 +513,13 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                                     src={order.avatar}
                                   />
                                 ) : (
-                                  <div className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs">
+                                  <div className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-admin-body">
                                     {order.initials}
                                   </div>
                                 )}
                                 <div>
                                   <span className="font-bold text-primary">{order.id}</span>
-                                  <p className="text-xs text-on-surface-variant">
+                                  <p className="text-admin-body text-on-surface-variant">
                                     {order.customerName}
                                   </p>
                                 </div>
@@ -530,7 +527,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                             </td>
                             <td className="py-3.5 px-3">
                               <span className="font-medium text-primary">{order.vendor}</span>
-                              <p className="text-[11px] text-on-surface-variant">
+                              <p className="text-admin-body text-on-surface-variant">
                                 {order.cakeType}
                               </p>
                             </td>
@@ -539,7 +536,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                             </td>
                             <td className="py-3.5 px-3">
                               <span
-                                className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md font-semibold ${
+                                className={`inline-flex items-center gap-1 text-admin-body px-2 py-0.5 rounded-md font-semibold ${
                                   order.statusCode === 'delivering'
                                     ? 'bg-sky-100 text-sky-800'
                                     : order.statusCode === 'ready_payout'
@@ -607,10 +604,10 @@ export const AdminDashboardPage = ({ onNavigate }) => {
           <div className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col">
             <div className="px-6 py-4 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/20">
               <div className="flex flex-col">
-                <span className="font-label-sm text-secondary font-bold uppercase tracking-wider text-xs">
-                  Kiểm Toán Escrow Vault PCI-DSS
+                <span className="font-label-sm text-secondary font-bold uppercase tracking-wider text-admin-body">
+                  Chi tiết ký quỹ
                 </span>
-                <h3 className="font-headline-sm text-primary font-bold text-base">
+                <h3 className="font-headline-sm text-primary font-bold text-admin-heading">
                   Giao dịch: {selectedOrderForEscrow.id}
                 </h3>
               </div>
@@ -622,7 +619,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               </button>
             </div>
 
-            <div className="p-6 space-y-4 text-xs">
+            <div className="p-6 space-y-4 text-admin-body">
               <div className="p-4 bg-surface-container-low rounded-xl space-y-2">
                 <div className="flex justify-between">
                   <span className="text-outline">Mã giao dịch ký quỹ:</span>
@@ -631,20 +628,20 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-outline">Khách hàng đặt bánh:</span>
+                  <span className="text-outline">Khách hàng:</span>
                   <span className="font-bold text-primary">
                     {selectedOrderForEscrow.customerName}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-outline">Xưởng thụ hưởng:</span>
+                  <span className="text-outline">Tiệm bánh:</span>
                   <span className="font-bold text-primary">
                     {selectedOrderForEscrow.vendor}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-outline">Tổng số tiền ký quỹ:</span>
-                  <span className="font-bold text-secondary text-sm">
+                  <span className="text-outline">Số tiền:</span>
+                  <span className="font-bold text-secondary text-admin-body">
                     {selectedOrderForEscrow.amount.toLocaleString('vi-VN')}₫
                   </span>
                 </div>
@@ -653,7 +650,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
               <div className="p-3 bg-secondary-fixed/30 text-on-secondary-fixed rounded-xl flex items-center gap-2">
                 <span className="material-symbols-outlined text-secondary">lock</span>
                 <span>
-                  Số tiền đang được đóng băng an toàn tại Vietcombank Escrow Vault. Sau khi khách nghiệm thu bánh hoàn tất, tiền sẽ tự động chuyển vào ví xưởng.
+                  Tiền ký quỹ được chuyển cho tiệm sau khi khách nghiệm thu.
                 </span>
               </div>
 
@@ -671,7 +668,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                     setIsEscrowModalOpen(false)
                   }}
                 >
-                  Xuất chứng thư bảo chứng
+                  Xuất biên lai
                 </button>
               </div>
             </div>

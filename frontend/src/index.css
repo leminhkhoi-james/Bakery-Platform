@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
 @theme {
+  --text-admin-title: 20px;
+  --text-admin-title--line-height: 28px;
+  --text-admin-heading: 16px;
+  --text-admin-heading--line-height: 24px;
+  --text-admin-body: 14px;
+  --text-admin-body--line-height: 20px;
+  --text-admin-metric: 24px;
+  --text-admin-metric--line-height: 32px;
   --color-wine: #6b212e;
   --color-wine-dark: #4f1722;
 

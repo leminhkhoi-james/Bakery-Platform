@@ -90,7 +90,7 @@ export default function AdminSidebar({
             <span className="material-symbols-outlined text-secondary text-sm">
               verified
             </span>
-            <span className="text-xs font-label-md font-bold text-on-secondary-container tracking-wide uppercase">
+            <span className="text-admin-body font-label-md font-bold text-on-secondary-container tracking-wide uppercase">
               ADMIN
             </span>
           </div>
@@ -105,7 +105,7 @@ export default function AdminSidebar({
               <button
                 key={item.id}
                 onClick={() => handleNav(item.route)}
-                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-sm transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-admin-body transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'bg-primary text-on-primary font-semibold shadow-sm shadow-primary/20'
                     : 'text-on-surface-variant hover:bg-surface-container hover:text-primary'
@@ -119,13 +119,13 @@ export default function AdminSidebar({
                   >
                     {item.icon}
                   </span>
-                  <span className="whitespace-nowrap text-[13.5px] font-medium tracking-tight truncate">
+                  <span className="whitespace-nowrap text-admin-body font-medium tracking-tight truncate">
                     {item.label}
                   </span>
                 </div>
                 {item.badge && (
                   <span
-                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
+                    className={`text-admin-body font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive
                         ? 'bg-on-primary/20 text-on-primary'
                         : 'bg-secondary-fixed text-on-secondary-fixed'
@@ -144,7 +144,7 @@ export default function AdminSidebar({
       <div className="pt-3 border-t border-outline-variant/20 space-y-1">
         <button
           onClick={() => handleNav('home')}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors text-sm font-label-md cursor-pointer"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors text-admin-body font-label-md cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg text-outline">
             storefront

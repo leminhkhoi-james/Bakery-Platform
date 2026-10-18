@@ -191,14 +191,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   return (
-    <div className="bg-background font-body text-body-md text-on-surface antialiased min-h-screen">
+    <div className="bg-background font-body text-admin-body text-on-surface antialiased min-h-screen">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-secondary/40 animate-bounce">
           <span className="material-symbols-outlined text-secondary-fixed text-xl">
             check_circle
           </span>
-          <span className="text-sm font-medium">{toastMessage}</span>
+          <span className="text-admin-body font-medium">{toastMessage}</span>
         </div>
       )}
 
@@ -214,7 +214,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
       <div className="md:pl-64 flex-1">
         <AdminHeader
           title="Đơn hàng"
-          contextBadge="Escrow"
+          showSearch={false}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           searchPlaceholder="Tìm đơn hàng..."
@@ -231,14 +231,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                       Đơn trong tháng
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
+                      <span className="font-headline-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                         3.420
                       </span>
-                      <span className="font-label-md text-xs text-on-surface-variant">
+                      <span className="font-label-md text-admin-body text-on-surface-variant">
                         đơn
                       </span>
                     </div>
@@ -256,14 +256,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                       Ký quỹ
                     </span>
                     <div className="flex items-baseline gap-1 mt-1">
-                      <span className="font-headline-md text-2xl text-primary tracking-tight font-serif font-bold">
+                      <span className="font-headline-md text-admin-metric text-primary tracking-tight font-serif font-bold">
                         382.400.000
                       </span>
-                      <span className="font-label-md text-sm text-secondary font-bold">
+                      <span className="font-label-md text-admin-body text-secondary font-bold">
                         đ
                       </span>
                     </div>
@@ -281,14 +281,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                       Đang giao
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
+                      <span className="font-headline-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                         48
                       </span>
-                      <span className="font-label-md text-xs text-on-surface-variant">
+                      <span className="font-label-md text-admin-body text-on-surface-variant">
                         xe
                       </span>
                     </div>
@@ -306,14 +306,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(45,30,24,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-[0_16px_36px_-6px_rgba(45,30,24,0.08)] transition-all border border-surface-container-high/60">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="font-label-sm text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+                    <span className="font-label-sm text-admin-body uppercase tracking-wider text-on-surface-variant font-semibold">
                       Cần hỗ trợ
                     </span>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <span className="font-headline-lg text-headline-lg text-primary tracking-tight font-serif font-bold">
+                      <span className="font-headline-lg text-admin-metric text-primary tracking-tight font-serif font-bold">
                         2
                       </span>
-                      <span className="font-label-md text-xs text-on-surface-variant">
+                      <span className="font-label-md text-admin-body text-on-surface-variant">
                         ca xử lý
                       </span>
                     </div>
@@ -335,24 +335,24 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setActiveStageTab('all')}
-                  className={`px-4 py-2 rounded-xl font-label-md text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${activeStageTab === 'all'
+                  className={`px-4 py-2 rounded-xl font-label-md text-admin-body font-semibold whitespace-nowrap transition-all shadow-sm ${activeStageTab === 'all'
                       ? 'bg-primary-container text-on-primary font-bold'
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
-                  Tất Cả Đơn (186 hôm nay)
+                  Tất cả (186)
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveStageTab('baking')}
-                  className={`px-4 py-2 rounded-xl font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'baking'
+                  className={`px-4 py-2 rounded-xl font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'baking'
                       ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
                   <span>Đang làm</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[11px] font-bold">
+                  <span className="px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-admin-body font-bold">
                     54
                   </span>
                 </button>
@@ -360,14 +360,14 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setActiveStageTab('delivering')}
-                  className={`px-4 py-2 rounded-xl font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'delivering'
+                  className={`px-4 py-2 rounded-xl font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'delivering'
                       ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                  <span>Đang Giao Xe Lạnh</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-[11px] font-bold">
+                  <span>Đang giao</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-admin-body font-bold">
                     48
                   </span>
                 </button>
@@ -375,13 +375,13 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setActiveStageTab('delivered')}
-                  className={`px-4 py-2 rounded-xl font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'delivered'
+                  className={`px-4 py-2 rounded-xl font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${activeStageTab === 'delivered'
                       ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
                   <span>Đã giao</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-[11px] font-bold">
+                  <span className="px-1.5 py-0.5 rounded-full bg-surface-container-highest text-admin-body font-bold">
                     28
                   </span>
                 </button>
@@ -389,12 +389,12 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setActiveStageTab('completed')}
-                  className={`px-4 py-2 rounded-xl font-label-md text-xs font-semibold whitespace-nowrap transition-all ${activeStageTab === 'completed'
+                  className={`px-4 py-2 rounded-xl font-label-md text-admin-body font-semibold whitespace-nowrap transition-all ${activeStageTab === 'completed'
                       ? 'bg-primary-container text-on-primary font-bold shadow-sm'
                       : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface'
                     }`}
                 >
-                  Đã Giải Ngân Escrow (Hoàn Tất)
+                  Đã giải ngân
                 </button>
 
                 <button
@@ -402,10 +402,10 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   onClick={() =>
                     showToast('Có 2 đơn hàng đã được hỗ trợ hoàn tiền cọc bảo hiểm.')
                   }
-                  className="px-4 py-2 rounded-xl hover:bg-surface-container text-error hover:bg-error-container/30 font-label-md text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ml-auto"
+                  className="px-4 py-2 rounded-xl hover:bg-surface-container text-error hover:bg-error-container/30 font-label-md text-admin-body font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ml-auto"
                 >
-                  <span>Hủy / Hoàn Cọc</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-error-container text-on-error-container text-[11px] font-bold">
+                  <span>Hủy / Hoàn cọc</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-error-container text-on-error-container text-admin-body font-bold">
                     2
                   </span>
                 </button>
@@ -418,8 +418,8 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                     search
                   </span>
                   <input
-                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container-low text-on-surface placeholder:text-outline text-body-sm font-body-sm rounded-xl focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
-                    placeholder="Tìm theo mã #ORD, tên khách, số điện thoại, xưởng bánh..."
+                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container-low text-on-surface placeholder:text-outline text-admin-body font-body-sm rounded-xl focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary/40 transition-all font-medium border-none shadow-sm"
+                    placeholder="Tìm mã đơn, khách, SĐT, tiệm..."
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -438,33 +438,33 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
 
                 <div className="flex flex-wrap items-center gap-2.5">
                   <div className="flex items-center gap-1.5 bg-surface-container-low px-3.5 py-2 rounded-xl border border-surface-container-high/60">
-                    <span className="font-label-sm text-xs text-on-surface-variant font-medium">
+                    <span className="font-label-sm text-admin-body text-on-surface-variant font-medium">
                       Phân loại:
                     </span>
                     <select
-                      className="bg-transparent font-label-md text-xs text-on-surface focus:outline-none cursor-pointer font-bold border-none"
+                      className="bg-transparent font-label-md text-admin-body text-on-surface focus:outline-none cursor-pointer font-bold border-none"
                       value={typeFilter}
                       onChange={(e) => setTypeFilter(e.target.value)}
                     >
                       <option value="all">Tất cả đơn</option>
-                      <option value="rfq">AI Custom RFQ (Độc bản)</option>
-                      <option value="catalog">Bánh Catalog Sẵn Có</option>
+                      <option value="rfq">Bánh đặt riêng</option>
+                      <option value="catalog">Bánh có sẵn</option>
                     </select>
                   </div>
 
                   <div className="flex items-center gap-1.5 bg-surface-container-low px-3.5 py-2 rounded-xl border border-surface-container-high/60">
-                    <span className="font-label-sm text-xs text-on-surface-variant font-medium">
+                    <span className="font-label-sm text-admin-body text-on-surface-variant font-medium">
                       Mức giá:
                     </span>
                     <select
-                      className="bg-transparent font-label-md text-xs text-on-surface focus:outline-none cursor-pointer font-bold border-none"
+                      className="bg-transparent font-label-md text-admin-body text-on-surface focus:outline-none cursor-pointer font-bold border-none"
                       value={priceFilter}
                       onChange={(e) => setPriceFilter(e.target.value)}
                     >
                       <option value="all">Mọi phân khúc</option>
                       <option value="low">Dưới 1.000.000đ</option>
                       <option value="mid">1.000.000đ - 3.000.000đ</option>
-                      <option value="high">Trên 3.000.000đ (Boutique cao cấp)</option>
+                      <option value="high">Trên 3.000.000đ</option>
                     </select>
                   </div>
 
@@ -473,7 +473,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                       event
                     </span>
                     <select
-                      className="bg-transparent font-label-md text-xs text-on-surface focus:outline-none cursor-pointer font-bold border-none"
+                      className="bg-transparent font-label-md text-admin-body text-on-surface focus:outline-none cursor-pointer font-bold border-none"
                       value={dateFilter}
                       onChange={(e) => setDateFilter(e.target.value)}
                     >
@@ -503,29 +503,29 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[1100px]">
                   <thead>
-                    <tr className="bg-surface-container-low text-on-surface-variant font-label-sm text-xs tracking-wider uppercase">
-                      <th className="py-3.5 px-6 font-semibold">Mã Đơn & Giờ Đặt</th>
-                      <th className="py-3.5 px-4 font-semibold">Khách Hàng & Nơi Nhận</th>
-                      <th className="py-3.5 px-4 font-semibold">Xưởng Phụ Trách</th>
-                      <th className="py-3.5 px-4 font-semibold">Chi Tiết Bánh & Giá Trị</th>
-                      <th className="py-3.5 px-4 font-semibold min-w-[220px]">Tiến Độ & Nhiệt Độ</th>
+                    <tr className="bg-surface-container-low text-on-surface-variant font-label-sm text-admin-body tracking-wider uppercase">
+                      <th className="py-3.5 px-6 font-semibold">Đơn hàng</th>
+                      <th className="py-3.5 px-4 font-semibold">Khách hàng</th>
+                      <th className="py-3.5 px-4 font-semibold">Tiệm bánh</th>
+                      <th className="py-3.5 px-4 font-semibold">Bánh / Giá trị</th>
+                      <th className="py-3.5 px-4 font-semibold min-w-[220px]">Tiến độ</th>
                       <th className="py-3.5 px-4 font-semibold">Escrow Vault</th>
-                      <th className="py-3.5 px-6 font-semibold text-right">Thao Tác Quản Trị</th>
+                      <th className="py-3.5 px-6 font-semibold text-right">Thao tác</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-surface-container-high/60 font-body-sm text-body-sm text-on-surface">
+                  <tbody className="divide-y divide-surface-container-high/60 font-body-sm text-admin-body text-on-surface">
                     {filteredOrders.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="py-12 text-center">
                           <span className="material-symbols-outlined text-4xl text-on-surface-variant/50 mb-2">
                             receipt_long
                           </span>
-                          <p className="text-body-md font-semibold text-primary">
-                            Không tìm thấy đơn hàng nào khớp với bộ lọc
+                          <p className="text-admin-body font-semibold text-primary">
+                            Không tìm thấy đơn hàng
                           </p>
                           <button
                             onClick={handleResetFilters}
-                            className="mt-3 px-4 py-1.5 bg-primary text-on-primary rounded-xl text-xs font-semibold hover:bg-secondary"
+                            className="mt-3 px-4 py-1.5 bg-primary text-on-primary rounded-xl text-admin-body font-semibold hover:bg-secondary"
                           >
                             Xóa bộ lọc
                           </button>
@@ -544,18 +544,18 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                             {/* Mã Đơn & Giờ Đặt */}
                             <td className="py-4 px-6 align-top">
                               <div className="space-y-1">
-                                <span className="font-label-md text-xs font-bold text-primary block font-mono">
+                                <span className="font-label-md text-admin-body font-bold text-primary block font-mono">
                                   #{order.id}
                                 </span>
                                 <span
-                                  className={`inline-block px-2 py-0.5 rounded-full font-label-sm text-[10px] font-semibold ${order.orderType === 'rfq'
+                                  className={`inline-block px-2 py-0.5 rounded-full font-label-sm text-admin-body font-semibold ${order.orderType === 'rfq'
                                       ? 'bg-secondary-fixed text-on-secondary-fixed'
                                       : 'bg-surface-container-high text-on-surface-variant'
                                     }`}
                                 >
                                   {order.orderTypeLabel}
                                 </span>
-                                <span className="text-on-surface-variant font-label-sm text-[11px] block">
+                                <span className="text-on-surface-variant font-label-sm text-admin-body block">
                                   {order.time}
                                 </span>
                               </div>
@@ -565,17 +565,17 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                             <td className="py-4 px-4 align-top">
                               <div className="space-y-0.5">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="font-label-md text-xs font-bold text-on-surface">
+                                  <span className="font-label-md text-admin-body font-bold text-on-surface">
                                     {order.customerName}
                                   </span>
                                 </div>
                                 <div
-                                  className="text-on-surface-variant font-body-sm text-xs truncate max-w-xs"
+                                  className="text-on-surface-variant font-body-sm text-admin-body truncate max-w-xs"
                                   title={order.customerAddress}
                                 >
                                   {order.customerAddress}
                                 </div>
-                                <div className="text-on-surface-variant font-label-sm text-[11px] font-mono">
+                                <div className="text-on-surface-variant font-label-sm text-admin-body font-mono">
                                   {order.customerPhone}
                                 </div>
                               </div>
@@ -584,10 +584,10 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                             {/* Xưởng Phụ Trách */}
                             <td className="py-4 px-4 align-top">
                               <div className="space-y-0.5">
-                                <span className="font-label-md text-xs font-bold text-primary block">
+                                <span className="font-label-md text-admin-body font-bold text-primary block">
                                   {order.vendorName}
                                 </span>
-                                <span className="text-on-surface-variant font-label-sm text-[11px] flex items-center gap-1">
+                                <span className="text-on-surface-variant font-label-sm text-admin-body flex items-center gap-1">
                                   <span className="material-symbols-outlined text-[14px] text-secondary">
                                     countertops
                                   </span>{' '}
@@ -607,17 +607,17 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                                   />
                                   <div>
                                     <span
-                                      className="font-label-md text-xs font-bold text-on-surface block truncate max-w-[160px]"
+                                      className="font-label-md text-admin-body font-bold text-on-surface block truncate max-w-[160px]"
                                       title={order.cakeTitle}
                                     >
                                       {order.cakeTitle}
                                     </span>
-                                    <span className="text-on-surface-variant font-label-sm text-[11px]">
+                                    <span className="text-on-surface-variant font-label-sm text-admin-body">
                                       {order.cakeSpec}
                                     </span>
                                   </div>
                                 </div>
-                                <div className="font-label-md text-sm font-bold text-secondary font-serif">
+                                <div className="font-label-md text-admin-body font-bold text-secondary font-serif">
                                   {order.cakePriceFormatted}
                                 </div>
                               </div>
@@ -626,7 +626,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                             {/* Tiến Độ & Nhiệt Độ */}
                             <td className="py-4 px-4 align-top">
                               <div className="space-y-1.5">
-                                <div className="flex items-center justify-between text-xs font-label-sm">
+                                <div className="flex items-center justify-between text-admin-body font-label-sm">
                                   <span
                                     className={`font-semibold ${isDelivering
                                         ? 'text-secondary flex items-center gap-1'
@@ -638,7 +638,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                                     )}
                                     {order.stageLabel}
                                   </span>
-                                  <span className="text-on-surface-variant text-[11px]">
+                                  <span className="text-on-surface-variant text-admin-body">
                                     {order.stageStep}
                                   </span>
                                 </div>
@@ -648,7 +648,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                                     style={{ width: `${order.progressPercent}%` }}
                                   ></div>
                                 </div>
-                                <span className="inline-flex items-center gap-1 text-[11px] text-on-surface-variant">
+                                <span className="inline-flex items-center gap-1 text-admin-body text-on-surface-variant">
                                   <span className="material-symbols-outlined text-[13px] text-secondary">
                                     {isDelivering ? 'thermostat' : 'info'}
                                   </span>
@@ -661,7 +661,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                             <td className="py-4 px-4 align-top">
                               <div className="space-y-1">
                                 <span
-                                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-[11px] font-semibold ${isReleased
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-label-sm text-admin-body font-semibold ${isReleased
                                       ? 'bg-primary-container text-on-primary'
                                       : 'bg-surface-container text-on-surface'
                                     }`}
@@ -671,7 +671,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                                   </span>
                                   <span>{order.escrowStatusLabel}</span>
                                 </span>
-                                <span className="block text-[11px] font-label-sm text-on-surface-variant font-mono">
+                                <span className="block text-admin-body font-label-sm text-on-surface-variant font-mono">
                                   {order.escrowContractId}
                                 </span>
                               </div>
@@ -707,7 +707,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                                 )}
 
                                 <button
-                                  className="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-sm text-xs font-semibold hover:bg-primary transition-colors shadow-sm"
+                                  className="px-3 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-sm text-admin-body font-semibold hover:bg-primary transition-colors shadow-sm"
                                   type="button"
                                   onClick={() => setSelectedOrderForDetail(order)}
                                 >
@@ -724,7 +724,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </div>
 
               {/* Phân Trang Chuẩn Xác */}
-              <div className="px-6 py-3.5 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-3 font-body-sm text-xs text-on-surface-variant border-t border-surface-container-high/60">
+              <div className="px-6 py-3.5 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-3 font-body-sm text-admin-body text-on-surface-variant border-t border-surface-container-high/60">
                 <div className="flex items-center gap-2">
                   <span>Hiển thị</span>
                   <select className="bg-surface-container px-2.5 py-1 rounded-lg text-on-surface font-medium focus:outline-none cursor-pointer border border-surface-container-high">
@@ -750,26 +750,26 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                     </span>
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-on-primary font-label-sm text-xs font-semibold shadow-sm"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-on-primary font-label-sm text-admin-body font-semibold shadow-sm"
                     type="button"
                   >
                     1
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs transition-colors"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-admin-body transition-colors"
                     type="button"
                   >
                     2
                   </button>
                   <button
-                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs transition-colors"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-admin-body transition-colors"
                     type="button"
                   >
                     3
                   </button>
                   <span className="px-1 text-on-surface-variant">...</span>
                   <button
-                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs transition-colors"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-admin-body transition-colors"
                     type="button"
                   >
                     31
@@ -805,10 +805,10 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-headline-sm text-lg font-bold font-serif">
+                  <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
                     Đơn Hàng #{selectedOrderForDetail.id}
                   </h3>
-                  <p className="text-body-sm text-secondary-fixed text-xs">
+                  <p className="text-admin-body text-secondary-fixed ">
                     {selectedOrderForDetail.time} • {selectedOrderForDetail.orderTypeLabel}
                   </p>
                 </div>
@@ -821,7 +821,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </button>
             </div>
 
-            <div className="p-6 space-y-4 text-body-sm">
+            <div className="p-6 space-y-4 text-admin-body">
               <div className="flex items-center gap-3 p-3.5 bg-surface-container rounded-2xl">
                 <img
                   src={selectedOrderForDetail.cakeImage}
@@ -829,22 +829,22 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   className="w-14 h-14 rounded-xl object-cover"
                 />
                 <div className="flex-1">
-                  <h4 className="font-bold text-primary text-sm font-serif">
+                  <h4 className="font-bold text-primary text-admin-heading font-serif">
                     {selectedOrderForDetail.cakeTitle}
                   </h4>
-                  <p className="text-xs text-on-surface-variant">
+                  <p className="text-admin-body text-on-surface-variant">
                     {selectedOrderForDetail.cakeSpec}
                   </p>
                   <p className="font-bold text-secondary font-serif mt-0.5">
                     {selectedOrderForDetail.cakePriceFormatted}
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-bold">
+                <span className="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-admin-body font-bold">
                   {selectedOrderForDetail.escrowStatusLabel}
                 </span>
               </div>
 
-              <div className="space-y-2 text-xs">
+              <div className="space-y-2 text-admin-body">
                 <div className="flex justify-between py-1.5 border-b border-surface-container-high">
                   <span className="text-on-surface-variant">Khách hàng:</span>
                   <span className="font-bold text-primary">
@@ -858,13 +858,13 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   </span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-surface-container-high">
-                  <span className="text-on-surface-variant">Xưởng chế tác:</span>
+                  <span className="text-on-surface-variant">Tiệm bánh:</span>
                   <span className="font-bold text-primary">
                     {selectedOrderForDetail.vendorName} ({selectedOrderForDetail.chef})
                   </span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-surface-container-high">
-                  <span className="text-on-surface-variant">Ký quỹ Escrow Vault:</span>
+                  <span className="text-on-surface-variant">Ký quỹ:</span>
                   <span className="font-bold text-secondary font-mono">
                     {selectedOrderForDetail.escrowPledge}
                   </span>
@@ -881,7 +881,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setSelectedOrderForDetail(null)}
-                  className="px-4 py-2 rounded-xl bg-surface-container-high text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-surface-container-high text-admin-body font-semibold"
                 >
                   Đóng
                 </button>
@@ -890,9 +890,9 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   <button
                     type="button"
                     onClick={() => handleDisburseEscrow(selectedOrderForDetail.id)}
-                    className="px-5 py-2 rounded-xl bg-primary text-on-primary hover:bg-secondary text-xs font-bold shadow-md"
+                    className="px-5 py-2 rounded-xl bg-primary text-on-primary hover:bg-secondary text-admin-body font-bold shadow-md"
                   >
-                    Phê Duyệt Giải Ngân Cọc
+                    Giải ngân cọc
                   </button>
                 )}
               </div>
@@ -915,10 +915,10 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-headline-sm text-lg font-bold font-serif">
-                    Radar GPS & Cảm Biến Xe Lạnh
+                  <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                    Theo dõi giao hàng
                   </h3>
-                  <p className="text-body-sm text-secondary-fixed text-xs">
+                  <p className="text-admin-body text-secondary-fixed ">
                     {selectedOrderForGps
                       ? `Giám sát trực tuyến đơn #${selectedOrderForGps.id}`
                       : 'Đang có 48 xe lạnh hoạt động giao tiệc'}
@@ -936,7 +936,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </button>
             </div>
 
-            <div className="p-6 space-y-4 text-body-sm">
+            <div className="p-6 space-y-4 text-admin-body">
               <div className="h-56 bg-surface-container rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border border-surface-container-high">
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#D48C95_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 <div className="relative z-10 flex flex-col items-center">
@@ -945,10 +945,10 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                       local_shipping
                     </span>
                   </span>
-                  <p className="font-bold text-primary mt-2 text-sm">
+                  <p className="font-bold text-primary mt-2 text-admin-body">
                     {selectedOrderForGps?.deliveryVehicle || 'Xe Van Suzuki Carry (51D-892.44)'}
                   </p>
-                  <p className="text-xs text-secondary font-bold">
+                  <p className="text-admin-body text-secondary font-bold">
                     Nhiệt độ thùng lạnh: 4.8°C • Độ rung: 0.02G (Chuẩn an toàn)
                   </p>
                 </div>
@@ -956,16 +956,16 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
 
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="p-3 bg-surface-container rounded-xl">
-                  <span className="text-xs text-on-surface-variant block">Tốc độ xe</span>
-                  <span className="font-bold text-primary text-base">32 km/h</span>
+                  <span className="text-admin-body text-on-surface-variant block">Tốc độ xe</span>
+                  <span className="font-bold text-primary text-admin-body">32 km/h</span>
                 </div>
                 <div className="p-3 bg-surface-container rounded-xl">
-                  <span className="text-xs text-on-surface-variant block">Dự kiến đến</span>
-                  <span className="font-bold text-secondary text-base">12 phút</span>
+                  <span className="text-admin-body text-on-surface-variant block">Dự kiến đến</span>
+                  <span className="font-bold text-secondary text-admin-body">12 phút</span>
                 </div>
                 <div className="p-3 bg-surface-container rounded-xl">
-                  <span className="text-xs text-on-surface-variant block">Khoảng cách</span>
-                  <span className="font-bold text-primary text-base">2.8 km</span>
+                  <span className="text-admin-body text-on-surface-variant block">Khoảng cách</span>
+                  <span className="font-bold text-primary text-admin-body">2.8 km</span>
                 </div>
               </div>
 
@@ -976,7 +976,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                     setShowRadarModal(false)
                     setSelectedOrderForGps(null)
                   }}
-                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-secondary"
+                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-admin-body font-bold hover:bg-secondary"
                 >
                   Đóng Bản Đồ
                 </button>
@@ -997,8 +997,8 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 <span className="material-symbols-outlined text-secondary-fixed text-lg">
                   lock_clock
                 </span>
-                <h3 className="font-headline-sm text-base font-bold font-serif">
-                  Cấu Hình Thời Gian Nghiệm Thu
+                <h3 className="font-headline-sm text-admin-heading font-bold font-serif">
+                  Thời gian nghiệm thu
                 </h3>
               </div>
               <button
@@ -1009,12 +1009,12 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
               </button>
             </div>
 
-            <div className="p-5 space-y-4 text-body-sm">
+            <div className="p-5 space-y-4 text-admin-body">
               <div>
-                <label className="block text-xs font-bold text-primary mb-1">
-                  Thời gian Grace Period thẩm định sau giao:
+                <label className="block text-admin-body font-bold text-primary mb-1">
+                  Thời gian chờ sau giao:
                 </label>
-                <select className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-xs font-medium">
+                <select className="w-full px-3 py-2 bg-surface-container-low border border-surface-container-high rounded-xl text-admin-body font-medium">
                   <option value="2">2 giờ (Tiêu chuẩn bánh tiệc sinh nhật)</option>
                   <option value="4">4 giờ (Bánh cưới Haute Couture nhiều tầng)</option>
                   <option value="12">12 giờ (Sự kiện doanh nghiệp quy mô lớn)</option>
@@ -1022,16 +1022,15 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                 </select>
               </div>
 
-              <div className="p-3 bg-surface-container rounded-xl text-[11px] text-on-surface-variant leading-relaxed">
-                Sau khi khách hàng nhận bánh và hết thời gian Grace Period, hệ
-                thống Escrow Vault sẽ tự động mở khóa tiền cọc về ví của tiệm bánh.
+              <div className="p-3 bg-surface-container rounded-xl text-admin-body text-on-surface-variant leading-relaxed">
+                Hết thời gian nghiệm thu, tiền cọc tự động chuyển về ví tiệm.
               </div>
 
               <div className="pt-3 flex items-center justify-end gap-2 border-t border-surface-container-high">
                 <button
                   type="button"
                   onClick={() => setShowEscrowConfigModal(false)}
-                  className="px-4 py-2 rounded-xl bg-surface-container-high text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-surface-container-high text-admin-body font-semibold"
                 >
                   Hủy bỏ
                 </button>
@@ -1041,7 +1040,7 @@ export default function AdminOrdersEscrowPage({ onNavigate }) {
                     showToast('Đã lưu cấu hình thời gian thẩm định Escrow Vault!')
                     setShowEscrowConfigModal(false)
                   }}
-                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-secondary"
+                  className="px-5 py-2 rounded-xl bg-primary text-on-primary text-admin-body font-bold hover:bg-secondary"
                 >
                   Lưu Cấu Hình
                 </button>
