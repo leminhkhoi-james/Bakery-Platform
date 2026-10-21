@@ -25,3 +25,6 @@ spring:
 subscription:
   order-expiry-hours: 24
 
+server:
+  port: ${SERVER_PORT:8084}
+
