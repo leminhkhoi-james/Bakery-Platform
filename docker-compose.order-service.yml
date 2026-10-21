@@ -1,0 +1,38 @@
+services:
+  order-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: ${ORDER_DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD:-postgres}
+    ports:
+      - "${ORDER_DB_PORT:-5434}:5432"
+    volumes:
+      - order-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  order-service:
+    build:
+      context: .
+      dockerfile: backend/order-service/Dockerfile
+    depends_on:
+      order-db:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      ORDER_DB_URL: jdbc:postgresql://order-db:5432/order_db
+      ORDER_DB_USERNAME: ${ORDER_DB_USERNAME:-postgres}
+      ORDER_DB_PASSWORD: ${ORDER_DB_PASSWORD:-postgres}
+      IDENTITY_JWK_SET_URI: ${IDENTITY_JWK_SET_URI:-http://identity-service:8081/.well-known/jwks.json}
+      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://identity-service:8081}
+      BAKERY_SERVICE_URL: ${BAKERY_SERVICE_URL:-http://bakery-service:8082}
+      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://marketplace-service:8083}
+    ports:
+      - "${ORDER_SERVICE_PORT:-8085}:8080"
+
+volumes:
+  order-db-data:  

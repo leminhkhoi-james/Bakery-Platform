@@ -1,4 +1,43 @@
 spring:
   application:
     name: chat-service
+  datasource:
+    url: ${CHAT_DB_URL:jdbc:postgresql://localhost:5432/chat_db}
+    username: ${CHAT_DB_USERNAME:postgres}
+    password: ${CHAT_DB_PASSWORD:postgres}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 55MB
 
+security:
+  jwt:
+    jwk-set-uri: ${IDENTITY_JWK_SET_URI:http://localhost:8081/.well-known/jwks.json}
+    issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+    user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
+    service-audience: ${CHAT_SERVICE_JWT_AUDIENCE:chat-service}
+
+clients:
+  marketplace:
+    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8083}
+    service-token: ${CHAT_MARKETPLACE_SERVICE_TOKEN:}
+  bakery:
+    base-url: ${BAKERY_SERVICE_URL:http://localhost:8082}
+    service-token: ${CHAT_BAKERY_SERVICE_TOKEN:}
+  connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
+  read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
+
+storage:
+  minio:
+    endpoint: ${CHAT_STORAGE_ENDPOINT:http://localhost:9000}
+    access-key: ${CHAT_STORAGE_ACCESS_KEY:minioadmin}
+    secret-key: ${CHAT_STORAGE_SECRET_KEY:minioadmin}
+    bucket: ${CHAT_STORAGE_BUCKET:chat-attachments}
+    presigned-url-expiry: ${CHAT_STORAGE_URL_EXPIRY:15m}

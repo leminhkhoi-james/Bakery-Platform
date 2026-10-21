@@ -15,12 +15,12 @@ liệu của mình và không được đọc trực tiếp database của servi
 | Identity Service | `identity_db` | 6 | [Xem ERD](erd/01-identity-service-logical.mmd) | [V1](../database/postgresql/identity-service/V1__init_schema.sql) |
 | Bakery Service | `bakery_db` | 11 | [Xem ERD](erd/02-bakery-service-logical.mmd) | [V1](../database/postgresql/bakery-service/V1__init_schema.sql) |
 | Marketplace Service | `marketplace_db` | 8 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
-| Order Service | `order_db` | 5 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql) |
+| Order Service | `order_db` | 6 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql), [V2](../database/postgresql/order-service/V2__order_creation_idempotency.sql) |
 | Chat Service | `chat_db` | 5 | [Xem ERD](erd/05-chat-service-logical.mmd) | [V1](../database/postgresql/chat-service/V1__init_schema.sql) |
 | Cake AI Service | `cake_ai_db` | 4 | [Xem ERD](erd/06-cake-ai-service-logical.mmd) | [V1](../database/postgresql/cake-ai-service/V1__init_schema.sql) |
 | Subscription Service | `subscription_db` | 5 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql) |
 
-**Tổng cộng: 44 bảng trong 7 database.**
+**Tổng cộng: 45 bảng trong 7 database.**
 
 Conceptual ERD toàn hệ thống: [00-conceptual-overall.mmd](erd/00-conceptual-overall.mmd).
 
@@ -167,11 +167,12 @@ dõi thanh toán giữa khách và tiệm.
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
+| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, `customer_note`, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
 | `order_items` | `id` | `order_id`, external source IDs, loại item, snapshot, cấu hình JSONB, giá và số lượng | Các hạng mục trong đơn |
 | `delivery_address_snapshots` | `order_id` | người nhận, địa chỉ, tọa độ, ghi chú | Địa chỉ bất biến tại thời điểm đặt |
 | `order_status_history` | `id` | `order_id`, trạng thái cũ/mới, `changed_by`*, ghi chú, thời gian | Audit tiến độ đơn |
 | `order_reviews` | `order_id` | `customer_id`*, `rating`, `comment`, `status`, timestamps, `version` | Review dựa trên order đã hoàn thành |
+| `order_idempotency_records` | `id` | `operation`, `idempotency_key`, `customer_id`*, `payload_hash`, `order_id`, `created_at` | Đảm bảo retry tạo order không sinh bản ghi trùng |
 
 ### Relationships
 
@@ -181,12 +182,14 @@ dõi thanh toán giữa khách và tiệm.
 | CustomerOrder → DeliveryAddressSnapshot | OneToOne | `delivery_address_snapshots` | `order_id` |
 | CustomerOrder → OrderStatusHistory | OneToMany | `order_status_history` | `order_id` |
 | CustomerOrder → OrderReview | OneToOne tùy chọn | `order_reviews` | `order_id` |
+| CustomerOrder → OrderIdempotencyRecord | OneToMany | `order_idempotency_records` | `order_id` |
 
 ### Quy tắc nghiệp vụ
 
 - `DIRECT_CATALOG`: `cake_request_id` và `offer_id` phải `NULL`.
 - `ACCEPTED_OFFER`: bắt buộc có `cake_request_id` và `offer_id`.
 - Một offer chỉ sinh tối đa một order.
+- Idempotency key duy nhất theo operation, customer và key; payload hash khác nhau trả conflict.
 - Mỗi order có tối đa một review, rating từ 1 đến 5.
 - Chỉ customer của order `COMPLETED` được tạo review; kiểm tra này nằm ở service.
 
@@ -200,11 +203,14 @@ Quản lý hội thoại, participant, tin nhắn, file đính kèm và trạng 
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
+| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, lý do đóng, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
 | `conversation_participants` | `id` | `conversation_id`, `user_id`*, loại participant, thời gian tham gia/đọc | Thành viên cuộc hội thoại |
-| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
+| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, payload fingerprint, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
 | `message_attachments` | `id` | `message_id`, object key, tên file, media type, dung lượng, thứ tự | Metadata file đính kèm |
 | `message_receipts` | `(message_id, participant_id)` | `delivered_at`, `read_at` | Trạng thái nhận và đọc theo participant |
+
+`conversations.close_reason` lưu lý do đóng tùy chọn. `messages.payload_fingerprint`
+lưu SHA-256 payload để phát hiện retry idempotency key với nội dung khác.
 
 ### Relationships
 

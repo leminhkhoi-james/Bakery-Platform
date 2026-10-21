@@ -1,0 +1,68 @@
+services:
+  chat-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: chat_db
+      POSTGRES_USER: ${CHAT_DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${CHAT_DB_PASSWORD:-postgres}
+    ports:
+      - "${CHAT_DB_PORT:-5435}:5432"
+    volumes:
+      - chat-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  chat-storage:
+    image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${CHAT_STORAGE_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${CHAT_STORAGE_SECRET_KEY:-minioadmin}
+    ports:
+      - "${CHAT_STORAGE_PORT:-9000}:9000"
+      - "${CHAT_STORAGE_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - chat-storage-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: backend/chat-service/Dockerfile
+    depends_on:
+      chat-db:
+        condition: service_healthy
+      chat-storage:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      CHAT_DB_URL: jdbc:postgresql://chat-db:5432/chat_db
+      CHAT_DB_USERNAME: ${CHAT_DB_USERNAME:-postgres}
+      CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD:-postgres}
+      IDENTITY_JWK_SET_URI: ${IDENTITY_JWK_SET_URI:-http://identity-service:8081/.well-known/jwks.json}
+      IDENTITY_JWT_ISSUER: ${IDENTITY_JWT_ISSUER:-bakery-platform-identity}
+      IDENTITY_JWT_USER_AUDIENCE: ${IDENTITY_JWT_USER_AUDIENCE:-bakery-platform-api}
+      CHAT_SERVICE_JWT_AUDIENCE: ${CHAT_SERVICE_JWT_AUDIENCE:-chat-service}
+      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://marketplace-service:8083}
+      CHAT_MARKETPLACE_SERVICE_TOKEN: ${CHAT_MARKETPLACE_SERVICE_TOKEN:-}
+      BAKERY_SERVICE_URL: ${BAKERY_SERVICE_URL:-http://bakery-service:8082}
+      CHAT_BAKERY_SERVICE_TOKEN: ${CHAT_BAKERY_SERVICE_TOKEN:-}
+      CHAT_STORAGE_ENDPOINT: ${CHAT_STORAGE_ENDPOINT:-http://host.docker.internal:9000}
+      CHAT_STORAGE_ACCESS_KEY: ${CHAT_STORAGE_ACCESS_KEY:-minioadmin}
+      CHAT_STORAGE_SECRET_KEY: ${CHAT_STORAGE_SECRET_KEY:-minioadmin}
+      CHAT_STORAGE_BUCKET: ${CHAT_STORAGE_BUCKET:-chat-attachments}
+    ports:
+      - "${CHAT_SERVICE_PORT:-8086}:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  chat-db-data:
+  chat-storage-data:

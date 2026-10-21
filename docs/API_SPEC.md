@@ -3,9 +3,11 @@
 > Contract API mục tiêu cho MSS Bakery Platform MVP. Cập nhật file này mỗi khi
 > endpoint, DTO, validation, authorization hoặc business invariant thay đổi.
 >
-> **Implementation status:** đây là contract mục tiêu. Các microservice đã được
-> scaffold và Identity authentication endpoints đã được triển khai; phần lớn
-> domain endpoints bên dưới vẫn đang chờ implementation.
+> **Implementation status:** Identity authentication, Order/Review endpoints
+> và Chat REST endpoints đã được triển khai. Order và Chat validate user/service
+> JWT contracts and enforce role/scope plus resource/participant authorization.
+> Chat requires Marketplace/Bakery internal authorization contracts and
+> provisioned service credentials; service-token issuance remains deferred.
 
 ---
 
@@ -1105,8 +1107,10 @@ MVP dùng REST polling; không có WebSocket/SSE contract.
 
 ### GET /conversations 🔒
 
-**Query:** common pagination; `status`; default sort `lastMessageAt,desc`.
-Chỉ trả conversation current user là active participant.
+**Query:** common pagination; optional `status`; optional `bakeryId` cho bakery
+member; default sort `lastMessageAt,desc`. Customer chỉ nhận conversation mình
+là participant. Khi lọc theo bakery, Chat Service kiểm tra active membership với
+Bakery Service trước khi trả conversation.
 
 **Success (200):** paginated `ConversationSummaryResponse` gồm unread count và
 last message preview.
@@ -1202,6 +1206,12 @@ Idempotently cập nhật receipt/lastReadAt đến message thuộc conversation
 
 **Success (200):** `data {conversationId,lastReadAt}`. **Errors:** `404` message;
 `422` message thuộc conversation khác.
+
+### DELETE /conversations/{conversationId}/messages/{messageId} 🔒 sender
+
+Soft-delete message do caller gửi; giữ tombstone nhưng không trả content hoặc
+attachment URL. **Success:** `204 No Content`. **Errors:** `404` message hoặc
+conversation; `403` message thuộc participant khác.
 
 ---
 
@@ -1532,6 +1542,19 @@ for 5 minutes. **Errors:** `404` resource; `409` unpublished/inactive catalog;
 **Success (200):** request ID, customer ID, target bakery, status and chat/AI
 eligibility flags. **Errors:** `404` request.
 
+### GET /internal/v1/cake-requests/{cakeRequestId}/chat-authorization — Marketplace
+
+**Required scope:** `marketplace:request:chat:authorize`. **Query:**
+`customerId`, `bakeryId`.
+
+Marketplace validates request ownership, request state/chat eligibility and
+whether the bakery is the target or has an eligible offer. Chat Service fails
+closed if this contract is unavailable or any returned identifier does not
+match the request.
+
+**Success (200):** `{cakeRequestId,customerId,bakeryId,requestStatus,authorized}`.
+**Errors:** `404` request; `403` service scope; `422` ineligible context.
+
 ### GET /internal/v1/offers/{offerId}/order-source — Marketplace
 
 **Required scope:** `marketplace:offer:read`.
@@ -1804,6 +1827,7 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | GET | `/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization` | Bakery | `bakery:membership:read` |
 | POST | `/internal/v1/catalog/quotes` | Bakery | `bakery:catalog:quote` |
 | GET | `/internal/v1/cake-requests/{cakeRequestId}/context` | Marketplace | `marketplace:request:read` |
+| GET | `/internal/v1/cake-requests/{cakeRequestId}/chat-authorization` | Marketplace | `marketplace:request:chat:authorize` |
 | GET | `/internal/v1/offers/{offerId}/order-source` | Marketplace | `marketplace:offer:read` |
 | POST | `/internal/v1/orders/from-offer` | Order | `order:create-from-offer` |
 | GET | `/internal/v1/orders/{orderId}/context` | Order | `order:context:read` |

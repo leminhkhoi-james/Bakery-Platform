@@ -9,9 +9,13 @@ ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thu�
 
 > **Trạng thái hiện tại:** backend đã được scaffold thành Maven multi-module với
 > bảy domain service và một API Gateway độc lập. Identity Service đã triển khai
-> persistence cho authentication, RS256 JWT/JWK, refresh rotation và RBAC nền
-> tảng; các domain feature, resource-server ở service còn lại, gateway routing,
-> frontend và tích hợp ngoài vẫn chưa được triển khai.
+> persistence cho authentication, RS256 JWT/JWK và refresh rotation. Order
+> Service và Chat Service đã có JWT resource-server. Chat có runtime
+> PostgreSQL/Flyway, participant-aware REST APIs và MinIO attachment storage.
+> Marketplace/Bakery runtime contracts và service-token provisioning còn thiếu,
+> nên các kiểm tra context/membership cần được kết nối khi các service phụ thuộc
+> được triển khai. Gateway routing, frontend và tích hợp ngoài vẫn chưa được
+> triển khai.
 
 ---
 

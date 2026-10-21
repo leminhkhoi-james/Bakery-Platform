@@ -10,6 +10,7 @@ erDiagram
         varchar customer_name_snapshot
         varchar customer_phone_snapshot
         varchar bakery_name_snapshot
+        text customer_note
         decimal subtotal
         decimal delivery_fee
         decimal total_amount
@@ -71,7 +72,18 @@ erDiagram
         bigint version
     }
 
+    ORDER_IDEMPOTENCY_RECORDS {
+        uuid id PK
+        varchar operation
+        uuid idempotency_key
+        uuid customer_id "External Identity reference"
+        varchar payload_hash
+        uuid order_id FK
+        timestamptz created_at
+    }
+
     CUSTOMER_ORDERS ||--|{ ORDER_ITEMS : contains
     CUSTOMER_ORDERS ||--|| DELIVERY_ADDRESS_SNAPSHOTS : ships_to
     CUSTOMER_ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
     CUSTOMER_ORDERS ||--o| ORDER_REVIEWS : may_receive
+    CUSTOMER_ORDERS ||--o{ ORDER_IDEMPOTENCY_RECORDS : deduplicates
