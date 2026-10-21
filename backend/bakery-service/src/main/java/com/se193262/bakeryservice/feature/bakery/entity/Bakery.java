@@ -74,6 +74,27 @@ public class Bakery {
         if (email != null) this.email = email;
     }
 
+    public void submitForApproval() {
+        if (status != BakeryStatus.DRAFT) throw new IllegalStateException("Only a draft bakery can be submitted");
+        status = BakeryStatus.PENDING_APPROVAL;
+    }
+
+    public void changeStatus(BakeryStatus target) {
+        boolean allowed = switch (target) {
+            case ACTIVE -> status == BakeryStatus.PENDING_APPROVAL || status == BakeryStatus.SUSPENDED;
+            case DRAFT -> status == BakeryStatus.PENDING_APPROVAL;
+            case SUSPENDED -> status == BakeryStatus.ACTIVE;
+            case CLOSED -> status != BakeryStatus.CLOSED;
+            case PENDING_APPROVAL -> false;
+        };
+        if (!allowed) throw new IllegalStateException("Invalid bakery status transition");
+        status = target;
+    }
+
+    public void replaceLogo(String objectKey) { this.logoObjectKey = objectKey; }
+
+    public void replaceCover(String objectKey) { this.coverObjectKey = objectKey; }
+
     public UUID getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }

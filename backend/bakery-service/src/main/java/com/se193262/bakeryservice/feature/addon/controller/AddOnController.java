@@ -3,9 +3,10 @@ package com.se193262.bakeryservice.feature.addon.controller;
 import com.se193262.bakeryservice.feature.addon.dto.AddOnDto;
 import com.se193262.bakeryservice.feature.addon.service.AddOnService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
+import com.se193262.bakeryservice.shared.dto.MediaResponse;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Profile("!prod")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/add-ons")
 public class AddOnController {
 
@@ -52,5 +54,12 @@ public class AddOnController {
     public ResponseEntity<Void> delete(@PathVariable UUID bakeryId, @PathVariable UUID addOnId) {
         addOnService.delete(bakeryId, addOnId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{addOnId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<MediaResponse>> uploadImage(@PathVariable UUID bakeryId,
+            @PathVariable UUID addOnId, @RequestPart("file") MultipartFile file) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.created(addOnService.uploadImage(bakeryId, addOnId, file)));
     }
 }

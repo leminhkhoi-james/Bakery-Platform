@@ -7,10 +7,12 @@ products, options, add-ons and availability.
 
 ## Current state
 
-Package skeleton only. The API contract includes public product browsing and
-`POST /internal/v1/catalog/quotes` for Order Service. Catalog has no separate
-table or entity; it composes data owned by the other Bakery features. Controllers,
-services, DTOs and tests will be added when this feature is implemented.
+Public product browsing and `POST /internal/v1/catalog/quotes` are implemented.
+Catalog has no separate table or entity; it composes products, options, add-ons,
+delivery areas and active subscription entitlement. The quote response matches
+Order Service's snapshot contract and expires in five minutes. Subscription's
+internal entitlement endpoint and service JWT issuance are required for runtime
+calls. Quote IDs are generated per request; there is no server-side quote store.
 
 ## Boundary
 

@@ -12,9 +12,11 @@ preserving IDs supplied for the same product and deleting omitted entries.
 Category ownership and option selection rules are checked. A PostgreSQL
 integration test covers catalog creation, queries and option replacement.
 
-Image upload, publish/hide/archive, public catalog filtering, subscription
-checks and signed media URLs are pending. JWT membership checks are enforced. Current
-controllers are available only outside the `prod` profile.
+Image upload/delete, publish/hide/archive, public catalog filtering, subscription
+checks and signed media URLs are implemented. Publish requires a primary image,
+active bakery and active subscription. Public catalog also checks entitlement;
+the Subscription internal endpoint and service token are still needed at runtime.
+JWT membership checks protect management routes in every profile.
 
 ## Boundary
 

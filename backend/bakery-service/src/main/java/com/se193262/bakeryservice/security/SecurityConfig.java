@@ -6,6 +6,7 @@ import com.se193262.bakeryservice.feature.member.repository.BakeryMemberReposito
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,9 +35,12 @@ import java.util.UUID;
 public class SecurityConfig {
 
     private final BakeryMemberRepository memberRepository;
+    private final String serviceAudience;
 
-    public SecurityConfig(BakeryMemberRepository memberRepository) {
+    public SecurityConfig(BakeryMemberRepository memberRepository,
+            @Value("${security.jwt.service-audience:bakery-service}") String serviceAudience) {
         this.memberRepository = memberRepository;
+        this.serviceAudience = serviceAudience;
     }
 
     @Bean
@@ -50,13 +54,36 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bakeries", "/api/v1/bakeries/{bakeryId}",
+                                "/api/v1/products", "/api/v1/products/{productId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/internal/v1/bakeries/{bakeryId}")
+                        .access(serviceScope("bakery:profile:read"))
+                        .requestMatchers(HttpMethod.GET,
+                                "/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization")
+                        .access(serviceScope("bakery:membership:read"))
+                        .requestMatchers(HttpMethod.POST, "/internal/v1/catalog/quotes")
+                        .access(serviceScope("bakery:catalog:quote"))
                         .requestMatchers("/internal/v1/**").denyAll()
                         .requestMatchers("/api/v1/admin/**").access(userRole("ADMIN"))
                         .requestMatchers(HttpMethod.POST, "/api/v1/bakeries").access(userRole("BAKERY_OWNER"))
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/{bakeryId}/submit-for-approval")
+                        .access(memberRole(BakeryMemberRole.OWNER))
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/bakeries/{bakeryId}/logo",
+                                "/api/v1/bakeries/{bakeryId}/cover")
+                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}/image")
+                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/{bakeryId}/products/{productId}/images")
+                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/bakeries/{bakeryId}/products/{productId}/publish",
+                                "/api/v1/bakeries/{bakeryId}/products/{productId}/hide",
+                                "/api/v1/bakeries/{bakeryId}/products/{productId}/archive")
+                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
                         .requestMatchers(HttpMethod.GET, "/api/v1/bakeries/{bakeryId}/members")
                         .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
                         .requestMatchers(HttpMethod.GET,
-                                "/api/v1/bakeries/{bakeryId}",
                                 "/api/v1/bakeries/{bakeryId}/categories",
                                 "/api/v1/bakeries/{bakeryId}/add-ons",
                                 "/api/v1/bakeries/{bakeryId}/products")
@@ -84,6 +111,9 @@ public class SecurityConfig {
                                 "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
                                 "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}")
                         .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/bakeries/{bakeryId}/products/{productId}/images/{imageId}")
+                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(resourceServer -> resourceServer
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
@@ -109,6 +139,22 @@ public class SecurityConfig {
         return (authentication, context) -> {
             Authentication resolved = authentication.get();
             return new AuthorizationDecision(isUser(resolved) && hasRole(resolved, role));
+        };
+    }
+
+    private AuthorizationManager<RequestAuthorizationContext> serviceScope(String scope) {
+        return (authentication, context) -> {
+            Authentication resolved = authentication.get();
+            if (!(resolved instanceof JwtAuthenticationToken token) || !resolved.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+            String correlationId = context.getRequest().getHeader("X-Correlation-Id");
+            String scopes = token.getToken().getClaimAsString("scope");
+            boolean allowed = "service".equals(token.getToken().getClaimAsString("token_type"))
+                    && token.getToken().getAudience().contains(serviceAudience)
+                    && correlationId != null && !correlationId.isBlank()
+                    && scopes != null && Arrays.asList(scopes.split(" ")).contains(scope);
+            return new AuthorizationDecision(allowed);
         };
     }
 

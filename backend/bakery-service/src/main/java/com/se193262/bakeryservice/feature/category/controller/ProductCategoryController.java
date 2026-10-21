@@ -4,7 +4,6 @@ import com.se193262.bakeryservice.feature.category.dto.ProductCategoryDto;
 import com.se193262.bakeryservice.feature.category.service.ProductCategoryService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Profile("!prod")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/categories")
 public class ProductCategoryController {
 

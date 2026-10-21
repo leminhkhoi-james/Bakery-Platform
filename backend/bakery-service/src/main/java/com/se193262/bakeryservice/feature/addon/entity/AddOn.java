@@ -83,6 +83,8 @@ public class AddOn {
         this.isActive = false;
     }
 
+    public void replaceImage(String objectKey) { this.imageObjectKey = objectKey; }
+
     public UUID getId() { return id; }
     public Bakery getBakery() { return bakery; }
     public String getName() { return name; }

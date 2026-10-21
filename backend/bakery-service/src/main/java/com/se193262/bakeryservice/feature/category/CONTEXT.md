@@ -8,8 +8,8 @@ Bakery-owned product categories.
 
 ProductCategory has list/create/patch/delete endpoints under a bakery. Deleting
 a category clears the category reference on its products. Responses use the
-shared API envelope; the controller is available outside the `prod` profile
-while public catalog filtering is pending. JWT membership checks are enforced.
+shared API envelope. Public product catalog can filter by category. JWT
+membership checks protect management routes in every profile.
 
 ## Boundary
 

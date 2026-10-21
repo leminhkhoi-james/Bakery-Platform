@@ -93,6 +93,29 @@ class SecurityConfigTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    @DisplayName("Internal Bakery profile requires a scoped service token and correlation ID")
+    void internalProfile_requiresServiceScopeAndCorrelation() throws Exception {
+        String path = "/internal/v1/bakeries/" + BAKERY_ID;
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-owner")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-profile"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-no-scope")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-profile")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Public bakery detail does not require JWT")
+    void bakeryDetail_withoutToken_isPublic() throws Exception {
+        mockMvc.perform(get("/api/v1/bakeries/" + BAKERY_ID)).andExpect(status().isOk());
+    }
+
     @RestController
     static class ProbeController {
         @PostMapping("/api/v1/bakeries")
@@ -103,6 +126,12 @@ class SecurityConfigTest {
 
         @PostMapping("/api/v1/bakeries/{bakeryId}/products")
         String createProduct() { return "ok"; }
+
+        @GetMapping("/internal/v1/bakeries/{bakeryId}")
+        String internalBakery() { return "ok"; }
+
+        @GetMapping("/api/v1/bakeries/{bakeryId}")
+        String publicBakery() { return "ok"; }
     }
 
     static class MemberFixture {
@@ -121,6 +150,8 @@ class SecurityConfigTest {
                         .subject(USER_ID.toString())
                         .claim("token_type", tokenType)
                         .claim("roles", List.of(role))
+                        .audience(List.of(token.startsWith("service") ? "bakery-service" : "bakery-platform-api"))
+                        .claim("scope", token.equals("service-profile") ? "bakery:profile:read" : "")
                         .build();
             };
         }

@@ -7,6 +7,12 @@ import com.se193262.bakeryservice.feature.bakery.entity.Bakery;
 import com.se193262.bakeryservice.feature.bakery.entity.BakeryAddress;
 import com.se193262.bakeryservice.feature.bakery.entity.BusinessHour;
 import com.se193262.bakeryservice.feature.bakery.entity.ServiceArea;
+import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
+import com.se193262.bakeryservice.shared.dto.PageResult;
+import com.se193262.bakeryservice.shared.dto.MediaResponse;
+import com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorage;
+import org.springframework.web.multipart.MultipartFile;
+import java.time.Instant;
 import com.se193262.bakeryservice.feature.bakery.repository.BakeryAddressRepository;
 import com.se193262.bakeryservice.feature.bakery.repository.BakeryRepository;
 import com.se193262.bakeryservice.feature.bakery.repository.BusinessHourRepository;
@@ -16,6 +22,8 @@ import com.se193262.bakeryservice.feature.member.entity.BakeryMember;
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
 import com.se193262.bakeryservice.feature.member.repository.BakeryMemberRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,17 +45,20 @@ public class BakeryServiceImpl implements BakeryService {
     private final BakeryAddressRepository addressRepository;
     private final ServiceAreaRepository serviceAreaRepository;
     private final BusinessHourRepository businessHourRepository;
+    private final BakeryImageStorage imageStorage;
 
     public BakeryServiceImpl(BakeryRepository bakeryRepository,
                              BakeryMemberRepository bakeryMemberRepository,
                              BakeryAddressRepository addressRepository,
                              ServiceAreaRepository serviceAreaRepository,
-                             BusinessHourRepository businessHourRepository) {
+                             BusinessHourRepository businessHourRepository,
+                             BakeryImageStorage imageStorage) {
         this.bakeryRepository = bakeryRepository;
         this.bakeryMemberRepository = bakeryMemberRepository;
         this.addressRepository = addressRepository;
         this.serviceAreaRepository = serviceAreaRepository;
         this.businessHourRepository = businessHourRepository;
+        this.imageStorage = imageStorage;
     }
 
     @Override
@@ -55,7 +66,7 @@ public class BakeryServiceImpl implements BakeryService {
     public BakeryDto create(BakeryDto request, UUID ownerUserId) {
         rejectServerFields(request);
         if (ownerUserId == null) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "X-User-Id is required until JWT is configured");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Owner user ID is required");
         }
         String name = required(request.name(), "name");
         String phoneNumber = required(request.phoneNumber(), "phoneNumber");
@@ -99,6 +110,105 @@ public class BakeryServiceImpl implements BakeryService {
         serviceAreaRepository.flush();
         businessHourRepository.flush();
         return toOperations(bakeryId);
+    }
+
+    @Override
+    @Transactional
+    public BakeryDto submitForApproval(UUID bakeryId) {
+        Bakery bakery = findBakery(bakeryId);
+        if (bakery.getStatus() != BakeryStatus.DRAFT) {
+            throw new AppException(HttpStatus.CONFLICT, "Only a draft bakery can be submitted");
+        }
+        boolean hasPrimaryAddress = addressRepository.findAllByBakery_Id(bakeryId).stream()
+                .anyMatch(BakeryAddress::isPrimary);
+        boolean hasActiveArea = serviceAreaRepository.findAllByBakery_Id(bakeryId).stream()
+                .anyMatch(ServiceArea::isActive);
+        if (bakery.getName().isBlank() || bakery.getPhoneNumber().isBlank()
+                || !hasPrimaryAddress || !hasActiveArea) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Bakery profile is incomplete");
+        }
+        bakery.submitForApproval();
+        bakeryRepository.flush();
+        return toDto(bakery);
+    }
+
+    @Override
+    @Transactional
+    public BakeryDto changeStatus(UUID bakeryId, BakeryStatus status) {
+        if (status == null) throw new AppException(HttpStatus.BAD_REQUEST, "status is required");
+        Bakery bakery = findBakery(bakeryId);
+        if (status == BakeryStatus.ACTIVE && bakery.getStatus() == BakeryStatus.PENDING_APPROVAL) {
+            boolean ready = addressRepository.findAllByBakery_Id(bakeryId).stream()
+                    .anyMatch(BakeryAddress::isPrimary)
+                    && serviceAreaRepository.findAllByBakery_Id(bakeryId).stream()
+                    .anyMatch(ServiceArea::isActive);
+            if (!ready) throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Approval checklist is incomplete");
+        }
+        try {
+            bakery.changeStatus(status);
+        } catch (IllegalStateException exception) {
+            throw new AppException(HttpStatus.CONFLICT, exception.getMessage());
+        }
+        bakeryRepository.flush();
+        return toDto(bakery);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResult<BakeryDto> listForAdmin(BakeryStatus status, String query, String city,
+            int page, int size) {
+        if (page < 1 || size < 1 || size > 100) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "page must be >= 1 and size must be 1..100");
+        }
+        if (city == null || city.isBlank()) {
+            return PageResult.fromPage(bakeryRepository.search(status, query == null ? "" : query.trim(),
+                    PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt")))
+                    .map(this::toDto));
+        }
+        long count = 0;
+        long offset = (long) (page - 1) * size;
+        List<BakeryDto> result = new ArrayList<>();
+        int chunk = 0;
+        org.springframework.data.domain.Page<Bakery> candidates;
+        do {
+            candidates = bakeryRepository.search(status, query == null ? "" : query.trim(),
+                    PageRequest.of(chunk++, 100, Sort.by(Sort.Direction.DESC, "createdAt")));
+            for (Bakery bakery : candidates.getContent()) {
+                boolean matchesCity = addressRepository.findAllByBakery_Id(bakery.getId()).stream()
+                        .anyMatch(address -> address.getCity().equalsIgnoreCase(city.trim()));
+                if (!matchesCity) continue;
+                if (count >= offset && result.size() < size) result.add(toDto(bakery));
+                count++;
+            }
+        } while (candidates.hasNext());
+        return new PageResult<>(new PageResult.Meta(page, size,
+                (int) ((count + size - 1) / size), count), result);
+    }
+
+    @Override
+    @Transactional
+    public MediaResponse uploadLogo(UUID bakeryId, MultipartFile file) {
+        Bakery bakery = findBakery(bakeryId);
+        BakeryImageStorage.StoredImage image = imageStorage.upload(file, "bakeries/" + bakeryId + "/logo");
+        String url = imageStorage.signedUrl(image.objectKey());
+        String oldKey = bakery.getLogoObjectKey();
+        bakery.replaceLogo(image.objectKey());
+        bakeryRepository.flush();
+        imageStorage.afterCommitDelete(oldKey);
+        return new MediaResponse(url, Instant.now().plus(imageStorage.urlExpiry()));
+    }
+
+    @Override
+    @Transactional
+    public MediaResponse uploadCover(UUID bakeryId, MultipartFile file) {
+        Bakery bakery = findBakery(bakeryId);
+        BakeryImageStorage.StoredImage image = imageStorage.upload(file, "bakeries/" + bakeryId + "/cover");
+        String url = imageStorage.signedUrl(image.objectKey());
+        String oldKey = bakery.getCoverObjectKey();
+        bakery.replaceCover(image.objectKey());
+        bakeryRepository.flush();
+        imageStorage.afterCommitDelete(oldKey);
+        return new MediaResponse(url, Instant.now().plus(imageStorage.urlExpiry()));
     }
 
     private Bakery findBakery(UUID bakeryId) {

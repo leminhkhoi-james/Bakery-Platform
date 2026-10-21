@@ -7,6 +7,14 @@ import com.se193262.bakeryservice.feature.category.entity.ProductCategory;
 import com.se193262.bakeryservice.feature.category.repository.ProductCategoryRepository;
 import com.se193262.bakeryservice.feature.product.dto.ProductDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductOptionsDto;
+import com.se193262.bakeryservice.feature.product.dto.ProductImageResponse;
+import com.se193262.bakeryservice.feature.product.entity.ProductImage;
+import com.se193262.bakeryservice.feature.product.repository.ProductImageRepository;
+import com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorage;
+import com.se193262.bakeryservice.infrastructure.client.SubscriptionEntitlementClient;
+import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
+import org.springframework.web.multipart.MultipartFile;
+import java.time.Instant;
 import com.se193262.bakeryservice.feature.product.entity.Product;
 import com.se193262.bakeryservice.feature.product.entity.ProductOptionGroup;
 import com.se193262.bakeryservice.feature.product.entity.ProductOptionValue;
@@ -40,17 +48,26 @@ public class ProductServiceImpl implements ProductService {
     private final BakeryRepository bakeryRepository;
     private final ProductOptionGroupRepository groupRepository;
     private final ProductOptionValueRepository valueRepository;
+    private final ProductImageRepository imageRepository;
+    private final BakeryImageStorage imageStorage;
+    private final SubscriptionEntitlementClient entitlementClient;
 
     public ProductServiceImpl(ProductRepository productRepository,
                               ProductCategoryRepository categoryRepository,
                               BakeryRepository bakeryRepository,
                               ProductOptionGroupRepository groupRepository,
-                              ProductOptionValueRepository valueRepository) {
+                              ProductOptionValueRepository valueRepository,
+                              ProductImageRepository imageRepository,
+                              BakeryImageStorage imageStorage,
+                              SubscriptionEntitlementClient entitlementClient) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.bakeryRepository = bakeryRepository;
         this.groupRepository = groupRepository;
         this.valueRepository = valueRepository;
+        this.imageRepository = imageRepository;
+        this.imageStorage = imageStorage;
+        this.entitlementClient = entitlementClient;
     }
 
     @Override
@@ -180,6 +197,112 @@ public class ProductServiceImpl implements ProductService {
             responseGroups.add(ProductOptionsDto.Group.fromEntity(savedGroups.get(i), savedValues.get(i)));
         }
         return new ProductOptionsDto(responseGroups);
+    }
+
+    @Override
+    @Transactional
+    public List<ProductImageResponse> uploadImages(UUID bakeryId, UUID productId,
+            List<MultipartFile> files, Integer primaryIndex, List<Integer> displayOrder) {
+        Product product = productRepository.findByIdAndBakery_Id(productId, bakeryId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found"));
+        if (files == null || files.isEmpty() || files.size() > 10
+                || imageRepository.countByProduct_Id(productId) + files.size() > 10) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Product requires 1 to 10 images in total");
+        }
+        if (primaryIndex != null && (primaryIndex < 0 || primaryIndex >= files.size())) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "primaryIndex is outside the file list");
+        }
+        if (displayOrder != null && displayOrder.size() != files.size()) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "displayOrder must match the file list");
+        }
+        if (displayOrder != null && displayOrder.stream()
+                .anyMatch(value -> value == null || value < 0)) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "displayOrder must be non-negative");
+        }
+        boolean hasPrimary = imageRepository.existsByProduct_IdAndIsPrimaryTrue(productId);
+        if (primaryIndex != null && hasPrimary) {
+            throw new AppException(HttpStatus.CONFLICT, "Product already has a primary image");
+        }
+        int selectedPrimary = hasPrimary ? -1 : primaryIndex == null ? 0 : primaryIndex;
+        List<ProductImageResponse> responses = new ArrayList<>();
+        for (int index = 0; index < files.size(); index++) {
+            BakeryImageStorage.StoredImage stored = imageStorage.upload(files.get(index),
+                    "bakeries/" + bakeryId + "/products/" + productId);
+            ProductImage image = new ProductImage(product, stored.objectKey(), stored.mediaType());
+            image.configure(displayOrder == null ? index : displayOrder.get(index), index == selectedPrimary);
+            String url = imageStorage.signedUrl(stored.objectKey());
+            imageRepository.saveAndFlush(image);
+            responses.add(new ProductImageResponse(image.getId(), url,
+                    Instant.now().plus(imageStorage.urlExpiry()), stored.mediaType(),
+                    image.getDisplayOrder(), image.isPrimary()));
+        }
+        return List.copyOf(responses);
+    }
+
+    @Override
+    @Transactional
+    public void deleteImage(UUID bakeryId, UUID productId, UUID imageId) {
+        productRepository.findByIdAndBakery_Id(productId, bakeryId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found"));
+        ProductImage image = imageRepository.findByIdAndProduct_Id(imageId, productId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product image not found"));
+        imageRepository.delete(image);
+        imageRepository.flush();
+        imageStorage.afterCommitDelete(image.getObjectKey());
+    }
+
+    @Override
+    @Transactional
+    public ProductDto publish(UUID bakeryId, UUID productId) {
+        Product product = findProduct(bakeryId, productId);
+        if (product.getStatus() != ProductStatus.DRAFT && product.getStatus() != ProductStatus.HIDDEN) {
+            throw new AppException(HttpStatus.CONFLICT, "Only draft or hidden products can be published");
+        }
+        if (product.getBakery().getStatus() != BakeryStatus.ACTIVE
+                || product.getBasePrice() == null || product.getBasePrice().signum() < 0
+                || !imageRepository.existsByProduct_IdAndIsPrimaryTrue(productId)) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Product requires an active bakery, valid price and primary image");
+        }
+        List<ProductOptionValue> optionValues = valueRepository.findAllByOptionGroup_Product_Id(productId);
+        for (ProductOptionGroup group : groupRepository.findAllByProduct_IdOrderByDisplayOrderAsc(productId)) {
+            long activeCount = optionValues.stream()
+                    .filter(value -> value.getOptionGroup().getId().equals(group.getId()) && value.isActive()).count();
+            if (group.isRequired() && activeCount < group.getMinimumSelections()) {
+                throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Required product options are incomplete");
+            }
+        }
+        if (!entitlementClient.hasActiveSubscription(bakeryId)) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Bakery subscription is inactive");
+        }
+        product.publish();
+        productRepository.flush();
+        return ProductDto.fromEntity(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductDto hide(UUID bakeryId, UUID productId) {
+        Product product = findProduct(bakeryId, productId);
+        try { product.hide(); }
+        catch (IllegalStateException exception) { throw new AppException(HttpStatus.CONFLICT, exception.getMessage()); }
+        productRepository.flush();
+        return ProductDto.fromEntity(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductDto archive(UUID bakeryId, UUID productId) {
+        Product product = findProduct(bakeryId, productId);
+        try { product.archive(); }
+        catch (IllegalStateException exception) { throw new AppException(HttpStatus.CONFLICT, exception.getMessage()); }
+        productRepository.flush();
+        return ProductDto.fromEntity(product);
+    }
+
+    private Product findProduct(UUID bakeryId, UUID productId) {
+        return productRepository.findByIdAndBakery_Id(productId, bakeryId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
     private static void validateGroup(ProductOptionsDto.Group group) {

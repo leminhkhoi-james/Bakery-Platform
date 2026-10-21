@@ -7,6 +7,10 @@ import com.se193262.bakeryservice.feature.addon.repository.AddOnRepository;
 import com.se193262.bakeryservice.feature.addon.service.AddOnService;
 import com.se193262.bakeryservice.feature.bakery.entity.Bakery;
 import com.se193262.bakeryservice.feature.bakery.repository.BakeryRepository;
+import com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorage;
+import com.se193262.bakeryservice.shared.dto.MediaResponse;
+import org.springframework.web.multipart.MultipartFile;
+import java.time.Instant;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +24,13 @@ public class AddOnServiceImpl implements AddOnService {
 
     private final AddOnRepository addOnRepository;
     private final BakeryRepository bakeryRepository;
+    private final BakeryImageStorage imageStorage;
 
-    public AddOnServiceImpl(AddOnRepository addOnRepository, BakeryRepository bakeryRepository) {
+    public AddOnServiceImpl(AddOnRepository addOnRepository, BakeryRepository bakeryRepository,
+            BakeryImageStorage imageStorage) {
         this.addOnRepository = addOnRepository;
         this.bakeryRepository = bakeryRepository;
+        this.imageStorage = imageStorage;
     }
 
     @Override
@@ -68,6 +75,21 @@ public class AddOnServiceImpl implements AddOnService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Add-on not found"));
         addOn.disable();
         addOnRepository.flush();
+    }
+
+    @Override
+    @Transactional
+    public MediaResponse uploadImage(UUID bakeryId, UUID addOnId, MultipartFile file) {
+        AddOn addOn = addOnRepository.findByIdAndBakery_Id(addOnId, bakeryId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Add-on not found"));
+        BakeryImageStorage.StoredImage image = imageStorage.upload(file,
+                "bakeries/" + bakeryId + "/add-ons/" + addOnId);
+        String url = imageStorage.signedUrl(image.objectKey());
+        String oldKey = addOn.getImageObjectKey();
+        addOn.replaceImage(image.objectKey());
+        addOnRepository.flush();
+        imageStorage.afterCommitDelete(oldKey);
+        return new MediaResponse(url, Instant.now().plus(imageStorage.urlExpiry()));
     }
 
     private Bakery findBakery(UUID bakeryId) {

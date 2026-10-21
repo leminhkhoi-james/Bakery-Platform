@@ -8,8 +8,8 @@ Bakery-owned product add-ons.
 
 AddOn has list/create/patch/delete endpoints under a bakery. Delete disables
 the add-on (`active=false`) so existing references can remain intact. Image
-upload is pending. JWT membership checks are enforced; the controller is available
-outside the `prod` profile.
+upload uses MinIO/S3-compatible storage and returns a short-lived signed URL.
+JWT membership checks protect management routes in every profile.
 
 ## Boundary
 

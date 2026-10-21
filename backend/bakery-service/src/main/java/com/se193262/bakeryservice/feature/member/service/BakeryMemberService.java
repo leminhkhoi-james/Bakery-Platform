@@ -11,7 +11,14 @@ public interface BakeryMemberService {
 
     BakeryMemberDto create(UUID bakeryId, BakeryMemberDto request);
 
+    BakeryMemberDto createAs(UUID bakeryId, UUID actorUserId, BakeryMemberDto request);
+
     BakeryMemberDto update(UUID bakeryId, UUID memberId, BakeryMemberDto request);
 
+    BakeryMemberDto updateAs(UUID bakeryId, UUID actorUserId, UUID memberId,
+            BakeryMemberDto request);
+
     void delete(UUID bakeryId, UUID memberId);
+
+    void deleteAs(UUID bakeryId, UUID actorUserId, UUID memberId);
 }

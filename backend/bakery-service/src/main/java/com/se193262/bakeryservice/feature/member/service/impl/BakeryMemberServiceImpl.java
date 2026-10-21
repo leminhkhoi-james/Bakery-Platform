@@ -9,6 +9,7 @@ import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberStatus;
 import com.se193262.bakeryservice.feature.member.repository.BakeryMemberRepository;
 import com.se193262.bakeryservice.feature.member.service.BakeryMemberService;
+import com.se193262.bakeryservice.infrastructure.client.IdentityUserClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +22,14 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
 
     private final BakeryMemberRepository memberRepository;
     private final BakeryRepository bakeryRepository;
+    private final IdentityUserClient identityUserClient;
 
     public BakeryMemberServiceImpl(BakeryMemberRepository memberRepository,
-                                   BakeryRepository bakeryRepository) {
+                                   BakeryRepository bakeryRepository,
+                                   IdentityUserClient identityUserClient) {
         this.memberRepository = memberRepository;
         this.bakeryRepository = bakeryRepository;
+        this.identityUserClient = identityUserClient;
     }
 
     @Override
@@ -56,6 +60,21 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
 
     @Override
     @Transactional
+    public BakeryMemberDto createAs(UUID bakeryId, UUID actorUserId, BakeryMemberDto request) {
+        BakeryMember actor = findActiveActor(bakeryId, actorUserId);
+        if (actor.getMemberRole() == BakeryMemberRole.STAFF
+                || actor.getMemberRole() == BakeryMemberRole.MANAGER
+                && (request == null || request.memberRole() != BakeryMemberRole.STAFF)) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Only an owner can add a manager");
+        }
+        if (request != null && request.userId() != null && request.memberRole() != null) {
+            identityUserClient.requireEligibleMember(request.userId());
+        }
+        return create(bakeryId, request);
+    }
+
+    @Override
+    @Transactional
     public BakeryMemberDto update(UUID bakeryId, UUID memberId, BakeryMemberDto request) {
         if (request == null || request.id() != null || request.joinedAt() != null
                 || request.userId() != null) {
@@ -79,6 +98,22 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
 
     @Override
     @Transactional
+    public BakeryMemberDto updateAs(UUID bakeryId, UUID actorUserId, UUID memberId,
+            BakeryMemberDto request) {
+        BakeryMember actor = findActiveActor(bakeryId, actorUserId);
+        BakeryMember target = findMember(bakeryId, memberId);
+        if (actor.getMemberRole() == BakeryMemberRole.STAFF
+                || actor.getMemberRole() == BakeryMemberRole.MANAGER
+                && (target.getMemberRole() != BakeryMemberRole.STAFF
+                || request != null && request.memberRole() != null
+                && request.memberRole() != BakeryMemberRole.STAFF)) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Manager may only update staff members");
+        }
+        return update(bakeryId, memberId, request);
+    }
+
+    @Override
+    @Transactional
     public void delete(UUID bakeryId, UUID memberId) {
         BakeryMember member = findMember(bakeryId, memberId);
         if (member.getMemberRole() == BakeryMemberRole.OWNER
@@ -87,6 +122,25 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
         }
         memberRepository.delete(member);
         memberRepository.flush();
+    }
+
+    @Override
+    @Transactional
+    public void deleteAs(UUID bakeryId, UUID actorUserId, UUID memberId) {
+        BakeryMember actor = findActiveActor(bakeryId, actorUserId);
+        BakeryMember target = findMember(bakeryId, memberId);
+        if (actor.getMemberRole() == BakeryMemberRole.STAFF
+                || actor.getMemberRole() == BakeryMemberRole.MANAGER
+                && target.getMemberRole() != BakeryMemberRole.STAFF) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Manager may only remove staff members");
+        }
+        delete(bakeryId, memberId);
+    }
+
+    private BakeryMember findActiveActor(UUID bakeryId, UUID actorUserId) {
+        return memberRepository.findByBakery_IdAndUserId(bakeryId, actorUserId)
+                .filter(member -> member.getStatus() == BakeryMemberStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(HttpStatus.FORBIDDEN, "Active bakery membership is required"));
     }
 
     private void ensureAnotherActiveOwner(UUID bakeryId) {

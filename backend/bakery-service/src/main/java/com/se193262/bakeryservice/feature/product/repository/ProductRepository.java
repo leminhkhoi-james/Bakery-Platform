@@ -2,6 +2,8 @@ package com.se193262.bakeryservice.feature.product.repository;
 
 import com.se193262.bakeryservice.feature.product.entity.Product;
 import com.se193262.bakeryservice.feature.product.entity.ProductStatus;
+import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
+import java.math.BigDecimal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,4 +36,20 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
                                  @Param("categoryId") UUID categoryId,
                                  @Param("query") String query,
                                  Pageable pageable);
+
+    @Query("""
+            select p from Product p
+            where p.status = :productStatus and p.bakery.status = :bakeryStatus
+              and (:bakeryId is null or p.bakery.id = :bakeryId)
+              and (:categoryId is null or p.category.id = :categoryId)
+              and (:customizable is null or p.isCustomizable = :customizable)
+              and (:minPrice is null or p.basePrice >= :minPrice)
+              and (:maxPrice is null or p.basePrice <= :maxPrice)
+              and lower(p.name) like lower(concat('%', :query, '%'))
+            """)
+    Page<Product> findPublicCandidates(@Param("productStatus") ProductStatus productStatus,
+            @Param("bakeryStatus") BakeryStatus bakeryStatus, @Param("bakeryId") UUID bakeryId,
+            @Param("categoryId") UUID categoryId, @Param("customizable") Boolean customizable,
+            @Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice,
+            @Param("query") String query, Pageable pageable);
 }

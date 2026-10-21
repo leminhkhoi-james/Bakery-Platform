@@ -101,6 +101,27 @@ public class Product {
         if (minimumNoticeHours != null) this.minimumNoticeHours = minimumNoticeHours;
     }
 
+    public void publish() {
+        if (status != ProductStatus.DRAFT && status != ProductStatus.HIDDEN) {
+            throw new IllegalStateException("Only draft or hidden products can be published");
+        }
+        status = ProductStatus.PUBLISHED;
+    }
+
+    public void hide() {
+        if (status != ProductStatus.PUBLISHED) {
+            throw new IllegalStateException("Only a published product can be hidden");
+        }
+        status = ProductStatus.HIDDEN;
+    }
+
+    public void archive() {
+        if (status == ProductStatus.ARCHIVED) {
+            throw new IllegalStateException("Product is already archived");
+        }
+        status = ProductStatus.ARCHIVED;
+    }
+
     public UUID getId() { return id; }
     public Bakery getBakery() { return bakery; }
     public ProductCategory getCategory() { return category; }

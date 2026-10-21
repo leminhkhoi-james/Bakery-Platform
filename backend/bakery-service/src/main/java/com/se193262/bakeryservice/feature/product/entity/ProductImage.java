@@ -52,6 +52,11 @@ public class ProductImage {
         this.mediaType = mediaType;
     }
 
+    public void configure(int displayOrder, boolean primary) {
+        this.displayOrder = displayOrder;
+        this.isPrimary = primary;
+    }
+
     public UUID getId() { return id; }
     public Product getProduct() { return product; }
     public String getObjectKey() { return objectKey; }
