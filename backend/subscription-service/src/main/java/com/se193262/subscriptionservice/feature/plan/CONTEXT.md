@@ -6,8 +6,12 @@ Subscription plan catalog and administration.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+SubscriptionPlan and its features are persisted in Subscription DB. Public APIs
+list/get ACTIVE plans. Admin APIs list/create/patch/archive plans and return the
+standard API response envelope. Admin endpoints require an ADMIN user JWT but
+remain available only outside the `prod` profile. Existing order price/name
+snapshots are not changed by plan edits; entitlement feature snapshots still
+need a schema decision before subscription activation is implemented.
 
 ## Boundary
 

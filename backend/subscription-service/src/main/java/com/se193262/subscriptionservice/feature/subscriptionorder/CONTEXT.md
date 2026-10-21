@@ -6,8 +6,11 @@ Bakery subscription purchase orders.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Subscription orders have create/list/get APIs. Create snapshots plan name,
+period, price and currency; it requires an Idempotency-Key and starts in
+PENDING_PAYMENT. Order expiry defaults to 24 hours. The temporary controller
+uses the JWT subject as the requester ID and checks platform roles. It remains
+disabled in `prod` and does not yet validate bakery membership through Bakery Service.
 
 ## Boundary
 

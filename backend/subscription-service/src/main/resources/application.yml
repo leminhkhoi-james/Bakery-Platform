@@ -1,4 +1,27 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: subscription-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${IDENTITY_JWKS_URI}
+          issuer-uri: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+          audiences: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
+  datasource:
+    url: ${SUBSCRIPTION_DB_URL}
+    username: ${SUBSCRIPTION_DB_USERNAME}
+    password: ${SUBSCRIPTION_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+subscription:
+  order-expiry-hours: 24
 
