@@ -47,10 +47,37 @@
   receipts. Protected internal routes remain deny-by-default.
 - Thêm Order V2 migration cho `customer_note` và idempotency records; cập nhật
   canonical DDL, ERD và database documentation.
+- Bakery Service đã có JPA/PostgreSQL/Flyway dependencies, runtime V1 migration
+  và entity mapping cho 11 bảng trong `bakery_db`, đặt trong từng
+  `feature/<feature>/entity`.
+- Bakery Service đã có 11 Spring Data repository interface và 11 service
+  interface tương ứng với 11 bảng; Bakery profile đã có một số query đọc cấu
+  hình hoạt động.
+- Bakery profile có API tạo, đọc theo ID, cập nhật và thay thế cấu hình hoạt động
+  cùng `ApiResponse`; controller tạm thời chỉ hoạt động ngoài profile `prod`.
+- Bakery Service có API dữ liệu theo spec cho category, add-on, member và product
+  management: list/create/patch/delete nơi contract có quy định, cùng PUT thay
+  toàn bộ product options. Controller dùng `ResponseEntity`, lỗi đi qua
+  `GlobalExceptionHandler`; category delete xóa tham chiếu trên product,
+  add-on delete chuyển `active=false`.
+- Subscription Service có Spring Web/JPA/Validation/Flyway/PostgreSQL, runtime
+  migration V1–V3 và entity mapping cho năm bảng trong `subscription_db`.
+  PostgreSQL local đã có database riêng và `.env` riêng của module.
+- Subscription Service có API dữ liệu cho public/admin plan, subscription order,
+  gửi payment bằng mã giao dịch, admin payment queue và đọc kỳ subscription.
+  Create order/payment dùng `Idempotency-Key`; controller trả `ResponseEntity`
+  và lỗi qua `GlobalExceptionHandler`. Các controller cần quyền vẫn chỉ bật
+  ngoài profile `prod` trong lúc chờ kiểm tra bakery membership từ Bakery Service.
+- Bakery và Subscription đã cấu hình OAuth2 Resource Server xác thực JWT của
+  Identity qua JWK/issuer/audience. SecurityFilterChain kiểm tra `token_type=user`,
+  platform role và trả ApiResponse cho 401/403; internal API deny-by-default.
+  Bakery còn kiểm tra member ACTIVE và member role của đúng bakery cho các route
+  quản lý đã triển khai. User ID khi tạo bakery/order và gửi payment lấy từ JWT
+  `sub`, không còn nhận từ `X-User-Id`.
 
 ## Đã kiểm tra
 
-- `mvn test` tại `backend/`: **BUILD SUCCESS**.
+- `mvn test` tại `backend/` trước khi thêm Bakery persistence: **BUILD SUCCESS**.
 - Maven reactor nhận đủ parent và tám application modules.
 - 19 Identity unit/configuration tests pass, không có failure hoặc error.
 - 5 Identity PostgreSQL/MockMvc integration tests được cấu hình bằng
@@ -62,21 +89,38 @@
 - Chat Service build passes; attachment validation unit tests pass. PostgreSQL,
   Flyway/JPA validation and HTTP lifecycle tests use Testcontainers and skipped
   because Docker daemon is unavailable.
-- Smoke tests for the four remaining domain modules and API Gateway pass.
+- `mvn -pl bakery-service -am -DskipTests compile`: **BUILD SUCCESS**.
+- `mvn test` tại `backend/bakery-service/` với PostgreSQL local: smoke test pass;
+  Flyway xác nhận V1, Hibernate `ddl-auto=validate` chấp nhận 11 entity và
+  Spring Data phát hiện đủ 11 repository interface.
+- `BakeryCrudIntegrationTests` với PostgreSQL local: tạo bakery/member OWNER,
+  thay thế và xóa cấu hình hoạt động, cập nhật và đọc lại hồ sơ; test rollback.
+- `BakeryCatalogIntegrationTests` với PostgreSQL local: tạo category/add-on/
+  product/member, lọc product, thay options giữ ID, chặn ID lạ, xóa category
+  mà giữ product; test rollback.
+- Subscription Service context test: Flyway áp dụng V1–V3 lên PostgreSQL local,
+  Hibernate `ddl-auto=validate` và 4 repository khởi động thành công.
+- `SubscriptionDataIntegrationTests` với PostgreSQL local: tạo plan/order/payment,
+  kiểm tra snapshot giá, pagination/filter, idempotency và archive; test rollback.
+- 6 SecurityConfig Web MVC tests của Bakery/Subscription pass: 401, role/token
+  type, Bakery membership và public subscription plans.
+- Ngày 2026-10-21, Subscription tests pass; Bakery compile và SecurityConfig tests
+  pass. Bakery DB integration tests không kết nối được PostgreSQL local trong lần
+  chạy này.
 
 ## Chưa triển khai
 
-- Phần lớn controller/service nghiệp vụ của các domain khác.
-- Spring Data JPA, PostgreSQL driver và Flyway trong các domain service còn lại.
-- Đồng bộ migration canonical vào runtime classpath của các service ngoài
-  Identity, Order và Chat.
-- OAuth2 Resource Server cho các domain service còn lại và API Gateway; cơ chế
-  cấp service JWT/client credentials vẫn chưa triển khai.
+- Các API ảnh và chuyển trạng thái, Identity validation, public catalog và media
+  storage của Bakery Service.
+- Subscription Service chưa có proof upload/signed URL, admin duyệt/từ chối
+  payment, tạo/kích hoạt/gia hạn/expire subscription, entitlement internal API,
+  bakery membership/ownership và kiểm tra bakery từ Bakery Service. Plan feature chưa
+  được snapshot vào order/subscription để giữ entitlement ổn định khi plan đổi.
+- Marketplace và Cake AI vẫn cần runtime nghiệp vụ, JPA/PostgreSQL/Flyway và
+  OAuth2 Resource Server; API Gateway cũng chưa có Resource Server.
 - Marketplace và Bakery chưa triển khai runtime cho các internal authorization
-  contracts mà Chat/Order cần; cần cấp service JWT có scope tương ứng trước khi
-  Chat conversation context và bakery membership hoạt động end-to-end.
-- Outbound Order Service internal clients need provisioned service JWTs; Identity
-  does not yet expose a service-token issuance flow.
+  contracts mà Chat/Order cần. Outbound Order clients cần service JWT; Identity
+  chưa có luồng cấp service token/client credentials.
 - Gateway routing/filter implementation và lựa chọn gateway dependency.
 - REST clients, timeout/error mapping, object storage và scheduler trong các
   service còn lại.
@@ -91,3 +135,18 @@
   thất bại; cần cấu hình Java agent khi dự án nâng mức kiểm soát test runtime.
 - Springdoc hiện phát warning khi chuyển một số JSON schema annotation; endpoint
   `/v3/api-docs` và kiểm tra route vẫn pass.
+- Docker daemon hiện không khả dụng nên PostgreSQL Testcontainers integration
+  tests bị skip; cần chạy lại khi Docker hoạt động để xác minh full HTTP flow.
+- Bakery smoke test hiện cần PostgreSQL local và `.env` trong thư mục module;
+  chưa có test profile/Testcontainers độc lập cho Maven reactor.
+- Subscription smoke/integration test hiện cũng cần PostgreSQL local và `.env`
+  trong thư mục module; chưa có test profile/Testcontainers độc lập.
+- Bakery controller đã lấy owner ID từ JWT và kiểm tra member/role nhưng chưa
+  kiểm tra Identity theo internal API; bị tắt trong profile `prod`. GET theo ID hiện
+  trả cả DRAFT và chưa lọc subscription/media như public contract mục tiêu.
+- Bakery membership route đã chặn STAFF ghi dữ liệu nhưng chưa áp dụng các quy
+  tắc chi tiết cho MANAGER khi thêm/sửa/xóa thành viên khác. Subscription mới
+  kiểm tra platform role, chưa xác minh quyền trên bakery cụ thể; giữ các
+  controller này ngoài profile `prod` cho tới khi có Bakery authorization API.
+- Bakery runtime V1 khác bản canonical ở phần thụt lề. Flyway đã áp dụng bản
+  runtime, nên không sửa trực tiếp V1 sau khi chạy nếu chưa xử lý checksum.

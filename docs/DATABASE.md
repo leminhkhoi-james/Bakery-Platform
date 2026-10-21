@@ -267,7 +267,7 @@ Không sử dụng invoice và không theo dõi tiền mua bánh giữa khách v
 | `subscription_plans` | `id` | `code`, tên, giá tháng, chu kỳ, trạng thái, timestamps, `version` | Gói thuê nền tảng |
 | `plan_features` | `(plan_id, feature_code)` | `feature_value` | Quyền lợi/giới hạn linh hoạt của gói |
 | `subscription_orders` | `id` | số đơn, external bakery/user IDs, plan, snapshot, số tiền, trạng thái, timestamps, `version` | Đơn bakery đăng ký hoặc gia hạn gói |
-| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, số tiền, trạng thái, admin duyệt | Ghi nhận payment bakery gửi nền tảng |
+| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, hash idempotency key, số tiền, trạng thái, admin duyệt | Ghi nhận payment bakery gửi nền tảng |
 | `bakery_subscriptions` | `id` | bakery*, plan, source order, trạng thái, thời hạn, timestamps, `version` | Một kỳ sử dụng gói đã được cấp |
 
 ### Relationships
@@ -357,6 +357,8 @@ private Map<String, Object> configurationSnapshot;
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).
 - `V1__init_schema.sql` chỉ chứa DDL của đúng một service.
 - `V2__seed_reference_data.sql` chỉ seed dữ liệu danh mục ổn định.
+- Subscription Service có `V3__payment_idempotency.sql` thêm hash key duy nhất
+  cho payment mới; cột nullable để tương thích dữ liệu cũ.
 - Identity Service đóng gói bản sao V1/V2 tại
   `backend/identity-service/src/main/resources/db/migration`; test build kiểm tra
   bản runtime này luôn khớp byte-content (không tính line ending) với nguồn

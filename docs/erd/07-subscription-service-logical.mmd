@@ -43,6 +43,7 @@ erDiagram
         uuid submitted_by_user_id "External Identity reference"
         varchar payment_method
         varchar payment_reference UK
+        varchar idempotency_key_hash UK "Nullable for legacy rows"
         varchar proof_object_key
         decimal amount
         varchar currency

@@ -38,6 +38,7 @@ psql -U postgres -d cake_ai_db -f database/postgresql/cake-ai-service/V1__init_s
 
 psql -U postgres -d subscription_db -f database/postgresql/subscription-service/V1__init_schema.sql
 psql -U postgres -d subscription_db -f database/postgresql/subscription-service/V2__seed_reference_data.sql
+psql -U postgres -d subscription_db -f database/postgresql/subscription-service/V3__payment_idempotency.sql
 ```
 
 Nếu mỗi service chạy một PostgreSQL container riêng, không cần chạy
