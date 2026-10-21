@@ -6,8 +6,12 @@ Bakery membership and bakery-scoped authorization.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+BakeryMember has list/create/patch/delete endpoints under a bakery. The last
+active OWNER cannot be removed or demoted; assigning OWNER through these
+endpoints is blocked. Identity-owned users remain UUID references. Identity
+validation and display snapshots are pending. JWT authentication and ACTIVE
+bakery membership checks apply to these endpoints, which remain available only
+outside the `prod` profile.
 
 ## Boundary
 

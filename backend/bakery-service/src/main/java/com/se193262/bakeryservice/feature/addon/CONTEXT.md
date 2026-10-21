@@ -6,8 +6,10 @@ Bakery-owned product add-ons.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+AddOn has list/create/patch/delete endpoints under a bakery. Delete disables
+the add-on (`active=false`) so existing references can remain intact. Image
+upload is pending. JWT membership checks are enforced; the controller is available
+outside the `prod` profile.
 
 ## Boundary
 
