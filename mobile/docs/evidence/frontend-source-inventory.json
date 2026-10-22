@@ -1,0 +1,6657 @@
+[
+  {
+    "path": "frontend/.oxlintrc.json",
+    "lines": 8,
+    "sha256": "9a11085b48d1ea2c1cdd18c3438a669abcc635f5586019e5df87161369af70ef",
+    "controls": []
+  },
+  {
+    "path": "frontend/index.html",
+    "lines": 18,
+    "sha256": "fed93bc0bff0ae70031a9aea90f9c02907795a453a6ef93a8342564743aa931b",
+    "controls": []
+  },
+  {
+    "path": "frontend/package.json",
+    "lines": 26,
+    "sha256": "a0e794937de2c72a93a8bf1a779995c009bb9397aeb9620bc07c862b1c09c5d3",
+    "controls": []
+  },
+  {
+    "path": "frontend/remove_bg.js",
+    "lines": 100,
+    "sha256": "1326d0de8ef7470d66473bf572a4b5f0543f4edc84ce806f16bdae3909a0cb41",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/App.jsx",
+    "lines": 330,
+    "sha256": "658c96024ddca73286419a10f35c93f85cc875dc041c78903762530f99465bf9",
+    "controls": [
+      {
+        "line": 5,
+        "source": "const [cartItems, setCartItems] = useState(["
+      },
+      {
+        "line": 154,
+        "source": "const [currentPage, setCurrentPage] = useState(() => resolveRouteFromUrl())"
+      },
+      {
+        "line": 155,
+        "source": "const [selectedCake, setSelectedCake] = useState(null)"
+      },
+      {
+        "line": 156,
+        "source": "const [activeCustomCake, setActiveCustomCake] = useState(null)"
+      },
+      {
+        "line": 157,
+        "source": "const [toastMessage, setToastMessage] = useState(null)"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/Badge.jsx",
+    "lines": 30,
+    "sha256": "02cc345d3c482668994be4076168ada038b9cd55b3d1a4a8456743bd5cef37c7",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/components/common/BrandLogo.jsx",
+    "lines": 43,
+    "sha256": "1d185ad3c3ff91ca072d497c1f53fe1373adec829411b6ee33f93f52772ebfbb",
+    "controls": [
+      {
+        "line": 29,
+        "source": "onClick={onClick}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/Button.jsx",
+    "lines": 52,
+    "sha256": "c7751a97e53df64c243cc21bde288841d40ef2a26f615af6d57d69522fde98ca",
+    "controls": [
+      {
+        "line": 39,
+        "source": "disabled={disabled}"
+      },
+      {
+        "line": 40,
+        "source": "onClick={onClick}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/Card.jsx",
+    "lines": 24,
+    "sha256": "b8d758d7581f03657d248b25cc9476ee4bd25e53f525f8b693104bec2a0ce4f9",
+    "controls": [
+      {
+        "line": 13,
+        "source": "onClick={onClick}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/EmptyState.jsx",
+    "lines": 24,
+    "sha256": "4504749584506e732f77f4f441d847e14436fcc48881867f411268fae7f5f29b",
+    "controls": [
+      {
+        "line": 17,
+        "source": "<h3 className=\"font-bold text-sm text-primary mb-1\">{title}</h3>"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/index.js",
+    "lines": 10,
+    "sha256": "6f11c65ebcbe91915ecfb79acd01d098fd9cf375f008ddb42e1769a94a7f5b2e",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/components/common/LoadingSpinner.jsx",
+    "lines": 30,
+    "sha256": "78e4b58bc7daf905f38b2eb746007bee36774a8df840591105c21a44a295da03",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/components/common/PolicyModal.jsx",
+    "lines": 341,
+    "sha256": "8ade351e080dd68c054548f726a78db84dda246a91ca666ac9ab5b3c0e74e432",
+    "controls": [
+      {
+        "line": 15,
+        "source": "const [activeTab, setActiveTab] = useState(initialTab)"
+      },
+      {
+        "line": 16,
+        "source": "const [searchTerm, setSearchTerm] = useState('')"
+      },
+      {
+        "line": 53,
+        "source": "onClick={onClose}"
+      },
+      {
+        "line": 65,
+        "source": "<h2 className=\"font-headline-sm text-lg sm:text-xl font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 78,
+        "source": "onClick={onClose}"
+      },
+      {
+        "line": 93,
+        "source": "onClick={() => setActiveTab(tab.id)}"
+      },
+      {
+        "line": 115,
+        "source": "placeholder=\"Tìm kiếm quy định...\""
+      },
+      {
+        "line": 117,
+        "source": "onChange={(e) => setSearchTerm(e.target.value)}"
+      },
+      {
+        "line": 141,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 157,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 173,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 188,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 217,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 234,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 247,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 274,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 287,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 308,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 331,
+        "source": "onClick={onClose}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/ScrollReveal.jsx",
+    "lines": 112,
+    "sha256": "d3ef00e3c8981af6df6d1701030513da2b9138e735ef9ca7af7a231855928469",
+    "controls": [
+      {
+        "line": 15,
+        "source": "const [isRevealed, setIsRevealed] = useState(false)"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/common/SearchBar.jsx",
+    "lines": 34,
+    "sha256": "17331ace0c31ad5f6de4b979171db9c7a824771590ce35e279c7e0be86f05d29",
+    "controls": [
+      {
+        "line": 18,
+        "source": "onChange={(e) => onChange && onChange(e.target.value)}"
+      },
+      {
+        "line": 19,
+        "source": "placeholder={placeholder}"
+      },
+      {
+        "line": 25,
+        "source": "onClick={onClear}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/AiStudioSection.jsx",
+    "lines": 212,
+    "sha256": "38cfe342ba4446c2400485eaf72295884c25dabb42c530acc3abf7f7e3f5ad53",
+    "controls": [
+      {
+        "line": 20,
+        "source": "<h2 className=\"font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary\">"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/BestSellersSection.jsx",
+    "lines": 212,
+    "sha256": "e148acdae2507e06ab53af165f1294a18722ced46354e5a01f6adc74518839ff",
+    "controls": [
+      {
+        "line": 6,
+        "source": "const [selectedSizes, setSelectedSizes] = useState({"
+      },
+      {
+        "line": 64,
+        "source": "<h2 className=\"font-savoure text-4xl sm:text-5xl font-bold text-[#9f1e31]\">"
+      },
+      {
+        "line": 72,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 96,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 118,
+        "source": "<h3"
+      },
+      {
+        "line": 120,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 152,
+        "source": "onClick={() => setSizeForProduct(cake.id, sizeLabel)}"
+      },
+      {
+        "line": 176,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 191,
+        "source": "onClick={() => handleQuickBiddingOrder(cake, currentSize, calculatedPrice)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/CategoryBentoSection.jsx",
+    "lines": 73,
+    "sha256": "c6d5f52d4cb2e7a68e01010a9a0c6dbc97ec7c8f9359ba8627c0cdff5a5d459b",
+    "controls": [
+      {
+        "line": 10,
+        "source": "<h2 className=\"font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4\">"
+      },
+      {
+        "line": 33,
+        "source": "<h3 className=\"font-savoure text-2xl font-bold italic text-wine mb-2\">"
+      },
+      {
+        "line": 43,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/CommitmentsAndReviewsSection.jsx",
+    "lines": 113,
+    "sha256": "499a8db232d85218e8ca546c3a58d2ea666d0f630c4f4bff70dccba306a613b5",
+    "controls": [
+      {
+        "line": 16,
+        "source": "<h2 className=\"font-headline-lg text-headline-lg text-primary\">"
+      },
+      {
+        "line": 30,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-primary mb-2\">"
+      },
+      {
+        "line": 48,
+        "source": "<h2 className=\"font-headline-lg text-headline-lg text-primary\">"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/CustomAtelierSection.jsx",
+    "lines": 181,
+    "sha256": "614b66299ae855acc8124ba4e6a19c7bd7c8dfc7ab90ed64ac4362d2e3a30ca6",
+    "controls": [
+      {
+        "line": 6,
+        "source": "const [ideaText, setIdeaText] = useState('')"
+      },
+      {
+        "line": 7,
+        "source": "const [selectedTone, setSelectedTone] = useState('Hồng dịu')"
+      },
+      {
+        "line": 8,
+        "source": "const [showPreview, setShowPreview] = useState(false)"
+      },
+      {
+        "line": 32,
+        "source": "<h2 className=\"font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4 leading-tight\">"
+      },
+      {
+        "line": 67,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 89,
+        "source": "<label htmlFor=\"cake-idea-text\" className=\"block font-bold text-wine text-sm mb-2\">"
+      },
+      {
+        "line": 97,
+        "source": "onChange={(e) => setIdeaText(e.target.value)}"
+      },
+      {
+        "line": 98,
+        "source": "placeholder=\"Ví dụ: Bánh sinh nhật cho bé gái 5 tuổi, màu hồng pastel, có hoa cúc nhỏ và vị dâu...\""
+      },
+      {
+        "line": 113,
+        "source": "onClick={() => setSelectedTone(t.name)}"
+      },
+      {
+        "line": 129,
+        "source": "onClick={handlePreviewClick}"
+      },
+      {
+        "line": 139,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/HeroSection.jsx",
+    "lines": 377,
+    "sha256": "96f2adb0f620b9898fd7ed4d71b3d7db90c86fced3b3d6b7cbc2686ac5a8a8fb",
+    "controls": [
+      {
+        "line": 75,
+        "source": "<h2 className=\"font-sweetcake text-3xl md:text-5xl text-wine font-bold tracking-wide drop-shadow-xs\">"
+      },
+      {
+        "line": 291,
+        "source": "<h1 className=\"font-savoure text-5xl sm:text-6xl lg:text-7xl font-bold text-wine tracking-normal leading-[1.05] mb-6 drop-shadow-[3px_3px_0_#ffe2cd]\">"
+      },
+      {
+        "line": 308,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 320,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 331,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/HowItWorksSection.jsx",
+    "lines": 234,
+    "sha256": "54af613d62a6ddced82403994a8d0f1950a103bf75beb2c08a8f3613d3a55258",
+    "controls": [
+      {
+        "line": 12,
+        "source": "<h2 className=\"font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4\">"
+      },
+      {
+        "line": 31,
+        "source": "<h3 className=\"font-savoure text-xl font-bold text-wine mb-2\">"
+      },
+      {
+        "line": 52,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 160,
+        "source": "<h2 className=\"font-savoure text-4xl sm:text-5xl font-bold text-wine mb-6 leading-tight\">"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/InstagramAndNewsletterSection.jsx",
+    "lines": 115,
+    "sha256": "d3f6639d876e86e1aa1ac8f75f617b248401abd47c65aa1c0b632655d52d1b16",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [email, setEmail] = useState('')"
+      },
+      {
+        "line": 8,
+        "source": "const [isSubscribed, setIsSubscribed] = useState(false)"
+      },
+      {
+        "line": 32,
+        "source": "<h2 className=\"font-headline-lg text-headline-lg text-primary\">"
+      },
+      {
+        "line": 69,
+        "source": "<h3 className=\"font-headline-lg text-headline-lg text-primary mb-3\">"
+      },
+      {
+        "line": 88,
+        "source": "<form onSubmit={handleSubmit} className=\"flex flex-col sm:flex-row gap-2\">"
+      },
+      {
+        "line": 91,
+        "source": "placeholder=\"Nhập địa chỉ email của bạn...\""
+      },
+      {
+        "line": 95,
+        "source": "onChange={(e) => setEmail(e.target.value)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/PartnerBakeriesSection.jsx",
+    "lines": 150,
+    "sha256": "13fd70fc414daf95aaf1748bfde494a2dc80245d14614c17f33d181a7dd75a3b",
+    "controls": [
+      {
+        "line": 6,
+        "source": "const [selectedCity, setSelectedCity] = useState('all')"
+      },
+      {
+        "line": 21,
+        "source": "<h2 className=\"font-savoure text-3xl sm:text-4xl font-bold text-wine mb-2.5 leading-tight\">"
+      },
+      {
+        "line": 32,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 76,
+        "source": "<h3 className=\"font-savoure text-2xl sm:text-3xl font-bold text-wine\">"
+      },
+      {
+        "line": 84,
+        "source": "onClick={() => setSelectedCity('all')}"
+      },
+      {
+        "line": 130,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/features/home/TrendingCakesSection.jsx",
+    "lines": 164,
+    "sha256": "ec2329789d02287726c89292d0d1cf468c20127783f51872a1665fc3d60624ce",
+    "controls": [
+      {
+        "line": 9,
+        "source": "const [activeFilter, setActiveFilter] = useState('Tất cả (48)')"
+      },
+      {
+        "line": 10,
+        "source": "const [favorites, setFavorites] = useState([1])"
+      },
+      {
+        "line": 30,
+        "source": "<h2 className=\"font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary\">"
+      },
+      {
+        "line": 52,
+        "source": "onClick={() => setActiveFilter(tag)}"
+      },
+      {
+        "line": 109,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-1\">"
+      },
+      {
+        "line": 141,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/constants/index.js",
+    "lines": 4,
+    "sha256": "a6ca6130f7c61cad5d6f667fecb08bde901e0c654712a401590fbd21e07f352d",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/constants/orderStatus.js",
+    "lines": 21,
+    "sha256": "dd24f21e49df370b1bb3ba402d53125b31ffa9635b0e5e60e17d5d6bf33db4a0",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/constants/paymentStatus.js",
+    "lines": 13,
+    "sha256": "2bddacf6819283061d3a73e9325718bc91b35d3c40bb1ace5d289d75d4b98b1f",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/constants/rfqStatus.js",
+    "lines": 17,
+    "sha256": "4dac83e683a0c18fc9b1c5a2c90a104fff2090f237870702b9cf49434f940072",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/constants/roles.js",
+    "lines": 15,
+    "sha256": "b24eaba4c8faa9020a774071f4771463a11cf6bb984a39fc5d1fa4aee7660617",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/context/AppDataContext.jsx",
+    "lines": 164,
+    "sha256": "54c888172b4e477e40880c80bbc818471f474f2d48393ac2e4ce6daa86b7475b",
+    "controls": [
+      {
+        "line": 26,
+        "source": "const [rfqs, setRfqs] = useState(INITIAL_RFQS)"
+      },
+      {
+        "line": 29,
+        "source": "const [bids, setBids] = useState(DEFAULT_BIDS)"
+      },
+      {
+        "line": 32,
+        "source": "const [kanbanOrders, setKanbanOrders] = useState(INITIAL_KANBAN_ORDERS)"
+      },
+      {
+        "line": 35,
+        "source": "const [activeRfqId, setActiveRfqId] = useState('#RFQ-2025-8892')"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/index.css",
+    "lines": 538,
+    "sha256": "b1c86b0090b09d6cb93dbf1df4466cf46d3720309d33db608bcfcc34daf25dc7",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/admin/AdminHeader.jsx",
+    "lines": 168,
+    "sha256": "58f630849371e84f6c7116d67f6f80a03184e985a259ee7aef45d6f1b1808934",
+    "controls": [
+      {
+        "line": 22,
+        "source": "const [internalCluster, setInternalCluster] = useState('all')"
+      },
+      {
+        "line": 40,
+        "source": "onClick={onToggleMobileSidebar}"
+      },
+      {
+        "line": 51,
+        "source": "onClick={backButton.onClick}"
+      },
+      {
+        "line": 62,
+        "source": "<h1 className=\"font-headline-sm text-admin-title font-bold text-primary truncate\">"
+      },
+      {
+        "line": 95,
+        "source": "onChange={(e) => onSearchChange(e.target.value)}"
+      },
+      {
+        "line": 96,
+        "source": "placeholder={searchPlaceholder}"
+      },
+      {
+        "line": 103,
+        "source": "onClick={() => onSearchChange('')}"
+      },
+      {
+        "line": 120,
+        "source": "onChange={(e) => handleClusterChange(e.target.value)}"
+      },
+      {
+        "line": 123,
+        "source": "<option value=\"all\">Toàn quốc</option>"
+      },
+      {
+        "line": 124,
+        "source": "<option value=\"hcm\">TP. Hồ Chí Minh</option>"
+      },
+      {
+        "line": 125,
+        "source": "<option value=\"hn\">Hà Nội</option>"
+      },
+      {
+        "line": 126,
+        "source": "<option value=\"dn\">Đà Nẵng</option>"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/layouts/admin/AdminLayout.jsx",
+    "lines": 9,
+    "sha256": "9a3b8922ea12eab57be5cbd988172de75d1ed0e2bdff564f4d6e6f8eafdf7659",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/admin/AdminSidebar.jsx",
+    "lines": 179,
+    "sha256": "887ffb55dabe19efc7cdfa414a9c932c7dfc5cc8de24ef6713a11c46b171fd5a",
+    "controls": [
+      {
+        "line": 79,
+        "source": "<BrandLogo onClick={() => handleNav('home')} />"
+      },
+      {
+        "line": 82,
+        "source": "onClick={onCloseMobile}"
+      },
+      {
+        "line": 107,
+        "source": "onClick={() => handleNav(item.route)}"
+      },
+      {
+        "line": 146,
+        "source": "onClick={() => handleNav('home')}"
+      },
+      {
+        "line": 170,
+        "source": "onClick={onCloseMobile}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/layouts/admin/index.js",
+    "lines": 3,
+    "sha256": "9fb5eb03444c91cfc9688158e9050b1b91ee40bf34a6b1b9816c205022bf41e5",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/customer/CustomerLayout.jsx",
+    "lines": 13,
+    "sha256": "2359fb906434bf67e6244d02bc18f4453a9818a9094b5dd951a1cd150ecb829a",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/customer/Footer.jsx",
+    "lines": 173,
+    "sha256": "df882c010d01ad372f971ccf9de9ca8302d7a7868c3eda0f830a35819906f314",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [isPolicyOpen, setIsPolicyOpen] = useState(false)"
+      },
+      {
+        "line": 8,
+        "source": "const [policyTab, setPolicyTab] = useState('terms') // 'terms' | 'privacy' | 'regulations'"
+      },
+      {
+        "line": 65,
+        "source": "<BrandLogo onClick={() => onNavigate && onNavigate('home')} />"
+      },
+      {
+        "line": 76,
+        "source": "<h3"
+      },
+      {
+        "line": 78,
+        "source": "onClick={() => handleCategoryClick('all')}"
+      },
+      {
+        "line": 89,
+        "source": "onClick={() => handleCategoryClick(item.category || item.label)}"
+      },
+      {
+        "line": 101,
+        "source": "<h3 className=\"font-savoure text-wine text-lg sm:text-xl font-bold border-b border-wine/20 pb-2\">"
+      },
+      {
+        "line": 109,
+        "source": "onClick={() => onNavigate && onNavigate(item.route)}"
+      },
+      {
+        "line": 120,
+        "source": "<h3 className=\"font-savoure text-wine text-lg sm:text-xl font-bold border-b border-wine/20 pb-2\">"
+      },
+      {
+        "line": 139,
+        "source": "onClick={() => openPolicy('terms')}"
+      },
+      {
+        "line": 146,
+        "source": "onClick={() => openPolicy('privacy')}"
+      },
+      {
+        "line": 153,
+        "source": "onClick={() => openPolicy('regulations')}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/layouts/customer/Header.jsx",
+    "lines": 427,
+    "sha256": "48b5342bcee75127e8c175ca474765d96b4a2f20158533f9c328e89424a5a711",
+    "controls": [
+      {
+        "line": 10,
+        "source": "const [searchValue, setSearchValue] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)"
+      },
+      {
+        "line": 12,
+        "source": "const [scrolledActiveTab, setScrolledActiveTab] = useState(activeTab)"
+      },
+      {
+        "line": 82,
+        "source": "<BrandLogo onClick={(e) => handleNav(e, 'home')} />"
+      },
+      {
+        "line": 102,
+        "source": "onClick={(e) => handleNav(e, link.route)}"
+      },
+      {
+        "line": 130,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 155,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 178,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 201,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 229,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 257,
+        "source": "onClick={(e) => handleNav(e, link.route)}"
+      },
+      {
+        "line": 284,
+        "source": "placeholder=\"Tìm bánh, tiệm bánh...\""
+      },
+      {
+        "line": 287,
+        "source": "onChange={(e) => setSearchValue(e.target.value)}"
+      },
+      {
+        "line": 300,
+        "source": "onClick={(e) => handleNav(e, 'cart')}"
+      },
+      {
+        "line": 317,
+        "source": "onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}"
+      },
+      {
+        "line": 336,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 347,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 358,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 371,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 382,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 393,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/layouts/customer/index.js",
+    "lines": 3,
+    "sha256": "81181d8cfd15e91e573bacb614ac72f2ecb3cf7e10430dd69a7ff1f457652253",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/index.js",
+    "lines": 14,
+    "sha256": "b0e722cb2231a614e9b16c829256a15cb229a8d4f0333b3e0993ed5b758503a4",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/vendor/index.js",
+    "lines": 3,
+    "sha256": "24f303d799c61f27c6416040bd0791c603839f4de3fa9e803c1ac3d8e5a76d31",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/vendor/VendorHeader.jsx",
+    "lines": 135,
+    "sha256": "955062b8aa1cdeacaadfcb417595f7d2614e6b38fc989f1acf11893d0b8ddfae",
+    "controls": [
+      {
+        "line": 20,
+        "source": "const [notificationCount] = useState(VENDOR_HEADER_NOTIFICATIONS.unreadCount)"
+      },
+      {
+        "line": 34,
+        "source": "onClick={onToggleMobileSidebar}"
+      },
+      {
+        "line": 44,
+        "source": "onClick={backButton.onClick}"
+      },
+      {
+        "line": 55,
+        "source": "<h1 className=\"font-headline-sm text-lg sm:text-xl font-bold text-primary truncate\">"
+      },
+      {
+        "line": 79,
+        "source": "onClick={onToggleReceiving}"
+      },
+      {
+        "line": 100,
+        "source": "onClick={handleNotificationClick}"
+      },
+      {
+        "line": 112,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-profile')}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/layouts/vendor/VendorLayout.jsx",
+    "lines": 9,
+    "sha256": "e25323f9c3f5d448172631ce28d96e838d2331b337d9680fe1bfce652dd0b042",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/layouts/vendor/VendorSidebar.jsx",
+    "lines": 139,
+    "sha256": "b836f6920d99d9904120a93223b59fbc7bfa01cf03a562306bc13edc0ccfbf17",
+    "controls": [
+      {
+        "line": 32,
+        "source": "<BrandLogo onClick={() => handleNav('home')} />"
+      },
+      {
+        "line": 35,
+        "source": "onClick={onCloseMobile}"
+      },
+      {
+        "line": 66,
+        "source": "onClick={() => handleNav(item.route)}"
+      },
+      {
+        "line": 105,
+        "source": "onClick={() => handleNav('home')}"
+      },
+      {
+        "line": 130,
+        "source": "onClick={onCloseMobile}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/main.jsx",
+    "lines": 13,
+    "sha256": "4fbd1478a91097b0e3b5dd3a57d2f69cc80a826f8eb6ef29aca4f9f5aef98bd6",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/admin/dashboard.js",
+    "lines": 94,
+    "sha256": "8af372a23016b8fcc2ce2c247809111080f22a52ed49ddf1b28875f4d0a58dc1",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/admin/orders.js",
+    "lines": 179,
+    "sha256": "aebe894fe49ce81a3ef10ee30843e7d54b93214fc0cc52eda1e1e21b88103672",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/admin/users.js",
+    "lines": 170,
+    "sha256": "c4f987400b924c813f09494aceb36cbf60b4a607e62a017493d077a8e953d0ce",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/admin/vendors.js",
+    "lines": 217,
+    "sha256": "2dc21232aa0d303df81da8004cbc9efb4e7e5e6af304fabaebb3db7da7a5baa5",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/aiDesigns.js",
+    "lines": 168,
+    "sha256": "3e4bb86562453f8e9d8a8a43308d27cdfbcfb40ff9942b289b93353a61037d87",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/cakes.js",
+    "lines": 6973,
+    "sha256": "4e5d77e4b99a4a723bf1520f7b45e0cb5e3bbd41c64cc1c34317fa2bceeca2b1",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/cart.js",
+    "lines": 95,
+    "sha256": "d700eaa57f7a55f1f8f3971bfc9f78102fd1a9281e81d40f7c69a67d4e440733",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/home.js",
+    "lines": 64,
+    "sha256": "623272fcde82aafe896d8f0fafb6d3452e9cbb259c65621e164acbd8723c2d19",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/orders.js",
+    "lines": 73,
+    "sha256": "3a8aa53c3a224dcee3af3d09c498cf6569a43ba2bc93b89bff0b101bb4db90a8",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/quotes.js",
+    "lines": 227,
+    "sha256": "55f59648dae1c9895cf0525c47777934c73bd2a170885f07fbf9badf009c33c4",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/reviews.js",
+    "lines": 69,
+    "sha256": "19205061565eb438cbcc7770f6b1c2b324b125bc3f01258bee280577f33cb9ff",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/stores.js",
+    "lines": 177,
+    "sha256": "8774f8a94656f11ce538c1488521c75d4ac2fcdaf761478f346293c58439bf84",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/customer/vouchers.js",
+    "lines": 82,
+    "sha256": "ac6e69c2dae08acbd8689058aa72cf6e988f8d75779002bf1f6bd3bec852e6f6",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/index.js",
+    "lines": 27,
+    "sha256": "97638cda81120993cc4991ce14603ef6303ba4234e9ee50144420d55324a305b",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/shared/conversations.js",
+    "lines": 41,
+    "sha256": "f3118c87d743eca6306d6b66e0c9b6d31a065d7546ec633a0adf567458b247ce",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/shared/navigation.js",
+    "lines": 173,
+    "sha256": "28115980569839abc0d35734ea11cd28ccbf6a1bef94e50d85591372e6a811ac",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/shared/social.js",
+    "lines": 36,
+    "sha256": "afd93c8894915820b1d5a46b46a43a82024dd186d976ed9cf835936d50677ad4",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/shared/users.js",
+    "lines": 43,
+    "sha256": "f378fd1eb18f9ece0fc28c5cb3312b48b70a74f563aadb0a9c5d16042e362787",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/catalog.js",
+    "lines": 59,
+    "sha256": "c9d8f335c2b40a9ccf4430a18d457815d0226ed939d3c315c63b5dc69ddce056",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/dashboard.js",
+    "lines": 48,
+    "sha256": "9c123d01c50d12518877d14f52e0d8228169029310f9aed94573867f03edd13d",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/orders.js",
+    "lines": 197,
+    "sha256": "4e2091bfb0298dd318dc3e00e9892ddc50eeacbd88f199a5961b0162c8379347",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/quotes.js",
+    "lines": 18,
+    "sha256": "8b78f45aa716ce7d8351c41e2e4377db89629fabe7160af1e35966549832f125",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/revenue.js",
+    "lines": 105,
+    "sha256": "591b9a5eb5780c533f578627da53c3e058b55182900cb7806c9867708b443d4f",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/rfqs.js",
+    "lines": 161,
+    "sha256": "ee0478df02941b2039f0c498b76e0f9ed241a1fa62ea8cf92625108951e97766",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/mockData/vendor/settings.js",
+    "lines": 21,
+    "sha256": "6e917b286ba51a76084e3980ab8d9470f2e5ee298f9b280b4a675eb8f38320e2",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/admin/dashboard/AdminDashboardPage.jsx",
+    "lines": 682,
+    "sha256": "6b269104e009cd7f5453cc0abbecd4bffdac13921b969c385802fa3738e76fad",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [selectedTimePeriod, setSelectedTimePeriod] = useState('month') // 'today' | '7days' | 'month' | 'quarter'"
+      },
+      {
+        "line": 9,
+        "source": "const [selectedCluster, setSelectedCluster] = useState('all') // 'all' | 'hcm' | 'hn' | 'dn'"
+      },
+      {
+        "line": 10,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 13,
+        "source": "const [toastMsg, setToastMsg] = useState(null)"
+      },
+      {
+        "line": 20,
+        "source": "const [isVendorModalOpen, setIsVendorModalOpen] = useState(false)"
+      },
+      {
+        "line": 21,
+        "source": "const [selectedVendorForModal, setSelectedVendorForModal] = useState(null)"
+      },
+      {
+        "line": 24,
+        "source": "const [isEscrowModalOpen, setIsEscrowModalOpen] = useState(false)"
+      },
+      {
+        "line": 25,
+        "source": "const [selectedOrderForEscrow, setSelectedOrderForEscrow] = useState(null)"
+      },
+      {
+        "line": 28,
+        "source": "const [vendorQueue, setVendorQueue] = useState(["
+      },
+      {
+        "line": 66,
+        "source": "const [escrowOrders, setEscrowOrders] = useState(["
+      },
+      {
+        "line": 179,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 230,
+        "source": "onClick={() => setSelectedTimePeriod(period.id)}"
+      },
+      {
+        "line": 238,
+        "source": "onClick={() => showToast('Mở bộ lọc thời gian nâng cao')}"
+      },
+      {
+        "line": 255,
+        "source": "onClick={() => onNavigate && onNavigate('admin-orders')}"
+      },
+      {
+        "line": 296,
+        "source": "onClick={() => onNavigate && onNavigate('admin-orders')}"
+      },
+      {
+        "line": 342,
+        "source": "onClick={() => onNavigate && onNavigate('admin-vendors')}"
+      },
+      {
+        "line": 369,
+        "source": "onClick={() => onNavigate && onNavigate('admin-users')}"
+      },
+      {
+        "line": 400,
+        "source": "<h2 className=\"font-headline-sm text-admin-heading text-primary font-serif\">"
+      },
+      {
+        "line": 477,
+        "source": "<h2 className=\"font-headline-sm text-admin-heading text-primary font-serif\">"
+      },
+      {
+        "line": 563,
+        "source": "onClick={() => handlePayoutOrder(order.id)}"
+      },
+      {
+        "line": 574,
+        "source": "onClick={() => handleOpenEscrowAudit(order)}"
+      },
+      {
+        "line": 610,
+        "source": "<h3 className=\"font-headline-sm text-primary font-bold text-admin-heading\">"
+      },
+      {
+        "line": 616,
+        "source": "onClick={() => setIsEscrowModalOpen(false)}"
+      },
+      {
+        "line": 660,
+        "source": "onClick={() => setIsEscrowModalOpen(false)}"
+      },
+      {
+        "line": 666,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/admin/dashboard/index.js",
+    "lines": 2,
+    "sha256": "e0de1b085cb625ef300dd3d0eb7e25137375a39633ee31afff5803df559fd689",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/admin/index.js",
+    "lines": 4,
+    "sha256": "84d760f9cdefce714399ca39a0fbf46b0e188d6fef31ab5d712cffb042cfc0d9",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/admin/orders/AdminOrdersEscrowPage.jsx",
+    "lines": 1054,
+    "sha256": "2b17cb9c09972b6ec1a3d4961328b5acf1c3c458dbc44c6917a562f2f7a0b0e5",
+    "controls": [
+      {
+        "line": 95,
+        "source": "const [orders, setOrders] = useState(() => [...contextOrdersFormatted, ...INITIAL_ORDERS])"
+      },
+      {
+        "line": 107,
+        "source": "const [activeStageTab, setActiveStageTab] = useState('all') // 'all' | 'pending' | 'baking' | 'delivering' | 'delivered' | 'completed' | 'cancelled'"
+      },
+      {
+        "line": 108,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 109,
+        "source": "const [typeFilter, setTypeFilter] = useState('all')"
+      },
+      {
+        "line": 110,
+        "source": "const [priceFilter, setPriceFilter] = useState('all')"
+      },
+      {
+        "line": 111,
+        "source": "const [dateFilter, setDateFilter] = useState('today')"
+      },
+      {
+        "line": 114,
+        "source": "const [selectedOrderForDetail, setSelectedOrderForDetail] = useState(null)"
+      },
+      {
+        "line": 115,
+        "source": "const [selectedOrderForGps, setSelectedOrderForGps] = useState(null)"
+      },
+      {
+        "line": 116,
+        "source": "const [showEscrowConfigModal, setShowEscrowConfigModal] = useState(false)"
+      },
+      {
+        "line": 117,
+        "source": "const [showRadarModal, setShowRadarModal] = useState(false)"
+      },
+      {
+        "line": 118,
+        "source": "const [toastMessage, setToastMessage] = useState(null)"
+      },
+      {
+        "line": 191,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 337,
+        "source": "onClick={() => setActiveStageTab('all')}"
+      },
+      {
+        "line": 348,
+        "source": "onClick={() => setActiveStageTab('baking')}"
+      },
+      {
+        "line": 362,
+        "source": "onClick={() => setActiveStageTab('delivering')}"
+      },
+      {
+        "line": 377,
+        "source": "onClick={() => setActiveStageTab('delivered')}"
+      },
+      {
+        "line": 391,
+        "source": "onClick={() => setActiveStageTab('completed')}"
+      },
+      {
+        "line": 402,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 422,
+        "source": "placeholder=\"Tìm mã đơn, khách, SĐT, tiệm...\""
+      },
+      {
+        "line": 425,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 429,
+        "source": "onClick={() => setSearchQuery('')}"
+      },
+      {
+        "line": 447,
+        "source": "onChange={(e) => setTypeFilter(e.target.value)}"
+      },
+      {
+        "line": 449,
+        "source": "<option value=\"all\">Tất cả đơn</option>"
+      },
+      {
+        "line": 450,
+        "source": "<option value=\"rfq\">Bánh đặt riêng</option>"
+      },
+      {
+        "line": 451,
+        "source": "<option value=\"catalog\">Bánh có sẵn</option>"
+      },
+      {
+        "line": 462,
+        "source": "onChange={(e) => setPriceFilter(e.target.value)}"
+      },
+      {
+        "line": 464,
+        "source": "<option value=\"all\">Mọi phân khúc</option>"
+      },
+      {
+        "line": 465,
+        "source": "<option value=\"low\">Dưới 1.000.000đ</option>"
+      },
+      {
+        "line": 466,
+        "source": "<option value=\"mid\">1.000.000đ - 3.000.000đ</option>"
+      },
+      {
+        "line": 467,
+        "source": "<option value=\"high\">Trên 3.000.000đ</option>"
+      },
+      {
+        "line": 478,
+        "source": "onChange={(e) => setDateFilter(e.target.value)}"
+      },
+      {
+        "line": 480,
+        "source": "<option value=\"today\">Giao Hôm Nay</option>"
+      },
+      {
+        "line": 481,
+        "source": "<option value=\"tomorrow\">Giao Ngày Mai</option>"
+      },
+      {
+        "line": 482,
+        "source": "<option value=\"weekend\">Đơn Cuối Tuần</option>"
+      },
+      {
+        "line": 483,
+        "source": "<option value=\"all_week\">Toàn bộ 7 ngày</option>"
+      },
+      {
+        "line": 491,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 527,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 688,
+        "source": "onClick={() => setSelectedOrderForGps(order)}"
+      },
+      {
+        "line": 701,
+        "source": "onClick={() => handleDisburseEscrow(order.id)}"
+      },
+      {
+        "line": 712,
+        "source": "onClick={() => setSelectedOrderForDetail(order)}"
+      },
+      {
+        "line": 731,
+        "source": "<option value=\"6\">6 đơn / trang</option>"
+      },
+      {
+        "line": 732,
+        "source": "<option value=\"15\">15 đơn / trang</option>"
+      },
+      {
+        "line": 733,
+        "source": "<option value=\"30\">30 đơn / trang</option>"
+      },
+      {
+        "line": 808,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 817,
+        "source": "onClick={() => setSelectedOrderForDetail(null)}"
+      },
+      {
+        "line": 883,
+        "source": "onClick={() => setSelectedOrderForDetail(null)}"
+      },
+      {
+        "line": 892,
+        "source": "onClick={() => handleDisburseEscrow(selectedOrderForDetail.id)}"
+      },
+      {
+        "line": 918,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 929,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 975,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1000,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 1005,
+        "source": "onClick={() => setShowEscrowConfigModal(false)}"
+      },
+      {
+        "line": 1014,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1018,
+        "source": "<option value=\"2\">2 giờ (Tiêu chuẩn bánh tiệc sinh nhật)</option>"
+      },
+      {
+        "line": 1019,
+        "source": "<option value=\"4\">4 giờ (Bánh cưới Haute Couture nhiều tầng)</option>"
+      },
+      {
+        "line": 1020,
+        "source": "<option value=\"12\">12 giờ (Sự kiện doanh nghiệp quy mô lớn)</option>"
+      },
+      {
+        "line": 1021,
+        "source": "<option value=\"24\">24 giờ (Đơn ngoại tỉnh)</option>"
+      },
+      {
+        "line": 1032,
+        "source": "onClick={() => setShowEscrowConfigModal(false)}"
+      },
+      {
+        "line": 1039,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/admin/orders/index.js",
+    "lines": 2,
+    "sha256": "ffc1797de516c81772d20da35d5e4a8c8e41fcab35b13ae31cc32ab60884a86c",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/admin/users/AdminUsersPage.jsx",
+    "lines": 1088,
+    "sha256": "2756a6bb0783fa839bc36c07313c2c5f54b9b14769876d7928be9a4de1c0600e",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [users, setUsers] = useState(INITIAL_USERS)"
+      },
+      {
+        "line": 9,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 10,
+        "source": "const [tierFilter, setTierFilter] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [statusFilter, setStatusFilter] = useState('')"
+      },
+      {
+        "line": 12,
+        "source": "const [spendingFilter, setSpendingFilter] = useState('')"
+      },
+      {
+        "line": 13,
+        "source": "const [sortBy, setSortBy] = useState('recent')"
+      },
+      {
+        "line": 16,
+        "source": "const [selectedUser, setSelectedUser] = useState(null)"
+      },
+      {
+        "line": 17,
+        "source": "const [showAddUserModal, setShowAddUserModal] = useState(false)"
+      },
+      {
+        "line": 18,
+        "source": "const [showAdvancedFilterModal, setShowAdvancedFilterModal] = useState(false)"
+      },
+      {
+        "line": 19,
+        "source": "const [toastMessage, setToastMessage] = useState(null)"
+      },
+      {
+        "line": 22,
+        "source": "const [newUser, setNewUser] = useState({"
+      },
+      {
+        "line": 180,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 216,
+        "source": "onClick={() => setShowAddUserModal(true)}"
+      },
+      {
+        "line": 321,
+        "source": "placeholder=\"Tìm tên, email hoặc mã...\""
+      },
+      {
+        "line": 324,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 328,
+        "source": "onClick={() => setSearchQuery('')}"
+      },
+      {
+        "line": 345,
+        "source": "onChange={(e) => setTierFilter(e.target.value)}"
+      },
+      {
+        "line": 347,
+        "source": "<option value=\"\">Phân loại: Tất cả</option>"
+      },
+      {
+        "line": 348,
+        "source": "<option value=\"diamond\">Khách Doanh Nghiệp</option>"
+      },
+      {
+        "line": 349,
+        "source": "<option value=\"gold\">Khách đặt tiệc</option>"
+      },
+      {
+        "line": 350,
+        "source": "<option value=\"silver\">Khách Cá Nhân</option>"
+      },
+      {
+        "line": 351,
+        "source": "<option value=\"standard\">Khách Hàng Mới</option>"
+      },
+      {
+        "line": 363,
+        "source": "onChange={(e) => setStatusFilter(e.target.value)}"
+      },
+      {
+        "line": 365,
+        "source": "<option value=\"\">Trạng thái: Tất cả</option>"
+      },
+      {
+        "line": 366,
+        "source": "<option value=\"active\">Hoạt động</option>"
+      },
+      {
+        "line": 367,
+        "source": "<option value=\"suspended\">Tạm khóa</option>"
+      },
+      {
+        "line": 379,
+        "source": "onChange={(e) => setSpendingFilter(e.target.value)}"
+      },
+      {
+        "line": 381,
+        "source": "<option value=\"\">Chi tiêu: Tất cả</option>"
+      },
+      {
+        "line": 382,
+        "source": "<option value=\"under1\">Dưới 1.000.000đ</option>"
+      },
+      {
+        "line": 383,
+        "source": "<option value=\"1to5\">1.000.000đ - 5.000.000đ</option>"
+      },
+      {
+        "line": 384,
+        "source": "<option value=\"5to20\">5.000.000đ - 20.000.000đ</option>"
+      },
+      {
+        "line": 385,
+        "source": "<option value=\"over20\">Trên 20.000.000đ</option>"
+      },
+      {
+        "line": 397,
+        "source": "onChange={(e) => setSortBy(e.target.value)}"
+      },
+      {
+        "line": 399,
+        "source": "<option value=\"recent\">Sắp xếp: Mới nhất</option>"
+      },
+      {
+        "line": 400,
+        "source": "<option value=\"gmv-high\">Chi tiêu cao nhất</option>"
+      },
+      {
+        "line": 401,
+        "source": "<option value=\"order-recent\">Đặt đơn gần nhất</option>"
+      },
+      {
+        "line": 402,
+        "source": "<option value=\"trust-high\">Độ uy tín cao nhất</option>"
+      },
+      {
+        "line": 414,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 460,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 613,
+        "source": "onClick={() => setSelectedUser(user)}"
+      },
+      {
+        "line": 624,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 666,
+        "source": "<option value=\"10\">10 / trang</option>"
+      },
+      {
+        "line": 667,
+        "source": "<option value=\"25\">25 / trang</option>"
+      },
+      {
+        "line": 668,
+        "source": "<option value=\"50\">50 / trang</option>"
+      },
+      {
+        "line": 752,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 765,
+        "source": "onClick={() => setSelectedUser(null)}"
+      },
+      {
+        "line": 836,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 853,
+        "source": "onClick={() => setSelectedUser(null)}"
+      },
+      {
+        "line": 879,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 885,
+        "source": "onClick={() => setShowAddUserModal(false)}"
+      },
+      {
+        "line": 892,
+        "source": "<form onSubmit={handleAddUserSubmit} className=\"p-6 space-y-4\">"
+      },
+      {
+        "line": 894,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 900,
+        "source": "placeholder=\"Ví dụ: Nguyễn Phương Linh\""
+      },
+      {
+        "line": 902,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 911,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 917,
+        "source": "placeholder=\"linh.nguyen@gmail.com\""
+      },
+      {
+        "line": 919,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 926,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 931,
+        "source": "placeholder=\"0908 123 456\""
+      },
+      {
+        "line": 933,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 942,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 947,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 952,
+        "source": "<option value=\"Quận 1, TP.HCM\">Quận 1, TP.HCM</option>"
+      },
+      {
+        "line": 953,
+        "source": "<option value=\"Quận 3, TP.HCM\">Quận 3, TP.HCM</option>"
+      },
+      {
+        "line": 954,
+        "source": "<option value=\"Quận 7, TP.HCM\">Quận 7, TP.HCM</option>"
+      },
+      {
+        "line": 955,
+        "source": "<option value=\"Thủ Đức, TP.HCM\">Thủ Đức, TP.HCM</option>"
+      },
+      {
+        "line": 956,
+        "source": "<option value=\"Tây Hồ, Hà Nội\">Tây Hồ, Hà Nội</option>"
+      },
+      {
+        "line": 957,
+        "source": "<option value=\"Hoàn Kiếm, Hà Nội\">Hoàn Kiếm, Hà Nội</option>"
+      },
+      {
+        "line": 964,
+        "source": "onClick={() => setShowAddUserModal(false)}"
+      },
+      {
+        "line": 994,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 999,
+        "source": "onClick={() => setShowAdvancedFilterModal(false)}"
+      },
+      {
+        "line": 1008,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1028,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1032,
+        "source": "<option value=\"any\">Bất kỳ số lượng đơn</option>"
+      },
+      {
+        "line": 1033,
+        "source": "<option value=\"1\">Ít nhất 1 đơn</option>"
+      },
+      {
+        "line": 1034,
+        "source": "<option value=\"5\">Từ 5 đơn trở lên</option>"
+      },
+      {
+        "line": 1035,
+        "source": "<option value=\"10\">Từ 10 đơn trở lên</option>"
+      },
+      {
+        "line": 1040,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1044,
+        "source": "<label className=\"flex items-center gap-2 p-2 bg-surface-container rounded-lg cursor-pointer\">"
+      },
+      {
+        "line": 1048,
+        "source": "<label className=\"flex items-center gap-2 p-2 bg-surface-container rounded-lg cursor-pointer\">"
+      },
+      {
+        "line": 1052,
+        "source": "<label className=\"flex items-center gap-2 p-2 bg-surface-container rounded-lg cursor-pointer\">"
+      },
+      {
+        "line": 1056,
+        "source": "<label className=\"flex items-center gap-2 p-2 bg-surface-container rounded-lg cursor-pointer\">"
+      },
+      {
+        "line": 1066,
+        "source": "onClick={() => setShowAdvancedFilterModal(false)}"
+      },
+      {
+        "line": 1073,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/admin/users/index.js",
+    "lines": 2,
+    "sha256": "021d13a4284621203f4f09466fe0b995c1b975accb28a9721296cd4e96246a7c",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/admin/vendors/AdminVendorsPage.jsx",
+    "lines": 1295,
+    "sha256": "aa6e42eaa32a7576a8786a2a46fb6e4ea03f836d5e41e8f15e351c71ea9cb381",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [vendors, setVendors] = useState(INITIAL_VENDORS)"
+      },
+      {
+        "line": 9,
+        "source": "const [activeTab, setActiveTab] = useState('all') // 'all' | 'active' | 'pending' | 'needs_info' | 'suspended'"
+      },
+      {
+        "line": 10,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [regionFilter, setRegionFilter] = useState('')"
+      },
+      {
+        "line": 12,
+        "source": "const [specialtyFilter, setSpecialtyFilter] = useState('')"
+      },
+      {
+        "line": 15,
+        "source": "const [isDrawerOpen, setIsDrawerOpen] = useState(false)"
+      },
+      {
+        "line": 16,
+        "source": "const [selectedVendorForDrawer, setSelectedVendorForDrawer] = useState(null)"
+      },
+      {
+        "line": 19,
+        "source": "const [selectedVendorForFee, setSelectedVendorForFee] = useState(null)"
+      },
+      {
+        "line": 20,
+        "source": "const [newFeeRate, setNewFeeRate] = useState('5.0%')"
+      },
+      {
+        "line": 23,
+        "source": "const [showInviteModal, setShowInviteModal] = useState(false)"
+      },
+      {
+        "line": 24,
+        "source": "const [inviteData, setInviteData] = useState({"
+      },
+      {
+        "line": 34,
+        "source": "const [toastMessage, setToastMessage] = useState(null)"
+      },
+      {
+        "line": 198,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 234,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 246,
+        "source": "onClick={() => setShowInviteModal(true)}"
+      },
+      {
+        "line": 365,
+        "source": "onClick={() => setActiveTab('all')}"
+      },
+      {
+        "line": 375,
+        "source": "onClick={() => setActiveTab('active')}"
+      },
+      {
+        "line": 385,
+        "source": "onClick={() => setActiveTab('pending')}"
+      },
+      {
+        "line": 398,
+        "source": "onClick={() => setActiveTab('needs_info')}"
+      },
+      {
+        "line": 411,
+        "source": "onClick={() => setActiveTab('suspended')}"
+      },
+      {
+        "line": 430,
+        "source": "placeholder=\"Tìm tên tiệm, bếp trưởng, mã, SĐT...\""
+      },
+      {
+        "line": 433,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 437,
+        "source": "onClick={() => setSearchQuery('')}"
+      },
+      {
+        "line": 452,
+        "source": "onChange={(e) => setRegionFilter(e.target.value)}"
+      },
+      {
+        "line": 454,
+        "source": "<option value=\"\">Tất cả khu vực</option>"
+      },
+      {
+        "line": 455,
+        "source": "<option value=\"q1\">Quận 1, TP.HCM</option>"
+      },
+      {
+        "line": 456,
+        "source": "<option value=\"q2\">Quận 2 Thảo Điền, TP.HCM</option>"
+      },
+      {
+        "line": 457,
+        "source": "<option value=\"q3\">Quận 3, TP.HCM</option>"
+      },
+      {
+        "line": 458,
+        "source": "<option value=\"bt\">Bình Thạnh, TP.HCM</option>"
+      },
+      {
+        "line": 459,
+        "source": "<option value=\"q7\">Quận 7 Phú Mỹ Hưng, TP.HCM</option>"
+      },
+      {
+        "line": 468,
+        "source": "onChange={(e) => setSpecialtyFilter(e.target.value)}"
+      },
+      {
+        "line": 470,
+        "source": "<option value=\"\">Tất cả chuyên môn</option>"
+      },
+      {
+        "line": 471,
+        "source": "<option value=\"couture\">Bánh Cưới Haute Couture</option>"
+      },
+      {
+        "line": 472,
+        "source": "<option value=\"ai-3d\">Bánh Kem AI 3D & Fondant</option>"
+      },
+      {
+        "line": 473,
+        "source": "<option value=\"french\">Mousse & Bánh Lạnh Pháp</option>"
+      },
+      {
+        "line": 474,
+        "source": "<option value=\"korean\">Bento Studio Hàn Quốc</option>"
+      },
+      {
+        "line": 475,
+        "source": "<option value=\"macaron\">Tháp Macaron & Tiệc Sự Kiện</option>"
+      },
+      {
+        "line": 485,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 533,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 714,
+        "source": "onClick={() => handleApproveVendor(vendor.id)}"
+      },
+      {
+        "line": 723,
+        "source": "onClick={() => handleOpenDrawer(vendor)}"
+      },
+      {
+        "line": 737,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 745,
+        "source": "onClick={() => handleOpenDrawer(vendor)}"
+      },
+      {
+        "line": 757,
+        "source": "onClick={() => handleOpenDrawer(vendor)}"
+      },
+      {
+        "line": 769,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 789,
+        "source": "onClick={() => handleToggleLock(vendor.id)}"
+      },
+      {
+        "line": 878,
+        "source": "onClick={handleCloseDrawer}"
+      },
+      {
+        "line": 894,
+        "source": "<h2 className=\"font-headline-md text-admin-heading text-primary font-serif font-bold\">"
+      },
+      {
+        "line": 904,
+        "source": "onClick={handleCloseDrawer}"
+      },
+      {
+        "line": 918,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading text-primary font-bold font-serif\">"
+      },
+      {
+        "line": 957,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading text-primary font-bold font-serif\">"
+      },
+      {
+        "line": 1046,
+        "source": "onClick={handleCloseDrawer}"
+      },
+      {
+        "line": 1053,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1062,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1088,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 1094,
+        "source": "onClick={() => setShowInviteModal(false)}"
+      },
+      {
+        "line": 1101,
+        "source": "<form onSubmit={handleInviteSubmit} className=\"p-6 space-y-4 text-admin-body\">"
+      },
+      {
+        "line": 1103,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 1109,
+        "source": "placeholder=\"Ví dụ: Maison Des Fleurs Pâtisserie\""
+      },
+      {
+        "line": 1111,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 1120,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 1125,
+        "source": "placeholder=\"Chef Pierre / Minh\""
+      },
+      {
+        "line": 1127,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 1134,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 1140,
+        "source": "placeholder=\"0912 345 678\""
+      },
+      {
+        "line": 1142,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 1152,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 1157,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 1165,
+        "source": "<option value=\"Bánh Cưới Haute Couture\">"
+      },
+      {
+        "line": 1168,
+        "source": "<option value=\"AI Custom 3D & Fondant\">"
+      },
+      {
+        "line": 1171,
+        "source": "<option value=\"Mousse & Bánh Lạnh Pháp\">"
+      },
+      {
+        "line": 1174,
+        "source": "<option value=\"Bento Studio Hàn Quốc\">"
+      },
+      {
+        "line": 1177,
+        "source": "<option value=\"Tháp Macaron & Tiệc Sự Kiện\">"
+      },
+      {
+        "line": 1183,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1 uppercase tracking-wider\">"
+      },
+      {
+        "line": 1188,
+        "source": "placeholder=\"Quận 1, TP.HCM\""
+      },
+      {
+        "line": 1190,
+        "source": "onChange={(e) =>"
+      },
+      {
+        "line": 1204,
+        "source": "onClick={() => setShowInviteModal(false)}"
+      },
+      {
+        "line": 1232,
+        "source": "<h3 className=\"font-headline-sm text-admin-heading font-bold font-serif\">"
+      },
+      {
+        "line": 1237,
+        "source": "onClick={() => setSelectedVendorForFee(null)}"
+      },
+      {
+        "line": 1244,
+        "source": "<form onSubmit={handleSaveFeeRate} className=\"p-5 space-y-4 text-admin-body\">"
+      },
+      {
+        "line": 1255,
+        "source": "<label className=\"block text-admin-body font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1260,
+        "source": "onChange={(e) => setNewFeeRate(e.target.value)}"
+      },
+      {
+        "line": 1263,
+        "source": "<option value=\"3.5%\">3.5% (Ưu đãi Đối tác Chiến lược)</option>"
+      },
+      {
+        "line": 1264,
+        "source": "<option value=\"5.0%\">5.0% (Mặc định Tiêu chuẩn Toàn sàn)</option>"
+      },
+      {
+        "line": 1265,
+        "source": "<option value=\"6.5%\">6.5% (Gói Hỗ trợ Marketing Cao Cấp)</option>"
+      },
+      {
+        "line": 1266,
+        "source": "<option value=\"8.0%\">8.0% (Bao trọn Giao hàng Xe lạnh)</option>"
+      },
+      {
+        "line": 1277,
+        "source": "onClick={() => setSelectedVendorForFee(null)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/admin/vendors/index.js",
+    "lines": 2,
+    "sha256": "716cf3bc3b657f2080d9a39fff1bdf18996ff5ad24443194c044efcb1bacbb57",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/auth/AuthPage.jsx",
+    "lines": 302,
+    "sha256": "92fcc91502fe6bf6da7334d80caae59a068b5695a40c1db89ac5e10e6eee474d",
+    "controls": [
+      {
+        "line": 4,
+        "source": "const [authTab, setAuthTab] = useState('login')"
+      },
+      {
+        "line": 5,
+        "source": "const [showLoginPassword, setShowLoginPassword] = useState(false)"
+      },
+      {
+        "line": 6,
+        "source": "const [showRegPassword, setShowRegPassword] = useState(false)"
+      },
+      {
+        "line": 9,
+        "source": "const [loginPhone, setLoginPhone] = useState('')"
+      },
+      {
+        "line": 10,
+        "source": "const [loginPassword, setLoginPassword] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [rememberMe, setRememberMe] = useState(true)"
+      },
+      {
+        "line": 14,
+        "source": "const [regLastName, setRegLastName] = useState('')"
+      },
+      {
+        "line": 15,
+        "source": "const [regFirstName, setRegFirstName] = useState('')"
+      },
+      {
+        "line": 16,
+        "source": "const [regPhone, setRegPhone] = useState('')"
+      },
+      {
+        "line": 17,
+        "source": "const [regPassword, setRegPassword] = useState('')"
+      },
+      {
+        "line": 18,
+        "source": "const [regBirthday, setRegBirthday] = useState('')"
+      },
+      {
+        "line": 19,
+        "source": "const [agreeTerms, setAgreeTerms] = useState(true)"
+      },
+      {
+        "line": 83,
+        "source": "onClick={() => setAuthTab('login')}"
+      },
+      {
+        "line": 96,
+        "source": "onClick={() => setAuthTab('register')}"
+      },
+      {
+        "line": 108,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 114,
+        "source": "<form className=\"space-y-4\" onSubmit={handleLoginSubmit}>"
+      },
+      {
+        "line": 117,
+        "source": "<label className=\"block font-label-lg text-label-lg text-on-surface font-medium\">"
+      },
+      {
+        "line": 126,
+        "source": "placeholder=\"VD: 0912 345 678\""
+      },
+      {
+        "line": 130,
+        "source": "onChange={(e) => setLoginPhone(e.target.value)}"
+      },
+      {
+        "line": 138,
+        "source": "<label className=\"block font-label-lg text-label-lg text-on-surface font-medium\">"
+      },
+      {
+        "line": 144,
+        "source": "onClick={() => alert('Vui lòng liên hệ quản trị viên hoặc sử dụng số điện thoại để khôi phục mật khẩu!')}"
+      },
+      {
+        "line": 156,
+        "source": "placeholder=\"••••••••••••\""
+      },
+      {
+        "line": 160,
+        "source": "onChange={(e) => setLoginPassword(e.target.value)}"
+      },
+      {
+        "line": 164,
+        "source": "onClick={() => setShowLoginPassword((prev) => !prev)}"
+      },
+      {
+        "line": 192,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary pt-1\">"
+      },
+      {
+        "line": 197,
+        "source": "<form className=\"space-y-3.5\" onSubmit={handleRegisterSubmit}>"
+      },
+      {
+        "line": 200,
+        "source": "<label className=\"block font-label-md text-label-md text-on-surface font-medium\">"
+      },
+      {
+        "line": 205,
+        "source": "placeholder=\"Nguyễn Hoàng\""
+      },
+      {
+        "line": 208,
+        "source": "onChange={(e) => setRegLastName(e.target.value)}"
+      },
+      {
+        "line": 212,
+        "source": "<label className=\"block font-label-md text-label-md text-on-surface font-medium\">"
+      },
+      {
+        "line": 217,
+        "source": "placeholder=\"Thanh Mai\""
+      },
+      {
+        "line": 221,
+        "source": "onChange={(e) => setRegFirstName(e.target.value)}"
+      },
+      {
+        "line": 227,
+        "source": "<label className=\"block font-label-md text-label-md text-on-surface font-medium\">"
+      },
+      {
+        "line": 236,
+        "source": "placeholder=\"0901 234 567\""
+      },
+      {
+        "line": 240,
+        "source": "onChange={(e) => setRegPhone(e.target.value)}"
+      },
+      {
+        "line": 247,
+        "source": "<label className=\"block font-label-md text-label-md text-on-surface font-medium\">"
+      },
+      {
+        "line": 261,
+        "source": "placeholder=\"Tạo mật khẩu an toàn (từ 6 ký tự)\""
+      },
+      {
+        "line": 266,
+        "source": "onChange={(e) => setRegPassword(e.target.value)}"
+      },
+      {
+        "line": 270,
+        "source": "onClick={() => setShowRegPassword((prev) => !prev)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/ai-studio/AiCakeStudioPage.jsx",
+    "lines": 1143,
+    "sha256": "2f013fa1d09cc7a8a4cd45388171a027f1cd5545eb1fa462d5541e8254b6d5d8",
+    "controls": [
+      {
+        "line": 22,
+        "source": "const [designMode, setDesignMode] = useState('ai')"
+      },
+      {
+        "line": 25,
+        "source": "const [promptInput, setPromptInput] = useState("
+      },
+      {
+        "line": 28,
+        "source": "const [isGenerating, setIsGenerating] = useState(false)"
+      },
+      {
+        "line": 29,
+        "source": "const [activeImageIndex, setActiveImageIndex] = useState(0)"
+      },
+      {
+        "line": 32,
+        "source": "const [uploadedImages, setUploadedImages] = useState(["
+      },
+      {
+        "line": 43,
+        "source": "const [selectedSizeId, setSelectedSizeId] = useState('2tier')"
+      },
+      {
+        "line": 44,
+        "source": "const [selectedFlavors, setSelectedFlavors] = useState(['vanilla', 'strawberry'])"
+      },
+      {
+        "line": 45,
+        "source": "const [selectedToppings, setSelectedToppings] = useState(["
+      },
+      {
+        "line": 49,
+        "source": "const [cakeMessage, setCakeMessage] = useState('Happy 7th Birthday Minh Khang!')"
+      },
+      {
+        "line": 50,
+        "source": "const [messagePlacement, setMessagePlacement] = useState('cake') // 'cake' | 'wood_plaque' | 'choco_plaque' | 'card'"
+      },
+      {
+        "line": 51,
+        "source": "const [checkedAccessories, setCheckedAccessories] = useState({"
+      },
+      {
+        "line": 61,
+        "source": "const [budget, setBudget] = useState(1000000)"
+      },
+      {
+        "line": 62,
+        "source": "const [budgetInputText, setBudgetInputText] = useState('1.000.000')"
+      },
+      {
+        "line": 63,
+        "source": "const [allowFlexiblePrice, setAllowFlexiblePrice] = useState(true)"
+      },
+      {
+        "line": 64,
+        "source": "const [deliveryDateRaw, setDeliveryDateRaw] = useState('2026-09-20')"
+      },
+      {
+        "line": 65,
+        "source": "const [deliveryDate, setDeliveryDate] = useState('Hôm nay, 20/09/2026')"
+      },
+      {
+        "line": 66,
+        "source": "const [deliveryTimeSlot, setDeliveryTimeSlot] = useState("
+      },
+      {
+        "line": 69,
+        "source": "const [isCustomTimeSlot, setIsCustomTimeSlot] = useState(false)"
+      },
+      {
+        "line": 70,
+        "source": "const [customTimeInput, setCustomTimeInput] = useState('')"
+      },
+      {
+        "line": 71,
+        "source": "const [deliveryAddress, setDeliveryAddress] = useState("
+      },
+      {
+        "line": 74,
+        "source": "const [customerNote, setCustomerNote] = useState(() => {"
+      },
+      {
+        "line": 84,
+        "source": "const [isSubmitted, setIsSubmitted] = useState(false)"
+      },
+      {
+        "line": 258,
+        "source": "<h1 className=\"font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary font-bold tracking-normal leading-tight flex items-center gap-2.5\">"
+      },
+      {
+        "line": 271,
+        "source": "onClick={() => setDesignMode('ai')}"
+      },
+      {
+        "line": 285,
+        "source": "onClick={() => setDesignMode('upload')}"
+      },
+      {
+        "line": 306,
+        "source": "<label"
+      },
+      {
+        "line": 326,
+        "source": "onChange={(e) => setPromptInput(e.target.value)}"
+      },
+      {
+        "line": 340,
+        "source": "onClick={() => setPromptInput(item.text)}"
+      },
+      {
+        "line": 354,
+        "source": "disabled={isGenerating}"
+      },
+      {
+        "line": 355,
+        "source": "onClick={handleReGenerate}"
+      },
+      {
+        "line": 384,
+        "source": "<label className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 396,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 458,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 470,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 491,
+        "source": "<h2 className=\"font-headline-sm text-[20px] text-primary font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 521,
+        "source": "onClick={() => setSelectedSizeId(s.id)}"
+      },
+      {
+        "line": 569,
+        "source": "onClick={() => toggleFlavor(flavor.id)}"
+      },
+      {
+        "line": 627,
+        "source": "onClick={() => toggleTopping(topping)}"
+      },
+      {
+        "line": 646,
+        "source": "<label"
+      },
+      {
+        "line": 674,
+        "source": "onClick={() => setMessagePlacement(opt.id)}"
+      },
+      {
+        "line": 689,
+        "source": "onChange={(e) => setCakeMessage(e.target.value)}"
+      },
+      {
+        "line": 709,
+        "source": "<label"
+      },
+      {
+        "line": 717,
+        "source": "onChange={() => toggleAccessory(item.id)}"
+      },
+      {
+        "line": 776,
+        "source": "onClick={handleReGenerate}"
+      },
+      {
+        "line": 791,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 815,
+        "source": "<h2 className=\"font-headline-sm text-[18px] sm:text-[20px] text-primary font-bold\">"
+      },
+      {
+        "line": 839,
+        "source": "<label"
+      },
+      {
+        "line": 847,
+        "source": "onClick={handleSyncEstimatedBudget}"
+      },
+      {
+        "line": 864,
+        "source": "onChange={handleBudgetChange}"
+      },
+      {
+        "line": 889,
+        "source": "onClick={() => handleSelectPreset(preset)}"
+      },
+      {
+        "line": 906,
+        "source": "<label"
+      },
+      {
+        "line": 925,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 954,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 975,
+        "source": "<label"
+      },
+      {
+        "line": 986,
+        "source": "onClick={() => setIsCustomTimeSlot(!isCustomTimeSlot)}"
+      },
+      {
+        "line": 999,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1007,
+        "source": "<option value=\"15:30 - 16:30\">15:30 - 16:30</option>"
+      },
+      {
+        "line": 1008,
+        "source": "<option value=\"09:00 - 11:00 (Buổi sáng)\">09:00 - 11:00 (Buổi sáng)</option>"
+      },
+      {
+        "line": 1009,
+        "source": "<option value=\"11:00 - 13:00 (Buổi trưa)\">11:00 - 13:00 (Buổi trưa)</option>"
+      },
+      {
+        "line": 1010,
+        "source": "<option value=\"14:00 - 16:00 (Trước giờ tiệc)\">14:00 - 16:00 (Trước giờ tiệc)</option>"
+      },
+      {
+        "line": 1011,
+        "source": "<option value=\"17:00 - 19:00 (Tiệc tối)\">17:00 - 19:00 (Tiệc tối)</option>"
+      },
+      {
+        "line": 1012,
+        "source": "<option value=\"custom\">✏️ Tự nhập khung giờ khác...</option>"
+      },
+      {
+        "line": 1027,
+        "source": "placeholder=\"Ví dụ: 16:15 - 17:00 hoặc Đúng 18:30...\""
+      },
+      {
+        "line": 1030,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1041,
+        "source": "onClick={() => setIsCustomTimeSlot(false)}"
+      },
+      {
+        "line": 1053,
+        "source": "<label"
+      },
+      {
+        "line": 1063,
+        "source": "placeholder=\"Số nhà, tên đường, phường/xã, quận/huyện...\""
+      },
+      {
+        "line": 1066,
+        "source": "onChange={(e) => setDeliveryAddress(e.target.value)}"
+      },
+      {
+        "line": 1077,
+        "source": "<label"
+      },
+      {
+        "line": 1091,
+        "source": "placeholder=\"Ví dụ: Giảm ngọt 30%, bé dị ứng đậu phộng, tạo hình Pikachu thật tươi vui kèm nến số 7...\""
+      },
+      {
+        "line": 1094,
+        "source": "onChange={(e) => setCustomerNote(e.target.value)}"
+      },
+      {
+        "line": 1111,
+        "source": "disabled={isSubmitted}"
+      },
+      {
+        "line": 1112,
+        "source": "onClick={handleSubmitRfq}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/ai-studio/index.js",
+    "lines": 2,
+    "sha256": "34cc118850abbe5bcecbc55bb35ed6c10f39d5cf3d913507a213c4a51071d4cd",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/bidding/BakerQuoteDetailPage.jsx",
+    "lines": 920,
+    "sha256": "53b01a0d658ba0bf37cb902a98d49230009f69b6aace454d045be426e9e0db28",
+    "controls": [
+      {
+        "line": 5,
+        "source": "const [isEscrowModalOpen, setIsEscrowModalOpen] = useState(false)"
+      },
+      {
+        "line": 6,
+        "source": "const [isProcessingEscrow, setIsProcessingEscrow] = useState(false)"
+      },
+      {
+        "line": 7,
+        "source": "const [escrowSuccess, setEscrowSuccess] = useState(false)"
+      },
+      {
+        "line": 9,
+        "source": "const [isChatOpen, setIsChatOpen] = useState(false)"
+      },
+      {
+        "line": 10,
+        "source": "const [chatMessage, setChatMessage] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [chatMessages, setChatMessages] = useState(["
+      },
+      {
+        "line": 19,
+        "source": "const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false)"
+      },
+      {
+        "line": 20,
+        "source": "const [adjustNote, setAdjustNote] = useState('')"
+      },
+      {
+        "line": 21,
+        "source": "const [adjustSuccess, setAdjustSuccess] = useState(false)"
+      },
+      {
+        "line": 22,
+        "source": "const [copiedShare, setCopiedShare] = useState(false)"
+      },
+      {
+        "line": 106,
+        "source": "onClick={() => onNavigate && onNavigate('bidding')}"
+      },
+      {
+        "line": 145,
+        "source": "<h1 className=\"font-headline-md text-headline-md text-primary tracking-tight\">"
+      },
+      {
+        "line": 181,
+        "source": "onClick={() => setIsChatOpen(true)}"
+      },
+      {
+        "line": 205,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 324,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 338,
+        "source": "<h3 className=\"font-label-lg text-label-lg text-primary font-bold\">"
+      },
+      {
+        "line": 359,
+        "source": "<h3 className=\"font-label-lg text-label-lg text-primary font-bold\">"
+      },
+      {
+        "line": 380,
+        "source": "<h3 className=\"font-label-lg text-label-lg text-primary font-bold\">"
+      },
+      {
+        "line": 401,
+        "source": "<h3 className=\"font-label-lg text-label-lg text-primary font-bold\">"
+      },
+      {
+        "line": 422,
+        "source": "<h3 className=\"font-label-lg text-label-lg text-primary font-bold\">"
+      },
+      {
+        "line": 633,
+        "source": "onClick={() => setIsEscrowModalOpen(true)}"
+      },
+      {
+        "line": 647,
+        "source": "onClick={() => setIsChatOpen(true)}"
+      },
+      {
+        "line": 657,
+        "source": "onClick={() => setIsAdjustModalOpen(true)}"
+      },
+      {
+        "line": 681,
+        "source": "onClick={() => setIsEscrowModalOpen(false)}"
+      },
+      {
+        "line": 692,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-primary font-semibold\">"
+      },
+      {
+        "line": 739,
+        "source": "onClick={() => setIsEscrowModalOpen(false)}"
+      },
+      {
+        "line": 746,
+        "source": "disabled={isProcessingEscrow}"
+      },
+      {
+        "line": 747,
+        "source": "onClick={handleProceedEscrow}"
+      },
+      {
+        "line": 794,
+        "source": "onClick={() => setIsChatOpen(false)}"
+      },
+      {
+        "line": 835,
+        "source": "onSubmit={handleSendChat}"
+      },
+      {
+        "line": 839,
+        "source": "onChange={(e) => setChatMessage(e.target.value)}"
+      },
+      {
+        "line": 840,
+        "source": "placeholder=\"Nhắn tin với Chef Minh Vũ...\""
+      },
+      {
+        "line": 861,
+        "source": "onClick={() => setIsAdjustModalOpen(false)}"
+      },
+      {
+        "line": 871,
+        "source": "<h3 className=\"font-headline-sm text-primary text-xl sm:text-2xl font-bold mt-1.5 leading-snug\">"
+      },
+      {
+        "line": 879,
+        "source": "<form className=\"space-y-4\" onSubmit={handleSendAdjustRequest}>"
+      },
+      {
+        "line": 882,
+        "source": "onChange={(e) => setAdjustNote(e.target.value)}"
+      },
+      {
+        "line": 883,
+        "source": "placeholder=\"Ví dụ: Giảm bớt kích thước xuống 1 tầng để hạ ngân sách, hoặc đổi vị sang matcha socola...\""
+      },
+      {
+        "line": 899,
+        "source": "onClick={() => setIsAdjustModalOpen(false)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/bidding/BiddingComparisonPage.jsx",
+    "lines": 1441,
+    "sha256": "1f5476d42a7ff8c6cd78d661e9ca9e3b5a6d8ad52929aa41ac77a4fe3bb46ea8",
+    "controls": [
+      {
+        "line": 28,
+        "source": "const [rfqData, setRfqData] = useState(() => {"
+      },
+      {
+        "line": 54,
+        "source": "const [currentStatus, setCurrentStatus] = useState('QUOTED')"
+      },
+      {
+        "line": 55,
+        "source": "const [acceptedBid, setAcceptedBid] = useState(null)"
+      },
+      {
+        "line": 56,
+        "source": "const [declinedBidIds, setDeclinedBidIds] = useState([])"
+      },
+      {
+        "line": 57,
+        "source": "const [orderCode, setOrderCode] = useState(null)"
+      },
+      {
+        "line": 58,
+        "source": "const [noticeMessage, setNoticeMessage] = useState(null)"
+      },
+      {
+        "line": 59,
+        "source": "const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)"
+      },
+      {
+        "line": 60,
+        "source": "const [cancelReason, setCancelReason] = useState('Đã tìm được phương án khác')"
+      },
+      {
+        "line": 63,
+        "source": "const [activeFilter, setActiveFilter] = useState('all') // 'all' | 'lowest' | 'fastest'"
+      },
+      {
+        "line": 64,
+        "source": "const [chattingWith, setChattingWith] = useState(null)"
+      },
+      {
+        "line": 65,
+        "source": "const [chatMessage, setChatMessage] = useState('')"
+      },
+      {
+        "line": 66,
+        "source": "const [chatHistory, setChatHistory] = useState([])"
+      },
+      {
+        "line": 69,
+        "source": "const [countdownSeconds, setCountdownSeconds] = useState("
+      },
+      {
+        "line": 404,
+        "source": "<h1 className=\"font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary mt-1 font-bold tracking-normal\">"
+      },
+      {
+        "line": 441,
+        "source": "onClick={handleResetFlow}"
+      },
+      {
+        "line": 453,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 472,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 490,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 509,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 604,
+        "source": "onClick={() => onNavigate && onNavigate('tracking')}"
+      },
+      {
+        "line": 614,
+        "source": "onClick={handleVendorConfirm}"
+      },
+      {
+        "line": 624,
+        "source": "onClick={handleVendorDecline}"
+      },
+      {
+        "line": 639,
+        "source": "onClick={handlePayment}"
+      },
+      {
+        "line": 649,
+        "source": "onClick={() => onNavigate && onNavigate('tracking')}"
+      },
+      {
+        "line": 664,
+        "source": "onClick={() => onNavigate && onNavigate('tracking')}"
+      },
+      {
+        "line": 674,
+        "source": "onClick={() => setCurrentStatus('BAKING')}"
+      },
+      {
+        "line": 681,
+        "source": "onClick={() => setCurrentStatus('DELIVERING')}"
+      },
+      {
+        "line": 688,
+        "source": "onClick={handleCompleteOrder}"
+      },
+      {
+        "line": 697,
+        "source": "onClick={() => onNavigate && onNavigate('profile')}"
+      },
+      {
+        "line": 711,
+        "source": "onClick={handleExtendRfq}"
+      },
+      {
+        "line": 719,
+        "source": "onClick={() => setIsCancelModalOpen(true)}"
+      },
+      {
+        "line": 732,
+        "source": "onClick={handleReopenRfq}"
+      },
+      {
+        "line": 745,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      },
+      {
+        "line": 753,
+        "source": "onClick={handleReopenRfq}"
+      },
+      {
+        "line": 836,
+        "source": "<h2 className=\"font-headline-md text-xl sm:text-2xl text-primary font-bold leading-snug mb-3.5\">"
+      },
+      {
+        "line": 940,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 955,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 972,
+        "source": "onClick={() => setIsCancelModalOpen(true)}"
+      },
+      {
+        "line": 999,
+        "source": "<h2 className=\"font-headline-lg text-2xl sm:text-3xl text-primary font-bold leading-tight\">"
+      },
+      {
+        "line": 1011,
+        "source": "onClick={() => setActiveFilter('all')}"
+      },
+      {
+        "line": 1021,
+        "source": "onClick={() => setActiveFilter('lowest')}"
+      },
+      {
+        "line": 1031,
+        "source": "onClick={() => setActiveFilter('fastest')}"
+      },
+      {
+        "line": 1046,
+        "source": "<h3 className=\"font-headline-sm text-lg font-bold text-primary mb-1\">"
+      },
+      {
+        "line": 1100,
+        "source": "<h3 className=\"font-headline-sm text-[20px] text-primary leading-snug flex items-center gap-1.5\">"
+      },
+      {
+        "line": 1215,
+        "source": "onClick={handleVendorConfirm}"
+      },
+      {
+        "line": 1226,
+        "source": "onClick={handleVendorDecline}"
+      },
+      {
+        "line": 1240,
+        "source": "onClick={handlePayment}"
+      },
+      {
+        "line": 1253,
+        "source": "onClick={() => handleAcceptBid(bid)}"
+      },
+      {
+        "line": 1268,
+        "source": "onClick={() => onNavigate && onNavigate('baker-quote')}"
+      },
+      {
+        "line": 1278,
+        "source": "onClick={() => handleOpenChat(bid)}"
+      },
+      {
+        "line": 1320,
+        "source": "onClick={() => setChattingWith(null)}"
+      },
+      {
+        "line": 1360,
+        "source": "onSubmit={handleSendChatMessage}"
+      },
+      {
+        "line": 1364,
+        "source": "onChange={(e) => setChatMessage(e.target.value)}"
+      },
+      {
+        "line": 1365,
+        "source": "placeholder=\"Nhắn tin với bếp trưởng...\""
+      },
+      {
+        "line": 1389,
+        "source": "<h3 className=\"font-bold text-base text-primary\">"
+      },
+      {
+        "line": 1403,
+        "source": "<label className=\"font-label-sm text-xs text-primary font-semibold\">"
+      },
+      {
+        "line": 1409,
+        "source": "onChange={(e) => setCancelReason(e.target.value)}"
+      },
+      {
+        "line": 1411,
+        "source": "<option value=\"Đã tìm được phương án khác\">Đã tìm được phương án khác</option>"
+      },
+      {
+        "line": 1412,
+        "source": "<option value=\"Muốn thay đổi mẫu thiết kế / ngân sách\">Muốn thay đổi mẫu thiết kế / ngân sách</option>"
+      },
+      {
+        "line": 1413,
+        "source": "<option value=\"Hoãn / Hủy lịch tiệc sinh nhật\">Hoãn / Hủy lịch tiệc sinh nhật</option>"
+      },
+      {
+        "line": 1414,
+        "source": "<option value=\"Lý do khác\">Lý do khác</option>"
+      },
+      {
+        "line": 1421,
+        "source": "onClick={() => setIsCancelModalOpen(false)}"
+      },
+      {
+        "line": 1428,
+        "source": "onClick={handleConfirmCancelRfq}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/bidding/index.js",
+    "lines": 4,
+    "sha256": "f4d9cf22145acbae5ca2139b9596fd5bafc178cd6daf604bb159db714dcb8dfd",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/catalog/ExploreCakesPage.jsx",
+    "lines": 1097,
+    "sha256": "4aea27faa5fb12dd6e82649de5fb2fb948f094016f43747b270b3b96542345dc",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [searchTerm, setSearchTerm] = useState('')"
+      },
+      {
+        "line": 8,
+        "source": "const [sortOption, setSortOption] = useState('popular')"
+      },
+      {
+        "line": 9,
+        "source": "const [maxPrice, setMaxPrice] = useState(2500000)"
+      },
+      {
+        "line": 10,
+        "source": "const [deliveryTime, setDeliveryTime] = useState('all')"
+      },
+      {
+        "line": 11,
+        "source": "const [selectedThemes, setSelectedThemes] = useState([])"
+      },
+      {
+        "line": 12,
+        "source": "const [selectedOccasions, setSelectedOccasions] = useState([])"
+      },
+      {
+        "line": 13,
+        "source": "const [selectedColor, setSelectedColor] = useState('')"
+      },
+      {
+        "line": 14,
+        "source": "const [selectedDistrict, setSelectedDistrict] = useState('Tất cả quận / TP. Hồ Chí Minh')"
+      },
+      {
+        "line": 15,
+        "source": "const [wishlist, setWishlist] = useState({})"
+      },
+      {
+        "line": 16,
+        "source": "const [selectedSizes, setSelectedSizes] = useState({})"
+      },
+      {
+        "line": 17,
+        "source": "const [showMobileFilter, setShowMobileFilter] = useState(false)"
+      },
+      {
+        "line": 18,
+        "source": "const [activePage, setActivePage] = useState(1)"
+      },
+      {
+        "line": 64,
+        "source": "const [selectedCategory, setSelectedCategory] = useState(() => {"
+      },
+      {
+        "line": 268,
+        "source": "<h1 className=\"font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary mt-1 font-bold tracking-normal\">"
+      },
+      {
+        "line": 285,
+        "source": "placeholder=\"Tìm theo tên bánh, phong cách, vị kem (vd: Dâu Đà Lạt, Valrhona, Minimalist)...\""
+      },
+      {
+        "line": 288,
+        "source": "onChange={(e) => setSearchTerm(e.target.value)}"
+      },
+      {
+        "line": 310,
+        "source": "onChange={(e) => setSortOption(e.target.value)}"
+      },
+      {
+        "line": 312,
+        "source": "<option value=\"popular\">Phổ biến nhất</option>"
+      },
+      {
+        "line": 313,
+        "source": "<option value=\"price_asc\">Giá tăng dần</option>"
+      },
+      {
+        "line": 314,
+        "source": "<option value=\"price_desc\">Giá giảm dần</option>"
+      },
+      {
+        "line": 315,
+        "source": "<option value=\"rating\">Đánh giá cao nhất (5.0★)</option>"
+      },
+      {
+        "line": 316,
+        "source": "<option value=\"fastest\">Giao nhanh nhất (2 Giờ)</option>"
+      },
+      {
+        "line": 328,
+        "source": "onClick={() => setShowMobileFilter((prev) => !prev)}"
+      },
+      {
+        "line": 361,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 399,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm tracking-tight text-primary\">"
+      },
+      {
+        "line": 406,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 415,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary flex items-center justify-between\">"
+      },
+      {
+        "line": 444,
+        "source": "<label"
+      },
+      {
+        "line": 457,
+        "source": "onChange={() => {"
+      },
+      {
+        "line": 476,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary flex items-center justify-between\">"
+      },
+      {
+        "line": 483,
+        "source": "<label className=\"flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface hover:text-primary\">"
+      },
+      {
+        "line": 486,
+        "source": "onChange={() => setDeliveryTime('all')}"
+      },
+      {
+        "line": 493,
+        "source": "<label className=\"flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface hover:text-primary bg-surface p-2 rounded-lg\">"
+      },
+      {
+        "line": 497,
+        "source": "onChange={() => setDeliveryTime('fast')}"
+      },
+      {
+        "line": 508,
+        "source": "<label className=\"flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface hover:text-primary\">"
+      },
+      {
+        "line": 511,
+        "source": "onChange={() => setDeliveryTime('same_day')}"
+      },
+      {
+        "line": 518,
+        "source": "<label className=\"flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface hover:text-primary\">"
+      },
+      {
+        "line": 521,
+        "source": "onChange={() => setDeliveryTime('custom')}"
+      },
+      {
+        "line": 534,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary\">"
+      },
+      {
+        "line": 556,
+        "source": "onChange={(e) => setMaxPrice(parseInt(e.target.value, 10))}"
+      },
+      {
+        "line": 568,
+        "source": "onClick={() => setMaxPrice(300000)}"
+      },
+      {
+        "line": 576,
+        "source": "onClick={() => setMaxPrice(600000)}"
+      },
+      {
+        "line": 584,
+        "source": "onClick={() => setMaxPrice(1200000)}"
+      },
+      {
+        "line": 592,
+        "source": "onClick={() => setMaxPrice(2500000)}"
+      },
+      {
+        "line": 603,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary flex items-center justify-between\">"
+      },
+      {
+        "line": 618,
+        "source": "<label"
+      },
+      {
+        "line": 624,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 644,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary\">"
+      },
+      {
+        "line": 657,
+        "source": "<label"
+      },
+      {
+        "line": 663,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 683,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary\">"
+      },
+      {
+        "line": 702,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 734,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 756,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary\">"
+      },
+      {
+        "line": 762,
+        "source": "onChange={(e) => setSelectedDistrict(e.target.value)}"
+      },
+      {
+        "line": 764,
+        "source": "<option>Tất cả quận / TP. Hồ Chí Minh</option>"
+      },
+      {
+        "line": 765,
+        "source": "<option>Quận 1 - Bến Nghé, Bến Thành</option>"
+      },
+      {
+        "line": 766,
+        "source": "<option>Quận 2 (Thủ Đức) - Thảo Điền</option>"
+      },
+      {
+        "line": 767,
+        "source": "<option>Quận 3 - Võ Thị Sáu, Lý Chính Thắng</option>"
+      },
+      {
+        "line": 768,
+        "source": "<option>Quận 7 - Phú Mỹ Hưng, Tân Phong</option>"
+      },
+      {
+        "line": 769,
+        "source": "<option>Quận 10 - 3 Tháng 2, Tô Hiến Thành</option>"
+      },
+      {
+        "line": 770,
+        "source": "<option>Quận Bình Thạnh - Phan Xích Long</option>"
+      },
+      {
+        "line": 778,
+        "source": "onClick={() => setShowMobileFilter(false)}"
+      },
+      {
+        "line": 799,
+        "source": "onClick={() => handleRemoveChip('price')}"
+      },
+      {
+        "line": 813,
+        "source": "onClick={() => handleRemoveChip('theme', theme)}"
+      },
+      {
+        "line": 827,
+        "source": "onClick={() => handleRemoveChip('occasion', occ)}"
+      },
+      {
+        "line": 835,
+        "source": "onClick={handleResetFilters}"
+      },
+      {
+        "line": 871,
+        "source": "onClick={() => onNavigate && onNavigate('product-detail', cakeToOrder)}"
+      },
+      {
+        "line": 899,
+        "source": "<h3"
+      },
+      {
+        "line": 901,
+        "source": "onClick={() => onNavigate && onNavigate('product-detail', cakeToOrder)}"
+      },
+      {
+        "line": 917,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 954,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 972,
+        "source": "onClick={() => handleQuickBiddingOrder(cakeToOrder)}"
+      },
+      {
+        "line": 997,
+        "source": "disabled={currentPage === 1}"
+      },
+      {
+        "line": 998,
+        "source": "onClick={() => handlePageChange(Math.max(1, currentPage - 1))}"
+      },
+      {
+        "line": 1028,
+        "source": "onClick={() => handlePageChange(item)}"
+      },
+      {
+        "line": 1038,
+        "source": "disabled={currentPage === totalPages}"
+      },
+      {
+        "line": 1039,
+        "source": "onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}"
+      },
+      {
+        "line": 1062,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-on-primary mt-0.5\">"
+      },
+      {
+        "line": 1074,
+        "source": "onClick={(e) => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/catalog/index.js",
+    "lines": 4,
+    "sha256": "0739b8523a04adf55324e4629e474c538a84904429e3f29718ffe4a2c05c2d9b",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/catalog/ProductDetailPage.jsx",
+    "lines": 1229,
+    "sha256": "118b0f1271cb398d2235cbdd054dc622b9c75eed171955f4b2f05bcc3ca68b75",
+    "controls": [
+      {
+        "line": 46,
+        "source": "const [selectedImage, setSelectedImage] = useState(0)"
+      },
+      {
+        "line": 47,
+        "source": "const [selectedSizeIndex, setSelectedSizeIndex] = useState("
+      },
+      {
+        "line": 50,
+        "source": "const [sweetness, setSweetness] = useState('less30')"
+      },
+      {
+        "line": 51,
+        "source": "const [cakeMessage, setCakeMessage] = useState('')"
+      },
+      {
+        "line": 52,
+        "source": "const [addonGoldCandle, setAddonGoldCandle] = useState(false)"
+      },
+      {
+        "line": 53,
+        "source": "const [addonPartyHat, setAddonPartyHat] = useState(false)"
+      },
+      {
+        "line": 54,
+        "source": "const [deliveryType, setDeliveryType] = useState('express')"
+      },
+      {
+        "line": 55,
+        "source": "const [quantity, setQuantity] = useState(1)"
+      },
+      {
+        "line": 56,
+        "source": "const [isWishlisted, setIsWishlisted] = useState(false)"
+      },
+      {
+        "line": 57,
+        "source": "const [activeTab, setActiveTab] = useState('taste')"
+      },
+      {
+        "line": 58,
+        "source": "const [showSizeGuide, setShowSizeGuide] = useState(false)"
+      },
+      {
+        "line": 218,
+        "source": "onClick={() => setSelectedImage(idx)}"
+      },
+      {
+        "line": 247,
+        "source": "<h1 className=\"font-headline-lg text-3xl sm:text-4xl lg:text-[38px] text-primary font-bold tracking-normal\">"
+      },
+      {
+        "line": 274,
+        "source": "<label className=\"font-label-md text-primary font-semibold flex items-center gap-1.5\">"
+      },
+      {
+        "line": 282,
+        "source": "onClick={() => setShowSizeGuide(true)}"
+      },
+      {
+        "line": 303,
+        "source": "onClick={() => setSelectedSizeIndex(idx)}"
+      },
+      {
+        "line": 341,
+        "source": "<label className=\"font-label-md text-primary font-semibold flex items-center gap-1.5\">"
+      },
+      {
+        "line": 348,
+        "source": "<label"
+      },
+      {
+        "line": 357,
+        "source": "onChange={() => setSweetness('french')}"
+      },
+      {
+        "line": 373,
+        "source": "<label"
+      },
+      {
+        "line": 382,
+        "source": "onChange={() => setSweetness('less30')}"
+      },
+      {
+        "line": 401,
+        "source": "<label"
+      },
+      {
+        "line": 410,
+        "source": "onChange={() => setSweetness('less50')}"
+      },
+      {
+        "line": 431,
+        "source": "<label"
+      },
+      {
+        "line": 449,
+        "source": "placeholder=\"Ví dụ: Happy Birthday Linh Anh! 🎂\""
+      },
+      {
+        "line": 452,
+        "source": "onChange={(e) => setCakeMessage(e.target.value)}"
+      },
+      {
+        "line": 462,
+        "source": "<label className=\"font-label-md text-primary font-semibold flex items-center gap-1.5\">"
+      },
+      {
+        "line": 469,
+        "source": "<label className=\"cursor-pointer p-2.5 rounded-xl bg-surface-container-low flex items-start gap-2.5 hover:bg-surface-container transition-all\">"
+      },
+      {
+        "line": 485,
+        "source": "<label className=\"cursor-pointer p-2.5 rounded-xl bg-surface-container-low flex items-start gap-2.5 hover:bg-surface-container transition-all\">"
+      },
+      {
+        "line": 501,
+        "source": "<label className=\"cursor-pointer p-2.5 rounded-xl bg-surface-container-low flex items-start gap-2.5 hover:bg-surface-container transition-all\">"
+      },
+      {
+        "line": 504,
+        "source": "onChange={(e) => setAddonGoldCandle(e.target.checked)}"
+      },
+      {
+        "line": 518,
+        "source": "<label className=\"cursor-pointer p-2.5 rounded-xl bg-surface-container-low flex items-start gap-2.5 hover:bg-surface-container transition-all\">"
+      },
+      {
+        "line": 521,
+        "source": "onChange={(e) => setAddonPartyHat(e.target.checked)}"
+      },
+      {
+        "line": 539,
+        "source": "<label className=\"font-label-md text-primary font-semibold flex items-center gap-1.5\">"
+      },
+      {
+        "line": 546,
+        "source": "<label"
+      },
+      {
+        "line": 555,
+        "source": "onChange={() => setDeliveryType('express')}"
+      },
+      {
+        "line": 573,
+        "source": "<label"
+      },
+      {
+        "line": 582,
+        "source": "onChange={() => setDeliveryType('schedule')}"
+      },
+      {
+        "line": 609,
+        "source": "onClick={() => setQuantity((q) => Math.max(1, q - 1))}"
+      },
+      {
+        "line": 624,
+        "source": "onClick={() => setQuantity((q) => q + 1)}"
+      },
+      {
+        "line": 636,
+        "source": "onClick={handleAdd}"
+      },
+      {
+        "line": 649,
+        "source": "onClick={handleFastOrder}"
+      },
+      {
+        "line": 677,
+        "source": "onClick={() => setActiveTab(tab.id)}"
+      },
+      {
+        "line": 695,
+        "source": "<h3 className=\"font-headline text-primary text-xl md:text-2xl font-bold\">"
+      },
+      {
+        "line": 917,
+        "source": "<h2 className=\"font-headline-md text-primary mt-1\">"
+      },
+      {
+        "line": 924,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 969,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 986,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1032,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1049,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1095,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1112,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1140,
+        "source": "<h3 className=\"font-headline-lg text-white leading-tight text-xl md:text-2xl font-bold\">"
+      },
+      {
+        "line": 1154,
+        "source": "onClick={(e) => {"
+      },
+      {
+        "line": 1174,
+        "source": "<h3 className=\"font-headline-sm text-primary\">"
+      },
+      {
+        "line": 1179,
+        "source": "onClick={() => setShowSizeGuide(false)}"
+      },
+      {
+        "line": 1216,
+        "source": "onClick={() => setShowSizeGuide(false)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/checkout/CartCheckoutPage.jsx",
+    "lines": 1711,
+    "sha256": "86cd99b32952bca5c7ef9317b9c4b829edf8ff7912fcf3d7e66c415cbf7e6218",
+    "controls": [
+      {
+        "line": 15,
+        "source": "const [activeStep, setActiveStep] = useState(() => {"
+      },
+      {
+        "line": 35,
+        "source": "const [localItems, setLocalItems] = useState(["
+      },
+      {
+        "line": 64,
+        "source": "const [unselectedIds, setUnselectedIds] = useState([])"
+      },
+      {
+        "line": 85,
+        "source": "const [customerName, setCustomerName] = useState('Nguyễn Mai Thảo Hân')"
+      },
+      {
+        "line": 86,
+        "source": "const [customerPhone, setCustomerPhone] = useState('0918 234 567')"
+      },
+      {
+        "line": 87,
+        "source": "const [customerEmail, setCustomerEmail] = useState('hanmai.sweetcake@example.com')"
+      },
+      {
+        "line": 88,
+        "source": "const [customerAddress, setCustomerAddress] = useState("
+      },
+      {
+        "line": 91,
+        "source": "const [customerDistrict, setCustomerDistrict] = useState("
+      },
+      {
+        "line": 94,
+        "source": "const [deliveryNotes, setDeliveryNotes] = useState("
+      },
+      {
+        "line": 99,
+        "source": "const [fulfillmentMethod, setFulfillmentMethod] = useState('delivery') // 'delivery' | 'pickup'"
+      },
+      {
+        "line": 100,
+        "source": "const [selectedDate, setSelectedDate] = useState('saturday') // 'today' | 'tomorrow' | 'saturday' | 'custom'"
+      },
+      {
+        "line": 101,
+        "source": "const [customDate, setCustomDate] = useState('2025-10-25')"
+      },
+      {
+        "line": 102,
+        "source": "const [selectedTimeSlot, setSelectedTimeSlot] = useState('15:30 - 16:30')"
+      },
+      {
+        "line": 103,
+        "source": "const [customTime, setCustomTime] = useState('15:30')"
+      },
+      {
+        "line": 107,
+        "source": "const [plaqueText, setPlaqueText] = useState('Happy 7th Birthday Minh Khang!')"
+      },
+      {
+        "line": 108,
+        "source": "const [greetingCardText, setGreetingCardText] = useState("
+      },
+      {
+        "line": 113,
+        "source": "const [accessories, setAccessories] = useState(["
+      },
+      {
+        "line": 181,
+        "source": "const [paymentMethod, setPaymentMethod] = useState('vietqr') // 'vietqr' | 'credit_card' | 'ewallet' | 'deposit_50'"
+      },
+      {
+        "line": 184,
+        "source": "const [appliedVoucher, setAppliedVoucher] = useState(MOCK_VOUCHERS[0]) // default pre-applied SWEETCAKE50K"
+      },
+      {
+        "line": 185,
+        "source": "const [voucherCodeInput, setVoucherCodeInput] = useState('')"
+      },
+      {
+        "line": 186,
+        "source": "const [voucherError, setVoucherError] = useState('')"
+      },
+      {
+        "line": 187,
+        "source": "const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false)"
+      },
+      {
+        "line": 190,
+        "source": "const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false)"
+      },
+      {
+        "line": 191,
+        "source": "const [orderNumber] = useState('ORD-2025-9982')"
+      },
+      {
+        "line": 354,
+        "source": "<h1 className=\"font-headline-lg text-primary text-3xl sm:text-4xl font-bold tracking-tight flex items-center gap-2.5\">"
+      },
+      {
+        "line": 377,
+        "source": "onClick={goToCart}"
+      },
+      {
+        "line": 402,
+        "source": "onClick={() => selectedItems.length > 0 && goToCheckout()}"
+      },
+      {
+        "line": 403,
+        "source": "disabled={selectedItems.length === 0}"
+      },
+      {
+        "line": 439,
+        "source": "<h2 className=\"font-headline-md text-primary text-2xl font-bold\">"
+      },
+      {
+        "line": 449,
+        "source": "onClick={() => onNavigate && onNavigate('explore')}"
+      },
+      {
+        "line": 457,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      },
+      {
+        "line": 473,
+        "source": "<label className=\"flex items-center gap-3 cursor-pointer select-none\">"
+      },
+      {
+        "line": 477,
+        "source": "onChange={handleSelectAll}"
+      },
+      {
+        "line": 493,
+        "source": "onClick={() => setUnselectedIds(items.map((it) => it.id))}"
+      },
+      {
+        "line": 501,
+        "source": "onClick={handleClear}"
+      },
+      {
+        "line": 526,
+        "source": "<label className=\"flex items-center gap-2 cursor-pointer select-none\">"
+      },
+      {
+        "line": 530,
+        "source": "onChange={() => handleToggleSelect(item.id)}"
+      },
+      {
+        "line": 570,
+        "source": "<h3"
+      },
+      {
+        "line": 582,
+        "source": "onClick={() => handleRemove(item.id)}"
+      },
+      {
+        "line": 618,
+        "source": "onClick={() => handleItemQuantity(item.id, -1)}"
+      },
+      {
+        "line": 629,
+        "source": "onClick={() => handleItemQuantity(item.id, 1)}"
+      },
+      {
+        "line": 668,
+        "source": "<h3 className=\"font-headline-sm text-primary font-bold text-base sm:text-lg\">"
+      },
+      {
+        "line": 690,
+        "source": "onChange={() => handleToggleAccessory(acc.id)}"
+      },
+      {
+        "line": 718,
+        "source": "onClick={() => handleAccessoryQuantity(acc.id, -1)}"
+      },
+      {
+        "line": 728,
+        "source": "onClick={() => handleAccessoryQuantity(acc.id, 1)}"
+      },
+      {
+        "line": 749,
+        "source": "<h3 className=\"font-headline-sm text-primary font-bold text-lg\">"
+      },
+      {
+        "line": 811,
+        "source": "onClick={() => setIsVoucherModalOpen(true)}"
+      },
+      {
+        "line": 839,
+        "source": "onClick={handleRemoveVoucher}"
+      },
+      {
+        "line": 851,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 855,
+        "source": "placeholder=\"Nhập mã SWEETCAKE50K...\""
+      },
+      {
+        "line": 860,
+        "source": "onClick={() => handleApplyVoucher()}"
+      },
+      {
+        "line": 904,
+        "source": "onClick={goToCheckout}"
+      },
+      {
+        "line": 905,
+        "source": "disabled={selectedItems.length === 0}"
+      },
+      {
+        "line": 922,
+        "source": "onClick={() => onNavigate && onNavigate('explore')}"
+      },
+      {
+        "line": 945,
+        "source": "onClick={goToCart}"
+      },
+      {
+        "line": 953,
+        "source": "<form onSubmit={handleCheckoutSubmit}>"
+      },
+      {
+        "line": 964,
+        "source": "<h2 className=\"font-headline-sm text-primary text-lg sm:text-xl font-bold\">"
+      },
+      {
+        "line": 973,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 978,
+        "source": "onChange={(e) => setCustomerName(e.target.value)}"
+      },
+      {
+        "line": 979,
+        "source": "placeholder=\"Ví dụ: Nguyễn Mai Thảo Hân\""
+      },
+      {
+        "line": 986,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 991,
+        "source": "onChange={(e) => setCustomerPhone(e.target.value)}"
+      },
+      {
+        "line": 992,
+        "source": "placeholder=\"0918 xxx xxx\""
+      },
+      {
+        "line": 1001,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1006,
+        "source": "onChange={(e) => setCustomerEmail(e.target.value)}"
+      },
+      {
+        "line": 1007,
+        "source": "placeholder=\"email@example.com\""
+      },
+      {
+        "line": 1015,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1019,
+        "source": "<label className=\"flex items-center gap-2 cursor-pointer text-sm font-medium\">"
+      },
+      {
+        "line": 1024,
+        "source": "onChange={() => setFulfillmentMethod('delivery')}"
+      },
+      {
+        "line": 1029,
+        "source": "<label className=\"flex items-center gap-2 cursor-pointer text-sm font-medium\">"
+      },
+      {
+        "line": 1034,
+        "source": "onChange={() => setFulfillmentMethod('pickup')}"
+      },
+      {
+        "line": 1045,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1050,
+        "source": "onChange={(e) => setCustomerAddress(e.target.value)}"
+      },
+      {
+        "line": 1051,
+        "source": "placeholder=\"Ví dụ: Căn hộ 18.04, Tháp Opal, Saigon Pearl\""
+      },
+      {
+        "line": 1059,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1064,
+        "source": "onChange={(e) => setCustomerDistrict(e.target.value)}"
+      },
+      {
+        "line": 1065,
+        "source": "placeholder=\"Ví dụ: Quận Bình Thạnh, TP. Hồ Chí Minh\""
+      },
+      {
+        "line": 1085,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1090,
+        "source": "onChange={(e) => setDeliveryNotes(e.target.value)}"
+      },
+      {
+        "line": 1091,
+        "source": "placeholder=\"Ví dụ: Gửi lễ tân sảnh Opal hoặc gọi trước 10 phút\""
+      },
+      {
+        "line": 1106,
+        "source": "<h2 className=\"font-headline-sm text-primary text-lg sm:text-xl font-bold\">"
+      },
+      {
+        "line": 1115,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1127,
+        "source": "onClick={() => setSelectedDate(d.key)}"
+      },
+      {
+        "line": 1144,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1165,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1179,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm\">"
+      },
+      {
+        "line": 1188,
+        "source": "<label"
+      },
+      {
+        "line": 1200,
+        "source": "onChange={() => setSelectedTimeSlot(t.slot)}"
+      },
+      {
+        "line": 1222,
+        "source": "<h2 className=\"font-headline-sm text-primary text-lg sm:text-xl font-bold\">"
+      },
+      {
+        "line": 1230,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm flex items-center justify-between\">"
+      },
+      {
+        "line": 1237,
+        "source": "onChange={(e) => setPlaqueText(e.target.value)}"
+      },
+      {
+        "line": 1238,
+        "source": "placeholder=\"Ví dụ: Happy 7th Birthday Minh Khang!\""
+      },
+      {
+        "line": 1245,
+        "source": "<label className=\"font-label-md text-on-surface font-semibold text-xs sm:text-sm flex items-center justify-between\">"
+      },
+      {
+        "line": 1251,
+        "source": "onChange={(e) => setGreetingCardText(e.target.value)}"
+      },
+      {
+        "line": 1252,
+        "source": "placeholder=\"Viết lời chúc yêu thương gửi đến người nhận...\""
+      },
+      {
+        "line": 1266,
+        "source": "<h2 className=\"font-headline-sm text-primary text-lg sm:text-xl font-bold\">"
+      },
+      {
+        "line": 1300,
+        "source": "<label"
+      },
+      {
+        "line": 1314,
+        "source": "onChange={() => setPaymentMethod(pm.key)}"
+      },
+      {
+        "line": 1338,
+        "source": "<h3 className=\"font-headline-sm text-primary font-bold text-lg\">"
+      },
+      {
+        "line": 1343,
+        "source": "onClick={goToCart}"
+      },
+      {
+        "line": 1462,
+        "source": "disabled={selectedItems.length === 0}"
+      },
+      {
+        "line": 1471,
+        "source": "onClick={goToCart}"
+      },
+      {
+        "line": 1492,
+        "source": "<h3 className=\"font-headline-sm text-primary font-bold text-lg\">Kho Voucher SweetCake</h3>"
+      },
+      {
+        "line": 1496,
+        "source": "onClick={() => setIsVoucherModalOpen(false)}"
+      },
+      {
+        "line": 1508,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1512,
+        "source": "placeholder=\"Nhập mã voucher (vd: SWEETCAKE50K)\""
+      },
+      {
+        "line": 1517,
+        "source": "onClick={() => handleApplyVoucher()}"
+      },
+      {
+        "line": 1563,
+        "source": "disabled={!isEligible}"
+      },
+      {
+        "line": 1564,
+        "source": "onClick={() => handleApplyVoucher(v)}"
+      },
+      {
+        "line": 1584,
+        "source": "onClick={() => setIsVoucherModalOpen(false)}"
+      },
+      {
+        "line": 1600,
+        "source": "onClick={() => setIsOrderSuccessModalOpen(false)}"
+      },
+      {
+        "line": 1614,
+        "source": "<h3 className=\"font-headline-sm text-primary text-2xl mt-1\">"
+      },
+      {
+        "line": 1672,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1684,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1694,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/checkout/index.js",
+    "lines": 4,
+    "sha256": "53b8a6d9bb91a551fbea4a53736709575e123edbf6a473e5a3e4a3aed7905a07",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/checkout/PaymentGatewayPage.jsx",
+    "lines": 1345,
+    "sha256": "1510995e9d89759e2479c445175994c2d7184ea89c8930253d1abef9c60ecc61",
+    "controls": [
+      {
+        "line": 4,
+        "source": "const [activeTab, setActiveTab] = useState('vnpay') // 'vnpay' | 'momo' | 'cod'"
+      },
+      {
+        "line": 5,
+        "source": "const [copiedContent, setCopiedContent] = useState(false)"
+      },
+      {
+        "line": 6,
+        "source": "const [isVerifyingPayment, setIsVerifyingPayment] = useState(false)"
+      },
+      {
+        "line": 7,
+        "source": "const [paymentSuccess, setPaymentSuccess] = useState(false)"
+      },
+      {
+        "line": 8,
+        "source": "const [paymentFailed, setPaymentFailed] = useState(false)"
+      },
+      {
+        "line": 9,
+        "source": "const [codConfirmed, setCodConfirmed] = useState(false)"
+      },
+      {
+        "line": 12,
+        "source": "const [acceptedBid] = useState(() => {"
+      },
+      {
+        "line": 21,
+        "source": "const [activeRfq] = useState(() => {"
+      },
+      {
+        "line": 53,
+        "source": "const [secondsRemaining, setSecondsRemaining] = useState(14 * 60 + 58)"
+      },
+      {
+        "line": 160,
+        "source": "onClick={() => setActiveTab('vnpay')}"
+      },
+      {
+        "line": 177,
+        "source": "onClick={() => setActiveTab('momo')}"
+      },
+      {
+        "line": 194,
+        "source": "onClick={() => setActiveTab('cod')}"
+      },
+      {
+        "line": 544,
+        "source": "onClick={handleCopyContent}"
+      },
+      {
+        "line": 566,
+        "source": "onClick={handleVerifyPayment}"
+      },
+      {
+        "line": 567,
+        "source": "disabled={isVerifyingPayment}"
+      },
+      {
+        "line": 577,
+        "source": "onClick={handleSimulateFail}"
+      },
+      {
+        "line": 578,
+        "source": "disabled={isVerifyingPayment}"
+      },
+      {
+        "line": 849,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 942,
+        "source": "onClick={handleConfirmCod}"
+      },
+      {
+        "line": 984,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      },
+      {
+        "line": 999,
+        "source": "disabled={isVerifyingPayment}"
+      },
+      {
+        "line": 1000,
+        "source": "onClick={handleVerifyPayment}"
+      },
+      {
+        "line": 1032,
+        "source": "<h3 className=\"font-headline-sm text-xl text-primary font-bold\">"
+      },
+      {
+        "line": 1038,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      },
+      {
+        "line": 1228,
+        "source": "<h3 className=\"font-headline-sm text-primary text-2xl mt-1 font-bold\">"
+      },
+      {
+        "line": 1265,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1275,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1302,
+        "source": "<h3 className=\"font-headline-sm text-primary text-2xl mt-1 font-bold\">"
+      },
+      {
+        "line": 1322,
+        "source": "onClick={() => setPaymentFailed(false)}"
+      },
+      {
+        "line": 1329,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/home/HomePage.jsx",
+    "lines": 42,
+    "sha256": "781f885614c057e2fe7f86f4c6b7e7b71cfdc3b4a408e8b9893129ec0d11242a",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/home/index.js",
+    "lines": 2,
+    "sha256": "fbc973c2ef77fbe815638b6ac2816cf4c4d582f3881d9bc8e49eee1cf3645ff6",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/index.js",
+    "lines": 8,
+    "sha256": "411174aa8b6adf9fe2ca1a0c02aa3f4623dffba5e22c62031217e977d35903e9",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/profile/CustomerProfilePage.jsx",
+    "lines": 1578,
+    "sha256": "448f595b285d7f084429a58e5a978c2f9468e0935c551c1b956dc41e5b9dc1a0",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [activeSideTab, setActiveSideTab] = useState('orders') // 'orders' | 'addresses' | 'security'"
+      },
+      {
+        "line": 11,
+        "source": "const [orderFilter, setOrderFilter] = useState('delivering') // 'delivering' | 'completed' | 'bespoke'"
+      },
+      {
+        "line": 14,
+        "source": "const [acceptedBid] = useState(() => {"
+      },
+      {
+        "line": 22,
+        "source": "const [activeRfq] = useState(() => {"
+      },
+      {
+        "line": 48,
+        "source": "const [deliveryStatus, setDeliveryStatus] = useState(() => {"
+      },
+      {
+        "line": 57,
+        "source": "const [completedOrders, setCompletedOrders] = useState(() => {"
+      },
+      {
+        "line": 76,
+        "source": "const [userProfile, setUserProfile] = useState(() => {"
+      },
+      {
+        "line": 87,
+        "source": "const [addresses, setAddresses] = useState(DEFAULT_SAVED_ADDRESSES)"
+      },
+      {
+        "line": 90,
+        "source": "const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)"
+      },
+      {
+        "line": 91,
+        "source": "const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false)"
+      },
+      {
+        "line": 92,
+        "source": "const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)"
+      },
+      {
+        "line": 93,
+        "source": "const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false)"
+      },
+      {
+        "line": 94,
+        "source": "const [isChefChatModalOpen, setIsChefChatModalOpen] = useState(false)"
+      },
+      {
+        "line": 95,
+        "source": "const [toastFeedback, setToastFeedback] = useState(null)"
+      },
+      {
+        "line": 98,
+        "source": "const [currentPassword, setCurrentPassword] = useState('')"
+      },
+      {
+        "line": 99,
+        "source": "const [newPassword, setNewPassword] = useState('')"
+      },
+      {
+        "line": 100,
+        "source": "const [confirmPassword, setConfirmPassword] = useState('')"
+      },
+      {
+        "line": 101,
+        "source": "const [passwordError, setPasswordError] = useState('')"
+      },
+      {
+        "line": 102,
+        "source": "const [showCurrentPassword, setShowCurrentPassword] = useState(false)"
+      },
+      {
+        "line": 103,
+        "source": "const [showNewPassword, setShowNewPassword] = useState(false)"
+      },
+      {
+        "line": 104,
+        "source": "const [showConfirmPassword, setShowConfirmPassword] = useState(false)"
+      },
+      {
+        "line": 107,
+        "source": "const [notifySms, setNotifySms] = useState(true)"
+      },
+      {
+        "line": 108,
+        "source": "const [notifyZalo, setNotifyZalo] = useState(true)"
+      },
+      {
+        "line": 109,
+        "source": "const [autoSaveAddress, setAutoSaveAddress] = useState(true)"
+      },
+      {
+        "line": 112,
+        "source": "const [editName, setEditName] = useState(userProfile.fullName)"
+      },
+      {
+        "line": 113,
+        "source": "const [editEmail, setEditEmail] = useState(userProfile.email)"
+      },
+      {
+        "line": 114,
+        "source": "const [editPhone, setEditPhone] = useState(userProfile.phone)"
+      },
+      {
+        "line": 117,
+        "source": "const [newAddrTitle, setNewAddrTitle] = useState('')"
+      },
+      {
+        "line": 118,
+        "source": "const [newAddrPhone, setNewAddrPhone] = useState('')"
+      },
+      {
+        "line": 119,
+        "source": "const [newAddrDetails, setNewAddrDetails] = useState('')"
+      },
+      {
+        "line": 122,
+        "source": "const [chefMessages, setChefMessages] = useState(DEFAULT_PROFILE_CHEF_MESSAGES)"
+      },
+      {
+        "line": 123,
+        "source": "const [chatInput, setChatInput] = useState('')"
+      },
+      {
+        "line": 323,
+        "source": "<h1 className=\"font-headline-md text-primary tracking-tight text-2xl sm:text-3xl font-bold\">"
+      },
+      {
+        "line": 371,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 386,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 407,
+        "source": "onClick={() => setActiveSideTab('orders')}"
+      },
+      {
+        "line": 431,
+        "source": "onClick={() => setActiveSideTab('addresses')}"
+      },
+      {
+        "line": 466,
+        "source": "onClick={() => setActiveSideTab('security')}"
+      },
+      {
+        "line": 496,
+        "source": "<h3 className=\"font-headline-sm text-base text-primary font-semibold flex items-center gap-2\">"
+      },
+      {
+        "line": 504,
+        "source": "onClick={() => setIsAddAddressModalOpen(true)}"
+      },
+      {
+        "line": 555,
+        "source": "<h2 className=\"font-headline-sm text-primary text-xl font-bold\">"
+      },
+      {
+        "line": 566,
+        "source": "<form className=\"space-y-4 max-w-xl\" onSubmit={handleChangePasswordSubmit}>"
+      },
+      {
+        "line": 577,
+        "source": "<label className=\"text-xs font-semibold text-primary block\">"
+      },
+      {
+        "line": 583,
+        "source": "placeholder=\"Nhập mật khẩu đang dùng\""
+      },
+      {
+        "line": 586,
+        "source": "onChange={(e) => setCurrentPassword(e.target.value)}"
+      },
+      {
+        "line": 591,
+        "source": "onClick={() => setShowCurrentPassword(!showCurrentPassword)}"
+      },
+      {
+        "line": 602,
+        "source": "<label className=\"text-xs font-semibold text-primary block\">"
+      },
+      {
+        "line": 608,
+        "source": "placeholder=\"Tối thiểu 6 ký tự\""
+      },
+      {
+        "line": 611,
+        "source": "onChange={(e) => setNewPassword(e.target.value)}"
+      },
+      {
+        "line": 616,
+        "source": "onClick={() => setShowNewPassword(!showNewPassword)}"
+      },
+      {
+        "line": 626,
+        "source": "<label className=\"text-xs font-semibold text-primary block\">"
+      },
+      {
+        "line": 632,
+        "source": "placeholder=\"Nhập lại mật khẩu mới\""
+      },
+      {
+        "line": 635,
+        "source": "onChange={(e) => setConfirmPassword(e.target.value)}"
+      },
+      {
+        "line": 640,
+        "source": "onClick={() => setShowConfirmPassword(!showConfirmPassword)}"
+      },
+      {
+        "line": 665,
+        "source": "<h3 className=\"font-headline-sm text-sm text-primary font-bold\">"
+      },
+      {
+        "line": 669,
+        "source": "<label className=\"flex items-center justify-between p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer\">"
+      },
+      {
+        "line": 681,
+        "source": "onChange={(e) => setNotifySms(e.target.checked)}"
+      },
+      {
+        "line": 686,
+        "source": "<label className=\"flex items-center justify-between p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer\">"
+      },
+      {
+        "line": 698,
+        "source": "onChange={(e) => setNotifyZalo(e.target.checked)}"
+      },
+      {
+        "line": 703,
+        "source": "<label className=\"flex items-center justify-between p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/20 cursor-pointer\">"
+      },
+      {
+        "line": 715,
+        "source": "onChange={(e) => setAutoSaveAddress(e.target.checked)}"
+      },
+      {
+        "line": 727,
+        "source": "<h2 className=\"font-headline-sm text-primary text-xl font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 739,
+        "source": "onClick={() => setIsAddAddressModalOpen(true)}"
+      },
+      {
+        "line": 785,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 813,
+        "source": "onClick={() => setOrderFilter('delivering')}"
+      },
+      {
+        "line": 830,
+        "source": "onClick={() => setOrderFilter('completed')}"
+      },
+      {
+        "line": 844,
+        "source": "onClick={() => setOrderFilter('bespoke')}"
+      },
+      {
+        "line": 874,
+        "source": "onClick={() => setOrderFilter('completed')}"
+      },
+      {
+        "line": 912,
+        "source": "onClick={handleCompleteCurrentOrder}"
+      },
+      {
+        "line": 923,
+        "source": "onClick={() => setIsInvoiceModalOpen(true)}"
+      },
+      {
+        "line": 933,
+        "source": "onClick={() => onNavigate && onNavigate('tracking')}"
+      },
+      {
+        "line": 1084,
+        "source": "onClick={() => setIsChefChatModalOpen(true)}"
+      },
+      {
+        "line": 1098,
+        "source": "<h2 className=\"font-headline-sm text-primary text-xl font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1181,
+        "source": "onClick={() =>"
+      },
+      {
+        "line": 1213,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1221,
+        "source": "onClick={() => setIsEditProfileModalOpen(false)}"
+      },
+      {
+        "line": 1228,
+        "source": "<form className=\"space-y-3\" onSubmit={handleSaveProfile}>"
+      },
+      {
+        "line": 1230,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1237,
+        "source": "onChange={(e) => setEditName(e.target.value)}"
+      },
+      {
+        "line": 1245,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1252,
+        "source": "onChange={(e) => setEditPhone(e.target.value)}"
+      },
+      {
+        "line": 1260,
+        "source": "onClick={() => setIsEditProfileModalOpen(false)}"
+      },
+      {
+        "line": 1282,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1290,
+        "source": "onClick={() => setIsAddAddressModalOpen(false)}"
+      },
+      {
+        "line": 1297,
+        "source": "<form className=\"space-y-3\" onSubmit={handleAddAddress}>"
+      },
+      {
+        "line": 1299,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1304,
+        "source": "placeholder=\"VD: Căn hộ nghỉ dưỡng Phú Mỹ Hưng\""
+      },
+      {
+        "line": 1307,
+        "source": "onChange={(e) => setNewAddrTitle(e.target.value)}"
+      },
+      {
+        "line": 1313,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1318,
+        "source": "placeholder={userProfile.phone}"
+      },
+      {
+        "line": 1321,
+        "source": "onChange={(e) => setNewAddrPhone(e.target.value)}"
+      },
+      {
+        "line": 1326,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1331,
+        "source": "placeholder=\"Số nhà, tầng, toà nhà, đường, phường, quận...\""
+      },
+      {
+        "line": 1334,
+        "source": "onChange={(e) => setNewAddrDetails(e.target.value)}"
+      },
+      {
+        "line": 1342,
+        "source": "onClick={() => setIsAddAddressModalOpen(false)}"
+      },
+      {
+        "line": 1364,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1372,
+        "source": "onClick={() => setIsChangePasswordModalOpen(false)}"
+      },
+      {
+        "line": 1381,
+        "source": "onSubmit={(e) => {"
+      },
+      {
+        "line": 1388,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1399,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1410,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1423,
+        "source": "onClick={() => setIsChangePasswordModalOpen(false)}"
+      },
+      {
+        "line": 1450,
+        "source": "<h3 className=\"font-headline-sm text-primary text-base font-bold\">"
+      },
+      {
+        "line": 1460,
+        "source": "onClick={() => setIsInvoiceModalOpen(false)}"
+      },
+      {
+        "line": 1493,
+        "source": "onClick={() => setIsInvoiceModalOpen(false)}"
+      },
+      {
+        "line": 1513,
+        "source": "<h3 className=\"font-headline-sm text-base text-primary-fixed font-bold\">"
+      },
+      {
+        "line": 1523,
+        "source": "onClick={() => setIsChefChatModalOpen(false)}"
+      },
+      {
+        "line": 1554,
+        "source": "onSubmit={handleSendChefMessage}"
+      },
+      {
+        "line": 1558,
+        "source": "placeholder=\"Nhắn dặn dò bếp trưởng...\""
+      },
+      {
+        "line": 1561,
+        "source": "onChange={(e) => setChatInput(e.target.value)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/profile/index.js",
+    "lines": 2,
+    "sha256": "c5455943af1c5b3f906ba84fd2f18424ac26694b8aab21cf241f52fea8556c4d",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/stores/index.js",
+    "lines": 2,
+    "sha256": "854b1624e7226394b4dcc38e65473d974f583a09026f7914877b68038d56c8cf",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/stores/StoreDirectoryPage.jsx",
+    "lines": 235,
+    "sha256": "73fc3e63914fa3f80bbaad46355920be6ed391b8100e3a5bacf801afe7c508ff",
+    "controls": [
+      {
+        "line": 11,
+        "source": "const [selectedCity, setSelectedCity] = useState('all') // 'all' | 'hcm' | 'hn'"
+      },
+      {
+        "line": 12,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 60,
+        "source": "<h1 className=\"font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary font-bold tracking-normal\">"
+      },
+      {
+        "line": 84,
+        "source": "onClick={onClearCustomCake}"
+      },
+      {
+        "line": 114,
+        "source": "onClick={() => setSelectedCity('all')}"
+      },
+      {
+        "line": 132,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 133,
+        "source": "placeholder=\"Tìm tiệm, quận, bếp trưởng...\""
+      },
+      {
+        "line": 161,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-primary font-bold group-hover:text-secondary transition-colors\">"
+      },
+      {
+        "line": 181,
+        "source": "onClick={() => handleSelectStoreForCake(store)}"
+      },
+      {
+        "line": 192,
+        "source": "onClick={() => onNavigate && onNavigate('explore')}"
+      },
+      {
+        "line": 205,
+        "source": "onClick={() => onNavigate && onNavigate('explore')}"
+      },
+      {
+        "line": 216,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/customer/tracking/index.js",
+    "lines": 2,
+    "sha256": "44b710832d00f0324ad92c4a06a87af8004d55e0ed06870af1fbb10d2c6ac187",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/customer/tracking/OrderTrackingPage.jsx",
+    "lines": 1663,
+    "sha256": "8e23181c35dfca6841da6c2fdefba97abe6711608a5c2fd29f8e2d4fead06b72",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [acceptedBid, setAcceptedBid] = useState(() => {"
+      },
+      {
+        "line": 21,
+        "source": "const [copiedCode, setCopiedCode] = useState(false)"
+      },
+      {
+        "line": 22,
+        "source": "const [showFaq, setShowFaq] = useState(false)"
+      },
+      {
+        "line": 25,
+        "source": "const [isChefChatOpen, setIsChefChatOpen] = useState(false)"
+      },
+      {
+        "line": 26,
+        "source": "const [chatMessages, setChatMessages] = useState(() =>"
+      },
+      {
+        "line": 36,
+        "source": "const [newChefMessage, setNewChefMessage] = useState('')"
+      },
+      {
+        "line": 39,
+        "source": "const [isChangeTimeModalOpen, setIsChangeTimeModalOpen] = useState(false)"
+      },
+      {
+        "line": 40,
+        "source": "const [selectedNewTime, setSelectedNewTime] = useState('15:30 - 16:30')"
+      },
+      {
+        "line": 41,
+        "source": "const [deliveryTimeNotice, setDeliveryTimeNotice] = useState('Hôm nay, 15:30 - 16:30 (25/10/2025)')"
+      },
+      {
+        "line": 44,
+        "source": "const [isEditPlaqueModalOpen, setIsEditPlaqueModalOpen] = useState(false)"
+      },
+      {
+        "line": 45,
+        "source": "const [plaqueText, setPlaqueText] = useState('Happy 7th Birthday Minh Khang!')"
+      },
+      {
+        "line": 46,
+        "source": "const [tempPlaqueText, setTempPlaqueText] = useState('Happy 7th Birthday Minh Khang!')"
+      },
+      {
+        "line": 49,
+        "source": "const [isVatModalOpen, setIsVatModalOpen] = useState(false)"
+      },
+      {
+        "line": 52,
+        "source": "const [isGalleryOpen, setIsGalleryOpen] = useState(false)"
+      },
+      {
+        "line": 53,
+        "source": "const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0)"
+      },
+      {
+        "line": 56,
+        "source": "const [trackingStage, setTrackingStage] = useState(4)"
+      },
+      {
+        "line": 59,
+        "source": "const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)"
+      },
+      {
+        "line": 60,
+        "source": "const [hasReviewed, setHasReviewed] = useState(false)"
+      },
+      {
+        "line": 61,
+        "source": "const [starRating, setStarRating] = useState(5)"
+      },
+      {
+        "line": 62,
+        "source": "const [aiMatchScore, setAiMatchScore] = useState(5)"
+      },
+      {
+        "line": 63,
+        "source": "const [flavorScore, setFlavorScore] = useState(5)"
+      },
+      {
+        "line": 64,
+        "source": "const [deliveryScore, setDeliveryScore] = useState(5)"
+      },
+      {
+        "line": 65,
+        "source": "const [reviewComment, setReviewComment] = useState("
+      },
+      {
+        "line": 68,
+        "source": "const [escrowReleased, setEscrowReleased] = useState(false)"
+      },
+      {
+        "line": 69,
+        "source": "const [showReviewSuccessBanner, setShowReviewSuccessBanner] = useState(false)"
+      },
+      {
+        "line": 72,
+        "source": "const [isCancelEscrowModalOpen, setIsCancelEscrowModalOpen] = useState(false)"
+      },
+      {
+        "line": 73,
+        "source": "const [orderCancelStatus, setOrderCancelStatus] = useState(null) // null | 'CANCELLED' | 'OVERDUE' | 'DISPUTE'"
+      },
+      {
+        "line": 74,
+        "source": "const [cancelPolicyPercent, setCancelPolicyPercent] = useState(70)"
+      },
+      {
+        "line": 115,
+        "source": "const [selectedPhotoForReview, setSelectedPhotoForReview] = useState(cakePhotoDefault)"
+      },
+      {
+        "line": 120,
+        "source": "const [temperature, setTemperature] = useState(4.8)"
+      },
+      {
+        "line": 121,
+        "source": "const [vibration, setVibration] = useState(0.02)"
+      },
+      {
+        "line": 122,
+        "source": "const [lastUpdated, setLastUpdated] = useState('11:28:40')"
+      },
+      {
+        "line": 252,
+        "source": "<h1 className=\"font-headline-md text-2xl sm:text-3xl lg:text-[34px] text-primary font-bold tracking-normal\">"
+      },
+      {
+        "line": 262,
+        "source": "onClick={handleCopyCode}"
+      },
+      {
+        "line": 285,
+        "source": "onClick={() => onNavigate && onNavigate('profile')}"
+      },
+      {
+        "line": 294,
+        "source": "onClick={handleOpenCancelModal}"
+      },
+      {
+        "line": 323,
+        "source": "onClick={() => onNavigate && onNavigate('profile')}"
+      },
+      {
+        "line": 348,
+        "source": "onClick={() => alert('Đã kết nối đường dây nóng điều phối xe lạnh khẩn cấp!')}"
+      },
+      {
+        "line": 373,
+        "source": "onClick={() => onNavigate && onNavigate('admin-orders')}"
+      },
+      {
+        "line": 385,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 398,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 411,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 424,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 439,
+        "source": "onClick={() => setOrderCancelStatus((prev) => (prev === 'OVERDUE' ? null : 'OVERDUE'))}"
+      },
+      {
+        "line": 449,
+        "source": "onClick={() => setOrderCancelStatus((prev) => (prev === 'DISPUTE' ? null : 'DISPUTE'))}"
+      },
+      {
+        "line": 637,
+        "source": "onClick={() => onNavigate && onNavigate('profile')}"
+      },
+      {
+        "line": 645,
+        "source": "onClick={() => setShowReviewSuccessBanner(false)}"
+      },
+      {
+        "line": 667,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 690,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 702,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 736,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 773,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 913,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 927,
+        "source": "<h3 className=\"font-headline-sm text-headline-sm text-primary truncate leading-tight text-base font-bold\">"
+      },
+      {
+        "line": 1074,
+        "source": "onClick={() => setIsChangeTimeModalOpen(true)}"
+      },
+      {
+        "line": 1081,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1109,
+        "source": "<h3 className=\"font-headline-sm text-base text-primary-fixed font-bold\">"
+      },
+      {
+        "line": 1120,
+        "source": "onClick={() => setIsChefChatOpen(false)}"
+      },
+      {
+        "line": 1155,
+        "source": "onSubmit={handleSendChefMessage}"
+      },
+      {
+        "line": 1159,
+        "source": "placeholder=\"Nhắn tin dặn dò thợ bánh...\""
+      },
+      {
+        "line": 1162,
+        "source": "onChange={(e) => setNewChefMessage(e.target.value)}"
+      },
+      {
+        "line": 1181,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1189,
+        "source": "onClick={() => setIsChangeTimeModalOpen(false)}"
+      },
+      {
+        "line": 1207,
+        "source": "<label"
+      },
+      {
+        "line": 1220,
+        "source": "onChange={() => setSelectedNewTime(slot.time)}"
+      },
+      {
+        "line": 1234,
+        "source": "onClick={() => setIsChangeTimeModalOpen(false)}"
+      },
+      {
+        "line": 1241,
+        "source": "onClick={handleSaveDeliveryTime}"
+      },
+      {
+        "line": 1256,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold flex items-center gap-2\">"
+      },
+      {
+        "line": 1264,
+        "source": "onClick={() => setIsEditPlaqueModalOpen(false)}"
+      },
+      {
+        "line": 1276,
+        "source": "<label className=\"text-xs font-semibold text-primary\">"
+      },
+      {
+        "line": 1284,
+        "source": "onChange={(e) => setTempPlaqueText(e.target.value)}"
+      },
+      {
+        "line": 1306,
+        "source": "onClick={() => setIsEditPlaqueModalOpen(false)}"
+      },
+      {
+        "line": 1313,
+        "source": "onClick={handleSavePlaque}"
+      },
+      {
+        "line": 1333,
+        "source": "<h3 className=\"font-headline-sm text-primary text-base font-bold\">"
+      },
+      {
+        "line": 1343,
+        "source": "onClick={() => setIsVatModalOpen(false)}"
+      },
+      {
+        "line": 1390,
+        "source": "onClick={() => setIsVatModalOpen(false)}"
+      },
+      {
+        "line": 1415,
+        "source": "onClick={() => setIsGalleryOpen(false)}"
+      },
+      {
+        "line": 1459,
+        "source": "onClick={() => setSelectedPhotoIndex(idx)}"
+      },
+      {
+        "line": 1490,
+        "source": "<h3 className=\"font-headline-sm text-base text-primary-fixed font-bold\">"
+      },
+      {
+        "line": 1500,
+        "source": "onClick={() => setIsReviewModalOpen(false)}"
+      },
+      {
+        "line": 1553,
+        "source": "onClick={() => setIsReviewModalOpen(false)}"
+      },
+      {
+        "line": 1560,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1591,
+        "source": "<h3 className=\"font-bold text-base\">Hủy Đơn &amp; Hoàn Cọc Escrow</h3>"
+      },
+      {
+        "line": 1597,
+        "source": "onClick={() => setIsCancelEscrowModalOpen(false)}"
+      },
+      {
+        "line": 1643,
+        "source": "onClick={() => setIsCancelEscrowModalOpen(false)}"
+      },
+      {
+        "line": 1650,
+        "source": "onClick={handleConfirmCancelOrder}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/index.js",
+    "lines": 12,
+    "sha256": "df41d65f4206f64635f7daaaf597c33bcb4bc6077c7bd081dc951d39f0c802f8",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/catalog/index.js",
+    "lines": 2,
+    "sha256": "acfc79fd0fdd06293bc38d994ea2e28f7809d04e744d009e7d420325c5d7659e",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/catalog/VendorMenuCatalogPage.jsx",
+    "lines": 1194,
+    "sha256": "b0690a485c4019932c114b8305f3397a3ce269f30c5b09108a8db71cd0c544f2",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 9,
+        "source": "const [activeSidebarTab, setActiveSidebarTab] = useState('thuc-don-va-mau-banh')"
+      },
+      {
+        "line": 12,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 13,
+        "source": "const [selectedStatus, setSelectedStatus] = useState('all')"
+      },
+      {
+        "line": 14,
+        "source": "const [selectedPrepTime, setSelectedPrepTime] = useState('all')"
+      },
+      {
+        "line": 15,
+        "source": "const [selectedCategory, setSelectedCategory] = useState('all')"
+      },
+      {
+        "line": 16,
+        "source": "const [sortBy, setSortBy] = useState('popular')"
+      },
+      {
+        "line": 17,
+        "source": "const [currentPageNum, setCurrentPageNum] = useState(1)"
+      },
+      {
+        "line": 20,
+        "source": "const [cakes, setCakes] = useState(INITIAL_VENDOR_CAKES)"
+      },
+      {
+        "line": 23,
+        "source": "const [isDrawerOpen, setIsDrawerOpen] = useState(false)"
+      },
+      {
+        "line": 24,
+        "source": "const [editingCake, setEditingCake] = useState(cakes[0])"
+      },
+      {
+        "line": 27,
+        "source": "const [formTitle, setFormTitle] = useState(editingCake.title)"
+      },
+      {
+        "line": 28,
+        "source": "const [formCategory, setFormCategory] = useState(editingCake.category)"
+      },
+      {
+        "line": 29,
+        "source": "const [formFlavor, setFormFlavor] = useState(editingCake.flavor)"
+      },
+      {
+        "line": 30,
+        "source": "const [formSweetness, setFormSweetness] = useState(editingCake.sweetness)"
+      },
+      {
+        "line": 31,
+        "source": "const [formSizes, setFormSizes] = useState(editingCake.sizes)"
+      },
+      {
+        "line": 32,
+        "source": "const [formComplimentary, setFormComplimentary] = useState(editingCake.complimentaryGift)"
+      },
+      {
+        "line": 33,
+        "source": "const [formCalligraphy, setFormCalligraphy] = useState(editingCake.freeCalligraphy)"
+      },
+      {
+        "line": 34,
+        "source": "const [formFlowers, setFormFlowers] = useState(editingCake.freshFlowersAddon)"
+      },
+      {
+        "line": 37,
+        "source": "const [toastMsg, setToastMsg] = useState(null)"
+      },
+      {
+        "line": 242,
+        "source": "onClick={handleOpenCreateDrawer}"
+      },
+      {
+        "line": 266,
+        "source": "<h1 className=\"font-headline-lg text-xl sm:text-2xl font-bold text-primary tracking-tight\">"
+      },
+      {
+        "line": 278,
+        "source": "onClick={() => showToast('Đã đồng bộ kiểm tra kho nguyên liệu trứng, bơ và Mascarpone!')}"
+      },
+      {
+        "line": 289,
+        "source": "onClick={handleOpenCreateDrawer}"
+      },
+      {
+        "line": 432,
+        "source": "placeholder=\"Tìm theo tên bánh, mã SKU (#CK-...), hương vị...\""
+      },
+      {
+        "line": 435,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 447,
+        "source": "onChange={(e) => setSelectedStatus(e.target.value)}"
+      },
+      {
+        "line": 449,
+        "source": "<option value=\"all\">Tất cả trạng thái</option>"
+      },
+      {
+        "line": 450,
+        "source": "<option value=\"open\">Đang mở bán ({cakes.filter((c) => c.isOpenForSale).length})</option>"
+      },
+      {
+        "line": 451,
+        "source": "<option value=\"paused\">Hết nguyên liệu ({cakes.filter((c) => !c.isOpenForSale).length})</option>"
+      },
+      {
+        "line": 461,
+        "source": "onChange={(e) => setSelectedPrepTime(e.target.value)}"
+      },
+      {
+        "line": 463,
+        "source": "<option value=\"all\">Tất cả thời gian</option>"
+      },
+      {
+        "line": 464,
+        "source": "<option value=\"express\">Lấy liền 2 giờ (Express)</option>"
+      },
+      {
+        "line": 465,
+        "source": "<option value=\"same-day\">Trong ngày 4h - 6h</option>"
+      },
+      {
+        "line": 475,
+        "source": "onChange={(e) => setSortBy(e.target.value)}"
+      },
+      {
+        "line": 477,
+        "source": "<option value=\"popular\">Phổ biến nhất</option>"
+      },
+      {
+        "line": 478,
+        "source": "<option value=\"sales\">Doanh số cao → thấp</option>"
+      },
+      {
+        "line": 479,
+        "source": "<option value=\"price\">Giá bán tăng dần</option>"
+      },
+      {
+        "line": 480,
+        "source": "<option value=\"recent\">Mới cập nhật</option>"
+      },
+      {
+        "line": 501,
+        "source": "onClick={() => setSelectedCategory(cat.id)}"
+      },
+      {
+        "line": 637,
+        "source": "<label className=\"relative inline-flex items-center cursor-pointer\">"
+      },
+      {
+        "line": 642,
+        "source": "onChange={() => handleToggleSale(cake.id)}"
+      },
+      {
+        "line": 659,
+        "source": "onClick={() => handleOpenEditDrawer(cake)}"
+      },
+      {
+        "line": 669,
+        "source": "onClick={() => onNavigate && onNavigate('explore')}"
+      },
+      {
+        "line": 679,
+        "source": "onClick={() => handleCloneCake(cake)}"
+      },
+      {
+        "line": 689,
+        "source": "onClick={() => handleDeleteCake(cake.id)}"
+      },
+      {
+        "line": 730,
+        "source": "onClick={() => showToast('Đang ở trang 1')}"
+      },
+      {
+        "line": 737,
+        "source": "onClick={() => showToast('Đang ở trang 1')}"
+      },
+      {
+        "line": 745,
+        "source": "onClick={() => showToast('Đã đến trang cuối')}"
+      },
+      {
+        "line": 773,
+        "source": "onClick={() => showToast('Mở biểu mẫu điều chỉnh bảng giá mùa lễ hội!')}"
+      },
+      {
+        "line": 809,
+        "source": "onClick={() => showToast('Lô dâu tây Đà Lạt mới sẽ được giao lúc 16:30 chiều nay!')}"
+      },
+      {
+        "line": 834,
+        "source": "onClick={() => onNavigate && onNavigate('ai-studio')}"
+      },
+      {
+        "line": 856,
+        "source": "onClick={() => setIsDrawerOpen(false)}"
+      },
+      {
+        "line": 867,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary text-lg font-bold\">"
+      },
+      {
+        "line": 873,
+        "source": "onClick={() => setIsDrawerOpen(false)}"
+      },
+      {
+        "line": 886,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold text-xs\">"
+      },
+      {
+        "line": 920,
+        "source": "onClick={() => showToast('Mở cửa sổ chọn ảnh chụp tiệc bánh từ máy tính!')}"
+      },
+      {
+        "line": 938,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold block mb-1 text-xs\">"
+      },
+      {
+        "line": 945,
+        "source": "onChange={(e) => setFormTitle(e.target.value)}"
+      },
+      {
+        "line": 951,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold block mb-1 text-xs\">"
+      },
+      {
+        "line": 957,
+        "source": "onChange={(e) => setFormCategory(e.target.value)}"
+      },
+      {
+        "line": 959,
+        "source": "<option>Bánh sinh nhật nghệ thuật</option>"
+      },
+      {
+        "line": 960,
+        "source": "<option>Bánh Mousse &amp; Entremet</option>"
+      },
+      {
+        "line": 961,
+        "source": "<option>Bánh cưới Haute Couture</option>"
+      },
+      {
+        "line": 962,
+        "source": "<option>Bento Cake tối giản Hàn Quốc</option>"
+      },
+      {
+        "line": 967,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold block mb-1 text-xs\">"
+      },
+      {
+        "line": 993,
+        "source": "onChange={(e) => setFormFlavor(e.target.value)}"
+      },
+      {
+        "line": 1005,
+        "source": "onChange={(e) => setFormSweetness(e.target.value)}"
+      },
+      {
+        "line": 1019,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold text-xs\">"
+      },
+      {
+        "line": 1024,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1064,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1082,
+        "source": "onChange={(e) => {"
+      },
+      {
+        "line": 1099,
+        "source": "<label className=\"font-label-lg text-label-lg text-primary font-semibold text-xs\">"
+      },
+      {
+        "line": 1103,
+        "source": "<label className=\"flex items-center gap-3 p-3 rounded-xl bg-surface-container-low cursor-pointer border border-outline-variant/15\">"
+      },
+      {
+        "line": 1108,
+        "source": "onChange={(e) => setFormComplimentary(e.target.checked)}"
+      },
+      {
+        "line": 1120,
+        "source": "<label className=\"flex items-center gap-3 p-3 rounded-xl bg-surface-container-low cursor-pointer border border-outline-variant/15\">"
+      },
+      {
+        "line": 1125,
+        "source": "onChange={(e) => setFormCalligraphy(e.target.checked)}"
+      },
+      {
+        "line": 1137,
+        "source": "<label className=\"flex items-center gap-3 p-3 rounded-xl bg-surface-container-low cursor-pointer border border-outline-variant/15\">"
+      },
+      {
+        "line": 1142,
+        "source": "onChange={(e) => setFormFlowers(e.target.checked)}"
+      },
+      {
+        "line": 1161,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 1172,
+        "source": "onClick={() => setIsDrawerOpen(false)}"
+      },
+      {
+        "line": 1179,
+        "source": "onClick={handleSaveDrawer}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/dashboard/index.js",
+    "lines": 2,
+    "sha256": "2ad9190fd8b15dbacb279295f2e5bd49a8701f0543ab66b9a98fbc21b948a902",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/dashboard/VendorDashboardPage.jsx",
+    "lines": 654,
+    "sha256": "0ffe27057676eebf7b754170c7d022141434263e58b17da6a48b6d3cc0621bf9",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [isReceivingOrders, setIsReceivingOrders] = useState(true)"
+      },
+      {
+        "line": 9,
+        "source": "const [toastMessage, setToastMessage] = useState(null)"
+      },
+      {
+        "line": 10,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 13,
+        "source": "const [rfqList, setRfqList] = useState(["
+      },
+      {
+        "line": 59,
+        "source": "const [selectedRfq, setSelectedRfq] = useState(null)"
+      },
+      {
+        "line": 60,
+        "source": "const [quotePrice, setQuotePrice] = useState('')"
+      },
+      {
+        "line": 61,
+        "source": "const [quoteNotes, setQuoteNotes] = useState('')"
+      },
+      {
+        "line": 62,
+        "source": "const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)"
+      },
+      {
+        "line": 125,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 136,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-menu')}"
+      },
+      {
+        "line": 167,
+        "source": "<h1 className=\"font-headline-lg text-2xl sm:text-3xl font-bold text-primary tracking-tight\">"
+      },
+      {
+        "line": 178,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 191,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 216,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 239,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-revenue')}"
+      },
+      {
+        "line": 263,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 289,
+        "source": "<h2 className=\"text-sm font-bold text-rose-900 uppercase tracking-wide flex items-center gap-1.5\">"
+      },
+      {
+        "line": 302,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 319,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 336,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 365,
+        "source": "<h2 className=\"font-headline-sm text-headline-sm text-primary\">"
+      },
+      {
+        "line": 375,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 419,
+        "source": "<h3 className=\"font-bold text-sm text-primary leading-snug\">"
+      },
+      {
+        "line": 439,
+        "source": "onClick={() => handleOpenQuoteModal(rfq)}"
+      },
+      {
+        "line": 446,
+        "source": "onClick={() => handleDismissRfq(rfq.id)}"
+      },
+      {
+        "line": 463,
+        "source": "<h3 className=\"text-sm font-bold text-primary flex items-center gap-2\">"
+      },
+      {
+        "line": 514,
+        "source": "<h3 className=\"text-sm font-bold text-primary\">"
+      },
+      {
+        "line": 519,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 569,
+        "source": "<h3 className=\"text-base font-bold text-primary\">"
+      },
+      {
+        "line": 575,
+        "source": "onClick={() => setIsQuoteModalOpen(false)}"
+      },
+      {
+        "line": 582,
+        "source": "<form onSubmit={handleSubmitQuote} className=\"space-y-4 text-xs\">"
+      },
+      {
+        "line": 601,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 608,
+        "source": "onChange={(e) => setQuotePrice(e.target.value)}"
+      },
+      {
+        "line": 611,
+        "source": "placeholder=\"VD: 950000\""
+      },
+      {
+        "line": 620,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 626,
+        "source": "onChange={(e) => setQuoteNotes(e.target.value)}"
+      },
+      {
+        "line": 634,
+        "source": "onClick={() => setIsQuoteModalOpen(false)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/index.js",
+    "lines": 6,
+    "sha256": "b568df411f09bda7c4e107cb82242fefcfe0e8347d81145517552dde2b1f093f",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/orders/index.js",
+    "lines": 2,
+    "sha256": "97b25c51660b25daf709bda9b30bfbbf34e4581e998c2914c7066b0361572e90",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/orders/VendorOrderManagementPage.jsx",
+    "lines": 1063,
+    "sha256": "d63b1cff4b036279edca7e76ec0a762d042ff023bad59d5b330b0c9acd78940c",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 10,
+        "source": "const [liveClock, setLiveClock] = useState('')"
+      },
+      {
+        "line": 24,
+        "source": "const [selectedFilter, setSelectedFilter] = useState('all') // 'all' | 'urgent' | 'birthday' | 'wedding' | 'corporate'"
+      },
+      {
+        "line": 25,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 28,
+        "source": "const [timelineOrder, setTimelineOrder] = useState(null)"
+      },
+      {
+        "line": 29,
+        "source": "const [qcOrder, setQcOrder] = useState(null)"
+      },
+      {
+        "line": 30,
+        "source": "const [driverOrder, setDriverOrder] = useState(null)"
+      },
+      {
+        "line": 33,
+        "source": "const [toastMsg, setToastMsg] = useState(null)"
+      },
+      {
+        "line": 264,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 357,
+        "source": "onClick={() => handleConfirmOrder(orders.pending[0])}"
+      },
+      {
+        "line": 374,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 375,
+        "source": "placeholder=\"Tìm theo mã đơn (#ORD), tên khách, SĐT, tên bánh...\""
+      },
+      {
+        "line": 393,
+        "source": "onClick={() => setSelectedFilter(tab.id)}"
+      },
+      {
+        "line": 413,
+        "source": "<h3 className=\"font-headline-sm text-xs font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 442,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 467,
+        "source": "onClick={() => handleRejectOrder(order)}"
+      },
+      {
+        "line": 474,
+        "source": "onClick={() => handleConfirmOrder(order)}"
+      },
+      {
+        "line": 493,
+        "source": "<h3 className=\"font-headline-sm text-xs font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 522,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 545,
+        "source": "onClick={() => handleStartBaking(order)}"
+      },
+      {
+        "line": 564,
+        "source": "<h3 className=\"font-headline-sm text-xs font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 601,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 619,
+        "source": "<label"
+      },
+      {
+        "line": 626,
+        "source": "onChange={() => handleToggleStep(order.id, idx)}"
+      },
+      {
+        "line": 646,
+        "source": "onClick={() => setQcOrder(order)}"
+      },
+      {
+        "line": 656,
+        "source": "onClick={() => handleFinishBaking(order)}"
+      },
+      {
+        "line": 675,
+        "source": "<h3 className=\"font-headline-sm text-xs font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 704,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 733,
+        "source": "onClick={() => setDriverOrder(order)}"
+      },
+      {
+        "line": 743,
+        "source": "onClick={() => showToast(`Đang kết nối gọi tài xế: ${order.driverPhone}`)}"
+      },
+      {
+        "line": 757,
+        "source": "onClick={() => handleDeliverSuccess(order)}"
+      },
+      {
+        "line": 765,
+        "source": "onClick={() => handleDeliverFailed(order)}"
+      },
+      {
+        "line": 785,
+        "source": "<h3 className=\"font-headline-sm text-xs font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 815,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 838,
+        "source": "onClick={() => setTimelineOrder(order)}"
+      },
+      {
+        "line": 864,
+        "source": "<h3 className=\"font-headline-sm text-base sm:text-lg font-bold text-primary\">{timelineOrder.title}</h3>"
+      },
+      {
+        "line": 868,
+        "source": "onClick={() => setTimelineOrder(null)}"
+      },
+      {
+        "line": 915,
+        "source": "onClick={() => setTimelineOrder(null)}"
+      },
+      {
+        "line": 930,
+        "source": "<h3 className=\"font-headline-sm text-base font-bold text-primary\">"
+      },
+      {
+        "line": 935,
+        "source": "onClick={() => setQcOrder(null)}"
+      },
+      {
+        "line": 961,
+        "source": "onClick={() => setQcOrder(null)}"
+      },
+      {
+        "line": 968,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 989,
+        "source": "<h3 className=\"font-headline-sm text-base font-bold text-primary\">"
+      },
+      {
+        "line": 994,
+        "source": "onClick={() => setDriverOrder(null)}"
+      },
+      {
+        "line": 1039,
+        "source": "onClick={() => setDriverOrder(null)}"
+      },
+      {
+        "line": 1046,
+        "source": "onClick={() => {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/revenue/index.js",
+    "lines": 2,
+    "sha256": "72b3347851a51cbf981201ab4166f81d50e14adadf84d8135a176ab172d61e5d",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/revenue/VendorRevenueEscrowPage.jsx",
+    "lines": 485,
+    "sha256": "7dbf341ad3c4277e27b23847cdc9f4257b3970a4ed5ca80705b7dc6c6d25d0e1",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 9,
+        "source": "const [availableBalance, setAvailableBalance] = useState(32500000)"
+      },
+      {
+        "line": 10,
+        "source": "const [escrowLocked, setEscrowLocked] = useState(14200000)"
+      },
+      {
+        "line": 11,
+        "source": "const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS)"
+      },
+      {
+        "line": 12,
+        "source": "const [activeFilter, setActiveFilter] = useState('all') // 'all' | 'released' | 'locked' | 'withdrawn'"
+      },
+      {
+        "line": 13,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 14,
+        "source": "const [toastFeedback, setToastFeedback] = useState(null)"
+      },
+      {
+        "line": 15,
+        "source": "const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false)"
+      },
+      {
+        "line": 16,
+        "source": "const [withdrawAmount, setWithdrawAmount] = useState('')"
+      },
+      {
+        "line": 108,
+        "source": "onClick={() => setIsWithdrawModalOpen(true)}"
+      },
+      {
+        "line": 133,
+        "source": "<h3 className=\"font-headline-md text-2xl font-bold text-primary\">"
+      },
+      {
+        "line": 150,
+        "source": "onClick={() => setIsWithdrawModalOpen(true)}"
+      },
+      {
+        "line": 165,
+        "source": "<h3 className=\"font-headline-md text-2xl font-bold text-secondary\">"
+      },
+      {
+        "line": 189,
+        "source": "<h3 className=\"font-headline-md text-2xl font-bold text-primary\">"
+      },
+      {
+        "line": 213,
+        "source": "<h3 className=\"font-headline-md text-2xl font-bold text-primary\">"
+      },
+      {
+        "line": 236,
+        "source": "onClick={() => setActiveFilter('all')}"
+      },
+      {
+        "line": 245,
+        "source": "onClick={() => setActiveFilter('released')}"
+      },
+      {
+        "line": 254,
+        "source": "onClick={() => setActiveFilter('locked')}"
+      },
+      {
+        "line": 263,
+        "source": "onClick={() => setActiveFilter('withdrawn')}"
+      },
+      {
+        "line": 281,
+        "source": "placeholder=\"Tìm mã đơn, tên bánh...\""
+      },
+      {
+        "line": 283,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 403,
+        "source": "<h3 className=\"font-headline-sm text-primary text-lg font-bold\">"
+      },
+      {
+        "line": 408,
+        "source": "onClick={() => setIsWithdrawModalOpen(false)}"
+      },
+      {
+        "line": 415,
+        "source": "<form onSubmit={handleWithdrawSubmit} className=\"space-y-4\">"
+      },
+      {
+        "line": 435,
+        "source": "<label className=\"font-bold text-primary\">Số tiền muốn rút:</label>"
+      },
+      {
+        "line": 438,
+        "source": "onClick={() => setWithdrawAmount(availableBalance.toLocaleString('vi-VN'))}"
+      },
+      {
+        "line": 448,
+        "source": "placeholder=\"Nhập số tiền (tối thiểu 500.000₫)\""
+      },
+      {
+        "line": 450,
+        "source": "onChange={(e) => setWithdrawAmount(e.target.value)}"
+      },
+      {
+        "line": 467,
+        "source": "onClick={() => setIsWithdrawModalOpen(false)}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/rfq/index.js",
+    "lines": 4,
+    "sha256": "f07a44b950bde2eb46e56056c5d64c5ad56d6eac1c478965f51efbcb3b162ff8",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/rfq/VendorBespokeQuoteSubmitPage.jsx",
+    "lines": 576,
+    "sha256": "7b17b76389b0c1001f7d697408dfa8431658a6de8230a5bcb472be2862beea7c",
+    "controls": [
+      {
+        "line": 9,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 11,
+        "source": "const [currentRfq, setCurrentRfq] = useState(() => {"
+      },
+      {
+        "line": 22,
+        "source": "const [quotePrice, setQuotePrice] = useState(950000)"
+      },
+      {
+        "line": 23,
+        "source": "const [selectedCakeSize, setSelectedCakeSize] = useState('2-tier')"
+      },
+      {
+        "line": 24,
+        "source": "const [selectedFlavor, setSelectedFlavor] = useState('vanilla-strawberry')"
+      },
+      {
+        "line": 25,
+        "source": "const [completionHours, setCompletionHours] = useState('6')"
+      },
+      {
+        "line": 26,
+        "source": "const [similarityNote, setSimilarityNote] = useState("
+      },
+      {
+        "line": 31,
+        "source": "const [sampleImages, setSampleImages] = useState(["
+      },
+      {
+        "line": 47,
+        "source": "const [commitOnTime, setCommitOnTime] = useState(true)"
+      },
+      {
+        "line": 48,
+        "source": "const [commitCoolShipping, setCommitCoolShipping] = useState(true)"
+      },
+      {
+        "line": 49,
+        "source": "const [commitMoneyBack, setCommitMoneyBack] = useState(true)"
+      },
+      {
+        "line": 52,
+        "source": "const [secondsLeft, setSecondsLeft] = useState(45 * 60)"
+      },
+      {
+        "line": 67,
+        "source": "const [toastMsg, setToastMsg] = useState(null)"
+      },
+      {
+        "line": 232,
+        "source": "<h2 className=\"font-headline-sm text-lg font-bold text-primary leading-snug\">"
+      },
+      {
+        "line": 281,
+        "source": "onSubmit={handleSubmitQuote}"
+      },
+      {
+        "line": 285,
+        "source": "<h1 className=\"font-headline-lg text-2xl font-bold text-primary tracking-tight\">Soạn Báo Giá Cho Khách Hàng</h1>"
+      },
+      {
+        "line": 298,
+        "source": "<h3 className=\"font-headline-sm text-sm font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 305,
+        "source": "<label className=\"text-xs font-bold text-primary flex items-center justify-between\">"
+      },
+      {
+        "line": 316,
+        "source": "onClick={() => setQuotePrice(900000)}"
+      },
+      {
+        "line": 329,
+        "source": "onClick={() => setQuotePrice(950000)}"
+      },
+      {
+        "line": 344,
+        "source": "onClick={() => setQuotePrice(1000000)}"
+      },
+      {
+        "line": 364,
+        "source": "onChange={(e) => setQuotePrice(Number(e.target.value))}"
+      },
+      {
+        "line": 375,
+        "source": "<label className=\"text-xs font-bold text-primary\">Kích thước (Size):</label>"
+      },
+      {
+        "line": 378,
+        "source": "onChange={(e) => setSelectedCakeSize(e.target.value)}"
+      },
+      {
+        "line": 381,
+        "source": "<option value=\"2-tier\">2 Tầng (20cm + 14cm) • 15-18 khách ★</option>"
+      },
+      {
+        "line": 382,
+        "source": "<option value=\"20cm\">Size 20cm (1 tầng cao) • 8-10 khách</option>"
+      },
+      {
+        "line": 383,
+        "source": "<option value=\"24cm\">Size 24cm (1 tầng rộng) • 12-14 khách</option>"
+      },
+      {
+        "line": 384,
+        "source": "<option value=\"16cm\">Size 16cm (Nhỏ gọn) • 4-6 khách</option>"
+      },
+      {
+        "line": 390,
+        "source": "<label className=\"text-xs font-bold text-primary\">"
+      },
+      {
+        "line": 395,
+        "source": "onChange={(e) => setSelectedFlavor(e.target.value)}"
+      },
+      {
+        "line": 398,
+        "source": "<option value=\"vanilla-strawberry\">"
+      },
+      {
+        "line": 401,
+        "source": "<option value=\"chocolate-belgium\">Chocolate Bỉ socola đen cao cấp</option>"
+      },
+      {
+        "line": 402,
+        "source": "<option value=\"red-velvet\">Red Velvet phô mai Mascarpone</option>"
+      },
+      {
+        "line": 403,
+        "source": "<option value=\"matcha-azuki\">Trà xanh Matcha Uji đậu đỏ</option>"
+      },
+      {
+        "line": 410,
+        "source": "<label className=\"text-xs font-bold text-primary\">"
+      },
+      {
+        "line": 416,
+        "source": "onClick={() => setCompletionHours('4')}"
+      },
+      {
+        "line": 427,
+        "source": "onClick={() => setCompletionHours('6')}"
+      },
+      {
+        "line": 438,
+        "source": "onClick={() => setCompletionHours('12')}"
+      },
+      {
+        "line": 453,
+        "source": "<label className=\"text-xs font-bold text-primary\">"
+      },
+      {
+        "line": 463,
+        "source": "onChange={(e) => setSimilarityNote(e.target.value)}"
+      },
+      {
+        "line": 464,
+        "source": "placeholder=\"Mô tả chi tiết giải pháp tạo hình, cam kết độ giống mẫu và các quà tặng kèm...\""
+      },
+      {
+        "line": 477,
+        "source": "<h3 className=\"font-headline-sm text-sm font-bold text-primary uppercase tracking-wider\">"
+      },
+      {
+        "line": 483,
+        "source": "onClick={handleAddSampleImage}"
+      },
+      {
+        "line": 511,
+        "source": "onClick={() => handleRemoveSampleImage(img.id)}"
+      },
+      {
+        "line": 522,
+        "source": "onClick={handleAddSampleImage}"
+      },
+      {
+        "line": 540,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-rfq')}"
+      },
+      {
+        "line": 549,
+        "source": "onClick={() =>"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/rfq/VendorRfqMarketplacePage.jsx",
+    "lines": 611,
+    "sha256": "09f6711ed615a4b81140b0302976c0ee195cbecc8cba45300161af7447b9a6b1",
+    "controls": [
+      {
+        "line": 8,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 10,
+        "source": "const [searchQuery, setSearchQuery] = useState('')"
+      },
+      {
+        "line": 11,
+        "source": "const [selectedCategory, setSelectedCategory] = useState('all')"
+      },
+      {
+        "line": 12,
+        "source": "const [selectedBudget, setSelectedBudget] = useState('all')"
+      },
+      {
+        "line": 13,
+        "source": "const [selectedDistance, setSelectedDistance] = useState('all')"
+      },
+      {
+        "line": 14,
+        "source": "const [selectedUrgency, setSelectedUrgency] = useState('all')"
+      },
+      {
+        "line": 17,
+        "source": "const [detailRfq, setDetailRfq] = useState(null)"
+      },
+      {
+        "line": 18,
+        "source": "const [chatRfq, setChatRfq] = useState(null)"
+      },
+      {
+        "line": 19,
+        "source": "const [chatMessageInput, setChatMessageInput] = useState('')"
+      },
+      {
+        "line": 20,
+        "source": "const [chatMessages, setChatMessages] = useState(["
+      },
+      {
+        "line": 36,
+        "source": "const [toastMsg, setToastMsg] = useState(null)"
+      },
+      {
+        "line": 57,
+        "source": "const [rejectedIds, setRejectedIds] = useState([])"
+      },
+      {
+        "line": 151,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-orders')}"
+      },
+      {
+        "line": 179,
+        "source": "onChange={(e) => setSearchQuery(e.target.value)}"
+      },
+      {
+        "line": 180,
+        "source": "placeholder=\"Tìm theo tên bánh, mã #RFQ, hương vị, địa chỉ giao...\""
+      },
+      {
+        "line": 196,
+        "source": "<label className=\"text-[11px] text-outline block mb-1\">Loại bánh:</label>"
+      },
+      {
+        "line": 199,
+        "source": "onChange={(e) => setSelectedCategory(e.target.value)}"
+      },
+      {
+        "line": 202,
+        "source": "<option value=\"all\">Tất cả loại bánh</option>"
+      },
+      {
+        "line": 203,
+        "source": "<option value=\"character\">Bánh nhân vật &amp; 3D</option>"
+      },
+      {
+        "line": 204,
+        "source": "<option value=\"bento\">Bento Cake Hàn Quốc</option>"
+      },
+      {
+        "line": 205,
+        "source": "<option value=\"wedding\">Bánh cưới &amp; Sự kiện</option>"
+      },
+      {
+        "line": 206,
+        "source": "<option value=\"mousse\">Mousse &amp; Entremet</option>"
+      },
+      {
+        "line": 211,
+        "source": "<label className=\"text-[11px] text-outline block mb-1\">Ngân sách:</label>"
+      },
+      {
+        "line": 214,
+        "source": "onChange={(e) => setSelectedBudget(e.target.value)}"
+      },
+      {
+        "line": 217,
+        "source": "<option value=\"all\">Tất cả mức giá</option>"
+      },
+      {
+        "line": 218,
+        "source": "<option value=\"under500\">Dưới 500.000đ</option>"
+      },
+      {
+        "line": 219,
+        "source": "<option value=\"500to1500\">500.000đ - 1.500.000đ</option>"
+      },
+      {
+        "line": 220,
+        "source": "<option value=\"over1500\">Trên 1.500.000đ</option>"
+      },
+      {
+        "line": 225,
+        "source": "<label className=\"text-[11px] text-outline block mb-1\">Khoảng cách giao:</label>"
+      },
+      {
+        "line": 228,
+        "source": "onChange={(e) => setSelectedDistance(e.target.value)}"
+      },
+      {
+        "line": 231,
+        "source": "<option value=\"all\">Toàn khu vực phục vụ</option>"
+      },
+      {
+        "line": 232,
+        "source": "<option value=\"under5\">Gần tiệm (Dưới 5 km)</option>"
+      },
+      {
+        "line": 233,
+        "source": "<option value=\"under10\">Dưới 10 km</option>"
+      },
+      {
+        "line": 238,
+        "source": "<label className=\"text-[11px] text-outline block mb-1\">Thời gian cần:</label>"
+      },
+      {
+        "line": 241,
+        "source": "onChange={(e) => setSelectedUrgency(e.target.value)}"
+      },
+      {
+        "line": 244,
+        "source": "<option value=\"all\">Tất cả thời gian</option>"
+      },
+      {
+        "line": 245,
+        "source": "<option value=\"urgent\">Sắp hết hạn báo giá</option>"
+      },
+      {
+        "line": 246,
+        "source": "<option value=\"today\">Cần giao trong ngày</option>"
+      },
+      {
+        "line": 269,
+        "source": "onClick={() => setDetailRfq(rfq)}"
+      },
+      {
+        "line": 317,
+        "source": "<h2"
+      },
+      {
+        "line": 319,
+        "source": "onClick={() => setDetailRfq(rfq)}"
+      },
+      {
+        "line": 380,
+        "source": "onClick={() => handleGoToQuoteSubmit(rfq)}"
+      },
+      {
+        "line": 391,
+        "source": "onClick={() => setDetailRfq(rfq)}"
+      },
+      {
+        "line": 400,
+        "source": "onClick={() => handleOpenChat(rfq)}"
+      },
+      {
+        "line": 426,
+        "source": "<h3 className=\"font-headline-md text-xl font-bold text-primary\">{detailRfq.title}</h3>"
+      },
+      {
+        "line": 430,
+        "source": "onClick={() => setDetailRfq(null)}"
+      },
+      {
+        "line": 510,
+        "source": "onClick={() => setDetailRfq(null)}"
+      },
+      {
+        "line": 517,
+        "source": "onClick={() => handleRejectRfq(detailRfq.id)}"
+      },
+      {
+        "line": 526,
+        "source": "onClick={() => {"
+      },
+      {
+        "line": 559,
+        "source": "onClick={() => setChatRfq(null)}"
+      },
+      {
+        "line": 587,
+        "source": "onSubmit={handleSendChatMessage}"
+      },
+      {
+        "line": 593,
+        "source": "onChange={(e) => setChatMessageInput(e.target.value)}"
+      },
+      {
+        "line": 594,
+        "source": "placeholder=\"Nhập câu hỏi tư vấn cho khách hàng...\""
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/pages/vendor/settings/index.js",
+    "lines": 2,
+    "sha256": "f348692c97fcca12fcfa271bc80326987de91d588f44c856f82b789eddb5c08e",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/pages/vendor/settings/VendorSettingsPage.jsx",
+    "lines": 421,
+    "sha256": "b12b52fbf1dc3fae722a4d34772ec463c18d0e7901ce50b10fbcbeade5e56331",
+    "controls": [
+      {
+        "line": 7,
+        "source": "const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)"
+      },
+      {
+        "line": 8,
+        "source": "const [shopName, setShopName] = useState(DEFAULT_VENDOR_SETTINGS.shopName)"
+      },
+      {
+        "line": 9,
+        "source": "const [headChef, setHeadChef] = useState(DEFAULT_VENDOR_SETTINGS.headChef)"
+      },
+      {
+        "line": 10,
+        "source": "const [phone, setPhone] = useState(DEFAULT_VENDOR_SETTINGS.phone)"
+      },
+      {
+        "line": 11,
+        "source": "const [email, setEmail] = useState(DEFAULT_VENDOR_SETTINGS.email)"
+      },
+      {
+        "line": 12,
+        "source": "const [kitchenAddress, setKitchenAddress] = useState(DEFAULT_VENDOR_SETTINGS.kitchenAddress)"
+      },
+      {
+        "line": 13,
+        "source": "const [bio, setBio] = useState(DEFAULT_VENDOR_SETTINGS.bio)"
+      },
+      {
+        "line": 14,
+        "source": "const [deliveryRadius, setDeliveryRadius] = useState(DEFAULT_VENDOR_SETTINGS.deliveryRadius)"
+      },
+      {
+        "line": 15,
+        "source": "const [operatingHours, setOperatingHours] = useState(DEFAULT_VENDOR_SETTINGS.operatingHours)"
+      },
+      {
+        "line": 16,
+        "source": "const [minLeadTime, setMinLeadTime] = useState(DEFAULT_VENDOR_SETTINGS.minLeadTime)"
+      },
+      {
+        "line": 19,
+        "source": "const [bankName, setBankName] = useState(DEFAULT_VENDOR_SETTINGS.bankName)"
+      },
+      {
+        "line": 20,
+        "source": "const [bankAccount, setBankAccount] = useState(DEFAULT_VENDOR_SETTINGS.bankAccount)"
+      },
+      {
+        "line": 21,
+        "source": "const [accountHolder, setAccountHolder] = useState(DEFAULT_VENDOR_SETTINGS.accountHolder)"
+      },
+      {
+        "line": 24,
+        "source": "const [acceptRfqAuto, setAcceptRfqAuto] = useState(true)"
+      },
+      {
+        "line": 25,
+        "source": "const [soundNotification, setSoundNotification] = useState(true)"
+      },
+      {
+        "line": 26,
+        "source": "const [acceptUrgentOrder, setAcceptUrgentOrder] = useState(true)"
+      },
+      {
+        "line": 28,
+        "source": "const [toastFeedback, setToastFeedback] = useState(null)"
+      },
+      {
+        "line": 71,
+        "source": "onClick={() => onNavigate && onNavigate('stores')}"
+      },
+      {
+        "line": 97,
+        "source": "<h1 className=\"font-headline-lg text-2xl font-bold text-primary tracking-tight\">{shopName}</h1>"
+      },
+      {
+        "line": 114,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-menu')}"
+      },
+      {
+        "line": 122,
+        "source": "<form onSubmit={handleSaveSettings} className=\"space-y-6\">"
+      },
+      {
+        "line": 133,
+        "source": "<h2 className=\"font-headline-sm text-base sm:text-lg font-bold text-primary\">"
+      },
+      {
+        "line": 145,
+        "source": "<label className=\"font-bold text-primary block\">Tên tiệm bánh:</label>"
+      },
+      {
+        "line": 149,
+        "source": "onChange={(e) => setShopName(e.target.value)}"
+      },
+      {
+        "line": 156,
+        "source": "<label className=\"font-bold text-primary block\">Chủ tiệm / Bếp trưởng đại diện:</label>"
+      },
+      {
+        "line": 160,
+        "source": "onChange={(e) => setHeadChef(e.target.value)}"
+      },
+      {
+        "line": 167,
+        "source": "<label className=\"font-bold text-primary block\">Hotline tiệm bánh:</label>"
+      },
+      {
+        "line": 171,
+        "source": "onChange={(e) => setPhone(e.target.value)}"
+      },
+      {
+        "line": 178,
+        "source": "<label className=\"font-bold text-primary block\">Email liên hệ:</label>"
+      },
+      {
+        "line": 182,
+        "source": "onChange={(e) => setEmail(e.target.value)}"
+      },
+      {
+        "line": 189,
+        "source": "<label className=\"font-bold text-primary block\">Giới thiệu tiệm &amp; Phong cách bánh:</label>"
+      },
+      {
+        "line": 193,
+        "source": "onChange={(e) => setBio(e.target.value)}"
+      },
+      {
+        "line": 195,
+        "source": "placeholder=\"Mô tả phong cách làm bánh, nguyên liệu cam kết, thế mạnh của tiệm...\""
+      },
+      {
+        "line": 211,
+        "source": "<h2 className=\"font-headline-sm text-base sm:text-lg font-bold text-primary\">"
+      },
+      {
+        "line": 223,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 229,
+        "source": "onChange={(e) => setKitchenAddress(e.target.value)}"
+      },
+      {
+        "line": 236,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 242,
+        "source": "onChange={(e) => setOperatingHours(e.target.value)}"
+      },
+      {
+        "line": 248,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 255,
+        "source": "onChange={(e) => setDeliveryRadius(e.target.value)}"
+      },
+      {
+        "line": 265,
+        "source": "<label className=\"font-bold text-primary block\">"
+      },
+      {
+        "line": 272,
+        "source": "onChange={(e) => setMinLeadTime(e.target.value)}"
+      },
+      {
+        "line": 293,
+        "source": "<h2 className=\"font-headline-sm text-base sm:text-lg font-bold text-primary\">"
+      },
+      {
+        "line": 305,
+        "source": "<label className=\"font-bold text-primary block\">Tên ngân hàng:</label>"
+      },
+      {
+        "line": 309,
+        "source": "onChange={(e) => setBankName(e.target.value)}"
+      },
+      {
+        "line": 316,
+        "source": "<label className=\"font-bold text-primary block\">Số tài khoản:</label>"
+      },
+      {
+        "line": 320,
+        "source": "onChange={(e) => setBankAccount(e.target.value)}"
+      },
+      {
+        "line": 327,
+        "source": "<label className=\"font-bold text-primary block\">Tên chủ tài khoản:</label>"
+      },
+      {
+        "line": 331,
+        "source": "onChange={(e) => setAccountHolder(e.target.value.toUpperCase())}"
+      },
+      {
+        "line": 341,
+        "source": "<h3 className=\"font-headline-sm text-base sm:text-lg font-bold text-primary\">"
+      },
+      {
+        "line": 346,
+        "source": "<label className=\"flex items-center justify-between p-3.5 bg-surface-container-low rounded-xl cursor-pointer hover:bg-surface-container transition-colors\">"
+      },
+      {
+        "line": 358,
+        "source": "onChange={(e) => setAcceptRfqAuto(e.target.checked)}"
+      },
+      {
+        "line": 363,
+        "source": "<label className=\"flex items-center justify-between p-3.5 bg-surface-container-low rounded-xl cursor-pointer hover:bg-surface-container transition-colors\">"
+      },
+      {
+        "line": 375,
+        "source": "onChange={(e) => setSoundNotification(e.target.checked)}"
+      },
+      {
+        "line": 380,
+        "source": "<label className=\"flex items-center justify-between p-3.5 bg-surface-container-low rounded-xl cursor-pointer hover:bg-surface-container transition-colors\">"
+      },
+      {
+        "line": 392,
+        "source": "onChange={(e) => setAcceptUrgentOrder(e.target.checked)}"
+      },
+      {
+        "line": 403,
+        "source": "onClick={() => onNavigate && onNavigate('vendor-dashboard')}"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/routes/AppRoutes.jsx",
+    "lines": 167,
+    "sha256": "1d91d5ccdc6d59391691fb9409b32b0f3be021dab2decc3207e11248fd9485c5",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/authService.js",
+    "lines": 27,
+    "sha256": "a79132ba0bf7e68c67255c51358f0cdc77c14a81774913711e5e68d365de53e4",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/cakeService.js",
+    "lines": 24,
+    "sha256": "98e7668beb0c248e89195ce650a200d67825fbd958c870350b983d1b531cde48",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/index.js",
+    "lines": 5,
+    "sha256": "e2e00072943963f5c38a98e4d7d4ea1ae4c50643263eef7bc80a5065d49adde2",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/orderService.js",
+    "lines": 26,
+    "sha256": "563cbf9158e3bc473552dcd5fd374926744a96d8e6cf2fa3dda46b7610a68297",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/rfqService.js",
+    "lines": 29,
+    "sha256": "f79228337adf02206d8cd904561fc5073f5a8285a65140eebc9607db1b10455c",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/services/vendorService.js",
+    "lines": 17,
+    "sha256": "15947bbf9a373840636c4d8273e2f80c021a5cf48e12be393edbddb58483dbba",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/utils/constants.js",
+    "lines": 22,
+    "sha256": "821efd937a30c3436513e9f6d6322760b38e5f8bfe8bb2e00ef05a18de2f211f",
+    "controls": []
+  },
+  {
+    "path": "frontend/src/utils/formatters.js",
+    "lines": 24,
+    "sha256": "ab97141ef79dccab7e895874754f569a02a2ba0a22c9bd0107e3d505aa289bf0",
+    "controls": []
+  },
+  {
+    "path": "frontend/vite.config.js",
+    "lines": 8,
+    "sha256": "918bdb49912d11a3b4b60751edb05aa1b5a60bf7e083637fd989fd28faaff82e",
+    "controls": []
+  }
+]

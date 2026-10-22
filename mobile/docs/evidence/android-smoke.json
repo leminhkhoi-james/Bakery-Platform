@@ -1,0 +1,20 @@
+{
+  "path": "artifacts\\sweetcake-debug.apk",
+  "bytes": 206916178,
+  "sha256": "2728f08d71870478d2c61567c4058ef0f24472a1d0c6565475e3634e22307c0d",
+  "entrypoint": "lib/main.dart",
+  "applicationId": "dev.sweetcake.sweetcake_mobile",
+  "emulator": "emulator-5556",
+  "model": "sdk_gphone64_x86_64",
+  "api": "36",
+  "startup": "Starting: Intent { cmp=dev.sweetcake.sweetcake_mobile/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: dev.sweetcake.sweetcake_mobile/.MainActivity\nTotalTime: 4893\nWaitTime: 4896\nComplete",
+  "startupMilliseconds": 4893,
+  "pid": "6021",
+  "offline": {
+    "wifi_on": "0",
+    "mobile_data": "0"
+  },
+  "runtimeErrorLog": "",
+  "screenshot": "docs/evidence/android-home.png",
+  "result": "PASSED"
+}

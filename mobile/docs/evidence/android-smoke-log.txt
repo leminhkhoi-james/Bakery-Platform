@@ -1,0 +1,38 @@
+$ adb install -r D:\MSS301\Bakery-Platform\mobile\artifacts\sweetcake-debug.apk
+Performing Streamed Install
+Success
+
+$ adb logcat -c
+
+$ adb shell am force-stop dev.sweetcake.sweetcake_mobile
+
+$ adb shell am start -W -n dev.sweetcake.sweetcake_mobile/.MainActivity
+Starting: Intent { cmp=dev.sweetcake.sweetcake_mobile/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: dev.sweetcake.sweetcake_mobile/.MainActivity
+TotalTime: 4893
+WaitTime: 4896
+Complete
+
+$ adb shell pidof dev.sweetcake.sweetcake_mobile
+6021
+
+$ adb shell screencap -p /sdcard/sweetcake-home.png
+
+$ adb pull /sdcard/sweetcake-home.png D:\MSS301\Bakery-Platform\mobile\docs\evidence\android-home.png
+/sdcard/sweetcake-home.png: 1 file pulled, 0 skipped. 29.4 MB/s (181310 bytes in 0.006s)
+
+$ adb logcat -d -s flutter:E AndroidRuntime:E
+
+$ adb shell settings get global wifi_on
+0
+
+$ adb shell settings get global mobile_data
+0
+
+$ adb shell getprop ro.product.model
+sdk_gphone64_x86_64
+
+$ adb shell getprop ro.build.version.sdk
+36

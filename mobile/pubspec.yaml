@@ -1,0 +1,30 @@
+name: sweetcake_mobile
+description: SweetCake Flutter mobile UI with offline mock data.
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: '>=3.13.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.3.0
+  flutter_localizations:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/
+    - assets/images/
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand.ttf
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans.ttf
