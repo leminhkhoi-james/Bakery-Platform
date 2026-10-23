@@ -7,7 +7,7 @@ JWT authentication via oauth2-resource-server.
 ## Read Before Coding
 - **Coding conventions**: `.codex-rules/project-rules.md` — read this FIRST, follow strictly
 - **Current progress**: `docs/PROJECT-STATUS.md` — know where we are before starting
-- **Architecture**: `docs/02-system-architecture.md`
+- **Architecture**: `docs/ARCHITECTURE.md`
 - **API endpoints**: `docs/API_SPEC.md`
 - **Database schema**: `docs/DATABASE.md`
 - **Why decisions were made**: `docs/decisions/`

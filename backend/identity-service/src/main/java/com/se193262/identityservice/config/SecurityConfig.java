@@ -2,6 +2,7 @@ package com.se193262.identityservice.config;
 
 import com.se193262.identityservice.security.CustomUserDetailsService;
 import com.se193262.identityservice.shared.dto.ApiResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -31,10 +32,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import tools.jackson.databind.ObjectMapper;
+
 import java.util.List;
 import java.util.function.Supplier;
-
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableWebSecurity
@@ -47,36 +48,61 @@ public class SecurityConfig {
             Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter,
             AuthenticationEntryPoint authenticationEntryPoint,
             AccessDeniedHandler accessDeniedHandler,
-            CorsConfigurationSource corsConfigurationSource
-    ) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+            CorsConfigurationSource corsConfigurationSource)
+            throws Exception {
+        http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/.well-known/jwks.json", "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/v1/auth/register",
-                                "/api/v1/auth/login",
-                                "/api/v1/auth/refresh").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/internal/v1/users/*/addresses/*")
-                        .access(serviceScope("identity:address:read"))
-                        .requestMatchers(HttpMethod.GET, "/internal/v1/users/*")
-                        .access(serviceScope("identity:user:read"))
-                        .requestMatchers("/internal/v1/**").denyAll()
-                        .requestMatchers("/api/v1/admin/**").access(userRole("ROLE_ADMIN"))
-                        .requestMatchers("/api/v1/**").access(tokenType("user"))
-                        .anyRequest().denyAll())
-                .oauth2ResourceServer(resourceServer -> resourceServer
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler))
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler));
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(
+                        authorize ->
+                                authorize
+                                        .requestMatchers(
+                                                HttpMethod.POST, "/internal/v1/auth/service-token")
+                                        .permitAll()
+                                        .requestMatchers("/actuator/health", "/actuator/health/**")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                HttpMethod.GET,
+                                                "/.well-known/jwks.json",
+                                                "/v3/api-docs/**",
+                                                "/v3/api-docs.yaml",
+                                                "/swagger-ui/**",
+                                                "/swagger-ui.html")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                HttpMethod.POST,
+                                                "/api/v1/auth/register",
+                                                "/api/v1/auth/login",
+                                                "/api/v1/auth/refresh")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                HttpMethod.GET, "/internal/v1/users/*/addresses/*")
+                                        .access(serviceScope("identity:address:read"))
+                                        .requestMatchers(HttpMethod.GET, "/internal/v1/users/*")
+                                        .access(serviceScope("identity:user:read"))
+                                        .requestMatchers("/internal/v1/**")
+                                        .denyAll()
+                                        .requestMatchers("/api/v1/admin/**")
+                                        .access(userRole("ROLE_ADMIN"))
+                                        .requestMatchers("/api/v1/**")
+                                        .access(tokenType("user"))
+                                        .anyRequest()
+                                        .denyAll())
+                .oauth2ResourceServer(
+                        resourceServer ->
+                                resourceServer
+                                        .jwt(
+                                                jwt ->
+                                                        jwt.jwtAuthenticationConverter(
+                                                                jwtAuthenticationConverter))
+                                        .authenticationEntryPoint(authenticationEntryPoint)
+                                        .accessDeniedHandler(accessDeniedHandler))
+                .exceptionHandling(
+                        exceptions ->
+                                exceptions
+                                        .authenticationEntryPoint(authenticationEntryPoint)
+                                        .accessDeniedHandler(accessDeniedHandler));
         return http.build();
     }
 
@@ -87,9 +113,7 @@ public class SecurityConfig {
 
     @Bean
     AuthenticationManager authenticationManager(
-            CustomUserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder
-    ) {
+            CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);
@@ -99,9 +123,15 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(CorsProperties properties) {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(properties.allowedOrigins());
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of(
-                "Authorization", "Content-Type", "Cache-Control", "Idempotency-Key", "X-Correlation-Id"));
+        configuration.setAllowedMethods(
+                List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(
+                List.of(
+                        "Authorization",
+                        "Content-Type",
+                        "Cache-Control",
+                        "Idempotency-Key",
+                        "X-Correlation-Id"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -116,8 +146,9 @@ public class SecurityConfig {
             response.setCharacterEncoding("UTF-8");
             objectMapper.writeValue(
                     response.getWriter(),
-                    ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), "Authentication is required or token is invalid")
-            );
+                    ApiResponse.error(
+                            HttpStatus.UNAUTHORIZED.value(),
+                            "Authentication is required or token is invalid"));
         };
     }
 
@@ -129,37 +160,44 @@ public class SecurityConfig {
             response.setCharacterEncoding("UTF-8");
             objectMapper.writeValue(
                     response.getWriter(),
-                    ApiResponse.error(HttpStatus.FORBIDDEN.value(), "Access is denied")
-            );
+                    ApiResponse.error(HttpStatus.FORBIDDEN.value(), "Access is denied"));
         };
     }
 
     private AuthorizationManager<RequestAuthorizationContext> tokenType(String expectedType) {
-        return (authentication, context) -> new AuthorizationDecision(
-                hasTokenType(authentication, expectedType));
+        return (authentication, context) ->
+                new AuthorizationDecision(hasTokenType(authentication, expectedType));
     }
 
     private AuthorizationManager<RequestAuthorizationContext> userRole(String authority) {
-        return (authentication, context) -> new AuthorizationDecision(
-                hasTokenType(authentication, "user") && hasAuthority(authentication, authority));
+        return (authentication, context) ->
+                new AuthorizationDecision(
+                        hasTokenType(authentication, "user")
+                                && hasAuthority(authentication, authority));
     }
 
     private AuthorizationManager<RequestAuthorizationContext> serviceScope(String scope) {
-        return (authentication, context) -> new AuthorizationDecision(
-                hasTokenType(authentication, "service")
-                        && hasAuthority(authentication, "SCOPE_" + scope));
+        return (authentication, context) ->
+                new AuthorizationDecision(
+                        hasTokenType(authentication, "service")
+                                && hasAuthority(authentication, "SCOPE_" + scope));
     }
 
-    private boolean hasTokenType(Supplier<? extends Authentication> authentication, String expectedType) {
+    private boolean hasTokenType(
+            Supplier<? extends Authentication> authentication, String expectedType) {
         Authentication resolved = authentication.get();
         return resolved instanceof JwtAuthenticationToken jwtAuthentication
                 && resolved.isAuthenticated()
                 && expectedType.equals(jwtAuthentication.getToken().getClaimAsString("token_type"));
     }
 
-    private boolean hasAuthority(Supplier<? extends Authentication> authentication, String authority) {
+    private boolean hasAuthority(
+            Supplier<? extends Authentication> authentication, String authority) {
         Authentication resolved = authentication.get();
-        return resolved != null && resolved.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> authority.equals(grantedAuthority.getAuthority()));
+        return resolved != null
+                && resolved.getAuthorities().stream()
+                        .anyMatch(
+                                grantedAuthority ->
+                                        authority.equals(grantedAuthority.getAuthority()));
     }
 }

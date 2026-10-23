@@ -45,7 +45,7 @@ tiện hơn. Nếu thay đổi là cần thiết, cập nhật tài liệu trư�
 | Build | Maven Wrapper |
 | Test | JUnit, Mockito, MockMvc, Testcontainers PostgreSQL |
 | Frontend | ReactJS; gọi backend qua API Gateway |
-| Object storage | MinIO hoặc S3; database chỉ lưu object key/metadata |
+| Object storage | Cloud Storage for Firebase (Marketplace); database chỉ lưu object key/metadata |
 | Local runtime | Docker Compose khi các service được scaffold đầy đủ |
 
 Không giả định dependency đã tồn tại. Trước khi sử dụng thư viện, kiểm tra
@@ -551,7 +551,7 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, UU
 
 ## 15. Object storage và upload
 
-- File ảnh lưu trên MinIO/S3; PostgreSQL chỉ lưu `object_key`, MIME type, size
+- Ảnh Marketplace lưu trên Cloud Storage for Firebase; PostgreSQL chỉ lưu `object_key`, MIME type, size
   và metadata cần thiết.
 - Không lưu base64 hoặc binary ảnh trong database.
 - Validate MIME bằng nội dung file, không chỉ extension do client cung cấp.
@@ -733,7 +733,7 @@ log.warn("Subscription inactive: bakeryId={}", bakeryId);
 | Thay đổi bảng/cột/index/constraint | Mermaid, `docs/DATABASE.md`, Flyway |
 | Quyết định kiến trúc mới | ADR trong `docs/decisions/` |
 | Feature có logic khó hiểu | `CONTEXT.md` trong feature package |
-| Thay đổi service boundary | `docs/02-system-architecture.md` và ADR |
+| Thay đổi service boundary | `docs/ARCHITECTURE.md` và ADR |
 
 Không tạo tài liệu giả hoặc đánh dấu hoàn thành khi code/test chưa tồn tại.
 Nếu file tài liệu được tham chiếu trong `AGENTS.md` chưa tồn tại, tạo file khi

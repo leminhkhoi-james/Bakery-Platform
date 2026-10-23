@@ -20,3 +20,7 @@ This feature may persist only data owned by Identity Service. References to
 other services remain plain UUID values and must be validated through internal
 REST contracts.
 
+
+## Internal service authentication
+
+ServiceTokenService issues five-minute target/scoped RS256 tokens after checking a configured BCrypt client secret hash and exact audience/scope grants. See ADR-002.

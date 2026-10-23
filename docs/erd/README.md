@@ -31,7 +31,7 @@ ERD tương ứng với một microservice và một database riêng.
   khác; chúng không phải database foreign key.
 - Các giá trị tiền tệ dùng `decimal`; khi hiện thực bằng PostgreSQL nên dùng
   `NUMERIC(12,2)` hoặc precision phù hợp.
-- Ảnh được lưu trên MinIO/S3; database chỉ lưu `object_key` và metadata.
+- Ảnh được lưu trên Cloud Storage for Firebase (Marketplace) hoặc storage adapter của service sở hữu; database chỉ lưu `object_key` và metadata.
 - Các bảng snapshot trong Order Service giữ nguyên dữ liệu tại thời điểm đặt
   hàng, kể cả khi profile, offer hoặc add-on ở service khác thay đổi về sau.
 - Marketplace Service là nơi sở hữu việc chọn mẫu bánh thông qua

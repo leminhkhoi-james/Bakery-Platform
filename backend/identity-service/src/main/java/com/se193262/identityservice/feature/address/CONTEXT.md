@@ -6,8 +6,7 @@ Customer address management.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Internal ownership-checked address snapshots are served through the user-context service. Public address CRUD remains pending.
 
 ## Boundary
 

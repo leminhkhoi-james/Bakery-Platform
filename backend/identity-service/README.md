@@ -28,3 +28,6 @@ set the last variable to `false` only for local HTTP development.
 Runtime Flyway migrations under `src/main/resources/db/migration` mirror the
 canonical files in `database/postgresql/identity-service`. A test fails when
 the copies drift.
+
+Docker instructions: [docs/DOCKER.md](../../docs/DOCKER.md). Executable builds use the `-exec.jar` suffix.
+Internal service-token issuance, user snapshot and address snapshot are implemented.

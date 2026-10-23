@@ -1,5 +1,2 @@
-/**
- * JWT authentication and authorization configuration.
- */
+/** JWT authentication and authorization configuration. */
 package com.se193262.marketplaceservice.security;
-

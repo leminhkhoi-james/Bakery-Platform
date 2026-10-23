@@ -66,3 +66,10 @@ spring:
 
 Không dùng `ddl-auto: update` cùng với Flyway vì hai cơ chế có thể thay đổi
 schema theo các cách khác nhau.
+
+## Runtime additions (2026-10-17)
+
+Marketplace và Order còn có V2 cho acceptance workflow/image size và order idempotency.
+Khi chạy service, để Flyway tự áp dụng toàn bộ migration trong runtime classpath thay vì chỉ
+chạy V1 thủ công. Các file SQL trong `../dev/` là fixture tùy chọn cho DB dùng thử và không
+được đưa vào Flyway production.

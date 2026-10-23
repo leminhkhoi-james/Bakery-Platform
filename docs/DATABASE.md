@@ -14,13 +14,13 @@ liệu của mình và không được đọc trực tiếp database của servi
 |---|---:|---:|---|---|
 | Identity Service | `identity_db` | 6 | [Xem ERD](erd/01-identity-service-logical.mmd) | [V1](../database/postgresql/identity-service/V1__init_schema.sql) |
 | Bakery Service | `bakery_db` | 11 | [Xem ERD](erd/02-bakery-service-logical.mmd) | [V1](../database/postgresql/bakery-service/V1__init_schema.sql) |
-| Marketplace Service | `marketplace_db` | 8 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
-| Order Service | `order_db` | 5 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql) |
+| Marketplace Service | `marketplace_db` | 9 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
+| Order Service | `order_db` | 6 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql) |
 | Chat Service | `chat_db` | 5 | [Xem ERD](erd/05-chat-service-logical.mmd) | [V1](../database/postgresql/chat-service/V1__init_schema.sql) |
 | Cake AI Service | `cake_ai_db` | 4 | [Xem ERD](erd/06-cake-ai-service-logical.mmd) | [V1](../database/postgresql/cake-ai-service/V1__init_schema.sql) |
 | Subscription Service | `subscription_db` | 5 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql) |
 
-**Tổng cộng: 44 bảng trong 7 database.**
+**Tổng cộng: 46 bảng trong 7 database.**
 
 Conceptual ERD toàn hệ thống: [00-conceptual-overall.mmd](erd/00-conceptual-overall.mmd).
 
@@ -345,7 +345,7 @@ private Map<String, Object> configurationSnapshot;
 
 ## Migration notes
 
-- **Tổng số bảng: 44**, chia trong 7 database.
+- **Tổng số bảng: 46**, chia trong 7 database.
 - Schema được quản lý bằng Flyway; production dùng `ddl-auto: validate`.
 - File tạo database: [00_create_databases.sql](../database/postgresql/00_create_databases.sql).
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).
@@ -357,3 +357,17 @@ private Map<String, Object> configurationSnapshot;
   canonical trong `database/postgresql/identity-service`.
 - Không sửa migration đã chạy ở môi trường dùng chung; tạo `V3`, `V4`, ... cho
   mọi thay đổi tiếp theo.
+
+
+## Marketplace and Order schema additions — 2026-10-17
+
+- Marketplace V2 adds `request_images.size_bytes BIGINT NOT NULL` (nonnegative).
+- `offer_acceptance_workflows`: UUID PK; local request/offer FKs; external customer UUID; customer/key
+  unique; SHA-256 payload fingerprint; delivery-address UUID/note; PREPARED/RETRYING/SUCCEEDED/FAILED;
+  retry count/next time; lease owner/until; order result; error status; timestamps and optimistic version.
+- Partial unique `cake_request_id` for PREPARED/RETRYING/SUCCEEDED reserves at most one successful or
+  unresolved selection per request. Due-time index supports recovery. No new request/offer enum values.
+- Order V2 adds `order_offer_creations`: idempotency key PK, unique offer FK to the local order's unique
+  offer reference, payload fingerprint and created timestamp. It commits atomically with order snapshots.
+- Images are in Firebase Storage; database stores object keys/metadata, never signed URLs or file bytes.
+- `database/dev/` is optional disposable fixture SQL and is not a production migration location.

@@ -6,8 +6,7 @@ Customer cake requests, preferences, reference images and selected designs.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Request lifecycle, authorized pagination, JSONB preferences, option snapshots, Firebase image compensation and selected-design validation are implemented. All aggregate mutations touch the request optimistic version. Image uploads happen outside the metadata transaction.
 
 ## Boundary
 

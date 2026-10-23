@@ -10,6 +10,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
+@org.springframework.test.annotation.DirtiesContext(
+        classMode = org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -18,7 +20,11 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 public abstract class AbstractPostgresIntegrationTest {
 
     @Container
-    static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17-alpine");
+    static final PostgreSQLContainer POSTGRES =
+            new PostgreSQLContainer(
+                    org.testcontainers.utility.DockerImageName.parse(
+                                    System.getProperty("test.postgres.image", "postgres:17-alpine"))
+                            .asCompatibleSubstituteFor("postgres"));
 
     @DynamicPropertySource
     static void postgresProperties(DynamicPropertyRegistry registry) {

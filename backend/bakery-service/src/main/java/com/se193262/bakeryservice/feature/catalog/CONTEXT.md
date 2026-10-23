@@ -6,8 +6,7 @@ Public and bakery-owned catalog orchestration.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Internal profile, membership, customization quote and add-on quote APIs read this service database. Full public catalog CRUD remains pending.
 
 ## Boundary
 

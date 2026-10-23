@@ -6,8 +6,7 @@ Subscription periods and bakery entitlement.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Internal entitlement API reads the active subscription period and plan features. Public payment/subscription-management workflows remain pending.
 
 ## Boundary
 

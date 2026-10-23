@@ -8,7 +8,7 @@ User profiles, platform roles and administrative user management.
 
 User, customer profile and platform-role persistence needed by authentication
 is implemented. Registration creates an active customer with the `CUSTOMER`
-role and default `vi` profile. Profile editing, address management and admin
+role and default `vi` profile. Internal user/address snapshot APIs have also been implemented using service-scoped JWTs. Profile editing, public address management and admin
 user-management endpoints remain pending.
 
 ## Boundary

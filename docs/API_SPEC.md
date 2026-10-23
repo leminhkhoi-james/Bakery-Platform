@@ -3,9 +3,10 @@
 > Contract API mục tiêu cho MSS Bakery Platform MVP. Cập nhật file này mỗi khi
 > endpoint, DTO, validation, authorization hoặc business invariant thay đổi.
 >
-> **Implementation status:** đây là contract mục tiêu. Các microservice đã được
-> scaffold và Identity authentication endpoints đã được triển khai; phần lớn
-> domain endpoints bên dưới vẫn đang chờ implementation.
+> **Implementation status:** Identity authentication, Marketplace public/internal APIs
+> và internal APIs tối thiểu ở các service phụ thuộc đã được triển khai. Các public
+> domain API ngoài Marketplace phần lớn vẫn là contract mục tiêu. Xem phần cập nhật
+> Marketplace cuối tài liệu và PROJECT-STATUS.md để biết phạm vi/kiểm chứng thực tế.
 
 ---
 
@@ -1822,3 +1823,75 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
   tables.
 - Không có distributed transaction hoặc endpoint cho phép client tự điều phối
   accept-offer workflow.
+
+
+## Implemented Marketplace additions (2026-10-17)
+
+Marketplace public paths in sections 6–7 and its two internal context/source paths are implemented.
+Reference images use **Cloud Storage for Firebase**, uploaded through the backend; no Firebase Auth
+or direct browser upload is involved. Responses include `sizeBytes`; URLs are V4 signed GET URLs
+valid for 15 minutes. No raw object keys are exposed. See [Firebase setup](FIREBASE-SETUP.md).
+
+### Service credentials
+
+`POST /internal/v1/auth/service-token` is credential-authenticated rather than bearer-authenticated.
+Request JSON: `{clientId, clientSecret, audience, scope}`. Scope is space-delimited and must be a subset
+of the client's configured grant for that exact audience. Success 200: `{accessToken, expiresIn:300}`.
+Invalid credentials, target or scopes return 401. User JWTs cannot invoke internal domain APIs;
+service JWTs cannot invoke public APIs. Private keys remain only in Identity.
+
+### Additional internal contracts
+
+- `GET /internal/v1/users/{userId}/bakery-memberships` (Bakery), scope `bakery:membership:read`:
+  array of `{bakeryId,userId,active,memberRole,authorized}` for active memberships.
+- `POST /internal/v1/catalog/add-on-quotes` (Bakery), scope `bakery:catalog:quote`:
+  validates bakery/service area and snapshots add-ons without requiring a base product.
+- `GET /internal/v1/cake-requests/{id}/generation-context` (Cake AI), scope `cake-ai:design:validate`:
+  `{hasJobs}`; changing a draft request type is blocked if it already has AI jobs.
+- Design validation also includes `{id,jobStatus}`; selected design requires SUCCEEDED + APPROVED.
+
+The current Marketplace-focused `catalog/quotes` and `catalog/add-on-quotes` request is:
+`{bakeryId,productId?,deliveryCity,deliveryDistrict,optionSelections:[{optionGroupId,optionValueId,quantity}],addOns:[{addOnId,quantity}]}`.
+The response is `{productId,productName,customizable,minimumNoticeHours,options,items,addOnTotal}`.
+Options contain server-generated `groupNameSnapshot`/`valueNameSnapshot`; items contain
+`addOnId,itemNameSnapshot,descriptionSnapshot,quantity,unitPrice,lineTotal`.
+Product quote requires a published product; add-on quote accepts null product. The richer direct-order
+catalog quote contract shown earlier remains a future extension and is not used by this implementation.
+
+### PATCH and lifecycle clarification
+
+PATCH bodies are flat subsets of create fields: omitted fields stay unchanged, explicit null clears
+nullable fields, supplied collections replace the entire collection, unknown fields return 400.
+`bakeryId` cannot be patched on offers. Open requests do not accept product option selections.
+NeededAt must be future; a supplied offer deadline must be future and precede neededAt.
+Offer completion and expiry must be future and no later than neededAt. One bakery has at most one
+offer per request, including previously withdrawn/expired offers. Totals are computed by the server.
+
+Offer deadline prevents new submissions/offer changes; it does not prevent acceptance of an unexpired
+offer. OPEN requests automatically become CLOSED at neededAt. Existing orders remain immutable
+if catalog/preferences/design metadata later change.
+
+Request detail adds `selectedDesign:{id}` when selected and `offers:[{id,bakeryId,status,totalPrice,expiresAt}]`.
+Customers/admins see all request offers; bakery members see only their own bakery offers.
+Customer external UUID is returned in an authorized detail; contact/address PII is not.
+Offer list currently uses the OfferResponse shape with empty items/history; detail includes snapshots/history.
+
+### Acceptance and retry
+
+Public Idempotency-Key is 1–128 ASCII letters/digits or `._:-`; a generated UUID is recommended.
+The key is scoped to customer and bound to offer/address/note. A mismatched replay returns 409.
+An active workflow reserves the request and freezes snapshot-affecting mutation. Timeout/5xx returns
+503 and is retried by the server; the frontend can replay the same key. Another offer cannot be selected
+while the result is uncertain. Definitive 404/422 releases the reservation and preserves that key's failure;
+use a new key after correcting the invalid input. The business status remains OPEN/PENDING until finalized.
+
+`GET /internal/v1/offers/{id}/order-source` is allowed only for an active or successful acceptance workflow.
+Its snapshot includes IDs, request title/description, neededAt, city/district, prices, configuration and items.
+Order validates the payload IDs and delivery area, then stores immutable snapshots and at most one order
+per offer. A customer phone number is required for the order snapshot.
+
+Docker development exposes Identity at localhost:8081 and Marketplace at localhost:8082, without Gateway.
+Other services remain separately configured. See [Docker instructions](DOCKER.md).
+
+Embedded image/offer/history collections are capped at 100 entries; histories show the latest changes.
+Use the paginated offer endpoints for the full offer list. Option/add-on selection arrays are limited to 100.

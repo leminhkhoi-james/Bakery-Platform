@@ -6,8 +6,7 @@ Direct and accepted-offer orders with immutable transaction snapshots.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Internal accepted-offer order creation persists immutable items/address and a durable key/payload fingerprint. Replay checks precede remote calls. Direct orders, public status management and reviews remain pending.
 
 ## Boundary
 

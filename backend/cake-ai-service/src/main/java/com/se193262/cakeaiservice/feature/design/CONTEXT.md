@@ -6,8 +6,7 @@ Generated design metadata, access validation and moderation.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Internal design validation and request generation-context APIs read persisted jobs/designs. Provider generation and public moderation workflows remain pending.
 
 ## Boundary
 

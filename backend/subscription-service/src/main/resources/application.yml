@@ -1,4 +1,44 @@
 spring:
   application:
     name: subscription-service
-
+  datasource:
+    url: ${SUBSCRIPTION_DB_URL}
+    username: ${SUBSCRIPTION_DB_USERNAME}
+    password: ${SUBSCRIPTION_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 101MB
+platform:
+  security:
+    audience: subscription-service
+    jwk-set-uri: ${IDENTITY_JWK_SET_URI:http://localhost:8081/.well-known/jwks.json}
+    issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+    user-audience: bakery-platform-api
+  remote:
+    identity-url: ${IDENTITY_SERVICE_BASE_URL:http://localhost:8081}
+    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8083}
+    subscription-url: ${SUBSCRIPTION_SERVICE_BASE_URL:http://localhost:8084}
+    cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
+    order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
+    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8082}
+    client-id: ${SERVICE_CLIENT_ID:subscription-service}
+    client-secret: ${SERVICE_CLIENT_SECRET:}
+    connect-timeout: 2s
+    read-timeout: 5s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true

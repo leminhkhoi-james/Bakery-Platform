@@ -75,3 +75,11 @@ erDiagram
     CUSTOMER_ORDERS ||--|| DELIVERY_ADDRESS_SNAPSHOTS : ships_to
     CUSTOMER_ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
     CUSTOMER_ORDERS ||--o| ORDER_REVIEWS : may_receive
+
+    ORDER_OFFER_CREATIONS {
+        varchar idempotency_key PK
+        uuid offer_id FK "Unique local order offer reference"
+        varchar payload_fingerprint
+        timestamptz created_at
+    }
+    CUSTOMER_ORDERS ||--o| ORDER_OFFER_CREATIONS : deduplicates

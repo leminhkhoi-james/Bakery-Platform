@@ -6,8 +6,7 @@ Bakery offers and the idempotent offer-acceptance workflow.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Offer snapshots, entitlement/membership checks, lifecycle and durable acceptance workflow are implemented. See ADR-002 for reservation, leases, idempotency and ambiguous-result recovery.
 
 ## Boundary
 
