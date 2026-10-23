@@ -15,10 +15,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.Map;
 
 @Entity
 @Table(name = "subscription_orders")
@@ -37,6 +40,11 @@ public class SubscriptionOrder {
     private UUID requestedByUserId;
     @Column(name = "plan_name_snapshot", nullable = false, length = 120)
     private String planNameSnapshot;
+    @Column(name = "plan_code_snapshot", nullable = false, length = 50)
+    private String planCodeSnapshot;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "features_snapshot", nullable = false, columnDefinition = "jsonb")
+    private Map<String, String> featuresSnapshot;
     @Column(name = "billing_period_months", nullable = false)
     private int billingPeriodMonths;
     @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
@@ -66,6 +74,8 @@ public class SubscriptionOrder {
         this.plan = plan;
         this.requestedByUserId = requestedByUserId;
         this.planNameSnapshot = plan.getName();
+        this.planCodeSnapshot = plan.getCode();
+        this.featuresSnapshot = Map.copyOf(plan.getFeatures());
         this.billingPeriodMonths = plan.getBillingPeriodMonths();
         this.totalAmount = plan.getMonthlyPrice().multiply(BigDecimal.valueOf(plan.getBillingPeriodMonths()));
         this.currency = plan.getCurrency();
@@ -73,12 +83,19 @@ public class SubscriptionOrder {
     }
 
     public void submitPayment() { this.status = SubscriptionOrderStatus.PAYMENT_REVIEW; }
+    public void complete(Instant now) { this.status = SubscriptionOrderStatus.COMPLETED; this.completedAt = now; }
+    public void rejectPayment(Instant now) {
+        this.status = expiresAt.isAfter(now) ? SubscriptionOrderStatus.PENDING_PAYMENT : SubscriptionOrderStatus.EXPIRED;
+    }
+    public void expire() { this.status = SubscriptionOrderStatus.EXPIRED; }
     public UUID getId() { return id; }
     public String getOrderNumber() { return orderNumber; }
     public UUID getBakeryId() { return bakeryId; }
     public SubscriptionPlan getPlan() { return plan; }
     public UUID getRequestedByUserId() { return requestedByUserId; }
     public String getPlanNameSnapshot() { return planNameSnapshot; }
+    public String getPlanCodeSnapshot() { return planCodeSnapshot; }
+    public Map<String, String> getFeaturesSnapshot() { return featuresSnapshot; }
     public int getBillingPeriodMonths() { return billingPeriodMonths; }
     public BigDecimal getTotalAmount() { return totalAmount; }
     public String getCurrency() { return currency; }

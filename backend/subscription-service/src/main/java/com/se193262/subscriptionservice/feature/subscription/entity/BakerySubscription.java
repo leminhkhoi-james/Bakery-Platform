@@ -17,9 +17,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.Map;
 
 @Entity
 @Table(name = "bakery_subscriptions")
@@ -42,6 +45,9 @@ public class BakerySubscription {
     private Instant periodStart;
     @Column(name = "period_end", nullable = false)
     private Instant periodEnd;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "features_snapshot", nullable = false, columnDefinition = "jsonb")
+    private Map<String, String> featuresSnapshot;
     @Column(name = "activated_at")
     private Instant activatedAt;
     @Column(name = "cancelled_at")
@@ -55,6 +61,20 @@ public class BakerySubscription {
 
     protected BakerySubscription() {}
 
+    public BakerySubscription(SubscriptionOrder order, Instant start, Instant end, Instant now) {
+        this.bakeryId = order.getBakeryId();
+        this.plan = order.getPlan();
+        this.sourceOrder = order;
+        this.periodStart = start;
+        this.periodEnd = end;
+        this.featuresSnapshot = Map.copyOf(order.getFeaturesSnapshot());
+        this.status = start.isAfter(now) ? SubscriptionStatus.SCHEDULED : SubscriptionStatus.ACTIVE;
+        if (this.status == SubscriptionStatus.ACTIVE) this.activatedAt = now;
+    }
+
+    public void activate(Instant now) { this.status = SubscriptionStatus.ACTIVE; this.activatedAt = now; }
+    public void expire() { this.status = SubscriptionStatus.EXPIRED; }
+
     public UUID getId() { return id; }
     public UUID getBakeryId() { return bakeryId; }
     public SubscriptionPlan getPlan() { return plan; }
@@ -62,6 +82,7 @@ public class BakerySubscription {
     public SubscriptionStatus getStatus() { return status; }
     public Instant getPeriodStart() { return periodStart; }
     public Instant getPeriodEnd() { return periodEnd; }
+    public Map<String, String> getFeaturesSnapshot() { return featuresSnapshot; }
     public Instant getActivatedAt() { return activatedAt; }
     public Instant getCancelledAt() { return cancelledAt; }
     public Instant getCreatedAt() { return createdAt; }

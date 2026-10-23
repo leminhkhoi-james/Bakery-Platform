@@ -12,12 +12,15 @@ import com.se193262.subscriptionservice.feature.subscriptionorder.entity.Subscri
 import com.se193262.subscriptionservice.feature.subscriptionorder.repository.SubscriptionOrderRepository;
 import com.se193262.subscriptionservice.feature.subscriptionorder.service.SubscriptionOrderService;
 import com.se193262.subscriptionservice.shared.dto.PageResult;
+import com.se193262.subscriptionservice.infrastructure.client.BakeryAccessClient;
+import com.se193262.subscriptionservice.infrastructure.storage.PaymentProofStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -34,33 +37,48 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
     private final SubscriptionPlanRepository planRepository;
     private final BakeryPaymentRepository paymentRepository;
     private final BakerySubscriptionRepository subscriptionRepository;
+    private final BakeryAccessClient bakeryClient;
+    private final PaymentProofStorage proofStorage;
+    private final TransactionTemplate transactions;
     private final long expiryHours;
 
     public SubscriptionOrderServiceImpl(SubscriptionOrderRepository orderRepository,
             SubscriptionPlanRepository planRepository, BakeryPaymentRepository paymentRepository,
-            BakerySubscriptionRepository subscriptionRepository,
+            BakerySubscriptionRepository subscriptionRepository, BakeryAccessClient bakeryClient,
+            PaymentProofStorage proofStorage, TransactionTemplate transactions,
             @Value("${subscription.order-expiry-hours:24}") long expiryHours) {
         this.orderRepository = orderRepository;
         this.planRepository = planRepository;
         this.paymentRepository = paymentRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.bakeryClient = bakeryClient;
+        this.proofStorage = proofStorage;
+        this.transactions = transactions;
         this.expiryHours = expiryHours;
     }
 
-    @Override @Transactional
+    @Override
     public SubscriptionOrderDto create(UUID bakeryId, UUID userId, String idempotencyKey,
                                        SubscriptionOrderDto request) {
+        bakeryClient.requireMember(bakeryId, userId, true);
+        return transactions.execute(status -> createInTransaction(bakeryId, userId, idempotencyKey, request));
+    }
+
+    private SubscriptionOrderDto createInTransaction(UUID bakeryId, UUID userId,
+            String idempotencyKey, SubscriptionOrderDto request) {
         if (request == null || request.planId() == null || request.id() != null
                 || request.orderNumber() != null || request.bakeryId() != null
                 || request.requestedByUserId() != null || request.planNameSnapshot() != null
+                || request.planCodeSnapshot() != null || request.featuresSnapshot() != null
                 || request.billingPeriodMonths() != null || request.totalAmount() != null
                 || request.currency() != null || request.status() != null
                 || request.expiresAt() != null || request.completedAt() != null
                 || request.createdAt() != null || request.payments() != null || request.period() != null) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Only planId is allowed in request body");
         }
-        if (idempotencyKey == null || idempotencyKey.isBlank() || idempotencyKey.length() > 200) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Valid Idempotency-Key is required");
+        try { UUID.fromString(idempotencyKey); }
+        catch (Exception exception) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Valid Idempotency-Key UUID is required");
         }
         String orderNumber = orderNumber(bakeryId, idempotencyKey);
         SubscriptionOrder existing = orderRepository.findByOrderNumber(orderNumber).orElse(null);
@@ -88,13 +106,19 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
     }
 
     @Override @Transactional(readOnly = true)
-    public PageResult<SubscriptionOrderDto> list(UUID bakeryId, SubscriptionOrderStatus status,
-                                                 int page, int size) {
+    public PageResult<SubscriptionOrderDto> list(UUID bakeryId, UUID userId, boolean admin,
+            SubscriptionOrderStatus status, int page, int size, String sort) {
+        if (admin) bakeryClient.requireBakery(bakeryId);
+        else bakeryClient.requireMember(bakeryId, userId, false);
         if (page < 1 || size < 1 || size > 100) {
             throw new AppException(HttpStatus.BAD_REQUEST, "page must be >= 1 and size must be 1..100");
         }
-        PageRequest pageable = PageRequest.of(page - 1, size,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
+        Sort.Direction direction = switch (sort) {
+            case "createdAt,desc" -> Sort.Direction.DESC;
+            case "createdAt,asc" -> Sort.Direction.ASC;
+            default -> throw new AppException(HttpStatus.BAD_REQUEST, "Invalid order sort");
+        };
+        PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(direction, "createdAt"));
         var orders = status == null
                 ? orderRepository.findAllByBakeryId(bakeryId, pageable)
                 : orderRepository.findAllByBakeryIdAndStatus(bakeryId, status, pageable);
@@ -103,15 +127,23 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
     }
 
     @Override @Transactional(readOnly = true)
-    public SubscriptionOrderDto get(UUID orderId) {
-        return details(orderRepository.findById(orderId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found")));
+    public SubscriptionOrderDto get(UUID orderId, UUID userId, boolean admin) {
+        SubscriptionOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found"));
+        if (!admin) bakeryClient.requireMember(order.getBakeryId(), userId, false);
+        return details(order, admin ? null : userId);
     }
 
     private SubscriptionOrderDto details(SubscriptionOrder order) {
+        return details(order, null);
+    }
+
+    private SubscriptionOrderDto details(SubscriptionOrder order, UUID viewerId) {
         return SubscriptionOrderDto.fromEntity(order,
                 paymentRepository.findAllByOrder_IdOrderBySubmittedAtAsc(order.getId()),
-                subscriptionRepository.findBySourceOrder_Id(order.getId()).orElse(null));
+                subscriptionRepository.findBySourceOrder_Id(order.getId()).orElse(null),
+                payment -> viewerId == null || viewerId.equals(payment.getSubmittedByUserId())
+                        ? proofStorage.signedUrl(payment.getProofObjectKey()) : null);
     }
 
     private static String orderNumber(UUID bakeryId, String idempotencyKey) {

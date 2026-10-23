@@ -21,13 +21,26 @@ public record BakeryPaymentDto(
         UUID reviewedByAdminId,
         String reviewNote,
         Instant submittedAt,
-        Instant reviewedAt
+        Instant reviewedAt,
+        String proofUrl
 ) {
+    public BakeryPaymentDto(UUID id, UUID subscriptionOrderId, UUID submittedByUserId,
+            String paymentMethod, String paymentReference, BigDecimal amount, String currency,
+            PaymentStatus status, UUID reviewedByAdminId, String reviewNote,
+            Instant submittedAt, Instant reviewedAt) {
+        this(id, subscriptionOrderId, submittedByUserId, paymentMethod, paymentReference,
+                amount, currency, status, reviewedByAdminId, reviewNote, submittedAt, reviewedAt, null);
+    }
+
     public static BakeryPaymentDto fromEntity(BakeryPayment payment) {
+        return fromEntity(payment, null);
+    }
+
+    public static BakeryPaymentDto fromEntity(BakeryPayment payment, String proofUrl) {
         return new BakeryPaymentDto(payment.getId(), payment.getOrder().getId(),
                 payment.getSubmittedByUserId(), payment.getPaymentMethod(),
                 payment.getPaymentReference(), payment.getAmount(), payment.getCurrency(),
                 payment.getStatus(), payment.getReviewedByAdminId(), payment.getReviewNote(),
-                payment.getSubmittedAt(), payment.getReviewedAt());
+                payment.getSubmittedAt(), payment.getReviewedAt(), proofUrl);
     }
 }

@@ -4,7 +4,6 @@ import com.se193262.subscriptionservice.feature.payment.dto.BakeryPaymentDto;
 import com.se193262.subscriptionservice.feature.payment.service.BakeryPaymentService;
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@Profile("!prod")
 @RequestMapping("/api/v1/subscription-orders/{orderId}/payments")
 public class BakeryPaymentController {
     private final BakeryPaymentService paymentService;
@@ -37,6 +35,6 @@ public class BakeryPaymentController {
             @RequestPart(value = "proof", required = false) MultipartFile proof) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(
                 paymentService.submit(orderId, UUID.fromString(jwt.getSubject()), idempotencyKey, request,
-                        proof != null && !proof.isEmpty())));
+                        proof)));
     }
 }

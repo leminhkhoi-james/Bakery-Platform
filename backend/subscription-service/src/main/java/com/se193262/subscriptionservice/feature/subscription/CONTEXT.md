@@ -6,12 +6,12 @@ Subscription periods and bakery entitlement.
 
 ## Current state
 
-The bakery subscription read API returns the current ACTIVE period, the next
-SCHEDULED period and active plan features when present. It returns null periods
-when none exist. Payment approval, period creation/activation, expiry scheduler,
-feature snapshots and the protected internal entitlement endpoint are pending.
-The temporary read controller is disabled in `prod`. JWT authentication and
-platform role checks are integrated; bakery membership validation is pending.
+The bakery read API returns current ACTIVE and next SCHEDULED periods with
+snapshotted features. Admin approval creates an ACTIVE period or queues a renewal
+after the current period. A scheduler activates due periods and expires ended
+periods. The internal entitlement endpoint uses service JWT audience/scope and
+returns inactive for bakeries without a current period. Public reads check Bakery
+membership or ADMIN role, with bakery existence validated through Bakery Service.
 
 ## Boundary
 

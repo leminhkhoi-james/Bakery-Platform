@@ -13,7 +13,7 @@ public record BakerySubscriptionDto(UUID bakeryId, Period currentSubscription,
                          Instant periodStart, Instant periodEnd) {
         public static Period fromEntity(BakerySubscription subscription) {
             return new Period(subscription.getId(), subscription.getPlan().getId(),
-                    subscription.getPlan().getCode(), subscription.getStatus(),
+                    subscription.getSourceOrder().getPlanCodeSnapshot(), subscription.getStatus(),
                     subscription.getPeriodStart(), subscription.getPeriodEnd());
         }
     }

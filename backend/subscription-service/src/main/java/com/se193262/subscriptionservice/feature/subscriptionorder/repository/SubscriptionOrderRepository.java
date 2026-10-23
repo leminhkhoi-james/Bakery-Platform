@@ -19,4 +19,6 @@ public interface SubscriptionOrderRepository extends JpaRepository<SubscriptionO
     Page<SubscriptionOrder> findAllByBakeryId(UUID bakeryId, Pageable pageable);
     Page<SubscriptionOrder> findAllByBakeryIdAndStatus(UUID bakeryId, SubscriptionOrderStatus status,
                                                       Pageable pageable);
+    java.util.List<SubscriptionOrder> findAllByStatusAndExpiresAtLessThanEqual(
+            SubscriptionOrderStatus status, Instant now);
 }

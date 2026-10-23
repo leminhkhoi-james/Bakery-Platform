@@ -6,7 +6,6 @@ import com.se193262.subscriptionservice.feature.subscriptionorder.service.Subscr
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
 import com.se193262.subscriptionservice.shared.dto.PageResult;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@Profile("!prod")
 @RequestMapping("/api/v1")
 public class SubscriptionOrderController {
     private final SubscriptionOrderService orderService;
@@ -44,14 +42,21 @@ public class SubscriptionOrderController {
 
     @GetMapping("/bakeries/{bakeryId}/subscription-orders")
     public ResponseEntity<ApiResponse<PageResult<SubscriptionOrderDto>>> list(@PathVariable UUID bakeryId,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) SubscriptionOrderStatus status,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(ApiResponse.success(orderService.list(bakeryId, status, page, size)));
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(orderService.list(bakeryId,
+                UUID.fromString(jwt.getSubject()), jwt.getClaimAsStringList("roles") != null
+                        && jwt.getClaimAsStringList("roles").contains("ADMIN"), status, page, size, sort)));
     }
 
     @GetMapping("/subscription-orders/{orderId}")
-    public ResponseEntity<ApiResponse<SubscriptionOrderDto>> get(@PathVariable UUID orderId) {
-        return ResponseEntity.ok(ApiResponse.success(orderService.get(orderId)));
+    public ResponseEntity<ApiResponse<SubscriptionOrderDto>> get(@PathVariable UUID orderId,
+            @AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok(ApiResponse.success(orderService.get(orderId,
+                UUID.fromString(jwt.getSubject()), jwt.getClaimAsStringList("roles") != null
+                        && jwt.getClaimAsStringList("roles").contains("ADMIN"))));
     }
 }

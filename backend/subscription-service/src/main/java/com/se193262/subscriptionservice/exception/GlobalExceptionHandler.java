@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -50,6 +51,12 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception exception) {
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "Invalid request"));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    ResponseEntity<ApiResponse<Void>> handleOversizedUpload(MaxUploadSizeExceededException exception) {
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "Proof exceeds 10 MB"));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)

@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -35,6 +36,8 @@ public class BakeryPayment {
     private String paymentReference;
     @Column(name = "idempotency_key_hash", unique = true, length = 64)
     private String idempotencyKeyHash;
+    @Column(name = "review_idempotency_key_hash", unique = true, length = 64)
+    private String reviewIdempotencyKeyHash;
     @Column(name = "proof_object_key", length = 512)
     private String proofObjectKey;
     @Column(name = "amount", nullable = false, precision = 12, scale = 2)
@@ -52,12 +55,14 @@ public class BakeryPayment {
     private Instant submittedAt;
     @Column(name = "reviewed_at")
     private Instant reviewedAt;
+    @Version @Column(name = "version", nullable = false)
+    private long version;
 
     protected BakeryPayment() {}
 
     public BakeryPayment(SubscriptionOrder order, UUID submittedByUserId, String paymentMethod,
                          String paymentReference, String idempotencyKeyHash,
-                         BigDecimal amount, String currency) {
+                         BigDecimal amount, String currency, String proofObjectKey) {
         this.order = order;
         this.submittedByUserId = submittedByUserId;
         this.paymentMethod = paymentMethod;
@@ -65,6 +70,22 @@ public class BakeryPayment {
         this.idempotencyKeyHash = idempotencyKeyHash;
         this.amount = amount;
         this.currency = currency;
+        this.proofObjectKey = proofObjectKey;
+    }
+
+    public void approve(UUID adminId, String note, String reviewKeyHash, Instant now) {
+        this.status = PaymentStatus.APPROVED;
+        this.reviewedByAdminId = adminId;
+        this.reviewNote = note;
+        this.reviewedAt = now;
+        this.reviewIdempotencyKeyHash = reviewKeyHash;
+    }
+
+    public void reject(UUID adminId, String note, Instant now) {
+        this.status = PaymentStatus.REJECTED;
+        this.reviewedByAdminId = adminId;
+        this.reviewNote = note;
+        this.reviewedAt = now;
     }
 
     public UUID getId() { return id; }
@@ -73,6 +94,7 @@ public class BakeryPayment {
     public String getPaymentMethod() { return paymentMethod; }
     public String getPaymentReference() { return paymentReference; }
     public String getIdempotencyKeyHash() { return idempotencyKeyHash; }
+    public String getReviewIdempotencyKeyHash() { return reviewIdempotencyKeyHash; }
     public String getProofObjectKey() { return proofObjectKey; }
     public BigDecimal getAmount() { return amount; }
     public String getCurrency() { return currency; }

@@ -6,13 +6,12 @@ Payment proof submission, review and audit.
 
 ## Current state
 
-Reference-based payment submission and admin queue listing are implemented.
-Submission requires multipart `metadata`, a payment reference and an
-Idempotency-Key. Payment and order move to SUBMITTED/PAYMENT_REVIEW. V3 adds a
-unique key hash; raw keys are not stored. Proof upload, signed URLs, approval,
-rejection and subscription activation are pending. Temporary controllers are
-disabled in `prod`. Submission takes user ID from the JWT subject and requires
-platform BAKERY_OWNER; bakery membership validation is not integrated yet.
+Submission accepts a reference or a private proof file in MinIO. Signed proof
+URLs are returned only to the submitting owner or admin. Admin approval and
+rejection update payment and order in one Subscription DB transaction; approval
+creates one period from the order's feature snapshot. Idempotency key hashes and
+optimistic versioning protect retries and concurrent review. Owner membership is
+validated through Bakery Service; unavailable validation fails closed.
 
 ## Boundary
 

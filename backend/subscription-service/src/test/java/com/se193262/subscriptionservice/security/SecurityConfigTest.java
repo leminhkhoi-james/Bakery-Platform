@@ -61,6 +61,19 @@ class SecurityConfigTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void entitlement_requiresScopedServiceTokenAndCorrelationId() throws Exception {
+        String path = "/internal/v1/subscriptions/bakeries/" + BAKERY_ID + "/entitlement";
+        mockMvc.perform(get(path)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-admin"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-entitlement"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-entitlement")
+                        .header("X-Correlation-Id", UUID.randomUUID().toString()))
+                .andExpect(status().isOk());
+    }
+
     @RestController
     static class ProbeController {
         @GetMapping("/api/v1/subscription-plans")
@@ -71,6 +84,9 @@ class SecurityConfigTest {
 
         @PostMapping("/api/v1/bakeries/{bakeryId}/subscription-orders")
         String createOrder() { return "ok"; }
+
+        @GetMapping("/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement")
+        String entitlement() { return "ok"; }
     }
 
     @TestConfiguration
@@ -85,6 +101,9 @@ class SecurityConfigTest {
                         .subject(UUID.randomUUID().toString())
                         .claim("token_type", tokenType)
                         .claim("roles", List.of(role))
+                        .claim("aud", List.of("subscription-service"))
+                        .claim("scope", token.contains("entitlement")
+                                ? "subscription:entitlement:read" : "")
                         .build();
             };
         }

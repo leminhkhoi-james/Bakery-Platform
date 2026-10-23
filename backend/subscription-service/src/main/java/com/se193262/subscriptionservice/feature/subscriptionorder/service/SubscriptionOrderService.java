@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface SubscriptionOrderService {
     SubscriptionOrderDto create(UUID bakeryId, UUID userId, String idempotencyKey,
                                 SubscriptionOrderDto request);
-    PageResult<SubscriptionOrderDto> list(UUID bakeryId, SubscriptionOrderStatus status, int page, int size);
-    SubscriptionOrderDto get(UUID orderId);
+    PageResult<SubscriptionOrderDto> list(UUID bakeryId, UUID userId, boolean admin,
+            SubscriptionOrderStatus status, int page, int size, String sort);
+    SubscriptionOrderDto get(UUID orderId, UUID userId, boolean admin);
 }

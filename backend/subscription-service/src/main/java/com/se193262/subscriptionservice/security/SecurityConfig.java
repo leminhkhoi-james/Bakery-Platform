@@ -3,6 +3,7 @@ package com.se193262.subscriptionservice.security;
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,11 @@ import java.util.UUID;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    private final String serviceAudience;
+
+    public SecurityConfig(@Value("${security.jwt.service-audience:subscription-service}") String serviceAudience) {
+        this.serviceAudience = serviceAudience;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -41,6 +47,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement")
+                        .access(serviceScope("subscription:entitlement:read"))
                         .requestMatchers("/internal/v1/**").denyAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/subscription-plans",
@@ -87,6 +96,21 @@ public class SecurityConfig {
                     && Arrays.stream(roles).anyMatch(role -> resolved.getAuthorities().stream()
                             .anyMatch(authority -> ("ROLE_" + role).equals(authority.getAuthority())));
             return new AuthorizationDecision(allowed);
+        };
+    }
+
+    private AuthorizationManager<RequestAuthorizationContext> serviceScope(String scope) {
+        return (authentication, context) -> {
+            Authentication resolved = authentication.get();
+            if (!(resolved instanceof JwtAuthenticationToken token) || !resolved.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+            String correlationId = context.getRequest().getHeader("X-Correlation-Id");
+            String scopes = token.getToken().getClaimAsString("scope");
+            return new AuthorizationDecision("service".equals(token.getToken().getClaimAsString("token_type"))
+                    && token.getToken().getAudience().contains(serviceAudience)
+                    && correlationId != null && !correlationId.isBlank()
+                    && scopes != null && Arrays.asList(scopes.split(" ")).contains(scope));
         };
     }
 

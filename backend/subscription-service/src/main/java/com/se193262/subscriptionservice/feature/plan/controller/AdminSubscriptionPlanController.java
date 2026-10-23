@@ -4,7 +4,6 @@ import com.se193262.subscriptionservice.feature.plan.dto.SubscriptionPlanDto;
 import com.se193262.subscriptionservice.feature.plan.service.SubscriptionPlanService;
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Profile("!prod")
 @RequestMapping("/api/v1/admin/subscription-plans")
 public class AdminSubscriptionPlanController {
     private final SubscriptionPlanService planService;

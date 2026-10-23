@@ -1,6 +1,6 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-10-21.
+> Cập nhật gần nhất: 2026-10-23.
 
 ## Đã hoàn thành
 
@@ -66,8 +66,8 @@
 - Subscription Service có API dữ liệu cho public/admin plan, subscription order,
   gửi payment bằng mã giao dịch, admin payment queue và đọc kỳ subscription.
   Create order/payment dùng `Idempotency-Key`; controller trả `ResponseEntity`
-  và lỗi qua `GlobalExceptionHandler`. Các controller cần quyền vẫn chỉ bật
-  ngoài profile `prod` trong lúc chờ kiểm tra bakery membership từ Bakery Service.
+  và lỗi qua `GlobalExceptionHandler`. Bakery membership được kiểm tra qua
+  internal API khi có service JWT hợp lệ; thiếu credential thì trả `503`.
 - Bakery và Subscription đã cấu hình OAuth2 Resource Server xác thực JWT của
   Identity qua JWK/issuer/audience. SecurityFilterChain kiểm tra `token_type=user`,
   platform role và trả ApiResponse cho 401/403; các internal API không được
@@ -86,6 +86,11 @@
 - Bakery outbound clients tới Identity user lookup và Subscription entitlement
   đã được nối theo API spec và fail closed khi thiếu service token/remote API.
   Quy tắc MANAGER chỉ được thêm/sửa/xóa STAFF đã được áp dụng.
+- Subscription Service đã nối Bakery membership/existence validation, MinIO proof
+  upload và signed URL, admin approve/reject payment, snapshot plan features,
+  tạo/gia hạn kỳ sử dụng, scheduler activate/expire và internal entitlement API.
+  Các route đã bật trong profile `prod`; JWT service audience/scope bảo vệ
+  internal endpoint. Có Dockerfile và Compose riêng cho DB/MinIO/service.
 
 ## Đã kiểm tra
 
@@ -124,16 +129,19 @@
   hợp lệ. PostgreSQL
   local port 5432 hiện không mở nên chưa chạy lại integration tests; Docker daemon
   cũng chưa sẵn để chạy stack.
+- Subscription package và Docker Compose config hợp lệ; 2 payment review tests,
+  1 lifecycle job test cùng 4 security route tests pass ngày 2026-10-23.
+  PostgreSQL local port 5432 và Docker daemon hiện không chạy nên chưa xác nhận
+  Flyway V4/JPA/HTTP end-to-end.
 
 ## Chưa triển khai
 
 - Bakery admin detail có danh sách member và subscription summary khi remote
   service khả dụng; public catalog chưa kèm rating Order. Chưa có end-to-end test với
   PostgreSQL/MinIO/Identity/Subscription và chưa có job retry cleanup ảnh mồ côi.
-- Subscription Service chưa có proof upload/signed URL, admin duyệt/từ chối
-  payment, tạo/kích hoạt/gia hạn/expire subscription, entitlement internal API,
-  bakery membership/ownership và kiểm tra bakery từ Bakery Service. Plan feature chưa
-  được snapshot vào order/subscription để giữ entitlement ổn định khi plan đổi.
+- Subscription cần kiểm thử HTTP đầu cuối với PostgreSQL, MinIO, Bakery và Identity
+  đang chạy cùng service JWT hợp lệ. Identity hiện chưa cấp service token nên các
+  luồng cần Bakery validation sẽ trả 503 cho tới khi tích hợp credential.
 - Marketplace và Cake AI vẫn cần runtime nghiệp vụ, JPA/PostgreSQL/Flyway và
   OAuth2 Resource Server; API Gateway cũng chưa có Resource Server.
 - Marketplace chưa triển khai runtime internal authorization. Bakery đã có ba
@@ -160,13 +168,11 @@
 - Subscription smoke/integration test hiện cũng cần PostgreSQL local và `.env`
   trong thư mục module; chưa có test profile/Testcontainers độc lập.
 - Bakery member creation có Identity lookup client nhưng Identity chưa triển khai
-  internal user endpoint; Bakery publish/public catalog có entitlement client nhưng
-  Subscription chưa triển khai internal entitlement endpoint. Cả hai còn thiếu
-  service JWT hợp lệ nên các luồng phụ thuộc trả `503` thay vì bỏ qua kiểm tra.
+  internal user endpoint. Bakery/Subscription đều đã có internal contracts nhưng
+  còn thiếu service JWT hợp lệ nên các luồng phụ thuộc trả `503`.
 - Compose của Order/Chat hiện mặc định trỏ Identity tới port `8081`, trong khi
   Identity local/Bakery mặc định dùng `8080`; cần thống nhất URL khi ghép stack.
-- Subscription mới
-  kiểm tra platform role, chưa xác minh quyền trên bakery cụ thể; giữ các
-  controller này ngoài profile `prod` cho tới khi có Bakery authorization API.
+- Docker daemon và PostgreSQL local không khả dụng trong lần triển khai
+  Subscription này; migration V4 và luồng persistence cần chạy lại khi DB hoạt động.
 - Bakery runtime V1 khác bản canonical ở phần thụt lề. Flyway đã áp dụng bản
   runtime, nên không sửa trực tiếp V1 sau khi chạy nếu chưa xử lý checksum.
