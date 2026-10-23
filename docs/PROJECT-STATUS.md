@@ -91,6 +91,11 @@
   tạo/gia hạn kỳ sử dụng, scheduler activate/expire và internal entitlement API.
   Các route đã bật trong profile `prod`; JWT service audience/scope bảo vệ
   internal endpoint. Có Dockerfile và Compose riêng cho DB/MinIO/service.
+- Bakery và Subscription có Compose chung `docker-compose.bakery-subscription.yml`,
+  gọi nhau bằng container DNS; mỗi service giữ PostgreSQL/MinIO và volume riêng.
+  Cấu hình mẫu ở `docker.env.example`, hướng dẫn tại
+  `docs/DOCKER-BAKERY-SUBSCRIPTION.md`. MinIO public URL signing cấu hình region
+  để không truy vấn region qua địa chỉ localhost của container.
 
 ## Đã kiểm tra
 
@@ -133,6 +138,18 @@
   1 lifecycle job test cùng 4 security route tests pass ngày 2026-10-23.
   PostgreSQL local port 5432 và Docker daemon hiện không chạy nên chưa xác nhận
   Flyway V4/JPA/HTTP end-to-end.
+- Ngày 2026-10-23, Maven package Bakery/Subscription và Compose chung config pass.
+  Hai storage URL tests pass, xác nhận ký URL public mà không gọi localhost từ
+  container để lấy region.
+- Stack Docker chung đã build và chạy đủ 6 container. Bakery Flyway V1 và
+  Subscription V1–V4 được áp dụng thành công; Hibernate validate schema pass.
+  Hai API OpenAPI và public plan trả 200, admin không token trả 401, MinIO health
+  của cả hai trả 200. HTTP qua container DNS hai chiều trả 200.
+  Bakery CRUD và Subscription data/payment approval integration tests pass trên
+  PostgreSQL Docker (profile test; Bakery client được mock trong test Subscription).
+  Identity port 8080 chưa chạy nên chưa xác nhận luồng HTTP có user/service JWT thật.
+  Image MinIO cũ không tải được từ Docker Hub/Quay; stack build cùng release từ
+  mã nguồn chính thức qua `docker/minio/Dockerfile`.
 
 ## Chưa triển khai
 
@@ -161,8 +178,8 @@
   thất bại; cần cấu hình Java agent khi dự án nâng mức kiểm soát test runtime.
 - Springdoc hiện phát warning khi chuyển một số JSON schema annotation; endpoint
   `/v3/api-docs` và kiểm tra route vẫn pass.
-- Docker daemon hiện không khả dụng nên PostgreSQL Testcontainers integration
-  tests bị skip; cần chạy lại khi Docker hoạt động để xác minh full HTTP flow.
+- Docker hiện hoạt động; các service khác cần chạy lại Testcontainers đã skip
+  trong các phiên trước khi xác minh full HTTP flow.
 - Bakery smoke test hiện cần PostgreSQL local và `.env` trong thư mục module;
   chưa có test profile/Testcontainers độc lập cho Maven reactor.
 - Subscription smoke/integration test hiện cũng cần PostgreSQL local và `.env`
@@ -172,7 +189,7 @@
   còn thiếu service JWT hợp lệ nên các luồng phụ thuộc trả `503`.
 - Compose của Order/Chat hiện mặc định trỏ Identity tới port `8081`, trong khi
   Identity local/Bakery mặc định dùng `8080`; cần thống nhất URL khi ghép stack.
-- Docker daemon và PostgreSQL local không khả dụng trong lần triển khai
-  Subscription này; migration V4 và luồng persistence cần chạy lại khi DB hoạt động.
+- Subscription V4 và luồng persistence đã xác minh trên PostgreSQL Docker;
+  luồng HTTP với Identity/Bakery JWT thật vẫn cần kiểm thử khi Identity chạy.
 - Bakery runtime V1 khác bản canonical ở phần thụt lề. Flyway đã áp dụng bản
   runtime, nên không sửa trực tiếp V1 sau khi chạy nếu chưa xử lý checksum.

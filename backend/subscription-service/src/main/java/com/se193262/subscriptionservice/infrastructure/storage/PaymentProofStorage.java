@@ -31,17 +31,20 @@ public class PaymentProofStorage {
     private final String accessKey;
     private final String secretKey;
     private final String bucket;
+    private final String region;
 
     public PaymentProofStorage(@Value("${storage.minio.endpoint:}") String endpoint,
             @Value("${storage.minio.public-endpoint:}") String publicEndpoint,
             @Value("${storage.minio.access-key:}") String accessKey,
             @Value("${storage.minio.secret-key:}") String secretKey,
-            @Value("${storage.minio.bucket:subscription-proofs}") String bucket) {
+            @Value("${storage.minio.bucket:subscription-proofs}") String bucket,
+            @Value("${storage.minio.region:us-east-1}") String region) {
         this.endpoint = endpoint;
         this.publicEndpoint = publicEndpoint;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
         this.bucket = bucket;
+        this.region = region;
     }
 
     public String upload(MultipartFile file, UUID orderId) {
@@ -85,9 +88,10 @@ public class PaymentProofStorage {
     public String signedUrl(String key) {
         if (key == null) return null;
         try {
+            // The browser URL can be unreachable from Docker; sign without a region lookup.
             return client(publicEndpoint.isBlank() ? endpoint : publicEndpoint)
                     .getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                            .method(Method.GET).bucket(bucket).object(key)
+                            .method(Method.GET).region(region).bucket(bucket).object(key)
                             .expiry(15, TimeUnit.MINUTES).build());
         } catch (Exception exception) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Proof storage is unavailable");

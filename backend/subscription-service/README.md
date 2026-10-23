@@ -13,3 +13,6 @@ For Bakery membership and existence validation, configure a service JWT with
 Identity issues service tokens, those routes fail closed with `503`.
 The entitlement route requires a service JWT for the Subscription audience with
 `subscription:entitlement:read` scope.
+
+To run Bakery and Subscription together on the same Docker network, follow
+[the combined Docker stack guide](../../docs/DOCKER-BAKERY-SUBSCRIPTION.md).

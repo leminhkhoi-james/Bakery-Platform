@@ -33,17 +33,20 @@ public class BakeryImageStorage {
     private final String accessKey;
     private final String secretKey;
     private final String bucket;
+    private final String region;
 
     public BakeryImageStorage(@Value("${storage.minio.endpoint:}") String endpoint,
             @Value("${storage.minio.public-endpoint:}") String publicEndpoint,
             @Value("${storage.minio.access-key:}") String accessKey,
             @Value("${storage.minio.secret-key:}") String secretKey,
-            @Value("${storage.minio.bucket:bakery-media}") String bucket) {
+            @Value("${storage.minio.bucket:bakery-media}") String bucket,
+            @Value("${storage.minio.region:us-east-1}") String region) {
         this.endpoint = endpoint;
         this.publicEndpoint = publicEndpoint;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
         this.bucket = bucket;
+        this.region = region;
     }
 
     public StoredImage upload(MultipartFile file, String prefix) {
@@ -127,8 +130,9 @@ public class BakeryImageStorage {
 
     private MinioClient signingClient() {
         if (publicEndpoint.isBlank()) return client();
+        // The browser URL can be unreachable from Docker; sign without a region lookup.
         return MinioClient.builder().endpoint(publicEndpoint)
-                .credentials(accessKey, secretKey).build();
+                .region(region).credentials(accessKey, secretKey).build();
     }
 
     private String detect(byte[] bytes) {

@@ -20,6 +20,9 @@ Internal Bakery endpoints require a service JWT with audience
 `bakery-service`, the endpoint's scope and `X-Correlation-Id`. Bakery's outbound
 Identity and Subscription calls require separate service JWTs in
 `BAKERY_IDENTITY_SERVICE_TOKEN` and `SUBSCRIPTION_SERVICE_TOKEN`. Identity's
-internal user lookup and Subscription's entitlement endpoint still need to be
-implemented; creating a member, publishing a product, public catalog lookup
-and quotes fail closed until those integrations are available.
+internal user lookup and service token issuance still need to be implemented.
+Subscription's entitlement endpoint is implemented; dependent calls fail closed
+until the appropriate service credentials are supplied.
+
+To run Bakery and Subscription together, follow
+[the combined Docker stack guide](../../docs/DOCKER-BAKERY-SUBSCRIPTION.md).
