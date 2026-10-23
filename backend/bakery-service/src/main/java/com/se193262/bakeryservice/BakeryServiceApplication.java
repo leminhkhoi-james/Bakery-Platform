@@ -4,12 +4,10 @@ import com.se193262.platform.config.PlatformConfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@Import(PlatformConfiguration.class)
-@EnableScheduling
+@EnableFeignClients
 public class BakeryServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(BakeryServiceApplication.class, args);

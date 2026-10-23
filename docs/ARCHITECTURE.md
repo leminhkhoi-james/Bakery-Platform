@@ -7,6 +7,15 @@ MSS Bakery Platform là marketplace kết nối khách hàng với nhiều tiệ
 thống hỗ trợ mua bánh có sẵn, đặt bánh custom qua yêu cầu và offer, chat theo
 ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thuê nền tảng.
 
+> **Trạng thái hiện tại:** backend đã được scaffold thành Maven multi-module với
+> bảy domain service và một API Gateway độc lập. Identity Service đã triển khai
+> persistence cho authentication, RS256 JWT/JWK và refresh rotation. Order
+> Service và Chat Service đã có JWT resource-server. Chat có runtime
+> PostgreSQL/Flyway, participant-aware REST APIs và MinIO attachment storage.
+> Marketplace/Bakery runtime contracts và service-token provisioning còn thiếu,
+> nên các kiểm tra context/membership cần được kết nối khi các service phụ thuộc
+> được triển khai. Gateway routing, frontend và tích hợp ngoài vẫn chưa được
+> triển khai.
 > **Trạng thái hiện tại:** backend có bảy domain service và API Gateway độc lập.
 > Identity authentication và Marketplace nghiệp vụ đã được triển khai, cùng các API
 > internal tối thiểu ở Bakery/Subscription/Cake AI/Order. Marketplace dùng Firebase Storage;

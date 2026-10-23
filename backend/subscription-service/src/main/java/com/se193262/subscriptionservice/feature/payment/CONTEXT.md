@@ -6,8 +6,12 @@ Payment proof submission, review and audit.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Submission accepts a reference or a private proof file in MinIO. Signed proof
+URLs are returned only to the submitting owner or admin. Admin approval and
+rejection update payment and order in one Subscription DB transaction; approval
+creates one period from the order's feature snapshot. Idempotency key hashes and
+optimistic versioning protect retries and concurrent review. Owner membership is
+validated through Bakery Service; unavailable validation fails closed.
 
 ## Boundary
 

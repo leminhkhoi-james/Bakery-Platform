@@ -1,0 +1,88 @@
+package com.se193262.bakeryservice.feature.bakery;
+
+import com.se193262.bakeryservice.feature.bakery.dto.BakeryDto;
+import com.se193262.bakeryservice.feature.bakery.dto.BakeryOperationsDto;
+import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
+import com.se193262.bakeryservice.feature.bakery.service.BakeryService;
+import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
+import com.se193262.bakeryservice.feature.member.repository.BakeryMemberRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+@Transactional
+class BakeryCrudIntegrationTests {
+
+    @Autowired
+    private BakeryService bakeryService;
+
+    @Autowired
+    private BakeryMemberRepository memberRepository;
+
+    @Test
+    void createsBakeryWithOwnerAndReplacesOperations() {
+        UUID ownerId = UUID.randomUUID();
+        BakeryDto created = bakeryService.create(new BakeryDto(null, "Test Bakery", "Fresh cakes",
+                "+84901112223", "test@example.com", null, null), ownerId);
+
+        assertThat(created.id()).isNotNull();
+        assertThat(created.status()).isEqualTo(BakeryStatus.DRAFT);
+        assertThat(memberRepository.findAll()).anySatisfy(member -> {
+            assertThat(member.getBakery().getId()).isEqualTo(created.id());
+            assertThat(member.getUserId()).isEqualTo(ownerId);
+            assertThat(member.getMemberRole()).isEqualTo(BakeryMemberRole.OWNER);
+        });
+
+        BakeryOperationsDto operations = bakeryService.replaceOperations(created.id(),
+                new BakeryOperationsDto(
+                        List.of(new BakeryOperationsDto.Address(null, "12 Le Loi", "Ben Nghe",
+                                "District 1", "Ho Chi Minh City", null, null, true)),
+                        List.of(new BakeryOperationsDto.ServiceArea(null, "Ho Chi Minh City",
+                                "District 1", BigDecimal.valueOf(30000), BigDecimal.valueOf(200000), true)),
+                        List.of(new BakeryOperationsDto.BusinessHour((short) 1,
+                                LocalTime.of(8, 0), LocalTime.of(20, 0), false))));
+
+        assertThat(operations.addresses()).hasSize(1);
+        assertThat(operations.serviceAreas()).hasSize(1);
+        assertThat(operations.businessHours()).hasSize(1);
+        UUID addressId = operations.addresses().getFirst().id();
+        UUID areaId = operations.serviceAreas().getFirst().id();
+        assertThat(addressId).isNotNull();
+        assertThat(areaId).isNotNull();
+
+        BakeryOperationsDto replaced = bakeryService.replaceOperations(created.id(),
+                new BakeryOperationsDto(
+                        List.of(new BakeryOperationsDto.Address(addressId, "14 Le Loi", null,
+                                "District 1", "Ho Chi Minh City", null, null, true)),
+                        List.of(new BakeryOperationsDto.ServiceArea(areaId, "Ho Chi Minh City",
+                                "District 1", BigDecimal.ZERO, BigDecimal.ZERO, true)),
+                        List.of(new BakeryOperationsDto.BusinessHour((short) 1,
+                                LocalTime.of(9, 0), LocalTime.of(18, 0), false))));
+
+        assertThat(replaced.addresses().getFirst().id()).isEqualTo(addressId);
+        assertThat(replaced.addresses().getFirst().addressLine()).isEqualTo("14 Le Loi");
+        assertThat(replaced.serviceAreas().getFirst().id()).isEqualTo(areaId);
+        assertThat(replaced.serviceAreas().getFirst().deliveryFee()).isEqualByComparingTo("0");
+        assertThat(replaced.businessHours().getFirst().opensAt()).isEqualTo(LocalTime.of(9, 0));
+
+        BakeryDto updated = bakeryService.update(created.id(), new BakeryDto(null, "Renamed Bakery",
+                null, null, null, null, null));
+        assertThat(updated.name()).isEqualTo("Renamed Bakery");
+        assertThat(bakeryService.get(created.id()).operations().addresses()).hasSize(1);
+
+        BakeryOperationsDto cleared = bakeryService.replaceOperations(created.id(),
+                new BakeryOperationsDto(List.of(), List.of(), List.of()));
+        assertThat(cleared.addresses()).isEmpty();
+        assertThat(cleared.serviceAreas()).isEmpty();
+        assertThat(cleared.businessHours()).isEmpty();
+    }
+}

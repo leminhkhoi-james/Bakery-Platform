@@ -167,11 +167,12 @@ dõi thanh toán giữa khách và tiệm.
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
+| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, `customer_note`, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
 | `order_items` | `id` | `order_id`, external source IDs, loại item, snapshot, cấu hình JSONB, giá và số lượng | Các hạng mục trong đơn |
 | `delivery_address_snapshots` | `order_id` | người nhận, địa chỉ, tọa độ, ghi chú | Địa chỉ bất biến tại thời điểm đặt |
 | `order_status_history` | `id` | `order_id`, trạng thái cũ/mới, `changed_by`*, ghi chú, thời gian | Audit tiến độ đơn |
 | `order_reviews` | `order_id` | `customer_id`*, `rating`, `comment`, `status`, timestamps, `version` | Review dựa trên order đã hoàn thành |
+| `order_idempotency_records` | `id` | `operation`, `idempotency_key`, `customer_id`*, `payload_hash`, `order_id`, `created_at` | Đảm bảo retry tạo order không sinh bản ghi trùng |
 
 ### Relationships
 
@@ -181,12 +182,14 @@ dõi thanh toán giữa khách và tiệm.
 | CustomerOrder → DeliveryAddressSnapshot | OneToOne | `delivery_address_snapshots` | `order_id` |
 | CustomerOrder → OrderStatusHistory | OneToMany | `order_status_history` | `order_id` |
 | CustomerOrder → OrderReview | OneToOne tùy chọn | `order_reviews` | `order_id` |
+| CustomerOrder → OrderIdempotencyRecord | OneToMany | `order_idempotency_records` | `order_id` |
 
 ### Quy tắc nghiệp vụ
 
 - `DIRECT_CATALOG`: `cake_request_id` và `offer_id` phải `NULL`.
 - `ACCEPTED_OFFER`: bắt buộc có `cake_request_id` và `offer_id`.
 - Một offer chỉ sinh tối đa một order.
+- Idempotency key duy nhất theo operation, customer và key; payload hash khác nhau trả conflict.
 - Mỗi order có tối đa một review, rating từ 1 đến 5.
 - Chỉ customer của order `COMPLETED` được tạo review; kiểm tra này nằm ở service.
 
@@ -200,11 +203,14 @@ Quản lý hội thoại, participant, tin nhắn, file đính kèm và trạng 
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
+| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, lý do đóng, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
 | `conversation_participants` | `id` | `conversation_id`, `user_id`*, loại participant, thời gian tham gia/đọc | Thành viên cuộc hội thoại |
-| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
+| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, payload fingerprint, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
 | `message_attachments` | `id` | `message_id`, object key, tên file, media type, dung lượng, thứ tự | Metadata file đính kèm |
 | `message_receipts` | `(message_id, participant_id)` | `delivered_at`, `read_at` | Trạng thái nhận và đọc theo participant |
+
+`conversations.close_reason` lưu lý do đóng tùy chọn. `messages.payload_fingerprint`
+lưu SHA-256 payload để phát hiện retry idempotency key với nội dung khác.
 
 ### Relationships
 
@@ -260,9 +266,9 @@ Không sử dụng invoice và không theo dõi tiền mua bánh giữa khách v
 |---|---|---|---|
 | `subscription_plans` | `id` | `code`, tên, giá tháng, chu kỳ, trạng thái, timestamps, `version` | Gói thuê nền tảng |
 | `plan_features` | `(plan_id, feature_code)` | `feature_value` | Quyền lợi/giới hạn linh hoạt của gói |
-| `subscription_orders` | `id` | số đơn, external bakery/user IDs, plan, snapshot, số tiền, trạng thái, timestamps, `version` | Đơn bakery đăng ký hoặc gia hạn gói |
-| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, số tiền, trạng thái, admin duyệt | Ghi nhận payment bakery gửi nền tảng |
-| `bakery_subscriptions` | `id` | bakery*, plan, source order, trạng thái, thời hạn, timestamps, `version` | Một kỳ sử dụng gói đã được cấp |
+| `subscription_orders` | `id` | số đơn, external bakery/user IDs, plan, tên/mã/quyền lợi snapshot, số tiền, trạng thái, timestamps, `version` | Đơn bakery đăng ký hoặc gia hạn gói |
+| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, hash idempotency và approval key, số tiền, trạng thái, admin duyệt, `version` | Ghi nhận payment bakery gửi nền tảng |
+| `bakery_subscriptions` | `id` | bakery*, plan, source order, quyền lợi snapshot, trạng thái, thời hạn, timestamps, `version` | Một kỳ sử dụng gói đã được cấp |
 
 ### Relationships
 
@@ -351,6 +357,11 @@ private Map<String, Object> configurationSnapshot;
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).
 - `V1__init_schema.sql` chỉ chứa DDL của đúng một service.
 - `V2__seed_reference_data.sql` chỉ seed dữ liệu danh mục ổn định.
+- Subscription Service có `V3__payment_idempotency.sql` thêm hash key duy nhất
+  cho payment mới; cột nullable để tương thích dữ liệu cũ.
+- Subscription Service có `V4__subscription_snapshots.sql` lưu plan code/features
+  tại lúc tạo order và features trên kỳ sử dụng; thêm optimistic version và hash
+  approval key cho payment. Migration backfill các order/period hiện hữu.
 - Identity Service đóng gói bản sao V1/V2 tại
   `backend/identity-service/src/main/resources/db/migration`; test build kiểm tra
   bản runtime này luôn khớp byte-content (không tính line ending) với nguồn

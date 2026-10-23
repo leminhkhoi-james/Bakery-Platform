@@ -26,6 +26,8 @@ erDiagram
         uuid plan_id FK
         uuid requested_by_user_id "External Identity reference"
         varchar plan_name_snapshot
+        varchar plan_code_snapshot
+        jsonb features_snapshot
         int billing_period_months
         decimal total_amount
         varchar currency
@@ -43,6 +45,8 @@ erDiagram
         uuid submitted_by_user_id "External Identity reference"
         varchar payment_method
         varchar payment_reference UK
+        varchar idempotency_key_hash UK "Nullable for legacy rows"
+        varchar review_idempotency_key_hash UK
         varchar proof_object_key
         decimal amount
         varchar currency
@@ -51,6 +55,7 @@ erDiagram
         text review_note
         timestamptz submitted_at
         timestamptz reviewed_at
+        bigint version
     }
 
     BAKERY_SUBSCRIPTIONS {
@@ -61,6 +66,7 @@ erDiagram
         varchar status
         timestamptz period_start
         timestamptz period_end
+        jsonb features_snapshot
         timestamptz activated_at
         timestamptz cancelled_at
         timestamptz created_at

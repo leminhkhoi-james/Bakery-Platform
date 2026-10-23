@@ -6,8 +6,20 @@ Bakery profiles, approval state and operating configuration.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Bakery, BakeryAddress, ServiceArea and BusinessHour entities are mapped to the
+Bakery database schema. Basic profile create/read/update and atomic operations
+replacement are implemented with one DTO type per request/response shape and a
+standard API response envelope. There is no bakery delete in the API contract.
+
+Creation takes the owner ID from the JWT subject and requires platform
+BAKERY_OWNER. Management routes require an ACTIVE member of the requested bakery
+with a matching role. Public browsing filters ACTIVE bakeries through the
+Subscription entitlement client and signs stored logo/cover URLs. Logo/cover
+upload, owner submission, admin status transitions, admin list/detail and
+internal profile/membership lookup are implemented. Productive use of public
+listing and internal clients requires service JWT issuance and the Subscription
+entitlement and Identity user lookup endpoints. Admin detail includes members
+and the subscription entitlement summary when Subscription is available.
 
 ## Boundary
 

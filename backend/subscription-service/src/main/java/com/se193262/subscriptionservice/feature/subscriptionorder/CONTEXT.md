@@ -6,8 +6,10 @@ Bakery subscription purchase orders.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Subscription orders have create/list/get APIs. Create snapshots plan name,
+code, features, period, price and currency; it requires an Idempotency-Key and
+starts in PENDING_PAYMENT. Order expiry defaults to 24 hours. Ownership and
+membership are checked through Bakery Service. A scheduler expires unpaid orders.
 
 ## Boundary
 
