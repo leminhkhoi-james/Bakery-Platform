@@ -25,6 +25,14 @@ spring:
       max-file-size: 10MB
       max-request-size: 11MB
 
+platform:
+  remote:
+    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8080}
+    client-id: subscription-service
+    client-secret: ${SUBSCRIPTION_CLIENT_SECRET:}
+    connect-timeout: 2s
+    read-timeout: 5s
+
 security:
   jwt:
     user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}

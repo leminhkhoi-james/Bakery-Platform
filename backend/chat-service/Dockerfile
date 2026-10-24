@@ -3,7 +3,7 @@ FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /workspace
 COPY backend/ backend/
 
-RUN mvn -f backend/pom.xml -pl chat-service -am -DskipTests package
+RUN --mount=type=cache,target=/root/.m2,sharing=locked mvn -B -ntp -f backend/pom.xml -pl chat-service -am -DskipTests package
 
 FROM eclipse-temurin:21-jre
 

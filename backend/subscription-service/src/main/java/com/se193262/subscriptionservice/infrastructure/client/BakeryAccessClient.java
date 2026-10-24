@@ -1,6 +1,7 @@
 package com.se193262.subscriptionservice.infrastructure.client;
 
 import com.se193262.subscriptionservice.exception.AppException;
+import com.se193262.platform.client.ServiceHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -17,10 +18,13 @@ import java.util.UUID;
 public class BakeryAccessClient {
     private final RestClient client;
     private final String serviceToken;
+    private final ServiceHttpClient tokenClient;
 
     public BakeryAccessClient(@Value("${clients.bakery.url:http://localhost:8082}") String baseUrl,
-            @Value("${clients.bakery.service-token:}") String serviceToken) {
+            @Value("${clients.bakery.service-token:}") String serviceToken,
+            ServiceHttpClient tokenClient) {
         this.serviceToken = serviceToken;
+        this.tokenClient = tokenClient;
         JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(
                 HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build());
         factory.setReadTimeout(Duration.ofSeconds(3));
@@ -50,18 +54,19 @@ public class BakeryAccessClient {
     }
 
     private <T> T call(String path, Class<T> type, Object... variables) {
-        if (serviceToken.isBlank()) {
-            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Bakery service credential is not configured");
-        }
         try {
+            String bearer = serviceToken.isBlank() ? tokenClient.serviceToken("bakery-service",
+                    "bakery:profile:read bakery:membership:read") : serviceToken;
             T response = client.get().uri(path, variables).headers(headers -> {
-                headers.setBearerAuth(serviceToken);
+                headers.setBearerAuth(bearer);
                 headers.set("X-Correlation-Id", UUID.randomUUID().toString());
             }).retrieve().body(type);
             if (response == null) {
                 throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Empty Bakery service response");
             }
             return response;
+        } catch (com.se193262.platform.exception.AppException exception) {
+            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Bakery service credential is unavailable");
         } catch (RestClientResponseException exception) {
             if (exception.getStatusCode().value() == 404) {
                 throw new AppException(HttpStatus.NOT_FOUND, "Bakery not found");

@@ -5,7 +5,7 @@ WORKDIR /src
 RUN CGO_ENABLED=0 go build -trimpath -o /out/minio .
 
 FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --system minio && useradd --system --gid minio minio \
     && mkdir /data && chown minio:minio /data

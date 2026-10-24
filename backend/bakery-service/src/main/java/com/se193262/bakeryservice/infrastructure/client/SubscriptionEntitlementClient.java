@@ -1,6 +1,7 @@
 package com.se193262.bakeryservice.infrastructure.client;
 
 import com.se193262.bakeryservice.exception.AppException;
+import com.se193262.platform.client.ServiceHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -18,11 +19,14 @@ import java.util.UUID;
 public class SubscriptionEntitlementClient {
     private final RestClient client;
     private final String serviceToken;
+    private final ServiceHttpClient tokenClient;
 
     public SubscriptionEntitlementClient(
             @Value("${clients.subscription.url:http://localhost:8084}") String baseUrl,
-            @Value("${clients.subscription.service-token:}") String serviceToken) {
+            @Value("${clients.subscription.service-token:}") String serviceToken,
+            ServiceHttpClient tokenClient) {
         this.serviceToken = serviceToken;
+        this.tokenClient = tokenClient;
         JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(
                 HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build());
         requestFactory.setReadTimeout(Duration.ofSeconds(3));
@@ -36,15 +40,13 @@ public class SubscriptionEntitlementClient {
     }
 
     public Entitlement getEntitlement(UUID bakeryId) {
-        if (serviceToken.isBlank()) {
-            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Subscription service credential is not configured");
-        }
         try {
+            String bearer = serviceToken.isBlank()
+                    ? tokenClient.serviceToken("subscription-service", "subscription:entitlement:read") : serviceToken;
             Entitlement response = client.get()
                     .uri("/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement", bakeryId)
                     .headers(headers -> {
-                        headers.setBearerAuth(serviceToken);
+                        headers.setBearerAuth(bearer);
                         headers.set("X-Correlation-Id", UUID.randomUUID().toString());
                     })
                     .retrieve().body(Entitlement.class);
@@ -52,6 +54,8 @@ public class SubscriptionEntitlementClient {
                 throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Invalid subscription response");
             }
             return response;
+        } catch (com.se193262.platform.exception.AppException exception) {
+            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Subscription service credential is unavailable");
         } catch (RestClientException exception) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Subscription service is unavailable");
         }

@@ -1,7 +1,5 @@
 package com.se193262.bakeryservice;
 
-import com.se193262.platform.config.PlatformConfiguration;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;

@@ -19,8 +19,10 @@ docker compose --env-file .env.docker -f docker-compose.bakery-subscription.yml 
 Edit `.env.docker` before starting if credentials or Identity URLs differ.
 Existing module `.env` files are for local Java execution; Compose uses
 `.env.docker`. The example credentials are local development defaults.
-Start Identity on the host at port 8080, with its own database and signing keys.
-Identity is reached from containers through `host.docker.internal`.
+The root `compose.yaml` exposes Identity on host port 8081. The default
+`IDENTITY_JWKS_URI` and `IDENTITY_SERVICE_URL` reach it through
+`host.docker.internal:8081`. If running Identity locally on port 8080 instead,
+override both URLs in `.env.docker` to use that port.
 
 | Component | Host port | Container address |
 |---|---:|---|
@@ -35,7 +37,9 @@ Swagger UI: `http://localhost:8082/swagger-ui/index.html` and
 `http://localhost:8084/swagger-ui/index.html`.
 
 Internal calls still require service JWTs; Docker networking does not grant
-authorization. Populate these variables when Identity issues service tokens:
+authorization. Set BAKERY_CLIENT_SECRET and SUBSCRIPTION_CLIENT_SECRET, with
+matching BCrypt hashes in Identity. Tokens are acquired/cached automatically.
+For deployments using explicit bearer overrides, these variables remain available:
 
 | Variable | Audience | Scopes |
 |---|---|---|
@@ -43,8 +47,9 @@ authorization. Populate these variables when Identity issues service tokens:
 | `SUBSCRIPTION_SERVICE_TOKEN` | `subscription-service` | `subscription:entitlement:read` |
 | `SUBSCRIPTION_BAKERY_SERVICE_TOKEN` | `bakery-service` | `bakery:membership:read bakery:profile:read` |
 
-Without those tokens, dependent operations return 503. Identity's internal user
-lookup and service token issuance remain integration work.
+Without valid client credentials or bearer overrides, dependent operations return
+503. Identity's internal user lookup and service token issuance are implemented.
+See [JWT runtime verification](JWT-LOCAL-VERIFICATION.md) for full-domain startup.
 
 ```powershell
 # Inspect application logs

@@ -8,11 +8,15 @@ From the repository root, `docker compose -f docker-compose.subscription-service
 starts Subscription, PostgreSQL and MinIO. The defaults expose PostgreSQL on
 `5437`, MinIO on `9004` and its console on `9005`.
 
-For Bakery membership and existence validation, configure a service JWT with
-`bakery:membership:read bakery:profile:read` scopes and Bakery audience. Until
-Identity issues service tokens, those routes fail closed with `503`.
+For Bakery membership and existence validation, configure SUBSCRIPTION_CLIENT_SECRET
+and its matching BCrypt hash in Identity. The client obtains/caches service JWTs
+for the Bakery audience with `bakery:membership:read bakery:profile:read` scopes.
+Unavailable credentials or dependencies fail closed with `503`.
 The entitlement route requires a service JWT for the Subscription audience with
 `subscription:entitlement:read` scope.
 
 To run Bakery and Subscription together on the same Docker network, follow
 [the combined Docker stack guide](../../docs/DOCKER-BAKERY-SUBSCRIPTION.md).
+
+See [JWT runtime verification](../../docs/JWT-LOCAL-VERIFICATION.md) for all domain
+services and the real HTTP verification script.

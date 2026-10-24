@@ -1,6 +1,52 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-10-23.
+> Cập nhật gần nhất: 2026-10-24.
+
+## JWT runtime — 2026-10-24
+
+- Cặp PEM mới trong Identity đã được kiểm tra khớp nhau; root/local env trỏ
+  đúng file. Live JWK của Identity khớp public PEM. PEM/key files bị Git ignore
+  và loại khỏi cả hai Docker build context; private key chỉ mount vào Identity.
+- Bakery/Subscription tự lấy và cache service JWT 5 phút từ Identity bằng
+  client secret riêng, với grant giới hạn theo target/scope. Không chia sẻ private
+  key và không cần paste bearer token ngắn hạn vào env cho luồng mặc định.
+- Identity internal user lookup đã bổ sung email/roles theo spec; thiếu roles
+  trước đó gây 422 khi Bakery thêm nhân viên dù JWT hợp lệ.
+- Stack 7 domain service + 7 PostgreSQL + 3 MinIO đã build và chạy. Compose runtime
+  wiring ở `compose.services.yaml`; chế độ `compose.no-firebase.yaml` cho phép chạy
+  Marketplace khi chưa có JSON credential, riêng image operations chưa khả dụng.
+- `scripts/Test-LocalJwt.ps1` pass trên HTTP thật: JWK/public PEM, register/login,
+  Bakery member lookup qua Identity, Subscription owner validation qua Bakery,
+  gửi reference payment/ADMIN approval, Bakery đọc active entitlement, user JWT
+  tại Marketplace/Order/Chat và service JWT tại Cake AI. Token sửa chữ ký, sai
+  audience và user không sở hữu bakery bị từ chối. Script đã xóa dữ liệu thử.
+- Test JWT/security/storage/routing chọn lọc pass. API Gateway vẫn là scaffold;
+  chưa có routing runtime. Chưa kiểm thử Firebase upload hay AI generation.
+- Local Identity/Marketplace dùng PostgreSQL 16 sẵn có với volume mới; cấu hình
+  mặc định của root Compose vẫn là PostgreSQL 17. Không đổi major version trên
+  volume đã khởi tạo. Docker images dùng Java 21 và Maven dependency cache chung.
+
+## Sửa lỗi sau merge — 2026-10-24
+
+- Bakery bổ sung dependency platform-support; Bakery/Subscription bổ sung
+  Testcontainers dependencies cho context tests đã merge.
+- Bakery profile/member và Subscription entitlement có một controller sở hữu mỗi
+  URI. Subscription giữ SecurityConfig/JwtDecoderConfig riêng, không import thêm
+  PlatformConfiguration gây trùng bean hoặc thay đổi kiểm tra quyền.
+- Marketplace customization quote chuyển sang `/internal/v1/catalog/customization-quotes`;
+  Order giữ `/internal/v1/catalog/quotes`. Các route bổ sung được bảo vệ theo scope.
+- Bakery xử lý platform business exception đúng HTTP status và AccessDenied 403.
+- Bakery/Subscription/Order xuất plain jar và executable `-exec.jar`; Dockerfiles
+  dùng executable jar để integration-tests vẫn import được application classes.
+- Maven test-compile và package toàn reactor pass. Test JWT/security của Identity,
+  Bakery/Subscription, signed URL storage và 3 routing regression tests pass.
+  Docker Compose config pass; chưa xác nhận runtime Docker/Firebase trong phiên này.
+- Docker Bakery/Subscription mặc định tìm Identity qua host port 8081 theo root
+  compose.yaml. Root .env và Identity local .env là hai cấu hình riêng; secrets
+  thực tế chỉ lưu trong file bị Git ignore. Firebase JSON local chưa có nên
+  Marketplace upload còn chờ credential của project nhóm.
+- Cặp Marketplace secret/hash được cung cấp không khớp; local hash được tạo lại
+  và đồng bộ giữa root Compose env với Identity local env, không ghi vào Git.
 
 ## Đã hoàn thành
 
@@ -163,9 +209,8 @@
 - Bakery admin detail có danh sách member và subscription summary khi remote
   service khả dụng; public catalog chưa kèm rating Order. Chưa có end-to-end test với
   PostgreSQL/MinIO/Identity/Subscription và chưa có job retry cleanup ảnh mồ côi.
-- Subscription cần kiểm thử HTTP đầu cuối với PostgreSQL, MinIO, Bakery và Identity
-  đang chạy cùng service JWT hợp lệ. Các client Subscription/Bakery khác vẫn cần
-  được cấp credential theo từng audience/scope khi triển khai các luồng phụ thuộc.
+- Luồng Subscription reference payment/JWT đã kiểm thử HTTP với Identity/Bakery;
+  upload proof lên MinIO và các luồng ngoài phạm vi script vẫn cần HTTP end-to-end.
 - Cake AI and API Gateway still need their remaining runtime/domain features.
 - Runtime integration still requires deployment configuration for service client
   secrets/hashes and dependent service URLs. Identity issues scoped tokens;

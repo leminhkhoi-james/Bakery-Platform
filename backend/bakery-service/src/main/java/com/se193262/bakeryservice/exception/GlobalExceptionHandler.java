@@ -24,6 +24,19 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(com.se193262.platform.exception.AppException.class)
+    ResponseEntity<ApiResponse<Void>> handlePlatformException(
+            com.se193262.platform.exception.AppException exception) {
+        return ResponseEntity.status(exception.status())
+                .body(ApiResponse.error(exception.status(), exception.getMessage()));
+    }
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    ResponseEntity<ApiResponse<Void>> handleAccessDenied(Exception exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error(HttpStatus.FORBIDDEN.value(), "Access is denied"));
+    }
+
     @ExceptionHandler(AppException.class)
     ResponseEntity<ApiResponse<Void>> handleAppException(AppException exception) {
         return ResponseEntity.status(exception.getStatus())

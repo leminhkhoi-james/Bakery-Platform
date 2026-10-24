@@ -44,12 +44,13 @@ services:
       BAKERY_DB_URL: jdbc:postgresql://bakery-db:5432/bakery_db
       BAKERY_DB_USERNAME: ${BAKERY_DB_USERNAME:-postgres}
       BAKERY_DB_PASSWORD: ${BAKERY_DB_PASSWORD:-postgres}
-      IDENTITY_JWKS_URI: ${IDENTITY_JWKS_URI:-http://host.docker.internal:8080/.well-known/jwks.json}
+      IDENTITY_JWKS_URI: ${IDENTITY_JWKS_URI:-http://host.docker.internal:8081/.well-known/jwks.json}
       IDENTITY_JWT_ISSUER: ${IDENTITY_JWT_ISSUER:-bakery-platform-identity}
       IDENTITY_JWT_USER_AUDIENCE: ${IDENTITY_JWT_USER_AUDIENCE:-bakery-platform-api}
       IDENTITY_JWT_SERVICE_AUDIENCE: ${IDENTITY_JWT_SERVICE_AUDIENCE:-bakery-service}
-      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:8080}
+      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:8081}
       BAKERY_IDENTITY_SERVICE_TOKEN: ${BAKERY_IDENTITY_SERVICE_TOKEN:-}
+      BAKERY_CLIENT_SECRET: ${BAKERY_CLIENT_SECRET:-}
       SUBSCRIPTION_SERVICE_URL: ${SUBSCRIPTION_SERVICE_URL:-http://host.docker.internal:8084}
       SUBSCRIPTION_SERVICE_TOKEN: ${SUBSCRIPTION_SERVICE_TOKEN:-}
       BAKERY_MINIO_ENDPOINT: http://bakery-storage:9000

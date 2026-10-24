@@ -18,11 +18,14 @@ uses Docker service names internally, while signed image URLs use
 
 Internal Bakery endpoints require a service JWT with audience
 `bakery-service`, the endpoint's scope and `X-Correlation-Id`. Bakery's outbound
-Identity and Subscription calls require separate service JWTs in
-`BAKERY_IDENTITY_SERVICE_TOKEN` and `SUBSCRIPTION_SERVICE_TOKEN`. Identity's
-internal user lookup and service-token issuance are implemented. Bakery's
-outbound calls still require provisioned target-audience service JWTs; dependent
-calls fail closed until the appropriate credentials are supplied.
+Identity and Subscription calls acquire scoped service JWTs automatically using
+`BAKERY_CLIENT_SECRET` and Identity's matching BCrypt hash. Explicit
+`BAKERY_IDENTITY_SERVICE_TOKEN` and `SUBSCRIPTION_SERVICE_TOKEN` remain optional
+bearer overrides. Dependent operations fail closed when token issuance or remote
+validation is unavailable.
 
 To run Bakery and Subscription together, follow
 [the combined Docker stack guide](../../docs/DOCKER-BAKERY-SUBSCRIPTION.md).
+
+See [JWT runtime verification](../../docs/JWT-LOCAL-VERIFICATION.md) for all domain
+services and the real HTTP verification script.

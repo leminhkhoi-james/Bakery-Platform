@@ -27,6 +27,11 @@ remain revocable even though access tokens are stateless.
   internal token endpoint. Clients are provisioned with BCrypt secret hashes and
   exact audience/scope grants; internal routes enforce token type, audience and
   scope. HTTP clients cache tokens with expiry skew and do not retry POST calls.
+- Bakery and Subscription use the same credential-authenticated service-token
+  flow, caching target/scoped tokens with expiry skew. Bakery grants are limited
+  to Identity user lookup and Subscription entitlement; Subscription grants are
+  limited to Bakery profile/membership lookup. Static bearer overrides remain
+  optional for existing deployments.
 - Refresh tokens are opaque 256-bit random values with a seven-day lifetime.
   Only SHA-256 hashes are stored. Every refresh rotates the token under a row
   lock; reuse of a revoked token revokes all active refresh sessions for that

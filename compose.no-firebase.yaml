@@ -1,0 +1,6 @@
+# Explicit local mode: Marketplace runs, Firebase image operations remain unavailable.
+services:
+  marketplace-service:
+    volumes: !reset []
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: ""

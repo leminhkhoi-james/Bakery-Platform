@@ -18,28 +18,13 @@ public class CatalogController {
         this.service = service;
     }
 
-    @GetMapping("/bakeries/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_bakery:profile:read')")
-    public Bakery bakery(@PathVariable UUID id) {
-        return service.bakery(id);
-    }
-
-    @GetMapping("/bakeries/{bakeryId}/members/{userId}/authorization")
-    @PreAuthorize("hasAuthority('SCOPE_bakery:membership:read')")
-    public Membership member(
-            @PathVariable UUID bakeryId,
-            @PathVariable UUID userId,
-            @RequestParam(required = false) String requiredRole) {
-        return service.authorization(bakeryId, userId, requiredRole);
-    }
-
     @GetMapping("/users/{userId}/bakery-memberships")
     @PreAuthorize("hasAuthority('SCOPE_bakery:membership:read')")
     public List<Membership> memberships(@PathVariable UUID userId) {
         return service.memberships(userId);
     }
 
-    @PostMapping("/catalog/quotes")
+    @PostMapping("/catalog/customization-quotes")
     @PreAuthorize("hasAuthority('SCOPE_bakery:catalog:quote')")
     public Quote quote(@Valid @RequestBody QuoteRequest request) {
         return service.quote(request, true);

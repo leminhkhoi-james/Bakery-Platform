@@ -4,4 +4,6 @@
 **/.env
 **/.env.*
 **/.keys
+**/*.pem
+**/*.key
 **/node_modules

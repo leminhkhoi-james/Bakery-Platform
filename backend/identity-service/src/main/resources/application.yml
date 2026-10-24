@@ -66,5 +66,14 @@ security.service-clients:
       grants:
         marketplace-service: "marketplace:request:chat:authorize"
         bakery-service: "bakery:membership:read"
+    bakery-service:
+      secret-hash: ${BAKERY_CLIENT_SECRET_HASH:}
+      grants:
+        identity-service: "identity:user:read"
+        subscription-service: "subscription:entitlement:read"
+    subscription-service:
+      secret-hash: ${SUBSCRIPTION_CLIENT_SECRET_HASH:}
+      grants:
+        bakery-service: "bakery:profile:read bakery:membership:read"
 
 management.endpoint.health.group.readiness.include: readinessState,db

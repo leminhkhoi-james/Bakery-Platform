@@ -18,14 +18,15 @@ public class UserContextService {
     }
 
     public Map<String, Object> user(UUID id) {
-        return jdbc.sql(
-                        "SELECT id,display_name AS \"displayName\",phone_number AS"
+        Map<String, Object> profile = jdbc.sql(
+                        "SELECT id,email,display_name AS \"displayName\",phone_number AS"
                             + " \"phoneNumber\",status FROM users WHERE id=:id AND status='ACTIVE'")
                 .param("id", id)
                 .query(
                         (row, n) -> {
                             Map<String, Object> result = new HashMap<>();
                             result.put("id", row.getObject("id"));
+                            result.put("email", row.getString("email"));
                             result.put("displayName", row.getString("displayName"));
                             result.put("phoneNumber", row.getString("phoneNumber"));
                             result.put("status", row.getString("status"));
@@ -33,6 +34,11 @@ public class UserContextService {
                         })
                 .optional()
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        List<String> roles = jdbc.sql("SELECT r.code FROM user_roles ur JOIN roles r ON r.id=ur.role_id"
+                        + " WHERE ur.user_id=:id ORDER BY r.code")
+                .param("id", id).query(String.class).list();
+        profile.put("roles", roles);
+        return profile;
     }
 
     public Map<String, Object> address(UUID userId, UUID addressId) {

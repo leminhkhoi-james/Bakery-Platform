@@ -47,7 +47,7 @@ public class BakeryClient {
         return http.post(
                 http.properties().bakeryUrl(),
                 "/internal/v1/catalog/"
-                        + (request.productId() == null ? "add-on-quotes" : "quotes"),
+                        + (request.productId() == null ? "add-on-quotes" : "customization-quotes"),
                 "bakery-service",
                 "bakery:catalog:quote",
                 request,

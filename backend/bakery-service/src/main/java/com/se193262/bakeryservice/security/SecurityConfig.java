@@ -59,9 +59,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/internal/v1/bakeries/{bakeryId}")
                         .access(serviceScope("bakery:profile:read"))
                         .requestMatchers(HttpMethod.GET,
-                                "/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization")
+                                "/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization",
+                                "/internal/v1/users/{userId}/bakery-memberships")
                         .access(serviceScope("bakery:membership:read"))
-                        .requestMatchers(HttpMethod.POST, "/internal/v1/catalog/quotes")
+                        .requestMatchers(HttpMethod.POST, "/internal/v1/catalog/quotes",
+                                "/internal/v1/catalog/customization-quotes",
+                                "/internal/v1/catalog/add-on-quotes")
                         .access(serviceScope("bakery:catalog:quote"))
                         .requestMatchers("/internal/v1/**").denyAll()
                         .requestMatchers("/api/v1/admin/**").access(userRole("ADMIN"))

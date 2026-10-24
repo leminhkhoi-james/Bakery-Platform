@@ -1875,17 +1875,19 @@ for `marketplace-service` and `bakery:membership:read` for `bakery-service`.
   array of `{bakeryId,userId,active,memberRole,authorized}` for active memberships.
 - `POST /internal/v1/catalog/add-on-quotes` (Bakery), scope `bakery:catalog:quote`:
   validates bakery/service area and snapshots add-ons without requiring a base product.
+- `POST /internal/v1/catalog/customization-quotes` (Bakery), scope `bakery:catalog:quote`:
+  validates a published base product and snapshots options/add-ons for Marketplace customization.
 - `GET /internal/v1/cake-requests/{id}/generation-context` (Cake AI), scope `cake-ai:design:validate`:
   `{hasJobs}`; changing a draft request type is blocked if it already has AI jobs.
 - Design validation also includes `{id,jobStatus}`; selected design requires SUCCEEDED + APPROVED.
 
-The current Marketplace-focused `catalog/quotes` and `catalog/add-on-quotes` request is:
+The Marketplace-focused `catalog/customization-quotes` and `catalog/add-on-quotes` request is:
 `{bakeryId,productId?,deliveryCity,deliveryDistrict,optionSelections:[{optionGroupId,optionValueId,quantity}],addOns:[{addOnId,quantity}]}`.
 The response is `{productId,productName,customizable,minimumNoticeHours,options,items,addOnTotal}`.
 Options contain server-generated `groupNameSnapshot`/`valueNameSnapshot`; items contain
 `addOnId,itemNameSnapshot,descriptionSnapshot,quantity,unitPrice,lineTotal`.
-Product quote requires a published product; add-on quote accepts null product. The richer direct-order
-catalog quote contract shown earlier remains a future extension and is not used by this implementation.
+Product quote requires a published product; add-on quote accepts null product. Direct orders continue
+to use the richer `catalog/quotes` contract shown earlier. Each URI has a single controller owner.
 
 ### PATCH and lifecycle clarification
 

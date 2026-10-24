@@ -8,6 +8,23 @@ Firebase setup is documented in [FIREBASE-SETUP.md](FIREBASE-SETUP.md).
 
 ## Prepare external credentials
 
+For an existing team project, ask its administrator for access and create a local
+service-account key with bucket-scoped permissions as described in
+FIREBASE-SETUP.md. A teammate's `C:/Users/...` paths do not exist on your machine;
+use the actual local paths. Identity itself does not use Firebase. With valid
+Identity keys and root `.env` values, `docker compose up --build -d identity-service`
+starts only Identity and its PostgreSQL dependency; Marketplace additionally
+requires the Firebase JSON bind file before it can start.
+
+The root `.env` is read by Compose and uses `IDENTITY_JWT_*_KEY_FILE` for host
+mounts. `backend/identity-service/.env` is read as Java properties for local Java
+execution and uses `IDENTITY_JWT_*_KEY_PATH`; BCrypt hashes there are unquoted.
+Compose BCrypt hashes in the root `.env` must remain single-quoted.
+Bakery occupies host port 8082 in the existing stack, so set
+`MARKETPLACE_SERVICE_PORT=8083` and `BAKERY_SERVICE_BASE_URL=http://host.docker.internal:8082`
+when running the services together. Identity's Docker host port is 8081; local
+Java execution without a port override uses 8080.
+
 Create an RSA 3072-bit key pair outside the repository, once:
 
 ```powershell

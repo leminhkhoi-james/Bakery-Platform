@@ -23,6 +23,12 @@ and the subscription entitlement summary when Subscription is available.
 
 ## Boundary
 
+Outbound Identity and Subscription calls acquire scoped five-minute service JWTs
+from Identity through the shared technical ServiceHttpClient and cache them with
+expiry skew. BAKERY_CLIENT_SECRET must match Identity's BCrypt client hash;
+the private signing key remains only in Identity. An explicit static bearer can
+still override token acquisition for existing deployments.
+
 This feature may persist only data owned by Bakery Service. References to
 other services remain plain UUID values and must be validated through internal
 REST contracts.

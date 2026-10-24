@@ -13,7 +13,12 @@ delivery areas and active subscription entitlement. The quote response matches
 Order Service's snapshot contract and expires in five minutes. Subscription's
 internal entitlement endpoint and service JWT issuance are required for runtime
 calls. Quote IDs are generated per request; there is no server-side quote store.
-Internal profile, membership, customization quote and add-on quote APIs read this service database. Full public catalog CRUD remains pending.
+Internal profile and membership APIs are owned by InternalBakeryController.
+InternalCatalogController owns the direct-order `/catalog/quotes` contract.
+CatalogController provides `/users/{userId}/bakery-memberships`,
+`/catalog/customization-quotes` and `/catalog/add-on-quotes` for Marketplace.
+The two quote request/response shapes have distinct URIs to avoid merge conflicts
+and preserve the direct-order contract. All require scoped service credentials.
 
 ## Boundary
 
