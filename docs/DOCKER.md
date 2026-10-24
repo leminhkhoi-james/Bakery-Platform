@@ -25,9 +25,15 @@ not an online hashing service:
 new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder(12).encode("your-random-service-secret")
 ```
 
-The secret is used only by Marketplace; Identity receives its hash. Order has a separate optional hash
-for its later external deployment. Paths in `.env` are absolute host paths with forward slashes.
+The secret is used only by Marketplace; Identity receives its hash. Set a separate
+`ORDER_SERVICE_CLIENT_SECRET` and BCrypt hash in `ORDER_CLIENT_SECRET_HASH` for Order's scoped internal
+service tokens. Paths in `.env` are absolute host paths with forward slashes.
 Missing bind files fail startup instead of being silently created as directories.
+
+For Chat integration, set a distinct `CHAT_SERVICE_CLIENT_SECRET` and its BCrypt hash in
+`CHAT_SERVICE_CLIENT_SECRET_HASH`. Chat sends the secret only to Identity's service-token endpoint;
+Identity stores/configures only the hash and grants Chat narrowly scoped Marketplace and Bakery tokens.
+Generate the hash locally with the same Spring Security BCryptPasswordEncoder example above.
 
 ## Validate, test and start
 
@@ -61,6 +67,20 @@ Start these services separately and configure their own databases and service cr
 those workflows. Their DB-owned internal APIs are implemented; full public CRUD is outside this task.
 Missing dependencies do not prevent Marketplace startup but operations requiring them return 503.
 An OPEN_CUSTOM draft can be created without those dependencies.
+
+To run Chat with Identity, Marketplace and Bakery on one Compose network, start the root,
+Bakery/Subscription and Chat Compose files together:
+
+```powershell
+docker compose -f compose.yaml -f docker-compose.bakery-subscription.yml -f docker-compose.chat-service.yml up --build -d
+```
+
+Set `MARKETPLACE_SERVICE_PORT=8083`, `BAKERY_SERVICE_BASE_URL=http://bakery-service:8082`,
+`IDENTITY_JWKS_URI=http://identity-service:8080/.well-known/jwks.json` and
+`IDENTITY_SERVICE_URL=http://identity-service:8080` in `.env` to avoid the host-port collision
+and connect services over Compose DNS. Chat obtains scoped service JWTs from `identity-service`;
+no pre-generated bearer tokens are needed. This stack still requires Marketplace Firebase
+settings and the RSA key files described above.
 
 Test fixture SQL in `database/dev/` must only be applied to disposable development/test databases.
 The `integration-tests` module creates six service contexts with real HTTP, real JWT/JWK, six isolated

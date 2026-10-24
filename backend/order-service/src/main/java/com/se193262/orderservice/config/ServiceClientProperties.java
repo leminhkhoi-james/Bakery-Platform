@@ -12,6 +12,6 @@ public record ServiceClientProperties(
         Duration connectTimeout,
         Duration readTimeout
 ) {
-    public record Service(String baseUrl) {
+    public record Service(String baseUrl, String audience, String scope) {
     }
 }

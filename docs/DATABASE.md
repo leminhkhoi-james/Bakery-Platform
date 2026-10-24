@@ -15,12 +15,12 @@ liệu của mình và không được đọc trực tiếp database của servi
 | Identity Service | `identity_db` | 6 | [Xem ERD](erd/01-identity-service-logical.mmd) | [V1](../database/postgresql/identity-service/V1__init_schema.sql) |
 | Bakery Service | `bakery_db` | 11 | [Xem ERD](erd/02-bakery-service-logical.mmd) | [V1](../database/postgresql/bakery-service/V1__init_schema.sql) |
 | Marketplace Service | `marketplace_db` | 9 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
-| Order Service | `order_db` | 6 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql) |
+| Order Service | `order_db` | 7 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql), [V2](../database/postgresql/order-service/V2__order_creation_idempotency.sql), [V3](../database/postgresql/order-service/V3__offer_idempotency.sql) |
 | Chat Service | `chat_db` | 5 | [Xem ERD](erd/05-chat-service-logical.mmd) | [V1](../database/postgresql/chat-service/V1__init_schema.sql) |
 | Cake AI Service | `cake_ai_db` | 4 | [Xem ERD](erd/06-cake-ai-service-logical.mmd) | [V1](../database/postgresql/cake-ai-service/V1__init_schema.sql) |
 | Subscription Service | `subscription_db` | 5 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql) |
 
-**Tổng cộng: 46 bảng trong 7 database.**
+**Tổng cộng: 47 bảng trong 7 database.**
 
 Conceptual ERD toàn hệ thống: [00-conceptual-overall.mmd](erd/00-conceptual-overall.mmd).
 
@@ -173,6 +173,7 @@ dõi thanh toán giữa khách và tiệm.
 | `order_status_history` | `id` | `order_id`, trạng thái cũ/mới, `changed_by`*, ghi chú, thời gian | Audit tiến độ đơn |
 | `order_reviews` | `order_id` | `customer_id`*, `rating`, `comment`, `status`, timestamps, `version` | Review dựa trên order đã hoàn thành |
 | `order_idempotency_records` | `id` | `operation`, `idempotency_key`, `customer_id`*, `payload_hash`, `order_id`, `created_at` | Đảm bảo retry tạo order không sinh bản ghi trùng |
+| `order_offer_creations` | `idempotency_key` | `offer_id`, `payload_fingerprint`, `created_at` | Đảm bảo accepted offer chỉ tạo một order và replay an toàn |
 
 ### Relationships
 
@@ -183,6 +184,7 @@ dõi thanh toán giữa khách và tiệm.
 | CustomerOrder → OrderStatusHistory | OneToMany | `order_status_history` | `order_id` |
 | CustomerOrder → OrderReview | OneToOne tùy chọn | `order_reviews` | `order_id` |
 | CustomerOrder → OrderIdempotencyRecord | OneToMany | `order_idempotency_records` | `order_id` |
+| CustomerOrder → OrderOfferCreation | OneToOne tùy chọn | `order_offer_creations` | `offer_id` |
 
 ### Quy tắc nghiệp vụ
 

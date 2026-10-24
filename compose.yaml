@@ -44,6 +44,7 @@ services:
       IDENTITY_REFRESH_COOKIE_SECURE: "false"
       MARKETPLACE_CLIENT_SECRET_HASH: ${MARKETPLACE_CLIENT_SECRET_HASH:?Set MARKETPLACE_CLIENT_SECRET_HASH}
       ORDER_CLIENT_SECRET_HASH: ${ORDER_CLIENT_SECRET_HASH:-}
+      CHAT_SERVICE_CLIENT_SECRET_HASH: ${CHAT_SERVICE_CLIENT_SECRET_HASH:-}
     volumes:
       - type: bind
         source: ${IDENTITY_JWT_PRIVATE_KEY_FILE:?Set IDENTITY_JWT_PRIVATE_KEY_FILE}
@@ -62,7 +63,7 @@ services:
       context: ./backend
       dockerfile: marketplace-service/Dockerfile
     ports:
-      - "127.0.0.1:8082:8080"
+      - "127.0.0.1:${MARKETPLACE_SERVICE_PORT:-8082}:8080"
     depends_on:
       marketplace-db:
         condition: service_healthy

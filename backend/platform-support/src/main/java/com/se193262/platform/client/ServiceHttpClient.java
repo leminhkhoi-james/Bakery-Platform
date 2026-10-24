@@ -34,6 +34,10 @@ public class ServiceHttpClient {
         return properties;
     }
 
+    public String serviceToken(String audience, String scope) {
+        return token(audience, scope);
+    }
+
     public <T> T get(String base, String path, String audience, String scope, Class<T> type) {
         return exchange(base, path, audience, scope, null, null, type);
     }

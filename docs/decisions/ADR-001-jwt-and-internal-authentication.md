@@ -23,9 +23,10 @@ remain revocable even though access tokens are stateless.
 - Service tokens use `token_type=service`, a target-service audience and a
   space-delimited OAuth2 `scope` claim mapped to `SCOPE_` authorities. User and
   service tokens cannot substitute for one another.
-- Issuing service tokens is deferred until typed service HTTP clients are
-  implemented. Internal routes are nevertheless deny-by-default and already
-  enforce their intended service audience/type/scope contract.
+- Identity issues five-minute service tokens through the credential-authenticated
+  internal token endpoint. Clients are provisioned with BCrypt secret hashes and
+  exact audience/scope grants; internal routes enforce token type, audience and
+  scope. HTTP clients cache tokens with expiry skew and do not retry POST calls.
 - Refresh tokens are opaque 256-bit random values with a seven-day lifetime.
   Only SHA-256 hashes are stored. Every refresh rotates the token under a row
   lock; reuse of a revoked token revokes all active refresh sessions for that

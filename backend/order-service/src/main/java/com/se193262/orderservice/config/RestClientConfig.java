@@ -6,6 +6,7 @@ import com.se193262.orderservice.infrastructure.client.IdentityClient;
 import com.se193262.orderservice.infrastructure.client.IdentityServiceClient;
 import com.se193262.orderservice.infrastructure.client.MarketplaceClient;
 import com.se193262.orderservice.infrastructure.client.MarketplaceServiceClient;
+import com.se193262.platform.client.ServiceHttpClient;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,6 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import java.net.http.HttpClient;
-import java.time.Duration;
 import java.util.UUID;
 
 @Configuration
@@ -24,8 +24,9 @@ import java.util.UUID;
 public class RestClientConfig {
 
     @Bean
-    IdentityClient identityHttpApi(ServiceClientProperties properties) {
-        return createClient(properties.identity().baseUrl(), properties, IdentityClient.class);
+    IdentityClient identityHttpApi(ServiceClientProperties properties, ServiceHttpClient serviceHttpClient) {
+        return createClient(properties.identity(), properties, IdentityClient.class,
+                serviceHttpClient);
     }
 
     @Bean
@@ -34,8 +35,9 @@ public class RestClientConfig {
     }
 
     @Bean
-    BakeryClient bakeryHttpApi(ServiceClientProperties properties) {
-        return createClient(properties.bakery().baseUrl(), properties, BakeryClient.class);
+    BakeryClient bakeryHttpApi(ServiceClientProperties properties, ServiceHttpClient serviceHttpClient) {
+        return createClient(properties.bakery(), properties, BakeryClient.class,
+                serviceHttpClient);
     }
 
     @Bean
@@ -44,8 +46,9 @@ public class RestClientConfig {
     }
 
     @Bean
-    MarketplaceClient marketplaceHttpApi(ServiceClientProperties properties) {
-        return createClient(properties.marketplace().baseUrl(), properties, MarketplaceClient.class);
+    MarketplaceClient marketplaceHttpApi(ServiceClientProperties properties, ServiceHttpClient serviceHttpClient) {
+        return createClient(properties.marketplace(), properties, MarketplaceClient.class,
+                serviceHttpClient);
     }
 
     @Bean
@@ -53,7 +56,11 @@ public class RestClientConfig {
         return new MarketplaceServiceClient(marketplaceHttpApi);
     }
 
-    private <T> T createClient(String baseUrl, ServiceClientProperties properties, Class<T> clientType) {
+    private <T> T createClient(
+            ServiceClientProperties.Service service,
+            ServiceClientProperties properties,
+            Class<T> clientType,
+            ServiceHttpClient serviceHttpClient) {
         HttpClient httpClient = HttpClient.newBuilder()
                 .connectTimeout(properties.connectTimeout())
                 .build();
@@ -61,12 +68,16 @@ public class RestClientConfig {
         requestFactory.setReadTimeout(properties.readTimeout());
 
         RestClient restClient = RestClient.builder()
-                .baseUrl(baseUrl)
+                .baseUrl(service.baseUrl())
                 .requestFactory(requestFactory)
                 .requestInterceptor((request, body, execution) -> {
                     String correlationId = MDC.get("correlationId");
                     request.getHeaders().set("X-Correlation-Id",
-                            correlationId == null || correlationId.isBlank() ? UUID.randomUUID().toString() : correlationId);
+                            correlationId == null || correlationId.isBlank()
+                                    ? UUID.randomUUID().toString()
+                                    : correlationId);
+                    request.getHeaders().setBearerAuth(
+                            serviceHttpClient.serviceToken(service.audience(), service.scope()));
                     return execution.execute(request, body);
                 })
                 .build();

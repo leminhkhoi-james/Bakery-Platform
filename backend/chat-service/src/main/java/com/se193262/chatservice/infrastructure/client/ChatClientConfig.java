@@ -18,18 +18,21 @@ import java.util.UUID;
 public class ChatClientConfig {
 
     @Bean
-    MarketplaceChatClient marketplaceChatClient(ServiceClientProperties properties) {
-        return createClient(properties.marketplace(), properties, MarketplaceChatClient.class);
+    MarketplaceChatClient marketplaceChatClient(
+            ServiceClientProperties properties, ServiceTokenProvider tokenProvider) {
+        return createClient(properties.marketplace(), properties, tokenProvider, MarketplaceChatClient.class);
     }
 
     @Bean
-    BakeryChatClient bakeryChatClient(ServiceClientProperties properties) {
-        return createClient(properties.bakery(), properties, BakeryChatClient.class);
+    BakeryChatClient bakeryChatClient(
+            ServiceClientProperties properties, ServiceTokenProvider tokenProvider) {
+        return createClient(properties.bakery(), properties, tokenProvider, BakeryChatClient.class);
     }
 
     private <T> T createClient(
             ServiceClientProperties.Service service,
             ServiceClientProperties properties,
+            ServiceTokenProvider tokenProvider,
             Class<T> clientType
     ) {
         HttpClient httpClient = HttpClient.newBuilder()
@@ -46,9 +49,8 @@ public class ChatClientConfig {
                             correlationId == null || correlationId.isBlank()
                                     ? UUID.randomUUID().toString()
                                     : correlationId);
-                    if (service.serviceToken() != null && !service.serviceToken().isBlank()) {
-                        request.getHeaders().setBearerAuth(service.serviceToken());
-                    }
+                    request.getHeaders().setBearerAuth(
+                            tokenProvider.token(service.audience(), service.scope()));
                     return execution.execute(request, body);
                 })
                 .build();

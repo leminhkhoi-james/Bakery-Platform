@@ -27,10 +27,12 @@ services:
       ORDER_DB_URL: jdbc:postgresql://order-db:5432/order_db
       ORDER_DB_USERNAME: ${ORDER_DB_USERNAME:-postgres}
       ORDER_DB_PASSWORD: ${ORDER_DB_PASSWORD:-postgres}
+      ORDER_SERVICE_CLIENT_ID: ${ORDER_SERVICE_CLIENT_ID:-order-service}
+      ORDER_SERVICE_CLIENT_SECRET: ${ORDER_SERVICE_CLIENT_SECRET:-}
       IDENTITY_JWK_SET_URI: ${IDENTITY_JWK_SET_URI:-http://identity-service:8081/.well-known/jwks.json}
-      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://identity-service:8081}
-      BAKERY_SERVICE_URL: ${BAKERY_SERVICE_URL:-http://bakery-service:8082}
-      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://marketplace-service:8083}
+      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:8081}
+      BAKERY_SERVICE_URL: ${BAKERY_SERVICE_URL:-http://host.docker.internal:8083}
+      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://host.docker.internal:8082}
     ports:
       - "${ORDER_SERVICE_PORT:-8085}:8080"
 

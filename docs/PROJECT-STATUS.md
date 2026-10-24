@@ -39,14 +39,18 @@
 - Order Service validates RS256 JWTs through Identity JWKs, maps platform roles
   and service scopes, protects public/internal routes, checks order ownership,
   and verifies active Bakery membership for bakery access.
+- Order obtains cached five-minute service JWTs from Identity for Identity,
+  Bakery and Marketplace clients; Identity grants Order only the required scopes.
 - Chat Service has runtime JPA/PostgreSQL/Flyway, Swagger/OpenAPI and a
   non-root Docker image with Compose-managed PostgreSQL and MinIO.
 - Chat conversation and message APIs implement participant/membership checks,
   Marketplace context authorization, cursor pagination, idempotent sends,
   attachment validation and signed URLs, soft-delete tombstones, and read/unread
-  receipts. Protected internal routes remain deny-by-default.
-- Thêm Order V2 migration cho `customer_note` và idempotency records; cập nhật
-  canonical DDL, ERD và database documentation.
+  receipts. Chat obtains short-lived service JWTs from Identity and calls the
+  scoped Marketplace/Bakery authorization APIs; protected internal routes remain
+  deny-by-default.
+- Thêm Order V2/V3 migrations cho `customer_note`, idempotency records và
+  accepted-offer idempotency; cập nhật canonical DDL, ERD và database docs.
 - Bakery Service đã có JPA/PostgreSQL/Flyway dependencies, runtime V1 migration
   và entity mapping cho 11 bảng trong `bakery_db`, đặt trong từng
   `feature/<feature>/entity`.
@@ -108,9 +112,12 @@
   review lifecycle; Testcontainers covers Flyway V1/V2, Hibernate validation,
   and HTTP/OpenAPI routes when Docker daemon is available. Latest run:
   14 tests, 11 passed and 3 Docker-dependent tests skipped.
-- Chat Service build passes; attachment validation unit tests pass. PostgreSQL,
-  Flyway/JPA validation and HTTP lifecycle tests use Testcontainers and skipped
-  because Docker daemon is unavailable.
+- Chat Service tests: 10 total, 6 passed and 4 PostgreSQL/HTTP Testcontainers
+  tests skipped because Docker is unavailable. Marketplace reactor tests: 33 total,
+  16 passed and 17 Docker-dependent HTTP tests skipped; all 3 new chat
+  authorization tests passed.
+- Combined Identity/Marketplace/Bakery/Chat Compose configuration validates;
+  runtime service-to-service HTTP has not been exercised because Docker is unavailable.
 - `mvn -pl bakery-service -am -DskipTests compile`: **BUILD SUCCESS**.
 - `mvn test` tại `backend/bakery-service/` với PostgreSQL local: smoke test pass;
   Flyway xác nhận V1, Hibernate `ddl-auto=validate` chấp nhận 11 entity và
@@ -157,13 +164,12 @@
   service khả dụng; public catalog chưa kèm rating Order. Chưa có end-to-end test với
   PostgreSQL/MinIO/Identity/Subscription và chưa có job retry cleanup ảnh mồ côi.
 - Subscription cần kiểm thử HTTP đầu cuối với PostgreSQL, MinIO, Bakery và Identity
-  đang chạy cùng service JWT hợp lệ. Identity hiện chưa cấp service token nên các
-  luồng cần Bakery validation sẽ trả 503 cho tới khi tích hợp credential.
-- Marketplace và Cake AI vẫn cần runtime nghiệp vụ, JPA/PostgreSQL/Flyway và
-  OAuth2 Resource Server; API Gateway cũng chưa có Resource Server.
-- Marketplace chưa triển khai runtime internal authorization. Bakery đã có ba
-  internal contracts; outbound Order/Chat/Bakery clients cần service JWT, Identity
-  chưa có luồng cấp service token/client credentials.
+  đang chạy cùng service JWT hợp lệ. Các client Subscription/Bakery khác vẫn cần
+  được cấp credential theo từng audience/scope khi triển khai các luồng phụ thuộc.
+- Cake AI and API Gateway still need their remaining runtime/domain features.
+- Runtime integration still requires deployment configuration for service client
+  secrets/hashes and dependent service URLs. Identity issues scoped tokens;
+  Chat's credentials/grants are configured for Marketplace and Bakery.
 - Gateway routing/filter implementation và lựa chọn gateway dependency.
 - REST clients, timeout/error mapping, object storage và scheduler trong các
   service còn lại.

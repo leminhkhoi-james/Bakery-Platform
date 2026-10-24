@@ -6,8 +6,10 @@
 > **Implementation status:** Identity authentication, Order/Review endpoints
 > và Chat REST endpoints đã được triển khai. Order và Chat validate user/service
 > JWT contracts and enforce role/scope plus resource/participant authorization.
-> Chat requires Marketplace/Bakery internal authorization contracts and
-> provisioned service credentials; service-token issuance remains deferred.
+> Marketplace chat authorization, Bakery membership authorization and Identity
+> service-token issuance are implemented. Chat requests least-privilege,
+> audience-specific service JWTs at runtime; configure the Chat client secret
+> hash in Identity and its matching secret in Chat.
 
 ---
 
@@ -1548,12 +1550,14 @@ eligibility flags. **Errors:** `404` request.
 `customerId`, `bakeryId`.
 
 Marketplace validates request ownership, request state/chat eligibility and
-whether the bakery is the target or has an eligible offer. Chat Service fails
-closed if this contract is unavailable or any returned identifier does not
-match the request.
+whether the bakery is the target or has an eligible offer. For OPEN requests,
+only unexpired PENDING offers qualify; after offer selection, only the ACCEPTED
+bakery qualifies. A known request returns `authorized=false` for an ineligible
+customer/bakery/state; Chat Service rejects that context. Chat also fails closed
+if this contract is unavailable or any returned identifier does not match.
 
 **Success (200):** `{cakeRequestId,customerId,bakeryId,requestStatus,authorized}`.
-**Errors:** `404` request; `403` service scope; `422` ineligible context.
+**Errors:** `404` request; `403` service scope.
 
 ### GET /internal/v1/offers/{offerId}/order-source — Marketplace
 
@@ -1862,6 +1866,8 @@ Request JSON: `{clientId, clientSecret, audience, scope}`. Scope is space-delimi
 of the client's configured grant for that exact audience. Success 200: `{accessToken, expiresIn:300}`.
 Invalid credentials, target or scopes return 401. User JWTs cannot invoke internal domain APIs;
 service JWTs cannot invoke public APIs. Private keys remain only in Identity.
+Chat authenticates as `chat-service`, requesting `marketplace:request:chat:authorize`
+for `marketplace-service` and `bakery:membership:read` for `bakery-service`.
 
 ### Additional internal contracts
 

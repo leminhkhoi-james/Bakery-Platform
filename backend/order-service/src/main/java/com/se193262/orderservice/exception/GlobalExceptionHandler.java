@@ -8,10 +8,12 @@ import com.se193262.orderservice.feature.order.OrderNotFoundException;
 import com.se193262.orderservice.feature.review.ReviewNotFoundException;
 import com.se193262.orderservice.infrastructure.client.RemoteServiceException;
 import com.se193262.orderservice.shared.dto.ApiResponse;
+import com.se193262.platform.exception.AppException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +37,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderConflictException.class)
     ResponseEntity<ApiResponse<Void>> handleConflict(OrderConflictException exception) {
         return error(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
+    @ExceptionHandler(AppException.class)
+    ResponseEntity<ApiResponse<Void>> handlePlatformException(AppException exception) {
+        HttpStatusCode status = HttpStatusCode.valueOf(exception.status());
+        return ResponseEntity.status(status).body(ApiResponse.error(status.value(), exception.getMessage()));
     }
 
     @ExceptionHandler({OrderNotFoundException.class, ReviewNotFoundException.class})

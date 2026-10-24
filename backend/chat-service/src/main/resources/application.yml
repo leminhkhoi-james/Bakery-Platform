@@ -25,12 +25,17 @@ security:
     service-audience: ${CHAT_SERVICE_JWT_AUDIENCE:chat-service}
 
 clients:
+  identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
+  client-id: ${CHAT_SERVICE_CLIENT_ID:chat-service}
+  client-secret: ${CHAT_SERVICE_CLIENT_SECRET:}
   marketplace:
-    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8083}
-    service-token: ${CHAT_MARKETPLACE_SERVICE_TOKEN:}
+    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8082}
+    audience: marketplace-service
+    scope: marketplace:request:chat:authorize
   bakery:
     base-url: ${BAKERY_SERVICE_URL:http://localhost:8082}
-    service-token: ${CHAT_BAKERY_SERVICE_TOKEN:}
+    audience: bakery-service
+    scope: bakery:membership:read
   connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
   read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
 

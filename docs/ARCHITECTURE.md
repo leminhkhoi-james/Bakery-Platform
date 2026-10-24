@@ -11,16 +11,11 @@ ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thu�
 > bảy domain service và một API Gateway độc lập. Identity Service đã triển khai
 > persistence cho authentication, RS256 JWT/JWK và refresh rotation. Order
 > Service và Chat Service đã có JWT resource-server. Chat có runtime
-> PostgreSQL/Flyway, participant-aware REST APIs và MinIO attachment storage.
-> Marketplace/Bakery runtime contracts và service-token provisioning còn thiếu,
-> nên các kiểm tra context/membership cần được kết nối khi các service phụ thuộc
-> được triển khai. Gateway routing, frontend và tích hợp ngoài vẫn chưa được
-> triển khai.
-> **Trạng thái hiện tại:** backend có bảy domain service và API Gateway độc lập.
-> Identity authentication và Marketplace nghiệp vụ đã được triển khai, cùng các API
-> internal tối thiểu ở Bakery/Subscription/Cake AI/Order. Marketplace dùng Firebase Storage;
-> local Compose cung cấp Identity, Marketplace và hai PostgreSQL riêng. Public CRUD của
-> các service hỗ trợ, Gateway routing, frontend, Chat và AI provider còn đang chờ triển khai.
+> PostgreSQL/Flyway, participant-aware REST APIs, MinIO attachment storage,
+> cùng outbound calls được bảo vệ bằng service JWT audience/scope cụ thể.
+> Marketplace chat eligibility và Bakery membership được xác minh qua internal
+> contracts; Identity phát hành và Chat cache service tokens trong thời hạn ngắn.
+> Gateway routing, frontend và AI provider integration vẫn chưa được triển khai.
 > Chi tiết kiểm chứng thực tế nằm trong `PROJECT-STATUS.md`.
 
 ---

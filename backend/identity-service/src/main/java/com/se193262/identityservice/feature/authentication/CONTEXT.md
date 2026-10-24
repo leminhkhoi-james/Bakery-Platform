@@ -11,8 +11,9 @@ logout, RS256 access-token issuing/validation and public JWK discovery. Refresh
 tokens are opaque and only their SHA-256 hashes are stored. Reuse of a rotated
 token revokes all remaining refresh sessions for that user.
 
-Service-token claim validation and internal route authorization are defined,
-but service-token issuance is deferred until internal HTTP clients are built.
+Service-token issuance is implemented. A client authenticates with its
+configured BCrypt secret hash and requests scopes granted for the exact
+audience; the resulting RS256 service JWT expires after five minutes.
 
 ## Boundary
 

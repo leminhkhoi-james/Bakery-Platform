@@ -20,4 +20,10 @@ public interface OfferRepository
             OfferStatus status, java.time.Instant now);
 
     boolean existsByCakeRequestIdAndBakeryId(UUID requestId, UUID bakeryId);
+
+    boolean existsByCakeRequestIdAndBakeryIdAndStatusAndExpiresAtAfter(
+            UUID requestId, UUID bakeryId, OfferStatus status, java.time.Instant now);
+
+    boolean existsByCakeRequestIdAndBakeryIdAndStatus(
+            UUID requestId, UUID bakeryId, OfferStatus status);
 }

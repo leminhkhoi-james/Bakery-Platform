@@ -6,11 +6,14 @@ import java.time.Duration;
 
 @ConfigurationProperties(prefix = "clients")
 public record ServiceClientProperties(
+        String identityUrl,
+        String clientId,
+        String clientSecret,
         Service marketplace,
         Service bakery,
         Duration connectTimeout,
         Duration readTimeout
 ) {
-    public record Service(String baseUrl, String serviceToken) {
+    public record Service(String baseUrl, String audience, String scope) {
     }
 }
