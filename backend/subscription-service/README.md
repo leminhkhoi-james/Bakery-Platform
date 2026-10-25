@@ -20,3 +20,19 @@ To run Bakery and Subscription together on the same Docker network, follow
 
 See [JWT runtime verification](../../docs/JWT-LOCAL-VERIFICATION.md) for all domain
 services and the real HTTP verification script.
+
+From `backend/`, run the service tests with Docker available:
+
+```powershell
+mvn -pl subscription-service -am verify
+```
+
+Persistence/context tests use temporary PostgreSQL Testcontainers and a test
+profile; they do not read local `.env` or use the development database. Without
+Docker those tests are skipped. To use another installed PostgreSQL image, pass
+`"-Dtest.postgres.image=postgres:16-alpine"` (default: `postgres:17-alpine`).
+
+`scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage` exercises real
+Identity/Bakery/Subscription JWT calls, proof upload and signed downloads, and
+checks that staff cannot see a private payment proof while the submitter/admin can.
+Run it from the repository root against the local combined Compose stack.

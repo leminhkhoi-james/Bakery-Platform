@@ -57,5 +57,23 @@ deletes only the users and bakery it created, including their subscription data;
 `-KeepTestData` retains those test records. Tokens and secrets are never printed.
 Run against the local development stack only.
 
-The script's Firebase-free payment check submits a bank reference, not an image.
-It does not verify Firebase upload or external AI generation.
+By default the script submits a bank reference. For a focused Bakery/Subscription
+run including real MinIO uploads, start only these services (the other Compose
+files below supply the same network/port wiring):
+
+```powershell
+docker compose -f compose.yaml -f docker-compose.bakery-subscription.yml -f docker-compose.order-service.yml -f docker-compose.chat-service.yml -f compose.services.yaml -f compose.no-firebase.yaml up -d --build identity-service bakery-service subscription-service
+./scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage
+```
+
+This uses eight containers and does not build Cake AI. It checks owner/member
+display-name snapshots, private proof upload/signed downloads, owner/admin access
+and staff denial, bakery logo replacement/cover/add-on media, product multipart
+images/primary/display order/deletion, publish and sorting. Invalid MIME, size,
+sort fields and unauthorized uploads are rejected. Test media is deleted through
+authenticated S3 requests before test database records are removed. Never point
+this role-provisioning script at a shared/production database.
+
+The focused run passed on 2026-10-25. Firebase upload and external AI generation
+remain outside this script. Bakery aggregate ratings await an Order summary API;
+see PROJECT-STATUS.md for the contract information needed from that team.

@@ -29,3 +29,29 @@ To run Bakery and Subscription together, follow
 
 See [JWT runtime verification](../../docs/JWT-LOCAL-VERIFICATION.md) for all domain
 services and the real HTTP verification script.
+
+From `backend/`, run the service tests with Docker available:
+
+```powershell
+mvn -pl bakery-service -am verify
+```
+
+Persistence/context tests use temporary PostgreSQL Testcontainers and a test
+profile; they do not read local `.env` or use the development database. Without
+Docker those tests are skipped. To use another installed PostgreSQL image, pass
+`"-Dtest.postgres.image=postgres:16-alpine"` (default: `postgres:17-alpine`).
+
+Public/admin bakery lists sort by `name`, `createdAt`, or `id`; product lists also
+allow `basePrice`. Invalid sort input returns 400. Member responses include a
+read-only `displayNameSnapshot` from Identity, persisted by Flyway V2.
+
+For the real JWT + MinIO checks, start Identity/Bakery/Subscription with the
+combined Compose wiring, then run from the repository root:
+
+```powershell
+./scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage
+```
+
+The script tests media replacement/deletion, signed downloads, proof privacy,
+membership snapshots and sorting. It removes only its own test users, bakery,
+subscriptions and uploaded objects unless `-KeepTestData` is supplied.
