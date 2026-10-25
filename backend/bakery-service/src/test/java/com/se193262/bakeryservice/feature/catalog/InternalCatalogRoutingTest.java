@@ -67,4 +67,28 @@ class InternalCatalogRoutingTest {
         mvc.perform(get("/internal/v1/users/" + ID + "/bakery-memberships"))
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.statusCode").value(404));
     }
+
+    @Test
+    @DisplayName("Null selections are rejected before either catalog service runs")
+    void quote_nullSelections_returns400() throws Exception {
+        String body = """
+                {"bakeryId":"%s","productId":"%s","quantity":1,
+                 "deliveryCity":"HCM","deliveryDistrict":"D1","optionSelections":[null],"addOns":[null]}
+                """.formatted(ID, ID);
+        for (String path : new String[] {"quotes", "customization-quotes", "add-on-quotes"}) {
+            mvc.perform(post("/internal/v1/catalog/" + path)
+                            .contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isBadRequest());
+        }
+        verifyNoInteractions(customizationService, directOrderService);
+    }
+
+    @Test
+    @DisplayName("Method authorization errors keep HTTP 403")
+    void memberships_accessDenied_returns403() throws Exception {
+        when(customizationService.memberships(ID))
+                .thenThrow(new org.springframework.security.access.AccessDeniedException("Denied"));
+        mvc.perform(get("/internal/v1/users/" + ID + "/bakery-memberships"))
+                .andExpect(status().isForbidden()).andExpect(jsonPath("$.statusCode").value(403));
+    }
 }

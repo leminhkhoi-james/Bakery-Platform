@@ -78,7 +78,7 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
 | `bakeries` | `id` | `name`, thông tin liên hệ, ảnh, `status`, timestamps, `version` | Hồ sơ chính của tiệm bánh |
-| `bakery_members` | `id` | `bakery_id`, `user_id`*, `member_role`, `status`, `joined_at` | User tham gia quản lý/vận hành tiệm |
+| `bakery_members` | `id` | `bakery_id`, `user_id`*, `display_name_snapshot`, `member_role`, `status`, `joined_at` | User tham gia quản lý/vận hành tiệm |
 | `bakery_addresses` | `id` | `bakery_id`, địa chỉ, tọa độ, `is_primary`, timestamps | Chi nhánh hoặc địa điểm của tiệm |
 | `service_areas` | `id` | `bakery_id`, `city`, `district`, `delivery_fee`, `minimum_order`, `active` | Khu vực tiệm nhận giao bánh |
 | `business_hours` | `id` | `bakery_id`, `day_of_week`, giờ mở/đóng, `closed` | Lịch hoạt động trong tuần |
@@ -90,6 +90,10 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | `product_option_values` | `id` | `option_group_id`, `name`, mô tả, `price_adjustment`, `active` | Giá trị cụ thể trong một nhóm lựa chọn |
 
 `user_id` trong `bakery_members` là external reference tới Identity Service.
+`V2__member_display_snapshot.sql` bổ sung tên hiển thị chụp từ Identity khi tạo
+OWNER/member. Tên này không đổi theo profile Identity về sau. Membership cũ có
+snapshot null được bổ sung khi đọc danh sách và Identity còn cung cấp user đó;
+Identity không khả dụng thì danh sách vẫn đọc được với snapshot null.
 
 ### Relationships
 

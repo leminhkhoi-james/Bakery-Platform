@@ -19,6 +19,7 @@ import java.util.UUID;
 
 @Service
 public class BakeryMemberServiceImpl implements BakeryMemberService {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BakeryMemberServiceImpl.class);
 
     private final BakeryMemberRepository memberRepository;
     private final BakeryRepository bakeryRepository;
@@ -33,18 +34,30 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<BakeryMemberDto> list(UUID bakeryId) {
         findBakery(bakeryId);
         return memberRepository.findAllByBakery_IdOrderByJoinedAtAsc(bakeryId)
-                .stream().map(BakeryMemberDto::fromEntity).toList();
+                .stream().map(member -> {
+                    if (member.getDisplayNameSnapshot() == null) {
+                        try {
+                            member.captureDisplayName(identityUserClient.getUser(member.getUserId()).displayName());
+                        } catch (AppException exception) {
+                            // Existing memberships stay readable while Identity is unavailable.
+                            log.warn("Member display snapshot unavailable: memberId={}, status={}",
+                                    member.getId(), exception.getStatus().value());
+                        }
+                    }
+                    return BakeryMemberDto.fromEntity(member);
+                }).toList();
     }
 
     @Override
     @Transactional
     public BakeryMemberDto create(UUID bakeryId, BakeryMemberDto request) {
         if (request == null || request.id() != null || request.status() != null
-                || request.joinedAt() != null || request.userId() == null || request.memberRole() == null) {
+                || request.joinedAt() != null || request.displayNameSnapshot() != null
+                || request.userId() == null || request.memberRole() == null) {
             throw new AppException(HttpStatus.BAD_REQUEST, "userId and memberRole are required; server fields are read-only");
         }
         if (request.memberRole() == BakeryMemberRole.OWNER) {
@@ -54,7 +67,8 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
         if (memberRepository.existsByBakery_IdAndUserId(bakeryId, request.userId())) {
             throw new AppException(HttpStatus.CONFLICT, "User is already a bakery member");
         }
-        BakeryMember member = new BakeryMember(bakery, request.userId(), request.memberRole());
+        var profile = identityUserClient.requireEligibleMember(request.userId());
+        BakeryMember member = new BakeryMember(bakery, request.userId(), request.memberRole(), profile.displayName());
         return BakeryMemberDto.fromEntity(memberRepository.saveAndFlush(member));
     }
 
@@ -67,9 +81,6 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
                 && (request == null || request.memberRole() != BakeryMemberRole.STAFF)) {
             throw new AppException(HttpStatus.FORBIDDEN, "Only an owner can add a manager");
         }
-        if (request != null && request.userId() != null && request.memberRole() != null) {
-            identityUserClient.requireEligibleMember(request.userId());
-        }
         return create(bakeryId, request);
     }
 
@@ -77,7 +88,7 @@ public class BakeryMemberServiceImpl implements BakeryMemberService {
     @Transactional
     public BakeryMemberDto update(UUID bakeryId, UUID memberId, BakeryMemberDto request) {
         if (request == null || request.id() != null || request.joinedAt() != null
-                || request.userId() != null) {
+                || request.userId() != null || request.displayNameSnapshot() != null) {
             throw new AppException(HttpStatus.BAD_REQUEST, "id, userId and joinedAt are read-only");
         }
         BakeryMember member = findMember(bakeryId, memberId);

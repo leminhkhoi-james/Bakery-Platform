@@ -32,25 +32,43 @@ public class IdentityUserClient {
         this.client = RestClient.builder().baseUrl(baseUrl).requestFactory(requestFactory).build();
     }
 
-    public void requireEligibleMember(UUID userId) {
+    public UserProfile requireEligibleMember(UUID userId) {
+        UserProfile user = getUser(userId);
+        if (user.roles() == null || user.roles().stream().noneMatch(role ->
+                role.equals("BAKERY_STAFF") || role.equals("BAKERY_OWNER"))) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "User does not have an eligible bakery platform role");
+        }
+        return user;
+    }
+
+    public UserProfile requireOwner(UUID userId) {
+        UserProfile user = getUser(userId);
+        if (user.roles() == null || !user.roles().contains("BAKERY_OWNER")) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "User is not a bakery owner");
+        }
+        return user;
+    }
+
+    public UserProfile getUser(UUID userId) {
         try {
             String bearer = serviceToken.isBlank()
                     ? tokenClient.serviceToken("identity-service", "identity:user:read") : serviceToken;
-            UserResponse user = client.get().uri("/internal/v1/users/{userId}", userId)
+            UserProfile user = client.get().uri("/internal/v1/users/{userId}", userId)
                     .headers(headers -> {
                         headers.setBearerAuth(bearer);
                         headers.set("X-Correlation-Id", UUID.randomUUID().toString());
                     })
-                    .retrieve().body(UserResponse.class);
-            if (user == null || !userId.equals(user.id())) {
+                    .retrieve().body(UserProfile.class);
+            if (user == null || !userId.equals(user.id())
+                    || user.displayName() == null || user.displayName().isBlank()
+                    || user.displayName().length() > 120) {
                 throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Invalid Identity response");
             }
-            if (!"ACTIVE".equals(user.status()) || user.roles() == null
-                    || user.roles().stream().noneMatch(platformRole ->
-                    platformRole.equals("BAKERY_STAFF") || platformRole.equals("BAKERY_OWNER"))) {
-                throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "User does not have an eligible bakery platform role");
+            if (!"ACTIVE".equals(user.status())) {
+                throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "User is not active");
             }
+            return user;
         } catch (com.se193262.platform.exception.AppException exception) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Identity service credential is unavailable");
         } catch (RestClientResponseException exception) {
@@ -63,5 +81,5 @@ public class IdentityUserClient {
         }
     }
 
-    private record UserResponse(UUID id, String status, List<String> roles) { }
+    public record UserProfile(UUID id, String displayName, String status, List<String> roles) { }
 }

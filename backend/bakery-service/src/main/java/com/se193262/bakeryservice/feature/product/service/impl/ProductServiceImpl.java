@@ -25,8 +25,8 @@ import com.se193262.bakeryservice.feature.product.repository.ProductOptionValueR
 import com.se193262.bakeryservice.feature.product.repository.ProductRepository;
 import com.se193262.bakeryservice.feature.product.service.ProductService;
 import com.se193262.bakeryservice.shared.dto.PageResult;
+import com.se193262.bakeryservice.shared.AllowedSort;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,14 +73,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public PageResult<ProductDto> list(UUID bakeryId, ProductStatus status, UUID categoryId,
-                                       String query, int page, int size) {
+                                       String query, int page, int size, String sort) {
         findBakery(bakeryId);
         if (page < 1 || size < 1 || size > 100) {
             throw new AppException(HttpStatus.BAD_REQUEST, "page must be >= 1 and size must be 1..100");
         }
         return PageResult.fromPage(productRepository.findManagement(bakeryId, status, categoryId,
                 query == null ? "" : query.trim(),
-                PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt")))
+                PageRequest.of(page - 1, size, AllowedSort.parse(sort, Set.of("createdAt", "name", "basePrice", "id"))))
                 .map(ProductDto::fromEntity));
     }
 

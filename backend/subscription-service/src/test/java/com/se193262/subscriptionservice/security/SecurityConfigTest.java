@@ -21,7 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class)
+@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class, properties = "spring.config.import=")
+@org.springframework.test.context.ActiveProfiles("test")
 @Import({SecurityConfig.class, SecurityConfigTest.ProbeController.class,
         SecurityConfigTest.TestBeans.class})
 class SecurityConfigTest {
@@ -74,8 +75,22 @@ class SecurityConfigTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("Method security denial is returned as 403 instead of 500")
+    void methodDenied_withAdminToken_returns403() throws Exception {
+        mockMvc.perform(get("/api/v1/admin/method-denied")
+                        .header("Authorization", "Bearer user-admin"))
+                .andExpect(status().isForbidden())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+                        .jsonPath("$.statusCode").value(403));
+    }
+
     @RestController
     static class ProbeController {
+        @GetMapping("/api/v1/admin/method-denied")
+        @org.springframework.security.access.prepost.PreAuthorize("denyAll()")
+        public String methodDenied() { return "unreachable"; }
+
         @GetMapping("/api/v1/subscription-plans")
         String plans() { return "ok"; }
 

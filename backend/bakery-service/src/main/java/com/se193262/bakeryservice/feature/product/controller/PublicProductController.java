@@ -31,9 +31,10 @@ public class PublicProductController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
         return ResponseEntity.ok(ApiResponse.success(service.list(query, bakeryId, categoryId,
-                city, customizable, minPrice, maxPrice, page, size)));
+                city, customizable, minPrice, maxPrice, page, size, sort)));
     }
 
     @GetMapping("/{productId}")

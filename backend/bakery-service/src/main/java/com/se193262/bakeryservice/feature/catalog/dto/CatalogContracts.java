@@ -27,8 +27,8 @@ public final class CatalogContracts {
             UUID productId,
             @NotBlank String deliveryCity,
             @NotBlank String deliveryDistrict,
-            List<@Valid Option> optionSelections,
-            List<@Valid AddOn> addOns) {}
+            List<@NotNull @Valid Option> optionSelections,
+            List<@NotNull @Valid AddOn> addOns) {}
 
     public record OptionSnapshot(
             UUID optionGroupId,

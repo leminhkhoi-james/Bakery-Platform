@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface SubscriptionOrderRepository extends JpaRepository<SubscriptionOrder, UUID> {
     Optional<SubscriptionOrder> findByOrderNumber(String orderNumber);
     boolean existsByPlan_Id(UUID planId);
+    boolean existsByBakeryIdAndStatus(UUID bakeryId, SubscriptionOrderStatus status);
     boolean existsByBakeryIdAndStatusInAndExpiresAtAfter(UUID bakeryId,
             Collection<SubscriptionOrderStatus> statuses, Instant now);
     Page<SubscriptionOrder> findAllByBakeryId(UUID bakeryId, Pageable pageable);

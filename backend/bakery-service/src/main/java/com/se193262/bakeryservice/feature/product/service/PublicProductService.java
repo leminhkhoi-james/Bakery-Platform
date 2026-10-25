@@ -20,6 +20,7 @@ import com.se193262.bakeryservice.feature.product.repository.ProductRepository;
 import com.se193262.bakeryservice.infrastructure.client.SubscriptionEntitlementClient;
 import com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorage;
 import com.se193262.bakeryservice.shared.dto.PageResult;
+import com.se193262.bakeryservice.shared.AllowedSort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -64,12 +65,13 @@ public class PublicProductService {
     @Transactional(readOnly = true)
     public PageResult<PublicProductResponse> list(String query, UUID bakeryId, UUID categoryId,
             String city, Boolean customizable, BigDecimal minPrice, BigDecimal maxPrice,
-            int page, int size) {
+            int page, int size, String sort) {
         if (page < 1 || size < 1 || size > 100 || minPrice != null && minPrice.signum() < 0
                 || maxPrice != null && maxPrice.signum() < 0
                 || minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Invalid product filters or pagination");
         }
+        Sort ordering = AllowedSort.parse(sort, java.util.Set.of("createdAt", "name", "basePrice", "id"));
         long offset = (long) (page - 1) * size;
         long count = 0;
         List<PublicProductResponse> result = new ArrayList<>();
@@ -81,7 +83,7 @@ public class PublicProductService {
             candidates = productRepository.findPublicCandidates(ProductStatus.PUBLISHED,
                     BakeryStatus.ACTIVE, bakeryId, categoryId, customizable, minPrice, maxPrice,
                     query == null ? "" : query.trim(),
-                    PageRequest.of(chunk++, 100, Sort.by(Sort.Direction.DESC, "createdAt")));
+                    PageRequest.of(chunk++, 100, ordering));
             for (Product product : candidates.getContent()) {
                 UUID candidateBakeryId = product.getBakery().getId();
                 boolean matchesCity = city == null || city.isBlank()

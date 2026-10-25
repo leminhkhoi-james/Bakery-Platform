@@ -6,9 +6,15 @@ import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryService;
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
 import com.se193262.bakeryservice.feature.member.repository.BakeryMemberRepository;
+import com.se193262.bakeryservice.feature.member.service.BakeryMemberService;
+import com.se193262.bakeryservice.feature.member.dto.BakeryMemberDto;
+import com.se193262.bakeryservice.feature.member.entity.BakeryMember;
+import com.se193262.bakeryservice.feature.bakery.repository.BakeryRepository;
+import com.se193262.bakeryservice.infrastructure.client.IdentityUserClient;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import com.se193262.bakeryservice.PostgresIntegrationTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -17,16 +23,18 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @Transactional
-class BakeryCrudIntegrationTests {
+class BakeryCrudIntegrationTests extends PostgresIntegrationTest {
 
     @Autowired
     private BakeryService bakeryService;
 
     @Autowired
     private BakeryMemberRepository memberRepository;
+    @Autowired private BakeryMemberService memberService;
+    @Autowired private BakeryRepository bakeryRepository;
 
     @Test
     void createsBakeryWithOwnerAndReplacesOperations() {
@@ -84,5 +92,47 @@ class BakeryCrudIntegrationTests {
         assertThat(cleared.addresses()).isEmpty();
         assertThat(cleared.serviceAreas()).isEmpty();
         assertThat(cleared.businessHours()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Owner/member names are captured from Identity and remain stable after profile edits")
+    void members_identityProfileChanges_preserveSnapshots() {
+        UUID ownerId = UUID.randomUUID();
+        UUID staffId = UUID.randomUUID();
+        UUID bakeryId = bakeryService.create(new BakeryDto(null, "Snapshots", null,
+                "0900000000", null, null, null), ownerId).id();
+        when(identityUserClient.requireEligibleMember(staffId)).thenReturn(new IdentityUserClient.UserProfile(
+                staffId, "Original staff name", "ACTIVE", List.of("BAKERY_STAFF")));
+        var member = memberService.createAs(bakeryId, ownerId,
+                new BakeryMemberDto(null, staffId, BakeryMemberRole.STAFF, null, null));
+        assertThat(member.displayNameSnapshot()).isEqualTo("Original staff name");
+        when(identityUserClient.getUser(staffId)).thenReturn(new IdentityUserClient.UserProfile(
+                staffId, "Changed name", "ACTIVE", List.of("BAKERY_STAFF")));
+        var members = memberService.list(bakeryId);
+        assertThat(members).filteredOn(item -> item.userId().equals(ownerId))
+                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly("Test member");
+        assertThat(members).filteredOn(item -> item.userId().equals(staffId))
+                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly("Original staff name");
+        verify(identityUserClient, never()).getUser(staffId);
+    }
+
+    @Test
+    @DisplayName("Legacy memberships obtain a snapshot without losing readability during Identity outages")
+    void members_missingSnapshot_backfillsOrReturnsNull() {
+        UUID ownerId = UUID.randomUUID();
+        UUID bakeryId = bakeryService.create(new BakeryDto(null, "Legacy", null,
+                "0900000000", null, null, null), ownerId).id();
+        UUID legacyId = UUID.randomUUID();
+        var legacy = memberRepository.saveAndFlush(new BakeryMember(bakeryRepository.findById(bakeryId)
+                .orElseThrow(), legacyId, BakeryMemberRole.STAFF));
+        memberService.list(bakeryId);
+        assertThat(legacy.getDisplayNameSnapshot()).isEqualTo("Test member");
+        UUID unavailableId = UUID.randomUUID();
+        memberRepository.saveAndFlush(new BakeryMember(bakeryRepository.findById(bakeryId)
+                .orElseThrow(), unavailableId, BakeryMemberRole.STAFF));
+        when(identityUserClient.getUser(unavailableId)).thenThrow(new com.se193262.bakeryservice.exception.AppException(
+                org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE, "Unavailable"));
+        assertThat(memberService.list(bakeryId)).filteredOn(item -> item.userId().equals(unavailableId))
+                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly((String) null);
     }
 }

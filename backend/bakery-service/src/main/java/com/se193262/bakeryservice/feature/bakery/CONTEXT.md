@@ -20,6 +20,9 @@ internal profile/membership lookup are implemented. Productive use of public
 listing and internal clients requires service JWT issuance and the Subscription
 entitlement and Identity user lookup endpoints. Admin detail includes members
 and the subscription entitlement summary when Subscription is available.
+Public/admin lists accept allow-listed sorting with stable UUID tie-breaking.
+Creation validates the owner through Identity and saves the owner's display-name
+snapshot in the local membership. Aggregate ratings remain pending an Order API.
 
 ## Boundary
 

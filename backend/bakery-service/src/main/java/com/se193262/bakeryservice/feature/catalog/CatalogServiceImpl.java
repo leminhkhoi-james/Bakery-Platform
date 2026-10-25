@@ -2,6 +2,7 @@ package com.se193262.bakeryservice.feature.catalog;
 
 import com.se193262.bakeryservice.feature.catalog.dto.CatalogContracts.*;
 import com.se193262.platform.exception.BusinessException;
+import com.se193262.bakeryservice.infrastructure.client.SubscriptionEntitlementClient;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,11 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class CatalogServiceImpl implements CatalogService {
     private final CatalogRepository repository;
+    private final SubscriptionEntitlementClient entitlementClient;
 
-    public CatalogServiceImpl(CatalogRepository repository) {
+    public CatalogServiceImpl(CatalogRepository repository, SubscriptionEntitlementClient entitlementClient) {
         this.repository = repository;
+        this.entitlementClient = entitlementClient;
     }
 
     public Bakery bakery(UUID id) {
@@ -83,6 +86,8 @@ public class CatalogServiceImpl implements CatalogService {
     public Quote quote(QuoteRequest request, boolean productRequired) {
         Bakery bakery = bakery(request.bakeryId());
         if (!"ACTIVE".equals(bakery.status())) throw BusinessException.conflict();
+        if (!entitlementClient.hasActiveSubscription(request.bakeryId()))
+            throw new BusinessException(409, "Bakery subscription is inactive");
         if (bakery.serviceAreas().stream()
                 .noneMatch(
                         a ->
