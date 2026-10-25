@@ -1,0 +1,538 @@
+@import "tailwindcss";
+
+@theme {
+  --text-admin-title: 20px;
+  --text-admin-title--line-height: 28px;
+  --text-admin-heading: 16px;
+  --text-admin-heading--line-height: 24px;
+  --text-admin-body: 14px;
+  --text-admin-body--line-height: 20px;
+  --text-admin-metric: 24px;
+  --text-admin-metric--line-height: 32px;
+  --color-wine: #6b212e;
+  --color-wine-dark: #4f1722;
+
+  /* French Haute Pâtisserie Palette (Warm Truffle & Caramel Gold) */
+  --color-primary: #6b212e;
+  /* Deep Warm Truffle / Bordeaux */
+  --color-on-primary: #ffffff;
+  --color-primary-container: #4f1722;
+  /* Dark Truffle */
+  --color-on-primary-container: #f5dcd7;
+  --color-primary-fixed: #f5dcd7;
+  --color-primary-fixed-dim: #f0eae5;
+  --color-on-primary-fixed: #331017;
+  --color-on-primary-fixed-variant: #521c25;
+
+  --color-secondary: #b87328;
+  /* French Caramel Gold */
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f6ece0;
+  /* Soft Caramel Foam */
+  --color-on-secondary-container: #4a2807;
+  --color-secondary-fixed: #f6ece0;
+  --color-secondary-fixed-dim: #e8d7c4;
+  --color-on-secondary-fixed: #381e05;
+  --color-on-secondary-fixed-variant: #5c350e;
+
+  --color-tertiary: #8a5749;
+  /* Warm Praline / Cocoa */
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #f5ebe7;
+  --color-on-tertiary-container: #3a1d17;
+  --color-tertiary-fixed: #f5ebe7;
+  --color-tertiary-fixed-dim: #e5d3cd;
+  --color-on-tertiary-fixed: #2e1610;
+  --color-on-tertiary-fixed-variant: #522b22;
+
+  --color-background: #fffdfa;
+  /* Luminous Warm Milk White */
+  --color-on-background: #241815;
+  /* Deep Warm Espresso */
+
+  --color-surface: #fffdfa;
+  /* Luminous Warm Milk White */
+  --color-on-surface: #241815;
+  /* Deep Warm Espresso */
+  --color-surface-dim: #fbf5ed;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fdfaf5;
+  /* Paper Clean */
+  --color-surface-container: #f7f0e6;
+  /* Calming warm neutral cream */
+  --color-surface-container-high: #f0e6d8;
+  --color-surface-container-highest: #e8dcce;
+  --color-surface-variant: #f3e9dc;
+  --color-on-surface-variant: #695e57;
+  /* Sophisticated warm taupe slate */
+  --color-inverse-surface: #291d1a;
+  --color-inverse-on-surface: #fffdfa;
+  --color-inverse-primary: #f5dcd7;
+
+  --color-outline: #8c7e75;
+  /* Neutral warm taupe for labels/icons */
+  --color-outline-variant: #ebdcd0;
+  /* Subtle warm borders */
+  --color-surface-tint: #6b212e;
+
+  --color-error: #b91c1c;
+  --color-on-error: #ffffff;
+  --color-error-container: #fee2e2;
+  --color-on-error-container: #7f1d1d;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-margin: 3rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+
+  --font-display: 'Quicksand', 'Nunito', sans-serif;
+  --font-headline: 'Quicksand', 'Nunito', sans-serif;
+  --font-fraunces: 'Fraunces', serif;
+  --font-serif: 'Fraunces', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  *,
+  ::before,
+  ::after {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: var(--font-sans);
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+}
+
+@layer utilities {
+
+  /* Typography Utilities - Scaled down for sleek, clean, modern UI */
+  .font-display-lg,
+  .font-headline-lg,
+  .font-headline-md,
+  .font-headline-sm,
+  .font-display-lg-mobile,
+  .font-headline-lg-mobile,
+  .font-headline,
+  .font-display,
+  .font-fraunces {
+    font-family: var(--font-headline);
+    font-weight: 700;
+  }
+
+  .font-body-lg,
+  .font-body-md,
+  .font-body-sm {
+    font-family: var(--font-body);
+    font-weight: 400;
+  }
+
+  .font-label-lg,
+  .font-label-md,
+  .font-label-sm {
+    font-family: var(--font-label);
+    font-weight: 600;
+  }
+
+  .text-display-lg {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-lg-mobile {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-headline-lg {
+    font-size: 22px;
+    line-height: 30px;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+
+  .text-headline-lg-mobile {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+  }
+
+  .text-headline-md {
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+  }
+
+  .text-headline-sm {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 600;
+  }
+
+  .text-body-lg {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
+  .text-body-md {
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 400;
+  }
+
+  .text-body-sm {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+  }
+
+  .text-label-lg {
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+  }
+
+  .text-label-md {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+  }
+
+  .text-label-sm {
+    font-size: 11px;
+    line-height: 15px;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+  }
+}
+
+/* Material Symbols configuration */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Savouré Bakery Signature Typography Utilities */
+.font-savoure {
+  font-family: 'Quicksand', 'Nunito', sans-serif;
+  letter-spacing: normal !important;
+}
+
+.font-fraunces {
+  font-family: 'Fraunces', serif;
+}
+
+.font-sweetcake {
+  font-family: 'Dancing Script', cursive;
+  letter-spacing: normal !important;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+/* CakeMatch Theme System */
+:root {
+  --wine: #6b212e;
+  --wine-dark: #4f1722;
+  --pink: #ffb8ce;
+  --pink-light: #fff0f5;
+  --cream: #fffdf9;
+  --paper: #ffffff;
+  --teal: #6fb9c6;
+  --teal-soft: #e4f4f7;
+  --butter: #fff2cc;
+  --ink: #2b1810;
+  --border: 1.5px solid #ebd8cb;
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.bg-paper {
+  background-color: var(--paper);
+}
+
+.bg-pink-light {
+  background-color: var(--pink-light);
+}
+
+.bg-teal-soft {
+  background-color: var(--teal-soft);
+}
+
+.text-wine {
+  color: var(--wine);
+}
+
+.text-wine-dark {
+  color: var(--wine-dark);
+}
+
+.border-wine {
+  border-color: var(--wine);
+}
+
+.check-band {
+  border-top: 4px solid var(--wine);
+  border-bottom: 4px solid var(--wine);
+  height: 48px;
+  background: repeating-conic-gradient(var(--wine) 0 25%, #fffdfa 0 50%) 0 0 / 32px 32px;
+}
+
+.scallop-edge-bottom {
+  position: relative;
+}
+
+.scallop-edge-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 13px;
+  background: radial-gradient(circle at 12px 0, var(--paper) 11px, transparent 12px) 0 0 / 24px 13px repeat-x;
+  filter: drop-shadow(0 2px 0 var(--wine));
+  pointer-events: none;
+  z-index: 20;
+}
+
+.scallop-edge-top {
+  position: relative;
+}
+
+.scallop-edge-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  height: 13px;
+  background: radial-gradient(circle at 12px 13px, var(--paper) 11px, transparent 12px) 0 0 / 24px 13px repeat-x;
+  filter: drop-shadow(0 -2px 0 var(--wine-dark));
+  pointer-events: none;
+  z-index: 20;
+}
+
+.cakematch-btn {
+  min-height: 48px;
+  border: 1.5px solid var(--wine);
+  border-radius: 999px;
+  background: var(--wine);
+  color: #ffffff;
+  padding: 11px 23px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(107, 33, 46, 0.16);
+  transition: transform .18s, box-shadow .18s, background .18s;
+  cursor: pointer;
+}
+
+.cakematch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(107, 33, 46, 0.22);
+  background: #7d2938;
+}
+
+.cakematch-btn-secondary {
+  min-height: 48px;
+  border: 1.5px solid #ded7ce;
+  border-radius: 999px;
+  color: var(--wine);
+  background: #ffffff;
+  padding: 11px 23px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform .18s, box-shadow .18s, background .18s;
+  cursor: pointer;
+}
+
+.cakematch-btn-secondary:hover {
+  background: #faf7f2;
+  border-color: var(--wine);
+  transform: translateY(-2px);
+}
+
+.dotted-frame-badge {
+  display: inline-block;
+  background: var(--paper);
+  border: 1.5px solid var(--wine);
+  outline: 2px dotted var(--pink);
+  outline-offset: 4px;
+  border-radius: 50px;
+  padding: 8px 25px;
+  margin-bottom: 13px;
+  color: var(--wine);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dome-cake-card {
+  background: var(--paper);
+  border: 1.5px solid #e6ded5;
+  border-radius: 165px 165px 18px 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.dome-cake-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.retro-shop-ticket {
+  border: 2px solid var(--wine);
+  border-radius: 18px;
+  background: var(--paper);
+  padding: 36px 35px;
+  box-shadow: 0 8px 24px rgba(107, 33, 46, 0.12);
+  transform: rotate(1deg);
+}
+
+.striped-hero-bg {
+  background: repeating-linear-gradient(90deg, #fcf7f0 0, #fcf7f0 62px, #fffdfa 62px, #fffdfa 124px);
+}
+
+.striped-idea-bg {
+  background: repeating-linear-gradient(90deg, #fdf9f2 0, #fdf9f2 76px, #ffffff 76px, #ffffff 152px);
+}
+
+/* Kawaii Cloud & Booth Decor Patterns (Fresh Sweet Bakery Palette) */
+.pattern-dots-mint {
+  background-color: #6fb9c6;
+  background-image: radial-gradient(#ffffff 22%, transparent 22%);
+  background-size: 14px 14px;
+}
+
+.pattern-dots-pink {
+  background-color: #ffb8ce;
+  background-image: radial-gradient(#ffffff 20%, transparent 20%);
+  background-size: 14px 14px;
+}
+
+.pattern-stripes-pink {
+  background: repeating-linear-gradient(-45deg,
+      #ffccd9,
+      #ffccd9 10px,
+      #fff5f8 10px,
+      #fff5f8 20px);
+}
+
+.striped-candy-bg {
+  /* Dreamy fairy-tale landscape background */
+  background-color: #fff4e9;
+  background-image:
+    linear-gradient(rgba(255, 244, 233, 0.25), rgba(255, 244, 233, 0.45)),
+    url('/images/fairy-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
+.striped-candy-blue-bg {
+  background: repeating-linear-gradient(90deg, #edf7f9 0, #edf7f9 62px, #fffdfa 62px, #fffdfa 124px);
+}
+
+.striped-candy-pink-bg {
+  background: repeating-linear-gradient(90deg, #fdf2f5 0, #fdf2f5 62px, #fffdfa 62px, #fffdfa 124px);
+}
+
+.striped-assurance-bg {
+  background-color: #fff7ee;
+  background-image:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 214, 226, 0.4) 0%, transparent 75%),
+    repeating-linear-gradient(90deg, #fff0e4 0px, #fff0e4 54px, #fffaf4 54px, #fffaf4 108px);
+}
+
+.pattern-gingham-red {
+  background-color: #fffdfa;
+  background-image:
+    linear-gradient(45deg, rgba(107, 33, 46, 0.08) 25%, transparent 25%, transparent 75%, rgba(107, 33, 46, 0.08) 75%),
+    linear-gradient(45deg, rgba(107, 33, 46, 0.08) 25%, transparent 25%, transparent 75%, rgba(107, 33, 46, 0.08) 75%);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.sunburst-bg {
+  background: #ffffff;
+  background-image: repeating-conic-gradient(from 0deg at 50% 248px,
+      #ffffff 0deg 12deg,
+      #fff8ee 12deg 24deg);
+}
+
+/* Full-Page Section Snap Scroll (Strictly scoped ONLY to Home Page) */
+html.snap-scroll-active,
+html:has(.home-page-wrapper) {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+html.snap-scroll-active .snap-section,
+html:has(.home-page-wrapper) .snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scroll-margin-top: 5.5rem;
+  min-height: calc(100vh - 5.5rem);
+  box-sizing: border-box;
+}
+
+/* Footer sits naturally at bottom of page with natural content height */
+html.snap-scroll-active footer,
+html:has(.home-page-wrapper) footer {
+  scroll-snap-align: start;
+  scroll-margin-top: 5.5rem;
+  min-height: auto !important;
+}

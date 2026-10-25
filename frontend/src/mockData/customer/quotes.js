@@ -1,0 +1,227 @@
+/**
+ * SweetCake Customer Bidding & Comparison Quotes Mock Data
+ */
+
+export const STAGE_LOGS = {
+  OPEN: {
+    icon: 'edit_document',
+    title: 'Nhật ký sàn: Yêu cầu đặt bánh #RFQ-2025-8892 đã được công khai trên Marketplace',
+    desc: 'Hệ thống đang điều phối tới các tiệm bánh Pâtisserie đạt chuẩn trong bán kính 10km để thẩm định mẫu 3D và gửi báo giá.',
+    badge: 'Hạn tiếp nhận: Còn 23 giờ 45 phút',
+    badgeIcon: 'schedule',
+  },
+  QUOTED: {
+    icon: 'request_quote',
+    title: 'Nhật ký sàn: 3 xưởng bánh đối tác đã hoàn tất gửi phương án & báo giá',
+    desc: 'Báo giá đã bao gồm nguyên liệu tươi chuẩn Pháp, thời gian hoàn thiện, hình ảnh phác thảo và cam kết bảo hộ Escrow 100%.',
+    badge: 'Đang mở chọn tiệm: Còn 04:27:35',
+    badgeIcon: 'nest_clock_farsight_analog',
+  },
+  CUSTOMER_ACCEPTED: {
+    icon: 'how_to_reg',
+    title: 'Nhật ký kết nối: Bạn đã chọn báo giá từ tiệm đối tác',
+    desc: 'Thông báo tiếp nhận đơn đã được chuyển khẩn cấp tới Bếp Trưởng xưởng bánh để chốt lịch nướng và nguyên liệu mascarpone tươi.',
+    badge: 'Chờ xưởng phản hồi: Trong vòng 15 phút',
+    badgeIcon: 'schedule',
+  },
+  VENDOR_CONFIRMED: {
+    icon: 'check_circle',
+    title: 'Nhật ký xưởng: Tiệm bánh đã xác nhận thực hiện theo yêu cầu',
+    desc: 'Bếp Trưởng cam kết chuẩn mẫu 3D trên 95% và bàn giao đúng giờ hẹn. Đơn hàng đã sẵn sàng chuyển sang bước ký quỹ Escrow.',
+    badge: 'Sẵn sàng thanh toán Escrow',
+    badgeIcon: 'lock_open',
+  },
+  PAID: {
+    icon: 'lock',
+    title: 'Nhật ký Escrow: Ký quỹ an toàn 100% đã được khóa bảo chứng',
+    desc: 'Khoản thanh toán được bảo hộ tại SweetCake Escrow Vault. Xưởng bánh bắt đầu tuyển chọn nguyên liệu tươi hữu cơ.',
+    badge: 'Bảo hộ Escrow 100% kích hoạt',
+    badgeIcon: 'verified_user',
+  },
+  BAKING: {
+    icon: 'skillet',
+    title: 'Nhật ký xưởng: Bếp trưởng đang đính trái mọng & dát vàng tạo hình',
+    desc: 'Cốt bánh Red Velvet nướng chín chuẩn ẩm mượt 08:45, lớp kem Mascarpone hữu cơ đánh lạnh đã đạt cấu trúc đàn hồi hoàn hảo lúc 10:50.',
+    badge: 'Thời gian nghỉ tủ lạnh: 35 phút nữa',
+    badgeIcon: 'nest_clock_farsight_analog',
+  },
+  DELIVERING: {
+    icon: 'local_shipping',
+    title: 'Nhật ký vận chuyển: Đã bàn giao cho tài xế xe lạnh chuyên dụng',
+    desc: 'Xe Van bảo quản nhiệt độ chuẩn 4.8°C và cảm biến chống sốc thủy lực 0.02G đang di chuyển đến điểm hẹn.',
+    badge: 'Dự kiến đến nơi: 25 phút nữa',
+    badgeIcon: 'near_me',
+  },
+  COMPLETED: {
+    icon: 'verified',
+    title: 'Nhật ký hoàn tất: Đơn hàng đã đồng kiểm và bàn giao thành công',
+    desc: 'Khách hàng đã kiểm tra nguyên vẹn form dáng bánh, quét mã QR hoàn tất giải ngân tiền đơn hàng cho tiệm bánh.',
+    badge: 'Đồng kiểm hoàn tất 100%',
+    badgeIcon: 'task_alt',
+  },
+};
+
+export const BIDS_DATA = [
+  {
+    id: 'sweet-bakery',
+    name: 'Sweet Bakery',
+    avatar:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBesdP3DId3ZbJWUpuX94w_eSF38N93fIKAFH_SGOIUBivtQpqdUUV5Ovn9mOyRpRmzeqsGaX294M2dbA-muNhgl_Cnq-flLPfZoSKJum0X-zOWc15Xf8wEOnSFl4DUkiQImGgY0m9zH5_Wb2aMWQdkGSrFDg5XuKwYO_4dD0RDUUo0rndxrBCLzUnSI9ba9nvT7B4JdMetJh0IQhtke4k4HzxxskabzJjttlEp3JQKwpnz71W8jZpk',
+    rating: 4.9,
+    ordersCount: 420,
+    tag: 'Top Bán Chạy',
+    verified: true,
+    isRecommended: true,
+    ribbonText: 'Được đề xuất nhiều nhất',
+    badgeClass: 'bg-secondary text-on-secondary',
+    price: 950000,
+    savingsText: 'Tiết kiệm 50.000đ',
+    savingsSubtitle: 'So với ngân sách 1.000.000đ',
+    durationDays: 2,
+    durationText: '2 ngày hoàn thiện',
+    deliveryTime: '15:30',
+    deliveryNote: 'Trước giờ tiệc 2 tiếng',
+    deliveryType: 'Xe thùng lạnh 4°C - 6°C chuyên dụng',
+    deliveryDesc: 'Bảo hiểm 100% dáng bánh kem, chống nghiêng xê dịch',
+    packageTitle: 'Gói dịch vụ bao gồm:',
+    packageItems: [
+      'Miễn phí Nến số 7 mạ vàng cao cấp',
+      'Set 10 dĩa + thìa giấy tự hủy thân thiện môi trường',
+      'Hộp bánh mica trong suốt thắt nơ lụa sang trọng',
+      'Thiệp chúc mừng socola: "Happy 7th Birthday Minh Khang!"',
+    ],
+    pitchTitle: 'Lời nhắn từ Master Baker Linh Đan:',
+    pitchQuote:
+      '"Chào bạn, Sweet Bakery chuyên tạo hình Pikachu sắc nét bằng socola Bỉ, kem tươi ít ngọt 35% cho bé. Cam kết giống thiết kế 3D trên 95%!"',
+    speedRank: 1,
+  },
+  {
+    id: 'moon-bakery',
+    name: 'Moon Bakery',
+    avatar:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAuXiau0Y_9nvbmHwO4c2kF8jHB0vokM2T2wu2oeCKWGGFZW5JPhxamwXUKaMyj0Lz1cpRU41AIgg0p9rGn_Vk2t_JWLKXyDXycX9d9A9janY_wuYXBK9UHOlRCyrnJkntUhWCtl6eU8RKNcdRAl1i1MKsNnEDKvHY8mVun_QiyLQA4JWnAITkxJAINC8ae_LGZlDkj5DZFImvDZ7PnZI8aGcSlygBQhWSGKvhj24WYhdJ6LPgwIZ5Y',
+    rating: 4.8,
+    ordersCount: 310,
+    tag: 'Giá Tiết Kiệm',
+    verified: true,
+    isRecommended: false,
+    ribbonText: 'Báo giá tốt nhất',
+    badgeClass: 'bg-primary text-secondary-fixed',
+    price: 900000,
+    savingsText: 'Tiết kiệm 100.000đ',
+    savingsSubtitle: 'Mức giá tối ưu ngân sách',
+    durationDays: 3,
+    durationText: '3 ngày hoàn thiện',
+    deliveryTime: '16:00',
+    deliveryNote: 'Sẵn sàng trước giờ tiệc',
+    deliveryType: 'Giao hàng thùng giữ nhiệt tiêu chuẩn',
+    deliveryDesc: 'Nhân viên giao bánh cẩn trọng với dây cố định',
+    packageTitle: 'Gói dịch vụ bao gồm:',
+    packageItems: [
+      'Set nến sinh nhật pastel + pháo sáng',
+      'Set 10 dĩa giấy + dao cắt bánh',
+      'Hộp giấy kraft sang trọng bảo vệ môi trường',
+      'Nguyên liệu cao cấp, bơ Pháp Elle & Vire',
+    ],
+    pitchTitle: 'Lời nhắn từ Bếp Trưởng Moon:',
+    pitchQuote:
+      '"Moon Bakery có sẵn cốt Chiffon vani dâu tây hữu cơ, nhận hoàn thành trong 3 ngày với mức giá tốt nhất sàn 900.000đ!"',
+    speedRank: 2,
+  },
+  {
+    id: 'abc-bakery',
+    name: 'ABC Bakery',
+    avatar:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAdaOD_2TgJSi8ibt5m2ftSAPxoF2BbOc5EibqKi6RWZAGr_uh6HIoKLL1LtwNYL4oYQqDfbNv-PAx4r88fvaGhSFM9wEAnofYIMgf5ps9EoY47f56fYYTOlZK0RoEIjHpBulLiv4peWMHNimwGSyjwdyASOBCOl613yU4fVoAqTK-REtijanUTAG3cE8nXfCX2UM2Y0zWoTCehgwX181ay7bkmU3rtNKXwWuXrRdsU-X1FxalbUBhg',
+    rating: 4.7,
+    ordersCount: 185,
+    tag: 'Chuẩn ISO 22000',
+    verified: false,
+    isRecommended: false,
+    ribbonText: 'Xưởng bánh kinh nghiệm',
+    badgeClass: 'bg-surface-container-high text-on-surface-variant',
+    price: 920000,
+    savingsText: 'Tiết kiệm 80.000đ',
+    savingsSubtitle: 'So với ngân sách dự kiến',
+    durationDays: 3,
+    durationText: '3 ngày hoàn thiện',
+    deliveryTime: '16:30',
+    deliveryNote: 'Trước giờ tiệc 1 tiếng',
+    deliveryType: 'Giao hàng thùng chống sốc tiêu chuẩn',
+    deliveryDesc: 'Tài xế xe máy giao bánh chuyên nghiệp',
+    packageTitle: 'Gói dịch vụ bao gồm:',
+    packageItems: [
+      'Set nến số mạ vàng + dao cắt bánh',
+      'Set 10 dĩa nhựa tiệc sinh nhật',
+      'Hộp carton cứng in logo tiệm',
+      'Thiệp chúc mừng in màu tiêu chuẩn',
+    ],
+    pitchTitle: 'Lời nhắn từ Quản lý bếp ABC:',
+    pitchQuote:
+      '"ABC Bakery có đầy đủ khuôn 2 tầng và nguyên liệu socola nặn Pikachu. Đảm bảo giao chuẩn hẹn và hương vị thơm béo!"',
+    speedRank: 3,
+  },
+]
+;
+
+export const STEPS = [
+  {
+    key: 'OPEN',
+    label: 'MỞ YÊU CẦU',
+    desc: 'Khách đăng yêu cầu',
+    icon: 'edit_document',
+    time: '09:15 - 24/10',
+  },
+  {
+    key: 'QUOTED',
+    label: 'NHẬN BÁO GIÁ',
+    desc: 'Nhiều tiệm báo giá',
+    icon: 'request_quote',
+    time: '10:45 - 24/10',
+  },
+  {
+    key: 'CUSTOMER_ACCEPTED',
+    label: 'CHỌN TIỆM',
+    desc: 'Khách chọn 1 báo giá',
+    icon: 'how_to_reg',
+    time: '14:20 - 24/10',
+  },
+  {
+    key: 'VENDOR_CONFIRMED',
+    label: 'TIỆM XÁC NHẬN',
+    desc: 'Tiệm xác nhận làm',
+    icon: 'check_circle',
+    time: '14:35 - 24/10',
+  },
+  {
+    key: 'PAID',
+    label: 'ĐÃ KÝ QUỸ',
+    desc: 'Thanh toán Escrow',
+    icon: 'lock',
+    time: '14:50 - 24/10',
+  },
+  {
+    key: 'BAKING',
+    label: 'ĐANG LÀM BÁNH',
+    desc: 'Đang làm bánh',
+    icon: 'oven_gen',
+    time: '10:30 - Hiện tại',
+  },
+  {
+    key: 'DELIVERING',
+    label: 'ĐANG GIAO HÀNG',
+    desc: 'Đang giao hàng',
+    icon: 'local_shipping',
+    time: 'Dự kiến 15:15',
+  },
+  {
+    key: 'COMPLETED',
+    label: 'HOÀN THÀNH',
+    desc: 'Đã hoàn thành',
+    icon: 'verified',
+    time: 'Dự kiến 15:45',
+  },
+]
+;
+
+export const LOGS_DATA = {}
