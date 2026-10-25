@@ -1,9 +1,12 @@
 import { useState } from 'react'
+import { authService } from '../../services/authService.js'
 
 export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
   const [authTab, setAuthTab] = useState('login')
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [showRegPassword, setShowRegPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   // Login form state
   const [loginPhone, setLoginPhone] = useState('')
@@ -18,44 +21,73 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
   const [regBirthday, setRegBirthday] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(true)
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault()
     if (!loginPhone || !loginPassword) return
-    if (onLoginSuccess) {
-      onLoginSuccess('Đăng nhập thành công! Chào mừng quý khách trở lại.')
-    }
-    if (onNavigate) {
-      onNavigate('home')
+    setLoading(true)
+    setErrorMessage('')
+
+    try {
+      const email = loginPhone.includes('@')
+        ? loginPhone.trim()
+        : `${loginPhone.trim().replace(/\s+/g, '')}@sweetcake.vn`
+
+      await authService.login(email, loginPassword)
+
+      if (onLoginSuccess) {
+        onLoginSuccess('Đăng nhập thành công! Chào mừng quý khách trở lại.')
+      }
+      if (onNavigate) {
+        onNavigate('home')
+      }
+    } catch (err) {
+      setErrorMessage(err.message || 'Đăng nhập không thành công, vui lòng thử lại.')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault()
     if (!regPhone || !regPassword) return
+    setLoading(true)
+    setErrorMessage('')
 
     const fullName = [regLastName, regFirstName].filter(Boolean).join(' ') || 'Quý Khách'
     const cleanPhone = regPhone.trim()
-    const userProfile = {
-      name: fullName,
-      phone: cleanPhone,
-      email: `${cleanPhone.replace(/\s+/g, '')}@sweetcake.vn`,
-      loyaltyTier: 'Hội viên Mới',
-      points: 100,
-    }
+    const email = `${cleanPhone.replace(/\s+/g, '')}@sweetcake.vn`
 
     try {
-      localStorage.setItem('sweetcake_user_profile', JSON.stringify(userProfile))
-    } catch {
-      // ignore
-    }
+      await authService.register({
+        email,
+        password: regPassword,
+        displayName: fullName,
+        phoneNumber: cleanPhone,
+      })
 
-    if (onLoginSuccess) {
-      onLoginSuccess(
-        `Đăng ký tài khoản thành công! Chào mừng ${fullName} đến với SweetCake.`
-      )
-    }
-    if (onNavigate) {
-      onNavigate('home')
+      const userProfile = {
+        name: fullName,
+        phone: cleanPhone,
+        email,
+        loyaltyTier: 'Hội viên Mới',
+        points: 100,
+      }
+      try {
+        localStorage.setItem('sweetcake_user_profile', JSON.stringify(userProfile))
+      } catch {}
+
+      if (onLoginSuccess) {
+        onLoginSuccess(
+          `Đăng ký tài khoản thành công! Chào mừng ${fullName} đến với SweetCake.`
+        )
+      }
+      if (onNavigate) {
+        onNavigate('home')
+      }
+    } catch (err) {
+      setErrorMessage(err.message || 'Đăng ký thất bại, vui lòng kiểm tra lại thông tin.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -109,6 +141,13 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                       Chào mừng quý khách trở lại
                     </h2>
                   </div>
+
+                  {errorMessage && (
+                    <div className="p-3 bg-error-container/40 border border-error/20 rounded-md text-error text-body-sm flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base">error</span>
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
 
                   {/* Traditional Login Inputs */}
                   <form className="space-y-4" onSubmit={handleLoginSubmit}>
