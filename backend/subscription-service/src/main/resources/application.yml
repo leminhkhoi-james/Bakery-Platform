@@ -1,0 +1,59 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: subscription-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${IDENTITY_JWKS_URI}
+          issuer-uri: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+  datasource:
+    url: ${SUBSCRIPTION_DB_URL}
+    username: ${SUBSCRIPTION_DB_USERNAME}
+    password: ${SUBSCRIPTION_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
+
+platform:
+  remote:
+    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8080}
+    client-id: subscription-service
+    client-secret: ${SUBSCRIPTION_CLIENT_SECRET:}
+    connect-timeout: 2s
+    read-timeout: 5s
+
+security:
+  jwt:
+    user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
+    service-audience: ${IDENTITY_JWT_SERVICE_AUDIENCE:subscription-service}
+
+clients:
+  bakery:
+    url: ${BAKERY_SERVICE_URL:http://localhost:8082}
+    service-token: ${SUBSCRIPTION_BAKERY_SERVICE_TOKEN:}
+
+storage:
+  minio:
+    endpoint: ${SUBSCRIPTION_MINIO_ENDPOINT:}
+    public-endpoint: ${SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT:}
+    access-key: ${SUBSCRIPTION_MINIO_ACCESS_KEY:}
+    secret-key: ${SUBSCRIPTION_MINIO_SECRET_KEY:}
+    bucket: ${SUBSCRIPTION_MINIO_BUCKET:subscription-proofs}
+
+subscription:
+  order-expiry-hours: 24
+
+server:
+  port: ${SERVER_PORT:8084}
+

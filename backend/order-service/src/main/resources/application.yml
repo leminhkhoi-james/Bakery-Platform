@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: ${ORDER_DB_URL:jdbc:postgresql://localhost:5432/order_db}
+    username: ${ORDER_DB_USERNAME:postgres}
+    password: ${ORDER_DB_PASSWORD:postgres}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+security:
+  jwt:
+    jwk-set-uri: ${IDENTITY_JWK_SET_URI:http://localhost:8081/.well-known/jwks.json}
+    issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+    user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
+    service-audience: ${ORDER_SERVICE_JWT_AUDIENCE:order-service}
+
+clients:
+  identity:
+    base-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
+    audience: identity-service
+    scope: identity:user:read identity:address:read
+  bakery:
+    base-url: ${BAKERY_SERVICE_URL:http://localhost:8083}
+    audience: bakery-service
+    scope: bakery:profile:read bakery:membership:read
+  marketplace:
+    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8082}
+    audience: marketplace-service
+    scope: marketplace:offer:read
+  connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
+  read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
+
+platform:
+  security:
+    audience: ${ORDER_SERVICE_JWT_AUDIENCE:order-service}
+    jwk-set-uri: ${IDENTITY_JWK_SET_URI:http://localhost:8081/.well-known/jwks.json}
+    issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+    user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
+  remote:
+    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
+    bakery-url: ${BAKERY_SERVICE_URL:http://localhost:8083}
+    subscription-url: ${SUBSCRIPTION_SERVICE_URL:http://localhost:8084}
+    cake-ai-url: ${CAKE_AI_SERVICE_URL:http://localhost:8085}
+    order-url: ${ORDER_SERVICE_URL:http://localhost:8086}
+    marketplace-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8082}
+    client-id: ${ORDER_SERVICE_CLIENT_ID:order-service}
+    client-secret: ${ORDER_SERVICE_CLIENT_SECRET:}
+    connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
+    read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
+

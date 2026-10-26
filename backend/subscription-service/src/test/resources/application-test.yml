@@ -1,0 +1,26 @@
+spring:
+  config:
+    import: ""
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:1/.well-known/jwks.json
+          issuer-uri: bakery-platform-identity
+
+platform:
+  remote:
+    identity-url: http://localhost:1
+    client-secret: ""
+
+clients:
+  bakery:
+    url: http://localhost:1
+    service-token: ""
+
+storage:
+  minio:
+    endpoint: ""
+    public-endpoint: ""
+    access-key: ""
+    secret-key: ""

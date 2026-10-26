@@ -1,0 +1,12 @@
+**/target
+**/.git
+**/.env
+**/.env.*
+**/.keys
+**/.secrets
+**/*.pem
+**/*.key
+**/*.p12
+**/*.json
+**/.idea
+**/.vscode
