@@ -1,31 +1,10 @@
 import { useState, useEffect } from 'react'
 import AppRoutes from './routes/AppRoutes'
+import { catalogUrl } from './routes/catalogNavigation.js'
+import { catalogCartItem } from './services/catalogCart.js'
 
 function App() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 'pikachu-3d-2tier',
-      title: 'Bánh Sinh Nhật Pikachu Tạo Hình 3D (2 Tầng)',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDl7eAPfu8ECgjGE4u7J5mfocv80iKgNlY1KhInqVxv-hjR5O1WFAa3x79hXqQhZN3RzfJ33wSPB0UKdouIsRpP13PgfleKx3mCShMDqV2rZVoiWnYGmSN7G4E0-D7CFYm5j5rpDndvQ3n1fV4YZICJJmac5TTLXpW80iIIepS9i-MaUDXTEYbRmI-jbI0Rfv0jZk9NELClAHgLk1Vl7QzP8IxXVqOMm28H2jPrOr_TpdRh8EhWTrhJ',
-      sizeSpec: '2 Tầng (20cm + 14cm) • 12 - 18 phần',
-      flavor: 'Chiffon Vani Dâu Tây Hữu Cơ (ít ngọt 30%) + Kem whipping Pháp',
-      bakery: 'La Crème Pâtisserie (Chef Jean-Luc)',
-      price: 950000,
-      quantity: 1,
-    },
-    {
-      id: 'macarons-box-6',
-      title: 'Hộp 6 Macarons Pháp Cao Cấp',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDQc3-sChlCzc2ggdfbTb-K34Fx0N8Nq1Yad9S6mpY8e2_TsT5AqG3bBjGsCzzyIIvH4XoZp8JZLjW3hFSfeyKQJvyNh_43DUUvnarGr-1Ly7npVePgmKU44Z9PPmTbqrwTMnEFmLOOdVBiHg6NpGMo0lWxwRxdNJGR0ezBbmYJr1X0nt56OD-NSwugzRwdOCR_XQkve6QCkxESWoZj4zPuKtJBro0jrLdJBbQ_JtGokzv53HveVvZj',
-      sizeSpec: '6 vị thượng hạng Pháp',
-      flavor: 'Pistachio, Raspberry, Dark Chocolate',
-      bakery: 'La Crème Pâtisserie',
-      price: 210000,
-      quantity: 1,
-    },
-  ])
+  const [cartItems, setCartItems] = useState([])
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
   const ROUTE_ALIASES = {
@@ -152,6 +131,7 @@ function App() {
   }
 
   const [currentPage, setCurrentPage] = useState(() => resolveRouteFromUrl())
+  const [routeSearch, setRouteSearch] = useState(() => typeof window === 'undefined' ? '' : window.location.search)
   const [selectedCake, setSelectedCake] = useState(null)
   const [activeCustomCake, setActiveCustomCake] = useState(null)
   const [toastMessage, setToastMessage] = useState(null)
@@ -165,10 +145,12 @@ function App() {
     const handlePopState = (e) => {
       const page = (e.state && e.state.page) || resolveRouteFromUrl()
       setCurrentPage(page || 'home')
+      setRouteSearch(window.location.search)
     }
     window.addEventListener('popstate', handlePopState)
 
     const handleDocumentClick = (e) => {
+      if (e.defaultPrevented) return
       const anchor = e.target.closest('a')
       if (!anchor) return
       const href = anchor.getAttribute('href')
@@ -206,6 +188,15 @@ function App() {
   }
 
   const handleAddToCart = (cake) => {
+    if (cake.catalogSource === 'backend') {
+      const item = catalogCartItem(cake)
+      setCartItems((previous) => {
+        const existing = previous.find((entry) => entry.id === item.id)
+        return existing ? previous.map((entry) => entry.id === item.id ? { ...entry, quantity: entry.quantity + item.quantity } : entry) : [item, ...previous]
+      })
+      showToast(`Đã thêm "${cake.title}" vào giỏ hàng!`)
+      return
+    }
     const qtyToAdd = cake.quantity || 1
     const targetSize =
       cake.selectedSize ||
@@ -284,11 +275,13 @@ function App() {
       setSelectedCake(cakeData)
     }
     const cleaned = (path || '').replace('#', '').trim()
-    const resolvedPath = ROUTE_ALIASES[cleaned] || cleaned || 'home'
+    const [pageName, query = ''] = cleaned.split('?')
+    const resolvedPath = ROUTE_ALIASES[pageName] || pageName || 'home'
     setCurrentPage(resolvedPath)
 
     if (typeof window !== 'undefined') {
-      const targetUrl = resolvedPath === 'home' ? '/' : `/${resolvedPath}`
+      const targetUrl = resolvedPath === 'home' ? '/' : query ? '/' + resolvedPath + '?' + query : catalogUrl(resolvedPath, cakeData)
+      setRouteSearch(new URL(targetUrl, window.location.origin).search)
       if (window.location.pathname !== targetUrl || window.location.hash) {
         window.history.pushState({ page: resolvedPath }, '', targetUrl)
       }
@@ -311,6 +304,7 @@ function App() {
       {/* App Routes Router */}
       <AppRoutes
         currentPage={currentPage}
+        routeSearch={routeSearch}
         onNavigate={handleNavigate}
         selectedCake={selectedCake}
         activeCustomCake={activeCustomCake}

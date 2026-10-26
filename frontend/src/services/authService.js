@@ -1,100 +1,140 @@
-import { api, setAuthToken } from './apiClient.js'
-import { MOCK_USERS } from '../mockData/admin/users.js'
+import { api, ApiError, clearAuthSession, onSessionExpired, refreshAccessToken, setAuthToken } from './apiClient.js'
+
+let snapshot = { user: null, status: 'loading', error: null }
+let restorePromise = null
+let operation = 0
+const listeners = new Set()
+const publish = (value) => {
+  snapshot = value
+  listeners.forEach((listener) => listener())
+}
+const anonymous = (error = null) => publish({ user: null, status: 'anonymous', error })
+onSessionExpired(() => anonymous())
+
+function logoutPending(value) {
+  try {
+    if (value !== undefined) {
+      if (value) sessionStorage.setItem('sweetcake_logout_pending', 'true')
+      else sessionStorage.removeItem('sweetcake_logout_pending')
+    }
+    return sessionStorage.getItem('sweetcake_logout_pending') === 'true'
+  } catch { return false }
+}
+
+function removeDemoSession() {
+  try {
+    for (const key of ['sweetcake_access_token', 'sweetcake_current_user', 'sweetcake_user_profile']) {
+      localStorage.removeItem(key)
+    }
+  } catch { /* Storage can be disabled by the browser. */ }
+}
+
+async function profile() {
+  const user = await api.get('/auth/me', { retryAuth: false })
+  if (!user?.id || !Array.isArray(user.roles)) {
+    throw new ApiError('Identity trả về thông tin tài khoản không hợp lệ.', 502)
+  }
+  return user
+}
+
+async function revokeSession() {
+  // Identity requires an authenticated user even though revocation uses a cookie.
+  await refreshAccessToken()
+  return api.post('/auth/logout', {}, { retryAuth: false })
+}
 
 export const authService = {
-  /**
-   * Log in user with email and password
-   * Calls POST /api/v1/auth/login
-   */
+  subscribe(listener) {
+    listeners.add(listener)
+    return () => listeners.delete(listener)
+  },
+  getSnapshot: () => snapshot,
+
+  restoreSession() {
+    if (restorePromise) return restorePromise
+    if (snapshot.status === 'authenticated') return Promise.resolve(snapshot.user)
+    const current = ++operation
+    publish({ user: null, status: 'loading', error: null })
+    removeDemoSession()
+    restorePromise = (async () => {
+      try {
+        if (logoutPending()) {
+          await revokeSession()
+          logoutPending(false)
+          clearAuthSession()
+          return null
+        }
+        await refreshAccessToken()
+        const user = await profile()
+        if (current === operation) publish({ user, status: 'authenticated', error: null })
+        return user
+      } catch (error) {
+        if (current === operation) {
+          clearAuthSession()
+          if (error.status === 401) {
+            logoutPending(false)
+            anonymous()
+          } else publish({ user: null, status: 'error', error })
+        }
+        return null
+      } finally {
+        if (current === operation && snapshot.status === 'loading') anonymous()
+      }
+    })().finally(() => { restorePromise = null })
+    return restorePromise
+  },
+
   async login(email, password) {
+    await restorePromise
+    const current = ++operation
+    clearAuthSession()
+    removeDemoSession()
     try {
-      const result = await api.post('/auth/login', { email, password })
-      if (result && result.accessToken) {
-        setAuthToken(result.accessToken)
-        // Fetch current user details
-        const profile = await this.getCurrentUser()
-        return profile
+      const token = await api.post('/auth/login', { email, password }, { auth: false, retryAuth: false })
+      if (!token?.accessToken || token.tokenType !== 'Bearer') {
+        throw new ApiError('Identity trả về phiên đăng nhập không hợp lệ.', 502)
       }
-      return result
-    } catch (error) {
-      console.warn('[authService.login] API failed, fallback to mock demo user:', error.message)
-      const user = MOCK_USERS.find((u) => u.email === email) || {
-        id: 'CUST-DEMO',
-        name: 'Khách Hàng Demo',
-        email: email || 'demo@sweetcake.vn',
-        tier: 'gold',
-        roles: ['CUSTOMER'],
-      }
-      localStorage.setItem('sweetcake_current_user', JSON.stringify(user))
+      if (current !== operation) throw new ApiError('Phiên đăng nhập đã thay đổi.', 401)
+      setAuthToken(token.accessToken)
+      const user = await profile()
+      if (current !== operation) throw new ApiError('Phiên đăng nhập đã thay đổi.', 401)
+      logoutPending(false)
+      publish({ user, status: 'authenticated', error: null })
       return user
-    }
-  },
-
-  /**
-   * Register a new user
-   * Calls POST /api/v1/auth/register
-   */
-  async register({ email, password, displayName, phoneNumber }) {
-    try {
-      const response = await api.post('/auth/register', {
-        email,
-        password,
-        displayName,
-        phoneNumber,
-      })
-      return response
     } catch (error) {
-      console.warn('[authService.register] API failed, fallback to local register:', error.message)
-      const newUser = {
-        id: `USER-${Date.now().toString().slice(-4)}`,
-        displayName: displayName || 'Quý Khách',
-        email,
-        phoneNumber,
-        roles: ['CUSTOMER'],
+      if (current === operation) {
+        clearAuthSession()
+        anonymous(error)
       }
-      localStorage.setItem('sweetcake_current_user', JSON.stringify(newUser))
-      return newUser
+      throw error
     }
   },
 
-  /**
-   * Get current authenticated user
-   * Calls GET /api/v1/auth/me
-   */
-  async getCurrentUser() {
-    try {
-      const profile = await api.get('/auth/me')
-      if (profile) {
-        localStorage.setItem('sweetcake_current_user', JSON.stringify(profile))
-        return profile
-      }
-    } catch {
-      // ignore
-    }
-
-    // Fallback to cached or mock user
-    try {
-      const saved = localStorage.getItem('sweetcake_current_user')
-      if (saved) return JSON.parse(saved)
-    } catch {}
-
-    return MOCK_USERS[0]
+  register({ email, password, displayName, phoneNumber }) {
+    return api.post('/auth/register', { email, password, displayName, phoneNumber }, {
+      auth: false, retryAuth: false,
+    })
   },
 
-  /**
-   * Logout user
-   * Calls POST /api/v1/auth/logout
-   */
+  getCurrentUser: () => api.get('/auth/me'),
+
   async logout() {
+    ++operation
+    logoutPending(true)
+    anonymous()
+    let failure = null
     try {
-      await api.post('/auth/logout', {})
-    } catch {
-      // ignore network errors on logout
+      await restorePromise
+      await revokeSession()
+      logoutPending(false)
+    } catch (error) {
+      if (error.status === 401) logoutPending(false)
+      else failure = error
     } finally {
-      setAuthToken(null)
-      localStorage.removeItem('sweetcake_current_user')
-      localStorage.removeItem('sweetcake_user_profile')
+      clearAuthSession()
+      removeDemoSession()
+      anonymous(failure)
     }
-    return true
+    if (failure) throw failure
   },
 }

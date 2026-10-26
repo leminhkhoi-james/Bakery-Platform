@@ -1,45 +1,40 @@
 import { useState } from 'react'
-import { authService } from '../../services/authService.js'
+import { useAuth } from '../../context/useAuth.js'
 
 export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
+  const { login, register, error: sessionError } = useAuth()
   const [authTab, setAuthTab] = useState('login')
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [showRegPassword, setShowRegPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   // Login form state
   const [loginPhone, setLoginPhone] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(true)
 
   // Register form state
   const [regLastName, setRegLastName] = useState('')
   const [regFirstName, setRegFirstName] = useState('')
   const [regPhone, setRegPhone] = useState('')
+  const [regEmail, setRegEmail] = useState('')
   const [regPassword, setRegPassword] = useState('')
-  const [regBirthday, setRegBirthday] = useState('')
-  const [agreeTerms, setAgreeTerms] = useState(true)
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
     if (!loginPhone || !loginPassword) return
     setLoading(true)
     setErrorMessage('')
+    setSuccessMessage('')
 
     try {
-      const email = loginPhone.includes('@')
-        ? loginPhone.trim()
-        : `${loginPhone.trim().replace(/\s+/g, '')}@sweetcake.vn`
-
-      await authService.login(email, loginPassword)
+      await login(loginPhone.trim(), loginPassword)
 
       if (onLoginSuccess) {
         onLoginSuccess('Đăng nhập thành công! Chào mừng quý khách trở lại.')
       }
-      if (onNavigate) {
-        onNavigate('home')
-      }
+      else onNavigate?.('profile')
     } catch (err) {
       setErrorMessage(err.message || 'Đăng nhập không thành công, vui lòng thử lại.')
     } finally {
@@ -49,41 +44,28 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault()
-    if (!regPhone || !regPassword) return
+    if (!regEmail || !regPassword) return
     setLoading(true)
     setErrorMessage('')
+    setSuccessMessage('')
 
     const fullName = [regLastName, regFirstName].filter(Boolean).join(' ') || 'Quý Khách'
     const cleanPhone = regPhone.trim()
-    const email = `${cleanPhone.replace(/\s+/g, '')}@sweetcake.vn`
+    const email = regEmail.trim()
 
     try {
-      await authService.register({
+      await register({
         email,
         password: regPassword,
         displayName: fullName,
         phoneNumber: cleanPhone,
       })
 
-      const userProfile = {
-        name: fullName,
-        phone: cleanPhone,
-        email,
-        loyaltyTier: 'Hội viên Mới',
-        points: 100,
-      }
-      try {
-        localStorage.setItem('sweetcake_user_profile', JSON.stringify(userProfile))
-      } catch {}
-
-      if (onLoginSuccess) {
-        onLoginSuccess(
-          `Đăng ký tài khoản thành công! Chào mừng ${fullName} đến với SweetCake.`
-        )
-      }
-      if (onNavigate) {
-        onNavigate('home')
-      }
+      setAuthTab('login')
+      setLoginPhone(email)
+      setLoginPassword('')
+      setRegPassword('')
+      setSuccessMessage('Đăng ký thành công. Vui lòng đăng nhập bằng email và mật khẩu của bạn.')
     } catch (err) {
       setErrorMessage(err.message || 'Đăng ký thất bại, vui lòng kiểm tra lại thông tin.')
     } finally {
@@ -133,6 +115,14 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                 </button>
               </div>
 
+              {(errorMessage || (!successMessage && sessionError?.message)) && (
+                <div role="alert" className="p-3 bg-error-container/40 border border-error/20 rounded-md text-error text-body-sm flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base">error</span>
+                  <span>{errorMessage || sessionError.message}</span>
+                </div>
+              )}
+              {successMessage && <p role="status" className="text-primary text-body-sm">{successMessage}</p>}
+
               {/* Form Section: SIGN IN */}
               {authTab === 'login' && (
                 <div className="space-y-6" id="form-login-container">
@@ -142,19 +132,12 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                     </h2>
                   </div>
 
-                  {errorMessage && (
-                    <div className="p-3 bg-error-container/40 border border-error/20 rounded-md text-error text-body-sm flex items-center gap-2">
-                      <span className="material-symbols-outlined text-base">error</span>
-                      <span>{errorMessage}</span>
-                    </div>
-                  )}
-
                   {/* Traditional Login Inputs */}
                   <form className="space-y-4" onSubmit={handleLoginSubmit}>
                     {/* Phone / Email Field */}
                     <div className="space-y-1.5">
                       <label className="block font-label-lg text-label-lg text-on-surface font-medium">
-                        Số điện thoại
+                        Email
                       </label>
                       <div className="relative flex items-center">
                         <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/70 text-[20px] pointer-events-none">
@@ -162,8 +145,10 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                         </span>
                         <input
                           className="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-11 pr-4 py-3 rounded-lg outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/30 transition-all placeholder:text-on-surface-variant/40"
-                          placeholder="VD: 0912 345 678"
-                          type="tel"
+                          placeholder="Email đăng nhập"
+                          type="email"
+                          autoComplete="username"
+                          aria-label="Email đăng nhập"
                           required
                           value={loginPhone}
                           onChange={(e) => setLoginPhone(e.target.value)}
@@ -192,6 +177,8 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                         <input
                           className="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-11 pr-11 py-3 rounded-lg outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/30 transition-all placeholder:text-on-surface-variant/40"
                           id="login-pwd"
+                          autoComplete="current-password"
+                          aria-label="Mật khẩu đăng nhập"
                           placeholder="••••••••••••"
                           type={showLoginPassword ? 'text' : 'password'}
                           required
@@ -215,8 +202,9 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                     <button
                       className="w-full mt-2 py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
                       type="submit"
+                      disabled={loading}
                     >
-                      <span>Đăng Nhập Vào Tài Khoản</span>
+                      <span>{loading ? 'Đang đăng nhập…' : 'Đăng Nhập Vào Tài Khoản'}</span>
                       <span className="material-symbols-outlined text-lg">east</span>
                     </button>
                   </form>
@@ -263,6 +251,21 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                     </div>
 
                     <div className="space-y-1">
+                      <label className="block font-label-md text-label-md text-on-surface font-medium" htmlFor="register-email">Email</label>
+                      <input
+                        id="register-email"
+                        className="w-full bg-surface-container-low text-on-surface font-body-md text-body-md px-3.5 py-2.5 rounded-lg outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/30 transition-all"
+                        type="email"
+                        autoComplete="username"
+                        placeholder="Email đăng ký"
+                        required
+                        maxLength={320}
+                        value={regEmail}
+                        onChange={(e) => setRegEmail(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-1">
                       <label className="block font-label-md text-label-md text-on-surface font-medium">
                         Số điện thoại
                       </label>
@@ -287,7 +290,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                           Mật khẩu bảo mật
                         </label>
                         <span className="font-label-sm text-label-sm text-on-surface-variant/60">
-                          Tối thiểu 6 ký tự
+                          Tối thiểu 8 ký tự
                         </span>
                       </div>
                       <div className="relative flex items-center">
@@ -297,10 +300,12 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                         <input
                           className="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-10 pr-10 py-2.5 rounded-lg outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/30 transition-all"
                           id="reg-pwd"
-                          placeholder="Tạo mật khẩu an toàn (từ 6 ký tự)"
+                          placeholder="Tạo mật khẩu an toàn (từ 8 ký tự)"
                           type={showRegPassword ? 'text' : 'password'}
                           required
-                          minLength={6}
+                          minLength={8}
+                          maxLength={100}
+                          autoComplete="new-password"
                           value={regPassword}
                           onChange={(e) => setRegPassword(e.target.value)}
                         />
@@ -320,11 +325,12 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                     <button
                       className="w-full py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] flex items-center justify-center gap-2 cursor-pointer"
                       type="submit"
+                      disabled={loading}
                     >
                       <span className="material-symbols-outlined text-lg">
                         how_to_reg
                       </span>
-                      <span>Tạo Tài Khoản</span>
+                      <span>{loading ? 'Đang đăng ký…' : 'Tạo Tài Khoản'}</span>
                     </button>
                   </form>
 

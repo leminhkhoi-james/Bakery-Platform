@@ -6,6 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "node --test",
+    "test:auth:live": "node scripts/auth-smoke.mjs",
+    "test:catalog:live": "node scripts/catalog-smoke.mjs",
+    "test:subscription:live": "node scripts/subscription-smoke.mjs",
+    "test:vendor-order:live": "node scripts/vendor-order-smoke.mjs",
+    "test:chat:live": "node scripts/chat-smoke.mjs",
+    "test:marketplace-ai:live": "node scripts/marketplace-ai-smoke.mjs",
+    "test:integration:read": "node scripts/integration-read-smoke.mjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },

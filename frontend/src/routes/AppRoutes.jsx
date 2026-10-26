@@ -1,39 +1,66 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
+import AuthGuard from './AuthGuard.jsx'
 import { CustomerLayout, VendorLayout, AdminLayout } from '../layouts'
 
 // Customer Pages (Modular Feature Subfolders)
-import HomePage from '../pages/customer/home/HomePage'
-import ExploreCakesPage from '../pages/customer/catalog/ExploreCakesPage'
-import ProductDetailPage from '../pages/customer/catalog/ProductDetailPage'
-import AiCakeStudioPage from '../pages/customer/ai-studio/AiCakeStudioPage'
-import BiddingComparisonPage from '../pages/customer/bidding/BiddingComparisonPage'
-import BakerQuoteDetailPage from '../pages/customer/bidding/BakerQuoteDetailPage'
-import CartCheckoutPage from '../pages/customer/checkout/CartCheckoutPage'
-import PaymentGatewayPage from '../pages/customer/checkout/PaymentGatewayPage'
-import OrderTrackingPage from '../pages/customer/tracking/OrderTrackingPage'
-import CustomerProfilePage from '../pages/customer/profile/CustomerProfilePage'
-import StoreDirectoryPage from '../pages/customer/stores/StoreDirectoryPage'
+const HomePage = lazy(() => import('../pages/customer/home/HomePage'))
+const ExploreCakesPage = lazy(() => import('../pages/customer/catalog/ExploreCakesPage'))
+const ProductDetailPage = lazy(() => import('../pages/customer/catalog/ProductDetailPage'))
+const AiCakeStudioPage = lazy(() => import('../pages/customer/ai-studio/AiCakeStudioPage'))
+const BiddingComparisonPage = lazy(() => import('../pages/customer/bidding/BiddingComparisonPage'))
+const BakerQuoteDetailPage = lazy(() => import('../pages/customer/bidding/BakerQuoteDetailPage'))
+const CustomerRequests = lazy(() => import('../components/marketplace/MarketplaceViews.jsx').then((module) => ({ default: module.CustomerRequests })))
+const CustomerRequestDetail = lazy(() => import('../components/marketplace/MarketplaceViews.jsx').then((module) => ({ default: module.CustomerRequestDetail })))
+const CartCheckoutPage = lazy(() => import('../pages/customer/checkout/CartCheckoutPage'))
+const PaymentGatewayPage = lazy(() => import('../pages/customer/checkout/PaymentGatewayPage'))
+const OrderTrackingPage = lazy(() => import('../pages/customer/tracking/OrderTrackingPage'))
+const CustomerProfilePage = lazy(() => import('../pages/customer/profile/CustomerProfilePage'))
+const StoreDirectoryPage = lazy(() => import('../pages/customer/stores/StoreDirectoryPage'))
+const BakeryDetailPage = lazy(() => import('../pages/customer/stores/BakeryDetailPage.jsx'))
+const SubscriptionPlansPage = lazy(() => import('../pages/customer/subscription/SubscriptionPlansPage.jsx'))
+const VendorSubscriptionPage = lazy(() => import('../pages/vendor/subscription/VendorSubscriptionPage.jsx'))
+const CustomerChatPage = lazy(() => import('../pages/chat/ChatPage.jsx').then((module) => ({ default: module.CustomerChatPage })))
+const VendorChatPage = lazy(() => import('../pages/chat/ChatPage.jsx').then((module) => ({ default: module.VendorChatPage })))
 
 // Auth Page
-import AuthPage from '../pages/auth/AuthPage'
+const AuthPage = lazy(() => import('../pages/auth/AuthPage'))
 
 // Vendor Pages (Modular Feature Subfolders)
-import VendorDashboardPage from '../pages/vendor/dashboard/VendorDashboardPage'
-import VendorMenuCatalogPage from '../pages/vendor/catalog/VendorMenuCatalogPage'
-import VendorRfqMarketplacePage from '../pages/vendor/rfq/VendorRfqMarketplacePage'
-import VendorBespokeQuoteSubmitPage from '../pages/vendor/rfq/VendorBespokeQuoteSubmitPage'
-import VendorOrderManagementPage from '../pages/vendor/orders/VendorOrderManagementPage'
-import VendorRevenueEscrowPage from '../pages/vendor/revenue/VendorRevenueEscrowPage'
-import VendorSettingsPage from '../pages/vendor/settings/VendorSettingsPage'
+const VendorDashboardPage = lazy(() => import('../pages/vendor/dashboard/VendorDashboardPage'))
+const VendorMenuCatalogPage = lazy(() => import('../pages/vendor/catalog/VendorMenuCatalogPage'))
+const VendorRfqMarketplacePage = lazy(() => import('../pages/vendor/rfq/VendorRfqMarketplacePage'))
+const VendorBespokeQuoteSubmitPage = lazy(() => import('../pages/vendor/rfq/VendorBespokeQuoteSubmitPage'))
+const VendorOrderManagementPage = lazy(() => import('../pages/vendor/orders/VendorOrderManagementPage'))
+const VendorRevenueEscrowPage = lazy(() => import('../pages/vendor/revenue/VendorRevenueEscrowPage'))
+const VendorSettingsPage = lazy(() => import('../pages/vendor/settings/VendorSettingsPage'))
 
 // Admin Pages (Modular Feature Subfolders)
-import AdminDashboardPage from '../pages/admin/dashboard/AdminDashboardPage'
-import AdminUsersPage from '../pages/admin/users/AdminUsersPage'
-import AdminVendorsPage from '../pages/admin/vendors/AdminVendorsPage'
-import AdminOrdersEscrowPage from '../pages/admin/orders/AdminOrdersEscrowPage'
+const AdminDashboardPage = lazy(() => import('../pages/admin/dashboard/AdminDashboardPage'))
+const AdminUsersPage = lazy(() => import('../pages/admin/users/AdminUsersPage'))
+const AdminVendorsPage = lazy(() => import('../pages/admin/vendors/AdminVendorsPage'))
+const AdminPaymentsPage = lazy(() => import('../pages/admin/vendors/AdminPaymentsPage.jsx'))
+const AdminPlansPage = lazy(() => import('../pages/admin/vendors/AdminPlansPage.jsx'))
+const AdminModerationPage = lazy(() => import('../pages/admin/vendors/AdminModerationPage.jsx'))
+const AdminOrdersEscrowPage = lazy(() => import('../pages/admin/orders/AdminOrdersEscrowPage'))
 
-export default function AppRoutes({
+class RouteBoundary extends React.Component {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  render() {
+    return this.state.failed ? <section role="alert" className="p-8 text-center"><p>Không thể tải màn hình. Vui lòng tải lại trang.</p><button className="mt-3 underline" onClick={() => window.location.reload()}>Tải lại trang</button></section> : this.props.children
+  }
+}
+export default function AppRoutes(props) {
+  return (
+    <AuthGuard page={props.currentPage} onNavigate={props.onNavigate}>
+      <RouteBoundary key={props.currentPage}><Suspense fallback={<p role="status" className="p-8 text-center text-primary">Đang tải màn hình…</p>}><PageRoutes {...props} /></Suspense></RouteBoundary>
+    </AuthGuard>
+  )
+}
+
+function PageRoutes({
   currentPage,
+  routeSearch,
   onNavigate,
   selectedCake,
   activeCustomCake,
@@ -50,9 +77,14 @@ export default function AppRoutes({
     currentPage === 'admin-dashboard' ||
     currentPage === 'admin-orders' ||
     currentPage === 'admin-vendors' ||
+    currentPage === 'admin-payments' ||
+    currentPage === 'admin-plans' ||
+    currentPage === 'admin-moderation' ||
     currentPage === 'admin-users'
 
   const isVendorPortal =
+    currentPage === 'vendor-chat' ||
+    currentPage === 'vendor-subscription' ||
     currentPage === 'vendor-dashboard' ||
     currentPage === 'vendor-orders' ||
     currentPage === 'vendor-quote-submit' ||
@@ -67,7 +99,13 @@ export default function AppRoutes({
     return (
       <AdminLayout activeTab={currentPage} onNavigate={onNavigate}>
         {currentPage === 'admin-orders' ? (
-          <AdminOrdersEscrowPage onNavigate={onNavigate} />
+          <AdminOrdersEscrowPage routeSearch={routeSearch} onNavigate={onNavigate} />
+        ) : currentPage === 'admin-plans' ? (
+          <AdminPlansPage onNavigate={onNavigate} />
+        ) : currentPage === 'admin-moderation' ? (
+          <AdminModerationPage onNavigate={onNavigate} />
+        ) : currentPage === 'admin-payments' ? (
+          <AdminPaymentsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-vendors' ? (
           <AdminVendorsPage onNavigate={onNavigate} />
         ) : currentPage === 'admin-users' ? (
@@ -83,20 +121,24 @@ export default function AppRoutes({
   if (isVendorPortal) {
     return (
       <VendorLayout activeTab={currentPage} onNavigate={onNavigate}>
-        {currentPage === 'vendor-orders' ? (
-          <VendorOrderManagementPage onNavigate={onNavigate} />
+        {currentPage === 'vendor-chat' ? (
+          <VendorChatPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+        ) : currentPage === 'vendor-subscription' ? (
+          <VendorSubscriptionPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+        ) : currentPage === 'vendor-orders' ? (
+          <VendorOrderManagementPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-quote-submit' ? (
-          <VendorBespokeQuoteSubmitPage onNavigate={onNavigate} rfqData={selectedCake} />
+          <VendorBespokeQuoteSubmitPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-rfq' ? (
-          <VendorRfqMarketplacePage onNavigate={onNavigate} />
+          <VendorRfqMarketplacePage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-menu' ? (
-          <VendorMenuCatalogPage onNavigate={onNavigate} />
+          <VendorMenuCatalogPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-revenue' ? (
-          <VendorRevenueEscrowPage onNavigate={onNavigate} />
+          <VendorRevenueEscrowPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-profile' || currentPage === 'vendor-settings' ? (
-          <VendorSettingsPage onNavigate={onNavigate} />
+          <VendorSettingsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : (
-          <VendorDashboardPage onNavigate={onNavigate} />
+          <VendorDashboardPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         )}
       </VendorLayout>
     )
@@ -105,7 +147,15 @@ export default function AppRoutes({
   // 3. Phân Hệ Khách Hàng (kèm Auth)
   return (
     <CustomerLayout cartCount={cartCount} activeTab={currentPage} onNavigate={onNavigate}>
-      {currentPage === 'profile' ? (
+      {currentPage === 'rfqs' || currentPage === 'rfq-new' ? (
+        <CustomerRequests key={currentPage} create={currentPage === 'rfq-new'} onNavigate={onNavigate} />
+      ) : currentPage === 'request-detail' ? (
+        <CustomerRequestDetail key={routeSearch} id={new URLSearchParams(routeSearch).get('id')} onNavigate={onNavigate} />
+      ) : currentPage === 'chat' ? (
+        <CustomerChatPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+      ) : currentPage === 'subscription-plans' ? (
+        <SubscriptionPlansPage onNavigate={onNavigate} />
+      ) : currentPage === 'profile' ? (
         <CustomerProfilePage onAddToCart={onAddToCart} onNavigate={onNavigate} />
       ) : currentPage === 'login' ? (
         <AuthPage
@@ -116,7 +166,7 @@ export default function AppRoutes({
           }}
         />
       ) : currentPage === 'tracking' ? (
-        <OrderTrackingPage onNavigate={onNavigate} />
+        <OrderTrackingPage routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'payment' ? (
         <PaymentGatewayPage onNavigate={onNavigate} />
       ) : currentPage === 'cart' ? (
@@ -132,19 +182,22 @@ export default function AppRoutes({
       ) : currentPage === 'product-detail' ? (
         <ProductDetailPage
           cake={selectedCake}
+          routeSearch={routeSearch}
           onAddToCart={onAddToCart}
           onNavigate={onNavigate}
         />
       ) : currentPage === 'ai-studio' ? (
         <AiCakeStudioPage
-          onAddToCart={onAddToCart}
+          key={routeSearch}
+          routeSearch={routeSearch}
           onNavigate={onNavigate}
-          onSetCustomCake={setActiveCustomCake}
         />
       ) : currentPage === 'bidding' ? (
-        <BiddingComparisonPage onAddToCart={onAddToCart} onNavigate={onNavigate} />
+        <BiddingComparisonPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'baker-quote' ? (
-        <BakerQuoteDetailPage onAddToCart={onAddToCart} onNavigate={onNavigate} />
+        <BakerQuoteDetailPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+      ) : currentPage === 'bakery-detail' ? (
+        <BakeryDetailPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'stores' ? (
         <StoreDirectoryPage
           customCake={activeCustomCake}
@@ -158,7 +211,7 @@ export default function AppRoutes({
           onNavigate={onNavigate}
         />
       ) : currentPage === 'explore' ? (
-        <ExploreCakesPage onAddToCart={onAddToCart} onNavigate={onNavigate} />
+        <ExploreCakesPage key={routeSearch} routeSearch={routeSearch} onAddToCart={onAddToCart} onNavigate={onNavigate} />
       ) : (
         <HomePage onAddToCart={onAddToCart} onNavigate={onNavigate} />
       )}

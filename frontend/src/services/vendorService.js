@@ -1,72 +1,44 @@
 import { api } from './apiClient.js'
-import { MOCK_VENDORS } from '../mockData/admin/vendors.js'
+import { publicationAdminService } from './publicationAdminService.js'
+import { catalogDetailPath, catalogQuery, mapBakery, mapCatalogPage } from './catalogModels.js'
+import { subscriptionService } from './subscriptionService.js'
 
 export const vendorService = {
   /**
    * Get bakeries list
    * Calls GET /api/v1/bakeries
    */
-  async getVendors(params = {}) {
-    const queryParams = new URLSearchParams()
-    if (params.query) queryParams.set('query', params.query)
-    if (params.city) queryParams.set('city', params.city)
-    if (params.district) queryParams.set('district', params.district)
-    if (params.page) queryParams.set('page', params.page)
-    if (params.size) queryParams.set('size', params.size)
-    if (params.sort) queryParams.set('sort', params.sort)
-
-    const qs = queryParams.toString()
-    const endpoint = `/bakeries${qs ? `?${qs}` : ''}`
-
-    try {
-      const response = await api.get(endpoint)
-      if (response && Array.isArray(response.results)) {
-        return response.results
-      }
-      if (Array.isArray(response)) {
-        return response
-      }
-      return [...MOCK_VENDORS]
-    } catch {
-      return [...MOCK_VENDORS]
-    }
+  async getVendors(params = {}, options = {}) {
+    const query = catalogQuery(params, ['query', 'city', 'district', 'page', 'size', 'sort'])
+    const data = await api.get('/bakeries' + query, { ...options, auth: false, retryAuth: false })
+    return mapCatalogPage(data, mapBakery)
   },
 
   /**
    * Get bakery detail by ID
    * Calls GET /api/v1/bakeries/{bakeryId}
    */
-  async getVendorById(bakeryId) {
-    try {
-      const response = await api.get(`/bakeries/${bakeryId}`)
-      if (response) return response
-    } catch {}
-    const vendor = MOCK_VENDORS.find((v) => v.id === bakeryId)
-    return vendor || null
+  async getVendorById(bakeryId, options = {}) {
+    const data = await api.get(catalogDetailPath('bakeries', bakeryId), { ...options, auth: false, retryAuth: false })
+    return mapBakery(data)
   },
 
   /**
    * Approve a vendor (Admin only)
    */
   async approveVendor(vendorId) {
-    const vendor = MOCK_VENDORS.find((v) => v.id === vendorId)
-    if (vendor) {
-      vendor.status = 'active'
-      vendor.statusLabel = 'Đang mở lò'
-      vendor.verified = true
-    }
-    return Promise.resolve(vendor || null)
+    const { bakery } = await publicationAdminService.getBakery(vendorId)
+    return publicationAdminService.changeBakeryStatus(bakery, 'ACTIVE')
   },
 
   /**
    * Get public subscription plans for bakeries
    * Calls GET /api/v1/subscription-plans
    */
-  async getSubscriptionPlans() {
-    try {
-      return await api.get('/subscription-plans')
-    } catch {
-      return []
-    }
+  getSubscriptionPlans(options) {
+    return subscriptionService.getPlans(options)
   },
 }
+
+export const loadBakeries = (params, options) => vendorService.getVendors(params, options)
+export const loadBakery = ({ id }, options) => vendorService.getVendorById(id, options)

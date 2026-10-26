@@ -12,6 +12,7 @@ export default function VendorSidebar({
   isMobileOpen = false,
   onCloseMobile,
   rfqCount = 4,
+  showMockBadges = true,
 }) {
   const handleNav = (route) => {
     if (onNavigate) {
@@ -82,7 +83,7 @@ export default function VendorSidebar({
                     {item.label}
                   </span>
                 </div>
-                {badgeText && (
+                {showMockBadges && badgeText && (
                   <span
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive

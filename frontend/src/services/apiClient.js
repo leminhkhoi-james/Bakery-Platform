@@ -5,29 +5,65 @@
  * - Base URL configuration (via VITE_API_BASE_URL or default /api/v1)
  * - Automatic Authorization header with JWT Bearer token
  * - Standard ApiResponse unwrapping: response.data
- * - Graceful fallback to mock data / mock provider when backend is offline
+ * - Propagate backend/network errors without mock data or fake sessions
  */
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
+const BASE_URL = import.meta.env?.VITE_API_BASE_URL || '/api/v1'
+
+let accessToken = ''
+let sessionVersion = 0
+let refreshPromise = null
+const sessionListeners = new Set()
 
 export const getAuthToken = () => {
-  try {
-    return localStorage.getItem('sweetcake_access_token') || ''
-  } catch {
-    return ''
-  }
+  return accessToken
 }
 
 export const setAuthToken = (token) => {
+  accessToken = token || ''
+  // Remove credentials cached by the previous demo client. Never persist new JWTs.
   try {
-    if (token) {
-      localStorage.setItem('sweetcake_access_token', token)
-    } else {
-      localStorage.removeItem('sweetcake_access_token')
-    }
+    localStorage.removeItem('sweetcake_access_token')
   } catch {
     // Ignore localStorage errors
   }
+}
+
+export const onSessionExpired = (listener) => {
+  sessionListeners.add(listener)
+  return () => sessionListeners.delete(listener)
+}
+
+export const clearAuthSession = () => {
+  sessionVersion += 1
+  setAuthToken(null)
+  sessionListeners.forEach((listener) => listener())
+}
+
+export function refreshAccessToken() {
+  if (refreshPromise) return refreshPromise
+  const version = sessionVersion
+  const refresh = async () => {
+    const token = await request('/auth/refresh', {
+      method: 'POST', auth: false, retryAuth: false,
+    })
+    if (version !== sessionVersion) throw new ApiError('Phiên đăng nhập đã kết thúc.', 401)
+    if (!token?.accessToken || token.tokenType !== 'Bearer') {
+      throw new ApiError('Identity trả về phiên đăng nhập không hợp lệ.', 502)
+    }
+    setAuthToken(token.accessToken)
+    return token.accessToken
+  }
+  // Cookies are shared by tabs; serialize rotations when Web Locks is available.
+  refreshPromise = Promise.resolve().then(() => globalThis.navigator?.locks
+    ? navigator.locks.request('sweetcake-auth-refresh', refresh)
+    : refresh())
+    .catch((error) => {
+      if (error.status === 401 && version === sessionVersion) clearAuthSession()
+      throw error
+    })
+    .finally(() => { refreshPromise = null })
+  return refreshPromise
 }
 
 /**
@@ -51,7 +87,8 @@ export class ApiError extends Error {
 export async function request(endpoint, options = {}, mockFallback = null) {
   const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`
 
-  const headers = new Headers(options.headers || {})
+  const { auth = true, retryAuth = true, ...fetchOptions } = options
+  const headers = new Headers(fetchOptions.headers || {})
 
   // Set default Content-Type for JSON if body is provided and not FormData
   if (options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')) {
@@ -59,16 +96,31 @@ export async function request(endpoint, options = {}, mockFallback = null) {
   }
 
   // Attach Bearer token if available
-  const token = getAuthToken()
-  if (token && !headers.has('Authorization')) {
+  const token = auth ? getAuthToken() : ''
+  const explicitAuthorization = headers.has('Authorization')
+  const version = sessionVersion
+  if (token && !explicitAuthorization) {
     headers.set('Authorization', `Bearer ${token}`)
   }
 
   try {
     const response = await fetch(url, {
-      ...options,
+      ...fetchOptions,
+      credentials: 'include',
+      signal: fetchOptions.signal || AbortSignal.timeout(10000),
       headers,
     })
+
+    const isSessionEndpoint = /\/auth\/(login|register|refresh|logout)$/.test(endpoint)
+    if (response.status === 401 && auth && retryAuth && !explicitAuthorization && !isSessionEndpoint) {
+      // Another request may have rotated the token while this one was in flight.
+      if (version !== sessionVersion) throw new ApiError('Phiên đăng nhập đã kết thúc.', 401)
+      if (!getAuthToken() || getAuthToken() === token) await refreshAccessToken()
+      return request(endpoint, { ...options, retryAuth: false }, mockFallback)
+    }
+    if (response.status === 401 && auth && !isSessionEndpoint && version === sessionVersion) {
+      clearAuthSession()
+    }
 
     // Handle 204 No Content
     if (response.status === 204) {
@@ -97,6 +149,9 @@ export async function request(endpoint, options = {}, mockFallback = null) {
     if (mockFallback && (error.name === 'TypeError' || error.status >= 500)) {
       console.warn(`[API] Fallback to mock for ${endpoint} due to:`, error.message)
       return mockFallback()
+    }
+    if (error.name === 'TypeError' || error.name === 'TimeoutError') {
+      throw new ApiError('Không thể kết nối backend. Vui lòng thử lại.', 0)
     }
     throw error
   }

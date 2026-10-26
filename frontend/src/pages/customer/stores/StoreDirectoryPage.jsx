@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
-
-import { STORES } from '../../../mockData/customer/stores.js'
+import { useState } from 'react'
+import { loadBakeries } from '../../../services/vendorService.js'
+import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
+import CatalogState from '../../../components/catalog/CatalogState.jsx'
+import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
+import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 
 export const StoreDirectoryPage = ({
   customCake = null,
@@ -10,16 +13,11 @@ export const StoreDirectoryPage = ({
 }) => {
   const [selectedCity, setSelectedCity] = useState('all') // 'all' | 'hcm' | 'hn'
   const [searchQuery, setSearchQuery] = useState('')
-
-  const filteredStores = STORES.filter((store) => {
-    const matchesCity = selectedCity === 'all' || store.city === selectedCity
-    const matchesSearch =
-      store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.chef.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.specialty.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCity && matchesSearch
-  })
+  const [district, setDistrict] = useState('')
+  const [sort, setSort] = useState('name,asc')
+  const [page, setPage] = useState(1)
+  const resource = useCatalogResource(loadBakeries, { query: searchQuery, city: selectedCity === 'all' ? '' : selectedCity, district, sort, page, size: 6 })
+  const filteredStores = resource.data?.result || []
 
   const handleSelectStoreForCake = (store) => {
     const cakePrice = customCake?.price || 950000
@@ -31,7 +29,7 @@ export const StoreDirectoryPage = ({
         id: `direct-order-${store.id}-${Date.now()}`,
         title: `${cakeTitle} • ${store.name}`,
         price: cakePrice,
-        bakery: `${store.name} (${store.chef.split('&')[0].trim()})`,
+        bakery: store.name,
         image:
           customCake?.image ||
           'https://lh3.googleusercontent.com/aida-public/AB6AXuDl7eAPfu8ECgjGE4u7J5mfocv80iKgNlY1KhInqVxv-hjR5O1WFAa3x79hXqQhZN3RzfJ33wSPB0UKdouIsRpP13PgfleKx3mCShMDqV2rZVoiWnYGmSN7G4E0-D7CFYm5j5rpDndvQ3n1fV4YZICJJmac5TTLXpW80iIIepS9i-MaUDXTEYbRmI-jbI0Rfv0jZk9NELClAHgLk1Vl7QzP8IxXVqOMm28H2jPrOr_TpdRh8EhWTrhJ',
@@ -111,15 +109,21 @@ export const StoreDirectoryPage = ({
             <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
               <button
                 type="button"
-                onClick={() => setSelectedCity('all')}
+                onClick={() => { setSelectedCity('all'); setDistrict(''); setPage(1) }}
                 className="px-5 py-2.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-bold shadow-sm whitespace-nowrap cursor-pointer flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-sm text-secondary-container">
                   location_on
                 </span>
-                <span>TP. Hồ Chí Minh ({STORES.length} tiệm bánh)</span>
+                <span>Tất cả ({resource.data?.meta.total ?? 0} tiệm bánh)</span>
               </button>
             </div>
+
+            <input aria-label="Thành phố cửa hàng" placeholder="Thành phố" value={selectedCity === 'all' ? '' : selectedCity} onChange={(event) => { setSelectedCity(event.target.value || 'all'); setPage(1) }} className="w-full sm:w-44 rounded-full bg-surface border border-outline-variant/30 px-4 py-2 text-primary" />
+            <input aria-label="Quận huyện cửa hàng" placeholder="Quận / huyện" value={district} onChange={(event) => { setDistrict(event.target.value); setPage(1) }} className="w-full sm:w-44 rounded-full bg-surface border border-outline-variant/30 px-4 py-2 text-primary" />
+            <select aria-label="Sắp xếp cửa hàng" value={sort} onChange={(event) => { setSort(event.target.value); setPage(1) }} className="w-full sm:w-auto rounded-full bg-surface border border-outline-variant/30 px-4 py-2 text-primary">
+              <option value="name,asc">Tên A–Z</option><option value="name,desc">Tên Z–A</option><option value="createdAt,desc">Mới nhất</option>
+            </select>
 
             {/* Search Input */}
             <div className="relative w-full sm:w-80">
@@ -129,8 +133,8 @@ export const StoreDirectoryPage = ({
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm tiệm, quận, bếp trưởng..."
+                onChange={(e) => { setSearchQuery(e.target.value); setPage(1) }}
+                placeholder="Tìm theo tên tiệm..."
                 className="w-full pl-10 pr-4 py-2 rounded-full bg-surface border border-outline-variant/30 text-primary placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/40 shadow-xs"
               />
             </div>
@@ -141,6 +145,7 @@ export const StoreDirectoryPage = ({
       {/* Store Cards Grid */}
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <CatalogState {...resource} empty={filteredStores.length === 0} emptyText="Chưa có cửa hàng phù hợp. Hãy thử thay đổi bộ lọc." onRetry={resource.reload} onNavigate={onNavigate} />
           {filteredStores.map((store) => (
             <div
               key={store.id}
@@ -150,7 +155,7 @@ export const StoreDirectoryPage = ({
                 {/* Store Top Header: Photo, Name, Location */}
                 <div className="flex items-start gap-4">
                   <div className="relative shrink-0">
-                    <img
+                    <CatalogImage
                       src={store.image}
                       alt={store.name}
                       className="w-20 h-20 md:w-24 md:h-24 rounded-2xl object-cover shadow-md group-hover:scale-105 transition-transform"
@@ -159,14 +164,14 @@ export const StoreDirectoryPage = ({
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-headline-sm text-headline-sm text-primary font-bold group-hover:text-secondary transition-colors">
-                      {store.name}
+                      <button className="text-left" onClick={() => onNavigate?.('bakery-detail', { id: store.id })}>{store.name}</button>
                     </h3>
 
                     <div className="flex items-center gap-1.5 mt-2 text-label-xs text-outline">
                       <span className="material-symbols-outlined text-sm text-secondary">
                         location_on
                       </span>
-                      <span className="truncate">{store.location}</span>
+                      <span className="truncate">{store.location || 'Tiệm chưa cung cấp địa chỉ.'}</span>
                     </div>
                   </div>
                 </div>
@@ -189,7 +194,7 @@ export const StoreDirectoryPage = ({
 
                     <button
                       type="button"
-                      onClick={() => onNavigate && onNavigate('explore')}
+                      onClick={() => onNavigate?.('bakery-detail', { id: store.id })}
                       className="w-full sm:w-auto py-3 px-4 rounded-2xl bg-surface-container-high text-primary hover:bg-surface-container-highest font-label-md text-label-md font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>Xem Menu Tiệm</span>
@@ -202,7 +207,7 @@ export const StoreDirectoryPage = ({
                   <>
                     <button
                       type="button"
-                      onClick={() => onNavigate && onNavigate('explore')}
+                      onClick={() => onNavigate?.('bakery-detail', { id: store.id })}
                       className="w-full sm:flex-1 py-3 px-5 rounded-2xl bg-primary text-on-primary font-label-md text-label-md font-bold shadow-md hover:bg-secondary transition-all flex items-center justify-center gap-2 cursor-pointer group-hover:shadow-lg"
                     >
                       <span className="material-symbols-outlined text-lg text-secondary-container">
@@ -227,6 +232,7 @@ export const StoreDirectoryPage = ({
             </div>
           ))}
         </div>
+        {resource.status === 'ready' && <CatalogPagination meta={resource.data.meta} onPage={setPage} />}
       </div>
     </div>
   )

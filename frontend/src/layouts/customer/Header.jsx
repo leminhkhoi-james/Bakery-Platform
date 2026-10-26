@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 import { CUSTOMER_NAV_LINKS } from '../../mockData/shared/navigation.js'
+import { useAuth } from '../../context/useAuth.js'
 
 export const Header = ({
   cartCount = 2,
   activeTab = 'home',
   onNavigate,
 }) => {
+  const { user, roles, logout } = useAuth()
   const [searchValue, setSearchValue] = useState('')
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [scrolledActiveTab, setScrolledActiveTab] = useState(activeTab)
@@ -281,13 +283,13 @@ export const Header = ({
             </span>
             <input
               className="w-full pl-9 pr-4 py-1.5 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-sm text-primary placeholder:text-primary/60 transition-all outline-none font-bold"
-              placeholder="Tìm bánh, tiệm bánh..."
+              placeholder="Tìm theo tên bánh..."
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  onNavigate && onNavigate('explore')
+                  onNavigate?.('explore', { query: searchValue })
                 }
               }}
             />
@@ -327,8 +329,8 @@ export const Header = ({
             {isProfileMenuOpen && (
               <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
                 <div className="px-4 py-3 border-b border-primary/20">
-                  <p className="font-savoure text-lg text-primary font-bold">Hân Mai</p>
-                  <p className="text-primary/70 text-xs truncate font-bold">hanmai.sweetcake@example.com</p>
+                  <p className="font-savoure text-lg text-primary font-bold">{user?.displayName || 'Khách'}</p>
+                  <p className="text-primary/70 text-xs truncate font-bold">{user?.email || 'Chưa đăng nhập'}</p>
                 </div>
 
                 <div className="py-1">
@@ -367,7 +369,7 @@ export const Header = ({
                 </div>
 
                 <div className="border-t border-primary/20 pt-1">
-                  <button
+                  {roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role)) && <button
                     onClick={(e) => {
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'vendor-dashboard')
@@ -376,9 +378,9 @@ export const Header = ({
                   >
                     <span className="material-symbols-outlined text-base">storefront</span>
                     <span>Cổng Tiệm bánh (Vendor Hub)</span>
-                  </button>
+                  </button>}
 
-                  <button
+                  {roles.includes('ADMIN') && <button
                     onClick={(e) => {
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'admin-dashboard')
@@ -387,17 +389,19 @@ export const Header = ({
                   >
                     <span className="material-symbols-outlined text-base">shield_person</span>
                     <span>Quản trị viên (Master Admin)</span>
-                  </button>
+                  </button>}
 
                   <button
-                    onClick={(e) => {
+                    onClick={async () => {
                       setIsProfileMenuOpen(false)
-                      handleNav(e, 'login')
+                      try { if (user) await logout() }
+                      catch { /* AuthContext exposes revocation errors on the login page. */ }
+                      onNavigate?.('login')
                     }}
                     className="w-full px-4 py-2 text-left text-xs font-bold text-error hover:bg-error-container flex items-center gap-2 cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-base">logout</span>
-                    <span>Đăng xuất</span>
+                    <span>{user ? 'Đăng xuất' : 'Đăng nhập'}</span>
                   </button>
                 </div>
               </div>

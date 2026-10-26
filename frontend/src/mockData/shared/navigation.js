@@ -47,6 +47,9 @@ export const FOOTER_DATA = {
     { label: 'Đồ uống & Trà hoa thượng hạng', route: 'explore', category: 'Đồ Uống & Trà' },
   ],
   supportLinks: [
+    { label: 'Yêu cầu bánh của tôi (RFQ)', route: 'rfqs' },
+    { label: 'Tin nhắn', route: 'chat' },
+    { label: 'Gói dịch vụ cho tiệm bánh', route: 'subscription-plans' },
     {
       label: 'Đăng nhập / Đăng ký tài khoản',
       route: 'login',
@@ -104,6 +107,8 @@ export const ADMIN_NAV_ITEMS = [
 ];
 
 export const VENDOR_NAV_ITEMS = [
+  { id: 'chat', label: 'Tin nhắn', icon: 'chat', route: 'vendor-chat' },
+  { id: 'subscription', label: 'Gói dịch vụ', icon: 'workspace_premium', route: 'vendor-subscription' },
   {
     id: 'dashboard',
     label: 'Tổng quan',
