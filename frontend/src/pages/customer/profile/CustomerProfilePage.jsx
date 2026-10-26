@@ -1207,7 +1207,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
       {/* MODAL 1: Edit Profile Modal */}
       {isEditProfileModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1276,7 +1276,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
       {/* MODAL 2: Add New Address Modal */}
       {isAddAddressModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1358,7 +1358,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
       {/* MODAL 3: Change Password Modal */}
       {isChangePasswordModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1439,7 +1439,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
       {/* MODAL 4: Electronic Invoice View (#ORD-2025-9982) */}
       {isInvoiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-lg w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div className="flex items-center gap-2">
@@ -1502,7 +1502,7 @@ export const CustomerProfilePage = ({ onNavigate, onAddToCart }) => {
 
       {/* MODAL 5: Chef Chat Modal */}
       {isChefChatModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col max-h-[85vh]">
             <div className="bg-primary-container text-on-primary-container p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">

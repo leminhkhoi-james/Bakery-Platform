@@ -854,7 +854,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
 
       {/* ================= MODAL: TIMELINE CHI TIẾT ĐƠN HÀNG ================= */}
       {timelineOrder && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-outline-variant/30 max-h-[90vh] overflow-y-auto animate-in fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div>
@@ -924,7 +924,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
 
       {/* ================= MODAL: CHỤP DUYỆT ẢNH BÁNH ================= */}
       {qcOrder && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-outline-variant/30 animate-in fade-in">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-base font-bold text-primary">
@@ -983,7 +983,7 @@ export const VendorOrderManagementPage = ({ onNavigate }) => {
 
       {/* ================= MODAL: GPS XE LẠNH ================= */}
       {driverOrder && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-outline-variant/30 animate-in fade-in">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-base font-bold text-primary">

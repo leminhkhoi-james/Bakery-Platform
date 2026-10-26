@@ -1295,7 +1295,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
 
       {/* CHAT MODAL */}
       {chattingWith && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-modal-overlay backdrop-blur-sm animate-in fade-in">
           <div className="bg-surface-container-lowest max-w-xl w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[540px] border border-outline-variant/30">
             {/* Header */}
             <div className="p-4 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/30">
@@ -1379,7 +1379,7 @@ export const BiddingComparisonPage = ({ onAddToCart, onNavigate }) => {
 
       {/* CANCEL RFQ CONFIRMATION MODAL */}
       {isCancelModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">

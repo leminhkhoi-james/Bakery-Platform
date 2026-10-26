@@ -674,7 +674,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 1: Escrow Deposit Confirmation */}
       {isEscrowModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-[0_24px_48px_rgba(45,30,24,0.2)] border border-outline-variant/30 relative">
             <button
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant cursor-pointer transition-colors"
@@ -766,7 +766,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 2: Chat Directly with Pastry Chef Minh Vu */}
       {isChatOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full h-[540px] flex flex-col shadow-2xl border border-outline-variant/30 overflow-hidden">
             {/* Header */}
             <div className="p-4 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/20">
@@ -854,7 +854,7 @@ export const BakerQuoteDetailPage = ({ onAddToCart, onNavigate }) => {
 
       {/* MODAL 3: Yêu Cầu Điều Chỉnh Báo Giá */}
       {isAdjustModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 relative">
             <button
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant cursor-pointer transition-colors"

@@ -559,7 +559,7 @@ export const VendorDashboardPage = ({ onNavigate }) => {
 
       {/* MODAL: SOẠN BÁO GIÁ NHANH */}
       {isQuoteModalOpen && selectedRfq && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-outline-variant/30 animate-in fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div>

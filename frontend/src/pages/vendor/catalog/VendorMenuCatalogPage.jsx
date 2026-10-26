@@ -852,7 +852,7 @@ export const VendorMenuCatalogPage = ({ onNavigate }) => {
         <div className="fixed inset-0 z-50 overflow-hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+            className="absolute inset-0 bg-modal-overlay backdrop-blur-xs transition-opacity"
             onClick={() => setIsDrawerOpen(false)}
           ></div>
 

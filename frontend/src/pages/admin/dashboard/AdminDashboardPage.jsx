@@ -2,6 +2,22 @@ import { ADMIN_PERIOD_METRICS, INITIAL_PENDING_BAKERIES, INITIAL_ESCROW_AUDIT_OR
 import { useState, useMemo } from 'react'
 import AdminSidebar from '../../../layouts/admin/AdminSidebar'
 import AdminHeader from '../../../layouts/admin/AdminHeader'
+import AdminOrderDetailModal from '../orders/AdminOrderDetailModal'
+import OrderStatusBadge from '../orders/OrderStatusBadge'
+import { INITIAL_ADMIN_ORDERS } from '../../../mockData/admin/orders.js'
+import { getAdminOrderStatus } from '../orders/adminOrderStatus'
+
+const normalizeOrderId = (id) => id.replace(/^#/, '')
+const adminOrdersById = new Map(INITIAL_ADMIN_ORDERS.map((order) => [normalizeOrderId(order.id), order]))
+
+// Dashboard's legacy status mixes escrow/delivery labels. Resolve lifecycle
+// status from the same order source as admin management; keep other fields intact.
+const HIGH_VALUE_ORDERS = INITIAL_ESCROW_AUDIT_ORDERS.map(({ status, statusCode, ...order }) => ({
+  ...order,
+  status: getAdminOrderStatus(adminOrdersById.get(normalizeOrderId(order.id))),
+  legacyEscrowStatus: status,
+  legacyEscrowStatusCode: statusCode,
+}))
 
 export const AdminDashboardPage = ({ onNavigate }) => {
   // Filtering states
@@ -20,9 +36,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
   const [isVendorModalOpen, setIsVendorModalOpen] = useState(false)
   const [selectedVendorForModal, setSelectedVendorForModal] = useState(null)
 
-  // Modal State for Escrow Audit
-  const [isEscrowModalOpen, setIsEscrowModalOpen] = useState(false)
-  const [selectedOrderForEscrow, setSelectedOrderForEscrow] = useState(null)
+  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState(null)
 
   // Vendors state
   const [vendorQueue, setVendorQueue] = useState([
@@ -62,53 +76,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
     },
   ])
 
-  // High Value Escrow Orders State
-  const [escrowOrders, setEscrowOrders] = useState([
-    {
-      id: '#ORD-2025-9982',
-      customerName: 'Chị Mai Lan',
-      avatar:
-        'https://lh3.googleusercontent.com/aida/AEtjO1WZRjjnQUSZWO0GO2HHbYzb_pF_Cb1GouEXNwCe8hr80KU7z8gLbqNO3e3r49bcYMylM4EN5qZ5rfSHF1zUax8zf2l6gvDphlkKepCJcgJpJgnBDvnC4dR6oFg-YO8Y-lt4GcA3go2fuzEy5axSH7juE_RlDcYLmaPw_30hlnTVCtvSJ3vukYWt6WPKODHMIF2CcVCVPOAYMYqDniTJB6oVTDtxpPeUSgsrCuTo-RuHJ1fkwE4a5dmjb30',
-      vendor: 'La Crème Atelier',
-      cakeType: 'Bánh cưới 3 tầng hoa đường',
-      amount: 5200000,
-      status: 'Khóa cọc 100%',
-      statusCode: 'locked',
-    },
-    {
-      id: '#ORD-2025-9975',
-      customerName: 'Anh Tuấn Kiệt',
-      avatar: null,
-      initials: 'TK',
-      vendor: 'The Sweet Art Boutique',
-      cakeType: 'AI Gen Custom Sculpture',
-      amount: 3850000,
-      status: 'Đang giao xe lạnh 5°C',
-      statusCode: 'delivering',
-    },
-    {
-      id: '#ORD-2025-9968',
-      customerName: 'Hoàng Phương Pâtisserie',
-      avatar: null,
-      initials: 'HP',
-      vendor: 'Maison De Mousse',
-      cakeType: 'Entremet Set 12 phần',
-      amount: 1450000,
-      status: 'Đã giao - Chờ giải ngân',
-      statusCode: 'ready_payout',
-    },
-    {
-      id: '#ORD-2025-9954',
-      customerName: 'Quang Thịnh Event Co.',
-      avatar: null,
-      initials: 'QT',
-      vendor: 'ChocoLuxe Master',
-      cakeType: 'Tháp Macaron & Tartlet Sự Kiện',
-      amount: 4600000,
-      status: 'Khóa cọc 100%',
-      statusCode: 'locked',
-    },
-  ])
+  const escrowOrders = HIGH_VALUE_ORDERS
 
   // Handlers for Vendor Actions
   const handleApproveVendor = (vendorId) => {
@@ -121,21 +89,6 @@ export const AdminDashboardPage = ({ onNavigate }) => {
   const handleOpenVendorModal = (vendor) => {
     setSelectedVendorForModal(vendor)
     setIsVendorModalOpen(true)
-  }
-
-  // Handlers for Escrow Payout
-  const handlePayoutOrder = (orderId) => {
-    setEscrowOrders((prev) =>
-      prev.map((o) =>
-        o.id === orderId ? { ...o, status: 'Đã giải ngân ví xưởng', statusCode: 'completed' } : o
-      )
-    )
-    showToast(`Đã giải ngân thành công cho đơn ${orderId}!`)
-  }
-
-  const handleOpenEscrowAudit = (order) => {
-    setSelectedOrderForEscrow(order)
-    setIsEscrowModalOpen(true)
   }
 
   // Dynamic Filtering
@@ -467,13 +420,10 @@ export const AdminDashboardPage = ({ onNavigate }) => {
 
             {/* ================= HIGH-VALUE ORDERS & ESCROW VAULT AUDIT ================= */}
             <section className="w-full">
-              <div className="w-full bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/20 space-y-5">
+              <div className="w-full bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-outline-variant/20 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-secondary text-[22px]">
-                        shield_with_heart
-                      </span>
                       <h2 className="font-headline-sm text-admin-heading text-primary font-serif">
                         Đơn hàng giá trị cao
                       </h2>
@@ -483,27 +433,33 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                 </div>
 
                 {/* Table of High-Value Orders */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                <div className="max-w-full overflow-x-auto rounded-lg focus-visible:outline-2 focus-visible:outline-primary" role="region" aria-label="Đơn hàng giá trị cao" tabIndex={0}>
+                  <table className="w-full min-w-[40rem] text-left border-collapse">
+                    <caption className="sr-only">Đơn hàng giá trị cao. Chọn mã đơn để xem chi tiết.</caption>
+                    <colgroup>
+                      <col className="w-[32%]" />
+                      <col className="w-[33%]" />
+                      <col className="w-[15%]" />
+                      <col className="w-[20%]" />
+                    </colgroup>
                     <thead>
                       <tr className="font-label-sm text-admin-body text-on-surface-variant uppercase tracking-wider bg-surface-container/80 rounded-lg ">
-                        <th className="py-3 px-3.5 rounded-l-lg">Mã Đơn / Khách hàng</th>
-                        <th className="py-3 px-3">Tiệm bánh</th>
-                        <th className="py-3 px-3">Giá trị</th>
-                        <th className="py-3 px-3">Ký quỹ</th>
-                        <th className="py-3 px-3 rounded-r-lg text-right">Thao Tác</th>
+                        <th scope="col" className="py-3 px-3.5 rounded-l-lg">Mã đơn / Khách hàng</th>
+                        <th scope="col" className="py-3 px-3">Tiệm bánh</th>
+                        <th scope="col" className="py-3 px-3">Giá trị</th>
+                        <th scope="col" className="py-3 pl-3 pr-4 sm:pr-6 text-right rounded-r-lg">Trạng thái đơn hàng</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-surface-container-high text-admin-body font-body-sm ">
                       {filteredEscrowOrders.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="py-6 text-center text-on-surface-variant">
+                          <td colSpan={4} className="py-6 text-center text-on-surface-variant">
                             Không tìm thấy đơn hàng
                           </td>
                         </tr>
                       ) : (
                         filteredEscrowOrders.map((order) => (
-                          <tr key={order.id} className="hover:bg-surface-container/50 transition-colors">
+                          <tr key={order.id} onClick={(event) => { event.currentTarget.querySelector('button')?.focus(); setSelectedOrderForDetail(order) }} className="cursor-pointer hover:bg-surface-container/60 focus-within:bg-surface-container/60 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-primary transition-colors">
                             <td className="py-3.5 px-3.5">
                               <div className="flex items-center gap-2.5">
                                 {order.avatar ? (
@@ -518,7 +474,7 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                                   </div>
                                 )}
                                 <div>
-                                  <span className="font-bold text-primary">{order.id}</span>
+                                  <button type="button" onClick={(event) => { event.stopPropagation(); setSelectedOrderForDetail(order) }} aria-label={`Xem chi tiết đơn hàng ${order.id}`} className="min-h-11 cursor-pointer rounded px-1 -ml-1 font-bold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{order.id}</button>
                                   <p className="text-admin-body text-on-surface-variant">
                                     {order.customerName}
                                   </p>
@@ -531,55 +487,11 @@ export const AdminDashboardPage = ({ onNavigate }) => {
                                 {order.cakeType}
                               </p>
                             </td>
-                            <td className="py-3.5 px-3 font-bold text-primary font-serif">
+                            <td className="py-3.5 px-3 font-bold text-primary tabular-nums whitespace-nowrap">
                               {order.amount.toLocaleString('vi-VN')}₫
                             </td>
-                            <td className="py-3.5 px-3">
-                              <span
-                                className={`inline-flex items-center gap-1 text-admin-body px-2 py-0.5 rounded-md font-semibold ${
-                                  order.statusCode === 'delivering'
-                                    ? 'bg-sky-100 text-sky-800'
-                                    : order.statusCode === 'ready_payout'
-                                      ? 'bg-emerald-100 text-emerald-800'
-                                      : order.statusCode === 'completed'
-                                        ? 'bg-secondary-fixed text-on-secondary-fixed'
-                                        : 'bg-secondary-fixed text-on-secondary-fixed'
-                                }`}
-                              >
-                                <span className="material-symbols-outlined text-[12px]">
-                                  {order.statusCode === 'delivering'
-                                    ? 'ac_unit'
-                                    : order.statusCode === 'ready_payout'
-                                      ? 'task_alt'
-                                      : 'lock'}
-                                </span>
-                                {order.status}
-                              </span>
-                            </td>
-                            <td className="py-3.5 px-3 text-right">
-                              {order.statusCode === 'ready_payout' ? (
-                                <button
-                                  className="p-1.5 rounded-lg text-secondary hover:bg-surface-container transition-colors cursor-pointer"
-                                  onClick={() => handlePayoutOrder(order.id)}
-                                  title="Giải ngân ngay cho xưởng"
-                                  type="button"
-                                >
-                                  <span className="material-symbols-outlined text-[18px]">
-                                    paid
-                                  </span>
-                                </button>
-                              ) : (
-                                <button
-                                  className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer"
-                                  onClick={() => handleOpenEscrowAudit(order)}
-                                  title="Kiểm toán giao dịch"
-                                  type="button"
-                                >
-                                  <span className="material-symbols-outlined text-[18px]">
-                                    verified_user
-                                  </span>
-                                </button>
-                              )}
+                            <td className="py-3.5 pl-3 pr-4 sm:pr-6 text-right">
+                              <OrderStatusBadge status={order.status} />
                             </td>
                           </tr>
                         ))
@@ -598,82 +510,8 @@ export const AdminDashboardPage = ({ onNavigate }) => {
 
 
 
-      {/* ================= MODAL KIỂM TOÁN ESCROW VAULT ================= */}
-      {isEscrowModalOpen && selectedOrderForEscrow && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-            <div className="px-6 py-4 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/20">
-              <div className="flex flex-col">
-                <span className="font-label-sm text-secondary font-bold uppercase tracking-wider text-admin-body">
-                  Chi tiết ký quỹ
-                </span>
-                <h3 className="font-headline-sm text-primary font-bold text-admin-heading">
-                  Giao dịch: {selectedOrderForEscrow.id}
-                </h3>
-              </div>
-              <button
-                className="p-1.5 rounded-full hover:bg-surface-container text-on-surface cursor-pointer"
-                onClick={() => setIsEscrowModalOpen(false)}
-              >
-                <span className="material-symbols-outlined text-[20px]">close</span>
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4 text-admin-body">
-              <div className="p-4 bg-surface-container-low rounded-xl space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-outline">Mã giao dịch ký quỹ:</span>
-                  <span className="font-mono font-bold text-primary">
-                    VAULT-2025-ESCROW-{selectedOrderForEscrow.id.replace(/[^0-9]/g, '')}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-outline">Khách hàng:</span>
-                  <span className="font-bold text-primary">
-                    {selectedOrderForEscrow.customerName}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-outline">Tiệm bánh:</span>
-                  <span className="font-bold text-primary">
-                    {selectedOrderForEscrow.vendor}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-outline">Số tiền:</span>
-                  <span className="font-bold text-secondary text-admin-body">
-                    {selectedOrderForEscrow.amount.toLocaleString('vi-VN')}₫
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3 bg-secondary-fixed/30 text-on-secondary-fixed rounded-xl flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">lock</span>
-                <span>
-                  Tiền ký quỹ được chuyển cho tiệm sau khi khách nghiệm thu.
-                </span>
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button
-                  className="px-4 py-2 rounded-xl bg-surface-container cursor-pointer"
-                  onClick={() => setIsEscrowModalOpen(false)}
-                >
-                  Đóng
-                </button>
-                <button
-                  className="px-5 py-2 rounded-xl bg-primary hover:bg-secondary text-on-primary font-bold cursor-pointer"
-                  onClick={() => {
-                    showToast('Đã trích xuất biên lai kiểm toán mật mã SHA-256')
-                    setIsEscrowModalOpen(false)
-                  }}
-                >
-                  Xuất biên lai
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {selectedOrderForDetail && (
+        <AdminOrderDetailModal order={selectedOrderForDetail} onClose={() => setSelectedOrderForDetail(null)} />
       )}
     </div>
   )

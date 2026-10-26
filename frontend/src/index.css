@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  /* Shared neutral backdrop for modals, dialogs and drawers. */
+  --color-modal-overlay: rgb(0 0 0 / 0.4);
   --text-admin-title: 20px;
   --text-admin-title--line-height: 28px;
   --text-admin-heading: 16px;

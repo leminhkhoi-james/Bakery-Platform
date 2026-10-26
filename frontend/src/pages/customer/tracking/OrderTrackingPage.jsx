@@ -1097,7 +1097,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 1: Chef Jean-Luc Direct Messaging */}
       {isChefChatOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col max-h-[85vh]">
             {/* Header */}
             <div className="bg-primary-container text-on-primary-container p-4 flex items-center justify-between">
@@ -1175,7 +1175,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 2: Change Delivery Time */}
       {isChangeTimeModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1250,7 +1250,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 3: Edit Plaque Inscription */}
       {isEditPlaqueModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-md w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
               <h3 className="font-headline-sm text-primary text-lg font-bold flex items-center gap-2">
@@ -1322,7 +1322,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 4: VAT Invoice Quick View */}
       {isVatModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-lg w-full shadow-2xl p-6 border border-outline-variant/30 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div className="flex items-center gap-2">
@@ -1399,7 +1399,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 5: Full 6-Photo Workshop History Gallery */}
       {isGalleryOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             <div className="p-4 bg-primary text-on-primary flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -1473,7 +1473,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 6: Customer Order Completion & View History Modal */}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-xs p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4 animate-fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             {/* Modal Header */}
             <div className="p-5 bg-gradient-to-r from-[#9e2a44] to-[#c74c66] text-white flex items-center justify-between">
@@ -1580,7 +1580,7 @@ export const OrderTrackingPage = ({ onNavigate }) => {
 
       {/* MODAL 7: Cancel Order & Escrow Refund Modal */}
       {isCancelEscrowModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-outline-variant/30 flex flex-col">
             <div className="p-5 bg-gradient-to-r from-rose-900 to-rose-700 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">

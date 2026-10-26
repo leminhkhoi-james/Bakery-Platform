@@ -416,7 +416,7 @@ export const VendorRfqMarketplacePage = ({ onNavigate }) => {
 
       {/* ================= MODAL: XEM CHI TIẾT RFQ ================= */}
       {detailRfq && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-surface rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 max-h-[90vh] overflow-y-auto animate-in fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div>
@@ -540,7 +540,7 @@ export const VendorRfqMarketplacePage = ({ onNavigate }) => {
 
       {/* ================= MODAL: CHAT VỚI KHÁCH HÀNG ================= */}
       {chatRfq && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-modal-overlay backdrop-blur-xs p-4">
           <div className="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[520px] animate-in fade-in">
             <div className="px-5 py-3.5 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/20">
               <div className="flex items-center gap-2.5">

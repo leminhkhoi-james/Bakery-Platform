@@ -128,7 +128,7 @@ export default function VendorSidebar({
           {/* Backdrop */}
           <div
             onClick={onCloseMobile}
-            className="fixed inset-0 bg-primary/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-modal-overlay backdrop-blur-xs transition-opacity"
           ></div>
           {/* Drawer content */}
           <div className="relative z-10 animate-slide-right">{sidebarContent}</div>

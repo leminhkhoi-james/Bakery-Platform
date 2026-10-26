@@ -215,3 +215,9 @@ export const INITIAL_VENDORS = [
 ;
 
 export const MOCK_VENDORS = INITIAL_VENDORS;
+
+// Original admin overview demo values; no aggregate API or calculation exists yet.
+export const VENDOR_OVERVIEW_METRICS = Object.freeze({
+  goodRatingPercent: 92.0,
+  onTimeDeliveryPercent: 99.1,
+})

@@ -49,7 +49,7 @@ export default function PolicyModal({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-in fade-in duration-200">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-primary/60 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-modal-overlay backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 

@@ -1484,7 +1484,7 @@ export const CartCheckoutPage = ({
 
       {/* KHO VOUCHER MODAL */}
       {isVoucherModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-md w-full p-6 shadow-2xl border border-outline-variant/30 space-y-5 relative">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
               <div className="flex items-center gap-2">
@@ -1593,7 +1593,7 @@ export const CartCheckoutPage = ({
 
       {/* MODAL: Order Placement Success & VietQR Confirmation */}
       {isOrderSuccessModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-surface rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-outline-variant/30 text-center relative">
             <button
               type="button"

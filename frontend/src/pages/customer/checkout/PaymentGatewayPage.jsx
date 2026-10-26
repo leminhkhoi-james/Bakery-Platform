@@ -1213,7 +1213,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
       {/* Payment Verified Success Modal */}
       {paymentSuccess && (
-        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-stone-200/80 text-center relative">
             <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
               <span className="material-symbols-outlined text-3xl">
@@ -1287,7 +1287,7 @@ export const PaymentGatewayPage = ({ onNavigate }) => {
 
       {/* Payment Failed Modal */}
       {paymentFailed && (
-        <div className="fixed inset-0 z-50 bg-black/15 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-rose-200 text-center relative">
             <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto shadow-sm">
               <span className="material-symbols-outlined text-3xl">

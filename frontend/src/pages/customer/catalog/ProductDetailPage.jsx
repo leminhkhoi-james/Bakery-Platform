@@ -1168,7 +1168,7 @@ export const ProductDetailPage = ({
 
         {/* MODAL: Size Guide */}
         {showSizeGuide && (
-          <div className="fixed inset-0 z-50 bg-primary/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 bg-modal-overlay backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-surface rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
               <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30">
                 <h3 className="font-headline-sm text-primary">
