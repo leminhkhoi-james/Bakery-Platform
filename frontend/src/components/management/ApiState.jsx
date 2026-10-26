@@ -5,10 +5,10 @@ export function ApiErrorMessage({ error, retry }) {
   return <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800"><p>{description || 'Không thể xử lý yêu cầu.'}</p><p className="break-words text-sm">{error?.message}</p>{retry && <button className="mt-3 underline" onClick={retry}>Thử lại</button>}</div>
 }
 export function ApiState({ resource, children }) {
-  if (resource.status === 'loading') return <p role="status" className="p-5">Đang tải dữ liệu…</p>
+  if (resource.status === 'loading') return <div role="status" aria-live="polite" className="space-y-3 py-4"><p className="text-sm text-on-surface-variant">Đang tải dữ liệu…</p><div aria-hidden="true" className="space-y-2 motion-safe:animate-pulse">{[0, 1, 2].map((line) => <div key={line} className="h-3 rounded bg-surface-container" style={{ width: [70, 95, 55][line] + '%' }} />)}</div></div>
   if (resource.error) return <ApiErrorMessage error={resource.error} retry={resource.reload} />
   return children
 }
-export const inputClass = 'mt-1 block w-full rounded-xl border border-outline-variant/40 bg-surface px-3 py-2.5 text-on-surface'
-export const buttonClass = 'rounded-xl bg-primary px-4 py-2.5 text-on-primary disabled:opacity-40'
-export const panelClass = 'rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-5 space-y-4'
+export const inputClass = 'sc-input'
+export const buttonClass = 'sc-button'
+export const panelClass = 'sc-panel space-y-4'

@@ -1,4 +1,5 @@
 import React from 'react'
+import { StatusBadge } from '../common/WorkspaceUI.jsx'
 import { canOrderPlan, formatSubscriptionMoney, subscriptionStatusLabel } from '../../services/subscriptionModels.js'
 
 export function SubscriptionError({ error, retry }) {
@@ -19,11 +20,11 @@ export function FeatureList({ features = {} }) {
 
 export function PlanCards({ plans, onSelect, canSelect = false, busy = false }) {
   if (!plans?.length) return <p className="rounded-2xl border border-outline-variant/30 p-6">Chưa có gói dịch vụ được mở bán.</p>
-  return <div className="grid gap-5 md:grid-cols-3">{plans.map((plan) => <article key={plan.id} className="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6">
+  return <div className="grid gap-5 md:grid-cols-3">{plans.map((plan) => <article key={plan.id} className="sc-panel flex flex-col gap-4">
     <div><p className="text-sm text-secondary">{plan.code || 'Chưa có mã gói'}</p><h3 className="text-xl font-bold text-primary">{plan.name || 'Chưa có tên gói'}</h3></div>
-    <p className="text-xl font-bold">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
+    <p className="font-serif text-3xl font-semibold text-primary">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
     <p>{plan.description || 'Chưa có mô tả.'}</p><p className="text-sm">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
-    <p className="text-sm">{plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)}</p><FeatureList features={plan.features} />
+    <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p><FeatureList features={plan.features} />
     {onSelect && <button disabled={!canSelect || busy || !canOrderPlan(plan)} onClick={() => onSelect(plan)} className="mt-auto rounded-xl bg-primary px-4 py-3 text-on-primary disabled:opacity-40">Chọn gói</button>}
   </article>)}</div>
 }

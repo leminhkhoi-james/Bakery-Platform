@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test": "node --test",
+    "test:ui:fixture": "node scripts/ui-preview-smoke.mjs",
     "test:auth:live": "node scripts/auth-smoke.mjs",
     "test:catalog:live": "node scripts/catalog-smoke.mjs",
     "test:subscription:live": "node scripts/subscription-smoke.mjs",

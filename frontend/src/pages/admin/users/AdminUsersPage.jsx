@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { panelClass } from '../../../components/management/ApiState.jsx'
+import { EmptyPanel } from '../../../components/common/WorkspaceUI.jsx'
 export default function AdminUsersPage({ onNavigate }) {
-  return <AdminFrame title="Người dùng" activeTab="admin-users" onNavigate={onNavigate}><section className={panelClass}><h2 className="font-bold">Chờ API quản lý người dùng</h2><p>Identity hiện chưa có public/admin API liệt kê, chỉnh sửa, khóa tài khoản hoặc cấp platform role. Không dùng danh sách demo hoặc gọi internal API từ trình duyệt.</p><p>Tài khoản Vendor/Admin phải được nhóm backend cấp theo quy trình quản trị hợp lệ.</p></section></AdminFrame>
+  return <AdminFrame title="Người dùng" activeTab="admin-users" onNavigate={onNavigate}><section className={panelClass}><EmptyPanel title="Chờ API quản lý người dùng" description="Chưa thể liệt kê, chỉnh sửa, khóa tài khoản hoặc cấp platform role từ giao diện." icon="manage_accounts" /><p className="sc-note">Identity hiện chưa có public/admin API quản lý người dùng. Tài khoản Vendor/Admin phải được nhóm backend cấp theo quy trình quản trị hợp lệ.</p></section></AdminFrame>
 }

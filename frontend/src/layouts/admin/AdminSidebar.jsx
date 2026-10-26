@@ -69,12 +69,6 @@ export default function AdminSidebar({
       icon: 'lock_clock',
       badge: null,
     },
-    {
-      id: 'admin-users',
-      route: 'admin-users',
-      label: 'Người dùng',
-      icon: 'group',
-    },
   ]
 
   const sidebarContent = (

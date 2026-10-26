@@ -11,6 +11,7 @@ export const Header = ({
   const { user, roles, logout } = useAuth()
   const [searchValue, setSearchValue] = useState('')
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const [scrolledActiveTab, setScrolledActiveTab] = useState(activeTab)
 
   useEffect(() => {
@@ -47,6 +48,8 @@ export const Header = ({
 
   const handleNav = (e, path) => {
     e.preventDefault()
+    setIsMobileNavOpen(false)
+    setIsProfileMenuOpen(false)
     if (onNavigate) {
       onNavigate(path)
     }
@@ -78,14 +81,14 @@ export const Header = ({
       </div>
 
       {/* MAIN NAVIGATION BAR (Below the top curtain ribbon) */}
-      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 flex items-center justify-between gap-gutter">
+      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 flex items-center justify-between gap-2 xl:gap-gutter">
         {/* Brand Logo */}
-        <div className="flex items-center gap-space-md shrink-0">
+        <div className="sc-customer-brand flex items-center gap-2 shrink-0"><button id="customer-menu-toggle" type="button" className="sc-customer-menu-button" aria-label="Mở điều hướng" aria-expanded={isMobileNavOpen} aria-controls="customer-mobile-navigation" onClick={() => { setIsMobileNavOpen(!isMobileNavOpen); setIsProfileMenuOpen(false) }}><span aria-hidden="true" className="material-symbols-outlined">{isMobileNavOpen ? 'close' : 'menu'}</span></button>
           <BrandLogo onClick={(e) => handleNav(e, 'home')} />
         </div>
 
         {/* Nav Links */}
-        <nav className="hidden lg:flex items-center gap-2 font-savoure">
+        <nav className="hidden xl:flex items-center gap-2 font-savoure">
           {CUSTOMER_NAV_LINKS.map((link) => {
             const isTabActive =
               scrolledActiveTab === link.route ||
@@ -275,7 +278,7 @@ export const Header = ({
         </nav>
 
         {/* Actions & Utilities */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Quick Search */}
           <div className="relative hidden md:block w-48 xl:w-64">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
@@ -315,19 +318,17 @@ export const Header = ({
           <div className="relative">
             <button
               aria-label="Tài khoản khách hàng"
+              aria-expanded={isProfileMenuOpen}
+              aria-controls="customer-profile-menu"
               className="p-1 rounded-full border-2 border-primary/40 hover:border-primary transition-colors cursor-pointer"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             >
-              <img
-                alt="Avatar khách hàng"
-                className="w-8 h-8 rounded-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZPxXa22XB0i3Vu6CEjC4sV8mvBIFb0EQEZcnrvSuK1DEWprPNIp8PkP71WcMVzOLDX6K-Jt8VTcnRELtaaMv9rnSZgPT4TmpW-whaHgBMbbNYkdUSCvSRluMe7lpAnau4QdozHVyKUzc-cOkYvDDtR1JZmBfJhvyyBetI1iwKFIecoBb2W-UPkWCRuIRrrqOITaESSKPbN_PRkwFhA-JKj3ye8RLhRYTIvA4UBkobMHm1hSVvheCw"
-              />
+              <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-semibold text-primary">{(user?.displayName || user?.email || 'Khách').slice(0, 1).toUpperCase()}</span>
             </button>
 
             {/* Profile Dropdown Menu */}
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
+              <div id="customer-profile-menu" className="absolute right-0 mt-3 w-64 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
                 <div className="px-4 py-3 border-b border-primary/20">
                   <p className="font-savoure text-lg text-primary font-bold">{user?.displayName || 'Khách'}</p>
                   <p className="text-primary/70 text-xs truncate font-bold">{user?.email || 'Chưa đăng nhập'}</p>
@@ -409,6 +410,12 @@ export const Header = ({
           </div>
         </div>
       </div>
+
+
+      {isMobileNavOpen && <nav id="customer-mobile-navigation" aria-label="Điều hướng trên điện thoại" className="sc-customer-mobile-nav xl:hidden" onKeyDown={(event) => { if (event.key === 'Escape') { setIsMobileNavOpen(false); document.getElementById('customer-menu-toggle')?.focus() } }}>
+        <div className="grid grid-cols-2 gap-2">{CUSTOMER_NAV_LINKS.map((link) => <a key={link.id} href={link.href} aria-current={activeTab === link.route ? 'page' : undefined} onClick={(event) => handleNav(event, link.route)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-primary hover:bg-primary-fixed">{link.label}</a>)}</div>
+        <form className="relative mt-3 md:hidden" onSubmit={(event) => { event.preventDefault(); setIsMobileNavOpen(false); onNavigate?.('explore', { query: searchValue }) }}><label htmlFor="mobile-cake-search" className="sr-only">Tìm theo tên bánh</label><input id="mobile-cake-search" type="search" value={searchValue} onChange={(event) => setSearchValue(event.target.value)} placeholder="Tìm theo tên bánh..." className="sc-input pr-12" /><button type="submit" aria-label="Tìm bánh" className="absolute right-1 top-1 p-2 text-primary"><span aria-hidden="true" className="material-symbols-outlined">search</span></button></form>
+      </nav>}
 
       {/* SVG Scalloped Wave Border at Bottom of Header */}
       <div className="w-full h-3 relative z-20 shrink-0 -mb-3">

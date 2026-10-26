@@ -103,7 +103,9 @@ test('Failed Vendor mutation exposes backend error, never emits success, and ref
   button(render(), 'Sửa').props.onClick()
   await nodes(render()).find((node) => node.type?.name === 'CatalogEntityForm').props.onSave(row)
   const tree = render()
-  assert.ok(nodes(tree).some((node) => node.type?.name === 'ApiErrorMessage' && node.props.error.status === 409))
+  // The conflict must reach the still-open form, rather than the inert page behind its dialog.
+  const failedForm = nodes(tree).find((node) => node.type?.name === 'CatalogEntityForm')
+  assert.equal(failedForm.props.error.status, 409)
   assert.doesNotMatch(text(tree), /Backend đã xác nhận/); assert.equal(reloads, 1)
 })
 

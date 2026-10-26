@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
-import { ApiErrorMessage, buttonClass, inputClass, panelClass } from '../../../components/management/ApiState.jsx'
+import { ApiErrorMessage, inputClass, panelClass } from '../../../components/management/ApiState.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { rfqService, loadRfq, loadOffer } from '../../../services/rfqService.js'
@@ -11,6 +11,7 @@ import MarketplaceState from '../../../components/marketplace/MarketplaceState.j
 import { RequestInfo } from '../../../components/marketplace/MarketplaceViews.jsx'
 import { useMarketplaceAction } from '../../../hooks/useMarketplaceAction.js'
 import OfferForm, { OfferInfo } from '../../../components/marketplace/OfferForm.jsx'
+import ConfirmAction from '../../../components/common/ConfirmAction.jsx'
 
 function NewOffer({ id, bakeryId, onNavigate }) {
   const resource = useCatalogResource(loadRfq, { id }), action = useMarketplaceAction(resource.reload)
@@ -20,7 +21,7 @@ function ManageOffer({ id, bakeryId, user, roles }) {
   const resource = useCatalogResource(loadOffer, { id }), membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
   const action = useMarketplaceAction(resource.reload), [reason, setReason] = useState('')
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
-  return <><MarketplaceState resource={resource}>{resource.data && (resource.data.bakeryId === bakeryId ? <><OfferInfo offer={resource.data} /><p>Sửa/rút báo giá chỉ dành cho OWNER/MANAGER, PENDING chưa hết hạn. Backend kiểm tra lại trạng thái RFQ và reservation.</p>{canEdit && pendingOffer(resource.data) ? <><OfferForm key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={(input) => action.run(() => rfqService.updateOffer(id, input))} /><section className={panelClass}><label>Lý do rút báo giá<input className={inputClass} maxLength={2000} value={reason} onChange={(e) => setReason(e.target.value)} /></label><button className={buttonClass} disabled={action.busy} onClick={() => action.run(() => rfqService.withdrawOffer(id, reason))}>Rút báo giá</button></section></> : <p>Không có quyền sửa/rút hoặc trạng thái báo giá không cho phép. STAFF có thể xem và gửi báo giá mới; không thể sửa/rút.</p>}</> : <p role="alert">Báo giá không thuộc cửa hàng đang chọn.</p>)}</MarketplaceState>{membership.error && membership.error.status !== 403 && <ApiErrorMessage error={membership.error} retry={membership.reload} />}{action.error && <ApiErrorMessage error={action.error} retry={resource.reload} />}</>
+  return <><MarketplaceState resource={resource}>{resource.data && (resource.data.bakeryId === bakeryId ? <><OfferInfo offer={resource.data} /><p>Sửa/rút báo giá chỉ dành cho OWNER/MANAGER, PENDING chưa hết hạn. Backend kiểm tra lại trạng thái RFQ và reservation.</p>{canEdit && pendingOffer(resource.data) ? <><OfferForm key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={(input) => action.run(() => rfqService.updateOffer(id, input))} /><section className={panelClass}><label>Lý do rút báo giá<input className={inputClass} maxLength={2000} value={reason} onChange={(e) => setReason(e.target.value)} /></label><ConfirmAction key={id} label="Rút báo giá" description="Xác nhận rút báo giá PENDING này." busy={action.busy} onConfirm={() => action.run(() => rfqService.withdrawOffer(id, reason))} /></section></> : <p>Không có quyền sửa/rút hoặc trạng thái báo giá không cho phép. STAFF có thể xem và gửi báo giá mới; không thể sửa/rút.</p>}</> : <p role="alert">Báo giá không thuộc cửa hàng đang chọn.</p>)}</MarketplaceState>{membership.error && membership.error.status !== 403 && <ApiErrorMessage error={membership.error} retry={membership.reload} />}{action.error && <ApiErrorMessage error={action.error} retry={resource.reload} />}</>
 }
 export default function VendorBespokeQuoteSubmitPage({ routeSearch = '', onNavigate }) {
   const { bakeryId, selectBakery, user, roles } = useVendorBakery(routeSearch), query = new URLSearchParams(routeSearch)

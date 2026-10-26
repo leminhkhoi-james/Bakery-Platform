@@ -38,7 +38,8 @@ test('Admin bakery and subscription screens render genuine empty states; dashboa
   assert.match(render(Vendors), /Không có tiệm phù hợp từ backend/)
   assert.match(render(Payments), /Chưa có chứng từ phù hợp từ backend/)
   const html = render(Dashboard)
-  assert.match(html, /Tổng từ backend: 0/); assert.match(html, /Tổng chứng từ SUBMITTED từ backend: 0/)
+  assert.match(html, /Tiệm chờ duyệt/); assert.match(html, /Thanh toán gói chờ duyệt/)
+  assert.equal([...html.matchAll(/class="sc-metric-value">0<\/p>/g)].length, 2)
   assert.doesNotMatch(html, /14|Phê duyệt xưởng bánh thành công/)
 })
 test('Admin list renders backend bakery name/status/ID, not demo rate or specialty', () => {

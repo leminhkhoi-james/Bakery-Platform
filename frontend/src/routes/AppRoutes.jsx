@@ -148,7 +148,7 @@ function PageRoutes({
   return (
     <CustomerLayout cartCount={cartCount} activeTab={currentPage} onNavigate={onNavigate}>
       {currentPage === 'rfqs' || currentPage === 'rfq-new' ? (
-        <CustomerRequests key={currentPage} create={currentPage === 'rfq-new'} onNavigate={onNavigate} />
+        <CustomerRequests key={currentPage + routeSearch} routeSearch={routeSearch} create={currentPage === 'rfq-new'} onNavigate={onNavigate} />
       ) : currentPage === 'request-detail' ? (
         <CustomerRequestDetail key={routeSearch} id={new URLSearchParams(routeSearch).get('id')} onNavigate={onNavigate} />
       ) : currentPage === 'chat' ? (

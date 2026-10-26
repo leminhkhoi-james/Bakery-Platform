@@ -8,6 +8,7 @@ import { FeatureList, PlanCards, ResourceState, SubscriptionError } from '../../
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import { vendorRoute } from '../../../routes/catalogNavigation.js'
 import SubscriptionOrderDetail from './SubscriptionOrderDetail.jsx'
+import { PortalHeader } from '../../../components/common/WorkspaceUI.jsx'
 
 function Period({ title, period }) {
   return <div className="rounded-xl bg-background p-4"><h3 className="font-bold">{title}</h3>{period ? <><p>{period.planCode || 'Chưa có mã gói'} · {subscriptionStatusLabel(period.status)}</p><p className="text-sm">{formatSubscriptionDate(period.periodStart)} → {formatSubscriptionDate(period.periodEnd)}</p></> : <p>Chưa có kỳ dịch vụ này.</p>}</div>
@@ -65,8 +66,8 @@ export default function VendorSubscriptionPage({ routeSearch = '', onNavigate })
     setBakeryId(value)
     onNavigate('vendor-subscription?bakeryId=' + value)
   }
-  return <div className="min-h-screen bg-background text-on-surface"><VendorSidebar activeTab="subscription" showMockBadges={false} onNavigate={(route) => onNavigate(vendorRoute(route, bakeryId))} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} /><div className="md:ml-72"><header className="flex items-center gap-4 border-b border-outline-variant/30 bg-surface-container-lowest p-5"><button aria-label="Mở menu" className="md:hidden" onClick={() => setMobile(true)}>☰</button><div><h1 className="text-2xl font-bold text-primary">Gói dịch vụ</h1><p>{user?.displayName || user?.email || 'Tài khoản đối tác'}</p></div></header><main className="mx-auto max-w-6xl space-y-7 p-4 md:p-8">
-    <form onSubmit={selectBakery} className="space-y-3 rounded-2xl bg-surface-container-lowest p-5"><label className="block font-bold" htmlFor="subscription-bakery">Cửa hàng cần quản lý</label><p className="text-sm">Nhập mã cửa hàng bạn được phân quyền quản lý. Hệ thống hiện chưa có API liệt kê cửa hàng của tài khoản.</p><div className="flex flex-wrap gap-3"><input id="subscription-bakery" value={input} onChange={(event) => setInput(event.target.value)} disabled={busy} placeholder="bakeryId (UUID)" className="min-w-0 flex-1 rounded-xl border p-3" required /><button disabled={busy} className="rounded-xl bg-primary px-5 py-3 text-on-primary disabled:opacity-40">Xem cửa hàng</button></div></form>
+  return <div className="sc-portal sc-portal--vendor"><VendorSidebar activeTab="subscription" showMockBadges={false} onNavigate={(route) => onNavigate(vendorRoute(route, bakeryId))} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} /><div className="min-w-0"><PortalHeader title="Gói dịch vụ" user={user} portal="Đối tác" onMenu={() => setMobile(true)} /><main id="workspace-content" className="sc-portal-main"><div className="sc-workspace">
+    <form onSubmit={selectBakery} className="sc-panel space-y-3"><label className="block font-bold" htmlFor="subscription-bakery">Cửa hàng cần quản lý</label><p className="text-sm">Nhập mã cửa hàng bạn được phân quyền quản lý. Hệ thống hiện chưa có API liệt kê cửa hàng của tài khoản.</p><div className="flex flex-wrap gap-3"><input id="subscription-bakery" value={input} onChange={(event) => setInput(event.target.value)} disabled={busy} placeholder="bakeryId (UUID)" className="min-w-0 flex-1 rounded-xl border p-3" required /><button disabled={busy} className="rounded-xl bg-primary px-5 py-3 text-on-primary disabled:opacity-40">Xem cửa hàng</button></div></form>
     {error && <SubscriptionError error={error} />}{bakeryId ? <><p className="break-all text-sm">Cửa hàng đang xem: {bakeryId}</p><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
-  </main></div></div>
+  </div></main></div></div>
 }

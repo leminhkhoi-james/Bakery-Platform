@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { targetedRequestRoute } from '../../../services/requestContextModels.js'
 import { loadProduct } from '../../../services/cakeService.js'
 import { catalogMoney, formatCatalogPrice } from '../../../services/catalogModels.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -8,7 +9,7 @@ import CatalogState from '../../../components/catalog/CatalogState.jsx'
 export const ProductDetailPage = ({ routeSearch = '', onAddToCart, onNavigate }) => {
   const id = new URLSearchParams(routeSearch).get('id') || ''
   const resource = useCatalogResource(loadProduct, { id })
-  return <div className="w-full striped-candy-bg min-h-[calc(100vh-20rem)]">
+  return <div className="sc-customer w-full striped-candy-bg min-h-[calc(100vh-20rem)]">
     <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-6 pb-20">
       <CatalogState {...resource} onRetry={resource.reload} onNavigate={onNavigate} />
       {resource.status === 'ready' && <ProductDetails key={resource.data.id} product={resource.data} onAddToCart={onAddToCart} onNavigate={onNavigate} />}
@@ -113,6 +114,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
           <button disabled={!canAdd} onClick={() => add(false)} className="flex-1 rounded-xl border-2 border-primary px-5 py-3 font-bold text-primary disabled:opacity-40">Thêm vào giỏ hàng</button>
           <button disabled={!canAdd} onClick={() => add(true)} className="flex-1 rounded-xl bg-primary px-5 py-3 font-bold text-on-primary disabled:opacity-40">Đặt nhanh</button>
         </div>
+        {product.customizable === true && product.bakeryId && <button className="sc-button" onClick={() => onNavigate?.(targetedRequestRoute(product))}>Yêu cầu báo giá riêng từ tiệm</button>}
         <button className="text-left text-secondary underline" onClick={() => onNavigate?.('ai-studio')}>Thiết kế bánh theo ý tưởng của bạn →</button>
       </div>
     </div>
