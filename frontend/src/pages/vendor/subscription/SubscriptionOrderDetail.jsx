@@ -21,7 +21,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
     try {
       const payment = await subscriptionService.submitPayment(request)
       setAttempt(null)
-      setMessage('Backend đã ghi nhận chứng từ: ' + subscriptionStatusLabel(payment.status) + '. Gói chỉ có hiệu lực sau khi backend xác nhận.')
+      setMessage('Đã ghi nhận chứng từ: ' + subscriptionStatusLabel(payment.status) + '. Gói chỉ có hiệu lực sau khi Admin phê duyệt.')
       resource.reload(); onChanged()
     } catch (failure) { setError(failure); if ([400, 422].includes(failure.status)) setAttempt(null) }
     finally { setBusy(false); onBusy(false) }

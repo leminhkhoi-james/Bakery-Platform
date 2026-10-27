@@ -37,7 +37,7 @@ export default function ProductManager({ bakeryId }) {
   async function mutate(action, keepEditor = false) {
     if (busy || !canEdit) return
     setBusy(true); setError(null); setNotice('')
-    try { const saved = await action(); if (keepEditor && adding) setSnapshots((current) => ({ ...current, [saved.id]: { options: { groups: [] }, images: [] } })); setAdding(false); setEditing(keepEditor ? saved : null); setNotice('Backend đã xác nhận. Đang tải lại danh sách.'); products.reload() }
+    try { const saved = await action(); if (keepEditor && adding) setSnapshots((current) => ({ ...current, [saved.id]: { options: { groups: [] }, images: [] } })); setAdding(false); setEditing(keepEditor ? saved : null); setNotice('Đã xác nhận. Đang tải lại danh sách.'); products.reload() }
     catch (failure) { setError(failure); products.reload() }
     finally { setBusy(false) }
   }

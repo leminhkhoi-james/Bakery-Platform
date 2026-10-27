@@ -6,6 +6,13 @@ import './styles/legacy-backgrounds.css'
 import './styles/design-system.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { authService } from './services/authService.js'
+import { installDemoFallback } from './mockData/runtime.js'
+
+installDemoFallback(() => {
+  const session = authService.getSnapshot()
+  return session.status === 'authenticated' ? session.user : null
+})
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

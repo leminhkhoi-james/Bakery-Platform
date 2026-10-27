@@ -29,8 +29,10 @@ export default defineConfig(({ mode }) => {
     '^/api/v1/conversations(?:/|\\?|$)': upstream(chat),
   }
   const routes = Object.keys(proxy).map((pattern) => new RegExp(pattern))
+  const testEntry = process.argv.find((entry) => /\.test\.[cm]?js$/.test(entry))
 
   return {
+    ...(testEntry ? { cacheDir: 'node_modules/.vite-tests/' + testEntry.split(/[\\/]/).at(-1) } : {}),
     plugins: [
       react(),
       tailwindcss(),

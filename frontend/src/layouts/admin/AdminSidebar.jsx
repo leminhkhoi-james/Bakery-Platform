@@ -1,3 +1,4 @@
+import { demoRuntime } from '../../mockData/runtime.js'
 import React from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 
@@ -69,6 +70,7 @@ export default function AdminSidebar({
       icon: 'receipt_long',
     },
     { id: 'admin-moderation', route: 'admin-moderation', label: 'Kiểm duyệt', icon: 'fact_check' },
+    { id: 'admin-users', route: 'admin-users', label: 'Người dùng', icon: 'group' },
   ]
 
   const sidebarContent = (
@@ -100,7 +102,7 @@ export default function AdminSidebar({
 
         {/* Navigation Links */}
         <nav className="space-y-1">
-          {navItems.map((item) => {
+          {navItems.filter((item) => item.id !== 'admin-users' || demoRuntime).map((item) => {
             const isActive = currentTab === item.id
 
             return (

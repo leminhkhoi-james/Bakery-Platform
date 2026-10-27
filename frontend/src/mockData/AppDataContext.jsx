@@ -7,9 +7,9 @@
  */
 
 import { createContext, useContext, useState } from 'react'
-import { INITIAL_RFQS } from '../mockData/vendor/rfqs.js'
-import { BIDS_DATA } from '../mockData/customer/quotes.js'
-import { INITIAL_KANBAN_ORDERS } from '../mockData/vendor/orders.js'
+import { INITIAL_RFQS } from './vendor/rfqs.js'
+import { BIDS_DATA } from './customer/quotes.js'
+import { INITIAL_KANBAN_ORDERS } from './vendor/orders.js'
 
 // ─── Default bids seeded for the demo RFQ ────────────────────────────────────
 // BiddingComparisonPage expects bids keyed by rfqId

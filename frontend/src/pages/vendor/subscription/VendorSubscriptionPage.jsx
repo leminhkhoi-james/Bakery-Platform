@@ -1,9 +1,11 @@
+import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
+import { BakerySelector } from '../../../components/management/VendorFrame.jsx'
 import React, { useState } from 'react'
 import VendorSidebar from '../../../layouts/vendor/VendorSidebar.jsx'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadSubscriptionPlans, loadBakerySubscription, loadSubscriptionOrders, subscriptionService } from '../../../services/subscriptionService.js'
-import { canOrderPlan, isSubscriptionId, subscriptionPermissions, formatSubscriptionDate, formatSubscriptionMoney, subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
+import { canOrderPlan, subscriptionPermissions, formatSubscriptionDate, formatSubscriptionMoney, subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
 import { FeatureList, PlanCards, ResourceState, SubscriptionError } from '../../../components/subscription/SubscriptionView.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import { vendorRoute } from '../../../routes/catalogNavigation.js'
@@ -51,24 +53,12 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy }) {
 
 export default function VendorSubscriptionPage({ routeSearch = '', onNavigate }) {
   const { user, roles } = useAuth()
-  const initial = (new URLSearchParams(routeSearch).get('bakeryId') || '').toLowerCase()
-  const [input, setInput] = useState(initial)
-  const [bakeryId, setBakeryId] = useState(isSubscriptionId(initial) ? initial : '')
-  const [error, setError] = useState(null)
+  const { bakeryId, selectBakery: setBakeryId } = useVendorBakery(routeSearch)
   const [busy, setBusy] = useState(false)
   const [mobile, setMobile] = useState(false)
   const plans = useCatalogResource(loadSubscriptionPlans)
-  function selectBakery(event) {
-    event.preventDefault()
-    if (busy) return
-    const value = input.trim().toLowerCase()
-    if (!isSubscriptionId(value)) return setError(new Error('Mã cửa hàng phải là UUID hợp lệ.'))
-    setError(null)
-    setBakeryId(value)
-    onNavigate('vendor-subscription?bakeryId=' + value)
-  }
   return <div className="sc-portal sc-portal--vendor"><VendorSidebar activeTab="subscription" showMockBadges={false} onNavigate={(route) => onNavigate(vendorRoute(route, bakeryId))} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} /><div className="min-w-0"><PortalHeader title="Gói dịch vụ" user={user} portal="Đối tác" onMenu={() => setMobile(true)} /><main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant="subscription" /><div className="sc-workspace">
-    <form onSubmit={selectBakery} className="sc-panel space-y-3"><label className="block font-bold" htmlFor="subscription-bakery">Cửa hàng cần quản lý</label><p className="text-sm">Nhập mã cửa hàng bạn được phân quyền quản lý. Hệ thống hiện chưa có API liệt kê cửa hàng của tài khoản.</p><div className="flex flex-wrap gap-3"><input id="subscription-bakery" value={input} onChange={(event) => setInput(event.target.value)} disabled={busy} placeholder="bakeryId (UUID)" className="min-w-0 flex-1 rounded-xl border p-3" required /><button disabled={busy} className="rounded-xl bg-primary px-5 py-3 text-on-primary disabled:opacity-40">Xem cửa hàng</button></div></form>
-    {error && <SubscriptionError error={error} />}{bakeryId ? <><p className="break-all text-sm">Cửa hàng đang xem: {bakeryId}</p><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
+    <BakerySelector key={bakeryId} bakeryId={bakeryId} onSelect={(value) => { setBakeryId(value); onNavigate('vendor-subscription?bakeryId=' + value) }} disabled={busy} />
+    {bakeryId ? <><p className="break-all text-sm">Cửa hàng đang xem: {bakeryId}</p><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
   </div></main></div></div>
 }

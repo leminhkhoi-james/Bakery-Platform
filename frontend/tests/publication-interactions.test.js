@@ -19,6 +19,7 @@ before(async () => {
     load(id) {
       const path = id.replaceAll('\\', '/')
       if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: { id: "' + userId + '" }, roles: ["BAKERY_OWNER"] }; }'
+      if (path.endsWith('/src/hooks/useVendorBakery.js')) return 'export function useVendorBakery(search = "") { const [bakeryId, selectBakery] = globalThis.__flowUseState(() => new URLSearchParams(search).get("bakeryId") || ""); return { bakeryId, selectBakery }; }'
       if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load, params) { globalThis.__flowResourceCalls.push({ name: load.name, params }); return globalThis.__flowResources[load.name] || { status: "loading", data: null, error: null, reload() {} }; }'
     },
     transform(code, id) {

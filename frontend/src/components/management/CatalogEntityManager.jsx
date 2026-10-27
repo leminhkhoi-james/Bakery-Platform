@@ -25,7 +25,7 @@ export default function CatalogEntityManager({ bakeryId, kind }) {
   async function mutate(action) {
     if (busy) return
     setBusy(true); setError(null); setNotice('')
-    try { await action(); setEditing(null); setAdding(false); setConfirm(''); setNotice('Backend đã xác nhận; danh sách được tải lại.'); resource.reload(); membership.reload() }
+    try { await action(); setEditing(null); setAdding(false); setConfirm(''); setNotice('Đã xác nhận; danh sách được tải lại.'); resource.reload(); membership.reload() }
     catch (failure) { setError(failure); if (![400, 422].includes(failure.status)) { resource.reload(); membership.reload() } }
     finally { setBusy(false) }
   }

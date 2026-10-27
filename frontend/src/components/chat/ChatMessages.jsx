@@ -1,3 +1,4 @@
+import { isMockRecord } from '../../mockData/runtime.js'
 import React, { useState } from 'react'
 import { dateTime } from '../../services/managementModels.js'
 
@@ -25,5 +26,5 @@ export function ChatMessages({ items, conversation, user, busy, onDelete }) {
 }
 
 export function ChatReadStatus({ conversation, userId }) {
-  return <details className="rounded-xl border border-outline-variant/30 p-3 text-xs text-on-surface-variant"><summary className="cursor-pointer">Mốc đọc do backend xác nhận</summary><p className="mt-2">Bạn đã đọc đến: {conversation.currentUserLastReadAt ? dateTime(conversation.currentUserLastReadAt) : 'Chưa có mốc đọc'}</p><ul className="mt-2 space-y-1">{conversation.participants.filter((participant) => participant.userId !== userId).map((participant) => <li key={participant.userId} className="break-all">{participantLabel(participant.participantType)} · {participant.userId}: {participant.lastReadAt ? dateTime(participant.lastReadAt) : 'Chưa có mốc đọc'}</li>)}</ul><p className="mt-2">DTO chưa có trạng thái đọc/giao của từng tin, online hoặc đang nhập.</p></details>
+  return <details className="rounded-xl border border-outline-variant/30 p-3 text-xs text-on-surface-variant"><summary className="cursor-pointer">{isMockRecord(conversation.id) ? 'Mốc đọc của hội thoại' : 'Mốc đọc do backend xác nhận'}</summary><p className="mt-2">Bạn đã đọc đến: {conversation.currentUserLastReadAt ? dateTime(conversation.currentUserLastReadAt) : 'Chưa có mốc đọc'}</p><ul className="mt-2 space-y-1">{conversation.participants.filter((participant) => participant.userId !== userId).map((participant) => <li key={participant.userId} className="break-all">{participantLabel(participant.participantType)} · {participant.userId}: {participant.lastReadAt ? dateTime(participant.lastReadAt) : 'Chưa có mốc đọc'}</li>)}</ul><p className="mt-2">DTO chưa có trạng thái đọc/giao của từng tin, online hoặc đang nhập.</p></details>
 }

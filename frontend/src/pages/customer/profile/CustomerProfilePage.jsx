@@ -1,3 +1,5 @@
+import { demoRuntime } from '../../../mockData/runtime.js'
+import MockAddressBook from '../../../mockData/MockAddressBook.jsx'
 import React, { useState } from 'react'
 import { useAuth } from '../../../context/useAuth.js'
 import { OrderList } from '../../../components/orders/OrderViews.jsx'
@@ -25,7 +27,7 @@ export default function CustomerProfilePage({ onNavigate }) {
         <div className="border-t border-outline-variant/30 pt-3 text-xs text-on-surface-variant"><p className="px-3 font-semibold">Quyền tài khoản</p><p className="mt-2 break-words px-3">{roles.join(' · ')}</p></div>
       </nav>
       <section className="sc-profile-content w-full min-w-0">{tab === 'orders' && canReadOrders ? <OrderList scope="mine" onNavigate={onNavigate} /> : <div className={panelClass}>
-        {tab === 'addresses' ? <><EmptyPanel title="Địa chỉ nhận bánh" description="Chưa thể quản lý địa chỉ giao hàng trên phiên bản backend hiện tại." icon="location_on" /><p className="sc-note">{ADDRESS_BLOCKER}</p></>
+        {tab === 'addresses' ? (demoRuntime && roles.includes('CUSTOMER') ? <MockAddressBook key={user.id} /> : <><EmptyPanel title="Địa chỉ nhận bánh" description="Chưa thể quản lý địa chỉ giao hàng trên phiên bản backend hiện tại." icon="location_on" /><p className="sc-note">{ADDRESS_BLOCKER}</p></>)
           : tab === 'security' ? <><EmptyPanel title="Bảo mật" description="Identity chưa có API đổi mật khẩu hoặc lưu tùy chọn thông báo." icon="shield" /><button disabled className={buttonClass}>Đổi mật khẩu — chờ API</button></>
             : <><h2 className="flex items-center gap-2 text-xl font-bold text-primary"><Icon name="person" /> Thông tin hồ sơ từ Identity</h2><dl className="sc-profile-fields">{[['Tên hiển thị', user.displayName], ['Email', user.email], ['Số điện thoại', user.phoneNumber || 'Chưa có số điện thoại']].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl><p className="sc-note">Backend chưa cung cấp API cập nhật hồ sơ.</p><button disabled className={buttonClass}>Cập nhật hồ sơ — chờ API</button></>}
       </div>}</section>

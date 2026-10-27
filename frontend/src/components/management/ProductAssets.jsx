@@ -21,7 +21,7 @@ export default function ProductAssets({ bakeryId, product, initialSnapshot, onSn
   async function mutate(action) {
     if (busy) return
     setBusy(true); onBusy?.(true); setError(null); setNotice('')
-    try { await action(); setNotice('Backend đã xác nhận; snapshot được đồng bộ.'); onChanged(); resource.reload() }
+    try { await action(); setNotice('Đã xác nhận; snapshot được đồng bộ.'); onChanged(); resource.reload() }
     catch (failure) { setError(failure); resource.reload() } finally { setBusy(false); onBusy?.(false) }
   }
   return <div className="space-y-4"><section className={panelClass}><h3 className="font-bold">Ảnh sản phẩm</h3>

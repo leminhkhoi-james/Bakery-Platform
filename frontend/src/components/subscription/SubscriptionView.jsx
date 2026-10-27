@@ -1,6 +1,7 @@
 import React from 'react'
 import { StatusBadge } from '../common/WorkspaceUI.jsx'
 import { canOrderPlan, formatSubscriptionMoney, subscriptionStatusLabel } from '../../services/subscriptionModels.js'
+import { isMockRecord } from '../../mockData/runtime.js'
 
 export function SubscriptionError({ error, retry }) {
   const explanation = { 401: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.', 403: 'Bạn không có quyền thao tác với cửa hàng này.', 404: 'Không tìm thấy dữ liệu được yêu cầu.' }[error?.status]
@@ -10,7 +11,9 @@ export function SubscriptionError({ error, retry }) {
 export function ResourceState({ resource, children }) {
   if (resource.status === 'loading') return <p role="status" className="p-5">Đang tải dữ liệu gói dịch vụ…</p>
   if (resource.error) return <SubscriptionError error={resource.error} retry={resource.reload} />
-  return children
+  const rows = Array.isArray(resource.data) ? resource.data : resource.data?.result || [resource.data]
+  const sample = rows.length > 0 && rows.every((row) => isMockRecord(row?.id || row?.bakeryId))
+  return <>{sample && <span className="text-xs text-on-surface-variant">Dữ liệu mẫu</span>}{children}</>
 }
 
 export function FeatureList({ features = {} }) {

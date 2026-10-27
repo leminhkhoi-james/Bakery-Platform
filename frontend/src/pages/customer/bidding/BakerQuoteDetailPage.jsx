@@ -1,3 +1,5 @@
+import { demoRuntime } from '../../../mockData/runtime.js'
+import { isDemoId } from '../../../mockData/seed.js'
 import React, { useState } from 'react'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -13,7 +15,7 @@ import { panelClass } from '../../../components/management/ApiState.jsx'
 function QuoteContext({ offer, onNavigate }) {
   const { user } = useAuth(), resource = useCatalogResource(loadRfq, { id: offer.cakeRequestId })
   const [now] = useState(() => Date.now())
-  return <MarketplaceState resource={resource}>{resource.data && (ownsRequest(resource.data, user) ? <><OfferInfo offer={offer} /><section className={panelClass}><h2 className="text-xl font-bold">Chấp nhận báo giá / tạo Order</h2><p>{ADDRESS_BLOCKER}</p><p>Accept → Order đang BLOCKED vì thiếu API địa chỉ Customer ở backend gốc. Vẫn có thể xem báo giá; chưa có API từ chối từng báo giá.</p><VerifiedCheckout offerId={offer.id} disabled={!acceptableOffer(offer, resource.data, user)} onNavigate={onNavigate} /></section>{(offer.status === 'ACCEPTED' || (offer.status === 'PENDING' && Date.parse(offer.expiresAt) > now)) && <ChatForRequest request={resource.data} bakeryId={offer.bakeryId} onNavigate={onNavigate} />}<button className="underline" onClick={() => onNavigate('bidding?cakeRequestId=' + offer.cakeRequestId)}>← Các báo giá của yêu cầu</button></> : <p role="alert">Không có quyền xem báo giá của tài khoản khác.</p>)}</MarketplaceState>
+  return <MarketplaceState resource={resource}>{resource.data && (ownsRequest(resource.data, user) ? <><OfferInfo offer={offer} /><section className={panelClass}><h2 className="text-xl font-bold">Chấp nhận báo giá / tạo Order</h2>{!(demoRuntime && isDemoId(offer.id)) && <><p>{ADDRESS_BLOCKER}</p><p>Accept → Order đang BLOCKED vì thiếu API địa chỉ Customer ở backend gốc. Vẫn có thể xem báo giá; chưa có API từ chối từng báo giá.</p></>}<VerifiedCheckout offerId={offer.id} disabled={!acceptableOffer(offer, resource.data, user)} onNavigate={onNavigate} /></section>{(offer.status === 'ACCEPTED' || (offer.status === 'PENDING' && Date.parse(offer.expiresAt) > now)) && <ChatForRequest request={resource.data} bakeryId={offer.bakeryId} onNavigate={onNavigate} />}<button className="underline" onClick={() => onNavigate('bidding?cakeRequestId=' + offer.cakeRequestId)}>← Các báo giá của yêu cầu</button></> : <p role="alert">Không có quyền xem báo giá của tài khoản khác.</p>)}</MarketplaceState>
 }
 export default function BakerQuoteDetailPage({ routeSearch = '', onNavigate }) {
   const id = new URLSearchParams(routeSearch).get('id'), resource = useCatalogResource(loadOffer, { id })

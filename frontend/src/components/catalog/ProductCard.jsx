@@ -1,5 +1,6 @@
 import { formatCatalogPrice } from '../../services/catalogModels.js'
 import CatalogImage from './CatalogImage.jsx'
+import { isMockRecord } from '../../mockData/runtime.js'
 
 export default function ProductCard({ product, onNavigate, variant = 'catalog' }) {
   const open = () => onNavigate?.('product-detail', product)
@@ -8,6 +9,7 @@ export default function ProductCard({ product, onNavigate, variant = 'catalog' }
       <CatalogImage src={product.image} alt={product.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
     </button>
     <div className={variant === 'home' ? 'flex flex-1 flex-col p-5' : 'flex flex-1 flex-col'}>
+      {isMockRecord(product.id) && <span className="mb-1 text-xs text-on-surface-variant">Dữ liệu mẫu</span>}
       {product.vendor && <button className="mb-1 text-left text-xs text-on-surface-variant" onClick={() => onNavigate?.('bakery-detail', { id: product.bakeryId })}>{product.vendor}</button>}
       <h3 className="font-headline-sm mb-3 line-clamp-2 text-[18px] font-bold leading-snug text-primary"><button className="text-left hover:text-primary-container" onClick={open}>{product.title}</button></h3>
       <p className="mb-4 line-clamp-2 text-xs text-on-surface-variant">{product.description || 'Chưa có mô tả sản phẩm.'}</p>
