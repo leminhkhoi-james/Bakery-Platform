@@ -31,9 +31,9 @@ export const CustomAtelierSection = ({ onNavigate }) => {
               <span className="dotted-frame-badge mb-4">Bánh riêng cho câu chuyện của bạn</span>
               <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4 leading-tight">
                 Bạn kể ý tưởng.<br />
-                <em className="font-normal italic text-[#be4876]">Bánh sẽ thành hình.</em>
+                <em className="font-normal italic text-brand-pink">Bánh sẽ thành hình.</em>
               </h2>
-              <p className="text-[#52202b] text-base sm:text-lg bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed">
+              <p className="text-on-surface text-base sm:text-lg bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed">
                 “Con tôi thích màu hồng, các vì sao và vị dâu tây...” Chỉ cần bắt đầu như thế! Bạn có thể chọn thêm cốt bánh bông mềm, kem cheese mịn màng hay thông điệp ý nghĩa.
               </p>
             </ScrollReveal>
@@ -50,7 +50,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                       <h4 className="font-savoure text-lg font-bold text-wine">
                         {step.title}
                       </h4>
-                      <p className="text-[#704350] text-xs leading-normal">
+                      <p className="text-on-surface-variant text-xs leading-normal">
                         {step.desc}
                       </p>
                     </div>
@@ -96,7 +96,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                     value={ideaText}
                     onChange={(e) => setIdeaText(e.target.value)}
                     placeholder="Ví dụ: Bánh sinh nhật cho bé gái 5 tuổi, màu hồng pastel, có hoa cúc nhỏ và vị dâu..."
-                    className="w-full border-2 border-[#bd6e7e] rounded-xl p-4 text-sm text-[#52202b] bg-[#fffdfa] focus:outline-none focus:border-wine transition-colors"
+                    className="w-full border-2 border-[#bd6e7e] rounded-xl p-4 text-sm text-on-surface bg-[#fffdfa] focus:outline-none focus:border-wine transition-colors"
                   ></textarea>
                 </div>
 
@@ -145,7 +145,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                   </a>
                 </div>
 
-                <p className="text-xs text-[#7e5760] mt-4">
+                <p className="text-xs text-on-surface-variant mt-4">
                   Tiếp tục để chọn vị bánh, trang trí và gửi yêu cầu đến các tiệm nghệ nhân.
                 </p>
 
@@ -163,7 +163,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                       <h4 className="font-savoure text-lg font-bold text-wine italic mb-1">
                         Phác thảo ý tưởng bánh ({selectedTone})
                       </h4>
-                      <p className="text-xs text-[#52202b] line-clamp-2">
+                      <p className="text-xs text-on-surface line-clamp-2">
                         “{ideaText}”
                       </p>
                     </div>

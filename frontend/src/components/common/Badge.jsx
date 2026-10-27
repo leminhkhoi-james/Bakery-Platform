@@ -17,7 +17,7 @@ export default function Badge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold select-none ${
+      className={`sc-ui-badge inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold select-none ${
         variantClasses[variant] || variantClasses.default
       } ${className}`}
     >

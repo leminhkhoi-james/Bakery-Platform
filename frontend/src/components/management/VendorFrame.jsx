@@ -5,6 +5,7 @@ import { isCatalogId } from '../../services/catalogModels.js'
 import { vendorRoute } from '../../routes/catalogNavigation.js'
 import { inputClass, buttonClass } from './ApiState.jsx'
 import { PortalHeader, Icon } from '../common/WorkspaceUI.jsx'
+import BackgroundOrnaments from '../common/BackgroundOrnaments.jsx'
 
 export function BakerySelector({ bakeryId, onSelect, disabled = false }) {
   const [input, setInput] = useState(bakeryId)
@@ -21,5 +22,5 @@ export default function VendorFrame({ title, activeTab, bakeryId, onNavigate, ch
   const { user } = useAuth()
   const [mobile, setMobile] = useState(false)
   const navigate = (route) => onNavigate(vendorRoute(route, bakeryId))
-  return <div className="sc-portal sc-portal--vendor"><VendorSidebar activeTab={activeTab} onNavigate={navigate} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} showMockBadges={false} /><PortalHeader title={title} user={user} portal="Đối tác" onMenu={() => setMobile(true)} /><main id="workspace-content" className="sc-portal-main"><div className="sc-workspace">{children}</div></main></div>
+  return <div className="sc-portal sc-portal--vendor"><VendorSidebar activeTab={activeTab} onNavigate={navigate} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} showMockBadges={false} /><PortalHeader title={title} user={user} portal="Đối tác" onMenu={() => setMobile(true)} /><main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className="sc-workspace">{children}</div></main></div>
 }

@@ -48,7 +48,7 @@ export const StoreDirectoryPage = ({
   }
 
   return (
-    <div className="w-full striped-candy-bg min-h-screen">
+    <div className="sc-catalog w-full min-h-screen">
       {/* Top Hero Section */}
       <div className="bg-transparent border-b border-outline-variant/10 py-6 sm:py-8 px-4 sm:px-6 lg:px-12">
         <div className="max-w-[1600px] mx-auto flex flex-col gap-6">
@@ -104,7 +104,7 @@ export const StoreDirectoryPage = ({
           </div>
 
           {/* Filter & Search Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4">
             {/* City Tabs - TP. Hồ Chí Minh strictly */}
             <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
               <button
@@ -149,7 +149,7 @@ export const StoreDirectoryPage = ({
           {filteredStores.map((store) => (
             <div
               key={store.id}
-              className="rounded-3xl bg-surface-container-low border border-outline-variant/15 p-6 md:p-8 hover:shadow-xl hover:border-secondary/30 transition-all flex flex-col justify-between group"
+              className="sc-ui-card rounded-3xl bg-surface-container-low border border-outline-variant/15 p-6 md:p-8 hover:shadow-xl hover:border-secondary/30 transition-all flex flex-col justify-between group"
             >
               <div>
                 {/* Store Top Header: Photo, Name, Location */}

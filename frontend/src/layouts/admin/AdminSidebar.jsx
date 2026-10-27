@@ -41,14 +41,6 @@ export default function AdminSidebar({
   const currentTab = normalizeTab(activeTab)
 
   const navItems = [
-    { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium' },
-    { id: 'admin-moderation', route: 'admin-moderation', label: 'Kiểm duyệt', icon: 'fact_check' },
-    {
-      id: 'admin-payments',
-      route: 'admin-payments',
-      label: 'Duyệt gói dịch vụ',
-      icon: 'receipt_long',
-    },
     {
       id: 'admin-dashboard',
       route: 'admin-dashboard',
@@ -69,6 +61,14 @@ export default function AdminSidebar({
       icon: 'lock_clock',
       badge: null,
     },
+    { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium' },
+    {
+      id: 'admin-payments',
+      route: 'admin-payments',
+      label: 'Duyệt gói dịch vụ',
+      icon: 'receipt_long',
+    },
+    { id: 'admin-moderation', route: 'admin-moderation', label: 'Kiểm duyệt', icon: 'fact_check' },
   ]
 
   const sidebarContent = (

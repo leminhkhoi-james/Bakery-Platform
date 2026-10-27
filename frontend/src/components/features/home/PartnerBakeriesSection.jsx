@@ -18,9 +18,9 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
               <span className="dotted-frame-badge mb-2">Dành cho các tiệm bánh nghệ nhân</span>
               <h2 className="font-savoure text-3xl sm:text-4xl font-bold text-wine mb-2.5 leading-tight">
                 Tiệm của bạn,<br />
-                <em className="font-normal italic text-[#be4876]">thêm nhiều câu chuyện.</em>
+                <em className="font-normal italic text-brand-pink">thêm nhiều câu chuyện.</em>
               </h2>
-              <p className="text-[#52202b] text-sm sm:text-base mb-4 leading-relaxed max-w-xl">
+              <p className="text-on-surface text-sm sm:text-base mb-4 leading-relaxed max-w-xl">
                 Mở gian hàng trên SweetCake, giới thiệu những mẫu bánh tuyệt phẩm và nhận yêu cầu thiết kế custom phù hợp với khả năng của tiệm.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -46,7 +46,7 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
                 <div className="font-savoure italic text-xl font-bold text-wine text-center mb-2">
                   Chào mừng tiệm bánh ♡
                 </div>
-                <ul className="space-y-2 text-xs text-[#71404b] font-bold text-left pt-2 border-t border-dashed border-[#d899a5]">
+                <ul className="space-y-2 text-xs text-on-surface-variant font-bold text-left pt-2 border-t border-dashed border-[#d899a5]">
                   <li className="flex items-center gap-2">
                     <span className="text-wine">✦</span> Trưng bày bộ sưu tập bánh nghệ nhân của tiệm
                   </li>
@@ -114,14 +114,14 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
                       <h4 className="font-savoure text-lg font-bold italic text-wine mb-1">
                         {bakery.name}
                       </h4>
-                      <p className="text-[#704350] text-xs leading-relaxed mb-3 line-clamp-2">
+                      <p className="text-on-surface-variant text-xs leading-relaxed mb-3 line-clamp-2">
                         {bakery.description}
                       </p>
                     </div>
 
                     <div className="pt-2.5 border-t border-wine/10 flex items-center justify-end">
                       <a
-                        className="text-wine font-extrabold text-xs underline underline-offset-4 hover:text-[#b8273b] transition-colors inline-flex items-center gap-1"
+                        className="text-wine font-extrabold text-xs underline underline-offset-4 hover:text-primary-container transition-colors inline-flex items-center gap-1"
                         href={'/bakery-detail?id=' + encodeURIComponent(bakery.id)}
                         onClick={(e) => {
                           e.preventDefault()

@@ -107,13 +107,18 @@ export const ADMIN_NAV_ITEMS = [
 ];
 
 export const VENDOR_NAV_ITEMS = [
-  { id: 'chat', label: 'Tin nhắn', icon: 'chat', route: 'vendor-chat' },
-  { id: 'subscription', label: 'Gói dịch vụ', icon: 'workspace_premium', route: 'vendor-subscription' },
   {
     id: 'dashboard',
     label: 'Tổng quan',
     icon: 'grid_view',
     route: 'vendor-dashboard',
+  },
+  {
+    id: 'orders',
+    label: 'Quản lý đơn hàng',
+    icon: 'cake',
+    badge: '15 đơn',
+    route: 'vendor-orders',
   },
   {
     id: 'rfq',
@@ -123,13 +128,7 @@ export const VENDOR_NAV_ITEMS = [
     badgeSuffix: ' mới',
     route: 'vendor-rfq',
   },
-  {
-    id: 'orders',
-    label: 'Quản lý đơn hàng',
-    icon: 'cake',
-    badge: '15 đơn',
-    route: 'vendor-orders',
-  },
+  { id: 'chat', label: 'Tin nhắn', icon: 'chat', route: 'vendor-chat' },
   {
     id: 'menu',
     label: 'Mẫu bánh tiệm',
@@ -149,6 +148,7 @@ export const VENDOR_NAV_ITEMS = [
     icon: 'storefront',
     route: 'vendor-profile',
   },
+  { id: 'subscription', label: 'Gói dịch vụ', icon: 'workspace_premium', route: 'vendor-subscription' },
 ];
 
 export const VENDOR_HEADER_NOTIFICATIONS = {

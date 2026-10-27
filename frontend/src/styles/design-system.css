@@ -1,0 +1,140 @@
+/* Shared UI contract. Background/decorative styles live in legacy-backgrounds.css. */
+html { scrollbar-gutter: stable; }
+:root, .sc-customer-layout, .sc-customer, .sc-catalog, .sc-portal, .sc-drawer {
+  --color-primary: var(--sc-color-primary);
+  --color-primary-container: var(--sc-color-primary-hover);
+  --color-on-surface: var(--sc-color-text);
+  --color-on-surface-variant: var(--sc-color-muted);
+  --font-serif: var(--sc-font-ui);
+  color: var(--sc-color-text);
+  font-family: var(--sc-font-ui);
+}
+/* The calligraphic SweetCake wordmark and Material Symbols are artwork/icons. */
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) :is(h1, h2, h3, h4, h5, h6):not(.font-sweetcake) {
+  font-family: var(--sc-font-ui);
+  font-weight: var(--sc-weight-bold);
+  line-height: var(--sc-line-heading);
+  text-wrap: pretty;
+}
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) :is(h1, h2, h3, h4, h5, h6):not(.font-sweetcake):not(.text-white):not(.text-on-primary):not(.text-on-primary-container) { color: var(--sc-color-primary); }
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) h1 { font-size: var(--sc-text-title); letter-spacing: -.02em; }
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) h2:not(.font-sweetcake) { font-size: var(--sc-text-section); }
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) :is(h3, h4, h5, h6) { font-size: var(--sc-text-heading); }
+.sc-portal-header h1 { font-size: var(--sc-text-section); }
+.sc-customer-heading h1 { font-size: var(--sc-text-title); }
+.home-page-wrapper .snap-section h2:not(.font-sweetcake) { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+:is(.sc-customer-layout, .sc-portal) .sc-metric h2, .sc-detail-grid dt, .sc-profile-fields dt { font-size: var(--sc-text-sm); font-weight: var(--sc-weight-medium); color: var(--sc-color-muted); }
+.sc-metric-value { font-family: var(--sc-font-ui); font-size: 2rem; font-weight: var(--sc-weight-bold); line-height: 1.25; }
+.sc-kicker { color: var(--sc-color-accent); font-size: var(--sc-text-xs); line-height: 1.5; font-weight: var(--sc-weight-bold); }
+:is(button, input, select, textarea, label, table, dialog) { font-family: var(--sc-font-ui); }
+:is(input, select, textarea, label, table) { line-height: var(--sc-line-body); }
+.sc-catalog-card h3 { font-family: var(--sc-font-ui); font-size: var(--sc-text-heading); color: var(--sc-color-primary); }
+.sc-catalog-card p { color: var(--sc-color-muted); }
+.sc-catalog-card h3 button:hover { color: var(--sc-color-primary-hover); }
+.sc-offer-card h3 { font-size: var(--sc-text-section); }
+.text-secondary { color: var(--sc-color-accent); }
+.text-outline { color: var(--sc-color-muted); }
+.sc-portal-header { padding-inline: var(--sc-page-gutter); }
+
+/* One container/gutter system for peer pages; nested workspaces do not add gutters. */
+.sc-customer-stage > .sc-customer:not(.striped-candy-bg),
+.sc-catalog > :is(section, div),
+.sc-customer-layout > header > [class*="max-w-"],
+.sc-customer-layout > footer > [class*="max-w-"] {
+  width: 100%;
+  max-width: var(--sc-content-width);
+  margin-inline: auto;
+  padding-inline: var(--sc-page-gutter);
+}
+.sc-customer-stage > .sc-customer { padding-block: var(--sc-page-top) var(--sc-page-bottom); }
+.sc-customer-stage > .sc-customer.striped-candy-bg { padding-inline: var(--sc-page-gutter); }
+.sc-customer.striped-candy-bg > [class*="max-w-"],
+.sc-catalog > div > [class*="max-w-"] {
+  width: 100%; max-width: calc(var(--sc-content-width) - 2 * var(--sc-page-gutter)); margin-inline: auto;
+}
+.sc-catalog > section:first-child, .sc-catalog > div:first-child { padding-top: var(--sc-page-top); }
+.sc-catalog > section:last-child, .sc-catalog > div:last-child { padding-bottom: var(--sc-page-bottom); }
+.sc-catalog > section + section { padding-top: var(--sc-section-gap); }
+.sc-portal-main { padding-inline: var(--sc-page-gutter); padding-top: calc(4.5rem + var(--sc-page-top)); padding-bottom: var(--sc-page-bottom); }
+.sc-portal-main > .sc-workspace { max-width: var(--sc-content-width); gap: var(--sc-section-gap); }
+.sc-customer-stage > .sc-customer[class*="space-y-"] > :not(:last-child) { margin-bottom: var(--sc-section-gap); }
+.sc-profile-page > .grid { gap: var(--sc-section-gap); }
+.sc-customer-heading { margin-bottom: var(--sc-section-gap); }
+.sc-section-heading { margin-bottom: var(--sc-card-gap); }
+[data-customer-page="login"] .sc-customer-stage > div { padding-top: var(--sc-page-top); }
+
+/* Reused by WorkspaceUI and the general Button/Card/Badge components. */
+.sc-panel, .sc-ui-card, .sc-product-card, .sc-catalog-card {
+  border-color: var(--sc-color-border);
+  border-radius: var(--sc-radius-card);
+  box-shadow: var(--sc-shadow-card);
+}
+.sc-panel, .sc-ui-card { padding: var(--sc-card-padding); }
+.sc-panel > :not(:last-child) { margin-bottom: var(--sc-card-gap); }
+.sc-panel.sc-metric > * { margin-bottom: 0; }
+.sc-customer-heading { border-radius: var(--sc-radius-card); }
+.sc-product-card-heading, .sc-product-card-body { padding: var(--sc-card-padding); }
+.sc-profile-page .sc-profile-nav { border-radius: var(--sc-radius-card); }
+.sc-profile-nav button { border-radius: var(--sc-radius-control); font-size: var(--sc-text-sm); }
+.sc-button, .sc-ui-button, .cakematch-btn, .cakematch-btn-secondary,
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) button:is(.bg-primary, [class~="border"][class*="px-"]) {
+  min-height: var(--sc-control-height);
+  border-radius: var(--sc-radius-control);
+  padding: .625rem 1rem;
+  font-size: var(--sc-text-sm);
+  line-height: 1.4;
+  font-weight: var(--sc-weight-semibold);
+  transition: background-color var(--sc-transition), border-color var(--sc-transition), box-shadow var(--sc-transition), transform var(--sc-transition);
+}
+.sc-button { background: var(--sc-color-primary); color: white; border: 1px solid transparent; }
+.sc-ui-button[data-size="sm"] { min-height: 2.5rem; padding: .5rem .75rem; font-size: var(--sc-text-xs); }
+.sc-ui-button[data-size="lg"] { min-height: 3rem; padding: .75rem 1.5rem; }
+.sc-button:hover:not(:disabled), .sc-ui-button[data-variant="primary"]:hover:not(:disabled),
+:is(.sc-customer, .sc-catalog, .sc-portal) button.bg-primary:hover:not(:disabled) { background-color: var(--sc-color-primary-hover); color: white; }
+:is(button, a, input, select, textarea, summary):focus-visible { outline: 2px solid var(--sc-color-focus); outline-offset: 3px; }
+.sc-button:active:not(:disabled), .sc-ui-button:active:not(:disabled) { transform: translateY(1px); }
+.sc-portal aside nav button [class*="text-["]:not(.material-symbols-outlined) { font-size: var(--sc-text-sm); }
+button:disabled, input:disabled, select:disabled, textarea:disabled { cursor: not-allowed; }
+button:disabled { opacity: .45; }
+.sc-icon-button { width: var(--sc-control-height); height: var(--sc-control-height); border-radius: var(--sc-radius-control); border-color: var(--sc-color-border); }
+:is(.sc-customer-layout, .sc-portal, .sc-drawer) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--sc-control-height);
+  border-radius: var(--sc-radius-control);
+  border-color: var(--sc-color-border);
+  font-size: var(--sc-text-sm);
+  font-weight: var(--sc-weight-regular);
+  color: var(--sc-color-text);
+}
+.sc-input { padding: .625rem .875rem; }
+.sc-input::placeholder { color: var(--sc-color-muted); opacity: .8; }
+:is(input[type="checkbox"], input[type="radio"], input[type="range"]) { accent-color: var(--sc-color-primary); }
+.sc-toolbar { border-radius: var(--sc-radius-card); border-color: var(--sc-color-border); padding: var(--sc-card-gap); }
+.sc-status, .sc-ui-badge { border-radius: var(--sc-radius-badge); font-size: var(--sc-text-xs); line-height: 1.5; font-weight: var(--sc-weight-semibold); padding: .3rem .6rem; }
+.sc-table { font-size: var(--sc-text-sm); line-height: var(--sc-line-body); }
+.sc-table th { color: var(--sc-color-muted); font-size: var(--sc-text-xs); font-weight: var(--sc-weight-bold); padding: 1rem; }
+.sc-table td { padding: 1rem; }
+.sc-table small { font-size: var(--sc-text-xs); color: var(--sc-color-muted); }
+.sc-table-wrap { border-radius: var(--sc-radius-card); border-color: var(--sc-color-border); }
+.sc-drawer-heading, .sc-drawer-body { padding: var(--sc-card-padding); }
+.sc-drawer-heading h2 { font-size: var(--sc-text-section); }
+.sc-tabs { border-radius: var(--sc-radius-card); }
+.sc-tabs button { min-height: var(--sc-control-height); border-radius: var(--sc-radius-control); font-size: var(--sc-text-sm); }
+.sc-tabs button[aria-pressed=true], .sc-profile-nav button[aria-pressed=true] { background: var(--sc-color-primary); color: white; }
+.sc-empty h3 { font-family: var(--sc-font-ui); font-size: var(--sc-text-heading); }
+.sc-empty p, .sc-note { font-size: var(--sc-text-sm); line-height: var(--sc-line-body); color: var(--sc-color-muted); }
+.sc-catalog-card:hover, .sc-ui-card[data-hover="true"]:hover { box-shadow: var(--sc-shadow-hover); }
+@media (max-width: 639px) {
+  .sc-table th, .sc-table td { padding: .75rem; }
+  .sc-customer-layout > header > [class*="max-w-"] { gap: .5rem; }
+}
+/* Full navigation needs enough room for labels and search at the shared font size. */
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .sc-customer-menu-button { display: inline-flex; }
+  .sc-customer-layout > header nav[class~="xl:flex"] { display: none; }
+  .sc-customer-mobile-nav { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-button, .sc-ui-button { transition: none; }
+}

@@ -290,12 +290,12 @@ export const HeroSection = ({ onNavigate }) => {
               <ScrollReveal animation="fade-up" delay={150}>
                 <h1 className="font-savoure text-5xl sm:text-6xl lg:text-7xl font-bold text-wine tracking-normal leading-[1.05] mb-6 drop-shadow-[3px_3px_0_#ffe2cd]">
                   Một chiếc bánh,<br />
-                  <em className="font-normal italic text-[#be4876]">thật là bạn.</em>
+                  <em className="font-normal italic text-brand-pink">thật là bạn.</em>
                 </h1>
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={200}>
-                <p className="text-base sm:text-lg text-[#52202b] bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed shadow-sm">
+                <p className="text-base sm:text-lg text-on-surface bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed shadow-sm">
                   Kể cho chúng mình chiếc bánh bạn đang nghĩ tới. SweetCake giúp bạn tìm mẫu phù hợp từ hơn 200+ bánh có sẵn hoặc kết nối với tiệm nghệ nhân có thể làm theo ý tưởng ấy.
                 </p>
               </ScrollReveal>
@@ -338,7 +338,7 @@ export const HeroSection = ({ onNavigate }) => {
                   </a>
                 </div>
 
-                <div className="text-[#9f1e31] text-sm font-bold mt-3">
+                <div className="text-primary text-sm font-bold mt-3">
                   Từ chiếc bánh có sẵn đến thiết kế dành riêng cho bạn ♡
                 </div>
               </ScrollReveal>

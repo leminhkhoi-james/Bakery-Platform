@@ -15,7 +15,7 @@ export const CategoryBentoSection = ({ onNavigate }) => {
           <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4">
             Bạn thích loại bánh nào?
           </h2>
-          <p className="text-[#6d3c45] text-base sm:text-lg max-w-2xl mx-auto mb-12">
+          <p className="text-on-surface-variant text-base sm:text-lg max-w-2xl mx-auto mb-12">
             Khám phá danh mục từ những mẫu bánh mới được các tiệm công khai.
           </p>
         </ScrollReveal>
@@ -39,14 +39,14 @@ export const CategoryBentoSection = ({ onNavigate }) => {
                     <h3 className="font-savoure text-2xl font-bold italic text-wine mb-2">
                       {cat.title}
                     </h3>
-                    <p className="text-[#704350] text-sm leading-relaxed mb-6">
+                    <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
                       Xem các mẫu bánh trong danh mục này.
                     </p>
                   </div>
 
                   <a
                     href={'/explore?categoryId=' + encodeURIComponent(cat.id)}
-                    className="inline-flex items-center gap-1 text-wine font-extrabold text-base hover:text-[#b8273b] transition-colors group/link cursor-pointer"
+                    className="inline-flex items-center gap-1 text-wine font-extrabold text-base hover:text-primary-container transition-colors group/link cursor-pointer"
                     onClick={(e) => {
                       e.preventDefault()
                       if (onNavigate) {

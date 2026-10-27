@@ -51,7 +51,7 @@ export const ExploreCakesPage = ({ onNavigate, routeSearch = '' }) => {
 
   const fieldClass = 'w-full rounded-xl border border-outline-variant/30 bg-surface px-4 py-2.5 text-primary outline-none focus:ring-2 focus:ring-secondary/30'
   return (
-    <div className="w-full striped-candy-bg min-h-screen">
+    <div className="sc-catalog w-full min-h-screen">
       <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-8">
         <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary mt-1 font-bold tracking-normal">Khám Phá &amp; Đặt Bánh Kem Nghệ Nhân</h1>
         <div className="mt-6 bg-surface/60 backdrop-blur-md rounded-2xl p-space-md shadow-sm flex flex-col gap-space-md border border-outline-variant/20">

@@ -12,7 +12,7 @@ export default function Button({
   ...props
 }) {
   const baseClasses =
-    'inline-flex items-center justify-center font-bold transition-all rounded-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none'
+    'sc-ui-button inline-flex items-center justify-center font-bold transition-all rounded-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none'
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-xs gap-1.5',
@@ -36,6 +36,8 @@ export default function Button({
   return (
     <button
       type={type}
+      data-variant={variant}
+      data-size={size}
       disabled={disabled}
       onClick={onClick}
       className={`${baseClasses} ${sizeClasses[size] || sizeClasses.md} ${

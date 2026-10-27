@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
-import { DataTable, DetailDrawer, EmptyPanel, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
+import { DataTable, DetailDrawer, EmptyPanel, SectionHeading, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
 import { ApiState, ApiErrorMessage, inputClass, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -32,6 +32,7 @@ export default function AdminVendorsPage({ onNavigate }) {
   const resource = useCatalogResource(loadAdminBakeries, { page, size: 20, status, query, city, sort: 'createdAt,desc' })
   const filter = (setter) => (event) => { setter(event.target.value); setPage(1) }
   return <AdminFrame title="Tiệm bánh · Duyệt hồ sơ" activeTab="admin-vendors" onNavigate={onNavigate}>
+    <SectionHeading title="Tiệm bánh đối tác" description="Tra cứu hồ sơ, xem điều kiện hoạt động và duyệt trạng thái tiệm." icon="storefront" />
     <section className={panelClass}><div className="grid gap-3 sm:grid-cols-3"><label>Tìm tên tiệm<input value={query} onChange={filter(setQuery)} className={inputClass} /></label><label>Thành phố<input value={city} onChange={filter(setCity)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={filter(setStatus)} className={inputClass}><option value="">Tất cả</option>{BAKERY_STATUSES.map((value) => <option key={value}>{value}</option>)}</select></label></div><button onClick={resource.reload} className="underline">Tải lại danh sách</button>
       <ApiState resource={resource}>{resource.data && <><p>Tổng theo bộ lọc: {resource.data.meta.total}</p>{resource.data.result.length ? <DataTable label="Danh sách hồ sơ tiệm bánh"><thead><tr><th>Tiệm bánh / Mã hồ sơ</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>{resource.data.result.map((bakery) => <tr key={bakery.id}><td><h2 className="font-semibold text-primary">{bakery.name}</h2><small>{bakery.id}</small></td><td><StatusBadge status={bakery.status} /></td><td><button className={buttonClass} onClick={() => setSelected(bakery.id)}>Xem / duyệt hồ sơ</button></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Không có tiệm phù hợp từ backend." description="Thử thay đổi bộ lọc để xem các hồ sơ khác." icon="storefront" />}<CatalogPagination meta={resource.data.meta} onPage={setPage} /></>}</ApiState>
     </section>{selected && <BakeryReview key={selected} id={selected} onChanged={resource.reload} onClose={() => setSelected(null)} onNavigate={onNavigate} />}

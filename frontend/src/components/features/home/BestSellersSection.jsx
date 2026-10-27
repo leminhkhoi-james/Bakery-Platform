@@ -13,9 +13,9 @@ export const BestSellersSection = ({ onNavigate }) => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="dotted-frame-badge">Mẫu bánh từ các tiệm</span>
-              <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-[#9f1e31]">Mẫu Bánh Mới Nhất</h2>
+              <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-primary">Mẫu Bánh Mới Nhất</h2>
             </div>
-            <button className="text-[#9f1e31] font-extrabold text-base underline underline-offset-4 hover:text-[#b8273b] transition-colors flex items-center gap-1" onClick={() => onNavigate?.('explore')}>Xem tất cả mẫu bánh <span aria-hidden="true">↗</span></button>
+            <button className="text-primary font-extrabold text-base underline underline-offset-4 hover:text-primary-container transition-colors flex items-center gap-1" onClick={() => onNavigate?.('explore')}>Xem tất cả mẫu bánh <span aria-hidden="true">↗</span></button>
           </div>
         </ScrollReveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">

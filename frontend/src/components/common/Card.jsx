@@ -11,7 +11,8 @@ export default function Card({
   return (
     <div
       onClick={onClick}
-      className={`bg-surface-container-low rounded-2xl ${padding} shadow-sm border border-outline-variant/10 ${
+      data-hover={hover}
+      className={`sc-ui-card bg-surface-container-low rounded-2xl ${padding} shadow-sm border border-outline-variant/10 ${
         hover
           ? 'hover:shadow-md hover:border-secondary/30 transition-all cursor-pointer'
           : ''

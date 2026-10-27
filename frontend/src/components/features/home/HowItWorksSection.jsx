@@ -12,7 +12,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
             <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4">
               Quy trình đặt bánh đơn giản.
             </h2>
-            <p className="text-[#704651] text-base sm:text-lg max-w-xl mx-auto mb-12">
+            <p className="text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto mb-12">
               Dù bạn chọn bánh có sẵn hay đặt thiết kế riêng, quy trình luôn rõ ràng và minh bạch.
             </p>
           </ScrollReveal>
@@ -31,7 +31,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                     <h3 className="font-savoure text-xl font-bold text-wine mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-[#704651] text-sm leading-relaxed mb-4">
+                    <p className="text-on-surface-variant text-sm leading-relaxed mb-4">
                       {step.desc}
                     </p>
                   </div>
@@ -143,7 +143,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                           <span className="uppercase tracking-wider">SweetCake Assurance</span>
                           <span>★</span>
                         </div>
-                        <span className="text-[11px] text-[#704651] italic mt-0.5 font-medium">
+                        <span className="text-[11px] text-on-surface-variant italic mt-0.5 font-medium">
                           100% Chăm chút tận tâm • Trao gửi trọn vẹn
                         </span>
                       </div>
@@ -176,7 +176,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                           Chuẩn xác
                         </span>
                       </div>
-                      <p className="text-[#52202b] text-sm leading-relaxed">
+                      <p className="text-on-surface text-sm leading-relaxed">
                         Ảnh và mẫu AI là ý tưởng tham khảo; tiệm sẽ xác nhận chi tiết bánh thực tế tốt nhất trước khi làm.
                       </p>
                     </div>
@@ -196,7 +196,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                           Minh bạch
                         </span>
                       </div>
-                      <p className="text-[#52202b] text-sm leading-relaxed">
+                      <p className="text-on-surface text-sm leading-relaxed">
                         Bạn luôn biết chính xác mức giá và thời gian hoàn thành trước khi xác nhận thanh toán.
                       </p>
                     </div>
@@ -216,7 +216,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                           100% An tâm
                         </span>
                       </div>
-                      <p className="text-[#52202b] text-sm leading-relaxed">
+                      <p className="text-on-surface text-sm leading-relaxed">
                         Nền tảng hỗ trợ phản hồi, đền bù 100% nếu giao trễ hoặc sản phẩm không đúng cam kết.
                       </p>
                     </div>

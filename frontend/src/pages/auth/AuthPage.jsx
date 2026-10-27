@@ -89,7 +89,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
               {/* Switcher Tabs */}
               <div className="flex items-center justify-center p-1 bg-surface-container rounded-lg">
                 <button
-                  className={`flex-1 py-2.5 rounded-md font-label-lg text-label-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${authTab === 'login'
+                  className={`sc-ui-button flex-1 py-2.5 rounded-md font-label-lg text-label-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${authTab === 'login'
                       ? 'text-on-surface bg-surface-container-lowest shadow-sm font-bold'
                       : 'text-on-surface-variant hover:text-on-surface font-medium'
                     }`}
@@ -102,7 +102,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                 </button>
 
                 <button
-                  className={`flex-1 py-2.5 rounded-md font-label-lg text-label-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${authTab === 'register'
+                  className={`sc-ui-button flex-1 py-2.5 rounded-md font-label-lg text-label-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${authTab === 'register'
                       ? 'text-on-surface bg-surface-container-lowest shadow-sm font-bold'
                       : 'text-on-surface-variant hover:text-on-surface font-medium'
                     }`}
@@ -200,7 +200,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
 
                     {/* Submit CTA Button */}
                     <button
-                      className="w-full mt-2 py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                      className="sc-button w-full mt-2 py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
                       type="submit"
                       disabled={loading}
                     >
@@ -323,7 +323,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                     </div>
 
                     <button
-                      className="w-full py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] flex items-center justify-center gap-2 cursor-pointer"
+                      className="sc-button w-full py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] flex items-center justify-center gap-2 cursor-pointer"
                       type="submit"
                       disabled={loading}
                     >

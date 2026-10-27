@@ -10,7 +10,7 @@ import ProductCard from '../../../components/catalog/ProductCard.jsx'
 export default function BakeryDetailPage({ routeSearch = '', onNavigate }) {
   const id = new URLSearchParams(routeSearch).get('id') || ''
   const resource = useCatalogResource(loadBakery, { id })
-  return <div className="w-full striped-candy-bg min-h-screen">
+  return <div className="sc-catalog w-full min-h-screen">
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 py-8">
       <button className="text-secondary underline" onClick={() => onNavigate?.('stores')}>← Danh sách cửa hàng</button>
       <div className="mt-6"><CatalogState {...resource} onRetry={resource.reload} onNavigate={onNavigate} /></div>

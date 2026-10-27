@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/design-tokens.css";
 
 @theme {
   --text-admin-title: 20px;
@@ -11,6 +12,7 @@
   --text-admin-metric--line-height: 32px;
   --color-wine: #6b212e;
   --color-wine-dark: #4f1722;
+  --color-brand-pink: #be4876;
 
   /* French Haute Pâtisserie Palette (Warm Truffle & Caramel Gold) */
   --color-primary: #6b212e;
@@ -91,21 +93,21 @@
   --spacing-gutter: 1.5rem;
   --spacing-gutter-mobile: 1rem;
 
-  --font-display: 'Quicksand', 'Nunito', sans-serif;
-  --font-headline: 'Quicksand', 'Nunito', sans-serif;
-  --font-fraunces: 'Fraunces', serif;
-  --font-serif: 'Fraunces', serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-label: 'Plus Jakarta Sans', sans-serif;
-  --font-cormorant: 'Cormorant Garamond', serif;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-display: var(--sc-font-ui);
+  --font-headline: var(--sc-font-ui);
+  --font-fraunces: var(--sc-font-ui);
+  --font-serif: var(--sc-font-ui);
+  --font-body: var(--sc-font-ui);
+  --font-label: var(--sc-font-ui);
+  --font-cormorant: var(--sc-font-ui);
+  --font-sans: var(--sc-font-ui);
 }
 
 @layer base {
   body {
     font-family: var(--font-sans);
-    font-size: 13.5px;
-    line-height: 1.5;
+    font-size: var(--sc-text-body);
+    line-height: var(--sc-line-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -196,20 +198,20 @@
   }
 
   .text-body-lg {
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 1rem;
+    line-height: var(--sc-line-body);
     font-weight: 400;
   }
 
   .text-body-md {
-    font-size: 13.5px;
-    line-height: 20px;
+    font-size: var(--sc-text-body);
+    line-height: var(--sc-line-body);
     font-weight: 400;
   }
 
   .text-body-sm {
-    font-size: 12px;
-    line-height: 18px;
+    font-size: var(--sc-text-xs);
+    line-height: 1.5;
     font-weight: 400;
   }
 
@@ -253,12 +255,12 @@
 
 /* Savouré Bakery Signature Typography Utilities */
 .font-savoure {
-  font-family: 'Quicksand', 'Nunito', sans-serif;
+  font-family: var(--sc-font-ui);
   letter-spacing: normal !important;
 }
 
 .font-fraunces {
-  font-family: 'Fraunces', serif;
+  font-family: var(--sc-font-ui);
 }
 
 .font-sweetcake {
@@ -267,7 +269,7 @@
 }
 
 .font-montserrat {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--sc-font-ui);
 }
 
 
@@ -473,13 +475,15 @@
 
 .striped-candy-bg {
   /* Dreamy fairy-tale landscape background */
-  background-color: #fff4e9;
-  background-image:
+  --sc-fairy-scene:
     linear-gradient(rgba(255, 244, 233, 0.25), rgba(255, 244, 233, 0.45)),
     url('/images/fairy-bg.jpg');
+  background-color: #fff4e9;
+  background-image: var(--sc-fairy-scene);
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 .striped-candy-blue-bg {
@@ -635,6 +639,25 @@ textarea.sc-input { min-height: 5rem; resize: vertical; }
 @media (min-width: 768px) { .sc-portal-header .sc-menu-button { display: none; } }
 .sc-customer-heading { padding: 1.35rem 1.5rem; border: 1px solid #e9dbce; border-radius: 1.1rem; background: linear-gradient(110deg, #f9efe3, #fffaf5 70%); }
 .sc-profile-avatar { width: 3.75rem; height: 3.75rem; font-size: 1.8rem; background: #fffdfa; }
+/* Reserve scrollbar space so longer order lists do not shift the profile shell. */
+html:has(.sc-profile-page) { scrollbar-gutter: stable; }
+.sc-profile-page { min-width: 0; min-height: calc(100dvh - 5.5rem); }
+.sc-profile-page .sc-customer-heading { width: 100%; min-height: 7.5rem; }
+.sc-profile-page .sc-customer-heading > div:first-child { flex: 1 1 16rem; }
+.sc-profile-page .sc-customer-heading h1 { overflow-wrap: anywhere; }
+.sc-profile-page .sc-profile-nav { width: 100%; }
+.sc-profile-content { min-height: 36rem; overflow-wrap: anywhere; }
+.sc-profile-content > *, .sc-profile-content > div > .sc-panel { width: 100%; min-height: inherit; }
+.sc-profile-content .sc-toolbar { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) {
+  .sc-profile-content .sc-toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .sc-profile-content .sc-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 639px) {
+  .sc-profile-content { min-height: 32rem; }
+}
 .sc-profile-fields { display: grid; gap: 0; }
 .sc-profile-fields > div { display: grid; gap: .3rem; padding: 1rem 0; border-bottom: 1px solid #eee5dc; }
 .sc-profile-fields dt { font-size: .75rem; color: #8b7970; }

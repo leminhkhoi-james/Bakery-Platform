@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DataTable, DetailDrawer, EmptyPanel, StatusBadge } from '../common/WorkspaceUI.jsx'
+import { DataTable, DetailDrawer, EmptyPanel, SectionHeading, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { useAuth } from '../../context/useAuth.js'
 import { loadOrders, loadOrder, orderService } from '../../services/orderService.js'
@@ -12,7 +12,7 @@ import ReviewModeration from './ReviewModeration.jsx'
 
 export function OrderSnapshot({ order }) {
   const address = order.deliveryAddress
-  return <div className="space-y-5">
+  return <div className="sc-order-snapshot space-y-5">
     <div className="flex flex-wrap justify-between gap-3"><div className="min-w-0"><p className="sc-kicker">Chi tiết đơn hàng</p><h2 className="break-all font-serif text-2xl font-semibold text-primary">{order.orderNumber || order.id}</h2><p className="mt-1 text-sm text-on-surface-variant">{order.bakeryName || 'Chưa có tên cửa hàng'} · {order.orderSource || 'Chưa có nguồn đơn'}</p></div><StatusBadge status={order.status} label={orderStatusLabel(order.status)} /></div>
     <dl className="sc-toolbar grid gap-3 sm:grid-cols-3">{[['Tiền hàng', order.subtotal], ['Phí giao hàng', order.deliveryFee], ['Tổng tiền backend', order.totalAmount]].map(([label, value]) => <div key={label}><dt className="text-xs text-on-surface-variant">{label}</dt><dd className="mt-1 font-serif text-lg font-semibold text-primary">{money(value, order.currency)}</dd></div>)}</dl>
     <div className="sc-detail-grid"><section className="rounded-xl border border-outline-variant/30 p-4"><h3 className="mb-3 font-bold text-primary">Khách hàng & giao nhận</h3><dl><div><dt>Khách hàng</dt><dd>{order.customerName || 'Chưa có tên'} · {order.customerPhone || 'Chưa có điện thoại'}</dd></div><div><dt>Hẹn giao</dt><dd>{dateTime(order.neededAt)}</dd></div><div><dt>Ghi chú</dt><dd>{order.customerNote || 'Không có'}</dd></div></dl></section><section className="rounded-xl border border-outline-variant/30 p-4"><h3 className="mb-3 font-bold text-primary">Địa chỉ tại thời điểm đặt</h3>{address ? <div className="space-y-2 text-sm"><p className="font-semibold">{address.recipientName} · {address.recipientPhone}</p><p>{[address.addressLine, address.ward, address.district, address.city].filter(Boolean).join(', ')}</p>{address.deliveryNote && <p>{address.deliveryNote}</p>}</div> : <p>Backend chưa trả địa chỉ giao hàng.</p>}</section></div>
@@ -59,7 +59,7 @@ export function OrderList({ scope = 'mine', bakeryId, onNavigate, initialOrderId
   const [orderId, setOrderId] = useState(initialOrderId)
   const resource = useCatalogResource(loadOrders, { scope, ...(bakeryId ? { bakeryId } : {}), page, size: 10, status, orderSource, sort, ...(createdFrom ? { createdFrom: new Date(createdFrom).toISOString() } : {}), ...(createdTo ? { createdTo: new Date(createdTo).toISOString() } : {}) })
   const update = (setter) => (event) => { setter(event.target.value); setPage(1) }
-  return <div className="space-y-5"><section className={panelClass}><h2 className="text-xl font-bold text-primary">{scope === 'bakery' ? 'Đơn hàng của cửa hàng' : 'Lịch sử đơn hàng'}</h2><div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+  return <div className="sc-order-history space-y-5"><section className={panelClass}><SectionHeading title={scope === 'bakery' ? 'Đơn hàng của cửa hàng' : 'Lịch sử đơn hàng'} description="Theo dõi đơn bánh, lịch hẹn giao và chi tiết từng đơn." icon="receipt_long" /><div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     <label>Trạng thái<select value={status} onChange={update(setStatus)} className={inputClass}><option value="">Tất cả</option>{ORDER_STATUSES.map((value) => <option key={value} value={value}>{orderStatusLabel(value)}</option>)}</select></label>
     <label>Nguồn đơn<select value={orderSource} onChange={update(setSource)} className={inputClass}><option value="">Tất cả</option>{ORDER_SOURCES.map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
     <label>Sắp xếp<select value={sort} onChange={update(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="createdAt,asc">Cũ nhất</option><option value="neededAt,asc">Ngày cần giao tăng dần</option><option value="totalAmount,desc">Tổng tiền giảm dần</option></select></label>

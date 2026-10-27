@@ -4,7 +4,7 @@ import VendorFrame, { BakerySelector } from '../../components/management/VendorF
 import { useVendorBakery } from '../../hooks/useVendorBakery.js'
 
 export function CustomerChatPage({ routeSearch, onNavigate }) {
-  return <main className="striped-candy-bg min-h-[65vh] px-4 py-8"><div className="mx-auto max-w-7xl space-y-6"><h1 className="text-3xl font-bold text-primary">Tin nhắn</h1><ChatWorkspace key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} /></div></main>
+  return <main className="sc-customer min-h-[65vh] bg-background px-4 py-8"><div className="mx-auto max-w-7xl space-y-6"><div className="sc-customer-heading"><p className="sc-kicker">Trao đổi cùng tiệm bánh</p><h1 className="font-serif text-3xl font-semibold text-primary">Tin nhắn</h1></div><ChatWorkspace key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} /></div></main>
 }
 
 export function VendorChatPage({ routeSearch = '', onNavigate }) {
