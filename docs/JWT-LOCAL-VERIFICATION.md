@@ -1,5 +1,20 @@
 # Local JWT integration verification
 
+For the owner-only Bakery/Subscription environment, run
+`./scripts/Start-BakerySubscription.ps1 -LocalBuild -Verify`. It creates a separate
+`bakery-owner-dev` Compose project without resetting older databases. To repeat
+only HTTP checks against that running project:
+
+```powershell
+./scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage -ComposeProject bakery-owner-dev
+```
+
+`-ComposeProject` selects the databases used for test role provisioning and
+cleanup; its default remains `bakery-platform` for the manual stack below.
+Both container execution and host Java with module `.env` files passed on
+2026-10-28, including owner-only permissions and retired member mutation routes.
+See [the Docker guide](DOCKER-BAKERY-SUBSCRIPTION.md) for startup and IDE use.
+
 Identity signs with the PEM pair configured by `IDENTITY_JWT_PRIVATE_KEY_FILE`
 and `IDENTITY_JWT_PUBLIC_KEY_FILE` in root `.env`. They are mounted read-only;
 PEM files are excluded from Git and both Docker build contexts.

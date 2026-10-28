@@ -4,6 +4,18 @@ Runs on port `8084` with its own `subscription_db`. Copy `.env.example` to `.env
 for local execution, then set the database, Identity JWK, Bakery service token
 and MinIO values. The real `.env` file is ignored by Git.
 
+For the verified owner-only setup, run from the repository root:
+
+```powershell
+./scripts/Start-BakerySubscription.ps1 -LocalBuild -Verify
+```
+
+The `bakery-owner-dev` project uses separate volumes and preserves old databases.
+For local Java/IntelliJ, use `-InfrastructureOnly -NoBuild`; module `.env` uses
+PostgreSQL on 5437, Identity on 8081, Bakery on 8082 and MinIO on 9004. Match
+credentials to root Compose configuration. Both Docker and host Java execution
+were verified against real PostgreSQL and MinIO on 2026-10-28.
+
 From the repository root, `docker compose -f docker-compose.subscription-service.yml up --build`
 starts Subscription, PostgreSQL and MinIO. The defaults expose PostgreSQL on
 `5437`, MinIO on `9004` and its console on `9005`.
@@ -32,7 +44,7 @@ profile; they do not read local `.env` or use the development database. Without
 Docker those tests are skipped. To use another installed PostgreSQL image, pass
 `"-Dtest.postgres.image=postgres:16-alpine"` (default: `postgres:17-alpine`).
 
-`scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage` exercises real
+`scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage -ComposeProject bakery-owner-dev` exercises real
 Identity/Bakery/Subscription JWT calls, proof upload and signed downloads, and
-checks that staff cannot see a private payment proof while the submitter/admin can.
+checks that unrelated customers cannot access private payments while the submitting owner/admin can.
 Run it from the repository root against the local combined Compose stack.

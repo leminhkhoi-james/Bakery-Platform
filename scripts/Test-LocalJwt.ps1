@@ -1,4 +1,5 @@
-param([switch]$KeepTestData, [switch]$BakerySubscriptionOnly, [switch]$WithStorage)
+param([switch]$KeepTestData, [switch]$BakerySubscriptionOnly, [switch]$WithStorage,
+    [ValidatePattern('^[a-z0-9][a-z0-9_-]*$')][string]$ComposeProject = 'bakery-platform')
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path -Parent $PSScriptRoot)
 $config = @{}
@@ -77,7 +78,7 @@ function Remove-TestObject($Service, $Bucket, $ObjectKey) {
     }
 }
 function Database-Sql($Service, $User, $Database, $Sql) {
-    $Sql | docker compose -f compose.yaml -f docker-compose.bakery-subscription.yml -f docker-compose.order-service.yml -f docker-compose.chat-service.yml -f compose.services.yaml -f compose.no-firebase.yaml exec -T $Service psql -U $User -d $Database -v ON_ERROR_STOP=1 -q > $null
+    $Sql | docker compose -p $ComposeProject -f compose.yaml -f docker-compose.bakery-subscription.yml -f docker-compose.order-service.yml -f docker-compose.chat-service.yml -f compose.services.yaml -f compose.no-firebase.yaml exec -T $Service psql -U $User -d $Database -v ON_ERROR_STOP=1 -q > $null
     if ($LASTEXITCODE -ne 0) { throw "Database verification failed: $Service" }
 }
 function New-TestUser($Name, $Role) {
@@ -107,6 +108,7 @@ try {
     } finally { $publicKey.Dispose() }
     Write-Output 'PASS Identity JWK matches the supplied public PEM'
     $owner = New-TestUser owner BAKERY_OWNER
+    $otherOwner = New-TestUser otherowner BAKERY_OWNER
     $admin = New-TestUser admin ADMIN
     $customer = New-TestUser customer $null
     $null = Request-Json GET 'http://localhost:8081/api/v1/auth/me' $null (Auth $owner.Token)
@@ -119,6 +121,18 @@ try {
     }
     Write-Output 'PASS Bakery validates owner JWT and owner display snapshot'
     $null = Request-Json GET "http://localhost:8082/api/v1/bakeries/$bakeryId/members" $null (Auth $customer.Token) 403
+    $null = Request-Json GET "http://localhost:8082/api/v1/bakeries/$bakeryId/members" $null (Auth $otherOwner.Token) 403
+    $null = Request-Json POST "http://localhost:8082/api/v1/bakeries/$bakeryId/members" @{ userId = $otherOwner.Id; memberRole = 'OWNER' } (Auth $owner.Token) 403
+    $null = Request-Json PATCH "http://localhost:8082/api/v1/bakeries/$bakeryId/members/$($owner.Id)" @{ status = 'ACTIVE' } (Auth $owner.Token) 403
+    $null = Request-Json DELETE "http://localhost:8082/api/v1/bakeries/$bakeryId/members/$($owner.Id)" $null (Auth $owner.Token) 403
+    $membershipToken = Service-Jwt subscription-service $config.SUBSCRIPTION_CLIENT_SECRET bakery-service 'bakery:membership:read'
+    $membershipHeaders = Auth $membershipToken
+    $membershipHeaders['X-Correlation-Id'] = $runId
+    $membershipUri = "http://localhost:8082/internal/v1/bakeries/$bakeryId/members/$($owner.Id)/authorization"
+    foreach ($unsupportedRole in @('MANAGER', 'STAFF', 'ADMIN')) {
+        $null = Request-Json GET ($membershipUri + '?requiredRole=' + $unsupportedRole) $null $membershipHeaders 400
+    }
+    Write-Output 'PASS owner-only membership, cross-bakery denial, retired member routes and internal role validation'
     $parts = $owner.Token.Split('.')
     $parts[2] = $(if ($parts[2][0] -eq 'a') { 'b' } else { 'a' }) + $parts[2].Substring(1)
     $null = Request-Json GET "http://localhost:8082/api/v1/bakeries/$bakeryId/members" $null (Auth ($parts -join '.')) 401
@@ -170,10 +184,10 @@ try {
     if (-not $KeepTestData) {
         if ($bakeryId) {
             if ($WithStorage) {
-                $bakeryKeys = docker compose -f docker-compose.bakery-subscription.yml exec -T bakery-db psql -U postgres -d bakery_db -At -c "SELECT logo_object_key FROM bakeries WHERE id='$bakeryId' UNION SELECT cover_object_key FROM bakeries WHERE id='$bakeryId' UNION SELECT image_object_key FROM add_ons WHERE bakery_id='$bakeryId' UNION SELECT i.object_key FROM product_images i JOIN products p ON p.id=i.product_id WHERE p.bakery_id='$bakeryId';"
+                $bakeryKeys = docker compose -p $ComposeProject -f docker-compose.bakery-subscription.yml exec -T bakery-db psql -U postgres -d bakery_db -At -c "SELECT logo_object_key FROM bakeries WHERE id='$bakeryId' UNION SELECT cover_object_key FROM bakeries WHERE id='$bakeryId' UNION SELECT image_object_key FROM add_ons WHERE bakery_id='$bakeryId' UNION SELECT i.object_key FROM product_images i JOIN products p ON p.id=i.product_id WHERE p.bakery_id='$bakeryId';"
                 if ($LASTEXITCODE -ne 0) { throw 'Could not list this run media for cleanup' }
                 foreach ($key in $bakeryKeys) { if ($key) { Remove-TestObject bakery bakery-media $key } }
-                $proofKeys = docker compose -f docker-compose.bakery-subscription.yml exec -T subscription-db psql -U postgres -d subscription_db -At -c "SELECT proof_object_key FROM bakery_payments WHERE subscription_order_id IN (SELECT id FROM subscription_orders WHERE bakery_id='$bakeryId');"
+                $proofKeys = docker compose -p $ComposeProject -f docker-compose.bakery-subscription.yml exec -T subscription-db psql -U postgres -d subscription_db -At -c "SELECT proof_object_key FROM bakery_payments WHERE subscription_order_id IN (SELECT id FROM subscription_orders WHERE bakery_id='$bakeryId');"
                 if ($LASTEXITCODE -ne 0) { throw 'Could not list this run proofs for cleanup' }
                 foreach ($key in $proofKeys) { if ($key) { Remove-TestObject subscription subscription-proofs $key } }
             }

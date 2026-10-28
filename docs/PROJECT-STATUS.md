@@ -2,6 +2,46 @@
 
 > Cập nhật gần nhất: 2026-10-28.
 
+## DB và runtime Bakery/Subscription — 2026-10-28
+
+- DB local cũ trên 5432 vẫn có constraint OWNER/MANAGER/STAFF và checksum cũ.
+  Giữ nguyên DB này và volumes project cũ; không reset hoặc repair Flyway.
+- Tạo môi trường `bakery-owner-dev` với volumes riêng: Identity, Bakery,
+  Subscription + 3 PostgreSQL + 2 MinIO. DB mới migrate thành công: Identity
+  chỉ có ADMIN/CUSTOMER/BAKERY_OWNER; Bakery V1–V2 chỉ nhận OWNER; Subscription
+  V1–V4 validate thành công. Hai module `.env` chuyển sang DB Docker 5436/5437,
+  Identity 8081 và MinIO 9002/9004; các file thật vẫn được Git ignore.
+- HTTP thật pass cả hai cách: app trong Docker và Java trên máy đọc module `.env`.
+  Kiểm tra PEM/JWK, user/service JWT, token bị sửa, quyền owner của đúng tiệm,
+  member mutation bị chặn, requiredRole cũ bị từ chối, mua/duyệt gói, entitlement,
+  payment proof privacy, upload/download/xóa ảnh, publish và sorting. Script dọn
+  đúng users/bakery/subscription/objects tạo trong lần chạy.
+- Thêm `Start-BakerySubscription.ps1` (build/start/IDE infrastructure/verify/stop)
+  và `Test-LocalServiceEnv.ps1`. Docker build không resolve được Maven Central
+  trên máy này; `-LocalBuild` đã package từ Maven cache và build runtime images
+  thành công, context chỉ chứa jar/Dockerfile. Không cần Firebase cho ba service.
+- Phạm vi kiểm tra là Identity/Bakery/Subscription; chưa chạy lại toàn bộ dự án.
+  Rating summary của Bakery vẫn chờ contract từ Order như ghi bên dưới.
+
+## Kiểm tra Bakery theo spec role mới — 2026-10-28
+
+- Bản pull `6c6875a` đã áp dụng ADR-004: platform có CUSTOMER, BAKERY_OWNER,
+  ADMIN; membership Bakery chỉ có OWNER. API thêm/sửa/xóa member đã bị loại bỏ.
+- Bakery dùng guard `bakeryOwner()` yêu cầu user JWT có BAKERY_OWNER và OWNER
+  ACTIVE của đúng bakery; admin API giữ policy ADMIN riêng. Dọn các repository
+  query và helper bổ sung tên cũ không còn dùng sau khi bỏ member mutations.
+- Bổ sung regression tests: owner không ghi catalog tiệm khác hoặc duyệt tiệm
+  thay admin; ADMIN không tự vượt policy quản lý catalog; PATCH/DELETE member bị
+  chặn; internal requiredRole từ chối MANAGER/STAFF/ADMIN; PostgreSQL constraint
+  chỉ cho lưu OWNER. Tên role cũ còn xuất hiện trong test từ chối, không phải enum.
+- `mvn -o -pl bakery-service,subscription-service -am clean verify
+  -Dtest.postgres.image=postgres:16-alpine` pass: Bakery 32, Subscription 14 và
+  platform-support 3 tests, không skip. Testcontainers dùng DB mới, Flyway/JPA
+  validate và executable jars pass. HTTP thật được kiểm tra tiếp ở mục trên.
+- Không sửa checksum/migration lịch sử hoặc reset DB dev đang có. Theo ADR-004,
+  bản initial schema đã đổi nên DB tạo trước thay đổi cần được tạo lại có chủ đích
+  trước khi chạy runtime mới; README Bakery đã ghi rõ điều kiện này.
+
 ## Owner-only roles — 2026-10-28
 
 - Platform chỉ còn `ADMIN`, `CUSTOMER`, `BAKERY_OWNER`; bakery membership chỉ
