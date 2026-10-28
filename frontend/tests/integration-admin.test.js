@@ -51,7 +51,7 @@ test('Admin Order uses real scope=all and enum transitions while other roles can
   assert.deepEqual(allowedOrderActions({ status: 'PENDING' }, { roles: ['ADMIN'] }, 'all'), ['CONFIRMED', 'CANCELLED'])
   for (const page of ['admin-plans', 'admin-moderation', 'admin-orders']) {
     assert.equal(canAccess(page, { roles: ['ADMIN'] }), true)
-    for (const role of ['CUSTOMER', 'BAKERY_OWNER', 'BAKERY_STAFF']) assert.equal(canAccess(page, { roles: [role] }), false)
+    for (const role of ['CUSTOMER', 'BAKERY_OWNER']) assert.equal(canAccess(page, { roles: [role] }), false)
   }
 })
 for (const status of [400, 401, 403, 404, 409, 422, 500, 503]) test('Every new Admin API exposes HTTP ' + status + ' without fake queue or success', async () => {

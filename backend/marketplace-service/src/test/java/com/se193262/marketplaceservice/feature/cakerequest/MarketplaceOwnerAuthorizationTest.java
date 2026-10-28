@@ -26,20 +26,20 @@ class MarketplaceOwnerAuthorizationTest {
     private final UUID userId = UUID.randomUUID();
 
     @Test
-    @DisplayName("Legacy staff platform role cannot access bakery requests")
-    void bakeryMember_withLegacyStaffRole_isForbidden() {
+    @DisplayName("Customer platform role cannot access bakery requests")
+    void bakeryMember_withCustomerRole_isForbidden() {
         var access = new MarketplaceAccess(bakery, workflows);
         assertThrows(BusinessException.class, () -> access.bakeryMember(
-                bakeryId, new Actor(userId, Set.of("ROLE_BAKERY_STAFF")), false));
+                bakeryId, new Actor(userId, Set.of("ROLE_CUSTOMER")), false));
         verifyNoInteractions(bakery);
     }
 
     @Test
-    @DisplayName("Owner JWT cannot authorize legacy manager membership for reads or writes")
-    void bakeryMember_withLegacyManagerMembership_isForbidden() {
+    @DisplayName("Owner JWT cannot authorize invalid membership for reads or writes")
+    void bakeryMember_withInvalidMembership_isForbidden() {
         var access = new MarketplaceAccess(bakery, workflows);
         when(bakery.membership(bakeryId, userId))
-                .thenReturn(new Membership(bakeryId, userId, true, "MANAGER", true));
+                .thenReturn(new Membership(bakeryId, userId, true, "INVALID", true));
         var actor = new Actor(userId, Set.of("ROLE_BAKERY_OWNER"));
         assertThrows(BusinessException.class, () -> access.bakeryMember(bakeryId, actor, false));
         assertThrows(BusinessException.class, () -> access.bakeryMember(bakeryId, actor, true));

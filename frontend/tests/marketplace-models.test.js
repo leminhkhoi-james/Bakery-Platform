@@ -43,9 +43,9 @@ test('Ownership/roles, closed/expired submission and accept rules match backend'
   assert.ok(!requestAcceptsOffers(open)); assert.ok(acceptableOffer(offer, open, user))
   assert.ok(!acceptableOffer({ ...offer, expiresAt: '2000-01-01' }, open, user))
   assert.ok(!acceptableOffer(offer, { ...open, status: 'CLOSED' }, user)); assert.ok(!pendingOffer({ ...offer, status: 'ACCEPTED' }))
-  for (const route of ['rfqs', 'rfq-new', 'request-detail', 'bidding', 'baker-quote', 'ai-studio']) { assert.ok(canAccess(route, user)); assert.ok(!canAccess(route, null)); assert.ok(!canAccess(route, { ...user, roles: ['BAKERY_STAFF'] })) }
-  assert.ok(memberCanEdit({ memberRole: 'MANAGER', status: 'ACTIVE' }, ['BAKERY_STAFF']))
-  assert.ok(!memberCanEdit({ memberRole: 'STAFF', status: 'ACTIVE' }, ['BAKERY_STAFF']))
+  for (const route of ['rfqs', 'rfq-new', 'request-detail', 'bidding', 'baker-quote', 'ai-studio']) { assert.ok(canAccess(route, user)); assert.ok(!canAccess(route, null)); assert.ok(!canAccess(route, { ...user, roles: ['BAKERY_OWNER'] })) }
+  assert.ok(memberCanEdit({ memberRole: 'OWNER', status: 'ACTIVE' }, ['BAKERY_OWNER']))
+  assert.ok(!memberCanEdit({ memberRole: 'INVALID', status: 'ACTIVE' }, ['BAKERY_OWNER']))
 })
 test('AI uses zero-based JobPage and nested JobDetail with ownership checks', () => {
   assert.equal(mapJobPage(jobPage([])).meta.page, 1); assert.equal(mapJobPage({ ...jobPage([]), page: 2 }).meta.page, 3)

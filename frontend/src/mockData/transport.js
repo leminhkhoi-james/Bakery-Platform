@@ -52,14 +52,12 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
         const DEMO_ACCOUNTS = {
           'customer@sweetcake.local': { role: 'CUSTOMER', pass: 'Customer@123', name: 'Hân Mai (Customer)', id: 'de000000-0000-4000-8000-000000000001' },
           'owner@sweetcake.local': { role: 'BAKERY_OWNER', pass: 'Owner@123', name: 'Chef Jean-Luc (Owner)', id: 'de000000-0000-4000-8000-000000000002' },
-          'staff@sweetcake.local': { role: 'BAKERY_STAFF', pass: 'Staff@123', name: 'Nhân viên Tiệm (Staff)', id: 'de000000-0000-4000-8000-000000000004' },
           'admin@sweetcake.local': { role: 'ADMIN', pass: 'Admin@123', name: 'Master Admin', id: 'de000000-0000-4000-8000-000000000003' },
         }
 
         const account = DEMO_ACCOUNTS[email] ||
           (email.includes('admin') ? DEMO_ACCOUNTS['admin@sweetcake.local'] :
            email.includes('owner') ? DEMO_ACCOUNTS['owner@sweetcake.local'] :
-           email.includes('staff') ? DEMO_ACCOUNTS['staff@sweetcake.local'] :
            email.includes('customer') ? DEMO_ACCOUNTS['customer@sweetcake.local'] : null)
 
         const cleanPassword = password.trim()

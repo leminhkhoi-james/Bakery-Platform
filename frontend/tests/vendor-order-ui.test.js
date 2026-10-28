@@ -90,7 +90,7 @@ test('Vendor settings initializes from actual bakery selector and does not displ
   assert.doesNotMatch(html, /La Crème|Jean-Luc|46\.7M|Thông tin đã lưu thành công/)
 })
 test('Vendor product list cannot expose editing controls before membership has been confirmed', () => {
-  const html = authenticated(ProductManager, { bakeryId }, ['BAKERY_STAFF'])
+  const html = authenticated(ProductManager, { bakeryId }, ['BAKERY_OWNER'])
   assert.match(html, /Đang xác minh quyền quản lý/); assert.match(html, /disabled=""/); assert.match(html, /Đang tải/)
   assert.doesNotMatch(html, /Pikachu|480\.000|Đã đồng bộ/)
 })

@@ -28,12 +28,11 @@ public abstract class PostgresIntegrationTest {
     @BeforeEach
     void identityFixture() {
         when(identityUserClient.requireOwner(any())).thenAnswer(call -> profile(call.getArgument(0)));
-        when(identityUserClient.requireEligibleMember(any())).thenAnswer(call -> profile(call.getArgument(0)));
         when(identityUserClient.getUser(any())).thenAnswer(call -> profile(call.getArgument(0)));
     }
 
     private static IdentityUserClient.UserProfile profile(UUID id) {
-        return new IdentityUserClient.UserProfile(id, "Test member", "ACTIVE", List.of("BAKERY_OWNER", "BAKERY_STAFF"));
+        return new IdentityUserClient.UserProfile(id, "Test member", "ACTIVE", List.of("BAKERY_OWNER", "CUSTOMER"));
     }
 
     @Container

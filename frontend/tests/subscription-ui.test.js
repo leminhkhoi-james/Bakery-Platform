@@ -29,7 +29,7 @@ test('Empty and missing DTO render explicit messages with disabled purchase', ()
   assert.match(html, /Chưa có thông tin giá/); assert.match(html, /Chưa có mô tả/); assert.match(html, /disabled=""/)
   assert.doesNotMatch(html, /199\.000|ACTIVE/)
 })
-test('Read-only staff and mutation busy states disable plan buttons', () => {
+test('Read-only viewer and mutation busy states disable plan buttons', () => {
   for (const props of [{ canSelect: false }, { canSelect: true, busy: true }]) assert.match(render(view.PlanCards, { plans: [plan()], onSelect: () => {}, ...props }), /disabled=""/)
   assert.doesNotMatch(render(view.PlanCards, { plans: [plan()], canSelect: true, onSelect: () => {} }), /disabled=""/)
 })
@@ -45,9 +45,9 @@ test('Vendor page has real identity/manual bakery selector and no invented activ
   assert.match(html, /Người dùng thật/); assert.match(html, /bakeryId/); assert.match(html, /Chọn cửa hàng/)
   assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực|La Crème/)
 })
-test('Vendor with UUID and staff role renders backend loading instead of demo periods/orders', () => {
-  const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { email: 'test@example.invalid' }, roles: ['BAKERY_STAFF'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
-  assert.match(html, /Nhân viên có thể xem/); assert.match(html, /Đang tải/)
+test('Vendor with UUID and owner role renders backend loading instead of demo periods/orders', () => {
+  const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { email: 'test@example.invalid' }, roles: ['BAKERY_OWNER'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
+  assert.match(html, /Chủ tiệm có thể tạo đơn/); assert.match(html, /Đang tải/)
   assert.doesNotMatch(html.replace(/<option[^>]*>.*?<\/option>/g, ''), /Đang hiệu lực|Đã hoàn tất/)
 })
 test('Public plan page is accessible without auth context and starts in loading state', () => {

@@ -28,7 +28,7 @@ CREATE TABLE conversation_participants (
     CONSTRAINT uq_conversation_participants_id_conversation UNIQUE (id, conversation_id),
     CONSTRAINT fk_conversation_participants_conversation
         FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
-    CONSTRAINT ck_conversation_participants_type CHECK (participant_type IN ('CUSTOMER', 'BAKERY_OWNER', 'BAKERY_STAFF'))
+    CONSTRAINT ck_conversation_participants_type CHECK (participant_type IN ('CUSTOMER', 'BAKERY_OWNER'))
 );
 
 CREATE TABLE messages (

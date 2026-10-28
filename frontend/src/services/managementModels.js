@@ -53,7 +53,7 @@ export function bakeryPayload(input, create = false) {
   if (!Object.keys(body).length) throw new ApiError('Chưa có thay đổi hồ sơ.', 400)
   return body
 }
-export const memberCanEdit = (member, roles = []) => member?.status === 'ACTIVE' && ['OWNER', 'MANAGER'].includes(member.memberRole) && roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role))
+export const memberCanEdit = (member, roles = []) => member?.status === 'ACTIVE' && member.memberRole === 'OWNER' && roles.some((role) => ['BAKERY_OWNER'].includes(role))
 export const productActions = (status) => ({ DRAFT: ['publish', 'archive'], HIDDEN: ['publish', 'archive'], PUBLISHED: ['hide', 'archive'], ARCHIVED: [] }[status] || [])
 export function validateImage(file) {
   if (!file || file.size < 1 || file.size > 5 * 1024 * 1024 || !['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) throw new ApiError('Ảnh phải là PNG/JPEG/WebP, từ 1 byte đến 5 MB.', 400)

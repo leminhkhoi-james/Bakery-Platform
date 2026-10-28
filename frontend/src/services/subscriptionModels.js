@@ -72,7 +72,7 @@ export function formatSubscriptionDate(value) {
 }
 
 export function subscriptionPermissions(roles = []) {
-  return { canRead: roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF', 'ADMIN'].includes(role)), canPurchase: roles.includes('BAKERY_OWNER') }
+  return { canRead: roles.some((role) => ['BAKERY_OWNER', 'ADMIN'].includes(role)), canPurchase: roles.includes('BAKERY_OWNER') }
 }
 
 export function canOrderPlan(plan) {

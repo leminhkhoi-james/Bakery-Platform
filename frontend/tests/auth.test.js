@@ -199,6 +199,6 @@ test('Route roles come from the backend profile, not demo navigation', () => {
   assert.equal(canAccess('admin-dashboard', user), false)
   assert.equal(canAccess('vendor-menu', user), false)
   assert.equal(canAccess('admin-dashboard', { roles: ['ADMIN'] }), true)
-  assert.equal(canAccess('vendor-menu', { roles: ['BAKERY_STAFF'] }), true)
+  assert.equal(canAccess('vendor-menu', { roles: ['BAKERY_OWNER'] }), true)
   assert.equal(canAccess('payment', { roles: ['BAKERY_OWNER'] }), false)
 })

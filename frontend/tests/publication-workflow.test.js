@@ -103,7 +103,7 @@ test('Category validation rejects invalid values before write', async () => {
 test('Admin pages require ADMIN; Vendor roles cannot approve stores or payments', () => {
   for (const page of ['admin-dashboard', 'admin-vendors', 'admin-payments']) {
     assert.equal(canAccess(page, null), false)
-    for (const role of ['CUSTOMER', 'BAKERY_OWNER', 'BAKERY_STAFF']) assert.equal(canAccess(page, { roles: [role] }), false)
+    for (const role of ['CUSTOMER', 'BAKERY_OWNER']) assert.equal(canAccess(page, { roles: [role] }), false)
     assert.equal(canAccess(page, { roles: ['ADMIN'] }), true)
   }
 })

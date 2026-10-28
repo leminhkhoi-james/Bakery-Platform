@@ -370,7 +370,7 @@ export const Header = ({
                 </div>
 
                 <div className="border-t border-primary/20 pt-1">
-                  {roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role)) && <button
+                  {roles.some((role) => ['BAKERY_OWNER'].includes(role)) && <button
                     onClick={(e) => {
                       setIsProfileMenuOpen(false)
                       handleNav(e, 'vendor-dashboard')

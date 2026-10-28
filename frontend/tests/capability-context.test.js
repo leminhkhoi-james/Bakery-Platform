@@ -60,7 +60,7 @@ test('RFQ picker uses scoped API pagination rather than a local array or invente
 })
 test('RFQ creation route preserves CUSTOMER permission and never grants it from context', () => {
   assert.equal(canAccess('rfq-new', { roles: ['CUSTOMER'] }), true)
-  for (const role of ['ADMIN', 'BAKERY_OWNER', 'BAKERY_STAFF']) assert.equal(canAccess('rfq-new', { roles: [role] }), false)
+  for (const role of ['ADMIN', 'BAKERY_OWNER']) assert.equal(canAccess('rfq-new', { roles: [role] }), false)
 })
 for (const status of [400, 401, 403, 404, 409, 422, 500, 503]) test('Context API HTTP ' + status + ' stays an error without mock or success', async () => {
   handler = () => reply(null, status)

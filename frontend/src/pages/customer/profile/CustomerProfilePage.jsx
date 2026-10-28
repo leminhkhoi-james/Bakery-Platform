@@ -15,7 +15,7 @@ export default function CustomerProfilePage({ onNavigate }) {
     <section className="sc-customer-heading flex flex-wrap items-center justify-between gap-4">
       <div className="flex min-w-0 items-center gap-4"><span className="sc-avatar sc-profile-avatar" aria-hidden="true">{(user.displayName || user.email || '').slice(0, 1).toUpperCase()}</span><div className="min-w-0"><p className="sc-kicker">Tài khoản SweetCake</p><h1 className="break-words font-serif text-2xl font-semibold text-primary sm:text-3xl">{user.displayName || user.email}</h1><p className="mt-1 break-all text-sm text-on-surface-variant">{user.email}</p></div></div>
       <div className="sc-actions">
-        {roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role)) && <button className={buttonClass} onClick={() => onNavigate('vendor-dashboard')}><Icon name="storefront" /> Quản lý tiệm bánh</button>}
+        {roles.some((role) => ['BAKERY_OWNER'].includes(role)) && <button className={buttonClass} onClick={() => onNavigate('vendor-dashboard')}><Icon name="storefront" /> Quản lý tiệm bánh</button>}
         {roles.includes('ADMIN') && <button className={buttonClass} onClick={() => onNavigate('admin-dashboard')}><Icon name="admin_panel_settings" /> Quản trị hệ thống</button>}
         <button className="sc-icon-button" aria-label="Đăng xuất" title="Đăng xuất" onClick={async () => { try { await logout(); onNavigate('home') } catch (failure) { setError(failure.message) } }}><Icon name="logout" /></button>
       </div>

@@ -81,23 +81,23 @@ class OrderManagementAuthorizationTest {
     }
 
     @Test
-    @DisplayName("Legacy staff platform role cannot read bakery orders")
-    void getOrder_withLegacyStaffRole_isForbidden() {
+    @DisplayName("Customer platform role cannot read bakery orders")
+    void getOrder_withCustomerRole_isForbidden() {
         when(persistenceService.getAuthorizationContext(ORDER_ID))
                 .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
         assertThrows(OrderAccessDeniedException.class,
-                () -> service.getOrder(ORDER_ID, OTHER_CUSTOMER_ID, Set.of("BAKERY_STAFF")));
+                () -> service.getOrder(ORDER_ID, OTHER_CUSTOMER_ID, Set.of("CUSTOMER")));
         verify(persistenceService, never()).getOrder(ORDER_ID);
     }
 
     @Test
-    @DisplayName("Owner JWT cannot use a legacy manager membership")
-    void getOrder_withLegacyManagerMembership_isForbidden() {
+    @DisplayName("Owner JWT cannot use a invalid membership")
+    void getOrder_withInvalidMembership_isForbidden() {
         when(persistenceService.getAuthorizationContext(ORDER_ID))
                 .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
         when(bakeryClient.getMembershipAuthorization(BAKERY_ID, OTHER_CUSTOMER_ID, "OWNER"))
                 .thenReturn(new BakeryClient.MembershipAuthorizationResponse(
-                        BAKERY_ID, OTHER_CUSTOMER_ID, true, "MANAGER", true));
+                        BAKERY_ID, OTHER_CUSTOMER_ID, true, "INVALID", true));
         assertThrows(OrderAccessDeniedException.class,
                 () -> service.getOrder(ORDER_ID, OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER")));
         verify(persistenceService, never()).getOrder(ORDER_ID);

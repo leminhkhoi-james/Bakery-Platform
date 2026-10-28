@@ -2,7 +2,7 @@ import { isMockRecord } from '../../mockData/runtime.js'
 import React, { useState } from 'react'
 import { dateTime } from '../../services/managementModels.js'
 
-const participantLabel = (type) => ({ CUSTOMER: 'Khách hàng', BAKERY_OWNER: 'Chủ tiệm', BAKERY_STAFF: 'Nhân viên tiệm' }[type] || 'Participant')
+const participantLabel = (type) => ({ CUSTOMER: 'Khách hàng', BAKERY_OWNER: 'Chủ tiệm' }[type] || 'Participant')
 function Attachment({ attachment }) {
   const [broken, setBroken] = useState(false)
   return <div className="mt-2 rounded-xl border border-outline-variant/30 bg-surface p-3 text-on-surface"><p className="break-all text-sm">{attachment.originalFileName || 'Tệp đính kèm'} · {attachment.mediaType || 'Chưa rõ loại'} · {attachment.fileSize === null ? 'Chưa có dung lượng' : attachment.fileSize.toLocaleString('vi-VN') + ' byte'}</p>

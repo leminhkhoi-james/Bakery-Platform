@@ -16,7 +16,6 @@ class MigrationSyncTest {
         Path projectRoot = Path.of("..", "..").toAbsolutePath().normalize();
         assertMigrationMatches(projectRoot, "V1__init_schema.sql");
         assertMigrationMatches(projectRoot, "V2__seed_reference_data.sql");
-        assertMigrationMatches(projectRoot, "V3__retire_bakery_staff_role.sql");
     }
 
     private void assertMigrationMatches(Path projectRoot, String fileName) throws Exception {

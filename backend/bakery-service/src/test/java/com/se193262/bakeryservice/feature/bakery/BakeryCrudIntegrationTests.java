@@ -95,44 +95,18 @@ class BakeryCrudIntegrationTests extends PostgresIntegrationTest {
     }
 
     @Test
-    @DisplayName("Owner/member names are captured from Identity and remain stable after profile edits")
-    void members_identityProfileChanges_preserveSnapshots() {
+    @DisplayName("Owner display name remains stable after Identity profile edits")
+    void owner_identityProfileChanges_preservesSnapshot() {
         UUID ownerId = UUID.randomUUID();
-        UUID staffId = UUID.randomUUID();
         UUID bakeryId = bakeryService.create(new BakeryDto(null, "Snapshots", null,
                 "0900000000", null, null, null), ownerId).id();
-        when(identityUserClient.requireEligibleMember(staffId)).thenReturn(new IdentityUserClient.UserProfile(
-                staffId, "Original staff name", "ACTIVE", List.of("BAKERY_STAFF")));
-        var member = memberService.createAs(bakeryId, ownerId,
-                new BakeryMemberDto(null, staffId, BakeryMemberRole.STAFF, null, null));
-        assertThat(member.displayNameSnapshot()).isEqualTo("Original staff name");
-        when(identityUserClient.getUser(staffId)).thenReturn(new IdentityUserClient.UserProfile(
-                staffId, "Changed name", "ACTIVE", List.of("BAKERY_STAFF")));
-        var members = memberService.list(bakeryId);
-        assertThat(members).filteredOn(item -> item.userId().equals(ownerId))
-                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly("Test member");
-        assertThat(members).filteredOn(item -> item.userId().equals(staffId))
-                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly("Original staff name");
-        verify(identityUserClient, never()).getUser(staffId);
-    }
-
-    @Test
-    @DisplayName("Legacy memberships obtain a snapshot without losing readability during Identity outages")
-    void members_missingSnapshot_backfillsOrReturnsNull() {
-        UUID ownerId = UUID.randomUUID();
-        UUID bakeryId = bakeryService.create(new BakeryDto(null, "Legacy", null,
-                "0900000000", null, null, null), ownerId).id();
-        UUID legacyId = UUID.randomUUID();
-        var legacy = memberRepository.saveAndFlush(new BakeryMember(bakeryRepository.findById(bakeryId)
-                .orElseThrow(), legacyId, BakeryMemberRole.STAFF));
-        memberService.list(bakeryId);
-        assertThat(legacy.getDisplayNameSnapshot()).isEqualTo("Test member");
-        UUID unavailableId = UUID.randomUUID();
-        memberRepository.saveAndFlush(new BakeryMember(bakeryRepository.findById(bakeryId)
-                .orElseThrow(), unavailableId, BakeryMemberRole.STAFF));
-        when(identityUserClient.getUser(unavailableId)).thenThrow(new com.se193262.bakeryservice.exception.AppException(
-                org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE, "Unavailable"));
-        assertThat(memberService.list(bakeryId)).filteredOn(item -> item.userId().equals(unavailableId))
-                .extracting(BakeryMemberDto::displayNameSnapshot).containsExactly((String) null);
+        clearInvocations(identityUserClient);
+        assertThat(memberService.list(bakeryId)).hasSize(1)
+                .allSatisfy(member -> {
+                    assertThat(member.userId()).isEqualTo(ownerId);
+                    assertThat(member.memberRole()).isEqualTo(BakeryMemberRole.OWNER);
+                    assertThat(member.displayNameSnapshot()).isEqualTo("Test member");
+                });
+        verifyNoInteractions(identityUserClient);
     }
 }

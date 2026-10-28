@@ -148,7 +148,7 @@ test('filtered initial pages verify root emptiness and propagate probe authentic
     assert.equal((await request(failed, '/orders?status=PENDING')).status, status)
   }
 })
-test('catalog CRUD/options, pricing and staff permissions use the same DEMO graph', async () => {
+test('catalog CRUD/options, pricing and ownership checks use the same DEMO graph', async () => {
   const app = setup(); app.as(vendor)
   const bakery = demoId(10)
   const category = await data(await request(app, `/bakeries/${bakery}/categories`, 'POST', { name: 'Bánh cưới', slug: 'banh-cuoi', active: true, displayOrder: 2 }))
@@ -160,9 +160,9 @@ test('catalog CRUD/options, pricing and staff permissions use the same DEMO grap
   app.as(customer)
   const order = await data(await request(app, '/orders/direct', 'POST', { bakeryId: bakery, productId: product.id, quantity: 2, optionSelections: [{ optionGroupId: options.groups[0].id, optionValueIds: [options.groups[0].values[0].id] }], addOns: [{ addOnId: demoId(70000), quantity: 1 }] }))
   assert.equal(order.subtotal, 1200000 + createSeed().addOns[0].price)
-  app.as({ id: 'aa000000-0000-4000-8000-000000000004', roles: ['BAKERY_STAFF'] })
+  app.as({ id: 'aa000000-0000-4000-8000-000000000004', roles: ['BAKERY_OWNER'] })
   assert.equal((await request(app, `/bakeries/${bakery}/products/${product.id}`, 'PATCH', { basePrice: 1 })).status, 403)
-  assert.equal((await request(app, `/bakeries/${bakery}/products`)).status, 200)
+  assert.equal((await request(app, `/bakeries/${bakery}/products`)).status, 403)
   app.as(vendor)
   const disposable = await data(await request(app, `/bakeries/${bakery}/categories`, 'POST', { name: 'Tạm', slug: 'tam', active: true, displayOrder: 3 }))
   assert.equal((await request(app, `/bakeries/${bakery}/categories/${disposable.id}`, 'DELETE')).status, 200)

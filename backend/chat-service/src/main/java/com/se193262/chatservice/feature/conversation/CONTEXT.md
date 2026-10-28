@@ -24,4 +24,4 @@ REST contracts.
 
 Platform roles are ADMIN, CUSTOMER and BAKERY_OWNER. Bakery membership only
 supports OWNER. Bakery access requires ownership of the requested bakery;
-retired staff/manager roles cannot authorize access. See ADR-004.
+only the owner can manage the bakery. See ADR-004.

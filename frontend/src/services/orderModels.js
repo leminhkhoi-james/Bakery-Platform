@@ -26,7 +26,7 @@ export function allowedOrderActions(order, user, scope) {
   if (user.roles?.includes('ADMIN') && scope === 'all') return available
   // Backend checks own CUSTOMER permissions before bakery roles.
   if (user.roles?.includes('CUSTOMER') && order.customerId === user.id && !user.roles.includes('ADMIN')) return available.filter((target) => target === 'CANCELLED')
-  if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role))) return available
+  if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) return available
   return []
 }
 export function mapOrder(dto, detail = false) {

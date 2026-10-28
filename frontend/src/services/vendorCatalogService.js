@@ -9,12 +9,12 @@ const path = (bakeryId, kind) => {
 export const vendorCatalogService = {
   async list(bakeryId, kind, options = {}) { return mapManagedList(await api.get(path(bakeryId, kind), options), kind) },
   async save(bakeryId, kind, id, input) {
-    const body = catalogEntityPayload(kind, input, !id), endpoint = path(bakeryId, kind)
+    const body = catalogEntityPayload(kind, input), endpoint = path(bakeryId, kind)
     const data = id ? await api.patch(endpoint + '/' + requireId(id), body) : await api.post(endpoint, body)
     mapManagedList([data], kind); if (id && data.id !== id.toLowerCase()) throw new ApiError('Backend trả sai bản ghi quản lý.', 502)
     return data
   },
-  remove(bakeryId, kind, id) { return api.delete(path(bakeryId, kind) + '/' + requireId(id)) },
+  remove(bakeryId, kind, id) { if (kind === 'members') throw new ApiError('Không có thao tác xóa chủ tiệm.', 403); return api.delete(path(bakeryId, kind) + '/' + requireId(id)) },
   async uploadAddOn(bakeryId, id, file) {
     const form = new FormData(); form.append('file', validateImage(file))
     const data = await api.post(path(bakeryId, 'add-ons') + '/' + requireId(id) + '/image', form)

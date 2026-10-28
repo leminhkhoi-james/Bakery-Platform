@@ -23,7 +23,7 @@ export function createDemoStore(storage) {
     if (has(user, 'ADMIN')) return
     const bakery = state.bakeries.find((item) => item.id === bakeryId)
     const member = state.members.find((item) => item.bakeryId === bakeryId && item.userId === user.id && item.status === 'ACTIVE')
-    if (!has(user, 'BAKERY_OWNER', 'BAKERY_STAFF') || !(bakery?.ownerId === user.id || member && (!edit || ['OWNER', 'MANAGER'].includes(member.memberRole)))) throw new DemoError('Không có quyền với tiệm DEMO này.', 403)
+    if (!has(user, 'BAKERY_OWNER') || !(bakery?.ownerId === user.id || member && (!edit || member.memberRole === 'OWNER'))) throw new DemoError('Không có quyền với tiệm DEMO này.', 403)
   }
   function own(user, record) {
     requireUser(user)
@@ -40,15 +40,8 @@ export function createDemoStore(storage) {
       state.addressOwners.push(user.id)
       return true
     }
-    const slot = has(user, 'ADMIN') ? 'admin' : has(user, 'BAKERY_OWNER') ? 'vendor' : has(user, 'BAKERY_STAFF') ? 'staff' : has(user, 'CUSTOMER') ? 'customer' : null
+    const slot = has(user, 'ADMIN') ? 'admin' : has(user, 'BAKERY_OWNER') ? 'vendor' : has(user, 'CUSTOMER') ? 'customer' : null
     if (!slot || state.actors[slot]) { if (ensureAddresses()) save(); return }
-    if (slot === 'staff') {
-      state.actors.staff = user.id
-      state.users.push({ id: user.id, name: 'Nhân viên · DEMO', email: user.email || 'staff@demo.invalid', roles: [...roles(user)], status: 'ACTIVE' })
-      for (const bakery of state.bakeries) state.members.push({ id: id(), bakeryId: bakery.id, userId: user.id, memberRole: 'STAFF', status: 'ACTIVE' })
-      for (const chat of state.conversations) chat.participants.push({ userId: user.id, participantType: 'BAKERY' })
-      ensureAddresses(); save(); return
-    }
     const old = state.users[{ customer: 0, vendor: 1, admin: 2 }[slot]]
     const oldId = old.id
     state.actors[slot] = user.id
@@ -60,7 +53,7 @@ export function createDemoStore(storage) {
     }
     state = replace(state)
     Object.assign(state.users.find((item) => item.id === user.id), { name: (user.fullName || user.name || old.name) + ' · DEMO', email: user.email || old.email, roles: [...roles(user)] })
-    if (slot === 'vendor') for (const bakery of state.bakeries) state.members.push({ id: id(), bakeryId: bakery.id, userId: user.id, memberRole: has(user, 'BAKERY_OWNER') ? 'OWNER' : 'STAFF', status: 'ACTIVE', displayNameSnapshot: user.fullName || old.name })
+    if (slot === 'vendor') for (const bakery of state.bakeries) state.members.push({ id: id(), bakeryId: bakery.id, userId: user.id, memberRole: 'OWNER', status: 'ACTIVE', displayNameSnapshot: user.fullName || old.name })
     ensureAddresses()
     save()
   }

@@ -39,19 +39,19 @@ class ConversationOwnerAuthorizationTest {
     }
 
     @Test
-    @DisplayName("Legacy staff JWT cannot join a bakery conversation")
-    void requireParticipant_withStaffToken_isRejected() {
+    @DisplayName("Customer JWT cannot join a bakery conversation")
+    void requireParticipant_withCustomerToken_isRejected() {
         assertThrows(ChatException.class, () -> service.requireParticipant(
-                conversation, userId, Set.of("BAKERY_STAFF"), null));
+                conversation, userId, Set.of("CUSTOMER"), null));
         verifyNoInteractions(context, persistence);
     }
 
     @Test
-    @DisplayName("Owner JWT with legacy manager membership cannot join a conversation")
-    void requireParticipant_withManagerMembership_isRejected() {
+    @DisplayName("Owner JWT with invalid membership cannot join a conversation")
+    void requireParticipant_withInvalidMembership_isRejected() {
         when(context.authorizeBakeryMember(bakeryId, userId, null))
                 .thenReturn(new BakeryChatClient.MembershipAuthorizationResponse(
-                        bakeryId, userId, true, "MANAGER", true));
+                        bakeryId, userId, true, "INVALID", true));
         assertThrows(ChatException.class, () -> service.requireParticipant(
                 conversation, userId, Set.of("BAKERY_OWNER"), null));
         verifyNoInteractions(persistence);

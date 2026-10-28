@@ -83,23 +83,24 @@ test('Public plan cards offer detail controls with server names and empty/error 
 test('Vendor management tabs provide actual categories/add-ons/members screens in existing catalog route', () => {
   setup({ loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }), loadManagedProducts: ready({ result: [], meta: { page: 1, pageSize: 12, total: 0, pages: 0 } }), loadManagedCategories: ready([]) }, ['BAKERY_OWNER'])
   const html = render(VendorMenu, { routeSearch: '?bakeryId=' + bakeryId })
-  for (const text of ['Sản phẩm', 'Danh mục', 'Phụ kiện', 'Nhân sự']) assert.ok(html.includes(text))
+  for (const text of ['Sản phẩm', 'Danh mục', 'Phụ kiện', 'Chủ tiệm']) assert.ok(html.includes(text))
 })
-test('Vendor list empty/error/loading and STAFF controls follow membership resource, not mock fallback', () => {
+test('Vendor list empty/error/loading and non-owner controls follow membership resource, not mock fallback', () => {
   setup({ loadCatalogEntities: ready([]), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
   assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Chưa có danh mục từ backend/)
-  setup({ loadCatalogEntities: ready([{ id, name: 'Backend fixture category' }]), loadVendorMembership: ready({ memberRole: 'STAFF', status: 'ACTIVE' }) }, ['BAKERY_STAFF'])
+  setup({ loadCatalogEntities: ready([{ id, name: 'Backend fixture category' }]), loadVendorMembership: ready({ memberRole: 'INVALID', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
   const html = render(EntityManager, { bakeryId, kind: 'categories' })
   assert.match(html, /Backend fixture category/); assert.match(html, /<button disabled=""[^>]*>Sửa/)
-  setup({ loadCatalogEntities: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['BAKERY_STAFF'])
+  setup({ loadCatalogEntities: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['BAKERY_OWNER'])
   assert.match(render(EntityManager, { bakeryId, kind: 'members' }), /Thử lại/)
   setup(); assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Đang tải/)
 })
-test('Vendor forms match DTO fields, manager cannot assign manager/owner, add-on category required', () => {
-  setup()
-  const members = render(EntityForm, { kind: 'members', actor: { memberRole: 'MANAGER' }, onSave() {}, onClose() {} })
-  assert.match(members, /User ID đã có Bakery role/); assert.doesNotMatch(members, /<option[^>]*>OWNER|<option[^>]*>MANAGER/)
-  const addon = render(EntityForm, { kind: 'add-ons', actor: {}, onSave() {}, onClose() {} })
+test('Owner listing has no membership mutation controls; add-on form retains required category', () => {
+  setup({ loadCatalogEntities: ready([{ id, userId, memberRole: 'OWNER', status: 'ACTIVE' }]), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
+  const members = render(EntityManager, { bakeryId, kind: 'members' })
+  assert.match(members, /Chủ tiệm/)
+  assert.doesNotMatch(members, /Thêm Chủ tiệm|Xác nhận xóa|>Sửa</)
+  const addon = render(EntityForm, { kind: 'add-ons', onSave() {}, onClose() {} })
   assert.match(addon, /Nhóm phụ kiện/); assert.match(addon, /maxLength="80"/)
 })
 test('Draft asset resume with no snapshot shows BLOCKED and never renders replace-options form', () => {

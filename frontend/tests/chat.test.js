@@ -32,7 +32,7 @@ test('Customer cannot render another customer conversation; vendor scope and par
 test('Chat routes require a session; Vendor chat inherits actual vendor role guard', () => {
   assert.deepEqual(requiredRoles('chat'), []); assert.equal(canAccess('chat', null), false)
   assert.equal(canAccess('vendor-chat', { roles: ['CUSTOMER'] }), false)
-  assert.equal(canAccess('vendor-chat', { roles: ['BAKERY_STAFF'] }), true)
+  assert.equal(canAccess('vendor-chat', { roles: ['BAKERY_OWNER'] }), true)
 })
 test('Message mapper preserves raw timestamps, sender IDs, editedAt and attachment metadata', () => {
   const result = mapMessage({ ...message, editedAt: '2026-10-26T02:00:00Z', attachments: [{ id: randomUUID(), originalFileName: 'proof.pdf', mediaType: 'application/pdf', fileSize: 123, url: 'https://fixture.invalid/proof' }] })

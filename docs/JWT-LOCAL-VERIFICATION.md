@@ -68,7 +68,7 @@ docker compose -f compose.yaml -f docker-compose.bakery-subscription.yml -f dock
 
 This uses eight containers and does not build Cake AI. It checks owner/member
 display-name snapshots, private proof upload/signed downloads, owner/admin access
-and staff denial, bakery logo replacement/cover/add-on media, product multipart
+and customer denial, bakery logo replacement/cover/add-on media, product multipart
 images/primary/display order/deletion, publish and sorting. Invalid MIME, size,
 sort fields and unauthorized uploads are rejected. Test media is deleted through
 authenticated S3 requests before test database records are removed. Never point

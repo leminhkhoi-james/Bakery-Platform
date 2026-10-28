@@ -110,11 +110,11 @@ export function routeDemo(store, path, method, body, query, user) {
             else if (parts[4] === 'images' && method === 'DELETE') { product.images = product.images.filter((image) => image.id !== parts[5]); result = null }
           }
         } else if (['categories', 'add-ons', 'members'].includes(kind)) {
+          if (kind === 'members' && !get) throw new DemoError('Chủ tiệm được tạo cùng tiệm.', 403)
           const key = kind === 'add-ons' ? 'addOns' : kind
           if (get) result = s[key].filter((item) => item.bakeryId === bakery.id)
           else if (!parts[3] && method === 'POST') {
-            if (kind === 'members') { const person = find('users', body.userId); if (!person.roles.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role)) || s.members.some((m) => m.bakeryId === bakery.id && m.userId === person.id)) throw new DemoError('Thành viên cần role Bakery và chưa thuộc tiệm.', 409); result = create(key, { ...body, bakeryId: bakery.id, status: 'ACTIVE', displayNameSnapshot: person.name }) }
-            else result = create(key, { ...body, bakeryId: bakery.id })
+            result = create(key, { ...body, bakeryId: bakery.id })
           }
           else { const item = find(key, parts[3]); if (item.bakeryId !== bakery.id) throw new DemoError('Sai tiệm.', 403); if (method === 'PATCH') result = update(item, body); if (method === 'DELETE') { if (kind === 'members' && item.memberRole === 'OWNER') throw new DemoError('Không xóa chủ tiệm.', 409); if (kind === 'categories' && s.products.some((p) => p.categoryId === item.id)) throw new DemoError('Danh mục đang có sản phẩm.', 409); s[key] = s[key].filter((row) => row.id !== item.id); result = null } }
         }

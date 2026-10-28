@@ -24,7 +24,7 @@ async function fixture(service, request, response) {
   if (request.headers.authorization !== 'Bearer http-fixture-token' && url.pathname !== '/api/v1/products/' + productId) return respond(response, 401, null)
   if (service === 'bakery') {
     if (url.pathname === '/api/v1/products/' + productId) return respond(response, 200, publicProduct)
-    if (url.pathname.endsWith('/members')) return respond(response, 200, [{ userId: customerId, memberRole: 'MANAGER', status: 'ACTIVE' }])
+    if (url.pathname.endsWith('/members')) return respond(response, 200, [{ userId: customerId, memberRole: 'OWNER', status: 'ACTIVE' }])
     if (url.pathname.endsWith('/products') && request.method === 'GET') return respond(response, 200, page([product], { page: Number(url.searchParams.get('page') || 1) }))
     if (request.method === 'POST' && url.pathname.endsWith('/products')) { product = { ...JSON.parse(raw), id: productId, status: 'DRAFT' }; return respond(response, 201, product) }
     if (request.method === 'PATCH' && url.pathname.endsWith('/products/' + productId)) { product = { ...product, ...JSON.parse(raw) }; return respond(response, 200, product) }
@@ -63,7 +63,7 @@ beforeEach(() => { calls = []; product = { ...managedProduct }; currentOrder = s
 after(async () => { globalThis.fetch = nativeFetch; setAuthToken(null); await vite?.close(); bakeryServer?.closeAllConnections(); orderServer?.closeAllConnections(); await Promise.all([bakeryServer && new Promise((resolve) => bakeryServer.close(resolve)), orderServer && new Promise((resolve) => orderServer.close(resolve))]) })
 
 test('Real Vite routing sends private products/member requests to Bakery and orders to Order', async () => {
-  assert.equal((await vendor.getMembership(bakeryId, customerId)).memberRole, 'MANAGER')
+  assert.equal((await vendor.getMembership(bakeryId, customerId)).memberRole, 'OWNER')
   const products = await vendor.getProducts(bakeryId, { page: 2, size: 10, sort: 'basePrice,asc' })
   const orders = await orderService.getOrders({ scope: 'bakery', bakeryId, page: 1 })
   assert.equal(products.meta.page, 2); assert.equal(orders.result[0].id, orderId)

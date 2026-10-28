@@ -50,9 +50,9 @@ class IdentityUserClientTest {
 
     @Test
     @DisplayName("Customer cannot become a bakery member through the internal profile lookup")
-    void requireEligibleMember_customer_returns422() {
+    void requireOwner_customer_returns422() {
         response = profile("CUSTOMER");
-        assertThatThrownBy(() -> client.requireEligibleMember(userId)).isInstanceOfSatisfying(
+        assertThatThrownBy(() -> client.requireOwner(userId)).isInstanceOfSatisfying(
                 AppException.class, exception -> assertThat(exception.getStatus().value()).isEqualTo(422));
     }
 

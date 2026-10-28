@@ -5,7 +5,7 @@ import { memberCanEdit } from '../../services/managementModels.js'
 import { ApiState, ApiErrorMessage, inputClass, buttonClass } from '../management/ApiState.jsx'
 const loadPermission = async ({ conversation, user }) => {
   if (conversation.customerId === user.id) return user.roles?.includes('CUSTOMER') === true
-  if (!user.roles?.some((role) => ['BAKERY_OWNER', 'BAKERY_STAFF'].includes(role))) return false
+  if (!user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) return false
   try { return memberCanEdit(await vendorManagementService.getMembership(conversation.bakeryId, user.id), user.roles) }
   catch (error) { if (error.status === 403) return false; throw error }
 }

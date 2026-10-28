@@ -12,19 +12,17 @@ beforeEach(() => { calls = []; setAuthToken('fixture-vendor'); handler = () => r
 after(() => { globalThis.fetch = nativeFetch; setAuthToken(null) })
 const category = { id, name: 'Category', slug: 'category', displayOrder: 2, active: true }
 const addon = { id, name: 'Add-on', category: 'Candles', price: '12000', description: 'Fixture', active: true }
-const member = { id, userId, memberRole: 'STAFF', status: 'ACTIVE' }
+const member = { id, userId, memberRole: 'OWNER', status: 'ACTIVE' }
 const options = { groups: [{ id: groupId, name: 'Flavor', selectionType: 'SINGLE', required: true, minimumSelections: 1, maximumSelections: 1, displayOrder: 0, values: [{ id: valueId, name: 'Vanilla', description: '', priceAdjustment: '-1000', active: true, displayOrder: 0 }] }] }
-for (const [kind, dto] of [['categories', category], ['add-ons', addon], ['members', member]]) test('Vendor ' + kind + ' list/create/patch/delete send exact endpoint/DTO and map response', async () => {
+for (const [kind, dto] of [['categories', category], ['add-ons', addon]]) test('Vendor ' + kind + ' list/create/patch/delete send exact endpoint/DTO and map response', async () => {
   handler = () => reply([dto]); assert.equal((await service.list(bakeryId, kind))[0].id, id)
   handler = () => reply(dto)
   const created = await service.save(bakeryId, kind, null, { ...dto, joinedAt: 'do-not-send', displayNameSnapshot: 'read-only' })
   assert.equal(created.id, id); let call = calls.at(-1)
   assert.equal(call.options.method, 'POST'); assert.equal(call.url, '/api/v1/bakeries/' + bakeryId + '/' + kind)
   const body = JSON.parse(call.options.body); assert.equal(body.id, undefined); assert.equal(body.joinedAt, undefined)
-  if (kind === 'members') assert.deepEqual(body, { userId, memberRole: 'STAFF' })
   if (kind === 'add-ons') assert.equal(body.price, 12000)
   await service.save(bakeryId, kind, id, dto); call = calls.at(-1); assert.equal(call.options.method, 'PATCH'); assert.ok(call.url.endsWith('/' + id))
-  if (kind === 'members') assert.deepEqual(JSON.parse(call.options.body), { memberRole: 'STAFF', status: 'ACTIVE' })
   handler = () => reply(null, 204); await service.remove(bakeryId, kind, id); assert.equal(calls.at(-1).options.method, 'DELETE')
 })
 test('Add-on image uses file multipart, Bearer and backend MediaResponse', async () => {
@@ -59,14 +57,17 @@ test('Snapshot read verifies product/bakery; fresh form never invents a GET/PUT 
   assert.equal(calls[0].options.headers.has('Authorization'), false)
   handler = () => reply({ product: { id }, bakeryId: randomUUID(), images: [], options }); await assert.rejects(service.getProductSnapshot(bakeryId, id), { status: 502 })
 })
-test('Vendor permission guards match OWNER/MANAGER/STAFF and protect last active owner', () => {
-  const owner = { id, memberRole: 'OWNER', status: 'ACTIVE' }, manager = { ...owner, memberRole: 'MANAGER' }, staff = { ...owner, memberRole: 'STAFF' }, roles = ['BAKERY_STAFF']
-  assert.equal(canManageEntity(staff, roles, 'categories'), false)
-  assert.equal(canManageEntity(manager, roles, 'members', { memberRole: 'MANAGER' }), false)
-  assert.equal(canManageEntity(manager, roles, 'members', { memberRole: 'STAFF' }), true)
+test('Only active owner can edit catalog; membership is read-only', async () => {
+  const owner = { id, memberRole: 'OWNER', status: 'ACTIVE' }, roles = ['BAKERY_OWNER']
+  assert.equal(canManageEntity(owner, roles, 'categories'), true)
   assert.equal(canManageEntity(owner, ['CUSTOMER'], 'categories'), false)
-  assert.equal(canManageEntity(owner, ['BAKERY_OWNER'], 'members', owner, [owner]), false)
-  assert.equal(canManageEntity(owner, ['BAKERY_OWNER'], 'members', owner, [owner, { ...owner, id: userId }]), true)
+  assert.equal(canManageEntity({ ...owner, status: 'INACTIVE' }, roles, 'categories'), false)
+  assert.equal(canManageEntity(owner, roles, 'members'), false)
+  handler = () => reply([member])
+  assert.equal((await service.list(bakeryId, 'members'))[0].memberRole, 'OWNER')
+  await assert.rejects(service.save(bakeryId, 'members', null, member), { status: 403 })
+  assert.throws(() => service.remove(bakeryId, 'members', id), { status: 403 })
+  assert.equal(calls.length, 1)
 })
 test('Validation strips read-only fields; no OWNER assignment or invalid mutable data before HTTP', () => {
   for (const [kind, input] of [['members', { userId, memberRole: 'OWNER' }], ['add-ons', { ...addon, category: '' }], ['categories', { ...category, displayOrder: -1 }]]) assert.throws(() => catalogEntityPayload(kind, input, true))
@@ -75,7 +76,7 @@ test('Validation strips read-only fields; no OWNER assignment or invalid mutable
 })
 for (const status of [400, 401, 403, 404, 409, 422, 500, 503]) test('Every new Vendor endpoint propagates HTTP ' + status + ' without mutation or empty fallback', async () => {
   handler = () => reply(null, status)
-  for (const [kind, dto] of [['categories', category], ['add-ons', addon], ['members', member]]) {
+  for (const [kind, dto] of [['categories', category], ['add-ons', addon]]) {
     await assert.rejects(service.list(bakeryId, kind), { status })
     await assert.rejects(service.save(bakeryId, kind, null, dto), { status })
     await assert.rejects(service.save(bakeryId, kind, id, dto), { status })

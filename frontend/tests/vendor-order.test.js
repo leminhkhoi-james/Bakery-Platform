@@ -35,9 +35,9 @@ test('Bakery fields reject server id/status/operations, require real name/phone 
   assert.throws(() => bakeryPayload({ name: 'Tiệm' }, true), { status: 400 })
   assert.throws(() => bakeryPayload({ email: 'bad-email' }), { status: 400 })
 })
-test('Local membership OWNER/MANAGER plus platform vendor role governs editing, STAFF cannot edit', () => {
-  for (const role of ['OWNER', 'MANAGER']) assert.equal(memberCanEdit({ memberRole: role, status: 'ACTIVE' }, ['BAKERY_STAFF']), true)
-  assert.equal(memberCanEdit({ memberRole: 'STAFF', status: 'ACTIVE' }, ['BAKERY_OWNER']), false)
+test('Local membership OWNER plus platform vendor role governs editing, non-owners cannot edit', () => {
+  for (const role of ['OWNER']) assert.equal(memberCanEdit({ memberRole: role, status: 'ACTIVE' }, ['BAKERY_OWNER']), true)
+  assert.equal(memberCanEdit({ memberRole: 'INVALID', status: 'ACTIVE' }, ['BAKERY_OWNER']), false)
   assert.equal(memberCanEdit({ memberRole: 'OWNER', status: 'INACTIVE' }, ['BAKERY_OWNER']), false)
   assert.equal(memberCanEdit(null, ['BAKERY_OWNER']), false)
 })
@@ -66,8 +66,8 @@ test('Managed empty products/categories remain empty; malformed envelopes fail',
   handler = () => reply({ results: [managedProduct] }); await assert.rejects(vendor.getProducts(bakeryId), { status: 502 }); await assert.rejects(vendor.getCategories(bakeryId), { status: 502 })
 })
 test('Membership is resolved from backend self member and never inferred from platform OWNER', async () => {
-  handler = () => reply([{ userId: customerId, memberRole: 'MANAGER', status: 'ACTIVE' }])
-  assert.equal((await vendor.getMembership(bakeryId, customerId)).memberRole, 'MANAGER')
+  handler = () => reply([{ userId: customerId, memberRole: 'OWNER', status: 'ACTIVE' }])
+  assert.equal((await vendor.getMembership(bakeryId, customerId)).memberRole, 'OWNER')
   assert.equal(await vendor.getMembership(bakeryId, randomUUID()), null)
 })
 test('Bakery create/patch and product create/patch send writable payloads only', async () => {
@@ -107,7 +107,7 @@ test('Vendor order list rejects data returned for another bakery', async () => {
   await assert.rejects(orderService.getOrders({ scope: 'bakery', bakeryId }), { status: 502 })
 })
 test('Customer actions are cancellation only before baking; Vendor follows exact state machine', () => {
-  const customer = { id: customerId, roles: ['CUSTOMER'] }, vendorUser = { id: randomUUID(), roles: ['BAKERY_STAFF'] }
+  const customer = { id: customerId, roles: ['CUSTOMER'] }, vendorUser = { id: randomUUID(), roles: ['BAKERY_OWNER'] }
   assert.deepEqual(allowedOrderActions(order, customer, 'mine'), ['CANCELLED'])
   assert.deepEqual(allowedOrderActions({ ...order, status: 'BAKING' }, customer, 'mine'), [])
   assert.deepEqual(allowedOrderActions({ ...order, status: 'BAKING' }, vendorUser, 'bakery'), ['READY'])

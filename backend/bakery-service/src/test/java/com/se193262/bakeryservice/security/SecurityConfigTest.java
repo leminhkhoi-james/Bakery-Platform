@@ -82,15 +82,15 @@ class SecurityConfigTest {
     }
 
     @Test
-    @DisplayName("JWT staff cũ bị từ chối dù có owner membership")
-    void catalog_withLegacyStaffToken_isForbidden() throws Exception {
+    @DisplayName("JWT customer bị từ chối dù có owner membership")
+    void catalog_withCustomerToken_isForbidden() throws Exception {
         BakeryMember member = new BakeryMember(new Bakery("Test", "0900000000", null),
                 USER_ID, BakeryMemberRole.OWNER);
         memberFixture.member = member;
         String path = "/api/v1/bakeries/" + BAKERY_ID + "/products";
-        mockMvc.perform(get(path).header("Authorization", "Bearer user-staff"))
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-customer"))
                 .andExpect(status().isForbidden());
-        mockMvc.perform(post(path).header("Authorization", "Bearer user-staff"))
+        mockMvc.perform(post(path).header("Authorization", "Bearer user-customer"))
                 .andExpect(status().isForbidden());
     }
 
@@ -155,7 +155,7 @@ class SecurityConfigTest {
         JwtDecoder jwtDecoder() {
             return token -> {
                 String tokenType = token.startsWith("service") ? "service" : "user";
-                String role = token.contains("staff") ? "BAKERY_STAFF" : "BAKERY_OWNER";
+                String role = token.contains("customer") ? "CUSTOMER" : "BAKERY_OWNER";
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(USER_ID.toString())

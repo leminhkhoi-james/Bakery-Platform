@@ -77,10 +77,10 @@ test('New backend-confirmed DRAFT profile can configure operations and submit; u
   assert.match(html, /Vận hành và giao hàng/); assert.match(html, /Gửi yêu cầu duyệt/)
   assert.match(render(BakeryManager, { bakeryId }), /Không tự PUT các danh sách rỗng/)
 })
-test('Only verified OWNER or MANAGER sees category creation in ProductManager', () => {
+test('Only verified OWNER sees category creation in ProductManager', () => {
   const resources = { loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadManagedProducts: ready(page([])), loadManagedCategories: ready([]) }
   fixtures(resources, ['BAKERY_OWNER']); assert.match(render(ProductManager, { bakeryId }), /Thêm danh mục sản phẩm/)
-  fixtures({ ...resources, loadVendorMembership: ready(null) }, ['BAKERY_STAFF']); assert.doesNotMatch(render(ProductManager, { bakeryId }), /Thêm danh mục sản phẩm/)
+  fixtures({ ...resources, loadVendorMembership: ready(null) }, ['BAKERY_OWNER']); assert.doesNotMatch(render(ProductManager, { bakeryId }), /Thêm danh mục sản phẩm/)
 })
 for (const status of [401, 403, 404, 500, 503, 0]) test('Admin screens expose HTTP/network ' + status + ' as error with retry, never an empty list', () => {
   const resource = { status: 'error', error: { status, message: 'Fixture failure' }, data: null, reload() {} }

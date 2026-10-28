@@ -16,14 +16,10 @@ member creation/update/deletion are removed; adding co-owners or transferring
 ownership is outside the current contract. Order, Marketplace, Chat and Subscription
 require OWNER membership for bakery access, with existing explicit admin exceptions.
 
-## Existing data and rollout
+## Initial schema
 
-Apply Identity V3, Bakery V2 and Chat V2 when deploying the services together.
-Former platform staff assignments and bakery staff/manager memberships are archived
-in local audit tables before removal. Former staff gain CUSTOMER, never BAKERY_OWNER.
-Existing OWNER memberships and their status remain unchanged. Old staff-only JWTs
-cannot authorize bakery management even before they expire.
-
-Historical Chat BAKERY_STAFF participant types remain readable to preserve sender
-attribution, but are marked left and cannot authorize access or new participation.
-No existing migration is edited. No live database is modified by editing these files.
+The user confirmed that no real data exists. Initial Identity role seeds and
+Bakery/Chat check constraints define only the supported roles directly. There
+are no legacy-role migrations, archive tables or historical participant types.
+Existing development databases must be recreated before using the revised initial
+schema. Do not repair checksums or reset databases automatically.

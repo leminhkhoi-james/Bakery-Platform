@@ -72,7 +72,7 @@ test('AI results never show unapproved image URLs and select is locked until SUC
 test('Customer/Vendor page entry states use true identity, real API loading and no legacy demo payload', () => {
   const customer = withUser(Views.CustomerRequests, { onNavigate: () => {} })
   assert.match(customer, /Yêu cầu bánh của tôi/); assert.match(customer, /Đang tải/)
-  const vendor = withUser(Vendor, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_STAFF'])
+  const vendor = withUser(Vendor, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
   assert.match(vendor, /Fixture customer/); assert.match(vendor, /tất cả membership/); assert.match(vendor, /Đang tải/)
   const ai = withUser(Ai.default, { onNavigate: () => {} })
   assert.match(ai, /Chọn yêu cầu/); assert.match(ai, /Đang tải/)

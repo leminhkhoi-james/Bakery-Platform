@@ -38,11 +38,11 @@ test('Plan detail uses actual UUID endpoint', async () => {
   handler = () => envelope(plan); assert.equal((await service.getPlan(planId)).id, planId)
   assert.equal(calls[0].url, '/api/v1/subscription-plans/' + planId)
 })
-test('Owner/staff permissions and existing vendor route guard are retained', () => {
-  assert.deepEqual(subscriptionPermissions(['BAKERY_STAFF']), { canRead: true, canPurchase: false })
+test('Only owners can purchase; admins can read subscription history', () => {
+  assert.deepEqual(subscriptionPermissions(['ADMIN']), { canRead: true, canPurchase: false })
   assert.equal(subscriptionPermissions(['BAKERY_OWNER']).canPurchase, true)
   assert.equal(subscriptionPermissions(['CUSTOMER']).canRead, false)
-  assert.deepEqual(requiredRoles('vendor-subscription'), ['BAKERY_OWNER', 'BAKERY_STAFF'])
+  assert.deepEqual(requiredRoles('vendor-subscription'), ['BAKERY_OWNER'])
 })
 test('Subscription uses Bearer JWT and preserves absent current/scheduled periods', async () => {
   handler = () => envelope({ bakeryId, currentSubscription: null, scheduledSubscription: null, features: {} })
@@ -80,7 +80,7 @@ test('Detailed order carries backend payment history and actual period', async (
 test('Only owner with unexpired pending order can submit payment', () => {
   assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], order), true)
   for (const status of ['PAYMENT_REVIEW', 'COMPLETED', 'REJECTED', 'EXPIRED', 'CANCELLED']) assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], { ...order, status }), false)
-  assert.equal(canSubmitSubscriptionPayment(['BAKERY_STAFF'], order), false)
+  assert.equal(canSubmitSubscriptionPayment(['CUSTOMER'], order), false)
   assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], { ...order, expiresAt: '2000-01-01' }), false)
 })
 test('Payment multipart contains writable metadata/proof, exact snapshot amount and idempotency key', async () => {
