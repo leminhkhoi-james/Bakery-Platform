@@ -74,49 +74,45 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/bakeries/{bakeryId}/logo",
                                 "/api/v1/bakeries/{bakeryId}/cover")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}/image")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/{bakeryId}/products/{productId}/images")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}/publish",
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}/hide",
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}/archive")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.GET, "/api/v1/bakeries/{bakeryId}/members")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/bakeries/{bakeryId}/categories",
                                 "/api/v1/bakeries/{bakeryId}/add-ons",
                                 "/api/v1/bakeries/{bakeryId}/products")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER,
-                                BakeryMemberRole.STAFF))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/v1/bakeries/{bakeryId}",
-                                "/api/v1/bakeries/{bakeryId}/members/{memberId}",
                                 "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
                                 "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}",
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.POST,
-                                "/api/v1/bakeries/{bakeryId}/members",
                                 "/api/v1/bakeries/{bakeryId}/categories",
                                 "/api/v1/bakeries/{bakeryId}/add-ons",
                                 "/api/v1/bakeries/{bakeryId}/products")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/v1/bakeries/{bakeryId}/operations",
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}/options")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.DELETE,
-                                "/api/v1/bakeries/{bakeryId}/members/{memberId}",
                                 "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
                                 "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .requestMatchers(HttpMethod.DELETE,
                                 "/api/v1/bakeries/{bakeryId}/products/{productId}/images/{imageId}")
-                        .access(memberRole(BakeryMemberRole.OWNER, BakeryMemberRole.MANAGER))
+                        .access(memberRole(BakeryMemberRole.OWNER))
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(resourceServer -> resourceServer
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
@@ -165,7 +161,7 @@ public class SecurityConfig {
         return (authentication, context) -> {
             Authentication resolved = authentication.get();
             if (!isUser(resolved)
-                    || !(hasRole(resolved, "BAKERY_OWNER") || hasRole(resolved, "BAKERY_STAFF"))) {
+                    || !hasRole(resolved, "BAKERY_OWNER")) {
                 return new AuthorizationDecision(false);
             }
             try {

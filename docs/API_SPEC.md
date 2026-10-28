@@ -6,7 +6,7 @@
 > **Implementation status:** Identity authentication, Order/Review endpoints
 > và Chat REST endpoints đã được triển khai. Order và Chat validate user/service
 > JWT contracts and enforce role/scope plus resource/participant authorization.
-> Marketplace chat authorization, Bakery membership authorization and Identity
+> Marketplace chat authorization, Bakery ownership authorization and Identity
 > service-token issuance are implemented. Chat requests least-privilege,
 > audience-specific service JWTs at runtime; configure the Chat client secret
 > hash in Identity and its matching secret in Chat.
@@ -67,11 +67,11 @@ Platform roles:
 |---|---|
 | `CUSTOMER` | Profile, cake request, order, review, chat, Cake AI |
 | `BAKERY_OWNER` | Tạo/quản lý bakery, subscription và toàn bộ bakery resources |
-| `BAKERY_STAFF` | Thao tác bakery theo membership role |
 | `ADMIN` | Duyệt bakery/payment và quản trị nền tảng |
 
-Bakery membership roles `OWNER`, `MANAGER`, `STAFF` được Bakery Service kiểm
-tra bổ sung; chúng không thay thế platform roles.
+Bakery membership chỉ có `OWNER`, được Bakery Service kiểm tra theo từng tiệm.
+API quản lý tiệm yêu cầu cả platform `BAKERY_OWNER` và membership `OWNER` ACTIVE
+của đúng bakery. `BAKERY_OWNER` không cấp quyền trên mọi tiệm.
 
 Service JWT dùng `token_type=service`, audience là service đích và claim
 `scope` theo chuẩn OAuth2 dạng chuỗi phân cách bằng khoảng trắng. Identity
@@ -422,19 +422,19 @@ Tạo bakery `DRAFT` và current user làm member `OWNER`. **Success (201):**
 `BakeryManagementResponse`. **Errors:** `400` validation; `503` Identity
 validation unavailable.
 
-### PATCH /bakeries/{bakeryId} 🔒 OWNER|MANAGER
+### PATCH /bakeries/{bakeryId} 🔒 OWNER
 
 **Request:** subset của create body. Không sửa status qua endpoint này.
 
 **Success (200):** `BakeryManagementResponse`. **Errors:** `403` membership;
 `404`; `409` optimistic conflict.
 
-### POST /bakeries/{bakeryId}/logo 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/logo 🔒 OWNER
 
 Upload hoặc thay logo. Contract multipart, response và error giống endpoint
 cover ngay dưới đây.
 
-### POST /bakeries/{bakeryId}/cover 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/cover 🔒 OWNER
 
 Hai endpoint dùng `multipart/form-data`, part `file`, image tối đa 5 MB. File
 mới thay file cũ bằng quy trình upload + compensation.
@@ -442,7 +442,7 @@ mới thay file cũ bằng quy trình upload + compensation.
 **Success (201):** `MediaResponse {url, expiresAt}`. **Errors:** `400` invalid
 file; `403`; `404`; `503` storage unavailable.
 
-### PUT /bakeries/{bakeryId}/operations 🔒 OWNER|MANAGER
+### PUT /bakeries/{bakeryId}/operations 🔒 OWNER
 
 Thay thế atomically cấu hình address, service area và business hours thuộc
 Bakery Service.
@@ -496,43 +496,13 @@ thông tin liên hệ.
 **Success (200):** status `PENDING_APPROVAL`. **Errors:** `409` wrong state;
 `422` profile incomplete.
 
-### GET /bakeries/{bakeryId}/members 🔒 OWNER|MANAGER
+### GET /bakeries/{bakeryId}/members 🔒 OWNER
 
 **Success (200):** member list không phân trang gồm user ID, display snapshot,
 member role, status, joinedAt. **Errors:** `403`; `404`.
 
-### POST /bakeries/{bakeryId}/members 🔒 OWNER|MANAGER
-
-```json
-{
-  "userId": "58cd4975-e979-4d87-95d4-cceb7dbb4fd7",
-  "memberRole": "STAFF"
-}
-```
-
-Manager chỉ thêm `STAFF`; chỉ owner thêm `MANAGER`. User phải có platform role
-`BAKERY_STAFF` hoặc `BAKERY_OWNER` phù hợp.
-
-**Success (201):** `BakeryMemberResponse`. **Errors:** `404` user; `409` member
-đã tồn tại; `422` role mismatch; `503` Identity unavailable.
-
-### PATCH /bakeries/{bakeryId}/members/{memberId} 🔒 OWNER|MANAGER
-
-```json
-{
-  "memberRole": "MANAGER",
-  "status": "ACTIVE"
-}
-```
-
-Manager không sửa owner/manager khác. Không hạ quyền hoặc deactivate owner cuối
-cùng. **Success (200):** `BakeryMemberResponse`. **Errors:** `403`, `404`, `409`,
-`422` last-owner invariant.
-
-### DELETE /bakeries/{bakeryId}/members/{memberId} 🔒 OWNER|MANAGER
-
-**Success (204):** no body. **Errors:** `403`; `404`; `422` không được xóa owner
-cuối cùng.
+Membership `OWNER` được tạo tự động cùng bakery. Không có API thêm, sửa hoặc
+xóa membership; các route POST/PATCH/DELETE member cũ bị từ chối.
 
 ---
 
@@ -553,11 +523,11 @@ invalid; `503` entitlement service unavailable nếu không có cache hợp lệ
 **Success (200):** product, bakery summary, category, signed image URLs, option
 groups/values và active add-ons của bakery. **Errors:** `404` product không public.
 
-### GET /bakeries/{bakeryId}/categories 🔒 OWNER|MANAGER|STAFF
+### GET /bakeries/{bakeryId}/categories 🔒 OWNER
 
 **Success (200):** tất cả categories của bakery, không phân trang.
 
-### POST /bakeries/{bakeryId}/categories 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/categories 🔒 OWNER
 
 ```json
 {
@@ -571,22 +541,22 @@ groups/values và active add-ons của bakery. **Errors:** `404` product không 
 **Success (201):** `ProductCategoryResponse`. **Errors:** `409` duplicate slug
 trong bakery.
 
-### PATCH /bakeries/{bakeryId}/categories/{categoryId} 🔒 OWNER|MANAGER
+### PATCH /bakeries/{bakeryId}/categories/{categoryId} 🔒 OWNER
 
 **Request:** subset của create body. **Success (200):** category. **Errors:**
 `404`; `409` duplicate slug.
 
-### DELETE /bakeries/{bakeryId}/categories/{categoryId} 🔒 OWNER|MANAGER
+### DELETE /bakeries/{bakeryId}/categories/{categoryId} 🔒 OWNER
 
 Xóa category và đặt `categoryId=null` cho products liên quan; không xóa product.
 
 **Success (204):** no body. **Errors:** `404`.
 
-### GET /bakeries/{bakeryId}/add-ons 🔒 OWNER|MANAGER|STAFF
+### GET /bakeries/{bakeryId}/add-ons 🔒 OWNER
 
 **Success (200):** tất cả add-ons của bakery, không phân trang.
 
-### POST /bakeries/{bakeryId}/add-ons 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/add-ons 🔒 OWNER
 
 ```json
 {
@@ -600,29 +570,29 @@ Xóa category và đặt `categoryId=null` cho products liên quan; không xóa 
 
 **Success (201):** `AddOnResponse`. **Errors:** `400` price âm/validation.
 
-### PATCH /bakeries/{bakeryId}/add-ons/{addOnId} 🔒 OWNER|MANAGER
+### PATCH /bakeries/{bakeryId}/add-ons/{addOnId} 🔒 OWNER
 
 **Request:** subset của create body. **Success (200):** add-on. **Errors:**
 `404`; `409` optimistic conflict.
 
-### POST /bakeries/{bakeryId}/add-ons/{addOnId}/image 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/add-ons/{addOnId}/image 🔒 OWNER
 
 **Request:** multipart part `file`, image tối đa 5 MB. **Success (201):**
 `MediaResponse`. **Errors:** `400`, `404`, `503`.
 
-### DELETE /bakeries/{bakeryId}/add-ons/{addOnId} 🔒 OWNER|MANAGER
+### DELETE /bakeries/{bakeryId}/add-ons/{addOnId} 🔒 OWNER
 
 Soft-disable bằng `active=false` nếu đã được tham chiếu; snapshot offer cũ không
 thay đổi. **Success (204):** no body. **Errors:** `404`.
 
-### GET /bakeries/{bakeryId}/products 🔒 OWNER|MANAGER|STAFF
+### GET /bakeries/{bakeryId}/products 🔒 OWNER
 
 **Query:** common pagination, `status`, `categoryId`, `query`. Trả cả draft và
 archived theo quyền membership.
 
 **Success (200):** paginated `ProductManagementResponse`.
 
-### POST /bakeries/{bakeryId}/products 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/products 🔒 OWNER
 
 ```json
 {
@@ -640,12 +610,12 @@ archived theo quyền membership.
 Tạo product `DRAFT`. **Success (201):** `ProductManagementResponse`. **Errors:**
 `404` category; `409` duplicate bakery/slug; `422` category thuộc bakery khác.
 
-### PATCH /bakeries/{bakeryId}/products/{productId} 🔒 OWNER|MANAGER
+### PATCH /bakeries/{bakeryId}/products/{productId} 🔒 OWNER
 
 **Request:** subset của create body; không sửa status. **Success (200):** product.
 **Errors:** `404`; `409` slug/optimistic conflict; `422` cross-bakery category.
 
-### POST /bakeries/{bakeryId}/products/{productId}/images 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/products/{productId}/images 🔒 OWNER
 
 **Request:** multipart parts `files` (1–10 images, tối đa 5 MB/file), optional
 `primaryIndex` và `displayOrder` JSON array.
@@ -653,12 +623,12 @@ Tạo product `DRAFT`. **Success (201):** `ProductManagementResponse`. **Errors:
 **Success (201):** array `ProductImageResponse`. **Errors:** `400` file/count;
 `404`; `409` multiple-primary conflict; `503` storage unavailable.
 
-### DELETE /bakeries/{bakeryId}/products/{productId}/images/{imageId} 🔒 OWNER|MANAGER
+### DELETE /bakeries/{bakeryId}/products/{productId}/images/{imageId} 🔒 OWNER
 
 **Success (204):** no body. Nếu xóa ảnh primary, không tự chọn ảnh khác.
 **Errors:** `404`.
 
-### PUT /bakeries/{bakeryId}/products/{productId}/options 🔒 OWNER|MANAGER
+### PUT /bakeries/{bakeryId}/products/{productId}/options 🔒 OWNER
 
 Thay thế toàn bộ option configuration của product trong một transaction.
 
@@ -694,7 +664,7 @@ min ≥ 1; IDs nếu có phải thuộc product hiện tại.
 **Success (200):** option groups/values. **Errors:** `409` optimistic conflict;
 `422` selection invariant/cross-product ID.
 
-### POST /bakeries/{bakeryId}/products/{productId}/publish 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/products/{productId}/publish 🔒 OWNER
 
 Product phải có ít nhất một image primary, giá/cấu hình hợp lệ và bakery có
 active subscription.
@@ -702,12 +672,12 @@ active subscription.
 **Success (200):** product status `PUBLISHED`. **Errors:** `409` wrong state;
 `422` incomplete product/inactive entitlement; `503` Subscription unavailable.
 
-### POST /bakeries/{bakeryId}/products/{productId}/hide 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/products/{productId}/hide 🔒 OWNER
 
 Chuyển `PUBLISHED` thành `HIDDEN`. **Success (200):** product. **Errors:** `409`
 wrong state.
 
-### POST /bakeries/{bakeryId}/products/{productId}/archive 🔒 OWNER|MANAGER
+### POST /bakeries/{bakeryId}/products/{productId}/archive 🔒 OWNER
 
 Chuyển product chưa archived thành `ARCHIVED`; order/request snapshots cũ giữ
 nguyên. **Success (200):** product. **Errors:** `409` wrong state.
@@ -749,7 +719,7 @@ state; `422` approval checklist chưa đạt.
 
 ### GET /cake-requests 🔒
 
-**Access:** `CUSTOMER` xem request của mình; bakery member xem request `OPEN`
+**Access:** `CUSTOMER` xem request của mình; bakery owner xem request `OPEN`
 phù hợp service area hoặc targeted đúng bakery; `ADMIN` xem theo filter quản trị.
 
 **Query:** common pagination; `scope=mine|available`, `status`, `requestType`,
@@ -760,7 +730,7 @@ customer chỉ hiện với bakery đã có quyền tham gia request.
 
 ### GET /cake-requests/{cakeRequestId} 🔒
 
-**Access:** owner customer, eligible/target bakery member hoặc admin.
+**Access:** owner customer, eligible/target bakery owner hoặc admin.
 
 **Success (200):** request detail gồm preference, option snapshots, signed image
 URLs, selected design summary, status history và offer summary theo quyền.
@@ -883,7 +853,7 @@ Cho phép cancel `DRAFT|OPEN`; không cancel khi đã có accepted offer/order.
 
 ### GET /offers 🔒
 
-**Access:** customer dùng `scope=received`; bakery member dùng `scope=sent`;
+**Access:** customer dùng `scope=received`; bakery owner dùng `scope=sent`;
 admin dùng filters quản trị.
 
 **Query:** common pagination; `scope`, `cakeRequestId`, `bakeryId`, `status`;
@@ -898,7 +868,7 @@ default sort `createdAt,desc`.
 **Success (200):** offer detail, item snapshots và status history. **Errors:**
 `403`; `404`.
 
-### POST /cake-requests/{cakeRequestId}/offers 🔒 BAKERY_OWNER|BAKERY_STAFF
+### POST /cake-requests/{cakeRequestId}/offers 🔒 BAKERY_OWNER
 
 ```json
 {
@@ -925,7 +895,7 @@ nếu targeted, phục vụ khu vực và có active subscription.
 request; `422` request không open/offer expired/ineligible/inactive entitlement;
 `503` Bakery hoặc Subscription unavailable.
 
-### PATCH /offers/{offerId} 🔒 submitting bakery OWNER|MANAGER
+### PATCH /offers/{offerId} 🔒 submitting bakery OWNER
 
 **Request:** subset của offer create body, trừ `bakeryId`; chỉ offer `PENDING`
 chưa hết hạn được sửa. Giá/totals được tính lại.
@@ -933,7 +903,7 @@ chưa hết hạn được sửa. Giá/totals được tính lại.
 **Success (200):** `OfferResponse`. **Errors:** `409` wrong state/optimistic
 conflict; `422` invariant.
 
-### POST /offers/{offerId}/withdraw 🔒 submitting bakery OWNER|MANAGER
+### POST /offers/{offerId}/withdraw 🔒 submitting bakery OWNER
 
 ```json
 {
@@ -1021,7 +991,7 @@ mismatch; `422` catalog/option/area/notice invalid; `503` remote unavailable.
 
 ### GET /orders 🔒
 
-**Access:** customer xem order của mình; bakery member xem order của bakery;
+**Access:** customer xem order của mình; bakery owner xem order của bakery;
 admin xem theo filter.
 
 **Query:** common pagination; `scope=mine|bakery`, `bakeryId`, `status`,
@@ -1036,7 +1006,7 @@ review nếu có. Không gọi catalog để thay snapshot. **Errors:** `403`; `
 
 ### POST /orders/{orderId}/status-transitions 🔒
 
-**Access:** bakery member thực hiện fulfillment transitions; customer/bakery có
+**Access:** bakery owner thực hiện fulfillment transitions; customer/bakery có
 thể cancel theo rule; admin override chỉ khi policy cho phép.
 
 ```json
@@ -1137,7 +1107,7 @@ Unique `(cakeRequestId,bakeryId)` giúp retry trả conversation hiện có.
 **Success (200):** conversation context, participants và current read state.
 **Errors:** `404` khi không phải participant.
 
-### POST /conversations/{conversationId}/close 🔒 CUSTOMER|bakery OWNER|MANAGER
+### POST /conversations/{conversationId}/close 🔒 CUSTOMER|bakery OWNER
 
 ```json
 {
@@ -1310,7 +1280,7 @@ trang vì là reference data nhỏ.
 **Success (200):** `SubscriptionPlanResponse`. **Errors:** `404` inactive hoặc
 không tồn tại.
 
-### GET /bakeries/{bakeryId}/subscription 🔒 bakery member|ADMIN
+### GET /bakeries/{bakeryId}/subscription 🔒 bakery owner|ADMIN
 
 **Success (200):** current active/scheduled period và entitlement features;
 `data.currentSubscription=null` nếu chưa có. **Errors:** `403`; `404` bakery.
@@ -1332,12 +1302,12 @@ trùng cho cùng idempotency key.
 **Errors:** `409` conflicting open order/idempotency mismatch; `422` plan inactive;
 `503` Bakery validation unavailable.
 
-### GET /bakeries/{bakeryId}/subscription-orders 🔒 bakery member|ADMIN
+### GET /bakeries/{bakeryId}/subscription-orders 🔒 bakery owner|ADMIN
 
 **Query:** common pagination; `status`; default sort `createdAt,desc`.
 **Success (200):** paginated subscription orders.
 
-### GET /subscription-orders/{orderId} 🔒 bakery member|ADMIN
+### GET /subscription-orders/{orderId} 🔒 bakery owner|ADMIN
 
 **Success (200):** order, safe payment summaries và activated period. Payment
 proof URL chỉ trả cho submitting bakery owner và admin. **Errors:** `403`; `404`.
@@ -1489,7 +1459,7 @@ nhưng không expose entity. Lỗi authentication/authorization vẫn là `401/4
 
 ### GET /internal/v1/bakeries/{bakeryId}/members/{userId}/authorization — Bakery
 
-**Required scope:** `bakery:membership:read`. **Query:** `requiredRole` optional.
+**Required scope:** `bakery:membership:read`. **Query:** `requiredRole` optional, chỉ chấp nhận `OWNER`.
 
 **Success (200):**
 
@@ -1498,7 +1468,7 @@ nhưng không expose entity. Lỗi authentication/authorization vẫn là `401/4
   "bakeryId": "f22b255f-cdd7-4f1e-946d-4f1309c70e34",
   "userId": "58cd4975-e979-4d87-95d4-cceb7dbb4fd7",
   "active": true,
-  "memberRole": "MANAGER",
+  "memberRole": "OWNER",
   "authorized": true
 }
 ```
@@ -1682,9 +1652,9 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | Domain | Field | Values |
 |---|---|---|
 | Identity | User status | `PENDING`, `ACTIVE`, `BLOCKED`, `DELETED` |
-| Identity | Platform role | `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`, `ADMIN` |
+| Identity | Platform role | `CUSTOMER`, `BAKERY_OWNER`, `ADMIN` |
 | Bakery | Bakery status | `DRAFT`, `PENDING_APPROVAL`, `ACTIVE`, `SUSPENDED`, `CLOSED` |
-| Bakery | Member role | `OWNER`, `MANAGER`, `STAFF` |
+| Bakery | Member role | `OWNER` |
 | Bakery | Member status | `INVITED`, `ACTIVE`, `INACTIVE` |
 | Catalog | Product status | `DRAFT`, `PUBLISHED`, `HIDDEN`, `ARCHIVED` |
 | Catalog | Option selection | `SINGLE`, `MULTIPLE` |
@@ -1728,35 +1698,32 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | GET | `/bakeries` | Public | Browse public bakeries |
 | GET | `/bakeries/{bakeryId}` | Public | Public bakery detail |
 | POST | `/bakeries` | `BAKERY_OWNER` | Create bakery |
-| PATCH | `/bakeries/{bakeryId}` | Owner/manager | Update bakery |
-| POST | `/bakeries/{bakeryId}/logo` | Owner/manager | Upload logo |
-| POST | `/bakeries/{bakeryId}/cover` | Owner/manager | Upload cover |
-| PUT | `/bakeries/{bakeryId}/operations` | Owner/manager | Replace operations config |
+| PATCH | `/bakeries/{bakeryId}` | Owner | Update bakery |
+| POST | `/bakeries/{bakeryId}/logo` | Owner | Upload logo |
+| POST | `/bakeries/{bakeryId}/cover` | Owner | Upload cover |
+| PUT | `/bakeries/{bakeryId}/operations` | Owner | Replace operations config |
 | POST | `/bakeries/{bakeryId}/submit-for-approval` | Owner | Submit bakery |
-| GET | `/bakeries/{bakeryId}/members` | Owner/manager | List members |
-| POST | `/bakeries/{bakeryId}/members` | Owner/manager | Add member |
-| PATCH | `/bakeries/{bakeryId}/members/{memberId}` | Owner/manager | Update member |
-| DELETE | `/bakeries/{bakeryId}/members/{memberId}` | Owner/manager | Remove member |
+| GET | `/bakeries/{bakeryId}/members` | Owner | List members |
 | GET | `/products` | Public | Search public products |
 | GET | `/products/{productId}` | Public | Product detail |
-| GET | `/bakeries/{bakeryId}/categories` | Bakery member | List categories |
-| POST | `/bakeries/{bakeryId}/categories` | Owner/manager | Create category |
-| PATCH | `/bakeries/{bakeryId}/categories/{categoryId}` | Owner/manager | Update category |
-| DELETE | `/bakeries/{bakeryId}/categories/{categoryId}` | Owner/manager | Delete category |
-| GET | `/bakeries/{bakeryId}/add-ons` | Bakery member | List add-ons |
-| POST | `/bakeries/{bakeryId}/add-ons` | Owner/manager | Create add-on |
-| PATCH | `/bakeries/{bakeryId}/add-ons/{addOnId}` | Owner/manager | Update add-on |
-| POST | `/bakeries/{bakeryId}/add-ons/{addOnId}/image` | Owner/manager | Upload add-on image |
-| DELETE | `/bakeries/{bakeryId}/add-ons/{addOnId}` | Owner/manager | Disable add-on |
-| GET | `/bakeries/{bakeryId}/products` | Bakery member | Manage product list |
-| POST | `/bakeries/{bakeryId}/products` | Owner/manager | Create product |
-| PATCH | `/bakeries/{bakeryId}/products/{productId}` | Owner/manager | Update product |
-| POST | `/bakeries/{bakeryId}/products/{productId}/images` | Owner/manager | Upload product images |
-| DELETE | `/bakeries/{bakeryId}/products/{productId}/images/{imageId}` | Owner/manager | Delete product image |
-| PUT | `/bakeries/{bakeryId}/products/{productId}/options` | Owner/manager | Replace product options |
-| POST | `/bakeries/{bakeryId}/products/{productId}/publish` | Owner/manager | Publish product |
-| POST | `/bakeries/{bakeryId}/products/{productId}/hide` | Owner/manager | Hide product |
-| POST | `/bakeries/{bakeryId}/products/{productId}/archive` | Owner/manager | Archive product |
+| GET | `/bakeries/{bakeryId}/categories` | Bakery owner | List categories |
+| POST | `/bakeries/{bakeryId}/categories` | Owner | Create category |
+| PATCH | `/bakeries/{bakeryId}/categories/{categoryId}` | Owner | Update category |
+| DELETE | `/bakeries/{bakeryId}/categories/{categoryId}` | Owner | Delete category |
+| GET | `/bakeries/{bakeryId}/add-ons` | Bakery owner | List add-ons |
+| POST | `/bakeries/{bakeryId}/add-ons` | Owner | Create add-on |
+| PATCH | `/bakeries/{bakeryId}/add-ons/{addOnId}` | Owner | Update add-on |
+| POST | `/bakeries/{bakeryId}/add-ons/{addOnId}/image` | Owner | Upload add-on image |
+| DELETE | `/bakeries/{bakeryId}/add-ons/{addOnId}` | Owner | Disable add-on |
+| GET | `/bakeries/{bakeryId}/products` | Bakery owner | Manage product list |
+| POST | `/bakeries/{bakeryId}/products` | Owner | Create product |
+| PATCH | `/bakeries/{bakeryId}/products/{productId}` | Owner | Update product |
+| POST | `/bakeries/{bakeryId}/products/{productId}/images` | Owner | Upload product images |
+| DELETE | `/bakeries/{bakeryId}/products/{productId}/images/{imageId}` | Owner | Delete product image |
+| PUT | `/bakeries/{bakeryId}/products/{productId}/options` | Owner | Replace product options |
+| POST | `/bakeries/{bakeryId}/products/{productId}/publish` | Owner | Publish product |
+| POST | `/bakeries/{bakeryId}/products/{productId}/hide` | Owner | Hide product |
+| POST | `/bakeries/{bakeryId}/products/{productId}/archive` | Owner | Archive product |
 | GET | `/cake-requests` | Authorized context | Search cake requests |
 | GET | `/cake-requests/{cakeRequestId}` | Authorized context | Request detail |
 | POST | `/cake-requests` | `CUSTOMER` | Create draft request |
@@ -1768,7 +1735,7 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | POST | `/cake-requests/{cakeRequestId}/cancel` | Customer owner | Cancel request |
 | GET | `/offers` | Offer participant | List offers |
 | GET | `/offers/{offerId}` | Offer participant | Offer detail |
-| POST | `/cake-requests/{cakeRequestId}/offers` | Bakery member | Submit offer |
+| POST | `/cake-requests/{cakeRequestId}/offers` | Bakery owner | Submit offer |
 | PATCH | `/offers/{offerId}` | Submitting bakery | Update offer |
 | POST | `/offers/{offerId}/withdraw` | Submitting bakery | Withdraw offer |
 | POST | `/offers/{offerId}/accept` | Customer owner | Accept offer and create order |
@@ -1794,10 +1761,10 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | GET | `/generated-designs/{designId}` | Owner/admin | Design detail |
 | GET | `/subscription-plans` | Public | List active plans |
 | GET | `/subscription-plans/{planId}` | Public | Plan detail |
-| GET | `/bakeries/{bakeryId}/subscription` | Bakery member/admin | Current entitlement |
+| GET | `/bakeries/{bakeryId}/subscription` | Bakery owner/admin | Current entitlement |
 | POST | `/bakeries/{bakeryId}/subscription-orders` | Owner | Create subscription order |
-| GET | `/bakeries/{bakeryId}/subscription-orders` | Bakery member/admin | List subscription orders |
-| GET | `/subscription-orders/{orderId}` | Bakery member/admin | Subscription order detail |
+| GET | `/bakeries/{bakeryId}/subscription-orders` | Bakery owner/admin | List subscription orders |
+| GET | `/subscription-orders/{orderId}` | Bakery owner/admin | Subscription order detail |
 | POST | `/subscription-orders/{orderId}/payments` | Owner | Submit payment evidence |
 
 ### Administration APIs
@@ -1903,7 +1870,7 @@ offer. OPEN requests automatically become CLOSED at neededAt. Existing orders re
 if catalog/preferences/design metadata later change.
 
 Request detail adds `selectedDesign:{id}` when selected and `offers:[{id,bakeryId,status,totalPrice,expiresAt}]`.
-Customers/admins see all request offers; bakery members see only their own bakery offers.
+Customers/admins see all request offers; bakery owners see only their own bakery offers.
 Customer external UUID is returned in an authorized detail; contact/address PII is not.
 Offer list currently uses the OfferResponse shape with empty items/history; detail includes snapshots/history.
 

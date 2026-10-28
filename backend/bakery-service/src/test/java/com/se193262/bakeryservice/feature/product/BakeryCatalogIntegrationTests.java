@@ -78,11 +78,8 @@ class BakeryCatalogIntegrationTests {
                         SelectionType.SINGLE, false, 0, 1, 0, List.of())))))
                 .isInstanceOf(AppException.class);
 
-        BakeryMemberDto staff = memberService.create(bakeryId,
-                new BakeryMemberDto(null, UUID.randomUUID(), BakeryMemberRole.STAFF, null, null));
-        assertThatThrownBy(() -> memberService.update(bakeryId, staff.id(),
-                new BakeryMemberDto(null, null, BakeryMemberRole.OWNER, null, null)))
-                .isInstanceOf(AppException.class);
+        assertThat(memberService.list(bakeryId))
+                .extracting(BakeryMemberDto::memberRole).containsExactly(BakeryMemberRole.OWNER);
 
         addOnService.delete(bakeryId, addOn.id());
         assertThat(addOnService.list(bakeryId).getFirst().active()).isFalse();

@@ -74,6 +74,14 @@ class SecurityConfigTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("Legacy staff JWT cannot create subscription orders")
+    void createOrder_withLegacyStaffToken_isForbidden() throws Exception {
+        mockMvc.perform(post("/api/v1/bakeries/" + BAKERY_ID + "/subscription-orders")
+                        .header("Authorization", "Bearer user-staff"))
+                .andExpect(status().isForbidden());
+    }
+
     @RestController
     static class ProbeController {
         @GetMapping("/api/v1/subscription-plans")
@@ -95,7 +103,8 @@ class SecurityConfigTest {
         JwtDecoder jwtDecoder() {
             return token -> {
                 String tokenType = token.startsWith("service") ? "service" : "user";
-                String role = token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
+                String role = token.contains("staff") ? "BAKERY_STAFF"
+                        : token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(UUID.randomUUID().toString())

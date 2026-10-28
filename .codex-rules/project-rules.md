@@ -484,8 +484,8 @@ public interface SubscriptionClient {
   Với microservices, ưu tiên asymmetric signing để resource services chỉ giữ
   public key/JWK, không chia sẻ private signing secret.
 - Access token ngắn hạn; refresh token chỉ lưu hash và có thể revoke.
-- Role nền tảng: `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`, `ADMIN`.
-- Bakery membership role (`OWNER`, `MANAGER`, `STAFF`) là dữ liệu Bakery
+- Role nền tảng: `CUSTOMER`, `BAKERY_OWNER`, `ADMIN`.
+- Bakery membership role (`OWNER`) là dữ liệu Bakery
   Service, không thay thế platform role.
 - Authorization phải kiểm tra cả role và resource ownership.
 - Không tin `customerId`, `bakeryId` do client gửi nếu có thể suy ra từ JWT và

@@ -308,8 +308,8 @@ Dependency rules:
 
 - Spring Security 7 + OAuth2 Resource Server xác thực JWT; không tự viết filter
   parse JWT nếu framework đã hỗ trợ.
-- Platform roles: `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`, `ADMIN`.
-- Bakery membership roles: `OWNER`, `MANAGER`, `STAFF`; đây là dữ liệu của
+- Platform roles: `CUSTOMER`, `BAKERY_OWNER`, `ADMIN`.
+- Bakery membership roles: `OWNER`; đây là dữ liệu của
   Bakery Service, không thay thế platform role.
 - Authorization kiểm tra cả role và resource ownership. Không tin
   `customerId`/`bakeryId` từ request nếu có thể suy ra từ JWT và membership.

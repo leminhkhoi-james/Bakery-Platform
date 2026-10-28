@@ -78,7 +78,7 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
 | `bakeries` | `id` | `name`, thông tin liên hệ, ảnh, `status`, timestamps, `version` | Hồ sơ chính của tiệm bánh |
-| `bakery_members` | `id` | `bakery_id`, `user_id`*, `member_role`, `status`, `joined_at` | User tham gia quản lý/vận hành tiệm |
+| `bakery_members` | `id` | `bakery_id`, `user_id`*, `member_role`, `status`, `joined_at` | Chủ sở hữu tiệm; member_role chỉ nhận OWNER |
 | `bakery_addresses` | `id` | `bakery_id`, địa chỉ, tọa độ, `is_primary`, timestamps | Chi nhánh hoặc địa điểm của tiệm |
 | `service_areas` | `id` | `bakery_id`, `city`, `district`, `delivery_fee`, `minimum_order`, `active` | Khu vực tiệm nhận giao bánh |
 | `business_hours` | `id` | `bakery_id`, `day_of_week`, giờ mở/đóng, `closed` | Lịch hoạt động trong tuần |
@@ -343,8 +343,7 @@ private Map<String, Object> configurationSnapshot;
 
 ## Sample data
 
-- Identity seed tạo bốn role: `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`,
-  `ADMIN`.
+- Identity migrations giữ ba role: `CUSTOMER`, `BAKERY_OWNER`, `ADMIN`.
 - Subscription seed tạo ba gói mẫu: `BASIC`, `PRO`, `PREMIUM` và các feature
   `MAX_PRODUCTS`, `MAX_MONTHLY_OFFERS`, `FEATURED_LISTING`.
 - Không seed user, bakery, order hoặc payment giả vào migration production.
@@ -384,3 +383,19 @@ private Map<String, Object> configurationSnapshot;
   offer reference, payload fingerprint and created timestamp. It commits atomically with order snapshots.
 - Images are in Firebase Storage; database stores object keys/metadata, never signed URLs or file bytes.
 - `database/dev/` is optional disposable fixture SQL and is not a production migration location.
+
+## Owner-only authorization migration — 2026-10-28
+
+Identity V3 removes BAKERY_STAFF assignments and its reference role, archives
+assignments in `retired_platform_role_assignments` (`user_id`, `role_code`,
+`retired_at`; composite primary key on user/role), grants CUSTOMER to former staff
+and restricts role codes to ADMIN, CUSTOMER, BAKERY_OWNER.
+Bakery V2 archives former MANAGER/STAFF records in `retired_bakery_members`
+(same identity, bakery/user reference, role/status and joined timestamp plus
+`retired_at`; primary key `id`; no foreign keys so audit survives deletion), then
+removes them from `bakery_members` and restricts `member_role` to OWNER.
+These audit tables are not authorization sources. No legacy user is promoted to owner.
+Chat V2 marks former staff participants as left and requires historical staff
+participants to have `left_at`; existing participant/message IDs are preserved.
+BAKERY_STAFF remains a historical participant type only, not a platform role.
+Existing V1/V2 initialization files are immutable; apply all subsequent migrations.

@@ -48,7 +48,7 @@ public class BakeryAccessClient {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Invalid Bakery authorization response");
         }
         if (!response.active() || !response.authorized()
-                || (ownerRequired && !"OWNER".equals(response.memberRole()))) {
+                || !"OWNER".equals(response.memberRole())) {
             throw new AppException(HttpStatus.FORBIDDEN, "Bakery membership is required");
         }
     }

@@ -17,3 +17,9 @@ keep their separate contract at `/internal/v1/catalog/quotes`.
 This feature may persist only data owned by Marketplace Service. References to
 other services remain plain UUID values and must be validated through internal
 REST contracts.
+
+## Authorization update — 2026-10-28
+
+Platform roles are ADMIN, CUSTOMER and BAKERY_OWNER. Bakery membership only
+supports OWNER. Bakery access requires ownership of the requested bakery;
+retired staff/manager roles cannot authorize access. See ADR-004.

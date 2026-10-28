@@ -27,7 +27,7 @@ function New-TestUser($Name, $Role) {
     $id = ([guid]$registered.data.id).ToString()
     $users.Add($id)
     if ($Role) {
-        if ($Role -notin @('BAKERY_OWNER','BAKERY_STAFF','ADMIN')) { throw 'Invalid test role' }
+        if ($Role -notin @('BAKERY_OWNER','ADMIN')) { throw 'Invalid test role' }
         Database-Sql identity-db $config.IDENTITY_DB_USERNAME identity_db "INSERT INTO user_roles(user_id,role_id) SELECT '$id',id FROM roles WHERE code='$Role' ON CONFLICT DO NOTHING;"
     }
     $login = Request-Json POST 'http://localhost:8081/api/v1/auth/login' @{ email = $email; password = $password }
@@ -49,14 +49,13 @@ try {
     Write-Output 'PASS Identity JWK matches the supplied public PEM'
     $owner = New-TestUser owner BAKERY_OWNER
     $admin = New-TestUser admin ADMIN
-    $staff = New-TestUser staff BAKERY_STAFF
     $customer = New-TestUser customer $null
     $null = Request-Json GET 'http://localhost:8081/api/v1/auth/me' $null (Auth $owner.Token)
     Write-Output 'PASS register/login and user JWT'
     $bakery = Request-Json POST 'http://localhost:8082/api/v1/bakeries' @{ name = "JWT test $runId"; phoneNumber = '0900000000' } (Auth $owner.Token) 201
     $bakeryId = ([guid]$bakery.data.id).ToString()
-    $null = Request-Json POST "http://localhost:8082/api/v1/bakeries/$bakeryId/members" @{ userId = $staff.Id; memberRole = 'STAFF' } (Auth $owner.Token) 201
-    Write-Output 'PASS Bakery validates user JWT and obtains Identity service JWT for member lookup'
+    $null = Request-Json GET "http://localhost:8082/api/v1/bakeries/$bakeryId/members" $null (Auth $owner.Token)
+    Write-Output 'PASS Bakery validates owner JWT and owner membership'
     $null = Request-Json GET "http://localhost:8082/api/v1/bakeries/$bakeryId/members" $null (Auth $customer.Token) 403
     $parts = $owner.Token.Split('.')
     $parts[2] = $(if ($parts[2][0] -eq 'a') { 'b' } else { 'a' }) + $parts[2].Substring(1)

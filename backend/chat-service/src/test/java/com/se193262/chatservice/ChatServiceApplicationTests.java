@@ -101,10 +101,10 @@ class ChatServiceApplicationTests {
         when(bakeryClient.authorizeMember(
                 eq(bakeryId), eq(BAKERY_USER_ID), org.mockito.ArgumentMatchers.isNull()))
                 .thenReturn(new BakeryChatClient.MembershipAuthorizationResponse(
-                        bakeryId, BAKERY_USER_ID, true, "MANAGER", true));
+                        bakeryId, BAKERY_USER_ID, true, "OWNER", true));
 
         mockMvc.perform(get("/api/v1/conversations/{conversationId}", conversationId)
-                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_STAFF")))
+                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_OWNER")))
                 .andExpect(status().isOk());
 
         UUID clientMessageId = UUID.randomUUID();
@@ -130,20 +130,20 @@ class ChatServiceApplicationTests {
                 .andExpect(status().isConflict());
 
         mockMvc.perform(get("/api/v1/conversations/{conversationId}/messages", conversationId)
-                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_STAFF")))
+                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_OWNER")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.items[0].id").value(sentMessageId.toString()));
 
         mockMvc.perform(post("/api/v1/conversations/{conversationId}/read", conversationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"throughMessageId\":\"" + sentMessageId + "\"}")
-                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_STAFF")))
+                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_OWNER")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.conversationId").value(conversationId));
 
         mockMvc.perform(get("/api/v1/conversations")
                         .param("bakeryId", bakeryId.toString())
-                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_STAFF")))
+                        .with(jwtToken(BAKERY_USER_ID, "ROLE_BAKERY_OWNER")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.result[0].unreadCount").value(0));
 

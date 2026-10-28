@@ -54,20 +54,14 @@ public class BakeryInternalService {
         }
         return memberRepository.findByBakery_IdAndUserId(bakeryId, userId)
                 .map(member -> {
-                    boolean active = member.getStatus() == BakeryMemberStatus.ACTIVE;
+                    boolean active = member.getStatus() == BakeryMemberStatus.ACTIVE
+                            && member.getMemberRole() == BakeryMemberRole.OWNER;
                     boolean authorized = active && (requiredRole == null
-                            || roleRank(member.getMemberRole()) >= roleRank(requiredRole));
+                            || member.getMemberRole() == requiredRole);
                     return new BakeryAuthorizationResponse(bakeryId, userId, active,
                             member.getMemberRole(), authorized);
                 })
                 .orElse(new BakeryAuthorizationResponse(bakeryId, userId, false, null, false));
     }
 
-    private int roleRank(BakeryMemberRole role) {
-        return switch (role) {
-            case OWNER -> 3;
-            case MANAGER -> 2;
-            case STAFF -> 1;
-        };
-    }
 }

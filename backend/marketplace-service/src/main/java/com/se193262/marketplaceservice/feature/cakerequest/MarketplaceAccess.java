@@ -51,7 +51,7 @@ public class MarketplaceAccess {
         var member = bakery.membership(bakeryId, actor.id());
         if (!member.authorized()
                 || !member.active()
-                || (manage && !Set.of("OWNER", "MANAGER").contains(member.memberRole())))
+                || !"OWNER".equals(member.memberRole()))
             throw BusinessException.forbidden();
     }
 
@@ -64,7 +64,9 @@ public class MarketplaceAccess {
             throw BusinessException.forbidden();
         var memberships =
                 actor.bakery() && !"mine".equals(scope)
-                        ? bakery.memberships(actor.id())
+                        ? bakery.memberships(actor.id()).stream()
+                                .filter(m -> m.active() && m.authorized() && "OWNER".equals(m.memberRole()))
+                                .toList()
                         : List
                                 .<com.se193262.marketplaceservice.infrastructure.client
                                                 .CatalogContracts.Membership>

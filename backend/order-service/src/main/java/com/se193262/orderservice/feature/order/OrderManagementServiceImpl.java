@@ -20,7 +20,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class OrderManagementServiceImpl implements OrderManagementService {
 
     private static final String ADMIN_ROLE = "ADMIN";
-    private static final Set<String> BAKERY_ROLES = Set.of("BAKERY_OWNER", "BAKERY_STAFF");
+    private static final Set<String> BAKERY_ROLES = Set.of("BAKERY_OWNER");
 
     private final OrderQueryPersistenceService persistenceService;
     private final BakeryServiceClient bakeryClient;
@@ -144,8 +144,9 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 
     private void requireActiveMembership(UUID bakeryId, UUID actorId) {
         BakeryClient.MembershipAuthorizationResponse membership =
-                bakeryClient.getMembershipAuthorization(bakeryId, actorId, null);
-        if (membership == null || !membership.active() || !membership.authorized()) {
+                bakeryClient.getMembershipAuthorization(bakeryId, actorId, "OWNER");
+        if (membership == null || !membership.active() || !membership.authorized()
+                || !"OWNER".equals(membership.memberRole())) {
             throw new OrderAccessDeniedException();
         }
     }

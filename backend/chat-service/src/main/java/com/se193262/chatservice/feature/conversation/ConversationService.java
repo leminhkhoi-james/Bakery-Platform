@@ -67,7 +67,7 @@ public class ConversationService {
         if (conversation.getCustomerId().equals(userId)) {
             requireParticipant(conversation, userId, roles, null);
         } else {
-            requireBakeryManager(conversation, userId, roles);
+            requireBakeryOwner(conversation, userId, roles);
         }
         return toResponse(persistenceService.close(conversation, reason),
                 participantRepository.findByConversationIdAndUserId(conversationId, userId)
@@ -121,7 +121,7 @@ public class ConversationService {
             return participantRepository.findByConversationIdAndUserId(conversation.getId(), userId)
                     .orElseThrow(ConversationService::notFound);
         }
-        if (!roles.contains("BAKERY_OWNER") && !roles.contains("BAKERY_STAFF")) {
+        if (!roles.contains("BAKERY_OWNER")) {
             throw notFound();
         }
         BakeryChatClient.MembershipAuthorizationResponse membership =
@@ -132,7 +132,6 @@ public class ConversationService {
         }
         ParticipantType participantType = switch (membership.memberRole()) {
             case "OWNER" -> ParticipantType.BAKERY_OWNER;
-            case "MANAGER", "STAFF" -> ParticipantType.BAKERY_STAFF;
             default -> throw notFound();
         };
         persistenceService.addParticipant(conversation, userId, participantType);
@@ -166,7 +165,7 @@ public class ConversationService {
         if (bakeryId == null) {
             return conversationRepository.findVisibleTo(userId, status, pageable);
         }
-        if (!roles.contains("BAKERY_OWNER") && !roles.contains("BAKERY_STAFF")) {
+        if (!roles.contains("BAKERY_OWNER")) {
             throw new ChatException(HttpStatus.FORBIDDEN, "Only bakery members can filter conversations by bakery");
         }
         BakeryChatClient.MembershipAuthorizationResponse membership =
@@ -183,16 +182,12 @@ public class ConversationService {
     }
 
     private boolean platformRoleMatches(Set<String> roles, String memberRole) {
-        return "OWNER".equals(memberRole)
-                ? roles.contains("BAKERY_OWNER")
-                : ("MANAGER".equals(memberRole) || "STAFF".equals(memberRole))
-                && roles.contains("BAKERY_STAFF");
+        return "OWNER".equals(memberRole) && roles.contains("BAKERY_OWNER");
     }
 
     private ParticipantType participantType(String memberRole) {
         return switch (memberRole) {
             case "OWNER" -> ParticipantType.BAKERY_OWNER;
-            case "MANAGER", "STAFF" -> ParticipantType.BAKERY_STAFF;
             default -> throw notFound();
         };
     }
@@ -203,20 +198,15 @@ public class ConversationService {
         }
     }
 
-    private void requireBakeryManager(Conversation conversation, UUID userId, Set<String> roles) {
-        if (!roles.contains("BAKERY_OWNER") && !roles.contains("BAKERY_STAFF")) {
+    private void requireBakeryOwner(Conversation conversation, UUID userId, Set<String> roles) {
+        if (!roles.contains("BAKERY_OWNER")) {
             throw notFound();
         }
         BakeryChatClient.MembershipAuthorizationResponse owner =
                 contextService.authorizeBakeryMember(conversation.getBakeryId(), userId, "OWNER");
-        boolean authorized = owner.active() && owner.authorized();
+        boolean authorized = owner.active() && owner.authorized() && "OWNER".equals(owner.memberRole());
         if (!authorized) {
-            BakeryChatClient.MembershipAuthorizationResponse manager =
-                    contextService.authorizeBakeryMember(conversation.getBakeryId(), userId, "MANAGER");
-            authorized = manager.active() && manager.authorized();
-        }
-        if (!authorized) {
-            throw new ChatException(HttpStatus.FORBIDDEN, "Only bakery owners or managers can close this conversation");
+            throw new ChatException(HttpStatus.FORBIDDEN, "Only bakery owners can close this conversation");
         }
         requireParticipant(conversation, userId, roles, null);
     }

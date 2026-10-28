@@ -107,7 +107,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/conversations")
                         .access(userRole("ROLE_CUSTOMER"))
                         .requestMatchers(HttpMethod.POST, "/api/v1/conversations/*/close")
-                        .access(userRoleAny("ROLE_CUSTOMER", "ROLE_BAKERY_OWNER", "ROLE_BAKERY_STAFF"))
+                        .access(userRoleAny("ROLE_CUSTOMER", "ROLE_BAKERY_OWNER"))
                         .requestMatchers("/api/v1/**").access(userToken())
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(resourceServer -> resourceServer

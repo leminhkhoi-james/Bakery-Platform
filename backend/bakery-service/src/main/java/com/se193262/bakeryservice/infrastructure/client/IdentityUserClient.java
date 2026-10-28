@@ -47,7 +47,7 @@ public class IdentityUserClient {
             }
             if (!"ACTIVE".equals(user.status()) || user.roles() == null
                     || user.roles().stream().noneMatch(platformRole ->
-                    platformRole.equals("BAKERY_STAFF") || platformRole.equals("BAKERY_OWNER"))) {
+                    platformRole.equals("BAKERY_OWNER"))) {
                 throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "User does not have an eligible bakery platform role");
             }

@@ -81,14 +81,14 @@ class SecurityConfigTest {
     }
 
     @Test
-    @DisplayName("STAFF được đọc nhưng không được sửa catalog")
-    void catalogWrite_withStaffMembership_isForbidden() throws Exception {
+    @DisplayName("JWT staff cũ bị từ chối dù có owner membership")
+    void catalog_withLegacyStaffToken_isForbidden() throws Exception {
         BakeryMember member = new BakeryMember(new Bakery("Test", "0900000000", null),
-                USER_ID, BakeryMemberRole.STAFF);
+                USER_ID, BakeryMemberRole.OWNER);
         memberFixture.member = member;
         String path = "/api/v1/bakeries/" + BAKERY_ID + "/products";
         mockMvc.perform(get(path).header("Authorization", "Bearer user-staff"))
-                .andExpect(status().isOk());
+                .andExpect(status().isForbidden());
         mockMvc.perform(post(path).header("Authorization", "Bearer user-staff"))
                 .andExpect(status().isForbidden());
     }
@@ -114,6 +114,16 @@ class SecurityConfigTest {
     @DisplayName("Public bakery detail does not require JWT")
     void bakeryDetail_withoutToken_isPublic() throws Exception {
         mockMvc.perform(get("/api/v1/bakeries/" + BAKERY_ID)).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Owner cannot use removed member creation endpoint")
+    void memberCreate_withOwnerToken_isForbidden() throws Exception {
+        memberFixture.member = new BakeryMember(new Bakery("Test", "0900000000", null),
+                USER_ID, BakeryMemberRole.OWNER);
+        mockMvc.perform(post("/api/v1/bakeries/" + BAKERY_ID + "/members")
+                        .header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
     }
 
     @RestController

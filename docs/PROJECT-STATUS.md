@@ -1,6 +1,32 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-10-24.
+> Cập nhật gần nhất: 2026-10-28.
+
+## Owner-only roles — 2026-10-28
+
+- Theo yêu cầu người dùng, platform chỉ còn `ADMIN`, `CUSTOMER`, `BAKERY_OWNER`;
+  bakery membership chỉ còn `OWNER`. Xem ADR-004.
+- Bakery management yêu cầu platform `BAKERY_OWNER` và membership `OWNER` ACTIVE
+  của đúng bakery. Tạo bakery tự gán OWNER từ JWT sub. Gỡ API/service thêm, sửa,
+  xóa member; giữ API đọc membership và internal authorization.
+- Đồng bộ Bakery, Marketplace/shared Actor, Order, Chat và Subscription;
+  JWT staff cũ và membership manager/staff không cấp quyền bakery.
+- Thêm Identity V3, Bakery V2, Chat V2; giữ nguyên migration đã chạy.
+  Migration lưu assignment/member cũ vào bảng audit, cấp CUSTOMER cho staff cũ,
+  thu hồi membership manager/staff và không tự nâng thành owner. Chat giữ lịch sử
+  người gửi nhưng đánh dấu staff participant đã rời; historical participant type
+  không phải role phân quyền.
+- Cập nhật API spec/index, database docs/ERD, architecture, project rules, feature
+  context và script Test-LocalJwt theo owner-only.
+- Kiểm tra: Maven `-pl identity-service,bakery-service,subscription-service,marketplace-service,order-service,chat-service -am "-Dtest=*Test" "-Dsurefire.failIfNoSpecifiedTests=false" test`
+  thành công: 100 test, 97 pass, 3 migration tests skip do Docker không chạy.
+  Bao gồm test legacy staff JWT, legacy manager membership, đúng bakery/ACTIVE,
+  owner được phép và route thêm member bị từ chối. Các module liên quan test-compile
+  thành công. DB smoke/HTTP end-to-end chưa chạy; chưa áp dụng migration lên DB thật.
+- Build toàn reactor còn vướng lỗi có sẵn ở Cake AI: thiếu Google auth/cloud
+  storage dependencies và `ApiResponse.accepted`; ngoài phạm vi thay đổi role.
+- Các mục bên dưới ghi lại lịch sử trước thay đổi này; mô hình staff/manager cũ
+  đã được thay thế bằng owner-only.
 
 ## JWT runtime — 2026-10-24
 

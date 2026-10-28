@@ -64,7 +64,7 @@ public class SecurityConfig {
                                 "/api/v1/bakeries/{bakeryId}/subscription",
                                 "/api/v1/bakeries/{bakeryId}/subscription-orders",
                                 "/api/v1/subscription-orders/{orderId}")
-                        .access(userRole("BAKERY_OWNER", "BAKERY_STAFF", "ADMIN"))
+                        .access(userRole("BAKERY_OWNER", "ADMIN"))
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(resourceServer -> resourceServer
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))

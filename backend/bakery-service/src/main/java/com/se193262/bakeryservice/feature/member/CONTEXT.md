@@ -2,23 +2,18 @@
 
 ## Responsibility
 
-Bakery membership and bakery-scoped authorization.
+Bakery-scoped ownership authorization and owner membership listing.
 
 ## Current state
 
-BakeryMember has list/create/patch/delete endpoints under a bakery. The last
-active OWNER cannot be removed or demoted; assigning OWNER through these
-endpoints is blocked. Identity-owned users remain UUID references. Identity
-lookup is wired through its internal API when creating a member. OWNER/MANAGER
-write restrictions are enforced in the service. Display snapshots are still
-pending, and Identity's internal user endpoint plus service JWT issuance are
-needed to create a member at runtime. JWT authentication and ACTIVE bakery
-membership checks apply in every profile. The internal authorization endpoint
-supports role hierarchy and negative authorization responses.
+Only OWNER membership is supported. Creation of a bakery creates its owner from
+JWT sub; member POST/PATCH/DELETE endpoints and service mutations have been removed.
+Management requires platform BAKERY_OWNER and ACTIVE OWNER membership of the exact
+bakery. Internal authorization accepts only OWNER (or no requiredRole).
+V2 archives and removes retired staff/manager memberships without promoting users.
+See docs/decisions/ADR-004-owner-only-authorization.md.
 
 ## Boundary
 
-This feature may persist only data owned by Bakery Service. References to
-other services remain plain UUID values and must be validated through internal
-REST contracts.
-
+Membership data belongs to Bakery; user_id remains an external UUID reference.
+Retired membership audit records never authorize access.

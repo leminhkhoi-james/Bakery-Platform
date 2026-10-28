@@ -48,16 +48,11 @@ public class CatalogServiceImpl implements CatalogService {
                         .findFirst()
                         .orElse(new Membership(bakeryId, userId, false, null, false));
         if (requiredRole == null) return membership;
-        if (!Set.of("OWNER", "MANAGER", "STAFF").contains(requiredRole))
+        if (!"OWNER".equals(requiredRole))
             throw new BusinessException(400, "Invalid membership role");
         boolean allowed =
                 membership.active()
-                        && switch (requiredRole) {
-                            case "OWNER" -> "OWNER".equals(membership.memberRole());
-                            case "MANAGER" ->
-                                    Set.of("OWNER", "MANAGER").contains(membership.memberRole());
-                            default -> true;
-                        };
+                        && "OWNER".equals(membership.memberRole());
         return new Membership(
                 bakeryId, userId, membership.active(), membership.memberRole(), allowed);
     }
@@ -66,7 +61,7 @@ public class CatalogServiceImpl implements CatalogService {
         return repository
                 .list(
                         "select bakery_id,member_role from bakery_members where user_id=:id and"
-                                + " status='ACTIVE'",
+                                + " status='ACTIVE' and member_role='OWNER'",
                         Map.of("id", userId))
                 .stream()
                 .map(

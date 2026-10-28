@@ -17,7 +17,7 @@ public record Actor(UUID id, Set<String> roles) {
     }
 
     public boolean bakery() {
-        return roles.contains("ROLE_BAKERY_OWNER") || roles.contains("ROLE_BAKERY_STAFF");
+        return roles.contains("ROLE_BAKERY_OWNER");
     }
 
     public static Actor current() {
