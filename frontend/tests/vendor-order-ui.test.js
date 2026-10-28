@@ -27,13 +27,13 @@ const user = { id: customerId, displayName: 'Tên tài khoản thật', email: '
 const authenticated = (Component, props, roles = ['CUSTOMER']) => renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { ...user, roles }, roles, logout: () => {} } }, React.createElement(Component, props)))
 
 test('Order detail renders backend snapshots, correct status history and monetary values', () => {
-  const html = render(OrderSnapshot, { order: mapOrder(order, true) })
-  for (const value of ['ORD-FIXTURE', 'Tiệm snapshot', 'Khách snapshot', 'Bánh snapshot', 'Vani snapshot', 'Địa chỉ snapshot', '220.000 VND', '10.000 VND', 'Chờ xác nhận']) assert.ok(html.includes(value), value)
+  const html = render(OrderSnapshot, { order: mapOrder(order, true) }).replaceAll('\u00a0', ' ')
+  for (const value of ['ORD-FIXTURE', 'Tiệm snapshot', 'Khách snapshot', 'Bánh snapshot', 'Vani snapshot', 'Địa chỉ snapshot', '220.000 ₫', '10.000 ₫', 'Chờ xác nhận']) assert.ok(html.includes(value), value)
   assert.doesNotMatch(html, /Đã thanh toán thành công|Ký quỹ thành công|950\.000|Pikachu/)
 })
 test('Missing order amounts/address do not become zero-fee delivery or invented payment state', () => {
   const html = render(OrderSnapshot, { order: mapOrder({ ...order, subtotal: null, totalAmount: null, deliveryFee: null, deliveryAddress: null }, true) })
-  assert.match(html, /Chưa có thông tin giá/); assert.match(html, /chưa trả địa chỉ/); assert.doesNotMatch(html, />0 VND</)
+  assert.match(html, /Chưa có thông tin giá/); assert.match(html, /Chưa có thông tin địa chỉ/); assert.doesNotMatch(html, />0 VND</)
 })
 test('Order list starts loading with actual enum filters and no mock Kanban rows', () => {
   const html = authenticated(OrderList, { onNavigate: () => {} })
@@ -43,7 +43,7 @@ test('Order list starts loading with actual enum filters and no mock Kanban rows
 test('Product form has real DTO fields, required validation and immutable status guidance', () => {
   const html = render(ProductForm, { product: managedProduct, onSave: () => {}, onClose: () => {} })
   assert.match(html, /Sản phẩm backend/); assert.match(html, /san-pham-backend/); assert.match(html, /min="0"/); assert.match(html, /maxLength="180"/i)
-  assert.match(html, /DRAFT/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
+  assert.match(html, /bản nháp/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
 })
 test('Bakery form never prefills demo contact/owner and create requires name/phone', () => {
   const html = render(BakeryProfileForm, { create: true, onSave: () => {} })
@@ -57,21 +57,21 @@ test('Operations form preserves full server rows and requires confirmation befor
 })
 test('Empty cart is empty and checkout is blocked without a verified deliveryAddressId', () => {
   const html = render(Cart, { cartItems: [], onNavigate: () => {} })
-  assert.match(html, /Giỏ hàng đang trống/); assert.match(html, /deliveryAddressId/); assert.match(html, /disabled=""/)
+  assert.match(html, /Giỏ hàng đang trống/); assert.match(html, /Hiện chưa thể chọn địa chỉ/); assert.match(html, /disabled=""/)
   assert.doesNotMatch(html, /Pikachu|950\.000|Saigon Pearl|Đã đặt hàng thành công/)
 })
 test('Populated local cart preserves item controls but requires revalidation and shows no fake totals', () => {
   const html = authenticated(Cart, { cartItems: [cartItem], onNavigate: () => {}, onUpdateQuantity: () => {}, onRemoveItem: () => {} })
-  assert.match(html, /Kiểm tra lại sản phẩm/); assert.match(html, /Số lượng: 2/); assert.match(html, /Chưa có API báo giá public/)
+  assert.match(html, /Kiểm tra lại sản phẩm/); assert.match(html, /Số lượng: 2/); assert.match(html, /Mỗi sản phẩm được đặt thành một đơn riêng/)
   assert.doesNotMatch(html, /Miễn phí giao hàng|Đã thanh toán|Voucher đã áp dụng/)
 })
 test('Payment page explicitly reports unsupported functionality and never offers fake success', () => {
   const html = render(Payment, { onNavigate: () => {} })
-  assert.match(html, /chưa hỗ trợ cổng thanh toán/); assert.doesNotMatch(html, /Đã thanh toán thành công|Mô phỏng|Tôi đã chuyển khoản/)
+  assert.match(html, /không thu tiền hoặc xác nhận giao dịch/); assert.doesNotMatch(html, /Đã thanh toán thành công|Mô phỏng|Tôi đã chuyển khoản/)
 })
 test('Legacy RFQ/demo cart lines cannot display mock prices or enter direct checkout', () => {
   const html = render(Cart, { cartItems: [{ id: 'demo-legacy', title: 'Pikachu demo', price: 950000 }], onNavigate: () => {} })
-  assert.match(html, /Mục ngoài Catalog chưa tích hợp/)
+  assert.match(html, /Sản phẩm chưa khả dụng/)
   assert.doesNotMatch(html, /950\.000|Pikachu demo|Kiểm tra lại sản phẩm/)
 })
 test('Customer profile order panel renders backend loading with real identity and no legacy completion code', () => {
@@ -81,7 +81,7 @@ test('Customer profile order panel renders backend loading with real identity an
 })
 test('Vendor dashboard starts loading real counts and hides shared mock badges', () => {
   const html = authenticated(VendorDashboard, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(html, /Đang tải/); assert.match(html, /Tổng số đơn hàng/); assert.match(html, /Chưa có API thống kê/)
+  assert.match(html, /Đang tải/); assert.match(html, /Tổng số đơn hàng/); assert.match(html, /Doanh thu chỉ được ghi nhận sau khi đối soát/)
   assert.doesNotMatch(html, /46\.7M|15 đơn|78%|#ORD-2025/)
 })
 test('Vendor settings initializes from actual bakery selector and does not display fake saved settings', () => {

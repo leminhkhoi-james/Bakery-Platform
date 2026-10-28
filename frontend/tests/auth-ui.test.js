@@ -35,7 +35,7 @@ test('Admin guard refuses CUSTOMER and renders content only for ADMIN', () => {
 
 test('Restoration failure displays a retry action without exposing protected content', () => {
   const error = renderGuard({ status: 'error', user: null, error: new Error('Backend unavailable') })
-  assert.match(error, /Backend unavailable/)
+  assert.match(error, /Chưa thể thực hiện thao tác/)
   assert.match(error, /Thử lại/)
   assert.doesNotMatch(error, /protected-content/)
 })

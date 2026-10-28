@@ -1,4 +1,3 @@
-import { isMockRecord } from '../../../mockData/runtime.js'
 import { useState } from 'react'
 import { targetedRequestRoute } from '../../../services/requestContextModels.js'
 import { loadProduct } from '../../../services/cakeService.js'
@@ -79,7 +78,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
             {product.category && <span className="inline-block px-3 py-1 bg-surface/80 rounded-full text-xs text-primary font-bold border border-outline-variant/30">{product.category}</span>}
             {product.vendor && <button className="text-xs font-bold text-secondary uppercase tracking-wider" onClick={() => onNavigate?.('bakery-detail', { id: product.bakeryId })}>{product.vendor}</button>}
           </div>
-          {isMockRecord(product.id) && <span className="text-xs text-on-surface-variant">Dữ liệu mẫu</span>}<h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[38px] text-primary font-bold tracking-normal">{product.title}</h1>
+          <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[38px] text-primary font-bold tracking-normal">{product.title}</h1>
         </div>
         <div className="bg-surface-container p-4 rounded-xl shadow-sm">
           <span id="display-price" className="font-headline-md text-primary font-bold">{formatCatalogPrice(unitPrice === null ? null : Math.round(unitPrice * 100) * quantity / 100)}</span>

@@ -434,3 +434,21 @@ test('Complete standardized mock flow: thêm địa chỉ → checkout → Order
   }
 })
 
+
+
+test('Owner status buttons use the existing service, retain notes/history and sync all roles without backend writes', async () => {
+  const app = setup(); app.as(customer); app.as(vendor)
+  const id = app.store.state.orders.find((order) => order.status === 'PENDING').id
+  const original = globalThis.fetch; globalThis.fetch = app.fetch
+  try {
+    const { orderService } = await import('../src/services/orderService.js')
+    for (const target of ['CONFIRMED', 'BAKING', 'READY', 'DELIVERING', 'COMPLETED']) {
+      app.as(vendor)
+      const order = await orderService.updateOrderStatus(id, target, 'Ghi chú ' + target)
+      assert.equal(order.statusHistory.at(-1).note, 'Ghi chú ' + target)
+      app.as(customer); assert.equal((await orderService.getOrderById(id)).status, target)
+      app.as(admin); assert.equal((await orderService.getOrderById(id)).status, target)
+    }
+    assert.equal(app.calls.length, 0)
+  } finally { globalThis.fetch = original }
+})

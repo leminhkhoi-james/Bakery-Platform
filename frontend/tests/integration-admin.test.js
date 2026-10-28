@@ -48,7 +48,7 @@ test('Admin Order uses real scope=all and enum transitions while other roles can
   handler = () => reply({ result: [{ id, customerId, bakeryId, status: 'PENDING' }], meta: { page: 1, pageSize: 10, pages: 1, total: 1 } })
   await orderService.getOrders({ scope: 'all', page: 1, size: 10 })
   assert.equal(new URL(calls[0].url, 'http://fixture').searchParams.get('scope'), 'all')
-  assert.deepEqual(allowedOrderActions({ status: 'PENDING' }, { roles: ['ADMIN'] }, 'all'), ['CONFIRMED', 'CANCELLED'])
+  assert.deepEqual(allowedOrderActions({ status: 'PENDING' }, { roles: ['ADMIN'] }, 'all'), [])
   for (const page of ['admin-plans', 'admin-moderation', 'admin-orders']) {
     assert.equal(canAccess(page, { roles: ['ADMIN'] }), true)
     for (const role of ['CUSTOMER', 'BAKERY_OWNER']) assert.equal(canAccess(page, { roles: [role] }), false)

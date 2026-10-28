@@ -2,7 +2,7 @@ import { api, ApiError } from './apiClient.js'
 import { catalogMoney, isCatalogId, mapProduct } from './catalogModels.js'
 import { requireId } from './managementModels.js'
 
-export const ADDRESS_BLOCKER = 'BLOCKED — Backend Identity gốc chưa có API địa chỉ Customer public. Chưa thể chọn/lưu địa chỉ, đặt hàng hoặc chấp nhận báo giá. Cần nhóm backend bổ sung API trả deliveryAddressId thuộc tài khoản; không dùng địa chỉ demo hay UUID tự tạo.'
+export const ADDRESS_BLOCKER = 'Hiện chưa thể chọn địa chỉ và xác nhận đơn hàng. Vui lòng kiểm tra địa chỉ nhận bánh hoặc thử lại sau.'
 
 export async function revalidateCartItem(item, options = {}) {
   const id = requireId(item.productId, 'Sản phẩm trong giỏ')

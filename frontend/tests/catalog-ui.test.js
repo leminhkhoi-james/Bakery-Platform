@@ -72,7 +72,7 @@ test('Empty and loading states are explicit and do not insert product cards', ()
   assert.doesNotMatch(html, /article|mock|Pikachu/)
 })
 
-for (const [status, text] of [[401, 'đăng nhập'], [403, 'không có quyền'], [404, 'Không tìm thấy'], [500, 'Backend unavailable'], [0, 'Backend unavailable']]) {
+for (const [status, text] of [[401, 'đăng nhập'], [403, 'không có quyền'], [404, 'Không tìm thấy'], [500, 'Kết nối đang gián đoạn'], [0, 'Kết nối đang gián đoạn']]) {
   test('Catalog UI exposes HTTP/network error ' + status, () => {
     const html = render(CatalogState, { status: 'error', error: { status, message: 'Backend unavailable' }, onRetry() {}, onNavigate() {} })
     assert.match(html, /role="alert"/)

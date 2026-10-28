@@ -1,3 +1,4 @@
+import { cleanPresentationLabel } from '../../services/uiLabels.js'
 import { useState, useEffect } from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 import { CUSTOMER_NAV_LINKS } from '../../mockData/shared/navigation.js'
@@ -330,7 +331,7 @@ export const Header = ({
             {isProfileMenuOpen && (
               <div id="customer-profile-menu" className="absolute right-0 mt-3 w-64 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
                 <div className="px-4 py-3 border-b border-primary/20">
-                  <p className="font-savoure text-lg text-primary font-bold">{user?.displayName || 'Khách'}</p>
+                  <p className="font-savoure text-lg text-primary font-bold">{cleanPresentationLabel(user?.displayName, 'Khách')}</p>
                   <p className="text-primary/70 text-xs truncate font-bold">{user?.email || 'Chưa đăng nhập'}</p>
                 </div>
 

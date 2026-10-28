@@ -5,7 +5,7 @@ import { requireId, text } from './managementModels.js'
 export const CHAT_STATUSES = ['OPEN', 'CLOSED', 'ARCHIVED']
 export const MESSAGE_TYPES = ['TEXT', 'IMAGE', 'FILE', 'SYSTEM']
 export const CHAT_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
-export const CHAT_CONTEXT_GUIDANCE = 'Mở hội thoại từ yêu cầu bánh hoặc báo giá hợp lệ. Backend xác minh RFQ, cửa hàng và quyền trao đổi trước khi tạo hội thoại.'
+export const CHAT_CONTEXT_GUIDANCE = 'Mở hội thoại từ yêu cầu bánh hoặc báo giá của bạn để trao đổi với tiệm.'
 const fail = (message) => { throw new ApiError(message, 502) }
 export const safeChatUrl = (value) => typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null
 

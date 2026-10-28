@@ -1,3 +1,5 @@
+import { displayReference } from '../../services/displayReference.js'
+import { uiLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadRfqAddOns } from '../../services/rfqService.js'
@@ -38,8 +40,8 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
       {/* Header with status badge & offer ID */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
         <div className="flex items-center gap-2.5">
-          <StatusBadge status={offer.status} label={OFFER_STATUS_LABELS[offer.status] || offer.status} />
-          <span className="text-xs text-outline font-mono">#{offer.id?.slice(0, 8)}</span>
+          <StatusBadge status={offer.status} label={OFFER_STATUS_LABELS[offer.status] || uiLabel(offer.status)} />
+          <span className="text-xs text-outline font-mono">{displayReference(offer.id, 'QTE')}</span>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-xs font-medium text-on-surface-variant">
           <Icon name="verified" className="text-sm text-secondary" /> Báo giá chính thức
@@ -189,7 +191,7 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
       {/* Collapsible raw details for transparency */}
       <details className="text-[11px] text-outline">
         <summary className="cursor-pointer hover:underline">Chi tiết kỹ thuật (ID)</summary>
-        <p className="mt-1 break-all font-mono">Tiệm ID: {offer.bakeryId} · Báo giá ID: {offer.id}</p>
+        <p className="mt-1 break-all font-mono">Tiệm: {displayReference(offer.bakeryId, 'SHOP')} · Báo giá: {displayReference(offer.id, 'QTE')}</p>
       </details>
     </section>
   )
@@ -207,5 +209,5 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave }) {
   }))
   const addOns = useCatalogResource(loadRfqAddOns, { bakeryId })
   const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues({ ...values, [key]: event.target.value }) })
-  return <form className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}><h2 className="text-xl font-bold">{offer ? 'Sửa báo giá PENDING' : 'Gửi báo giá thật'}</h2><fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">{[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => <label key={key}>{label}<input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} /></label>)}<label className="sm:col-span-2">Mô tả và điều kiện<textarea id="offer-message" maxLength={4000} className={inputClass} rows={4} {...field('message')} /></label><section className="sm:col-span-2 space-y-3"><h3 className="font-bold">Phụ kiện từ tiệm</h3><ApiState resource={addOns}>{addOns.data?.map((item) => <label key={item.id} className="flex flex-wrap items-center gap-3"><input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />{item.name} · {moneyVnd(item.price)}{values.items.some((row) => row.addOnId === item.id) && <input aria-label={'Số lượng ' + item.name} type="number" min={1} value={values.items.find((row) => row.addOnId === item.id).quantity} onChange={(event) => setValues({ ...values, items: values.items.map((row) => row.addOnId === item.id ? { ...row, quantity: event.target.value } : row) })} className="w-20 rounded border p-2" />}</label>)}</ApiState><p className="text-sm">Backend xác minh phụ kiện, subscription, membership và tính tổng tiền; không gửi tổng giá do frontend tự tính.</p></section></fieldset><button id="offer-submit-btn" className={buttonClass} disabled={disabled || busy}>{busy ? 'Đang gửi…' : 'Lưu báo giá'}</button></form>
+  return <form className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}><h2 className="text-xl font-bold">{offer ? 'Sửa báo giá đang chờ' : 'Gửi báo giá'}</h2><fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">{[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => <label key={key}>{label}<input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} /></label>)}<label className="sm:col-span-2">Mô tả và điều kiện<textarea id="offer-message" maxLength={4000} className={inputClass} rows={4} {...field('message')} /></label><section className="sm:col-span-2 space-y-3"><h3 className="font-bold">Phụ kiện từ tiệm</h3><ApiState resource={addOns}>{addOns.data?.map((item) => <label key={item.id} className="flex flex-wrap items-center gap-3"><input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />{item.name} · {moneyVnd(item.price)}{values.items.some((row) => row.addOnId === item.id) && <input aria-label={'Số lượng ' + item.name} type="number" min={1} value={values.items.find((row) => row.addOnId === item.id).quantity} onChange={(event) => setValues({ ...values, items: values.items.map((row) => row.addOnId === item.id ? { ...row, quantity: event.target.value } : row) })} className="w-20 rounded border p-2" />}</label>)}</ApiState><p className="text-sm">Kiểm tra phụ kiện, thời gian hoàn thành và tổng tiền trước khi gửi báo giá.</p></section></fieldset><button id="offer-submit-btn" className={buttonClass} disabled={disabled || busy}>{busy ? 'Đang gửi…' : 'Lưu báo giá'}</button></form>
 }

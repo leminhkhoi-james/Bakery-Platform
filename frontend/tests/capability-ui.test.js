@@ -43,10 +43,11 @@ test('CLOSED bakery transition requires additional acknowledgement and keeps rea
   let changed = 0; const calls = [], bakery = { id, name: 'Fixture bakery', status: 'PENDING_APPROVAL', operations: { addresses: [], serviceAreas: [] } }
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...bakery, status: 'CLOSED' } }) }
   const render = setup(Review, { id, onChanged: () => changed++, onClose() {}, onNavigate() {} }, { loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
-  nodes(render()).find((node) => node.type === 'select').props.onChange({ target: { value: 'CLOSED' } })
-  await nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); assert.equal(calls.length, 0)
-  nodes(render()).find((node) => node.type === 'input' && node.props.type === 'checkbox').props.onChange({ target: { checked: true } })
-  await nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
+  const actionPanel = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  const close = actionPanel.props.actions.find((action) => action.key === 'CLOSED')
+  assert.ok(close.confirmText, 'closing retains explicit irreversible-action acknowledgement')
+  assert.equal(calls.length, 0, 'rendering/selecting actions never sends a mutation')
+  await actionPanel.props.onConfirm('CLOSED')
   assert.equal(calls[0].url, '/api/v1/admin/bakeries/' + id + '/status'); assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'CLOSED' }); assert.equal(changed, 1)
 })
 test('Payment form applies valid date range to GET parameters and rejects reversed dates', () => {

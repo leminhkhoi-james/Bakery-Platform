@@ -1,30 +1,46 @@
 import React from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
-import { ApiState, panelClass, buttonClass } from '../../../components/management/ApiState.jsx'
-import { DataTable, EmptyPanel, Icon, SectionHeading, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
+import { DataTable, Icon, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
+import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
-import { loadAdminBakeries, loadAdminPayments } from '../../../services/publicationAdminService.js'
-import { formatSubscriptionMoney } from '../../../services/subscriptionModels.js'
+import { loadAdminDashboard } from '../../../services/adminDashboardService.js'
+import { buildAdminDashboard, dashboardMoney, dashboardNumber, dashboardOrderName, dashboardDateTime, DASHBOARD_PENDING_ORDER_STATUS } from '../../../services/adminDashboardModels.js'
+import { orderStatusLabel } from '../../../services/orderModels.js'
+import { StatusDistribution } from './DashboardCharts.jsx'
+import AdminWorkQueue from './AdminWorkQueue.jsx'
+import './admin-dashboard.css'
 
+const metrics = [
+  ['bakeries', 'Tổng tiệm bánh', 'storefront', 'admin-vendors'],
+  ['pendingBakeries', 'Tiệm chờ duyệt', 'pending_actions', 'admin-vendors'],
+  ['users', 'Tổng người dùng', 'group', 'admin-users'],
+  ['products', 'Sản phẩm', 'cake'],
+  ['orders', 'Tổng đơn hàng', 'shopping_bag', 'admin-orders'],
+  ['revenue', 'Doanh thu gói dịch vụ', 'account_balance_wallet', 'admin-payments'],
+  ['requests', 'Yêu cầu báo giá', 'request_quote'],
+  ['offers', 'Báo giá', 'price_check'],
+  ['pendingPayments', 'Gói dịch vụ chờ duyệt', 'receipt_long', 'admin-payments'],
+  ['pendingOrders', 'Đơn hàng chờ xử lý', 'assignment_late', 'admin-orders?status=' + DASHBOARD_PENDING_ORDER_STATUS],
+]
 export default function AdminDashboardPage({ onNavigate }) {
-  const bakeries = useCatalogResource(loadAdminBakeries, { status: 'PENDING_APPROVAL', page: 1, size: 5, sort: 'createdAt,asc' })
-  const payments = useCatalogResource(loadAdminPayments, { status: 'SUBMITTED', page: 1, size: 5, sort: 'submittedAt,asc' })
-  return <AdminFrame title="Tổng quan quản trị" activeTab="admin-dashboard" onNavigate={onNavigate}>
-    <SectionHeading title="Trung tâm vận hành" description="Hồ sơ và chứng từ cần xử lý, cập nhật từ hệ thống." icon="dashboard" />
-    <div className="grid gap-4 md:grid-cols-2">
-      <section className={panelClass + ' sc-metric'}><div><h2>Tiệm chờ duyệt</h2><ApiState resource={bakeries}>{bakeries.data && <><p className="sc-metric-value">{bakeries.data.meta.total}</p><p className="text-xs text-on-surface-variant">Hồ sơ PENDING_APPROVAL</p></>}</ApiState></div><span className="sc-metric-icon"><Icon name="storefront" /></span></section>
-      <section className={panelClass + ' sc-metric'}><div><h2>Thanh toán gói chờ duyệt</h2><ApiState resource={payments}>{payments.data && <><p className="sc-metric-value">{payments.data.meta.total}</p><p className="text-xs text-on-surface-variant">Chứng từ SUBMITTED</p></>}</ApiState></div><span className="sc-metric-icon"><Icon name="receipt_long" /></span></section>
-    </div>
-    <div className="sc-dashboard-queues grid items-start gap-5 xl:grid-cols-2">
-      <section className={panelClass}><SectionHeading title="Hồ sơ tiệm bánh" action={<button className="text-xs underline" onClick={bakeries.reload}>Tải lại</button>} />
-        <ApiState resource={bakeries}>{bakeries.data && (bakeries.data.result.length ? <DataTable label="Tiệm chờ duyệt"><thead><tr><th>Tiệm bánh</th><th>Trạng thái</th><th>Hồ sơ</th></tr></thead><tbody>{bakeries.data.result.map((bakery) => <tr key={bakery.id}><td><strong>{bakery.name}</strong><small>{bakery.id}</small></td><td><StatusBadge status={bakery.status} /></td><td><button className="font-semibold text-primary underline" onClick={() => onNavigate('admin-vendors')}>Xem hồ sơ</button></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Chưa có tiệm gửi duyệt." description="Hồ sơ mới sẽ xuất hiện khi Vendor gửi yêu cầu." icon="storefront" />)}</ApiState>
-        <button className={buttonClass} onClick={() => onNavigate('admin-vendors')}>Xem hồ sơ tiệm <Icon name="arrow_forward" /></button>
-      </section>
-      <section className={panelClass}><SectionHeading title="Chứng từ mua gói" action={<button className="text-xs underline" onClick={payments.reload}>Tải lại</button>} />
-        <ApiState resource={payments}>{payments.data && (payments.data.result.length ? <DataTable label="Chứng từ chờ duyệt"><thead><tr><th>Chứng từ</th><th>Giá trị</th><th>Trạng thái</th></tr></thead><tbody>{payments.data.result.map((payment) => <tr key={payment.id}><td><strong>{payment.paymentReference || payment.id}</strong><small>{payment.subscriptionOrderId}</small></td><td className="whitespace-nowrap tabular-nums">{formatSubscriptionMoney(payment.amount, payment.currency)}</td><td><StatusBadge status={payment.status} /></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Chưa có chứng từ chờ duyệt." description="Chứng từ do Vendor gửi sẽ được liệt kê tại đây." icon="receipt_long" />)}</ApiState>
-        <button className={buttonClass} onClick={() => onNavigate('admin-payments')}>Đối chiếu thanh toán <Icon name="arrow_forward" /></button>
-      </section>
-    </div>
-    <section className={panelClass}><SectionHeading title="Điều kiện xuất hiện trên SweetCake" icon="task_alt" /><div className="grid gap-3 md:grid-cols-3">{[['01', 'Duyệt hồ sơ', 'Tiệm ở trạng thái ACTIVE.'], ['02', 'Xác nhận gói dịch vụ', 'Subscription còn hiệu lực.'], ['03', 'Công khai sản phẩm', 'Sản phẩm ở trạng thái PUBLISHED.']].map(([number, title, detail]) => <div key={number} className="flex gap-3 rounded-xl bg-surface-container-low p-3"><span className="font-serif text-xl text-secondary">{number}</span><div><h3 className="font-semibold">{title}</h3><p className="mt-1 text-xs text-on-surface-variant">{detail}</p></div></div>)}</div><details className="text-xs text-on-surface-variant"><summary className="cursor-pointer">Phạm vi dữ liệu</summary><p className="mt-2">Duyệt hồ sơ tiệm và duyệt thanh toán gói là hai bước độc lập. Thống kê doanh thu/escrow chưa có API.</p></details></section>
-  </AdminFrame>
+  const { user } = useAuth()
+  const resource = useCatalogResource(loadAdminDashboard, { user: { id: user?.id, roles: user?.roles || [] } })
+  const dashboard = buildAdminDashboard(resource.data)
+  const loading = resource.status === 'loading'
+  const failing = resource.status === 'error' || Object.values(resource.data || {}).some((item) => item.state === 'error')
+  const go = (route) => () => onNavigate(route)
+  const orderRoute = (row) => 'admin-orders?orderId=' + encodeURIComponent(row.id)
+  const workGroups = [
+    { key: 'bakeries', title: 'Tiệm chờ duyệt', icon: 'storefront', route: 'admin-vendors?status=PENDING_APPROVAL', items: dashboard.pendingBakeries?.map((row) => ({ key: row.id, name: row.name || 'Tiệm bánh', route: 'admin-vendors?bakeryId=' + row.id })) },
+    { key: 'payments', title: 'Chứng từ chờ duyệt', icon: 'receipt_long', route: 'admin-payments', items: dashboard.pendingPayments?.map((row) => ({ key: row.id, name: dashboard.bakeries?.find((bakery) => bakery.id === row.bakeryId)?.name || 'Chứng từ mua gói', detail: row.amount == null ? undefined : dashboardMoney(row.amount, row.currency || 'VND'), route: 'admin-payments?paymentId=' + row.id })) },
+    { key: 'moderation', title: 'Kiểm duyệt nội dung', icon: 'fact_check', route: 'admin-moderation', items: dashboard.moderation?.map((row) => ({ key: row.kind + row.id, name: row.label, route: 'admin-moderation?kind=' + row.kind + '&id=' + row.id })) },
+  ]
+
+  return <AdminFrame activeTab="admin-dashboard" onNavigate={onNavigate} headerAction={<button aria-label="Làm mới tổng quan" className="sc-button sc-action-button sc-action-button--secondary" disabled={loading || resource.refreshing} onClick={resource.reload}><Icon name="refresh" />{loading || resource.refreshing ? 'Đang cập nhật…' : 'Làm mới'}</button>}><div className="sc-dashboard" aria-busy={loading || resource.refreshing}>
+    {failing && <p role="alert" className="sc-dashboard-notice">Một số số liệu chưa tải được. Vui lòng làm mới để cập nhật.</p>}
+    <section className="sc-dashboard-kpis" aria-label="Chỉ số tổng quan">{metrics.map(([key, label, icon, route]) => <article key={key} className="sc-panel sc-dashboard-kpi"><div><Icon name={icon} /><span>{label}</span></div><div className="sc-dashboard-kpi-footer"><strong className="sc-metric-value" aria-label={loading ? 'Đang tải số liệu' : (key === 'revenue' ? dashboard.revenue == null : dashboard.counts[key] == null) ? 'Chưa có số liệu' : undefined}>{loading ? '…' : key === 'revenue' ? dashboard.revenue == null ? '—' : Object.keys(dashboard.revenue).length ? Object.entries(dashboard.revenue).map(([code, amount]) => <span key={code}>{dashboardMoney(amount, code)}</span>) : dashboardMoney(0) : dashboardNumber(dashboard.counts[key])}</strong>{route && <button onClick={go(route)} aria-label={'Xem ' + label.toLocaleLowerCase('vi')}><Icon name="arrow_forward" /></button>}</div></article>)}</section>
+    <section className="sc-dashboard-section" aria-labelledby="dashboard-statuses"><div className="sc-dashboard-section-heading"><h2 id="dashboard-statuses">Tình hình hoạt động</h2></div><div className="sc-dashboard-statuses"><StatusDistribution title="Trạng thái đơn hàng" items={dashboard.distributions.orders} icon="đơn hàng" onNavigate={go('admin-orders')} /><StatusDistribution title="Trạng thái tiệm bánh" items={dashboard.distributions.bakeries} icon="tiệm bánh" onNavigate={go('admin-vendors')} /><StatusDistribution title="Trạng thái người dùng" items={dashboard.distributions.users} icon="người dùng" onNavigate={go('admin-users')} /></div></section>
+    <section className="sc-dashboard-section" aria-labelledby="dashboard-work"><div className="sc-dashboard-section-heading"><h2 id="dashboard-work">Việc cần xử lý</h2><span>Chờ quản trị viên xử lý</span></div><AdminWorkQueue groups={workGroups} loading={loading} onNavigate={onNavigate} /></section>
+    <section className="sc-dashboard-section" aria-labelledby="dashboard-recent"><div className="sc-dashboard-section-heading"><h2 id="dashboard-recent">Hoạt động gần đây</h2></div><div className="sc-dashboard-recent"><article className="sc-panel"><div className="sc-dashboard-panel-heading"><h3>Đơn hàng mới nhất</h3><button className="sc-dashboard-link" onClick={go('admin-orders')}>Xem tất cả <Icon name="arrow_forward" /></button></div>{dashboard.recentOrders.length ? <DataTable label="Đơn hàng gần đây"><thead><tr><th>Đơn hàng</th><th>Trạng thái</th><th className="sc-money">Giá trị</th><th>Ngày tạo</th><th className="sc-table-actions" scope="col">Chi tiết</th></tr></thead><tbody>{dashboard.recentOrders.map((row) => <tr key={row.id}><td><strong>{dashboardOrderName(row)}</strong><small>{row.customerName || row.bakeryName || 'Đơn bánh'}</small></td><td><StatusBadge status={row.status} label={orderStatusLabel(row.status)} /></td><td className="sc-money">{row.totalAmount == null || !row.currency ? '—' : dashboardMoney(row.totalAmount, row.currency)}</td><td>{dashboardDateTime(row.createdAt)}</td><td className="sc-table-actions"><button className="sc-button sc-action-button sc-action-button--secondary" onClick={go(orderRoute(row))} aria-label={'Xem chi tiết ' + dashboardOrderName(row)}><Icon name="visibility" />Xem</button></td></tr>)}</tbody></DataTable> : <p className="sc-dashboard-empty">{loading ? 'Đang tải đơn hàng…' : dashboard.orders == null ? 'Chưa tải được đơn hàng.' : 'Chưa có đơn hàng.'}</p>}</article></div></section>
+  </div></AdminFrame>
 }

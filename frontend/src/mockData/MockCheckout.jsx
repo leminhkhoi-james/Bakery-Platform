@@ -51,7 +51,7 @@ export default function MockCheckout({ offerId, items = [], onConfirmed, onNavig
   return <form onSubmit={submit} className="space-y-4">
     <div className="flex items-center gap-1.5 rounded-xl bg-surface-container-high px-3 py-2 text-xs text-on-surface-variant">
       <Icon name="info" className="text-sm text-secondary shrink-0" />
-      <span>Dữ liệu mẫu · Đơn hàng được lưu trên trình duyệt, không gửi backend hoặc thu tiền.</span>
+      <span>Trang này không thu tiền. Vui lòng trao đổi phương thức thanh toán với tiệm.</span>
     </div>
 
     <label className="block space-y-1.5">

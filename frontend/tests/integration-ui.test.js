@@ -56,7 +56,7 @@ test('Existing review displays real DTO, status gates editing/deletion including
 test('Inbox no longer claims Marketplace unavailable and offers real RFQ navigation', () => {
   setup()
   const html = render(Workspace, { onNavigate() {} })
-  assert.match(html, /Chọn yêu cầu để mở Chat/); assert.doesNotMatch(html, /Marketplace chưa sẵn sàng|Tạo hội thoại — cần Marketplace/)
+  assert.match(html, /Chọn yêu cầu để nhắn tin/); assert.doesNotMatch(html, /Marketplace chưa sẵn sàng|Tạo hội thoại — cần Marketplace/)
 })
 test('Close UI requires loaded manager/customer permission and explicit confirmation', () => {
   setup({ loadPermission: ready(true) })
@@ -68,7 +68,7 @@ test('Close UI requires loaded manager/customer permission and explicit confirma
 })
 test('AI design UI uses real detail DTO, loading/error handling and does not reveal unapproved images', () => {
   setup({ loadDesign: ready({ id, generationJobId: id, moderationStatus: 'PENDING', imageUrl: null }) })
-  assert.match(render(Design, { id, jobId: id }), /Backend chưa cung cấp ảnh/)
+  assert.match(render(Design, { id, jobId: id }), /Chưa có ảnh được duyệt/)
   setup(); assert.match(render(Design, { id }), /Đang tải/)
   setup({ loadDesign: { status: 'error', data: null, error: { status: 500, message: 'Fixture failure' }, reload() {} } })
   assert.match(render(Design, { id }), /Thử lại/)
@@ -87,10 +87,10 @@ test('Vendor management tabs provide actual categories/add-ons/members screens i
 })
 test('Vendor list empty/error/loading and non-owner controls follow membership resource, not mock fallback', () => {
   setup({ loadCatalogEntities: ready([]), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
-  assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Chưa có danh mục từ backend/)
+  assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Chưa có danh mục/)
   setup({ loadCatalogEntities: ready([{ id, name: 'Backend fixture category' }]), loadVendorMembership: ready({ memberRole: 'INVALID', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
   const html = render(EntityManager, { bakeryId, kind: 'categories' })
-  assert.match(html, /Backend fixture category/); assert.match(html, /<button disabled=""[^>]*>Sửa/)
+  assert.match(html, /Backend fixture category/); assert.match(html, /<button disabled=""[^>]*>(?:(?!<\/button>)[\s\S])*Sửa/)
   setup({ loadCatalogEntities: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['BAKERY_OWNER'])
   assert.match(render(EntityManager, { bakeryId, kind: 'members' }), /Thử lại/)
   setup(); assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Đang tải/)
@@ -106,22 +106,22 @@ test('Owner listing has no membership mutation controls; add-on form retains req
 test('Draft asset resume with no snapshot shows BLOCKED and never renders replace-options form', () => {
   setup({ loadProductSnapshot: { status: 'error', error: { status: 404 }, data: null, reload() {} } }, ['BAKERY_OWNER'])
   const html = render(Assets, { bakeryId, product: { id }, onSnapshot() {}, onChanged() {} })
-  assert.match(html, /BLOCKED chỉnh options/); assert.doesNotMatch(html, /Lưu tùy chọn/)
-  assert.match(html, /Upload ảnh/)
+  assert.match(html, /Chưa tải đủ tùy chọn/); assert.doesNotMatch(html, /Lưu tùy chọn/)
+  assert.match(html, /Tải ảnh lên/)
 })
-test('Known asset snapshot renders real image IDs and confirmable options editor; no invented persisted IDs', () => {
+test('Known asset snapshot hides image UUIDs while retaining deletion and confirmed options editor', () => {
   setup({ loadProductSnapshot: ready(null) }, ['BAKERY_OWNER'])
   const snapshot = { images: [{ id, displayOrder: 2, primary: true }], options: { groups: [] } }
   const html = render(Assets, { bakeryId, product: { id }, initialSnapshot: snapshot, onSnapshot() {}, onChanged() {} })
-  assert.ok(html.includes(id)); assert.match(html, /Xóa ảnh/); assert.match(html, /Lưu tùy chọn/)
-  assert.match(render(Options, { options: { groups: [] }, onSave() {} }), /Xác nhận thay toàn bộ options/)
+  assert.ok(!html.includes(id)); assert.match(html, /Ảnh 3/); assert.match(html, /Xóa ảnh/); assert.match(html, /Lưu tùy chọn/)
+  assert.match(render(Options, { options: { groups: [] }, onSave() {} }), /Xác nhận lưu toàn bộ tùy chọn/)
 })
 
 test('Admin plan management renders real records, empty/error/loading and DTO form fields', () => {
   setup({ loadAdminPlans: ready([{ id, code: 'SERVER', name: 'Backend plan fixture', status: 'INACTIVE', monthlyPrice: 321000, currency: 'VND' }]) }, ['ADMIN'])
   assert.match(render(AdminPlans), /Backend plan fixture/); assert.match(render(AdminPlans), /Sửa gói/)
   assert.match(render(AdminPlanForm, { onSave() {}, onClose() {} }), /Xác nhận lưu/)
-  setup({ loadAdminPlans: ready([]) }, ['ADMIN']); assert.match(render(AdminPlans), /Chưa có gói dịch vụ trong backend/)
+  setup({ loadAdminPlans: ready([]) }, ['ADMIN']); assert.match(render(AdminPlans), /Chưa có gói dịch vụ/)
   setup({ loadAdminPlans: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['ADMIN']); assert.match(render(AdminPlans), /Thử lại/)
   setup({}, ['ADMIN']); assert.match(render(AdminPlans), /Đang tải/)
 })
@@ -131,13 +131,34 @@ test('Admin Orders page loads all scope, contains no mock escrow statistics and 
   assert.match(html, /Chưa có đơn hàng phù hợp/); assert.doesNotMatch(html, /Giải ngân|Khóa cọc|1.250.000/)
   assert.equal(globalThis.__integrationCalls.find((call) => call.name === 'loadOrders').params.scope, 'all')
 })
+
+test('Populated Admin order table keeps Vietnamese statuses and an accessible detail action', () => {
+  setup({ loadOrders: ready({ result: [{ id, orderNumber: 'ORD-HTTP-FIXTURE', bakeryName: 'Fixture bakery', status: 'CONFIRMED', totalAmount: 350000, currency: 'VND' }], meta: { page: 1, pageSize: 10, total: 1, pages: 1 } }) }, ['ADMIN'])
+  const html = render(AdminOrders)
+  assert.match(html, /ORD-HTTP-FIXTURE/)
+  assert.match(html, /Đã xác nhận/)
+  assert.match(html, /<table class="sc-table"/)
+  assert.match(html, /Xem đơn<\/button>/)
+  assert.doesNotMatch(html, />CONFIRMED</)
+})
 test('Moderation UI operates by real UUID only, no fake queue, states and role gates are explicit', () => {
-  setup({}, ['ADMIN']); assert.match(render(AdminModeration), /Backend chưa có danh sách chờ duyệt/)
+  setup({}, ['ADMIN']); assert.match(render(AdminModeration), /Nhập mã đơn hàng hoặc mã thiết kế/)
   setup({ loadModerationDesign: ready({ id, generationJobId: id, moderationStatus: 'PENDING', imageUrl: null }) }, ['ADMIN'])
-  assert.match(render(DesignModeration, { id }), /Xác nhận kiểm duyệt thiết kế/)
+  assert.match(render(DesignModeration, { id }), /Duyệt thiết kế/)
   setup({ loadModerationDesign: ready({ id, generationJobId: id, moderationStatus: 'APPROVED' }) }, ['ADMIN'])
-  assert.doesNotMatch(render(DesignModeration, { id }), /Xác nhận kiểm duyệt thiết kế/)
+  assert.doesNotMatch(render(DesignModeration, { id }), /Duyệt thiết kế/)
   const review = { orderId: id, status: 'PUBLISHED' }
   assert.match(render(ReviewModeration, { review }), /Ẩn đánh giá/)
   setup({}, ['CUSTOMER']); assert.equal(render(ReviewModeration, { review }), '')
+})
+
+test('Dashboard order shortcut applies a valid status to the existing Admin list and ignores invalid enums', () => {
+  for (const [query, expected] of [['?status=PENDING', 'PENDING'], ['?status=invalid', ''], ['', '']]) {
+    setup({}, ['ADMIN'])
+    const html = render(AdminOrders, { routeSearch: query })
+    const call = globalThis.__integrationCalls.find((entry) => entry.name === 'loadOrders')
+    assert.equal(call.params.scope, 'all')
+    assert.equal(call.params.status, expected)
+    if (expected) assert.match(html, /value="PENDING" selected=""/)
+  }
 })

@@ -1,3 +1,4 @@
+import { displayReference } from '../src/services/displayReference.js'
 // Controlled hook harness: exercises actual component event handlers without browser/live writes.
 import assert from 'node:assert/strict'
 import { before, after, test } from 'node:test'
@@ -54,7 +55,7 @@ function nodes(tree) {
   return [tree, ...nodes(tree.props.children)]
 }
 const text = (tree) => Array.isArray(tree) ? tree.map(text).join('') : tree && typeof tree === 'object' ? text(tree.props?.children) : String(tree ?? '')
-const button = (tree, label) => nodes(tree).find((node) => node.type === 'button' && text(node.props.children) === label)
+const button = (tree, label) => nodes(tree).find((node) => (node.type === 'button' || node.type?.name === 'RefreshButton') && text(node.props.children) === label)
 
 test('Vendor routes preserve real bakery UUID, existing order query and do not leak bakery IDs into customer routes', () => {
   assert.equal(vendorRoute('vendor-menu', bakeryId), 'vendor-menu?bakeryId=' + bakeryId)
@@ -73,7 +74,7 @@ test('Created DRAFT stays editable/uploadable/publishable even when current prod
   vendor.saveProduct = async () => saved
   try {
     const render = harness(ProductManager, { bakeryId })
-    const statusSelect = nodes(render()).find((node) => node.type === 'select' && text(node).includes('PUBLISHED'))
+    const statusSelect = nodes(render()).find((node) => node.type === 'select' && nodes(node).some((option) => option.type === 'option' && option.props.value === 'PUBLISHED'))
     statusSelect.props.onChange({ target: { value: 'PUBLISHED' } })
     button(render(), 'Thêm sản phẩm').props.onClick()
     let form = nodes(render()).find((node) => node.type?.name === 'ProductForm')
@@ -82,8 +83,8 @@ test('Created DRAFT stays editable/uploadable/publishable even when current prod
     form = nodes(tree).find((node) => node.type?.name === 'ProductForm')
     assert.equal(form.props.product.id, productId)
     assert.ok(nodes(tree).some((node) => node.type?.name === 'ProductAssets' && node.props.initialSnapshot?.options?.groups.length === 0))
-    assert.equal(button(tree, 'Kích hoạt bán').props.disabled, false)
-    assert.match(text(tree), new RegExp(productId))
+    const lifecycle = nodes(tree).find((node) => node.type?.name === 'EntityActionButtons'); assert.equal(lifecycle.props.actions.find((action) => action.key === 'publish').disabled, false)
+    assert.match(text(tree), new RegExp(displayReference(productId, 'PRD')))
   } finally { vendor.saveProduct = original }
 })
 test('Successful bakery creation stops the original form from resubmitting the same bakery inadvertently', async () => {
@@ -110,7 +111,7 @@ test('Subscription refresh reloads current order details as well as periods/hist
   const render = harness(workspaceElement.type, workspaceElement.props)
   // Select an existing order to open its detail.
   globalThis.__flowResources.loadSubscriptionOrders = ready({ ...list, result: [{ id: orderId }] })
-  const orderButton = nodes(render()).find((node) => node.type === 'button' && text(node).includes(orderId))
+  const orderButton = nodes(render()).find((node) => node.type === 'button' && text(node).includes(displayReference(orderId, 'SUB')))
   orderButton.props.onClick()
   const before = nodes(render()).find((node) => node.type === OrderDetail).props.revision
   button(render(), 'Làm mới').props.onClick()

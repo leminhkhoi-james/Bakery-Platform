@@ -117,6 +117,45 @@ button:disabled { opacity: .45; }
 .sc-table td { padding: 1rem; }
 .sc-table small { font-size: var(--sc-text-xs); color: var(--sc-color-muted); }
 .sc-table-wrap { border-radius: var(--sc-radius-card); border-color: var(--sc-color-border); }
+.sc-button.sc-order-secondary { background: var(--color-surface, #fffdfa); color: var(--sc-color-primary); border-color: var(--sc-color-border); }
+.sc-button.sc-order-secondary:hover:not(:disabled) { background: var(--color-surface-container-low, #f5efe6); }
+
+/* Shared action surfaces keep the existing SweetCake palette and control tokens. */
+.sc-entity-actions { display: grid; gap: .8rem; min-width: 0; }
+.sc-action-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; }
+.sc-action-heading h3, .sc-action-confirm h4 { margin: 0; font-size: .9rem; font-weight: var(--sc-weight-semibold); }
+.sc-current-status { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: var(--sc-text-xs); }
+.sc-action-row { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; min-width: 0; }
+.sc-action-button { min-height: var(--sc-control-height); white-space: normal; text-align: center; }
+.sc-button.sc-action-button--secondary, .sc-button.sc-choice-button { color: var(--sc-color-primary); background: var(--color-surface, #fffdfa); border-color: var(--sc-color-border); }
+.sc-button.sc-action-button--warning { color: #87541d; background: #fff2dc; border-color: #e6c99a; }
+.sc-button.sc-action-button--danger { color: var(--sc-color-primary); background: #fbecef; border-color: #dbb5be; }
+.sc-button.sc-choice-button.is-selected { background: var(--sc-color-primary); color: white; border-color: var(--sc-color-primary); }
+.sc-button:is(.sc-action-button--secondary, .sc-action-button--warning, .sc-action-button--danger, .sc-choice-button):hover:not(:disabled):not(.is-selected) { background: var(--color-surface-container-low, #f5efe6); color: var(--sc-color-primary); }
+.sc-action-confirm { display: grid; gap: .8rem; padding: 1rem; border: 1px solid var(--sc-color-border); border-radius: var(--sc-radius-control); background: var(--color-surface-container-low, #f5efe6); }
+.sc-action-confirm p, .sc-entity-actions > p { font-size: var(--sc-text-sm); line-height: 1.6; overflow-wrap: anywhere; }
+.sc-action-acknowledgement { display: flex; align-items: flex-start; gap: .6rem; }
+.sc-choice-field { min-width: 0; display: grid; gap: .4rem; }
+.sc-choice-field legend { padding-bottom: .4rem; font-size: var(--sc-text-sm); }
+
+/* Every admin list uses the same cell rhythm, wrapping rules and action controls. */
+.sc-portal--admin .sc-table-wrap { width: 100%; min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; }
+.sc-portal--admin .sc-table { width: 100%; border-spacing: 0; table-layout: auto; }
+.sc-portal--admin .sc-table :is(th, td) { vertical-align: middle; padding: .875rem 1rem; line-height: 1.5; }
+.sc-portal--admin .sc-table td { height: 4.5rem; max-width: 28rem; overflow-wrap: anywhere; }
+.sc-portal--admin .sc-table :is(h2, h3, strong) { margin: 0; font-size: inherit; line-height: 1.5; font-weight: var(--sc-weight-semibold); }
+.sc-portal--admin .sc-table :is(th, td):last-child { text-align: right; }
+.sc-portal--admin .sc-table .sc-action-row { justify-content: flex-end; }
+.sc-portal--admin .sc-table .sc-button { min-height: 2.5rem; font-size: var(--sc-text-xs); gap: .4rem; padding: .5rem .8rem; }
+.sc-portal--admin .sc-table .sc-status { max-width: 100%; white-space: normal; }
+.sc-portal--admin .sc-table :is(.sc-money, .tabular-nums) { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sc-portal--admin .sc-table small { display: block; margin-top: .25rem; line-height: 1.5; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .sc-action-row > .sc-action-button { flex: 1 1 12rem; }
+  .sc-action-confirm { padding: .8rem; }
+  .sc-portal--admin .sc-table :is(th, td) { padding: .75rem; }
+  .sc-portal--admin .sc-table { min-width: 34rem; }
+}
 .sc-drawer-heading, .sc-drawer-body { padding: var(--sc-card-padding); }
 .sc-drawer-heading h2 { font-size: var(--sc-text-section); }
 .sc-tabs { border-radius: var(--sc-radius-card); }
@@ -138,3 +177,38 @@ button:disabled { opacity: .45; }
 @media (prefers-reduced-motion: reduce) {
   .sc-button, .sc-ui-button { transition: none; }
 }
+
+/* Action columns use table-cell alignment; button groups stay centered without altering table layout. */
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table :is(th, td).sc-table-actions {
+  width: 12rem;
+  min-width: 12rem;
+  padding: .75rem;
+  text-align: center;
+  vertical-align: middle;
+}
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table .sc-table-actions .sc-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table .sc-table-actions :is(.sc-button, .sc-table-action-link) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  min-height: 2.5rem;
+  gap: .4rem;
+  padding: .5rem .75rem;
+  font-size: var(--sc-text-xs);
+  line-height: 1.4;
+}
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table .sc-table-actions .sc-action-row > .sc-action-button { flex: 0 0 auto; }
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table tbody:has(.sc-table-actions) tr { height: 4.5rem; }
+
+/* Refresh controls and feedback keep readable spacing across workspaces. */
+.sc-refresh-button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; max-width: 100%; min-height: 2.5rem; margin-block: .5rem; padding: .55rem .85rem; line-height: 1.4; text-decoration: none; white-space: normal; }
+.sc-refresh-button .sc-icon { flex-shrink: 0; font-size: 1.1rem; }
+.sc-toolbar > label { display: grid; gap: .35rem; min-width: 0; }
+:is(.sc-panel, .sc-drawer-body) :is(p, dd, [role="alert"], [role="status"]) { overflow-wrap: anywhere; line-height: 1.6; }

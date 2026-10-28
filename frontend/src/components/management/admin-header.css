@@ -1,0 +1,22 @@
+.sc-portal--admin { --sc-admin-header-height: 5.25rem; }
+.sc-portal--admin .sc-portal-header { height: var(--sc-admin-header-height); padding-block: .65rem; padding-inline: var(--sc-page-gutter); gap: 1rem; }
+.sc-portal--admin .sc-portal-heading { flex: 1; min-width: 0; }
+.sc-portal--admin .sc-portal-header h1 { margin: 0; font-size: 1.25rem; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; }
+.sc-portal--admin .sc-portal-description { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: .25rem 0 0; font-size: .78rem; line-height: 1.45; color: var(--sc-color-muted); }
+.sc-portal--admin .sc-portal-header-tools { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; min-width: 0; max-width: 45%; }
+.sc-portal--admin .sc-identity { flex-shrink: 0; min-width: 0; max-width: 16rem; }
+.sc-portal--admin .sc-portal-header-tools .sc-identity { flex-shrink: 1; max-width: 12rem; }
+.sc-portal--admin .sc-portal-main { padding-top: calc(var(--sc-admin-header-height) + .9rem); padding-inline: var(--sc-page-gutter); }
+.sc-portal--admin .sc-portal-main > .sc-workspace { gap: 1rem; }
+.sc-portal--admin .sc-admin-header-action .sc-button { min-height: 2.25rem; padding: .45rem .65rem; font-size: .78rem; white-space: nowrap; }
+@media (max-width: 639px) {
+  .sc-portal--admin { --sc-admin-header-height: 6rem; }
+  .sc-portal--admin .sc-portal-header { gap: .5rem; padding-block: .5rem; }
+  .sc-portal--admin .sc-portal-header h1 { font-size: 1.05rem; }
+  .sc-portal--admin .sc-portal-description { font-size: .72rem; }
+  .sc-portal--admin .sc-portal-header-tools { flex-shrink: 0; gap: .45rem; max-width: none; }
+  .sc-portal--admin .sc-identity { max-width: none; }
+  .sc-portal--admin .sc-admin-header-action .sc-button { width: 2.25rem; padding: .4rem; font-size: 0; }
+  .sc-portal--admin .sc-admin-header-action .sc-icon { font-size: 1.15rem; }
+  .sc-portal--admin .sc-portal-main { padding-top: calc(var(--sc-admin-header-height) + .65rem); }
+}

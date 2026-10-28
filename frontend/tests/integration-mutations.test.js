@@ -83,9 +83,10 @@ test('Design moderation actual UI requires selection and acknowledgement, PATCHs
   let reloaded = 0; const calls = []
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return reply({ id, generationJobId: jobId, moderationStatus: 'APPROVED' }) }
   const render = harness(Design, { id }, { loadModerationDesign: ready({ id, generationJobId: jobId, moderationStatus: 'PENDING' }, () => reloaded++) }, ['ADMIN'])
-  nodes(render()).find((node) => node.type === 'select').props.onChange({ target: { value: 'APPROVED' } })
-  nodes(render()).find((node) => node.type === 'input' && node.props.type === 'checkbox').props.onChange({ target: { checked: true } })
-  await nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
+  const actions = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  assert.deepEqual(actions.props.actions.map((action) => action.key), ['APPROVED', 'REJECTED'])
+  assert.equal(calls.length, 0)
+  await actions.props.onConfirm('APPROVED')
   assert.equal(calls[0].options.method, 'PATCH'); assert.deepEqual(JSON.parse(calls[0].options.body), { moderationStatus: 'APPROVED' }); assert.equal(reloaded, 1)
 })
 test('Review moderation UI PATCHs HIDDEN only after confirmation and triggers resource read', async () => {

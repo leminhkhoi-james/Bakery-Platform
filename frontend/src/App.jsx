@@ -270,7 +270,7 @@ function App() {
     showToast('Đã làm trống giỏ hàng!')
   }
 
-  const handleNavigate = (path, cakeData = null) => {
+  const handleNavigate = (path, cakeData = null, navigation = {}) => {
     if (cakeData) {
       setSelectedCake(cakeData)
     }
@@ -282,8 +282,8 @@ function App() {
     if (typeof window !== 'undefined') {
       const targetUrl = resolvedPath === 'home' ? '/' : query ? '/' + resolvedPath + '?' + query : catalogUrl(resolvedPath, cakeData)
       setRouteSearch(new URL(targetUrl, window.location.origin).search)
-      if (window.location.pathname !== targetUrl || window.location.hash) {
-        window.history.pushState({ page: resolvedPath }, '', targetUrl)
+      if (window.location.pathname + window.location.search !== targetUrl || window.location.hash) {
+        window.history[navigation.replace ? 'replaceState' : 'pushState']({ page: resolvedPath }, '', targetUrl)
       }
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }

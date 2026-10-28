@@ -15,7 +15,7 @@ test('Original backend blocks every address/checkout entry point before any netw
       () => loadAddresses(),
       () => createVerifiedDirectOrder({}, { deliveryAddressId: 'arbitrary-id' }, 'retry-key'),
       () => acceptVerifiedOffer('offer-id', { deliveryAddressId: 'arbitrary-id' }, 'retry-key'),
-    ]) await assert.rejects(operation, error => error.status === 503 && /BLOCKED/.test(error.message))
+    ]) await assert.rejects(operation, error => error.status === 503 && /Hiện chưa thể chọn địa chỉ/.test(error.message))
     assert.equal(calls, 0)
   } finally { globalThis.fetch = nativeFetch }
 })

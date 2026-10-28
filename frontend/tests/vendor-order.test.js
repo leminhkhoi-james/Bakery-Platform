@@ -106,20 +106,20 @@ test('Vendor order list rejects data returned for another bakery', async () => {
   handler = () => reply(page([{ ...order, bakeryId: randomUUID() }]))
   await assert.rejects(orderService.getOrders({ scope: 'bakery', bakeryId }), { status: 502 })
 })
-test('Customer actions are cancellation only before baking; Vendor follows exact state machine', () => {
+test('Customer only tracks status; Owner follows the exact fulfilment state machine', () => {
   const customer = { id: customerId, roles: ['CUSTOMER'] }, vendorUser = { id: randomUUID(), roles: ['BAKERY_OWNER'] }
-  assert.deepEqual(allowedOrderActions(order, customer, 'mine'), ['CANCELLED'])
+  assert.deepEqual(allowedOrderActions(order, customer, 'mine'), [])
   assert.deepEqual(allowedOrderActions({ ...order, status: 'BAKING' }, customer, 'mine'), [])
   assert.deepEqual(allowedOrderActions({ ...order, status: 'BAKING' }, vendorUser, 'bakery'), ['READY'])
   for (const status of ['COMPLETED', 'CANCELLED', 'NEW']) assert.deepEqual(allowedOrderActions({ ...order, status }, vendorUser, 'bakery'), [])
   assert.equal(ORDER_STATUSES.includes('NEW'), false)
-  assert.deepEqual(allowedOrderActions(order, { ...customer, roles: ['CUSTOMER', 'BAKERY_OWNER'] }, 'bakery'), ['CANCELLED'])
+  assert.deepEqual(allowedOrderActions(order, { ...customer, roles: ['CUSTOMER', 'BAKERY_OWNER'] }, 'bakery'), [])
 })
 test('Direct checkout requires deliveryAddressId; never generates missing IDs or accepts negative quantity', async () => {
   await assert.rejects(orderService.createDirectOrder({ ...directRequest, deliveryAddressId: undefined }, randomUUID()), { status: 400 })
   await assert.rejects(orderService.createDirectOrder({ ...directRequest, quantity: 0 }, randomUUID()), { status: 422 })
   await assert.rejects(orderService.createDirectOrder({ ...directRequest, requestedDeliveryAt: '2000-01-01' }, randomUUID()), { status: 422 })
-  assert.equal(calls.length, 0); assert.match(ADDRESS_BLOCKER, /deliveryAddressId/)
+  assert.equal(calls.length, 0); assert.match(ADDRESS_BLOCKER, /Hiện chưa thể chọn địa chỉ/)
 })
 test('Order creation sends exact contract, excludes client prices/address/payment and preserves retry key', async () => {
   const key = randomUUID(); handler = () => reply(order, 201)

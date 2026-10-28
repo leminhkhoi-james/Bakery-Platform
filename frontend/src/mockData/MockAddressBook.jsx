@@ -24,7 +24,7 @@ function AddressBook() {
   }
   return <section className="space-y-4">
     <h2 className="text-xl font-bold text-primary">Địa chỉ nhận bánh</h2>
-    <p className="text-xs text-on-surface-variant">Dữ liệu mẫu · Địa chỉ chỉ dùng cho đơn hàng mẫu.</p>
+    <p className="text-xs text-on-surface-variant">Quản lý địa chỉ nhận bánh của bạn.</p>
     <button className={buttonClass} disabled={!!selected} onClick={() => { setSelected(emptyAddress(user, addresses.length === 0)); setError(null); setNotice(''); setDeleting(null) }}>Thêm địa chỉ</button>
     {selected && <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); mutate(selected.id ? 'PATCH' : 'POST', '/sample-addresses' + (selected.id ? '/' + selected.id : ''), selected) }}><h3 className="font-bold">{selected.id ? 'Sửa địa chỉ' : 'Địa chỉ mới'}</h3><AddressFields value={selected} onChange={setSelected} /><div className="flex flex-wrap gap-3"><button className={buttonClass}>Lưu địa chỉ</button><button type="button" onClick={() => { setSelected(null); setError(null) }}>Hủy</button></div></form>}
     {error && <ApiErrorMessage error={error} />}{notice && <p role="status" className="text-sm text-primary">{notice}</p>}

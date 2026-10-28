@@ -1,3 +1,5 @@
+import { displayReference } from '../../../services/displayReference.js'
+import { publicCopy } from '../../../services/uiLabels.js'
 import { isMockRecord } from '../../../mockData/runtime.js'
 import { STYLE_PROMPTS } from '../../../mockData/customer/aiDesigns.js'
 import React, { useEffect, useState } from 'react'
@@ -191,7 +193,7 @@ export function GenerationForm({ cakeRequestId, jobId, disabled, onSubmitted }) 
         <Icon name="info" className="mt-0.5 shrink-0 text-sm text-secondary" />
         <p className="text-sm">
           {isMock
-            ? 'Chế độ thiết kế minh họa: Sử dụng các mẫu phác thảo gợi ý sẵn có để bạn tham khảo quy trình nhanh chóng và hoàn toàn miễn phí.'
+            ? 'Các phác thảo gợi ý giúp bạn chọn ý tưởng và trao đổi với tiệm.'
             : 'Hệ thống tự động phác thảo hình ảnh và kiểm duyệt tiêu chuẩn an toàn. Bạn có thể chọn mẫu bánh ưng ý nhất để đính kèm vào yêu cầu gửi tiệm làm bánh.'}
         </p>
       </div>
@@ -254,7 +256,7 @@ export function DesignResults({ detail, busy, onSelect }) {
             <div className="flex items-center justify-between gap-2">
               <StatusBadge status={design.moderationStatus} label={MODERATION_STATUS_LABELS[design.moderationStatus] || design.moderationStatus} />
               <span className="max-w-[60%] truncate text-xs text-on-surface-variant">
-                {design.moderationReason?.includes('mockdata') ? 'Mẫu phác thảo minh họa' : design.moderationReason}
+                {publicCopy(design.moderationReason, 'Phác thảo tham khảo')}
               </span>
             </div>
 
@@ -311,7 +313,7 @@ function JobDetail({ id, onNavigate }) {
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
               <div className="flex items-center gap-2.5">
                 <StatusBadge status={job.status} label={JOB_STATUS_LABELS[job.status] || ('Trạng thái: ' + job.status)} />
-                <span className="font-mono text-xs text-outline">Mã thiết kế: #{job.id?.slice(0, 8)}</span>
+                <span className="font-mono text-xs text-outline">Mã thiết kế: {displayReference(job.id, 'AI')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-secondary/15 px-3 py-1 text-xs font-semibold text-secondary">

@@ -1,5 +1,7 @@
+import { userFeedback } from '../../services/uiLabels.js'
 import { useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
+import { roleLandingPage } from '../../routes/sessionNavigation.js'
 
 export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
   const { login, register, error: sessionError } = useAuth()
@@ -29,14 +31,14 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
     setSuccessMessage('')
 
     try {
-      await login(loginPhone.trim(), loginPassword)
+      const signedInUser = await login(loginPhone.trim(), loginPassword)
 
       if (onLoginSuccess) {
         onLoginSuccess('Đăng nhập thành công! Chào mừng quý khách trở lại.')
       }
-      else onNavigate?.('profile')
+      else onNavigate?.(roleLandingPage(signedInUser), null, { replace: true })
     } catch (err) {
-      setErrorMessage(err.message || 'Đăng nhập không thành công, vui lòng thử lại.')
+      setErrorMessage(userFeedback(err))
     } finally {
       setLoading(false)
     }
@@ -67,7 +69,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
       setRegPassword('')
       setSuccessMessage('Đăng ký thành công. Vui lòng đăng nhập bằng email và mật khẩu của bạn.')
     } catch (err) {
-      setErrorMessage(err.message || 'Đăng ký thất bại, vui lòng kiểm tra lại thông tin.')
+      setErrorMessage(userFeedback(err))
     } finally {
       setLoading(false)
     }
@@ -118,7 +120,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
               {(errorMessage || (!successMessage && sessionError?.message)) && (
                 <div role="alert" className="p-3 bg-error-container/40 border border-error/20 rounded-md text-error text-body-sm flex items-center gap-2">
                   <span className="material-symbols-outlined text-base">error</span>
-                  <span>{errorMessage || sessionError.message}</span>
+                  <span>{errorMessage || userFeedback(sessionError)}</span>
                 </div>
               )}
               {successMessage && <p role="status" className="text-primary text-body-sm">{successMessage}</p>}

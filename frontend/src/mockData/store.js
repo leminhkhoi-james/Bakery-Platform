@@ -93,13 +93,13 @@ export function createDemoStore(storage) {
     if (offer) { offer.status = 'ACCEPTED'; const request = find('requests', offer.cakeRequestId); request.status = 'OFFER_SELECTED'; for (const other of state.offers) if (other.cakeRequestId === request.id && other.id !== offer.id && other.status === 'PENDING') other.status = 'REJECTED'; for (const chat of state.conversations) if (chat.cakeRequestId === request.id && chat.bakeryId === bakeryId) chat.orderId = order.id }
     return order
   }
-  function transitionOrder(user, orderId, targetStatus, scope = 'bakery') {
+  function transitionOrder(user, orderId, targetStatus, scope = 'bakery', reason = '') {
     const order = find('orders', orderId)
     const transitions = { PENDING: ['CONFIRMED', 'CANCELLED'], CONFIRMED: ['BAKING', 'CANCELLED'], BAKING: ['READY'], READY: ['DELIVERING'], DELIVERING: ['COMPLETED'], COMPLETED: [], CANCELLED: [] }
     if (has(user, 'CUSTOMER') && order.customerId === user.id && !has(user, 'ADMIN')) { if (targetStatus !== 'CANCELLED') throw new DemoError('Khách chỉ được hủy đơn.', 403) }
     else { if (scope === 'all') requireUser(user, 'ADMIN'); else bakeryAccess(user, order.bakeryId) }
     if (!transitions[order.status]?.includes(targetStatus)) throw new DemoError('Chuyển trạng thái không hợp lệ.', 409)
-    order.statusHistory.push({ fromStatus: order.status, toStatus: targetStatus, changedAt: stamp(), note: 'Thao tác DEMO' }); order.status = targetStatus
+    order.statusHistory.push({ fromStatus: order.status, toStatus: targetStatus, changedAt: stamp(), note: reason.trim(), changedBy: user.id }); order.status = targetStatus
     if (targetStatus === 'COMPLETED') order.completedAt = stamp()
     return order
   }

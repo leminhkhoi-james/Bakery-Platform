@@ -1,5 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import AuthGuard from './AuthGuard.jsx'
+import { useAuth } from '../context/useAuth.js'
+import { sessionIdentity } from './sessionNavigation.js'
 import { CustomerLayout, VendorLayout, AdminLayout } from '../layouts'
 
 // Customer Pages (Modular Feature Subfolders)
@@ -51,9 +53,10 @@ class RouteBoundary extends React.Component {
   }
 }
 export default function AppRoutes(props) {
+  const { user } = useAuth()
   return (
     <AuthGuard page={props.currentPage} onNavigate={props.onNavigate}>
-      <RouteBoundary key={props.currentPage}><Suspense fallback={<p role="status" className="p-8 text-center text-primary">Đang tải màn hình…</p>}><PageRoutes {...props} /></Suspense></RouteBoundary>
+      <RouteBoundary key={props.currentPage + ':' + sessionIdentity(user)}><Suspense fallback={<p role="status" className="p-8 text-center text-primary">Đang tải màn hình…</p>}><PageRoutes {...props} /></Suspense></RouteBoundary>
     </AuthGuard>
   )
 }
@@ -103,11 +106,11 @@ function PageRoutes({
         ) : currentPage === 'admin-plans' ? (
           <AdminPlansPage onNavigate={onNavigate} />
         ) : currentPage === 'admin-moderation' ? (
-          <AdminModerationPage onNavigate={onNavigate} />
+          <AdminModerationPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-payments' ? (
           <AdminPaymentsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-vendors' ? (
-          <AdminVendorsPage onNavigate={onNavigate} />
+          <AdminVendorsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-users' ? (
           <AdminUsersPage onNavigate={onNavigate} />
         ) : (
@@ -162,7 +165,6 @@ function PageRoutes({
           onNavigate={onNavigate}
           onLoginSuccess={(msg) => {
             showToast(msg)
-            onNavigate('profile')
           }}
         />
       ) : currentPage === 'tracking' ? (

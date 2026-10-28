@@ -148,7 +148,7 @@ export function routeDemo(store, path, method, body, query, user) {
     else {
       const order = find('orders', parts[1]); if (!has(user, 'ADMIN') && order.customerId !== user.id) bakeryAccess(user, order.bakeryId)
       if (get) result = order
-      else if (parts[2] === 'status-transitions' && method === 'POST') result = store.transitionOrder(user, order.id, body.targetStatus)
+      else if (parts[2] === 'status-transitions' && method === 'POST') result = store.transitionOrder(user, order.id, body.targetStatus, 'bakery', body.reason || '')
       else if (parts[2] === 'review') { own(user, order); if (method === 'DELETE') { if (order.review) order.review.status = 'DELETED'; result = null } else { if (order.status !== 'COMPLETED' || !Number.isInteger(body.rating) || body.rating < 1 || body.rating > 5) throw new DemoError('Đơn phải hoàn tất và đánh giá từ 1–5 sao.'); order.review = { ...body, orderId: order.id, customerId: user.id, status: 'PUBLISHED', createdAt: stamp(), updatedAt: stamp() }; result = order.review } }
     }
   } else if (parts[0] === 'conversations') {

@@ -1,3 +1,4 @@
+import { displayReference } from '../src/services/displayReference.js'
 import assert from 'node:assert/strict'
 import { before, after, test } from 'node:test'
 import { randomUUID } from 'node:crypto'
@@ -34,40 +35,40 @@ function fixtures(resources = {}, roles = ['ADMIN']) {
   globalThis.__publicationUiAuth = { user: { id: userId, displayName: 'Fixture administrator' }, roles }
 }
 test('Admin bakery and subscription screens render genuine empty states; dashboard counts come from APIs', () => {
-  fixtures({ loadAdminBakeries: ready(page([])), loadAdminPayments: ready(page([])) })
-  assert.match(render(Vendors), /Không có tiệm phù hợp từ backend/)
-  assert.match(render(Payments), /Chưa có chứng từ phù hợp từ backend/)
+  fixtures({ loadAdminBakeries: ready(page([])), loadAdminPayments: ready(page([])), loadAdminDashboard: ready({ bakeries: { state: 'ready', rows: [] }, payments: { state: 'ready', rows: [] } }) })
+  assert.match(render(Vendors), /Không có tiệm phù hợp/)
+  assert.match(render(Payments), /Chưa có chứng từ phù hợp/)
   const html = render(Dashboard)
-  assert.match(html, /Tiệm chờ duyệt/); assert.match(html, /Thanh toán gói chờ duyệt/)
-  assert.equal([...html.matchAll(/class="sc-metric-value">0<\/p>/g)].length, 2)
-  assert.doesNotMatch(html, /14|Phê duyệt xưởng bánh thành công/)
+  assert.match(html, /Tiệm chờ duyệt/); assert.match(html, /Gói dịch vụ chờ duyệt/)
+  assert.match(html, /Chưa có số liệu/); assert.match(html, /Công việc quản trị/); assert.match(html, /Doanh thu gói dịch vụ/)
+  assert.doesNotMatch(html, /sc-metric-value">14<|Phê duyệt xưởng bánh thành công/)
 })
 test('Admin list renders backend bakery name/status/ID, not demo rate or specialty', () => {
   fixtures({ loadAdminBakeries: ready(page([{ id: bakeryId, name: 'Named bakery HTTP fixture', status: 'PENDING_APPROVAL' }])) })
   const html = render(Vendors)
-  assert.match(html, /Named bakery HTTP fixture/); assert.match(html, /PENDING_APPROVAL/); assert.ok(html.includes(bakeryId))
+  assert.match(html, /Named bakery HTTP fixture/); assert.match(html, /PENDING_APPROVAL/); assert.ok(html.includes(displayReference(bakeryId, 'SHOP'))); assert.ok(!html.includes(bakeryId))
   assert.doesNotMatch(html, /5.0%|Mời tiệm|Haute Couture/)
 })
 test('Bakery review differentiates missing entitlement from inactive and validates approval checklist', () => {
   const bakery = { id: bakeryId, name: 'Fixture', status: 'PENDING_APPROVAL', operations: { addresses: [], serviceAreas: [] } }
   fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
   const unknown = render(BakeryReview, { id: bakeryId })
-  assert.match(unknown, /Chưa xác minh được/); assert.match(unknown, /value="ACTIVE" disabled/); assert.match(unknown, /Chưa có/)
+  assert.match(unknown, /Chưa tải được thông tin gói dịch vụ/); assert.match(unknown, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Duyệt \/ kích hoạt/); assert.match(unknown, /Chưa có/)
   fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: { active: false } }) })
-  assert.match(render(BakeryReview, { id: bakeryId }), /Duyệt tiệm không tự kích hoạt Subscription/)
+  assert.match(render(BakeryReview, { id: bakeryId }), /Duyệt tiệm không tự kích hoạt gói dịch vụ/)
 })
 test('Payment review uses backend order/bakery values and blocks amount mismatch', () => {
   fixtures({ loadAdminOrder: ready({ id: orderId, bakeryId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' }) })
   const html = render(PaymentReview, { payment: { id: randomUUID(), subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 1, currency: 'VND' } })
-  assert.ok(html.includes(bakeryId)); assert.match(html, /Số tiền\/tiền tệ chưa khớp/)
-  assert.match(html, /<button disabled=""[^>]*>Phê duyệt thanh toán/)
+  assert.ok(html.includes(displayReference(bakeryId, 'SHOP'))); assert.ok(!html.includes(bakeryId)); assert.match(html, /Số tiền\/tiền tệ chưa khớp/)
+  assert.match(html, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Phê duyệt thanh toán/)
   assert.match(html, /Tôi đã đối chiếu/); assert.doesNotMatch(html, /Thanh toán thành công/)
 })
 test('Vendor category form has real DTO fields and no sample category values', () => {
   fixtures()
   const html = render(CategoryForm, { onSave() {} })
   assert.match(html, /maxLength="120"/); assert.match(html, /maxLength="140"/)
-  assert.match(html, /12 sản phẩm công khai mới nhất/); assert.doesNotMatch(html, /Bánh Cưới|Sinh Nhật/)
+  assert.match(html, /chọn danh mục này khi thêm hoặc sửa sản phẩm/); assert.doesNotMatch(html, /Bánh Cưới|Sinh Nhật/)
 })
 test('New backend-confirmed DRAFT profile can configure operations and submit; unknown profiles cannot overwrite operations', () => {
   const membership = ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' })
@@ -75,7 +76,7 @@ test('New backend-confirmed DRAFT profile can configure operations and submit; u
   const profile = { id: bakeryId, name: 'Fixture newly created', status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }
   const html = render(BakeryManager, { bakeryId, initialProfile: profile })
   assert.match(html, /Vận hành và giao hàng/); assert.match(html, /Gửi yêu cầu duyệt/)
-  assert.match(render(BakeryManager, { bakeryId }), /Không tự PUT các danh sách rỗng/)
+  assert.match(render(BakeryManager, { bakeryId }), /Chưa tải được cấu hình vận hành/)
 })
 test('Only verified OWNER sees category creation in ProductManager', () => {
   const resources = { loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadManagedProducts: ready(page([])), loadManagedCategories: ready([]) }
@@ -84,20 +85,20 @@ test('Only verified OWNER sees category creation in ProductManager', () => {
 })
 for (const status of [401, 403, 404, 500, 503, 0]) test('Admin screens expose HTTP/network ' + status + ' as error with retry, never an empty list', () => {
   const resource = { status: 'error', error: { status, message: 'Fixture failure' }, data: null, reload() {} }
-  fixtures({ loadAdminBakeries: resource, loadAdminPayments: resource })
+  fixtures({ loadAdminBakeries: resource, loadAdminPayments: resource, loadAdminDashboard: resource })
   for (const Component of [Vendors, Payments, Dashboard]) {
     const html = render(Component)
-    assert.match(html, /role="alert"/); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /Không có tiệm phù hợp|Chưa có chứng từ phù hợp|Tổng từ backend: 0/)
+    assert.match(html, /role="alert"/); assert.match(html, Component === Dashboard ? /Làm mới/ : /Thử lại/); assert.doesNotMatch(html, /Không có tiệm phù hợp|Chưa có chứng từ phù hợp|Tổng từ backend: 0/)
   }
 })
 
 test('Public ACTIVE bakery cannot be submitted again; loading Admin APIs do not display empty or fake counts', () => {
   fixtures({ loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadVendorProfile: ready({ id: bakeryId, name: 'Public fixture' }) }, ['BAKERY_OWNER'])
-  assert.match(render(BakeryManager, { bakeryId }), /<button disabled=""[^>]*>Gửi yêu cầu duyệt/)
+  assert.match(render(BakeryManager, { bakeryId }), /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Gửi yêu cầu duyệt/)
   fixtures()
   for (const Component of [Vendors, Payments, Dashboard]) {
     const html = render(Component)
-    assert.match(html, /Đang tải dữ liệu/)
+    assert.match(html, Component === Dashboard ? /Đang tải số liệu/ : /Đang tải dữ liệu/)
     assert.doesNotMatch(html, /Không có tiệm phù hợp|Chưa có chứng từ phù hợp|Tổng từ backend: 0/)
   }
 })

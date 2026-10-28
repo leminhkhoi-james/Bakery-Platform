@@ -9,5 +9,5 @@ export function CustomerChatPage({ routeSearch, onNavigate }) {
 
 export function VendorChatPage({ routeSearch = '', onNavigate }) {
   const { bakeryId, selectBakery } = useVendorBakery(routeSearch)
-  return <VendorFrame title="Tin nhắn của cửa hàng" activeTab="chat" bakeryId={bakeryId} onNavigate={onNavigate}><BakerySelector bakeryId={bakeryId} onSelect={(id) => { selectBakery(id); onNavigate('vendor-chat?bakeryId=' + id) }} /><p className="text-sm">{bakeryId ? 'Backend xác minh membership khi lọc theo cửa hàng.' : 'Đang xem các hội thoại bạn đã tham gia. Chọn bakeryId để truy cập hộp thư của cửa hàng theo membership.'}</p><ChatWorkspace key={bakeryId + ':' + routeSearch} bakeryId={bakeryId} routeSearch={routeSearch} baseRoute="vendor-chat" onNavigate={onNavigate} /></VendorFrame>
+  return <VendorFrame title="Tin nhắn của cửa hàng" activeTab="chat" bakeryId={bakeryId} onNavigate={onNavigate}><BakerySelector bakeryId={bakeryId} onSelect={(id) => { selectBakery(id); onNavigate('vendor-chat?bakeryId=' + id) }} /><p className="text-sm">{bakeryId ? 'Bạn đang xem các hội thoại thuộc tiệm đã chọn.' : 'Bạn đang xem các hội thoại đã tham gia. Chọn tiệm để mở hộp thư tương ứng.'}</p><ChatWorkspace key={bakeryId + ':' + routeSearch} bakeryId={bakeryId} routeSearch={routeSearch} baseRoute="vendor-chat" onNavigate={onNavigate} /></VendorFrame>
 }

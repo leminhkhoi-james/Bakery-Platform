@@ -9,5 +9,5 @@ import MockCheckout from '../../mockData/MockCheckout.jsx'
 export default function VerifiedCheckout({ offerId, items = [], ...props }) {
   const { user } = useAuth()
   if (demoRuntime && (isDemoId(offerId) || items.length > 0 && items.every((item) => isDemoId(item.productId) && isDemoId(item.bakeryId)))) return <MockCheckout key={user?.id || 'anonymous'} {...props} offerId={offerId} items={items} />
-  return <section className="space-y-4"><AddressPicker />{!user?.roles?.includes('CUSTOMER') && <p>Đăng nhập tài khoản Customer để xem đơn hàng. Checkout hiện chưa khả dụng.</p>}<button type="button" disabled className={buttonClass}>{offerId ? 'Chấp nhận báo giá — BLOCKED' : 'Đặt hàng — BLOCKED'}</button></section>
+  return <section className="space-y-4"><AddressPicker />{!user?.roles?.includes('CUSTOMER') && <p>Vui lòng đăng nhập tài khoản khách hàng để tiếp tục. Hiện chưa thể xác nhận đơn hàng.</p>}<button type="button" disabled className={buttonClass}>{offerId ? 'Chưa thể chấp nhận báo giá' : 'Chưa thể đặt hàng'}</button></section>
 }

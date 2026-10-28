@@ -173,7 +173,7 @@ function QuoteContext({ offer, onNavigate }) {
             {!(demoRuntime && isDemoId(offer.id)) && (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-900 space-y-1">
                 <p className="font-bold">{ADDRESS_BLOCKER}</p>
-                <p>Accept → Order đang BLOCKED vì thiếu API địa chỉ Customer ở backend gốc.</p>
+                <p>Chưa thể hoàn tất đặt hàng lúc này. Vui lòng liên hệ tiệm để được hỗ trợ.</p>
               </div>
             )}
 

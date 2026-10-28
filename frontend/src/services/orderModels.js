@@ -21,11 +21,10 @@ export function reviewPermissions(order, user) {
 export const orderStatusLabel = (value) => ({ PENDING: 'Chờ xác nhận', CONFIRMED: 'Đã xác nhận', BAKING: 'Đang làm bánh', READY: 'Sẵn sàng giao', DELIVERING: 'Đang giao', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' }[value] || value || 'Chưa rõ trạng thái')
 const transitions = { PENDING: ['CONFIRMED', 'CANCELLED'], CONFIRMED: ['BAKING', 'CANCELLED'], BAKING: ['READY'], READY: ['DELIVERING'], DELIVERING: ['COMPLETED'], COMPLETED: [], CANCELLED: [] }
 export function allowedOrderActions(order, user, scope) {
-  if (!user) return []
+  if (!user || user.roles?.includes('ADMIN')) return []
   const available = transitions[order.status] || []
-  if (user.roles?.includes('ADMIN') && scope === 'all') return available
   // Backend checks own CUSTOMER permissions before bakery roles.
-  if (user.roles?.includes('CUSTOMER') && order.customerId === user.id && !user.roles.includes('ADMIN')) return available.filter((target) => target === 'CANCELLED')
+  if (user.roles?.includes('CUSTOMER') && order.customerId === user.id && !user.roles.includes('ADMIN')) return []
   if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) return available
   return []
 }

@@ -33,15 +33,15 @@ test('Marketplace/AI loading and all error codes do not reveal fake content', ()
   assert.match(render(State, { resource: { status: 'loading' } }), /role="status"/)
   for (const status of [400, 401, 403, 404, 409, 500, 0]) {
     const html = render(State, { kind: 'Cake AI', resource: { status: 'error', error: { status, message: 'Fixture error' }, reload: () => {} } })
-    assert.match(html, /role="alert"/); assert.match(html, /Fixture error/)
-    if (status === 0 || status >= 500) { assert.match(html, /BLOCKED/); assert.match(html, /provider\/Firebase/) }
+    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : /Fixture error/)
+    if (status === 0 || status >= 500) { assert.match(html, /tạm chưa khả dụng/); assert.doesNotMatch(html, /BLOCKED|provider|Firebase/) }
     assert.doesNotMatch(html, /<img|Jean|Escrow/)
   }
 })
 test('RFQ form preserves styling, exact types, required fields and disabled writes while blocked', () => {
   const html = render(RequestForm, { disabled: true, onSave: () => {} })
   assert.match(html, /OPEN_CUSTOM/); assert.match(html, /TARGETED_PRODUCT_CUSTOM/); assert.match(html, /maxLength="10000"/)
-  assert.match(html, /fieldset disabled/); assert.match(html, /sm:grid-cols-2/); assert.match(html, /lưu DRAFT/)
+  assert.match(html, /fieldset disabled/); assert.match(html, /sm:grid-cols-2/); assert.match(html, /Lưu bản nháp/)
   assert.doesNotMatch(html, /value="OPEN"|mock|fallback/)
 })
 test('RFQ detail displays preference, snapshots and missing-image state safely', () => {
@@ -73,7 +73,7 @@ test('Customer/Vendor page entry states use true identity, real API loading and 
   const customer = withUser(Views.CustomerRequests, { onNavigate: () => {} })
   assert.match(customer, /Yêu cầu bánh của tôi/); assert.match(customer, /Đang tải/)
   const vendor = withUser(Vendor, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(vendor, /Fixture customer/); assert.match(vendor, /tất cả membership/); assert.match(vendor, /Đang tải/)
+  assert.match(vendor, /Fixture customer/); assert.match(vendor, /các tiệm bạn tham gia/); assert.match(vendor, /Đang tải/)
   const ai = withUser(Ai.default, { onNavigate: () => {} })
   assert.match(ai, /Chọn yêu cầu/); assert.match(ai, /Đang tải/)
   const quote = withUser(Quote, { routeSearch: '?id=invalid', onNavigate: () => {} })

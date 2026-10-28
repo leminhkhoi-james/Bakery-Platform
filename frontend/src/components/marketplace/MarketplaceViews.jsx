@@ -1,3 +1,5 @@
+import { displayReference } from '../../services/displayReference.js'
+import { uiLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
@@ -86,7 +88,7 @@ export function RequestInfo({ request }) {
           <span className="rounded-full bg-surface-container px-2.5 py-0.5 text-xs font-semibold text-on-surface-variant">
             {request.requestType || 'Tự thiết kế'}
           </span>
-          <span className="font-mono text-xs text-outline">#{request.id?.slice(0, 8)}</span>
+          <span className="font-mono text-xs text-outline">{displayReference(request.id, 'RFQ')}</span>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
           <Icon name="verified" className="text-sm text-secondary" /> Yêu cầu đặt làm riêng
@@ -193,7 +195,7 @@ export function RequestInfo({ request }) {
           <div className="divide-y divide-outline-variant/20 text-sm">
             {request.optionSelections.map((item, index) => (
               <div key={index} className="flex items-center justify-between py-2">
-                <span className="text-on-surface">{item.groupNameSnapshot || item.optionGroupId}: {item.valueNameSnapshot || item.optionValueId}</span>
+                <span className="text-on-surface">{item.groupNameSnapshot || displayReference(item.optionGroupId, 'OPT')}: {item.valueNameSnapshot || displayReference(item.optionValueId, 'VAL')}</span>
                 <span className="font-semibold text-primary">× {item.quantity}</span>
               </div>
             ))}
@@ -217,11 +219,11 @@ export function RequestInfo({ request }) {
         </div>
       )}
 
-      {/* Selected Design ID */}
+      {/* Selected Mã thiết kế */}
       {request.selectedDesignId && (
         <div className="flex items-center gap-2 rounded-2xl bg-amber-50 px-4 py-3 text-xs text-amber-900 border border-amber-200">
           <Icon name="auto_awesome" className="text-base text-amber-700" />
-          <span>Mẫu thiết kế AI được chọn: <strong className="font-mono">{request.selectedDesignId}</strong></span>
+          <span>Mẫu thiết kế AI được chọn: <strong className="font-mono">{displayReference(request.selectedDesignId, 'ART')}</strong></span>
         </div>
       )}
     </section>
@@ -246,10 +248,10 @@ export function RequestListView({ resource, onPage, onOpen }) {
                       {REQUEST_TYPE_LABELS[request.requestType] || request.requestType || 'Tùy chỉnh'}
                     </span>
                   </div>
-                  <span className="font-mono text-xs text-outline">#{request.id?.slice(0, 8)}</span>
+                  <span className="font-mono text-xs text-outline">{displayReference(request.id, 'RFQ')}</span>
                 </div>
 
-                <h2 className="font-serif text-xl font-bold text-primary">{request.title || request.id}</h2>
+                <h2 className="font-serif text-xl font-bold text-primary">{request.title || displayReference(request.id, 'RFQ')}</h2>
 
                 <p className="flex items-center gap-2 text-sm text-on-surface-variant">
                   <Icon name="location_on" className="text-base text-primary" />
@@ -301,7 +303,7 @@ export function RequestFilters({ filters, onChange }) {
           <option value="">Tất cả trạng thái</option>
           {REQUEST_STATUSES.map((status) => (
             <option key={status} value={status}>
-              {RFQ_STATUS_LABELS[status] || status}
+              {RFQ_STATUS_LABELS[status] || uiLabel(status)}
             </option>
           ))}
         </select>
@@ -444,7 +446,7 @@ export function CustomerRequestDetail({ id, onNavigate }) {
 
                     <section className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4 text-xs">
                       <p className="font-semibold text-primary">Tải lên ảnh tham khảo:</p>
-                      <p className="text-outline">PNG/JPEG/WebP, 1–10 tệp, tối đa 10 MiB/tệp. Upload cần Firebase hoạt động.</p>
+                      <p className="text-outline">PNG/JPEG/WebP, 1–10 tệp, tối đa 10 MiB/tệp. </p>
                       <input
                         aria-label="Ảnh tham khảo RFQ"
                         type="file"
@@ -459,7 +461,7 @@ export function CustomerRequestDetail({ id, onNavigate }) {
                         disabled={action.busy || !files.length}
                         onClick={() => action.run(async () => { await rfqService.uploadImages(id, files); setFiles([]) })}
                       >
-                        Upload ảnh
+                        Tải ảnh lên
                       </button>
 
                       {request.images.map((image) => (
@@ -506,7 +508,7 @@ export function CustomerRequestDetail({ id, onNavigate }) {
                       <ConfirmAction
                         key={id}
                         label="Hủy yêu cầu"
-                        description="Xác nhận hủy RFQ. Backend sẽ kiểm tra trạng thái và báo giá liên quan."
+                        description="Xác nhận hủy yêu cầu báo giá này."
                         busy={action.busy}
                         onConfirm={() => action.run(() => rfqService.cancelRfq(id, reason))}
                       />
@@ -528,10 +530,10 @@ export function CustomerRequestDetail({ id, onNavigate }) {
 export function ChatForRequest({ request, bakeryId, onNavigate }) {
   const { user } = useAuth(), action = useMarketplaceAction()
   const valid = ownsRequest(request, user) && !['DRAFT', 'CANCELLED'].includes(request.status)
-  return <div className="space-y-2">{action.error && <ApiErrorMessage error={action.error} />}<button className={buttonClass} disabled={!valid || action.busy} onClick={() => action.run(async () => { const conversation = await chatService.createConversation({ cakeRequestId: request.id, bakeryId }, { userId: user.id, roles: user.roles }); onNavigate('chat?conversationId=' + conversation.id) })}>Mở hội thoại thật với tiệm</button><p className="text-sm">Backend xác minh RFQ, tiệm đích hoặc báo giá hợp lệ trước khi mở Chat.</p></div>
+  return <div className="space-y-2">{action.error && <ApiErrorMessage error={action.error} />}<button className={buttonClass} disabled={!valid || action.busy} onClick={() => action.run(async () => { const conversation = await chatService.createConversation({ cakeRequestId: request.id, bakeryId }, { userId: user.id, roles: user.roles }); onNavigate('chat?conversationId=' + conversation.id) })}>Mở hội thoại với tiệm</button><p className="text-sm">Trao đổi trực tiếp với tiệm về yêu cầu và báo giá này.</p></div>
 }
 export function OfferCards({ resource, onPage, onOpen }) {
-  return <MarketplaceState resource={resource}>{resource.data && <><div className="grid gap-4 md:grid-cols-2">{resource.data.result.map((offer) => <article className={panelClass + ' sc-offer-card'} key={offer.id}><p className="break-all">Tiệm: {offer.bakeryId}</p><p><StatusBadge status={offer.status} /></p><h3 className="text-xl font-bold">{moneyVnd(offer.totalPrice)}</h3><p>Hoàn thành: {offer.estimatedCompletionAt || 'Chưa có'}</p><p>Hết hạn: {offer.expiresAt}</p><button className={buttonClass} onClick={() => onOpen(offer.id)}>Chi tiết báo giá</button></article>)}</div>{!resource.data.result.length && <section className={panelClass}><EmptyPanel title="Chưa có báo giá." description="Báo giá từ tiệm sẽ xuất hiện tại đây khi có dữ liệu phù hợp." icon="description" /></section>}<CatalogPagination meta={resource.data.meta} onPage={onPage} /></>}</MarketplaceState>
+  return <MarketplaceState resource={resource}>{resource.data && <><div className="grid gap-4 md:grid-cols-2">{resource.data.result.map((offer) => <article className={panelClass + ' sc-offer-card'} key={offer.id}><p className="break-all">Tiệm: {displayReference(offer.bakeryId, 'SHOP')}</p><p><StatusBadge status={offer.status} /></p><h3 className="text-xl font-bold">{moneyVnd(offer.totalPrice)}</h3><p>Hoàn thành: {offer.estimatedCompletionAt || 'Chưa có'}</p><p>Hết hạn: {offer.expiresAt}</p><button className={buttonClass} onClick={() => onOpen(offer.id)}>Chi tiết báo giá</button></article>)}</div>{!resource.data.result.length && <section className={panelClass}><EmptyPanel title="Chưa có báo giá." description="Báo giá từ tiệm sẽ xuất hiện tại đây khi có dữ liệu phù hợp." icon="description" /></section>}<CatalogPagination meta={resource.data.meta} onPage={onPage} /></>}</MarketplaceState>
 }
 export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
   const [filters, setFilters] = useState({ scope, cakeRequestId, bakeryId, page: 1, size: 12, sort: 'createdAt,desc', status: '' })
@@ -545,7 +547,7 @@ export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
             <option value="">Tất cả trạng thái</option>
             {OFFER_STATUSES.map((status) => (
               <option key={status} value={status}>
-                {OFFER_STATUS_LABELS[status] || status}
+                {OFFER_STATUS_LABELS[status] || uiLabel(status)}
               </option>
             ))}
           </select>

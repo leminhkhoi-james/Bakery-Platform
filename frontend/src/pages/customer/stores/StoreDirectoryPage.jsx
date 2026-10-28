@@ -1,4 +1,3 @@
-import { isMockRecord } from '../../../mockData/runtime.js'
 import { useState } from 'react'
 import { loadBakeries } from '../../../services/vendorService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -165,7 +164,7 @@ export const StoreDirectoryPage = ({
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-headline-sm text-headline-sm text-primary font-bold group-hover:text-secondary transition-colors">
-                      <button className="text-left" onClick={() => onNavigate?.('bakery-detail', { id: store.id })}>{store.name}</button>{isMockRecord(store.id) && <span className="ml-2 text-xs font-normal text-on-surface-variant">Dữ liệu mẫu</span>}
+                      <button className="text-left" onClick={() => onNavigate?.('bakery-detail', { id: store.id })}>{store.name}</button>
                     </h3>
 
                     <div className="flex items-center gap-1.5 mt-2 text-label-xs text-outline">

@@ -26,7 +26,7 @@ test('Plan UI uses DTO name/description/price/period/status/arbitrary feature va
 test('Empty and missing DTO render explicit messages with disabled purchase', () => {
   assert.match(render(view.PlanCards, { plans: [] }), /Chưa có gói dịch vụ/)
   const html = render(view.PlanCards, { plans: [mapSubscriptionPlan({ id: randomUUID() })], canSelect: true, onSelect: () => {} })
-  assert.match(html, /Chưa có thông tin giá/); assert.match(html, /Chưa có mô tả/); assert.match(html, /disabled=""/)
+  assert.match(html, /Chưa có thông tin giá/); assert.match(html, /Xem quyền lợi và mức phí/); assert.match(html, /disabled=""/)
   assert.doesNotMatch(html, /199\.000|ACTIVE/)
 })
 test('Read-only viewer and mutation busy states disable plan buttons', () => {
@@ -37,17 +37,17 @@ test('Loading and HTTP/network error states suppress stale/mock plan content', (
   assert.match(render(view.ResourceState, { resource: { status: 'loading' }, children: 'STALE_PLAN' }), /Đang tải/)
   for (const status of [401, 403, 404, 500, 0]) {
     const html = render(view.ResourceState, { resource: { status: 'error', error: { status, message: 'API failure' }, reload: () => {} }, children: 'STALE_PLAN' })
-    assert.match(html, /role="alert"/); assert.match(html, /API failure/); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
+    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : /Chưa thể thực hiện thao tác/); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
   }
 })
 test('Vendor page has real identity/manual bakery selector and no invented active subscription', () => {
   const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { displayName: 'Người dùng thật' }, roles: ['BAKERY_OWNER'] } }, React.createElement(VendorPage, { onNavigate: () => {} })))
-  assert.match(html, /Người dùng thật/); assert.match(html, /bakeryId/); assert.match(html, /Chọn cửa hàng/)
+  assert.match(html, /Người dùng thật/); assert.match(html, /Nhập mã cửa hàng/); assert.match(html, /Chọn cửa hàng/)
   assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực|La Crème/)
 })
 test('Vendor with UUID and owner role renders backend loading instead of demo periods/orders', () => {
   const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { email: 'test@example.invalid' }, roles: ['BAKERY_OWNER'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
-  assert.match(html, /Chủ tiệm có thể tạo đơn/); assert.match(html, /Đang tải/)
+  assert.match(html, /Chủ tiệm có thể mua kỳ dịch vụ/); assert.match(html, /Đang tải/)
   assert.doesNotMatch(html.replace(/<option[^>]*>.*?<\/option>/g, ''), /Đang hiệu lực|Đã hoàn tất/)
 })
 test('Public plan page is accessible without auth context and starts in loading state', () => {
