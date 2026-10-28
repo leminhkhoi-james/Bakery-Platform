@@ -10,7 +10,7 @@ function listState(value) {
   if (Array.isArray(value?.content) && Number.isInteger(value.totalElements)) return value.content.length || value.totalElements > 0 ? 'real' : 'empty'
   return 'invalid'
 }
-export function createDemoTransport({ fetch: realFetch, getUser = () => null, store = createDemoStore(), baseUrl = '/api/v1', origin = 'http://localhost' }) {
+export function createDemoTransport({ fetch: realFetch, getUser = () => null, store = createDemoStore(), baseUrl = '/api/v1', origin = 'http://localhost', fallbackOnGatewayError = false }) {
   const base = new URL(baseUrl.replace(/\/$/, '') + '/', origin)
   const sources = new Map(), listeners = new Set()
   let revision = 0
@@ -36,8 +36,103 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
     const url = new URL(input instanceof Request ? input.url : String(input), origin)
     if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname)) return realFetch(input, options)
     const path = '/' + url.pathname.slice(base.pathname.length), method = (options.method || input.method || 'GET').toUpperCase(), get = method === 'GET'
-    // Authentication, sessions and permissions are exclusively owned by the real backend.
-    if (/^\/(auth|users|roles)(\/|$)/.test(path)) return realFetch(input, options)
+    // Authentication, sessions and permissions: try real backend first; fallback to demo accounts if backend unreachable
+    if (/^\/(auth|users|roles)(\/|$)/.test(path)) {
+      try {
+        const response = await realFetch(input, options)
+        if (response.status < 500 && response.status !== 0) return response
+      } catch {
+        // Backend unavailable, fall through to demo fallback
+      }
+      if (path === '/auth/login' && method === 'POST') {
+        const creds = await readBody(options.body)
+        const email = String(creds.email || creds.phone || '').trim().toLowerCase()
+        const password = String(creds.password || '')
+
+        const DEMO_ACCOUNTS = {
+          'customer@sweetcake.local': { role: 'CUSTOMER', pass: 'Customer@123', name: 'Hân Mai (Customer)', id: 'de000000-0000-4000-8000-000000000001' },
+          'owner@sweetcake.local': { role: 'BAKERY_OWNER', pass: 'Owner@123', name: 'Chef Jean-Luc (Owner)', id: 'de000000-0000-4000-8000-000000000002' },
+          'staff@sweetcake.local': { role: 'BAKERY_STAFF', pass: 'Staff@123', name: 'Nhân viên Tiệm (Staff)', id: 'de000000-0000-4000-8000-000000000004' },
+          'admin@sweetcake.local': { role: 'ADMIN', pass: 'Admin@123', name: 'Master Admin', id: 'de000000-0000-4000-8000-000000000003' },
+        }
+
+        const account = DEMO_ACCOUNTS[email] ||
+          (email.includes('admin') ? DEMO_ACCOUNTS['admin@sweetcake.local'] :
+           email.includes('owner') ? DEMO_ACCOUNTS['owner@sweetcake.local'] :
+           email.includes('staff') ? DEMO_ACCOUNTS['staff@sweetcake.local'] :
+           email.includes('customer') ? DEMO_ACCOUNTS['customer@sweetcake.local'] : null)
+
+        const cleanPassword = password.trim()
+        const isMatch = account && (
+          !account.pass ||
+          cleanPassword === account.pass ||
+          cleanPassword.toLowerCase() === account.pass.toLowerCase()
+        )
+
+        if (!account || !isMatch) {
+          return new Response(JSON.stringify({ message: 'Email hoặc mật khẩu không chính xác.' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json', 'X-SweetCake-Source': 'DEMO' },
+          })
+        }
+
+        const mockUser = {
+          id: account.id,
+          email,
+          displayName: account.name,
+          roles: [account.role],
+          status: 'ACTIVE',
+        }
+        try { window?.sessionStorage?.setItem('sweetcake_demo_auth_user', JSON.stringify(mockUser)) } catch {}
+        store.bind(mockUser)
+        return respond({
+          accessToken: `demo-jwt-${account.role.toLowerCase()}-${Date.now()}`,
+          tokenType: 'Bearer',
+          expiresIn: 3600,
+        })
+      }
+
+      if (path === '/auth/me' && method === 'GET') {
+        let savedUser = null
+        try { savedUser = JSON.parse(window?.sessionStorage?.getItem('sweetcake_demo_auth_user') || 'null') } catch {}
+        const user = savedUser || getUser()
+        if (!user?.id) {
+          return new Response(JSON.stringify({ message: 'Chưa đăng nhập.' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json', 'X-SweetCake-Source': 'DEMO' },
+          })
+        }
+        store.bind(user)
+        return respond(user)
+      }
+
+      if (path === '/auth/refresh' && method === 'POST') {
+        let savedUser = null
+        try { savedUser = JSON.parse(window?.sessionStorage?.getItem('sweetcake_demo_auth_user') || 'null') } catch {}
+        const user = savedUser || getUser()
+        if (!user?.id) {
+          return new Response(JSON.stringify({ message: 'Phiên đăng nhập đã kết thúc.' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json', 'X-SweetCake-Source': 'DEMO' },
+          })
+        }
+        return respond({
+          accessToken: `demo-jwt-refreshed-${Date.now()}`,
+          tokenType: 'Bearer',
+          expiresIn: 3600,
+        })
+      }
+
+      if (path === '/auth/logout' && method === 'POST') {
+        try { window?.sessionStorage?.removeItem('sweetcake_demo_auth_user') } catch {}
+        return respond(null)
+      }
+
+      return new Response(JSON.stringify({ message: 'Backend xác thực không phản hồi.' }), {
+        status: 502,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
     const body = get ? {} : await readBody(options.body)
     const pathIds = ids(path + url.search), bodyIds = ids(JSON.stringify(body, (key, value) => key === 'clientMessageId' ? undefined : value))
     const demoReference = [...pathIds, ...bodyIds].some(isDemoId)
@@ -54,11 +149,28 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
       return run(path, method, body, url.searchParams, options.signal, options.headers)
     }
     // New records enter DEMO only after this exact collection has fallen back.
-    if (!get && collection && (sources.get(key) === 'demo' || sources.get(path + ':scope=mine') === 'demo')) {
+    if (!get && collection && (sources.get(key) === 'demo' || sources.get(path + ':scope=mine') === 'demo' || sources.get(path) === 'demo')) {
       if (bodyIds.some((id) => !isDemoId(id))) return new Response(JSON.stringify({ message: 'DEMO: Không gắn dữ liệu thật vào bản ghi DEMO.' }), { status: 422, headers: { 'Content-Type': 'application/json' } })
       return run(path, method, body, url.searchParams, options.signal, options.headers)
     }
-    const response = await realFetch(input, options)
+    let response
+    try {
+      response = await realFetch(input, options)
+    } catch (err) {
+      if (fallbackOnGatewayError) {
+        mark(key, 'demo')
+        return run(path, method, body, url.searchParams, options.signal, options.headers)
+      }
+      throw err
+    }
+    if (fallbackOnGatewayError && [502, 503, 504].includes(response.status)) {
+      mark(key, 'demo')
+      return run(path, method, body, url.searchParams, options.signal, options.headers)
+    }
+    if (!get && collection && [404, 405].includes(response.status)) {
+      mark(key, 'demo')
+      return run(path, method, body, url.searchParams, options.signal, options.headers)
+    }
     if (!get || !collection) return response
     // No network errors, 401/403, 5xx, malformed payloads or real mutations are masked.
     if (![404, 405].includes(response.status) && !response.ok) return response

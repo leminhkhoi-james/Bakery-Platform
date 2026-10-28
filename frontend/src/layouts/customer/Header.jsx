@@ -81,14 +81,14 @@ export const Header = ({
       </div>
 
       {/* MAIN NAVIGATION BAR (Below the top curtain ribbon) */}
-      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 flex items-center justify-between gap-2 xl:gap-gutter">
+      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-8 2xl:px-12 flex items-center justify-between gap-2 xl:gap-4">
         {/* Brand Logo */}
         <div className="sc-customer-brand flex items-center gap-2 shrink-0"><button id="customer-menu-toggle" type="button" className="sc-customer-menu-button" aria-label="Mở điều hướng" aria-expanded={isMobileNavOpen} aria-controls="customer-mobile-navigation" onClick={() => { setIsMobileNavOpen(!isMobileNavOpen); setIsProfileMenuOpen(false) }}><span aria-hidden="true" className="material-symbols-outlined">{isMobileNavOpen ? 'close' : 'menu'}</span></button>
           <BrandLogo onClick={(e) => handleNav(e, 'home')} />
         </div>
 
         {/* Nav Links */}
-        <nav className="hidden xl:flex items-center gap-2 font-savoure">
+        <nav className="hidden xl:flex items-center gap-1.5 2xl:gap-2.5 font-savoure whitespace-nowrap shrink-0">
           {CUSTOMER_NAV_LINKS.map((link) => {
             const isTabActive =
               scrolledActiveTab === link.route ||
@@ -96,9 +96,9 @@ export const Header = ({
 
             if (link.id === 'explore') {
               return (
-                <div key={link.id} className="relative group/menu">
+                <div key={link.id} className="relative group/menu shrink-0">
                   <a
-                    className={`px-4 py-1.5 rounded-full text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       isTabActive
                         ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                         : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -106,8 +106,8 @@ export const Header = ({
                     href={link.href}
                     onClick={(e) => handleNav(e, link.route)}
                   >
-                    <span>{link.label}</span>
-                    <span className="material-symbols-outlined text-sm transition-transform duration-200 group-hover/menu:rotate-180">
+                    <span className="whitespace-nowrap">{link.label}</span>
+                    <span className="material-symbols-outlined text-sm transition-transform duration-200 group-hover/menu:rotate-180 shrink-0">
                       expand_more
                     </span>
                   </a>
@@ -253,7 +253,7 @@ export const Header = ({
             return (
               <a
                 key={link.id}
-                className={`px-4 py-1.5 rounded-full text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                   isTabActive
                     ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                     : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -262,13 +262,13 @@ export const Header = ({
                 onClick={(e) => handleNav(e, link.route)}
               >
                 {link.icon && (
-                  <span className="material-symbols-outlined text-base text-current">
+                  <span className="material-symbols-outlined text-base text-current shrink-0">
                     {link.icon}
                   </span>
                 )}
-                <span className={isTabActive ? 'text-on-primary' : 'text-primary'}>{link.label}</span>
+                <span className={`whitespace-nowrap ${isTabActive ? 'text-on-primary' : 'text-primary'}`}>{link.label}</span>
                 {link.badge && (
-                  <span className={isTabActive ? "bg-white text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30" : "bg-primary-fixed text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30"}>
+                  <span className={isTabActive ? "bg-white text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30 shrink-0" : "bg-primary-fixed text-primary font-bold text-xs px-2 py-0.5 rounded-full border border-primary/30 shrink-0"}>
                     {link.badge}
                   </span>
                 )}
@@ -278,9 +278,9 @@ export const Header = ({
         </nav>
 
         {/* Actions & Utilities */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3 2xl:gap-4 shrink-0">
           {/* Quick Search */}
-          <div className="relative hidden md:block w-48 xl:w-64">
+          <div className="relative hidden md:block w-40 lg:w-44 xl:w-52 2xl:w-64 shrink">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
               search
             </span>

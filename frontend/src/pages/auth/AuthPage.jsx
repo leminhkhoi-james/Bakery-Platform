@@ -144,6 +144,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                           phone
                         </span>
                         <input
+                          id="login-email"
                           className="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-11 pr-4 py-3 rounded-lg outline-none focus:bg-surface-container focus:ring-2 focus:ring-secondary/30 transition-all placeholder:text-on-surface-variant/40"
                           placeholder="Email đăng nhập"
                           type="email"
@@ -200,6 +201,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
 
                     {/* Submit CTA Button */}
                     <button
+                      id="login-submit-btn"
                       className="sc-button w-full mt-2 py-3.5 px-6 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-secondary transition-all shadow-[0_4px_16px_rgba(45,30,24,0.18)] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
                       type="submit"
                       disabled={loading}

@@ -1,6 +1,16 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-10-25.
+> Cập nhật gần nhất: 2026-10-28.
+
+## Hoàn thiện giao diện Marketplace, AI Studio, Quote Detail & Demo Runtime — 2026-10-28
+
+- Tối ưu hóa UI/UX Marketplace: Chuẩn hóa nhãn trạng thái RFQ/Offer tiếng Việt, layout 2 cột rõ ràng, hiển thị đầy đủ thông tin chi tiết báo giá và hỗ trợ trao đổi chat trực tiếp với tiệm bánh.
+- Hoàn thiện Baker Quote Detail Page: Layout 2 cột với panel thanh toán cố định (sticky checkout), phân rã chi tiết tiền bánh/phí giao hàng/phụ kiện, xem tóm tắt yêu cầu RFQ gốc và ảnh mẫu đi kèm.
+- Form báo giá Vendor (OfferForm): Nâng cấp trải nghiệm tạo báo giá cho baker, tự động tính toán tổng tiền, kiểm tra hạn báo giá và xác thực trường nhập liệu.
+- AI Cake Studio Page: Quy trình thiết kế bánh AI tương tác mượt mà, theo dõi trạng thái job (Job Status) và kiểm duyệt (Moderation Status), thư viện thiết kế đã tạo và chuyển nhanh sang luồng tạo RFQ custom bánh.
+- Header & Navigation: Cải thiện bố cục responsive, chống tràn/co vỡ text trên các kích thước màn hình khác nhau (lg, xl, 2xl).
+- Demo Runtime & Auth: Bổ sung cơ chế tự động fallback khi backend gateway ngắt kết nối (offline demo mode), hỗ trợ đăng nhập test account nhanh (Customer, Owner, Staff, Admin) và lưu trữ phiên qua sessionStorage.
+- Toàn bộ 449 test suite frontend pass; Vite build thành công sạch sẽ 0 lỗi.
 
 ## Hoàn thiện Bakery/Subscription — 2026-10-25
 

@@ -11,7 +11,12 @@ import { installDemoFallback } from './mockData/runtime.js'
 
 installDemoFallback(() => {
   const session = authService.getSnapshot()
-  return session.status === 'authenticated' ? session.user : null
+  if (session.status === 'authenticated') return session.user
+  try {
+    const saved = JSON.parse(window?.sessionStorage?.getItem('sweetcake_demo_auth_user') || 'null')
+    if (saved?.id) return saved
+  } catch {}
+  return null
 })
 
 createRoot(document.getElementById('root')).render(
