@@ -30,9 +30,12 @@ public class BakeryMember {
     @JoinColumn(name = "bakery_id", nullable = false)
     private Bakery bakery;
 
-    // Identity Service owns the user; this service stores only its ID.
+    // Identity owns the user; the local name is a snapshot, not a shared user entity.
     @Column(name = "user_id", nullable = false)
     private UUID userId;
+
+    @Column(name = "display_name_snapshot", length = 120)
+    private String displayNameSnapshot;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_role", nullable = false, length = 30)
@@ -55,6 +58,15 @@ public class BakeryMember {
         this.memberRole = memberRole;
     }
 
+    public BakeryMember(Bakery bakery, UUID userId, BakeryMemberRole memberRole, String displayNameSnapshot) {
+        this(bakery, userId, memberRole);
+        this.displayNameSnapshot = displayNameSnapshot;
+    }
+
+    public void captureDisplayName(String displayName) {
+        if (displayNameSnapshot == null) this.displayNameSnapshot = displayName;
+    }
+
     public void update(BakeryMemberRole role, BakeryMemberStatus status) {
         if (role != null) this.memberRole = role;
         if (status != null) this.status = status;
@@ -63,6 +75,7 @@ public class BakeryMember {
     public UUID getId() { return id; }
     public Bakery getBakery() { return bakery; }
     public UUID getUserId() { return userId; }
+    public String getDisplayNameSnapshot() { return displayNameSnapshot; }
     public BakeryMemberRole getMemberRole() { return memberRole; }
     public BakeryMemberStatus getStatus() { return status; }
     public Instant getJoinedAt() { return joinedAt; }

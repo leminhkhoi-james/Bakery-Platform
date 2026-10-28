@@ -29,7 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class)
+@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class, properties = "spring.config.import=")
+@org.springframework.test.context.ActiveProfiles("test")
 @Import({SecurityConfig.class, SecurityConfigTest.ProbeController.class,
         SecurityConfigTest.TestBeans.class})
 class SecurityConfigTest {

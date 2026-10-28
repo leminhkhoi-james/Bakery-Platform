@@ -26,8 +26,9 @@ public class PublicBakeryController {
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String district,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(ApiResponse.success(service.list(query, city, district, page, size)));
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "name,asc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(service.list(query, city, district, page, size, sort)));
     }
 
     @GetMapping("/{bakeryId}")

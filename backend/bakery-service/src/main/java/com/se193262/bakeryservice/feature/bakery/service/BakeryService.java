@@ -23,7 +23,7 @@ public interface BakeryService {
 
     BakeryDto changeStatus(UUID bakeryId, BakeryStatus status);
 
-    PageResult<BakeryDto> listForAdmin(BakeryStatus status, String query, String city, int page, int size);
+    PageResult<BakeryDto> listForAdmin(BakeryStatus status, String query, String city, int page, int size, String sort);
 
     MediaResponse uploadLogo(UUID bakeryId, MultipartFile file);
 

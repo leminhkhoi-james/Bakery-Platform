@@ -37,8 +37,9 @@ public class AdminBakeryController {
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String city,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(ApiResponse.success(bakeryService.listForAdmin(status, query, city, page, size)));
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(bakeryService.listForAdmin(status, query, city, page, size, sort)));
     }
 
     @GetMapping("/{bakeryId}")

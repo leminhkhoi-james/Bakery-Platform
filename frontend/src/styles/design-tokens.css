@@ -1,0 +1,46 @@
+:root {
+  --sc-font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sc-color-primary: #6b212e;
+  --sc-color-primary-hover: #4f1722;
+  --sc-color-text: #382d25;
+  --sc-color-muted: #695e57;
+  --sc-color-accent: #a56623;
+  --sc-color-border: #e7d8cc;
+  --sc-color-focus: #b87328;
+  --sc-color-pink: #f5dcd7;
+  --sc-color-cream: #fffdfa;
+  --sc-text-xs: .75rem;
+  --sc-text-sm: .875rem;
+  --sc-text-body: .875rem;
+  --sc-text-title: clamp(1.5rem, 2.5vw, 2rem);
+  --sc-text-section: 1.25rem;
+  --sc-text-heading: 1rem;
+  --sc-line-body: 1.6;
+  --sc-line-heading: 1.3;
+  --sc-weight-regular: 400;
+  --sc-weight-medium: 500;
+  --sc-weight-semibold: 600;
+  --sc-weight-bold: 700;
+  --sc-content-width: 88rem;
+  --sc-page-gutter: clamp(1rem, 3vw, 2rem);
+  --sc-page-top: 2rem;
+  --sc-page-bottom: 3rem;
+  --sc-section-gap: 1.5rem;
+  --sc-card-gap: 1rem;
+  --sc-card-padding: 1.5rem;
+  --sc-radius-control: .75rem;
+  --sc-radius-card: 1.25rem;
+  --sc-radius-badge: .5rem;
+  --sc-control-height: 2.75rem;
+  --sc-shadow-card: 0 8px 24px -4px #4023160a;
+  --sc-shadow-hover: 0 12px 30px -6px #40231618;
+  --sc-transition: 160ms ease;
+}
+@media (max-width: 639px) {
+  :root {
+    --sc-page-top: 1.5rem;
+    --sc-page-bottom: 2rem;
+    --sc-section-gap: 1.25rem;
+    --sc-card-padding: 1rem;
+  }
+}

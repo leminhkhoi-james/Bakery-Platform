@@ -4,29 +4,79 @@
 
 ## Owner-only roles — 2026-10-28
 
-- Theo yêu cầu người dùng, platform chỉ còn `ADMIN`, `CUSTOMER`, `BAKERY_OWNER`;
-  bakery membership chỉ còn `OWNER`. Xem ADR-004.
-- Bakery management yêu cầu platform `BAKERY_OWNER` và membership `OWNER` ACTIVE
-  của đúng bakery. Tạo bakery tự gán OWNER từ JWT sub. Gỡ API/service thêm, sửa,
-  xóa member; giữ API đọc membership và internal authorization.
-- Đồng bộ Bakery, Marketplace/shared Actor, Order, Chat và Subscription;
-  JWT staff cũ và membership manager/staff không cấp quyền bakery.
-- Thêm Identity V3, Bakery V2, Chat V2; giữ nguyên migration đã chạy.
-  Migration lưu assignment/member cũ vào bảng audit, cấp CUSTOMER cho staff cũ,
-  thu hồi membership manager/staff và không tự nâng thành owner. Chat giữ lịch sử
-  người gửi nhưng đánh dấu staff participant đã rời; historical participant type
-  không phải role phân quyền.
-- Cập nhật API spec/index, database docs/ERD, architecture, project rules, feature
-  context và script Test-LocalJwt theo owner-only.
-- Kiểm tra: Maven `-pl identity-service,bakery-service,subscription-service,marketplace-service,order-service,chat-service -am "-Dtest=*Test" "-Dsurefire.failIfNoSpecifiedTests=false" test`
-  thành công: 100 test, 97 pass, 3 migration tests skip do Docker không chạy.
-  Bao gồm test legacy staff JWT, legacy manager membership, đúng bakery/ACTIVE,
-  owner được phép và route thêm member bị từ chối. Các module liên quan test-compile
-  thành công. DB smoke/HTTP end-to-end chưa chạy; chưa áp dụng migration lên DB thật.
-- Build toàn reactor còn vướng lỗi có sẵn ở Cake AI: thiếu Google auth/cloud
-  storage dependencies và `ApiResponse.accepted`; ngoài phạm vi thay đổi role.
-- Các mục bên dưới ghi lại lịch sử trước thay đổi này; mô hình staff/manager cũ
-  đã được thay thế bằng owner-only.
+- Platform chỉ còn `ADMIN`, `CUSTOMER`, `BAKERY_OWNER`; bakery membership chỉ
+  còn `OWNER`. Các API quản lý yêu cầu owner ACTIVE của đúng bakery.
+- Người dùng xác nhận chưa có dữ liệu thực: sửa schema khởi tạo/seed trực tiếp,
+  bỏ toàn bộ migration thu hồi quyền, bảng audit và loại participant lịch sử.
+  Không tự reset database/volume hoặc sửa Flyway checksum trên máy người dùng.
+- Giữ snapshot tên OWNER khi tạo tiệm; bỏ bổ sung tên cho dữ liệu cũ và API
+  thêm/sửa/xóa nhân viên. Giữ các thay đổi mới về sort, catalog và subscription.
+- Frontend đồng bộ owner-only: bỏ demo account staff, các lựa chọn chức vụ và
+  form sửa nhân sự; danh sách membership chỉ đọc thông tin chủ tiệm.
+- Đã xử lý conflict nội dung từ origin/dev trong các file liên quan đến role.
+  Không tạo merge commit.
+- Kiểm tra: clean build/test các module liên quan thành công: 101 test,
+  không failure/error/skip. Frontend 448/448 test pass, production build pass;
+  lint không có error (còn warning có sẵn). Script JWT kiểm tra cú pháp pass.
+  Chưa chạy HTTP end-to-end/DB integration hoặc reset database phát triển.
+
+
+## Hoàn thiện giao diện Marketplace, AI Studio, Quote Detail & Demo Runtime — 2026-10-28
+
+- Tối ưu hóa UI/UX Marketplace: Chuẩn hóa nhãn trạng thái RFQ/Offer tiếng Việt, layout 2 cột rõ ràng, hiển thị đầy đủ thông tin chi tiết báo giá và hỗ trợ trao đổi chat trực tiếp với tiệm bánh.
+- Hoàn thiện Baker Quote Detail Page: Layout 2 cột với panel thanh toán cố định (sticky checkout), phân rã chi tiết tiền bánh/phí giao hàng/phụ kiện, xem tóm tắt yêu cầu RFQ gốc và ảnh mẫu đi kèm.
+- Form báo giá Vendor (OfferForm): Nâng cấp trải nghiệm tạo báo giá cho baker, tự động tính toán tổng tiền, kiểm tra hạn báo giá và xác thực trường nhập liệu.
+- AI Cake Studio Page: Quy trình thiết kế bánh AI tương tác mượt mà, theo dõi trạng thái job (Job Status) và kiểm duyệt (Moderation Status), thư viện thiết kế đã tạo và chuyển nhanh sang luồng tạo RFQ custom bánh.
+- Header & Navigation: Cải thiện bố cục responsive, chống tràn/co vỡ text trên các kích thước màn hình khác nhau (lg, xl, 2xl).
+- Demo Runtime & Auth: Bổ sung cơ chế tự động fallback khi backend gateway ngắt kết nối (offline demo mode), hỗ trợ đăng nhập test account nhanh (Customer, Owner, Staff, Admin) và lưu trữ phiên qua sessionStorage.
+- Toàn bộ 449 test suite frontend pass; Vite build thành công sạch sẽ 0 lỗi.
+
+## Hoàn thiện Bakery/Subscription — 2026-10-25
+
+- Bakery public/admin lists hỗ trợ sort allow-list; product lists thêm `basePrice`.
+  Trường/hướng không hợp lệ trả 400; sort có UUID tie-breaker trước phân trang.
+- Flyway V2 thêm `bakery_members.display_name_snapshot`. Bakery xác minh OWNER
+  qua Identity khi tạo tiệm; owner/member lưu tên tại lúc tham gia. Snapshot là
+  read-only, không đổi theo profile về sau. Membership cũ được bổ sung tên khi đọc
+  nếu Identity khả dụng; không lấy được thì vẫn trả membership với snapshot null.
+- Maven verify Bakery/Subscription cùng platform-support pass: Bakery 27 tests,
+  Subscription 14 và shared client 3; không skip. Flyway V1→V2/JPA validate và
+  executable jars pass trên PostgreSQL 16 Testcontainers.
+- HTTP thật trên Identity/Bakery/Subscription + 3 DB + 2 MinIO pass qua
+  `scripts/Test-LocalJwt.ps1 -BakerySubscriptionOnly -WithStorage`: PEM/JWK,
+  user/service JWT, owner/member names, quyền sở hữu, token bị sửa, mua/duyệt gói,
+  proof upload/download và quyền owner/admin/staff, logo replacement cleanup,
+  cover/add-on, multipart product images/display order/primary/delete, publish,
+  sort và invalid sort/MIME/size. Script dọn users, bakery, subscription và objects.
+- Chờ Order: chưa có API rating summary theo bakery. Cần nhóm Order cung cấp
+  method/path, request/response (`bakeryId`, average rating, review count), quy tắc
+  review được tính và scope. Sau khi chốt mới nối client Bakery và Identity grant.
+- Cake AI mới pull vẫn có lỗi compile đã ghi bên dưới; không thuộc phạm vi này.
+
+## Bakery/Subscription review sau pull — 2026-10-25
+
+- Commit mới `658c32c` bổ sung Cake AI, không thay đổi trực tiếp Bakery/Subscription.
+- Marketplace customization/add-on quotes của Bakery kiểm tra subscription còn
+  hiệu lực giống direct-order quotes; thiếu entitlement trả 409, remote lỗi trả 503.
+  Phần tử null trong option/add-on selection trả 400 thay vì lỗi xử lý bên trong.
+- Subscription tạo order dùng transaction advisory lock theo bakery để chặn
+  concurrent open orders. Order PAYMENT_REVIEW tiếp tục chặn mua mới ngay cả khi
+  hết hạn gửi payment, cho tới khi admin giải quyết review.
+- Retry tạo order giữ quyền xem payment proof: chỉ người gửi chứng từ hoặc admin
+  nhận signed URL. Người tạo order không mặc nhiên xem chứng từ người khác gửi.
+- Bakery trả đúng 404/405/415 và lỗi thiếu query parameter 400; Subscription trả
+  403 khi method security từ chối, thay vì bị generic handler chuyển thành 500.
+- Integration tests của hai service dùng profile test và PostgreSQL Testcontainers
+  riêng, không import local `.env` hoặc dùng DB phát triển. Khi Docker không chạy,
+  các test cần DB được skip; unit/MVC tests vẫn chạy.
+- `mvn -o -pl bakery-service,subscription-service -am verify
+  -Dtest.postgres.image=postgres:16-alpine` pass: Bakery 21 tests, Subscription 14,
+  platform-support 3; không skip. Flyway/JPA validate và executable jars pass.
+  PostgreSQL test containers đã được dọn; Docker Desktop đã tắt lại.
+- Full-reactor `test-compile` còn fail trong Cake AI mới pull vì thiếu dependency
+  Google Cloud Storage/Google Auth và gọi `ApiResponse.accepted(...)` chưa tồn tại
+  trong platform-support. Chưa sửa Cake AI ngoài phạm vi Bakery/Subscription;
+  chưa chạy lại HTTP end-to-end toàn stack trong đợt review này.
 
 ## JWT runtime — 2026-10-24
 
@@ -232,11 +282,11 @@
 
 ## Chưa triển khai
 
-- Bakery admin detail có danh sách member và subscription summary khi remote
-  service khả dụng; public catalog chưa kèm rating Order. Chưa có end-to-end test với
-  PostgreSQL/MinIO/Identity/Subscription và chưa có job retry cleanup ảnh mồ côi.
-- Luồng Subscription reference payment/JWT đã kiểm thử HTTP với Identity/Bakery;
-  upload proof lên MinIO và các luồng ngoài phạm vi script vẫn cần HTTP end-to-end.
+- Bakery public catalog chưa kèm rating: chờ API summary của Order như mục trên.
+  Media compensation đã kiểm thử HTTP; job retry cleanup ảnh mồ côi là cải thiện
+  vận hành còn lại, không phải endpoint mới trong API spec.
+- Bakery/Subscription đã kiểm thử HTTP với PostgreSQL/MinIO/Identity và proof;
+  các trường hợp ngoài phạm vi script/test hiện có chưa được xác nhận toàn bộ.
 - Cake AI and API Gateway still need their remaining runtime/domain features.
 - Runtime integration still requires deployment configuration for service client
   secrets/hashes and dependent service URLs. Identity issues scoped tokens;
@@ -257,13 +307,9 @@
   `/v3/api-docs` và kiểm tra route vẫn pass.
 - Docker hiện hoạt động; các service khác cần chạy lại Testcontainers đã skip
   trong các phiên trước khi xác minh full HTTP flow.
-- Bakery smoke test hiện cần PostgreSQL local và `.env` trong thư mục module;
-  chưa có test profile/Testcontainers độc lập cho Maven reactor.
-- Subscription smoke/integration test hiện cũng cần PostgreSQL local và `.env`
-  trong thư mục module; chưa có test profile/Testcontainers độc lập.
-- Bakery member creation có Identity lookup client nhưng Identity chưa triển khai
-  internal user endpoint. Bakery/Subscription đều đã có internal contracts nhưng
-  còn thiếu service JWT hợp lệ nên các luồng phụ thuộc trả `503`.
+- Bakery/Subscription đã có test profile/Testcontainers độc lập; cần Docker để
+  chạy persistence/context tests. Identity user lookup và scoped service JWT đã
+  xác minh HTTP trong đợt 2026-10-24.
 - Compose của Order/Chat hiện mặc định trỏ Identity tới port `8081`, trong khi
   Identity local/Bakery mặc định dùng `8080`; cần thống nhất URL khi ghép stack.
 - Subscription V4 và luồng persistence đã xác minh trên PostgreSQL Docker;

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record CatalogQuoteRequest(@NotNull UUID bakeryId, @NotNull UUID productId,
-        @Positive int quantity, @Valid List<OptionSelection> optionSelections,
-        @Valid List<AddOnSelection> addOns, @NotBlank String deliveryDistrict,
+        @Positive int quantity, @Valid List<@NotNull OptionSelection> optionSelections,
+        @Valid List<@NotNull AddOnSelection> addOns, @NotBlank String deliveryDistrict,
         @NotBlank String deliveryCity) {
     public record OptionSelection(@NotNull UUID optionGroupId,
             @NotNull List<@NotNull UUID> optionValueIds) { }

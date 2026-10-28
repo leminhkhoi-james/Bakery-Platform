@@ -19,6 +19,9 @@ CatalogController provides `/users/{userId}/bakery-memberships`,
 `/catalog/customization-quotes` and `/catalog/add-on-quotes` for Marketplace.
 The two quote request/response shapes have distinct URIs to avoid merge conflicts
 and preserve the direct-order contract. All require scoped service credentials.
+All three quote routes require a current active Subscription entitlement; remote
+validation failures return 503 instead of allowing an unchecked quote. Null list
+elements in option/add-on selections are rejected by request validation.
 
 ## Boundary
 

@@ -81,6 +81,10 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
             throw new AppException(HttpStatus.BAD_REQUEST, "Valid Idempotency-Key UUID is required");
         }
         String orderNumber = orderNumber(bakeryId, idempotencyKey);
+        // Serialize creation and approval for this bakery across application instances.
+        if (!subscriptionRepository.tryLockBakery(bakeryId)) {
+            throw new AppException(HttpStatus.CONFLICT, "Another subscription operation is in progress");
+        }
         SubscriptionOrder existing = orderRepository.findByOrderNumber(orderNumber).orElse(null);
         if (existing != null) {
             if (!existing.getBakeryId().equals(bakeryId)
@@ -88,11 +92,11 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
                     || !existing.getPlan().getId().equals(request.planId())) {
                 throw new AppException(HttpStatus.CONFLICT, "Idempotency-Key was used with different order data");
             }
-            return details(existing);
+            return details(existing, userId);
         }
-        if (orderRepository.existsByBakeryIdAndStatusInAndExpiresAtAfter(bakeryId,
-                List.of(SubscriptionOrderStatus.PENDING_PAYMENT, SubscriptionOrderStatus.PAYMENT_REVIEW),
-                Instant.now())) {
+        if (orderRepository.existsByBakeryIdAndStatus(bakeryId, SubscriptionOrderStatus.PAYMENT_REVIEW)
+                || orderRepository.existsByBakeryIdAndStatusInAndExpiresAtAfter(bakeryId,
+                List.of(SubscriptionOrderStatus.PENDING_PAYMENT), Instant.now())) {
             throw new AppException(HttpStatus.CONFLICT, "Bakery already has an open subscription order");
         }
         SubscriptionPlan plan = planRepository.findById(request.planId())
@@ -102,7 +106,7 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
         }
         SubscriptionOrder order = new SubscriptionOrder(orderNumber, bakeryId, plan, userId,
                 Instant.now().plus(expiryHours, ChronoUnit.HOURS));
-        return details(orderRepository.saveAndFlush(order));
+        return details(orderRepository.saveAndFlush(order), userId);
     }
 
     @Override @Transactional(readOnly = true)
@@ -132,10 +136,6 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found"));
         if (!admin) bakeryClient.requireMember(order.getBakeryId(), userId, false);
         return details(order, admin ? null : userId);
-    }
-
-    private SubscriptionOrderDto details(SubscriptionOrder order) {
-        return details(order, null);
     }
 
     private SubscriptionOrderDto details(SubscriptionOrder order, UUID viewerId) {

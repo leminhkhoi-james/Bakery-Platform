@@ -17,19 +17,10 @@ erDiagram
         uuid id PK
         uuid bakery_id FK
         uuid user_id "External Identity reference"
+        varchar display_name_snapshot "Name captured from Identity"
         varchar member_role "OWNER only"
         varchar status
         timestamptz joined_at
-    }
-
-    RETIRED_BAKERY_MEMBERS {
-        uuid id PK
-        uuid bakery_id "Historical reference"
-        uuid user_id "Historical reference"
-        varchar member_role "Historical role only"
-        varchar status
-        timestamptz joined_at
-        timestamptz retired_at
     }
 
     BAKERY_ADDRESSES {

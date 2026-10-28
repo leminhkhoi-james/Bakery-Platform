@@ -17,6 +17,9 @@ checks and signed media URLs are implemented. Publish requires a primary image,
 active bakery and active subscription. Public catalog also checks entitlement;
 the Subscription internal endpoint and service token are still needed at runtime.
 JWT membership checks protect management routes in every profile.
+Public/management lists accept `name`, `basePrice`, `createdAt`, or `id` sorting
+with `asc`/`desc`; unknown fields are rejected before running the query. UUID
+tie-breaking keeps chunk scanning/pagination stable for equal sort values.
 
 ## Boundary
 

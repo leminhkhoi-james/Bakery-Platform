@@ -21,7 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class)
+@WebMvcTest(controllers = SecurityConfigTest.ProbeController.class, properties = "spring.config.import=")
+@org.springframework.test.context.ActiveProfiles("test")
 @Import({SecurityConfig.class, SecurityConfigTest.ProbeController.class,
         SecurityConfigTest.TestBeans.class})
 class SecurityConfigTest {
@@ -75,15 +76,21 @@ class SecurityConfigTest {
     }
 
     @Test
-    @DisplayName("Legacy staff JWT cannot create subscription orders")
-    void createOrder_withLegacyStaffToken_isForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/bakeries/" + BAKERY_ID + "/subscription-orders")
-                        .header("Authorization", "Bearer user-staff"))
-                .andExpect(status().isForbidden());
+    @DisplayName("Method security denial is returned as 403 instead of 500")
+    void methodDenied_withAdminToken_returns403() throws Exception {
+        mockMvc.perform(get("/api/v1/admin/method-denied")
+                        .header("Authorization", "Bearer user-admin"))
+                .andExpect(status().isForbidden())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+                        .jsonPath("$.statusCode").value(403));
     }
 
     @RestController
     static class ProbeController {
+        @GetMapping("/api/v1/admin/method-denied")
+        @org.springframework.security.access.prepost.PreAuthorize("denyAll()")
+        public String methodDenied() { return "unreachable"; }
+
         @GetMapping("/api/v1/subscription-plans")
         String plans() { return "ok"; }
 
@@ -103,8 +110,7 @@ class SecurityConfigTest {
         JwtDecoder jwtDecoder() {
             return token -> {
                 String tokenType = token.startsWith("service") ? "service" : "user";
-                String role = token.contains("staff") ? "BAKERY_STAFF"
-                        : token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
+                String role = token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(UUID.randomUUID().toString())

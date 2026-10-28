@@ -1,0 +1,35 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test",
+    "test:ui:fixture": "node scripts/ui-preview-smoke.mjs",
+    "test:auth:live": "node scripts/auth-smoke.mjs",
+    "test:catalog:live": "node scripts/catalog-smoke.mjs",
+    "test:subscription:live": "node scripts/subscription-smoke.mjs",
+    "test:vendor-order:live": "node scripts/vendor-order-smoke.mjs",
+    "test:chat:live": "node scripts/chat-smoke.mjs",
+    "test:marketplace-ai:live": "node scripts/marketplace-ai-smoke.mjs",
+    "test:integration:read": "node scripts/integration-read-smoke.mjs",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "jimp": "^1.6.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "vite": "^8.3.0"
+  }
+}

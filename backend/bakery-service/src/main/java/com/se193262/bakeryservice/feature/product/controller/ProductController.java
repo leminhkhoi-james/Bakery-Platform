@@ -43,9 +43,10 @@ public class ProductController {
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) String query,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
         return ResponseEntity.ok(ApiResponse.success(
-                productService.list(bakeryId, status, categoryId, query, page, size)));
+                productService.list(bakeryId, status, categoryId, query, page, size, sort)));
     }
 
     @PostMapping

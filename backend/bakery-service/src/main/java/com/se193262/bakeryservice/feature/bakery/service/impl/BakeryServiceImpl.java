@@ -9,8 +9,10 @@ import com.se193262.bakeryservice.feature.bakery.entity.BusinessHour;
 import com.se193262.bakeryservice.feature.bakery.entity.ServiceArea;
 import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
 import com.se193262.bakeryservice.shared.dto.PageResult;
+import com.se193262.bakeryservice.shared.AllowedSort;
 import com.se193262.bakeryservice.shared.dto.MediaResponse;
 import com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorage;
+import com.se193262.bakeryservice.infrastructure.client.IdentityUserClient;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.Instant;
 import com.se193262.bakeryservice.feature.bakery.repository.BakeryAddressRepository;
@@ -46,19 +48,21 @@ public class BakeryServiceImpl implements BakeryService {
     private final ServiceAreaRepository serviceAreaRepository;
     private final BusinessHourRepository businessHourRepository;
     private final BakeryImageStorage imageStorage;
+    private final IdentityUserClient identityUserClient;
 
     public BakeryServiceImpl(BakeryRepository bakeryRepository,
                              BakeryMemberRepository bakeryMemberRepository,
                              BakeryAddressRepository addressRepository,
                              ServiceAreaRepository serviceAreaRepository,
                              BusinessHourRepository businessHourRepository,
-                             BakeryImageStorage imageStorage) {
+                             BakeryImageStorage imageStorage, IdentityUserClient identityUserClient) {
         this.bakeryRepository = bakeryRepository;
         this.bakeryMemberRepository = bakeryMemberRepository;
         this.addressRepository = addressRepository;
         this.serviceAreaRepository = serviceAreaRepository;
         this.businessHourRepository = businessHourRepository;
         this.imageStorage = imageStorage;
+        this.identityUserClient = identityUserClient;
     }
 
     @Override
@@ -70,10 +74,12 @@ public class BakeryServiceImpl implements BakeryService {
         }
         String name = required(request.name(), "name");
         String phoneNumber = required(request.phoneNumber(), "phoneNumber");
+        var ownerProfile = identityUserClient.requireOwner(ownerUserId);
         Bakery bakery = new Bakery(name, phoneNumber, normalized(request.email()));
         bakery.updateProfile(null, request.description(), null, null);
         bakeryRepository.saveAndFlush(bakery);
-        bakeryMemberRepository.save(new BakeryMember(bakery, ownerUserId, BakeryMemberRole.OWNER));
+        bakeryMemberRepository.save(new BakeryMember(bakery, ownerUserId, BakeryMemberRole.OWNER,
+                ownerProfile.displayName()));
         return toDto(bakery);
     }
 
@@ -156,13 +162,14 @@ public class BakeryServiceImpl implements BakeryService {
     @Override
     @Transactional(readOnly = true)
     public PageResult<BakeryDto> listForAdmin(BakeryStatus status, String query, String city,
-            int page, int size) {
+            int page, int size, String sort) {
         if (page < 1 || size < 1 || size > 100) {
             throw new AppException(HttpStatus.BAD_REQUEST, "page must be >= 1 and size must be 1..100");
         }
+        Sort ordering = AllowedSort.parse(sort, Set.of("name", "createdAt", "id"));
         if (city == null || city.isBlank()) {
             return PageResult.fromPage(bakeryRepository.search(status, query == null ? "" : query.trim(),
-                    PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt")))
+                    PageRequest.of(page - 1, size, ordering))
                     .map(this::toDto));
         }
         long count = 0;
@@ -172,7 +179,7 @@ public class BakeryServiceImpl implements BakeryService {
         org.springframework.data.domain.Page<Bakery> candidates;
         do {
             candidates = bakeryRepository.search(status, query == null ? "" : query.trim(),
-                    PageRequest.of(chunk++, 100, Sort.by(Sort.Direction.DESC, "createdAt")));
+                    PageRequest.of(chunk++, 100, ordering));
             for (Bakery bakery : candidates.getContent()) {
                 boolean matchesCity = addressRepository.findAllByBakery_Id(bakery.getId()).stream()
                         .anyMatch(address -> address.getCity().equalsIgnoreCase(city.trim()));

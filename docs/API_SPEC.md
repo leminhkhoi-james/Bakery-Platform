@@ -125,6 +125,18 @@ Response danh sách dùng:
 
 Không chấp nhận sort field nằm ngoài allow-list của endpoint.
 
+Bakery sorting accepts `asc`/`desc` and adds `id,asc` as a stable tie-breaker:
+
+| Endpoint | Allowed fields | Default |
+|---|---|---|
+| `GET /bakeries` | `name`, `createdAt`, `id` | `name,asc` |
+| `GET /admin/bakeries` | `name`, `createdAt`, `id` | `createdAt,desc` |
+| `GET /products` | `name`, `basePrice`, `createdAt`, `id` | `createdAt,desc` |
+| `GET /bakeries/{bakeryId}/products` | `name`, `basePrice`, `createdAt`, `id` | `createdAt,desc` |
+
+Invalid fields, directions or extra sort segments return `400`, including when
+the result set is empty. Sorting occurs before pagination/filtering by entitlement.
+
 ### Common Headers
 
 | Header | Khi nào | Mục đích |
@@ -503,6 +515,9 @@ member role, status, joinedAt. **Errors:** `403`; `404`.
 
 Membership `OWNER` được tạo tự động cùng bakery. Không có API thêm, sửa hoặc
 xóa membership; các route POST/PATCH/DELETE member cũ bị từ chối.
+
+`displayNameSnapshot` is captured from Identity when the owner creates the bakery.
+Later profile edits do not rewrite this read-only snapshot.
 
 ---
 
@@ -1302,6 +1317,11 @@ trùng cho cùng idempotency key.
 **Errors:** `409` conflicting open order/idempotency mismatch; `422` plan inactive;
 `503` Bakery validation unavailable.
 
+Concurrent creation for the same bakery may return `409`; retry with the same
+key after the other operation completes. An order under `PAYMENT_REVIEW` still
+blocks a new purchase after its submission deadline until admin review resolves it.
+Replayed responses apply the same payment-proof visibility as order detail.
+
 ### GET /bakeries/{bakeryId}/subscription-orders 🔒 bakery owner|ADMIN
 
 **Query:** common pagination; `status`; default sort `createdAt,desc`.
@@ -1855,6 +1875,8 @@ Options contain server-generated `groupNameSnapshot`/`valueNameSnapshot`; items 
 `addOnId,itemNameSnapshot,descriptionSnapshot,quantity,unitPrice,lineTotal`.
 Product quote requires a published product; add-on quote accepts null product. Direct orders continue
 to use the richer `catalog/quotes` contract shown earlier. Each URI has a single controller owner.
+All three quote routes require an active bakery subscription (`409` if inactive,
+`503` when required Subscription validation is unavailable). Null selections return `400`.
 
 ### PATCH and lifecycle clarification
 

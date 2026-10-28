@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface ProductService {
 
     PageResult<ProductDto> list(UUID bakeryId, ProductStatus status, UUID categoryId,
-                                String query, int page, int size);
+                                String query, int page, int size, String sort);
 
     ProductDto create(UUID bakeryId, ProductDto request);
 
