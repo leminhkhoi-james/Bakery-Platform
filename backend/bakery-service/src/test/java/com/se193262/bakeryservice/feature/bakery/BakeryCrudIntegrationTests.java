@@ -109,4 +109,27 @@ class BakeryCrudIntegrationTests extends PostgresIntegrationTest {
                 });
         verifyNoInteractions(identityUserClient);
     }
+
+    @Test
+    @DisplayName("Revised initial schema allows OWNER and rejects retired membership roles")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
+    void membershipSchema_nonOwnerRole_violatesRoleConstraint() {
+        UUID bakeryId = bakeryService.create(new BakeryDto(null, "Role constraint", null,
+                "0900000000", null, null, null), UUID.randomUUID()).id();
+        var jdbc = org.springframework.jdbc.core.simple.JdbcClient.create(dataSource);
+        var transactions = new org.springframework.transaction.support.TransactionTemplate(transactionManager);
+        for (String role : List.of("MANAGER", "STAFF", "ADMIN")) {
+            org.assertj.core.api.Assertions.assertThatThrownBy(() -> transactions.executeWithoutResult(status ->
+                    jdbc.sql("insert into bakery_members(bakery_id,user_id,member_role) values (:bakeryId,:userId,:role)")
+                            .param("bakeryId", bakeryId).param("userId", UUID.randomUUID()).param("role", role).update()))
+                    .isInstanceOfSatisfying(org.springframework.dao.DataIntegrityViolationException.class,
+                            exception -> assertThat(exception.getMostSpecificCause().getMessage())
+                                    .contains("ck_bakery_members_role"));
+        }
+        assertThat(memberService.list(bakeryId)).hasSize(1)
+                .allSatisfy(member -> assertThat(member.memberRole()).isEqualTo(BakeryMemberRole.OWNER));
+    }
+
+    @Autowired private javax.sql.DataSource dataSource;
+    @Autowired private org.springframework.transaction.PlatformTransactionManager transactionManager;
 }

@@ -10,6 +10,9 @@ Only OWNER membership is supported. Creation of a bakery creates its owner from
 JWT sub; member POST/PATCH/DELETE endpoints and service mutations have been removed.
 Management requires platform BAKERY_OWNER and ACTIVE OWNER membership of the exact
 bakery. Internal authorization accepts only OWNER (or no requiredRole).
+The security guard is explicitly owner-only, with no configurable list of local
+roles. Tests cover cross-bakery denial, admin/owner separation, removed member
+mutation routes, rejected role parameters and the PostgreSQL OWNER-only check.
 See docs/decisions/ADR-004-owner-only-authorization.md.
 
 ## Boundary

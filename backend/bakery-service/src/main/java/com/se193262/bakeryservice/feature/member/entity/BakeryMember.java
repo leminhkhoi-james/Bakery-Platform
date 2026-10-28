@@ -63,10 +63,6 @@ public class BakeryMember {
         this.displayNameSnapshot = displayNameSnapshot;
     }
 
-    public void captureDisplayName(String displayName) {
-        if (displayNameSnapshot == null) this.displayNameSnapshot = displayName;
-    }
-
     public void update(BakeryMemberRole role, BakeryMemberStatus status) {
         if (role != null) this.memberRole = role;
         if (status != null) this.status = status;

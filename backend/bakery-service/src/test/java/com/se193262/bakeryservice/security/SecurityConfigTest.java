@@ -27,6 +27,8 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = SecurityConfigTest.ProbeController.class, properties = "spring.config.import=")
@@ -127,6 +129,44 @@ class SecurityConfigTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    @DisplayName("Owner-only policy blocks all removed member mutation routes")
+    void memberMutations_withOwnerToken_areForbidden() throws Exception {
+        memberFixture.member = new BakeryMember(new Bakery("Test", "0900000000", null),
+                USER_ID, BakeryMemberRole.OWNER);
+        String path = "/api/v1/bakeries/" + BAKERY_ID + "/members/" + UUID.randomUUID();
+        mockMvc.perform(patch(path).header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(delete(path).header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("A bakery owner cannot change another bakery's catalog or use admin approval APIs")
+    void catalogWrite_otherBakeryOrAdminEndpoint_isForbidden() throws Exception {
+        memberFixture.member = new BakeryMember(new Bakery("Test", "0900000000", null),
+                USER_ID, BakeryMemberRole.OWNER);
+        mockMvc.perform(post("/api/v1/bakeries/" + BAKERY_ID + "/products")
+                        .header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isOk());
+        mockMvc.perform(post("/api/v1/bakeries/" + UUID.randomUUID() + "/products")
+                        .header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(patch("/api/v1/admin/bakeries/" + BAKERY_ID + "/status")
+                        .header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Platform ADMIN does not bypass owner membership on catalog APIs")
+    void catalog_adminWithoutOwnerRole_isForbidden() throws Exception {
+        memberFixture.member = new BakeryMember(new Bakery("Test", "0900000000", null),
+                USER_ID, BakeryMemberRole.OWNER);
+        mockMvc.perform(post("/api/v1/bakeries/" + BAKERY_ID + "/products")
+                        .header("Authorization", "Bearer user-admin"))
+                .andExpect(status().isForbidden());
+    }
+
     @RestController
     static class ProbeController {
         @PostMapping("/api/v1/bakeries")
@@ -155,7 +195,8 @@ class SecurityConfigTest {
         JwtDecoder jwtDecoder() {
             return token -> {
                 String tokenType = token.startsWith("service") ? "service" : "user";
-                String role = token.contains("customer") ? "CUSTOMER" : "BAKERY_OWNER";
+                String role = token.contains("customer") ? "CUSTOMER"
+                        : token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(USER_ID.toString())

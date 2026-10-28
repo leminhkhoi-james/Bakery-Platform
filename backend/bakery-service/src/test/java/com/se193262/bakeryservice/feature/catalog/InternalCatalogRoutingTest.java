@@ -45,6 +45,17 @@ class InternalCatalogRoutingTest {
     }
 
     @Test
+    @DisplayName("Internal authorization rejects retired member-role parameters")
+    void membershipAuthorization_nonOwnerRole_returns400() throws Exception {
+        for (String role : new String[] {"MANAGER", "STAFF", "ADMIN"}) {
+            mvc.perform(get("/internal/v1/bakeries/" + ID + "/members/" + ID + "/authorization")
+                            .param("requiredRole", role))
+                    .andExpect(status().isBadRequest());
+        }
+        verifyNoInteractions(bakeryService);
+    }
+
+    @Test
     @DisplayName("Direct order and customization quote payloads reach distinct handlers")
     void quote_contracts_reachDistinctHandlers() throws Exception {
         String body = """
