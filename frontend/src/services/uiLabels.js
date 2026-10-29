@@ -8,20 +8,30 @@ const labels = {
   CONFIRMED: 'Đã xác nhận', BAKING: 'Đang làm bánh', READY: 'Sẵn sàng giao', DELIVERING: 'Đang giao', COMPLETED: 'Hoàn tất',
   PENDING_PAYMENT: 'Chờ thanh toán', PAYMENT_REVIEW: 'Chờ đối chiếu thanh toán',
   QUEUED: 'Đang chờ', PROCESSING: 'Đang xử lý', SUCCEEDED: 'Hoàn thành', FAILED: 'Không thành công',
-  OWNER: 'Chủ tiệm', BAKERY_OWNER: 'Chủ tiệm', ADMIN: 'Quản trị viên', CUSTOMER: 'Khách hàng',
+  OWNER: 'Chủ tiệm', BAKERY_OWNER: 'Chủ tiệm', BAKERY_STAFF: 'Nhân viên tiệm', STAFF: 'Nhân viên tiệm', ADMIN: 'Quản trị viên', CUSTOMER: 'Khách hàng', BLOCKED: 'Tạm ngưng',
   OPEN_CUSTOM: 'Đặt bánh theo ý tưởng', TARGETED_PRODUCT_CUSTOM: 'Tùy chỉnh mẫu bánh của tiệm',
   DIRECT_CATALOG: 'Đặt từ mẫu bánh', ACCEPTED_OFFER: 'Đặt theo báo giá', CATALOG_PRODUCT: 'Bánh theo mẫu', CUSTOM_CAKE: 'Bánh thiết kế riêng',
   SINGLE: 'Chọn một', MULTIPLE: 'Chọn nhiều', TEXT: 'Văn bản', IMAGE: 'Ảnh', FILE: 'Tệp đính kèm', SYSTEM: 'Hệ thống', BAKERY: 'Tiệm bánh',
   BANK_TRANSFER: 'Chuyển khoản ngân hàng', CASH: 'Tiền mặt', COD: 'Thanh toán khi nhận hàng',
 }
-export const uiLabel = (value, fallback = 'Chưa có thông tin') => labels[value] || value || fallback
+const technicalCopy = /\b(?:backend|API|DEMO|mock\s*data|debug)(?:\b|_)|dữ\s+liệu\s+mẫu|Gói minh họa/i
+export const uiLabel = (value, fallback = 'Chưa có thông tin') => labels[value] || (technicalCopy.test(String(value || '')) ? fallback : value || fallback)
 export function userFeedback(error) {
   const message = String(error?.message || '')
   if (error?.status >= 500 || error?.status === 0) return 'Kết nối đang gián đoạn. Vui lòng thử lại sau.'
-  if (/\b(?:backend|API|DTO|JWT|UUID|BLOCKED|DEMO|mockData|debug|snapshot|Response|Idempotency)\b|dữ liệu mẫu|stack trace|TypeError|ReferenceError/i.test(message)) return 'Chưa thể thực hiện thao tác này. Vui lòng kiểm tra thông tin và thử lại.'
+  if (technicalCopy.test(message) || /\b(?:DTO|JWT|UUID|BLOCKED|snapshot|Response|Idempotency)\b|stack trace|TypeError|ReferenceError/i.test(message)) return 'Chưa thể thực hiện thao tác này. Vui lòng kiểm tra thông tin và thử lại.'
   return message || 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
 }
 
 // Presentation only: source IDs, records and authentication values are never modified.
-export const cleanPresentationLabel = (value, fallback = '') => typeof value === 'string' ? value.replace(/\s*[·|]\s*DEMO\b/gi, '').replace(/\s*\(DEMO\)/gi, '').replace(/^(?:DEMO|MẪU)[-_]/i, '').trim() || fallback : value || fallback
-export const publicCopy = (value, fallback = '') => /\b(?:mockData|backend|API|DEMO)\b|dữ liệu mẫu|Gói minh họa/i.test(String(value || '')) ? fallback : value || fallback
+export function cleanPresentationLabel(value, fallback = '') {
+  if (typeof value !== 'string') return value || fallback
+  const marker = '(?:DEMO|dữ\\s+liệu\\s+mẫu|mock\\s*data|backend|API)'
+  const text = value
+    .replace(new RegExp('\\s*[·|•]\\s*' + marker + '\\s*$', 'gi'), '')
+    .replace(new RegExp('\\s*[([]\\s*' + marker + '\\s*[)\\]]', 'gi'), '')
+    .replace(new RegExp('^' + marker + '\\s*[·|•:]\\s*', 'i'), '')
+    .replace(/^(?:DEMO|MẪU)[-_]/i, '').trim()
+  return new RegExp('^' + marker + '$', 'i').test(text) ? fallback : text || fallback
+}
+export const publicCopy = (value, fallback = '') => technicalCopy.test(String(value || '')) ? fallback : value || fallback

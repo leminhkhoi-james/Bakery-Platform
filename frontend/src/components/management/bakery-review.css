@@ -1,0 +1,67 @@
+.sc-drawer.sc-bakery-review-dialog { inset: 0; margin: auto; width: min(64rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: var(--sc-radius-card); overflow: hidden; background: #f8f3ed; }
+.sc-drawer.sc-bakery-review-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.sc-bakery-review-dialog .sc-drawer-heading { position: relative; top: auto; z-index: 2; padding: .75rem 1rem; gap: 1rem; border-bottom: 1px solid #decfc4; }
+.sc-bakery-review-dialog .sc-drawer-body { display: block; min-height: 0; padding: .85rem 1rem; overflow-y: auto; overscroll-behavior: contain; }
+.sc-bakery-review-dialog .sc-drawer-footer { padding: .5rem 1rem; border-top: 1px solid #d6bdaf; background: #fffaf5; max-height: 55dvh; overflow-y: auto; }
+.sc-bakery-review { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; min-width: 0; align-items: start; }
+.sc-bakery-review-section { min-width: 0; border: 1px solid #e1d3c8; border-radius: .75rem; background: #fffdfa; padding: .75rem; }
+.sc-bakery-review-section-title { display: flex; align-items: start; gap: .5rem; margin-bottom: .5rem; }
+.sc-bakery-review-section-title > .sc-icon { color: var(--sc-color-primary); font-size: 1.1rem; padding-top: .1rem; }
+.sc-bakery-review-section-title h3 { margin: 0; color: var(--sc-color-primary); font-size: .9rem; line-height: 1.4; font-weight: 700; }
+.sc-bakery-review-section-title p { margin-top: .1rem; font-size: .69rem; color: #716058; }
+.sc-bakery-review-section h4 { font-size: .76rem; font-weight: 650; margin-bottom: .4rem; }
+.sc-bakery-review-section :is(p, dd, strong, small, span) { overflow-wrap: anywhere; }
+.sc-bakery-review-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1rem; }
+.sc-bakery-review-wide { grid-column: 1 / -1; }
+.sc-bakery-review dt { color: #716058; font-size: .7rem; font-weight: 500; line-height: 1.5; }
+.sc-bakery-review dd { margin: .15rem 0 0; font-size: .8rem; font-weight: 550; line-height: 1.5; white-space: pre-wrap; }
+.sc-bakery-review .sc-bakery-review-missing { color: #716058; font-size: .76rem; font-weight: 400; font-style: italic; }
+.sc-bakery-review-subtitle { margin-top: .7rem; }
+.sc-bakery-review-addresses, .sc-bakery-review-areas { display: grid; gap: .6rem; }
+.sc-bakery-review-areas > li + li, .sc-bakery-review-addresses > li + li { border-top: 1px solid var(--sc-color-border); padding-top: .6rem; }
+.sc-bakery-review-member-list > [role="row"] { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .7fr) minmax(0, 1fr); gap: .5rem; align-items: start; padding-block: .45rem; font-size: .76rem; border-bottom: 1px solid var(--sc-color-border); }
+.sc-bakery-review-member-list > [role="row"]:last-child { border-bottom: 0; padding-bottom: 0; }
+.sc-bakery-review-member-list strong { font-weight: 600; }
+.sc-bakery-review-member-list .sc-bakery-review-member-labels { color: #716058; font-size: .69rem; padding-top: 0; }
+.sc-bakery-review-muted { margin-block: .3rem; color: #716058; font-size: .74rem; line-height: 1.5; }
+.sc-bakery-review-subscription-state { font-size: .8rem; margin-bottom: .5rem; }
+.sc-bakery-review-subscription-tools { margin-top: .5rem; }
+.sc-bakery-review-subscription-tools > button { font-size: .74rem; padding: .4rem .6rem; min-height: 2rem; }
+.sc-bakery-review-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+.sc-bakery-review-checks li { display: flex; align-items: start; gap: .35rem; font-size: .75rem; }
+.sc-bakery-review-checks .sc-icon { font-size: 1rem; margin-top: .1rem; }
+.sc-bakery-review-checks .is-complete > .sc-icon { color: #2c6949; }
+.sc-bakery-review-checks .is-incomplete > .sc-icon { color: var(--sc-color-accent); }
+.sc-bakery-review-checks small { display: block; margin-top: .1rem; color: #716058; font-size: .69rem; }
+.sc-bakery-review-footer-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.sc-bakery-review-footer h3 { color: var(--sc-color-primary); font-weight: 700; font-size: .85rem; }
+.sc-bakery-review-footer .sc-entity-actions { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.sc-bakery-review-footer .sc-action-row { gap: .5rem; }
+.sc-bakery-review-footer .sc-action-row .sc-button { flex: 0 0 auto; min-height: 2.25rem; font-size: .78rem; }
+.sc-bakery-review-footer .sc-action-confirm { padding: .25rem 0 0; border: 0; box-shadow: none; background: transparent; }
+.sc-bakery-review-footer .sc-action-confirm > p { font-size: .78rem; line-height: 1.5; }
+.sc-bakery-review-footer .sc-note { margin-top: .35rem; padding: 0; border: 0; background: transparent; font-size: .74rem; color: #8a4b28; }
+.sc-bakery-review-footer .sc-feedback { margin-top: .4rem; font-size: .78rem; }
+.sc-action-reason { display: grid; gap: .35rem; margin-block: .65rem; font-weight: 600; }
+.sc-action-reason textarea { width: 100%; min-width: 0; resize: vertical; font-weight: 400; }
+.sc-action-reason small { color: #716058; font-size: .75rem; font-weight: 400; }
+@media (max-width: 759px) { .sc-bakery-review { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 479px) {
+  .sc-drawer.sc-bakery-review-dialog { width: calc(100vw - 1rem); max-height: calc(100dvh - 1rem); }
+  .sc-bakery-review-dialog .sc-drawer-heading, .sc-bakery-review-dialog .sc-drawer-footer { padding: .65rem .75rem; }
+  .sc-bakery-review-dialog .sc-drawer-body { padding: .65rem .75rem; }
+  .sc-bakery-review-fields, .sc-bakery-review-checks { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Compact confirmation stays in the footer; only the six-card body scrolls. */
+.sc-bakery-review-footer:has(.sc-action-confirm) > .sc-bakery-review-muted { display: none; }
+.sc-bakery-review-footer .sc-action-confirm { display: grid; gap: .35rem; }
+.sc-bakery-review-footer .sc-action-confirm h4 { margin: 0; color: var(--sc-color-primary); font-size: .8rem; font-weight: 700; }
+.sc-bakery-review-footer .sc-action-reason { margin: 0; gap: .25rem; font-size: .76rem; }
+.sc-bakery-review-footer .sc-action-reason textarea { height: 80px; min-height: 80px; max-height: 80px; resize: none; padding: .5rem .65rem; font-size: .8rem; }
+.sc-bakery-review-footer .sc-action-required-hint { margin: 0; color: #80512f; font-size: .73rem; }
+.sc-bakery-review-footer .sc-action-confirm > .sc-action-row { flex-wrap: nowrap; }
+.sc-bakery-review-footer .sc-action-confirm .sc-action-row .sc-button { white-space: nowrap; padding-inline: .65rem; }
+.sc-bakery-review-footer .sc-action-confirm:has(textarea) .sc-action-row .sc-button:first-child:not(:disabled) { background: var(--sc-color-primary); border-color: var(--sc-color-primary); color: #fffaf5; }
+.sc-bakery-review-footer .sc-action-confirm:has(textarea) .sc-action-row .sc-button:first-child:disabled { opacity: 1; background: #e8ddd7; border-color: #c7b6ad; color: #78665c; cursor: not-allowed; box-shadow: none; }
+.sc-bakery-review-footer .sc-action-confirm:has(textarea) .sc-action-row .sc-button:first-child:not(:disabled):hover { filter: brightness(.94); }

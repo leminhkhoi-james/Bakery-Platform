@@ -103,7 +103,7 @@ test('Successful bakery creation stops the original form from resubmitting the s
 test('Admin payment navigation query is applied to actual API loader filters', () => {
   const render = harness(PaymentsPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate() {} })
   render()
-  assert.equal(globalThis.__flowResourceCalls.find((call) => call.name === 'loadAdminPayments').params.bakeryId, bakeryId)
+  assert.equal(globalThis.__flowResourceCalls.find((call) => call.name === 'loadPaymentDirectory').params.bakeryId, bakeryId)
 })
 test('Subscription refresh reloads current order details as well as periods/history', () => {
   const page = harness(VendorPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate() {} })()

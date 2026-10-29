@@ -1,3 +1,4 @@
+import { isMockRecord } from '../mockData/runtime.js'
 import { api, ApiError } from './apiClient.js'
 import { catalogQuery, isCatalogId } from './catalogModels.js'
 import { requireId, requireText, mapPage } from './managementModels.js'
@@ -32,9 +33,12 @@ export const publicationAdminService = {
     if (bakery.id.toLowerCase() !== id.toLowerCase()) throw new ApiError('Hồ sơ trả về sai tiệm.', 502)
     return { ...data, bakery }
   },
-  async changeBakeryStatus(bakery, status) {
+  async changeBakeryStatus(bakery, status, reason) {
     if (!bakeryTransitions(bakery?.status).includes(status)) throw new ApiError('Chuyển trạng thái tiệm không hợp lệ. Hãy tải lại.', 409)
-    const result = mapAdminBakery(await api.patch('/admin/bakeries/' + requireId(bakery.id) + '/status', { status }))
+    const payload = { status }
+    // Review notes are supported only by the local record contract, never by the live endpoint.
+    if (isMockRecord(bakery.id) && status === 'DRAFT' && reason?.trim()) payload.reviewNote = requireText(reason, 'Lý do trả hồ sơ')
+    const result = mapAdminBakery(await api.patch('/admin/bakeries/' + requireId(bakery.id) + '/status', payload))
     if (result.id !== bakery.id || result.status !== status) throw new ApiError('Backend chưa xác nhận đúng tiệm/trạng thái yêu cầu.', 502)
     return result
   },

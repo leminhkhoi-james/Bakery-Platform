@@ -19,9 +19,11 @@ const render = (Component, props) => renderToStaticMarkup(React.createElement(Co
 const plan = () => mapSubscriptionPlan({ id: randomUUID(), code: 'DYNAMIC', name: 'Tên gói từ DTO', description: 'Mô tả từ DTO', monthlyPrice: 321987, currency: 'VND', billingPeriodMonths: 3, status: 'ACTIVE', features: { UNKNOWN_FEATURE: 'custom-value', FEATURED_LISTING: 'false', MAX_PRODUCTS: '-1' } })
 
 test('Plan UI uses DTO name/description/price/period/status/arbitrary feature values', () => {
-  const html = render(view.PlanCards, { plans: [plan()] })
-  for (const text of ['Tên gói từ DTO', 'Mô tả từ DTO', '321.987 VND', '3 tháng', 'Đang mở bán', 'UNKNOWN_FEATURE', 'custom-value', '-1', 'Không']) assert.ok(html.includes(text), text)
-  assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực/)
+  const record = plan(), before = JSON.stringify(record)
+  const html = render(view.PlanCards, { plans: [record] })
+  for (const text of ['Tên gói từ DTO', 'Mô tả từ DTO', '321.987 VND', '3 tháng', 'Đang mở bán', 'Quyền lợi bổ sung', 'custom-value', 'Không giới hạn', 'Không']) assert.ok(html.includes(text), text)
+  assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực|UNKNOWN_FEATURE/)
+  assert.equal(JSON.stringify(record), before)
 })
 test('Empty and missing DTO render explicit messages with disabled purchase', () => {
   assert.match(render(view.PlanCards, { plans: [] }), /Chưa có gói dịch vụ/)

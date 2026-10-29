@@ -31,6 +31,8 @@ before(async () => {
 })
 after(async () => { await vite?.close(); delete globalThis.__publicationUiResources; delete globalThis.__publicationUiAuth })
 function fixtures(resources = {}, roles = ['ADMIN']) {
+  if (resources.loadAdminPayments) resources.loadPaymentDirectory = resources.loadAdminPayments
+  if (resources.loadAdminOrder) resources.loadPaymentContext = { ...resources.loadAdminOrder, data: { order: resources.loadAdminOrder.data } }
   globalThis.__publicationUiResources = resources
   globalThis.__publicationUiAuth = { user: { id: userId, displayName: 'Fixture administrator' }, roles }
 }
@@ -53,16 +55,43 @@ test('Bakery review differentiates missing entitlement from inactive and validat
   const bakery = { id: bakeryId, name: 'Fixture', status: 'PENDING_APPROVAL', operations: { addresses: [], serviceAreas: [] } }
   fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
   const unknown = render(BakeryReview, { id: bakeryId })
-  assert.match(unknown, /Chưa tải được thông tin gói dịch vụ/); assert.match(unknown, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Duyệt \/ kích hoạt/); assert.match(unknown, /Chưa có/)
+  assert.match(unknown, /Chưa tải được thông tin gói dịch vụ/); assert.match(unknown, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Duyệt tiệm/); assert.match(unknown, /Chưa có/)
   fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: { active: false } }) })
   assert.match(render(BakeryReview, { id: bakeryId }), /Duyệt tiệm không tự kích hoạt gói dịch vụ/)
+})
+
+test('Bakery profile renders six separate sections and places Admin actions after the scrolling body', () => {
+  fixtures({ loadAdminBakery: ready({ bakery: { id: bakeryId, name: 'Tiệm kiểm thử', status: 'ACTIVE', phoneNumber: '.', email: '.', operations: { addresses: [], serviceAreas: [] } }, members: [{ userId, displayNameSnapshot: '.', memberRole: 'OWNER', status: 'ACTIVE' }] }) })
+  const html = render(BakeryReview, { id: bakeryId })
+  for (const heading of ['Thông tin tiệm', 'Liên hệ &amp; địa chỉ', 'Thành viên', 'Khu vực giao hàng', 'Gói dịch vụ', 'Trạng thái &amp; xử lý hồ sơ']) assert.ok(html.includes(heading))
+  assert.equal((html.match(/class="sc-bakery-review-section"/g) || []).length, 6)
+  const footer = html.indexOf('<footer class="sc-drawer-footer">')
+  assert.ok(footer > html.indexOf('Trạng thái &amp; xử lý hồ sơ'))
+  assert.doesNotMatch(html.slice(0, footer), /Đóng tiệm<\/button>/)
+  assert.match(html.slice(footer), /Đóng tiệm/)
+  assert.ok(!html.includes(userId)); assert.ok(!html.includes(bakeryId))
+  assert.match(html, /Chưa cung cấp/)
+  assert.match(html, /Đóng tiệm/)
+  assert.doesNotMatch(html, /Trả hồ sơ|Duyệt tiệm<\/button>|Tạm ngưng<\/button>/)
+  fixtures({ loadAdminBakery: ready({ bakery: { id: bakeryId, name: 'Tiệm kiểm thử', status: 'ACTIVE' } }) }, ['CUSTOMER'])
+  assert.doesNotMatch(render(BakeryReview, { id: bakeryId }), /Đóng tiệm/)
 })
 test('Payment review uses backend order/bakery values and blocks amount mismatch', () => {
   fixtures({ loadAdminOrder: ready({ id: orderId, bakeryId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' }) })
   const html = render(PaymentReview, { payment: { id: randomUUID(), subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 1, currency: 'VND' } })
-  assert.ok(html.includes(displayReference(bakeryId, 'SHOP'))); assert.ok(!html.includes(bakeryId)); assert.match(html, /Số tiền\/tiền tệ chưa khớp/)
+  assert.ok(!html.includes(bakeryId)); assert.match(html, /Số tiền hoặc tiền tệ không khớp/)
   assert.match(html, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Phê duyệt thanh toán/)
-  assert.match(html, /Tôi đã đối chiếu/); assert.doesNotMatch(html, /Thanh toán thành công/)
+  assert.match(html, /Chưa có chứng từ đính kèm/); assert.doesNotMatch(html, /Thanh toán thành công/)
+  for (const title of ['Thông tin đơn mua', 'Thông tin thanh toán', 'Chứng từ đính kèm']) assert.ok(html.includes(title))
+})
+test('Payment attachment is viewable only for safe URLs and completed reviews cannot be processed again', () => {
+  fixtures({ loadPaymentContext: ready({ order: { id: orderId, bakeryId, status: 'COMPLETED', totalAmount: 199000, currency: 'VND' } }) })
+  const payment = { id: randomUUID(), subscriptionOrderId: orderId, status: 'APPROVED', amount: 199000, currency: 'VND', proofUrl: 'https://storage.example.test/proof.pdf' }
+  const html = render(PaymentReview, { payment })
+  assert.match(html, /href="https:\/\/storage.example.test\/proof.pdf"/); assert.match(html, /Xem chứng từ/)
+  assert.doesNotMatch(html, /Phê duyệt thanh toán<\/button>|Từ chối<\/button>/)
+  const unsafe = render(PaymentReview, { payment: { ...payment, proofUrl: 'javascript:alert(1)' } })
+  assert.doesNotMatch(unsafe, /javascript:/); assert.match(unsafe, /Chưa có chứng từ đính kèm/)
 })
 test('Vendor category form has real DTO fields and no sample category values', () => {
   fixtures()

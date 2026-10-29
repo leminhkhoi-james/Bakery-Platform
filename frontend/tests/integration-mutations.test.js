@@ -14,7 +14,7 @@ before(async () => {
   }, transform(code, id) {
     const path = id.replaceAll('\\', '/').split('?')[0]
     if (['CatalogEntityManager.jsx', 'ProductAssets.jsx', 'OrderReview.jsx', 'AdminPlansPage.jsx', 'AdminModerationPage.jsx', 'ReviewModeration.jsx'].some((name) => path.endsWith('/' + name))) {
-      return code.replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value)")
+      return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value), useRef = (value) => globalThis.__mutationState(() => ({ current: value }))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value)")
     }
   } }] })
   Entity = (await vite.ssrLoadModule('/src/components/management/CatalogEntityManager.jsx')).default
@@ -78,6 +78,35 @@ test('Admin actual create-plan callback POSTs whitelisted form and reloads plans
   const form = nodes(render()).find((node) => node.type?.name === 'AdminPlanForm')
   await form.props.onSave({ ...dto, featureRows: [] })
   assert.equal(calls[0].url, '/api/v1/admin/subscription-plans'); assert.equal(JSON.parse(calls[0].options.body).id, undefined); assert.equal(reloaded, 1)
+})
+
+test('Plan action dialog defers writes until confirmation, suppresses double submits and shows only verified status', async () => {
+  let reloaded = 0, finish
+  const calls = [], plan = { id, code: 'FIXTURE', name: 'Gói kiểm thử', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '20' } }
+  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return new Promise((resolve) => { finish = () => resolve(reply({ ...plan, status: 'INACTIVE' })) }) }
+  const render = harness(Plans, { onNavigate() {} }, { loadAdminPlans: ready([plan], () => reloaded++) }, ['ADMIN'])
+  const card = () => nodes(render()).find((node) => node.type?.name === 'AdminPlanCard')
+  const dialog = () => nodes(render()).find((node) => node.type?.name === 'AdminPlanActionDialog')
+  card().props.onAction('archive'); assert.equal(calls.length, 0)
+  dialog().props.onClose(); assert.equal(calls.length, 0)
+  card().props.onAction('pause')
+  const confirm = dialog().props.onConfirm, pending = confirm()
+  await confirm(); assert.equal(calls.length, 1)
+  assert.equal(card().props.plan.status, 'ACTIVE', 'no optimistic fake success')
+  finish(); await pending
+  assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'INACTIVE' })
+  assert.equal(card().props.plan.status, 'INACTIVE'); assert.equal(reloaded, 1); assert.equal(dialog(), undefined)
+})
+
+test('Failed plan actions keep the confirmation open and cannot fabricate a successful status', async () => {
+  const plan = { id, code: 'FIXTURE', name: 'Gói kiểm thử', status: 'ACTIVE', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, features: {} }
+  globalThis.fetch = async () => reply(null, 503)
+  const render = harness(Plans, { onNavigate() {} }, { loadAdminPlans: ready([plan]) }, ['ADMIN'])
+  nodes(render()).find((node) => node.type?.name === 'AdminPlanCard').props.onAction('archive')
+  await nodes(render()).find((node) => node.type?.name === 'AdminPlanActionDialog').props.onConfirm()
+  assert.equal(nodes(render()).find((node) => node.type?.name === 'AdminPlanActionDialog').props.error.status, 503)
+  assert.equal(nodes(render()).find((node) => node.type?.name === 'AdminPlanCard').props.plan.status, 'ACTIVE')
+  assert.doesNotMatch(text(render()), /Đã cập nhật gói dịch vụ/)
 })
 test('Design moderation actual UI requires selection and acknowledgement, PATCHs then reloads', async () => {
   let reloaded = 0; const calls = []

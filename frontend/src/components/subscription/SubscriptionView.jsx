@@ -2,6 +2,7 @@ import { userFeedback, cleanPresentationLabel, publicCopy } from '../../services
 import React from 'react'
 import { StatusBadge } from '../common/WorkspaceUI.jsx'
 import { canOrderPlan, formatSubscriptionMoney, subscriptionStatusLabel } from '../../services/subscriptionModels.js'
+import { planFeatureRows } from '../../services/planPresentation.js'
 
 export function SubscriptionError({ error, retry }) {
   const explanation = { 401: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.', 403: 'Bạn không có quyền thao tác với cửa hàng này.', 404: 'Không tìm thấy dữ liệu được yêu cầu.' }[error?.status]
@@ -15,14 +16,13 @@ export function ResourceState({ resource, children }) {
 }
 
 export function FeatureList({ features = {} }) {
-  const labels = { MAX_PRODUCTS: 'Số sản phẩm tối đa', MAX_MONTHLY_OFFERS: 'Số báo giá mỗi tháng', FEATURED_LISTING: 'Hiển thị nổi bật' }
-  return Object.keys(features).length ? <ul className="space-y-2 text-sm">{Object.entries(features).map(([key, value]) => <li key={key}>{labels[key] || key}: <strong>{value === 'true' ? 'Có' : value === 'false' ? 'Không' : value}</strong></li>)}</ul> : <p className="text-sm text-on-surface-variant">Chưa có thông tin tính năng.</p>
+  return Object.keys(features).length ? <ul className="space-y-2 text-sm">{planFeatureRows(features).map((row) => <li key={row.code}>{row.label}: <strong>{row.value}</strong></li>)}</ul> : <p className="text-sm text-on-surface-variant">Chưa có thông tin quyền lợi.</p>
 }
 
 export function PlanCards({ plans, onSelect, canSelect = false, busy = false }) {
   if (!plans?.length) return <p className="rounded-2xl border border-outline-variant/30 p-6">Chưa có gói dịch vụ được mở bán.</p>
   return <div className="grid gap-5 md:grid-cols-3">{plans.map((plan) => <article key={plan.id} className="sc-panel flex flex-col gap-4">
-    <div><p className="text-sm text-secondary">{cleanPresentationLabel(plan.code, 'Gói dịch vụ')}</p><h3 className="text-xl font-bold text-primary">{plan.name || 'Chưa có tên gói'}</h3></div>
+    <div><p className="text-sm text-secondary">{cleanPresentationLabel(plan.code, 'Gói dịch vụ')}</p><h3 className="text-xl font-bold text-primary">{cleanPresentationLabel(plan.name, 'Chưa có tên gói')}</h3></div>
     <p className="font-serif text-3xl font-semibold text-primary">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
     <p>{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p><p className="text-sm">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
     <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p><FeatureList features={plan.features} />

@@ -1,0 +1,92 @@
+.sc-admin-plans { container-type: inline-size; }
+.sc-admin-plans-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
+.sc-admin-plans-toolbar > div { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
+.sc-admin-plans-toolbar p { color: var(--sc-color-muted); font-size: .8rem; }
+.sc-admin-plans-grid { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 1rem; }
+@container (min-width: 38rem) { .sc-admin-plans-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (min-width: 59rem) { .sc-admin-plans-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 767px) { .sc-admin-plans-grid { grid-template-columns: minmax(0, 1fr); } }
+.sc-admin-plan-card { display: flex; flex-direction: column; min-width: 0; padding: 1rem; border: 1px solid var(--sc-color-border); border-radius: var(--sc-radius-card); background: #fffcf8; box-shadow: var(--sc-shadow-card); }
+.sc-admin-plan-heading { display: flex; align-items: start; justify-content: space-between; gap: .65rem; margin-bottom: .8rem; min-height: 2.5rem; }
+.sc-admin-plan-heading h2 { min-width: 0; font-size: 1.05rem; line-height: 1.4; font-weight: 650; overflow-wrap: anywhere; }
+.sc-admin-plan-heading .sc-status { flex-shrink: 0; max-width: 50%; white-space: normal; font-size: .7rem; }
+.sc-admin-plan-price { margin: 0; color: var(--sc-color-primary); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.sc-admin-plan-price strong { font-size: 1.55rem; font-weight: 700; line-height: 1.35; }
+.sc-admin-plan-price > span { font-size: .8rem; font-weight: 500; }
+.sc-admin-plan-cycle { margin-top: .35rem; font-size: .78rem; color: var(--sc-color-muted); }
+.sc-admin-plan-cycle strong { color: var(--sc-color-text); font-weight: 550; }
+.sc-admin-plan-description { margin-top: .75rem; color: var(--sc-color-muted); font-size: .8rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sc-admin-plan-benefits { flex: 1; margin-block: 1rem; }
+.sc-admin-plan-benefits h3 { margin-bottom: .45rem; font-size: .8rem; font-weight: 650; }
+.sc-admin-plan-benefits dl { display: grid; gap: .5rem; }
+.sc-admin-plan-benefits dl > div { display: flex; justify-content: space-between; align-items: start; gap: .75rem; font-size: .8rem; line-height: 1.5; }
+.sc-admin-plan-benefits dt { min-width: 0; color: var(--sc-color-muted); overflow-wrap: anywhere; }
+.sc-admin-plan-benefits dd { max-width: 60%; text-align: right; font-weight: 600; overflow-wrap: anywhere; }
+.sc-admin-plan-muted { font-size: .8rem; color: var(--sc-color-muted); }
+.sc-admin-plan-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; border-top: 1px solid var(--sc-color-border); padding-top: .85rem; }
+.sc-admin-plan-actions .sc-button { width: auto; min-height: 2.35rem; padding: .45rem .65rem; font-size: .78rem; gap: .35rem; }
+.sc-plan-menu { position: relative; }
+.sc-plan-menu-items { position: absolute; z-index: 20; top: calc(100% + .4rem); right: 0; width: 14rem; max-width: calc(100vw - 3rem); padding: .35rem; border: 1px solid var(--sc-color-border); border-radius: .75rem; background: #fffaf5; box-shadow: var(--sc-shadow-card); }
+.sc-plan-menu-items button { display: flex; align-items: center; gap: .5rem; width: 100%; min-height: 2.6rem; padding: .5rem .6rem; border-radius: .5rem; font-size: .8rem; text-align: left; }
+.sc-plan-menu-items button:hover, .sc-plan-menu-items button:focus-visible { background: #f5e8dd; }
+.sc-plan-menu-items .is-danger { color: var(--sc-color-primary); }
+.sc-drawer.sc-plan-action-dialog { inset: 0; margin: auto; width: min(30rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: var(--sc-radius-card); overflow: clip; }
+.sc-plan-action-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.sc-plan-action-dialog .sc-drawer-heading { position: static; padding: .8rem 1rem; }
+.sc-plan-action-dialog .sc-drawer-heading h2 { font-size: 1.05rem; }
+.sc-plan-action-dialog .sc-drawer-body { display: grid; min-height: 0; overflow-y: auto; gap: .45rem; padding: .85rem 1rem; font-size: .84rem; line-height: 1.5; }
+.sc-plan-action-dialog .sc-drawer-body p { margin: 0; }
+.sc-plan-action-dialog .sc-drawer-footer { padding: .7rem 1rem; border-top: 1px solid #dfcfc4; background: #fffaf5; }
+.sc-plan-action-dialog .sc-action-row { flex-wrap: nowrap; gap: .5rem; }
+.sc-plan-action-dialog .sc-button { width: auto; min-height: 2.3rem; padding: .45rem .65rem; font-size: .8rem; white-space: nowrap; }
+.sc-plan-action-name { color: var(--sc-color-primary); font-weight: 650; }
+.sc-plan-action-dialog .sc-action-row { justify-content: flex-end; }
+.sc-plan-feature-editor { display: grid; gap: .75rem; }
+@media (max-width: 639px) { .sc-admin-plan-card { padding: .875rem; } }
+
+.sc-drawer.sc-plan-form-dialog { width: min(52rem, 100vw); height: 100dvh; max-height: 100dvh; overflow: clip; background: #f8f3ed; }
+.sc-plan-form-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.sc-plan-form-dialog .sc-drawer-heading { position: static; padding: .85rem 1.1rem; border-bottom: 1px solid #ddcbbf; }
+.sc-plan-form-dialog .sc-drawer-heading h2 { font-size: 1.1rem; }
+.sc-plan-form-dialog .sc-drawer-body { display: block; min-height: 0; overflow-y: auto; padding: 1rem 1.1rem; overscroll-behavior: contain; }
+.sc-plan-form-dialog .sc-drawer-footer { padding: .7rem 1.1rem; border-top: 1px solid #d8c3b4; background: #fffaf5; }
+.sc-plan-form-fields { display: grid; min-width: 0; gap: .8rem; }
+.sc-plan-form-section { min-width: 0; padding: .85rem; border: 1px solid #dfcfc4; border-radius: .75rem; background: #fffdfa; }
+.sc-plan-form-section h3 { margin: 0 0 .65rem; color: var(--sc-color-primary); font-size: .9rem; font-weight: 700; }
+.sc-plan-basic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 1rem; align-items: start; }
+.sc-plan-form-section label { position: relative; display: grid; min-width: 0; gap: .3rem; font-size: .8rem; font-weight: 550; color: #5c4941; }
+.sc-plan-form-section :is(input, select, textarea) { margin: 0; min-width: 0; width: 100%; padding: .5rem .65rem; font-size: .84rem; font-weight: 400; }
+.sc-plan-form-section input[readonly] { background: #f1eae3; color: #68574e; }
+.sc-plan-form-section textarea { min-height: 76px; resize: vertical; }
+.sc-plan-form-help { display: block; color: #756158; font-size: .74rem; font-weight: 400; line-height: 1.5; }
+.sc-plan-billing-help { align-self: center; }
+.sc-plan-form-section .sc-choice-field legend { font-size: .76rem; color: #756158; margin-bottom: .4rem; }
+.sc-plan-form-section .sc-choice-field .sc-button { padding: .45rem .65rem; min-height: 2.25rem; font-size: .8rem; }
+.sc-plan-section-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.sc-plan-section-heading h3 { margin-bottom: 0; }
+.sc-plan-section-heading .sc-button { min-height: 2rem; padding: .4rem .55rem; font-size: .75rem; }
+.sc-plan-form-dialog .sc-plan-feature-editor { gap: .4rem; }
+.sc-plan-feature-columns, .sc-plan-form-dialog .sc-plan-feature-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 2.25rem; gap: .5rem; }
+.sc-plan-feature-columns { font-size: .72rem; color: #756158; margin-top: .25rem; }
+.sc-plan-form-dialog .sc-plan-feature-row { padding-block: .4rem; align-items: start; }
+.sc-plan-feature-row > .sc-icon-button { min-width: 0; width: 2.25rem; height: 2.45rem; color: var(--sc-color-primary); }
+.sc-plan-feature-row .sc-plan-custom-feature { grid-column: 1 / -1; font-size: .72rem; color: #756158; }
+.sc-plan-custom-feature summary { width: fit-content; cursor: pointer; padding-block: .2rem; }
+.sc-plan-custom-feature label { margin-top: .4rem; }
+.sc-plan-required { color: #a22840; }
+.sc-plan-required-help { margin-bottom: .5rem; color: #756158; font-size: .72rem; }
+.sc-plan-field-error { display: block; color: #a2283f; font-size: .73rem; font-weight: 400; line-height: 1.4; }
+.sc-plan-form-dialog [aria-invalid="true"] { border-color: #a2283f; }
+.sc-plan-data-warning { display: flex; align-items: start; gap: .4rem; margin-top: .5rem; padding: .5rem; border-radius: .4rem; background: #fff1dc; color: #7e4b21; font-size: .75rem; line-height: 1.5; }
+.sc-plan-form-footer { display: grid; gap: .55rem; }
+.sc-plan-form-footer .sc-action-row { justify-content: flex-end; flex-wrap: nowrap; gap: .5rem; }
+.sc-plan-form-footer .sc-button { min-height: 2.3rem; padding: .45rem .8rem; font-size: .8rem; white-space: nowrap; }
+@media (max-width: 599px) {
+  .sc-plan-basic-grid { grid-template-columns: minmax(0, 1fr); }
+  .sc-plan-form-dialog .sc-drawer-heading, .sc-plan-form-dialog .sc-drawer-footer { padding: .65rem .75rem; }
+  .sc-plan-form-dialog .sc-drawer-body { padding: .65rem .75rem; }
+  .sc-plan-form-section { padding: .7rem; }
+  .sc-plan-section-heading { flex-wrap: wrap; }
+  .sc-plan-feature-columns, .sc-plan-form-dialog .sc-plan-feature-row { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr) 2rem; gap: .35rem; }
+  .sc-plan-feature-row > .sc-icon-button { width: 2rem; }
+}

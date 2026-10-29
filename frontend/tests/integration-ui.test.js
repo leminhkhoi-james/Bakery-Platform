@@ -120,10 +120,23 @@ test('Known asset snapshot hides image UUIDs while retaining deletion and confir
 test('Admin plan management renders real records, empty/error/loading and DTO form fields', () => {
   setup({ loadAdminPlans: ready([{ id, code: 'SERVER', name: 'Backend plan fixture', status: 'INACTIVE', monthlyPrice: 321000, currency: 'VND' }]) }, ['ADMIN'])
   assert.match(render(AdminPlans), /Backend plan fixture/); assert.match(render(AdminPlans), /Sửa gói/)
-  assert.match(render(AdminPlanForm, { onSave() {}, onClose() {} }), /Xác nhận lưu/)
+  assert.match(render(AdminPlanForm, { onSave() {}, onClose() {} }), /Lưu gói/)
   setup({ loadAdminPlans: ready([]) }, ['ADMIN']); assert.match(render(AdminPlans), /Chưa có gói dịch vụ/)
   setup({ loadAdminPlans: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['ADMIN']); assert.match(render(AdminPlans), /Thử lại/)
   setup({}, ['ADMIN']); assert.match(render(AdminPlans), /Đang tải/)
+})
+
+test('Admin plan cards show readable benefits and monthly prices, with archive confirmation removed from cards', () => {
+  setup({ loadAdminPlans: ready([{ id, code: 'DEMO_0', name: 'Khởi đầu', status: 'ACTIVE', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 3, features: { products: '20', support: 'Hỗ trợ đối tác' } }]) }, ['ADMIN'])
+  const html = render(AdminPlans)
+  assert.match(html, /199\.000 đ/); assert.match(html, /\/tháng/); assert.match(html, /3 tháng/)
+  assert.match(html, /Số sản phẩm tối đa/); assert.match(html, /Hỗ trợ đối tác/)
+  assert.match(html, /aria-haspopup="menu"/)
+  assert.doesNotMatch(html, /DEMO_0|>0 ·|>products<|>support<|type="checkbox"/)
+  const plan = { id, code: 'STANDARD', name: 'Gói tiêu chuẩn · DEMO', description: 'Quyền lợi tiêu chuẩn · DEMO', status: 'ACTIVE', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, features: { products: '20' } }
+  const form = render(AdminPlanForm, { plan, onSave() {}, onClose() {} })
+  assert.doesNotMatch(form, /DEMO/); assert.match(form, /value="Gói tiêu chuẩn"/)
+  assert.equal(plan.name, 'Gói tiêu chuẩn · DEMO')
 })
 test('Admin Orders page loads all scope, contains no mock escrow statistics and supports review details', () => {
   setup({ loadOrders: ready({ result: [], meta: { page: 1, pageSize: 10, total: 0, pages: 0 } }) }, ['ADMIN'])
@@ -137,7 +150,7 @@ test('Populated Admin order table keeps Vietnamese statuses and an accessible de
   const html = render(AdminOrders)
   assert.match(html, /ORD-HTTP-FIXTURE/)
   assert.match(html, /Đã xác nhận/)
-  assert.match(html, /<table class="sc-table"/)
+  assert.match(html, /<table class="sc-table sc-admin-fixed-table sc-admin-orders-table"/)
   assert.match(html, /Xem đơn<\/button>/)
   assert.doesNotMatch(html, />CONFIRMED</)
 })

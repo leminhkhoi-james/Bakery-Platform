@@ -1,3 +1,4 @@
+import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import { useState } from 'react'
 import { loadBakeries } from '../../../services/vendorService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -27,7 +28,7 @@ export const StoreDirectoryPage = ({
     if (onAddToCart) {
       onAddToCart({
         id: `direct-order-${store.id}-${Date.now()}`,
-        title: `${cakeTitle} • ${store.name}`,
+        title: `${cakeTitle} • ${cleanPresentationLabel(store.name, 'Tiệm bánh')}`,
         price: cakePrice,
         bakery: store.name,
         image:
@@ -157,14 +158,14 @@ export const StoreDirectoryPage = ({
                   <div className="relative shrink-0">
                     <CatalogImage
                       src={store.image}
-                      alt={store.name}
+                      alt={cleanPresentationLabel(store.name, 'Tiệm bánh')}
                       className="w-20 h-20 md:w-24 md:h-24 rounded-2xl object-cover shadow-md group-hover:scale-105 transition-transform"
                     />
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-headline-sm text-headline-sm text-primary font-bold group-hover:text-secondary transition-colors">
-                      <button className="text-left" onClick={() => onNavigate?.('bakery-detail', { id: store.id })}>{store.name}</button>
+                      <button className="text-left" onClick={() => onNavigate?.('bakery-detail', { id: store.id })}>{cleanPresentationLabel(store.name, 'Tiệm bánh')}</button>
                     </h3>
 
                     <div className="flex items-center gap-1.5 mt-2 text-label-xs text-outline">

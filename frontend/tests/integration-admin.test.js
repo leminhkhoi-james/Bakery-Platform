@@ -35,6 +35,18 @@ test('Plan validation covers VND, period, price, duplicated features, limits bef
   for (const patch of [{ currency: 'USD' }, { monthlyPrice: -1 }, { monthlyPrice: Infinity }, { billingPeriodMonths: 0 }, { status: 'DRAFT' }, { featureRows: [{ code: 'DUP', value: '1' }, { code: 'DUP', value: '2' }] }, { featureRows: [{ code: '', value: '1' }] }]) await assert.rejects(service.savePlan(null, { ...input, ...patch }))
   assert.equal(calls.length, 0)
 })
+
+test('Pausing/restoring plans PATCHes only status and waits for the exact authoritative response', async () => {
+  handler = () => reply({ ...plan, status: 'INACTIVE' })
+  assert.equal((await service.changePlanStatus(id, 'INACTIVE')).status, 'INACTIVE')
+  assert.equal(calls[0].url, '/api/v1/admin/subscription-plans/' + id)
+  assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'INACTIVE' })
+  handler = () => reply({ ...plan, status: 'ACTIVE' })
+  await assert.rejects(service.changePlanStatus(id, 'INACTIVE'), { status: 502 })
+  const count = calls.length
+  await assert.rejects(service.changePlanStatus(id, 'ARCHIVED'), { status: 400 })
+  assert.equal(calls.length, count)
+})
 test('Moderation PATCH sends only actual status fields, response must confirm IDs/status', async () => {
   handler = () => reply(review); assert.equal((await service.moderateReview(id, 'HIDDEN')).status, 'HIDDEN')
   assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'HIDDEN' }); assert.equal(calls[0].url, '/api/v1/admin/reviews/' + id + '/status')
@@ -56,10 +68,10 @@ test('Admin Order uses real scope=all and enum transitions while other roles can
 })
 for (const status of [400, 401, 403, 404, 409, 422, 500, 503]) test('Every new Admin API exposes HTTP ' + status + ' without fake queue or success', async () => {
   handler = () => reply(null, status)
-  for (const call of [() => service.getPlans(), () => service.savePlan(null, input), () => service.savePlan(id, input), () => service.archivePlan(id), () => service.moderateReview(id, 'HIDDEN'), () => service.moderateDesign(id, 'APPROVED')]) await assert.rejects(call(), { status })
+  for (const call of [() => service.getPlans(), () => service.savePlan(null, input), () => service.savePlan(id, input), () => service.archivePlan(id), () => service.changePlanStatus(id, 'INACTIVE'), () => service.moderateReview(id, 'HIDDEN'), () => service.moderateDesign(id, 'APPROVED')]) await assert.rejects(call(), { status })
 })
 test('Admin offline fixture preserves errors for all mutation categories', async () => {
   handler = () => { throw new TypeError('offline') }
-  for (const call of [() => service.getPlans(), () => service.savePlan(null, input), () => service.savePlan(id, input), () => service.archivePlan(id), () => service.moderateReview(id, 'HIDDEN'), () => service.moderateDesign(id, 'APPROVED')]) await assert.rejects(call(), { status: 0 })
+  for (const call of [() => service.getPlans(), () => service.savePlan(null, input), () => service.savePlan(id, input), () => service.archivePlan(id), () => service.changePlanStatus(id, 'INACTIVE'), () => service.moderateReview(id, 'HIDDEN'), () => service.moderateDesign(id, 'APPROVED')]) await assert.rejects(call(), { status: 0 })
 })
 

@@ -53,16 +53,53 @@ export function routeDemo(store, path, method, body, query, user) {
     requireUser(user, 'ADMIN')
     if (parts[1] === 'bakeries') {
       if (!parts[2] && get) result = page(s.bakeries)
-      else { const bakery = find('bakeries', parts[2]); if (get) result = { bakery, operations: bakery.operations, members: s.members.filter((m) => m.bakeryId === bakery.id) }; else if (parts[3] === 'status' && method === 'PATCH') { const allowed = { DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }; if (!allowed[bakery.status]?.includes(body.status)) throw new DemoError('Trạng thái không hợp lệ.', 409); result = update(bakery, { status: body.status }) } }
+      else { const bakery = find('bakeries', parts[2]); if (get) {
+        const current = s.subscriptions.find((item) => item.bakeryId === bakery.id && item.status === 'ACTIVE')
+        const registered = s.subscriptions.some((item) => item.bakeryId === bakery.id) || s.subscriptionOrders.some((item) => item.bakeryId === bakery.id)
+        result = { bakery, operations: bakery.operations, members: s.members.filter((m) => m.bakeryId === bakery.id), subscription: { active: Boolean(current), planCode: current?.planCode || s.plans.find((item) => item.id === current?.planId)?.code || null, periodEnd: current?.periodEnd || null, registrationStatus: registered ? 'REGISTERED' : 'NOT_REGISTERED' } }
+      } else if (parts[3] === 'status' && method === 'PATCH') { const allowed = { DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }; if (!allowed[bakery.status]?.includes(body.status)) throw new DemoError('Trạng thái không hợp lệ.', 409); result = update(bakery, { status: body.status, reviewDecision: { status: body.status === 'DRAFT' ? 'RETURNED' : body.status, reason: body.status === 'DRAFT' ? body.reviewNote?.trim() || null : null, reviewedAt: stamp() } }) } }
     } else if (parts[1] === 'users') {
-      if (!parts[2] && get) result = page(s.users)
-      else if (!parts[2] && method === 'POST') result = create('users', { ...body, roles: ['CUSTOMER'], status: 'ACTIVE' })
-      else { const person = find('users', parts[2]); if (Object.values(s.actors).includes(person.id)) throw new DemoError('Không thay đổi tài khoản đăng nhập thật từ dữ liệu mẫu.', 403); if (method === 'PATCH') result = update(person, { name: body.name ?? person.name, email: body.email ?? person.email, status: body.status ?? person.status }); else if (method === 'DELETE') { if (s.orders.some((o) => o.customerId === person.id) || s.bakeries.some((b) => b.ownerId === person.id)) throw new DemoError('Người dùng có dữ liệu liên kết.', 409); s.users = s.users.filter((p) => p.id !== person.id); result = null } }
+      if (!parts[2] && get) result = page(s.users.filter((person) => (!query.get('role') || person.roles.includes(query.get('role'))) && (!query.get('email') || [person.name, person.email].join(' ').toLocaleLowerCase('vi').includes(query.get('email').toLocaleLowerCase('vi')))))
+      else if (!parts[2] && method === 'POST') {
+        if (!body.name?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email || '')) throw new DemoError('Vui lòng kiểm tra họ tên và email.', 422)
+        if (s.users.some((person) => person.email?.toLowerCase() === body.email.trim().toLowerCase())) throw new DemoError('Email đã được sử dụng.', 409)
+        result = create('users', { name: body.name.trim(), email: body.email.trim(), roles: ['CUSTOMER'], status: 'ACTIVE' })
+      }
+      else {
+        const person = find('users', parts[2])
+        if (Object.values(s.actors).includes(person.id) || person.id === user.id || person.roles.includes('ADMIN')) throw new DemoError('Tài khoản đăng nhập hoặc tài khoản quản trị được bảo vệ.', 403)
+        if (method === 'PATCH') {
+          if (body.status && !['ACTIVE', 'SUSPENDED'].includes(body.status)) throw new DemoError('Trạng thái người dùng không hợp lệ.', 422)
+          if (body.name !== undefined && !body.name.trim() || body.email !== undefined && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) throw new DemoError('Vui lòng kiểm tra họ tên và email.', 422)
+          if (body.email && s.users.some((other) => other.id !== person.id && other.email?.toLowerCase() === body.email.trim().toLowerCase())) throw new DemoError('Email đã được sử dụng.', 409)
+          result = update(person, { name: body.name?.trim() ?? person.name, email: body.email?.trim() ?? person.email, status: body.status ?? person.status })
+        } else if (method === 'DELETE') {
+          if (s.orders.some((o) => o.customerId === person.id) || s.bakeries.some((b) => b.ownerId === person.id)) throw new DemoError('Người dùng có dữ liệu liên kết.', 409)
+          s.users = s.users.filter((p) => p.id !== person.id); result = null
+        }
+      }
     } else if (parts[1] === 'generated-designs' && method === 'PATCH' && parts[3] === 'moderation') {
       const design = find('designs', parts[2]); if (!['APPROVED', 'REJECTED'].includes(body.moderationStatus)) throw new DemoError('Trạng thái duyệt không hợp lệ.'); result = update(design, { moderationStatus: body.moderationStatus })
     } else if (parts[1] === 'subscription-plans') {
-      if (!parts[2]) { if (get) result = s.plans; else if (method === 'POST') result = create('plans', { ...body, name: body.name + ' · DEMO' }) }
-      else { const plan = find('plans', parts[2]); if (method === 'PATCH') { if (body.code !== plan.code && s.subscriptionOrders.some((o) => o.planId === plan.id)) throw new DemoError('Không đổi mã gói đã có đơn mua.', 409); result = update(plan, body) } else if (method === 'POST' && parts[3] === 'archive') result = update(plan, { status: 'ARCHIVED' }) }
+      if (!parts[2]) {
+        if (get) result = s.plans
+        else if (method === 'POST') {
+          if (s.plans.some((plan) => plan.code === body.code)) throw new DemoError('Mã gói đã tồn tại.', 409)
+          result = create('plans', { ...body, name: body.name + ' · DEMO' })
+        }
+      } else {
+        const plan = find('plans', parts[2])
+        if (method === 'PATCH') {
+          if (body.code != null && body.code !== plan.code) {
+            if (s.subscriptionOrders.some((order) => order.planId === plan.id)) throw new DemoError('Không đổi mã gói đã có đơn mua.', 409)
+            if (s.plans.some((item) => item.id !== plan.id && item.code === body.code)) throw new DemoError('Mã gói đã tồn tại.', 409)
+          }
+          result = update(plan, body)
+        } else if (method === 'POST' && parts[3] === 'archive') {
+          if (plan.status === 'ARCHIVED') throw new DemoError('Gói đã được lưu trữ.', 409)
+          result = update(plan, { status: 'ARCHIVED' })
+        }
+      }
     } else if (parts[1] === 'reviews' && method === 'PATCH') {
       const order = find('orders', parts[2]); if (!order.review || !['PUBLISHED', 'HIDDEN'].includes(body.status)) throw new DemoError('Đánh giá/trạng thái không hợp lệ.'); order.review.status = body.status; result = order.review
     } else if (parts[1] === 'bakery-payments') {
@@ -74,9 +111,16 @@ export function routeDemo(store, path, method, body, query, user) {
           const approved = parts[3] === 'approve'
           if (approved && (payment.amount !== order.totalAmount || payment.currency !== order.currency)) throw new DemoError('Chứng từ không khớp.')
           if (!approved && !body.reviewNote?.trim()) throw new DemoError('Cần lý do từ chối.')
-          payment.status = approved ? 'APPROVED' : 'REJECTED'; payment.reviewNote = body.reviewNote
-          order.status = approved ? 'COMPLETED' : 'PENDING_PAYMENT'
-          const subscription = approved ? create('subscriptions', { bakeryId: order.bakeryId, planId: order.planId, planCode: order.planCodeSnapshot, status: 'ACTIVE', periodStart: stamp(), periodEnd: future(30) }) : null
+          if (approved && (order.period || s.subscriptions.some((period) => period.sourceOrderId === order.id))) throw new DemoError('Đơn mua gói đã có kỳ dịch vụ.', 409)
+          const now = Date.now(), months = order.billingPeriodMonths
+          if (approved && (!Number.isInteger(months) || months < 1)) throw new DemoError('Kỳ đăng ký chưa hợp lệ.', 422)
+          for (const period of s.subscriptions) if (approved && period.bakeryId === order.bakeryId && period.status === 'ACTIVE' && Date.parse(period.periodEnd) <= now) period.status = 'EXPIRED'
+          const start = Math.max(now, ...s.subscriptions.filter((period) => period.bakeryId === order.bakeryId && ['ACTIVE', 'SCHEDULED'].includes(period.status) && Date.parse(period.periodEnd) > now).map((period) => Date.parse(period.periodEnd)))
+          const end = new Date(start), day = end.getUTCDate()
+          if (approved) { end.setUTCDate(1); end.setUTCMonth(end.getUTCMonth() + months); const lastDay = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth() + 1, 0)).getUTCDate(); end.setUTCDate(Math.min(day, lastDay)) }
+          payment.status = approved ? 'APPROVED' : 'REJECTED'; payment.reviewNote = body.reviewNote; payment.reviewedAt = new Date(now).toISOString(); payment.reviewedByAdminId = user.id
+          order.status = approved ? 'COMPLETED' : Date.parse(order.expiresAt) <= now ? 'EXPIRED' : 'PENDING_PAYMENT'
+          const subscription = approved ? create('subscriptions', { bakeryId: order.bakeryId, sourceOrderId: order.id, planId: order.planId, planCode: order.planCodeSnapshot, featuresSnapshot: clone(order.featuresSnapshot), status: start > now ? 'SCHEDULED' : 'ACTIVE', periodStart: new Date(start).toISOString(), periodEnd: end.toISOString() }) : null
           order.period = subscription
           result = { payment, order: subOrderDto(order), subscription }
         }
@@ -96,10 +140,10 @@ export function routeDemo(store, path, method, body, query, user) {
         if (!kind && method === 'PATCH') result = update(bakery, body)
         else if (kind === 'submit-for-approval' && method === 'POST') result = update(bakery, { status: 'PENDING_APPROVAL' })
         else if (kind === 'operations') { if (get) result = bakery.operations; else if (method === 'PUT') { bakery.operations = body; bakery.primaryAddress = body.addresses.find((a) => a.primary) || body.addresses[0]; result = body } }
-        else if (kind === 'subscription' && get) result = { bakeryId: bakery.id, currentSubscription: s.subscriptions.find((p) => p.bakeryId === bakery.id && p.status === 'ACTIVE') || null, scheduledSubscription: null, features: {} }
+        else if (kind === 'subscription' && get) { const current = s.subscriptions.find((p) => p.bakeryId === bakery.id && p.status === 'ACTIVE') || null; result = { bakeryId: bakery.id, currentSubscription: current, scheduledSubscription: null, features: clone(current?.featuresSnapshot || {}) } }
         else if (kind === 'subscription-orders') {
           if (get) result = page(s.subscriptionOrders.filter((o) => o.bakeryId === bakery.id).map(subOrderDto))
-          else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); const plan = find('plans', body.planId); result = create('subscriptionOrders', { bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId, planNameSnapshot: plan.name, planCodeSnapshot: plan.code, featuresSnapshot: plan.features, billingPeriodMonths: plan.billingPeriodMonths, totalAmount: plan.monthlyPrice, currency: plan.currency, status: 'PENDING_PAYMENT', expiresAt: future(3), payments: [] }) }
+          else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); const plan = find('plans', body.planId); if (plan.status !== 'ACTIVE') throw new DemoError('Gói đã ngừng cung cấp hoặc được lưu trữ.', 422); result = create('subscriptionOrders', { bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId, planNameSnapshot: plan.name, planCodeSnapshot: plan.code, featuresSnapshot: clone(plan.features), billingPeriodMonths: plan.billingPeriodMonths, totalAmount: Math.round(Number(plan.monthlyPrice) * plan.billingPeriodMonths * 100) / 100, currency: plan.currency, status: 'PENDING_PAYMENT', expiresAt: future(3), payments: [] }) }
         } else if (kind === 'products') {
           if (!parts[3]) { if (get) result = page(s.products.filter((p) => p.bakeryId === bakery.id)); else if (method === 'POST') result = create('products', { ...body, bakeryId: bakery.id, status: 'DRAFT', images: [], options: { groups: [] } }) }
           else {

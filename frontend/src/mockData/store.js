@@ -88,7 +88,8 @@ export function createDemoStore(storage) {
       for (const selected of input.addOns || []) { const addOn = find('addOns', selected.addOnId); if (selectedExtras.has(addOn.id) || addOn.bakeryId !== bakeryId || !addOn.active || !Number.isInteger(selected.quantity) || selected.quantity < 1) throw new DemoError('Phụ kiện không hợp lệ.'); selectedExtras.add(addOn.id); extras += addOn.price * selected.quantity }
     }
     const bakery = find('bakeries', bakeryId), subtotal = product ? unitPrice * quantity + extras : offer.cakePrice + offer.addOnTotal, deliveryFee = offer?.deliveryFee ?? 30000
-    const order = { id: id(), customerId: user.id, bakeryId, bakeryName: bakery.name, customerName: user.displayName || user.fullName || user.name || 'Khách', customerPhone: address.recipientPhone, orderNumber: 'MẪU-' + state.nextId, orderSource: offer ? 'ACCEPTED_OFFER' : 'DIRECT_CATALOG', status: 'PENDING', currency: 'VND', subtotal, deliveryFee, totalAmount: subtotal + deliveryFee, neededAt: input.requestedDeliveryAt || (offer && find('requests', offer.cakeRequestId).neededAt) || new Date(Date.now() + 7 * 86400000).toISOString(), customerNote: input.customerNote || '', createdAt: stamp(), items: [{ id: id(), sourceProductId: product?.id || null, name: product?.name || find('requests', offer.cakeRequestId).title, quantity, unitPrice: subtotal / quantity, lineTotal: subtotal, itemType: offer ? 'CUSTOM_CAKE' : 'CATALOG_PRODUCT', configuration: { optionSelections: input.optionSelections || [], addOns: input.addOns || [] } }], statusHistory: [], review: null, deliveryAddress: structuredClone(address) }
+    const createdAt = stamp(), changedByName = user.displayName || user.fullName || user.name || null
+    const order = { id: id(), customerId: user.id, bakeryId, bakeryName: bakery.name, customerName: user.displayName || user.fullName || user.name || 'Khách', customerPhone: address.recipientPhone, orderNumber: 'MẪU-' + state.nextId, orderSource: offer ? 'ACCEPTED_OFFER' : 'DIRECT_CATALOG', status: 'PENDING', currency: 'VND', subtotal, deliveryFee, totalAmount: subtotal + deliveryFee, neededAt: input.requestedDeliveryAt || (offer && find('requests', offer.cakeRequestId).neededAt) || new Date(Date.now() + 7 * 86400000).toISOString(), customerNote: input.customerNote || '', createdAt, items: [{ id: id(), sourceProductId: product?.id || null, name: product?.name || find('requests', offer.cakeRequestId).title, quantity, unitPrice: subtotal / quantity, lineTotal: subtotal, itemType: offer ? 'CUSTOM_CAKE' : 'CATALOG_PRODUCT', configuration: { optionSelections: input.optionSelections || [], addOns: input.addOns || [] } }], statusHistory: [{ fromStatus: null, toStatus: 'PENDING', changedAt: createdAt, changedBy: user.id, changedByName, note: 'Đơn hàng được tạo.' }], review: null, deliveryAddress: structuredClone(address) }
     state.orders.unshift(order)
     if (offer) { offer.status = 'ACCEPTED'; const request = find('requests', offer.cakeRequestId); request.status = 'OFFER_SELECTED'; for (const other of state.offers) if (other.cakeRequestId === request.id && other.id !== offer.id && other.status === 'PENDING') other.status = 'REJECTED'; for (const chat of state.conversations) if (chat.cakeRequestId === request.id && chat.bakeryId === bakeryId) chat.orderId = order.id }
     return order
@@ -99,8 +100,13 @@ export function createDemoStore(storage) {
     if (has(user, 'CUSTOMER') && order.customerId === user.id && !has(user, 'ADMIN')) { if (targetStatus !== 'CANCELLED') throw new DemoError('Khách chỉ được hủy đơn.', 403) }
     else { if (scope === 'all') requireUser(user, 'ADMIN'); else bakeryAccess(user, order.bakeryId) }
     if (!transitions[order.status]?.includes(targetStatus)) throw new DemoError('Chuyển trạng thái không hợp lệ.', 409)
-    order.statusHistory.push({ fromStatus: order.status, toStatus: targetStatus, changedAt: stamp(), note: reason.trim(), changedBy: user.id }); order.status = targetStatus
-    if (targetStatus === 'COMPLETED') order.completedAt = stamp()
+    if (order.statusHistory == null) order.statusHistory = []
+    if (!Array.isArray(order.statusHistory)) throw new DemoError('Chưa thể đọc lịch sử đơn hàng. Vui lòng tải lại.', 409)
+    const changedAt = stamp()
+    order.statusHistory.push({ fromStatus: order.status, toStatus: targetStatus, changedAt, note: reason.trim(), changedBy: user.id, changedByName: user.displayName || user.fullName || user.name || null }); order.status = targetStatus
+    order.updatedAt = changedAt
+    if (targetStatus === 'CONFIRMED') order.acceptedAt = changedAt
+    if (targetStatus === 'COMPLETED') order.completedAt = changedAt
     return order
   }
   return {

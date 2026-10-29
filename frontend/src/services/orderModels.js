@@ -40,7 +40,7 @@ export function mapOrder(dto, detail = false) {
       return { id: item.id, sourceProductId: item.sourceProductId, name: text(item.name), itemType: text(item.itemType), configuration: item.configuration ?? null, quantity: Number.isInteger(item.quantity) ? item.quantity : null, unitPrice: catalogMoney(item.unitPrice), lineTotal: catalogMoney(item.lineTotal) }
     })
     order.deliveryAddress = dto.deliveryAddress == null ? null : Object.fromEntries(['recipientName', 'recipientPhone', 'addressLine', 'ward', 'district', 'city', 'deliveryNote'].map((key) => [key, text(dto.deliveryAddress[key])]))
-    order.statusHistory = dto.statusHistory.map((history) => ({ fromStatus: text(history?.fromStatus), toStatus: text(history?.toStatus), note: text(history?.note), changedAt: text(history?.changedAt) }))
+    order.statusHistory = dto.statusHistory.map((history) => ({ fromStatus: text(history?.fromStatus), toStatus: text(history?.toStatus), note: text(history?.note), changedAt: text(history?.changedAt), changedBy: text(history?.changedBy), changedByName: text(history?.changedByName) }))
     order.review = dto.review == null ? null : mapReview(dto.review)
     if (order.review && (order.review.orderId !== order.id || order.review.customerId !== order.customerId)) throw new ApiError('Đánh giá không thuộc đơn/khách hàng.', 502)
   }

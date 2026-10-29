@@ -1,0 +1,33 @@
+.sc-drawer.sc-user-form-dialog, .sc-drawer.sc-user-decision-dialog { overflow: clip; background: #fffaf5; }
+.sc-drawer.sc-user-form-dialog { width: min(31.25rem, calc(100vw - 2rem)); }
+.sc-drawer.sc-user-decision-dialog { width: min(34rem, calc(100vw - 2rem)); }
+.sc-user-form-dialog[open], .sc-user-decision-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-heading { position: static; padding: .8rem 1rem; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-heading h2 { font-size: 1.05rem; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .85rem 1rem; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer { padding: .7rem 1rem; border-top: 1px solid #e0cfc1; background: #faf4ec; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer .sc-action-row { justify-content: flex-end; flex-wrap: nowrap; gap: .5rem; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer .sc-button { width: auto; min-height: 2.3rem; padding: .45rem .75rem; font-size: .8rem; white-space: nowrap; }
+.sc-user-form fieldset { display: grid; min-width: 0; gap: .8rem; }
+.sc-user-form label { display: grid; gap: .35rem; color: #5f4d43; font-size: .8rem; font-weight: 550; }
+.sc-user-form .sc-input { width: 100%; min-width: 0; padding: .55rem .7rem; font-size: .85rem; font-weight: 400; }
+.sc-user-required { color: #a12640; }
+.sc-user-form [aria-invalid="true"] { border-color: #a12640; }
+.sc-user-form .sc-field-error { line-height: 1.45; font-weight: 400; }
+.sc-user-form > [role="alert"] { margin-top: .75rem; }
+.sc-user-decision-content { display: grid; gap: .75rem; }
+.sc-user-decision-content .sc-review-fields { grid-template-columns: minmax(0, 1fr); gap: .55rem; }
+.sc-user-decision-content .sc-review-fields > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .6rem; align-items: baseline; }
+.sc-user-decision-content .sc-review-fields dt { margin: 0; font-size: .75rem; color: #756157; }
+.sc-user-decision-content .sc-review-fields dd { font-size: .83rem; line-height: 1.5; }
+.sc-user-decision-content .sc-review-help { margin: 0; color: #756157; font-size: .8rem; }
+.sc-user-delete-warning { color: #842d3e; background: #fff0f0; border: 1px solid #ecd0d3; padding: .65rem .75rem; border-radius: .55rem; font-size: .8rem; line-height: 1.5; }
+.sc-user-decision-dialog .sc-user-delete-confirm { background: #a32842; border-color: #a32842; color: #fff; }
+.sc-user-decision-dialog .sc-user-delete-confirm:not(:disabled):hover { background: #862039; }
+@media (max-width: 479px) {
+  .sc-drawer.sc-user-form-dialog, .sc-drawer.sc-user-decision-dialog { width: calc(100vw - 1rem); max-height: calc(100dvh - 1rem); }
+  :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-heading,
+  :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-body,
+  :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer { padding: .7rem .75rem; }
+  .sc-user-decision-content .sc-review-fields > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+}

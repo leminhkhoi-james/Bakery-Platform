@@ -1,0 +1,43 @@
+.sc-drawer.sc-review-dialog { inset: 0; margin: auto; width: min(54rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: var(--sc-radius-card); overflow: auto; }
+.sc-drawer.sc-review-dialog--compact { width: min(34rem, calc(100vw - 2rem)); }
+.sc-review-dialog .sc-drawer-heading { padding: 1rem 1.25rem; gap: 1rem; }
+.sc-review-dialog .sc-drawer-body { padding: 0 1.25rem 1.25rem; gap: 0; }
+.sc-review-section { padding-block: 1rem; border-bottom: 1px solid var(--sc-color-border); }
+.sc-review-section:last-child { border-bottom: 0; padding-bottom: 0; }
+.sc-review-section > header { margin-bottom: .75rem; }
+.sc-review-section h3 { font-weight: 650; font-size: .95rem; color: var(--sc-color-primary); }
+.sc-review-section header p, .sc-review-help { font-size: .78rem; color: var(--sc-color-muted); margin-top: .3rem; line-height: 1.6; }
+.sc-review-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem 1.5rem; }
+.sc-review-fields dt { color: var(--sc-color-muted); font-size: .75rem; margin-bottom: .2rem; }
+.sc-review-fields dd { font-size: .875rem; font-weight: 550; overflow-wrap: anywhere; white-space: pre-wrap; }
+.sc-review-fields .is-missing { font-weight: 400; font-style: italic; color: var(--sc-color-muted); }
+.sc-review-section--action { border-top: 2px solid var(--sc-color-border); }
+.sc-review-section--action .sc-action-row { margin-top: .85rem; }
+.sc-admin-filter { display: grid; grid-template-columns: minmax(12rem, 1.3fr) minmax(9rem, .8fr) repeat(2, minmax(10rem, 1fr)) auto; align-items: end; gap: .75rem; }
+.sc-admin-filter label { display: grid; gap: .3rem; min-width: 0; }
+.sc-admin-filter .sc-action-row { flex-wrap: nowrap; gap: .5rem; }
+.sc-admin-filter .sc-button { min-height: var(--sc-control-height); white-space: nowrap; }
+.sc-portal--admin .sc-admin-record-table { width: 100%; min-width: 0; table-layout: fixed; }
+.sc-admin-record-table :is(th, td) { overflow-wrap: anywhere; }
+.sc-admin-record-table small { display: block; color: var(--sc-color-muted); font-size: .75rem; margin-top: .2rem; }
+.sc-admin-record-table th:last-child { width: 10rem; }
+.sc-review-confirm { display: grid; gap: .85rem; padding-top: 1rem; }
+.sc-review-confirm label { display: grid; gap: .3rem; }
+.sc-review-confirm textarea { min-height: 6rem; }
+.sc-review-confirm .sc-action-row { justify-content: flex-end; }
+.sc-moderation-lookup { display: grid; grid-template-columns: minmax(10rem, .8fr) minmax(15rem, 1.5fr) auto; gap: .75rem; align-items: end; }
+.sc-moderation-lookup label { display: grid; gap: .3rem; }
+.sc-user-toolbar { display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.sc-user-filters { display: grid; grid-template-columns: minmax(12rem, 1.4fr) repeat(2, minmax(9rem, 1fr)) auto; align-items: end; gap: .75rem; }
+.sc-user-filters label { display: grid; gap: .3rem; }
+.sc-portal--admin .sc-table.sc-admin-record-table :is(th, td).sc-table-actions { width: 10rem; min-width: 0; }
+@media (max-width: 1023px) { .sc-portal--admin .sc-table.sc-admin-record-table td.sc-table-actions { width: 100%; } }
+.sc-field-error { font-size: .75rem; color: #a32038; }
+@media (max-width: 1150px) { .sc-user-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 539px) { .sc-user-filters { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 767px) { .sc-moderation-lookup { grid-template-columns: minmax(0, 1fr); } .sc-moderation-lookup button { justify-self: start; } }
+.sc-review-proof { display: flex; gap: .65rem; align-items: center; flex-wrap: wrap; margin-top: .75rem; }
+.sc-review-image { max-width: 100%; max-height: 18rem; object-fit: contain; border-radius: .75rem; margin-top: .75rem; }
+@media (max-width: 1250px) { .sc-admin-filter { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sc-admin-filter > .sc-action-row { grid-column: 1 / -1; } }
+@media (max-width: 1023px) { .sc-admin-record-table, .sc-admin-record-table tbody, .sc-admin-record-table tr, .sc-admin-record-table td { display: block; width: 100%; } .sc-admin-record-table thead { display: none; } .sc-admin-record-table tbody tr { padding: .65rem; border-bottom: 1px solid var(--sc-color-border); height: auto !important; } .sc-admin-record-table td { height: auto !important; min-width: 0 !important; max-width: none !important; padding: .4rem .35rem !important; border: 0; } .sc-admin-record-table td[data-label]::before { content: attr(data-label); display: block; color: var(--sc-color-muted); font-size: .7rem; margin-bottom: .15rem; } }
+@media (max-width: 539px) { .sc-review-fields, .sc-admin-filter { grid-template-columns: minmax(0, 1fr); } .sc-review-dialog .sc-drawer-heading { padding: .85rem 1rem; } .sc-review-dialog .sc-drawer-body { padding-inline: 1rem; } }

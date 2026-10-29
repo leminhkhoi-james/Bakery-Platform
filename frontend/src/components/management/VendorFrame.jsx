@@ -1,3 +1,4 @@
+import { cleanPresentationLabel } from '../../services/uiLabels.js'
 import { displayReference } from '../../services/displayReference.js'
 import React, { useState } from 'react'
 import VendorSidebar from '../../layouts/vendor/VendorSidebar.jsx'
@@ -15,7 +16,7 @@ export function BakerySelector({ bakeryId, onSelect, disabled = false }) {
   const [input, setInput] = useState(bakeryId)
   const [error, setError] = useState('')
   const available = useCatalogResource(loadBakeries, { page: 1, size: 100 })
-  if (available.data?.result.length) return <section className="sc-panel sc-bakery-selector"><label className="font-bold text-primary" htmlFor="managed-bakery">Cửa hàng cần quản lý</label><select id="managed-bakery" className={inputClass} disabled={disabled} value={bakeryId || ''} onChange={(e) => onSelect(e.target.value)}><option value="">Chọn cửa hàng</option>{bakeryId && !available.data.result.some((bakery) => bakery.id === bakeryId) && <option value={bakeryId}>Cửa hàng đã chọn</option>}{available.data.result.map((bakery) => <option key={bakery.id} value={bakery.id}>{bakery.name}</option>)}</select><details><summary className="cursor-pointer text-xs">Nhập mã cửa hàng khác</summary><input className={inputClass} value={input} onChange={(e) => setInput(e.target.value)} aria-label="Mã cửa hàng khác" /><button disabled={disabled || !isCatalogId(input)} className={buttonClass} onClick={() => onSelect(input)}>Xem cửa hàng</button></details></section>
+  if (available.data?.result.length) return <section className="sc-panel sc-bakery-selector"><label className="font-bold text-primary" htmlFor="managed-bakery">Cửa hàng cần quản lý</label><select id="managed-bakery" className={inputClass} disabled={disabled} value={bakeryId || ''} onChange={(e) => onSelect(e.target.value)}><option value="">Chọn cửa hàng</option>{bakeryId && !available.data.result.some((bakery) => bakery.id === bakeryId) && <option value={bakeryId}>Cửa hàng đã chọn</option>}{available.data.result.map((bakery) => <option key={bakery.id} value={bakery.id}>{cleanPresentationLabel(bakery.name, 'Tiệm bánh')}</option>)}</select><details><summary className="cursor-pointer text-xs">Nhập mã cửa hàng khác</summary><input className={inputClass} value={input} onChange={(e) => setInput(e.target.value)} aria-label="Mã cửa hàng khác" /><button disabled={disabled || !isCatalogId(input)} className={buttonClass} onClick={() => onSelect(input)}>Xem cửa hàng</button></details></section>
   if (available.error) return <ApiErrorMessage error={available.error} retry={available.reload} />
   return <form className="sc-panel sc-bakery-selector" onSubmit={(event) => {
     event.preventDefault()

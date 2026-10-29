@@ -19,7 +19,7 @@ export default function Preview() {
  useEffect(() => { queueMicrotask(() => setStatus(currentUser ? 'authenticated' : 'anonymous')) }, [])
  const choose = actor => { persistActor(actor); setUser(actor); setStatus(actor ? 'authenticated' : 'anonymous') }
  return <AuthContext.Provider value={{ user, status, roles: user?.roles || [], isAuthenticated: !!user, logout: async () => choose(null), restoreSession: async () => {} }}>
- <div aria-label="Vai trò kiểm thử" style={{ position:'relative', zIndex:100, padding:8, display:'flex', gap:8, flexWrap:'wrap', background:'#fff' }}>{actors.map((actor, i) => <button className="sc-button" key={actor.id} onClick={() => choose(actor)}>{['Khách hàng', 'Chủ tiệm', 'Quản trị viên'][i]}</button>)}<button className="sc-button" onClick={() => choose(null)}>Đăng xuất kiểm thử</button></div>
+ <div aria-label="Vai trò kiểm thử" style={{ position:'fixed', bottom:0, right:0, zIndex:100, padding:4, display:'flex', gap:8, flexWrap:'wrap', background:'#fff' }}>{actors.map((actor, i) => <button className="sc-button" key={actor.id} onClick={() => choose(actor)}>{['Khách hàng', 'Chủ tiệm', 'Quản trị viên'][i]}</button>)}<button className="sc-button" onClick={() => choose(null)}>Đăng xuất kiểm thử</button></div>
  <App />
  </AuthContext.Provider>
 }

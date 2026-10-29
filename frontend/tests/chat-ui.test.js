@@ -80,8 +80,11 @@ test('Legacy Chat entry explicitly blocks missing Marketplace context and opens 
   assert.doesNotMatch(html, /Chef Jean|Đã xem|Trực tuyến|10:05|Pikachu/)
   let route
   const tree = EntryModal({ vendor: true, onClose: () => {}, onNavigate: (value) => { route = value } })
-  tree.props.children.props.children.at(-1).props.onClick()
+  tree.props.children({ requestClose: () => true }).props.children.at(-1).props.onClick()
   assert.equal(route, 'vendor-chat')
+  route = null
+  tree.props.children({ requestClose: () => false }).props.children.at(-1).props.onClick()
+  assert.equal(route, null, 'blocked close cannot navigate behind the modal')
 })
 test('Customer and Vendor chat pages use protected identity and real loading states without demo data', () => {
   const customer = withUser(CustomerPage, { routeSearch: '?conversationId=' + conversationId, onNavigate: () => {} })

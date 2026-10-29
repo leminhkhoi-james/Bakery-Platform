@@ -37,11 +37,8 @@
 .sc-dashboard-distribution .sc-dashboard-link { margin-top: auto; }
 .sc-dashboard-icon { display: inline-flex; justify-content: center; align-items: center; width: 2.25rem; height: 2.25rem; flex-shrink: 0; color: var(--sc-color-primary); background: #f7edf0; border-radius: .7rem; }
 .sc-dashboard-recent { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 1rem; }
-.sc-dashboard-recent .sc-table { min-width: 44rem; table-layout: fixed; }
 .sc-dashboard-recent .sc-table td { height: 3.75rem; font-size: .78rem; }
-.sc-dashboard-recent .sc-table td:nth-child(4) { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .sc-dashboard-recent .sc-table :is(strong, small) { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sc-dashboard-recent .sc-table :is(th, td) { padding: .65rem .7rem; }
 .sc-dashboard-activity { display: grid; gap: 1rem; list-style: none; margin: 1rem 0 0; padding: 0; }
 .sc-dashboard-activity li { display: flex; align-items: flex-start; gap: .65rem; }
 .sc-dashboard-activity li > div { min-width: 0; flex: 1; }

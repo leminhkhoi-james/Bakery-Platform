@@ -74,7 +74,7 @@ export default function AdminSidebar({
   ]
 
   const sidebarContent = (
-    <aside className="w-64 h-full bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between py-4 px-2.5 select-none">
+    <aside className="sc-admin-sidebar w-64 h-full bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between py-4 px-2.5 select-none">
       {/* Top Branding & Main Navigation */}
       <div>
         {/* Brand Logo & Admin Badge */}
@@ -84,6 +84,7 @@ export default function AdminSidebar({
             {onCloseMobile && (
               <button
                 onClick={onCloseMobile}
+                aria-label="Đóng menu"
                 className="md:hidden p-1 text-on-surface-variant hover:text-primary rounded-lg cursor-pointer"
               >
                 <span className="material-symbols-outlined text-xl">close</span>
@@ -153,7 +154,7 @@ export default function AdminSidebar({
           <span className="material-symbols-outlined text-lg text-outline">
             storefront
           </span>
-          <span>Marketplace</span>
+          <span>Về trang chủ</span>
         </button>
       </div>
     </aside>

@@ -3,7 +3,7 @@ import { before, after, test } from 'node:test'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createServer } from 'vite'
-import { userFeedback, publicCopy, cleanPresentationLabel } from '../src/services/uiLabels.js'
+import { userFeedback, publicCopy, cleanPresentationLabel, uiLabel } from '../src/services/uiLabels.js'
 
 let vite, ApiState, ResourceState, ProductCard, RefreshButton, CatalogState
 before(async () => {
@@ -56,4 +56,27 @@ test('Source markers are removed only from presentation, while meaningful names 
   assert.equal(publicCopy('Ảnh mockData có sẵn', 'Phác thảo tham khảo'), 'Phác thảo tham khảo')
   assert.equal(publicCopy('Kem tươi và dâu Đà Lạt'), 'Kem tươi và dâu Đà Lạt')
   assert.deepEqual(record, { id: 'original', name: 'Tiệm Hoa · DEMO', reference: 'DEMO-SUB-101' })
+})
+
+test('Legacy marker variants never leak into labels, status badges or explanatory copy', () => {
+  for (const value of ['Tiệm Hoa [DEMO]', 'Tiệm Hoa (Dữ liệu mẫu)', 'Tiệm Hoa • mockData', 'DEMO: Tiệm Hoa']) assert.equal(cleanPresentationLabel(value), 'Tiệm Hoa')
+  for (const value of ['DEMO', 'API', 'mock data', 'Dữ liệu mẫu']) {
+    assert.equal(cleanPresentationLabel(value, 'Chưa có thông tin'), 'Chưa có thông tin')
+    assert.equal(uiLabel(value, 'Chưa có trạng thái'), 'Chưa có trạng thái')
+    assert.equal(publicCopy(value, 'Vui lòng thử lại.'), 'Vui lòng thử lại.')
+  }
+  assert.equal(publicCopy('DEMO_1', 'Gói dịch vụ'), 'Gói dịch vụ')
+  assert.equal(uiLabel('ACTIVE'), 'Đang hoạt động')
+  assert.equal(cleanPresentationLabel('La Crème Pâtisserie'), 'La Crème Pâtisserie')
+})
+
+test('Product cards hide legacy source annotations without changing the navigation record', () => {
+  const product = { id: 'original', title: 'Bánh dâu [DEMO]', vendor: 'Tiệm Hoa · DEMO', description: 'Dữ liệu mẫu lấy từ backend API', price: 200000 }
+  const html = render(ProductCard, { product })
+  assert.doesNotMatch(html, /DEMO|Dữ liệu mẫu|backend|API/)
+  assert.match(html, /Bánh dâu/); assert.match(html, /Tiệm Hoa/)
+  let selected
+  ProductCard({ product, onNavigate: (route, record) => { selected = { route, record } } }).props.children[0].props.onClick()
+  assert.equal(selected.route, 'product-detail'); assert.equal(selected.record, product)
+  assert.equal(product.title, 'Bánh dâu [DEMO]')
 })

@@ -1,7 +1,8 @@
+import { bakeryReviewText } from '../../services/bakeryReviewModels.js'
 import { displayReference } from '../../services/displayReference.js'
 import RefreshButton from '../common/RefreshButton.jsx'
 import EntityActionButtons from '../common/EntityActionButtons.jsx'
-import { uiLabel } from '../../services/uiLabels.js'
+import { uiLabel, cleanPresentationLabel, publicCopy } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { useAuth } from '../../context/useAuth.js'
@@ -20,13 +21,13 @@ export function CreateBakery({ onCreated }) {
   const { roles } = useAuth()
   const [busy, setBusy] = useState(false), [error, setError] = useState(null), [created, setCreated] = useState(null)
   if (!roles.includes('BAKERY_OWNER')) return <p>Chỉ chủ tiệm được tạo cửa hàng.</p>
-  if (created) return <section className={panelClass}><p role="status" className="break-all">Đã tạo tiệm {created.name}: {displayReference(created.id, 'SHOP')} · {uiLabel(created.status)}</p><p>Tiếp tục cấu hình vận hành và gửi duyệt ở hồ sơ phía trên.</p><button type="button" className={buttonClass} onClick={() => setCreated(null)}>Tạo một tiệm khác</button></section>
+  if (created) return <section className={panelClass}><p role="status" className="break-all">Đã tạo tiệm {cleanPresentationLabel(created.name, 'Tiệm bánh')}: {displayReference(created.id, 'SHOP')} · {uiLabel(created.status)}</p><p>Tiếp tục cấu hình vận hành và gửi duyệt ở hồ sơ phía trên.</p><button type="button" className={buttonClass} onClick={() => setCreated(null)}>Tạo một tiệm khác</button></section>
   return <><BakeryProfileForm create busy={busy} onSave={async (input) => {
     if (busy) return
     setBusy(true); setError(null)
     try { const bakery = await vendorManagementService.createBakery(input); setCreated(bakery); onCreated(bakery) }
     catch (failure) { setError(failure); return false } finally { setBusy(false) }
-  }} />{error && <><ApiErrorMessage error={error} /><p className="text-sm">Nếu chưa nhận được phản hồi, hãy kiểm tra danh sách tiệm trước khi gửi lại để tránh tạo trùng.</p></>}{created && <p role="status" className="break-all">Đã tạo tiệm {created.name}: {displayReference(created.id, 'SHOP')} · {uiLabel(created.status)}</p>}</>
+  }} />{error && <><ApiErrorMessage error={error} /><p className="text-sm">Nếu chưa nhận được phản hồi, hãy kiểm tra danh sách tiệm trước khi gửi lại để tránh tạo trùng.</p></>}{created && <p role="status" className="break-all">Đã tạo tiệm {cleanPresentationLabel(created.name, 'Tiệm bánh')}: {displayReference(created.id, 'SHOP')} · {uiLabel(created.status)}</p>}</>
 }
 
 export default function BakeryManager({ bakeryId, initialProfile }) {
@@ -35,7 +36,7 @@ export default function BakeryManager({ bakeryId, initialProfile }) {
   const profile = useCatalogResource(loadVendorProfile, { bakeryId })
   const [confirmedProfile, setProfile] = useState(initialProfile?.id === bakeryId ? initialProfile : null), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [revision, setRevision] = useState(0)
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
-  const current = confirmedProfile || profile.data
+  const current = profile.refreshing ? confirmedProfile || profile.data : profile.data || confirmedProfile
   async function mutate(operation, message) {
     if (busy || !canEdit) return false
     setBusy(true); setError(null)
@@ -44,7 +45,7 @@ export default function BakeryManager({ bakeryId, initialProfile }) {
   }
   return <div className="space-y-5"><section className={panelClass}><h2 className="flex items-center gap-2 text-xl font-bold text-primary"><Icon name="storefront" /> Hồ sơ cửa hàng</h2><ApiState resource={membership}><p>Quyền quản lý: {uiLabel(membership.data?.memberRole, 'Chưa xác nhận')}.</p></ApiState>
     {profile.status === 'loading' ? <p role="status">Đang tải hồ sơ công khai…</p> : profile.error?.status === 404 ? <p>Hồ sơ tiệm chưa được công khai hoặc chưa thể tải. Chủ tiệm có thể cập nhật thông tin cần thay đổi.</p> : profile.error ? <ApiErrorMessage error={profile.error} retry={profile.reload} /> : null}
-    {current && <><h3 className="font-bold">{current.name}</h3><p>{current.description || 'Chưa có mô tả.'}</p>{confirmedProfile?.status && <p>Trạng thái hiện tại: <StatusBadge status={confirmedProfile.status} /></p>}</>}<RefreshButton onClick={profile.reload} className="underline">Tải lại hồ sơ công khai</RefreshButton>
+    {current && <><h3 className="font-bold">{cleanPresentationLabel(current.name, 'Tiệm bánh')}</h3><p>{publicCopy(current.description, 'Chưa có mô tả.')}</p>{current.status && <p>Trạng thái hiện tại: <StatusBadge status={current.status} /></p>}{current.status === 'DRAFT' && current.reviewDecision?.status === 'RETURNED' && <div className="sc-note"><strong>Hồ sơ đã được trả lại</strong><p>Lý do trả hồ sơ: {publicCopy(bakeryReviewText(current.reviewDecision.reason), 'Chưa có lý do được ghi nhận.')}</p></div>}</>}<RefreshButton onClick={profile.reload} className="underline">Tải lại hồ sơ công khai</RefreshButton>
   </section>{canEdit && <>
     <BakeryProfileForm key={revision} profile={current} busy={busy} onSave={(input) => mutate(() => vendorManagementService.updateBakery(bakeryId, input), 'Đã cập nhật hồ sơ. Đang tải lại thông tin.')} />
     {current?.operations ? <BakeryOperationsForm key={'operations-' + revision} operations={current.operations} busy={busy} onSave={(input) => mutate(async () => {

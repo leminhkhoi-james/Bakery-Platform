@@ -24,6 +24,61 @@ function setup(upstream = () => response()) {
 const request = (runtime, path, method = 'GET', body) => runtime.fetch('/api/v1' + path, { method, body: body ? JSON.stringify(body) : undefined })
 const data = async (res) => (await res.json()).data
 
+test('Plan edits, pause and archive keep purchased snapshots and block new purchases after availability ends', async () => {
+  const app = setup(); app.as(vendor)
+  const plan = app.store.state.plans[0], bakery = app.store.state.bakeries[0]
+  plan.billingPeriodMonths = 3
+  const order = await data(await request(app, '/bakeries/' + bakery.id + '/subscription-orders', 'POST', { planId: plan.id }))
+  const before = structuredClone(order)
+  assert.equal(order.totalAmount, plan.monthlyPrice * 3)
+  app.as(admin)
+  await request(app, '/admin/subscription-plans/' + plan.id, 'PATCH', { name: 'Tên mới', monthlyPrice: 999999, features: { MAX_PRODUCTS: '999' }, status: 'INACTIVE' })
+  const stored = app.store.state.subscriptionOrders.find((item) => item.id === order.id)
+  assert.deepEqual(stored.featuresSnapshot, before.featuresSnapshot)
+  assert.equal(stored.totalAmount, before.totalAmount); assert.equal(stored.planNameSnapshot, before.planNameSnapshot)
+  app.as(vendor)
+  assert.equal((await request(app, '/bakeries/' + bakery.id + '/subscription-orders', 'POST', { planId: plan.id })).status, 422)
+  app.as(admin)
+  assert.equal((await request(app, '/admin/subscription-plans/' + plan.id, 'PATCH', { code: 'DIFFERENT' })).status, 409)
+  assert.equal((await request(app, '/admin/subscription-plans/' + plan.id + '/archive', 'POST')).status, 200)
+  assert.equal((await request(app, '/admin/subscription-plans/' + plan.id + '/archive', 'POST')).status, 409)
+  assert.deepEqual(stored.featuresSnapshot, before.featuresSnapshot)
+  assert.equal(app.calls.length, 0, 'local plan writes never reach the real transport')
+})
+
+test('An activated subscription retains its purchased benefits after its plan is edited and archived', async () => {
+  const app = setup(); app.as(admin)
+  const payment = app.store.state.payments[0]
+  const bought = app.store.state.subscriptionOrders.find((order) => order.id === payment.subscriptionOrderId)
+  const expected = structuredClone(bought.featuresSnapshot)
+  const approved = await data(await request(app, '/admin/bakery-payments/' + payment.id + '/approve', 'POST', {}))
+  const end = approved.subscription.periodEnd
+  await request(app, '/admin/subscription-plans/' + bought.planId, 'PATCH', { monthlyPrice: 123000, features: { MAX_PRODUCTS: '999' }, status: 'INACTIVE' })
+  await request(app, '/admin/subscription-plans/' + bought.planId + '/archive', 'POST')
+  app.as(vendor)
+  const subscription = await data(await request(app, '/bakeries/' + bought.bakeryId + '/subscription'))
+  assert.deepEqual(subscription.features, expected)
+  assert.equal(subscription.currentSubscription.periodEnd, end)
+  assert.deepEqual(app.store.state.subscriptionOrders.find((order) => order.id === bought.id).featuresSnapshot, expected)
+  assert.equal(app.calls.length, 0)
+})
+
+test('Bakery return reason synchronizes through the existing local graph and never reaches the upstream', async () => {
+  const app = setup(); app.as(vendor)
+  const bakery = app.store.state.bakeries[0]
+  bakery.status = 'PENDING_APPROVAL'
+  app.as(admin)
+  const returned = await data(await request(app, '/admin/bakeries/' + bakery.id + '/status', 'PATCH', { status: 'DRAFT', reviewNote: 'Bổ sung số nhà và đường.' }))
+  assert.equal(returned.status, 'DRAFT')
+  assert.equal(returned.reviewDecision.reason, 'Bổ sung số nhà và đường.')
+  const review = await data(await request(app, '/admin/bakeries/' + bakery.id))
+  assert.equal(review.bakery.reviewDecision.status, 'RETURNED')
+  app.as(vendor)
+  const owner = await data(await request(app, '/bakeries/' + bakery.id))
+  assert.equal(owner.reviewDecision.reason, 'Bổ sung số nhà và đường.')
+  assert.equal(owner.status, 'DRAFT'); assert.equal(app.calls.length, 0)
+})
+
 test('empty real lists fall back to contract-valid DEMO data; real data immediately takes priority without merging', async () => {
   let live = empty
   const app = setup(() => response(live))

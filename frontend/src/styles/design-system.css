@@ -208,7 +208,23 @@ button:disabled { opacity: .45; }
 :is(.sc-portal, .sc-customer, .sc-drawer) .sc-table tbody:has(.sc-table-actions) tr { height: 4.5rem; }
 
 /* Refresh controls and feedback keep readable spacing across workspaces. */
-.sc-refresh-button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; max-width: 100%; min-height: 2.5rem; margin-block: .5rem; padding: .55rem .85rem; line-height: 1.4; text-decoration: none; white-space: normal; }
+.sc-button.sc-refresh-button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; max-width: 100%; min-height: 2.25rem; margin: 0; padding: .4rem .7rem; font-size: .8rem; line-height: 1.4; text-decoration: none; white-space: normal; vertical-align: middle; flex-shrink: 0; }
 .sc-refresh-button .sc-icon { flex-shrink: 0; font-size: 1.1rem; }
+.sc-refresh-button > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.sc-toolbar { align-items: end; gap: .75rem; }
+.sc-toolbar-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; min-width: 0; }
+.sc-toolbar-actions > :is(h2, h3, p) { margin: 0; min-width: 0; }
+.sc-toolbar-actions > :is(h2, h3) { flex: 1 1 12rem; }
+.sc-toolbar-actions > label { display: grid; gap: .35rem; min-width: 0; }
+.sc-toolbar-actions > .sc-refresh-button { align-self: end; }
+.sc-section-heading > .sc-actions { gap: .75rem; align-self: center; }
+.sc-bakery-selector { display: grid; gap: .75rem; }
+.sc-bakery-selector > :not(:last-child) { margin-bottom: 0; }
+.sc-bakery-selector details[open] { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }
+.sc-bakery-selector details > summary { flex-basis: 100%; }
+.sc-bakery-selector details > input { flex: 1 1 16rem; min-width: 0; }
+.sc-bakery-selector details > button { flex: 0 0 auto; }
+:is(.sc-panel, .sc-drawer-body, .sc-order-detail) > .sc-refresh-button { display: flex; width: fit-content; margin-block: .5rem; }
+@media (max-width: 639px) { .sc-button.sc-refresh-button { min-height: 2.5rem; } .sc-toolbar-actions > label { flex: 1 1 12rem; } }
 .sc-toolbar > label { display: grid; gap: .35rem; min-width: 0; }
 :is(.sc-panel, .sc-drawer-body) :is(p, dd, [role="alert"], [role="status"]) { overflow-wrap: anywhere; line-height: 1.6; }

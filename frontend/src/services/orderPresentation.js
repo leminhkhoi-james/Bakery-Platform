@@ -1,4 +1,23 @@
 import { displayReference } from './displayReference.js'
+import { cleanPresentationLabel, publicCopy } from './uiLabels.js'
+
+// Sort copies only. Missing timestamps stay visible after dated events; ties retain source order.
+export function orderHistoryEntries(history) {
+  if (!Array.isArray(history)) return []
+  const time = (event) => event?.changedAt && Number.isFinite(Date.parse(event.changedAt)) ? Date.parse(event.changedAt) : Infinity
+  return history.toSorted((a, b) => {
+    const first = time(a), second = time(b)
+    return first === second ? 0 : first < second ? -1 : 1
+  })
+}
+export function orderHistoryNote(value) {
+  const note = publicCopy(cleanPresentationLabel(value))
+  return note === 'Order created' ? 'Đơn hàng được tạo.' : note
+}
+export function orderHistoryActor(event) {
+  const name = publicCopy(cleanPresentationLabel(event?.changedByName))
+  return typeof name === 'string' && /[\p{L}\p{N}]/u.test(name) && !/[0-9a-f]{8}-[0-9a-f-]{27}/i.test(name) ? name : null
+}
 export function formatOrderDate(value) {
   if (!value || !Number.isFinite(Date.parse(value))) return 'Chưa có thời gian'
   const parts = Object.fromEntries(new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).map((part) => [part.type, part.value]))

@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminSidebar from '../../layouts/admin/AdminSidebar.jsx'
 import { useAuth } from '../../context/useAuth.js'
 import { PortalHeader } from '../common/WorkspaceUI.jsx'
 import BackgroundOrnaments from '../common/BackgroundOrnaments.jsx'
 import './admin-header.css'
+import './admin-layout.css'
+import './admin-tables.css'
+import { lockPageScroll } from '../common/modalState.js'
 
 const ADMIN_PAGE_HEADERS = {
   'admin-dashboard': { title: 'Tổng quan hệ thống', description: 'Theo dõi hoạt động và những việc cần xử lý.' },
@@ -19,9 +22,23 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
   const [mobile, setMobile] = useState(false)
   const { user } = useAuth()
   const heading = ADMIN_PAGE_HEADERS[activeTab] || { title }
+  useEffect(() => {
+    if (!mobile) return
+    const releaseScroll = lockPageScroll(document)
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const closeOnDesktop = () => { if (desktop.matches) setMobile(false) }
+    const closeOnEscape = (event) => { if (event.key === 'Escape') setMobile(false) }
+    desktop.addEventListener('change', closeOnDesktop)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      releaseScroll()
+      desktop.removeEventListener('change', closeOnDesktop)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [mobile])
   return <div className="sc-portal sc-portal--admin">
     <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
     <PortalHeader title={heading.title} description={heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} />
-    <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className="sc-workspace">{children}</div></main>
+    <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}>{children}</div></main>
   </div>
 }

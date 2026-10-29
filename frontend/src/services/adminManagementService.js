@@ -31,12 +31,18 @@ export const adminManagementService = {
   async savePlan(id, input) {
     const body = planPayload(input), root = '/admin/subscription-plans'
     const dto = planDto(id ? await api.patch(root + '/' + requireId(id), body) : await api.post(root, body))
-    if (id && dto.id !== id.toLowerCase()) throw new ApiError('Backend trả sai gói.', 502)
+    if (id && dto.id !== id.toLowerCase() || dto.status !== body.status) throw new ApiError('Chưa thể xác nhận đúng gói hoặc trạng thái đã lưu.', 502)
     return dto
   },
   async archivePlan(id) {
     const dto = planDto(await api.post('/admin/subscription-plans/' + requireId(id) + '/archive'))
     if (dto.id !== id.toLowerCase() || dto.status !== 'ARCHIVED') throw new ApiError('Backend chưa xác nhận archive.', 502)
+    return dto
+  },
+  async changePlanStatus(id, status) {
+    if (!['ACTIVE', 'INACTIVE'].includes(status)) throw new ApiError('Chọn trạng thái cung cấp hợp lệ.', 400)
+    const dto = planDto(await api.patch('/admin/subscription-plans/' + requireId(id), { status }))
+    if (dto.id !== id.toLowerCase() || dto.status !== status) throw new ApiError('Chưa thể xác nhận trạng thái gói. Vui lòng tải lại.', 502)
     return dto
   },
   async moderateReview(orderId, status) {

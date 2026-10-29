@@ -3,7 +3,8 @@ import { before, after, test } from 'node:test'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createServer } from 'vite'
-import { formatOrderDate, formatOrderMoney, configurationEntries } from '../src/services/orderPresentation.js'
+import { formatOrderDate, formatOrderMoney, configurationEntries, orderHistoryEntries } from '../src/services/orderPresentation.js'
+import { mapOrder } from '../src/services/orderModels.js'
 import { order as fixture } from './fixtures/vendorOrder.js'
 
 let vite, View, Progress, Detail
@@ -87,4 +88,41 @@ test('Owner actions appear immediately below the progress and before products in
   assert.match(html, /Xác nhận đơn hàng/)
   assert.match(html, /Từ chối đơn hàng/)
   assert.doesNotMatch(html, /<select/)
+})
+
+test('History preserves every record and actor reference through mapping; presentation sorts without mutating source', () => {
+  const events = [
+    { fromStatus: 'CONFIRMED', toStatus: 'BAKING', changedAt: '2026-10-28T01:00:00Z', changedBy: fixture.customerId, changedByName: 'Nguyễn An', note: 'Bắt đầu làm bánh' },
+    { fromStatus: 'PENDING', toStatus: 'CONFIRMED', changedAt: '2026-10-27T01:00:00Z', changedBy: fixture.customerId, note: 'Đã nhận đơn' },
+    { fromStatus: 'BAKING', toStatus: 'READY', changedAt: null, changedBy: fixture.customerId, note: 'Chưa có thời gian' },
+  ]
+  const dto = { ...fixture, status: 'READY', statusHistory: events }, before = structuredClone(dto)
+  const mapped = mapOrder(dto, true), sorted = orderHistoryEntries(mapped.statusHistory)
+  assert.equal(mapped.statusHistory.length, 3); assert.equal(mapped.statusHistory[0].changedBy, fixture.customerId)
+  assert.equal(mapped.statusHistory[0].changedByName, 'Nguyễn An')
+  assert.deepEqual(sorted.map((event) => event.toStatus), ['CONFIRMED', 'BAKING', 'READY'])
+  assert.equal(sorted[2].changedAt, null); assert.equal(mapped.statusHistory[0].toStatus, 'BAKING')
+  assert.deepEqual(dto, before)
+  const html = render(View, { order: mapped })
+  assert.match(html, /3 lần cập nhật|3<!-- --> lần cập nhật/)
+  assert.match(html, /Nguyễn An/); assert.ok(!html.includes(fixture.customerId))
+  assert.ok(html.indexOf('Đã nhận đơn') < html.indexOf('Bắt đầu làm bánh'))
+})
+for (const status of ['PENDING', 'CONFIRMED', 'BAKING', 'DELIVERING', 'COMPLETED']) test('A single saved event stays one event for ' + status + ', without reconstructing previous steps', () => {
+  const order = { ...fixture, status, statusHistory: [{ fromStatus: null, toStatus: status, changedAt: null, note: 'Thao tác DEMO', changedBy: fixture.customerId }] }
+  const html = render(View, { order }), history = html.slice(html.indexOf('<details class="sc-order-history">'))
+  assert.equal((history.match(/<li\b/g) || []).length, 1)
+  assert.match(history, /1 bản ghi lịch sử được lưu/); assert.match(history, /Chưa có thời gian/)
+  assert.ok(!history.includes(fixture.customerId)); assert.doesNotMatch(history, /DEMO|Thao tác DEMO/)
+  assert.equal(order.statusHistory.length, 1)
+})
+test('Empty history and repeated real transitions retain accurate counts', () => {
+  const empty = render(View, { order: { ...fixture, statusHistory: [] } })
+  assert.match(empty, /Chưa có lịch sử trạng thái/)
+  const event = { fromStatus: 'PENDING', toStatus: 'CONFIRMED', changedAt: '2026-10-27T01:00:00Z' }
+  const events = [event, { ...event, note: 'Bản ghi riêng cùng thời gian' }]
+  const html = render(View, { order: { ...fixture, statusHistory: events } })
+  const history = html.slice(html.indexOf('<details class="sc-order-history">'))
+  assert.equal((history.match(/<li\b/g) || []).length, 2)
+  assert.deepEqual(orderHistoryEntries(events), events)
 })

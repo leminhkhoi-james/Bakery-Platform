@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ModalSurface from './ModalSurface.jsx'
 
 /**
  * SweetCake Official Legal & Platform Policy Modal Component
@@ -46,15 +47,9 @@ export default function PolicyModal({
   ]
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-in fade-in duration-200">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-primary/60 backdrop-blur-md transition-opacity"
-        onClick={onClose}
-      />
-
+    <ModalSurface onClose={onClose} label="Trung tâm pháp lý SweetCake" className="sc-policy-dialog" guardChanges={false}>{({ requestClose }) => <>
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-5xl h-[90vh] bg-surface-container-lowest rounded-3xl shadow-2xl border border-outline-variant/30 flex flex-col overflow-hidden z-10 font-body">
+      <div className="relative w-full max-w-5xl h-full bg-surface-container-lowest rounded-3xl shadow-2xl border border-outline-variant/30 flex flex-col overflow-hidden z-10 font-body">
         {/* Header Bar */}
         <div className="px-6 py-5 bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
@@ -75,7 +70,7 @@ export default function PolicyModal({
           </div>
 
           <button
-            onClick={onClose}
+            onClick={requestClose}
             className="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary flex items-center justify-center transition-colors cursor-pointer shrink-0"
             title="Đóng"
           >
@@ -328,7 +323,7 @@ export default function PolicyModal({
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
             <button
-              onClick={onClose}
+              onClick={requestClose}
               className="w-full sm:w-auto px-8 py-2.5 rounded-xl bg-secondary text-on-secondary hover:bg-secondary/90 font-bold text-xs transition-all shadow-sm cursor-pointer"
             >
               Đã Hiểu &amp; Đồng Ý
@@ -336,6 +331,6 @@ export default function PolicyModal({
           </div>
         </div>
       </div>
-    </div>
+    </>}</ModalSurface>
   )
 }

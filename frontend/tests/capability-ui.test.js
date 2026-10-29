@@ -11,7 +11,7 @@ before(async () => {
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: { id: "11111111-1111-4111-8111-111111111111", roles: ["ADMIN"], displayName: "Capability fixture" }, roles: ["ADMIN"] }; }'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load, params) { globalThis.__capCalls.push({name:load.name,params});return globalThis.__capResources[load.name] || {status:"loading",data:null,error:null,reload(){}}; }'
   }, transform(code, id) {
-    if (['ConfirmAction.jsx', 'AdminVendorsPage.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial)")
+    if (['ConfirmAction.jsx', 'AdminVendorsPage.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial), useRef=(initial)=>globalThis.__capState(()=>({current:initial}))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial)")
   } }] })
   Confirm = (await vite.ssrLoadModule('/src/components/common/ConfirmAction.jsx')).default
   Review = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminVendorsPage.jsx')).BakeryReview
@@ -22,7 +22,7 @@ before(async () => {
   ;(await vite.ssrLoadModule('/src/services/apiClient.js')).setAuthToken('capability-ui-fixture')
 })
 after(async () => { globalThis.fetch = nativeFetch; await vite?.close(); for (const key of ['__capState', '__capCalls', '__capResources']) delete globalThis[key] })
-const nodes = (node) => Array.isArray(node) ? node.flatMap(nodes) : node && typeof node === 'object' ? [node, ...nodes(node.props?.children)] : []
+const nodes = (node) => Array.isArray(node) ? node.flatMap(nodes) : node && typeof node === 'object' ? [node, ...nodes(node.props?.children), ...nodes(node.props?.footer)] : []
 function setup(Component, props = {}, resources = {}) {
   const values = []; let cursor = 0
   globalThis.__capCalls = []; globalThis.__capResources = resources
@@ -40,7 +40,7 @@ test('Confirmation widget does not call mutation before acknowledgement and rese
   await button.props.onClick(); assert.equal(writes, 1); assert.equal(nodes(render()).find((node) => node.type === 'button').props.disabled, true)
 })
 test('CLOSED bakery transition requires additional acknowledgement and keeps real PATCH/reload contract', async () => {
-  let changed = 0; const calls = [], bakery = { id, name: 'Fixture bakery', status: 'PENDING_APPROVAL', operations: { addresses: [], serviceAreas: [] } }
+  let changed = 0; const calls = [], bakery = { id, name: 'Fixture bakery', status: 'ACTIVE', operations: { addresses: [], serviceAreas: [] } }
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...bakery, status: 'CLOSED' } }) }
   const render = setup(Review, { id, onChanged: () => changed++, onClose() {}, onNavigate() {} }, { loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
   const actionPanel = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
@@ -49,6 +49,25 @@ test('CLOSED bakery transition requires additional acknowledgement and keeps rea
   assert.equal(calls.length, 0, 'rendering/selecting actions never sends a mutation')
   await actionPanel.props.onConfirm('CLOSED')
   assert.equal(calls[0].url, '/api/v1/admin/bakeries/' + id + '/status'); assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'CLOSED' }); assert.equal(changed, 1)
+  const updated = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  assert.equal(updated.props.status, 'CLOSED', 'verified response updates the popup while list reload is pending')
+  assert.deepEqual(updated.props.actions, [])
+  assert.equal(await updated.props.onConfirm('ACTIVE'), false)
+  assert.equal(calls.length, 1, 'unavailable actions never issue another request')
+})
+test('Bakery approval uses only the backend checklist and updates footer status after a confirmed response', async () => {
+  const calls = []; let changed = 0
+  const bakery = { id, name: 'Tiệm kiểm thử', status: 'PENDING_APPROVAL', operations: { addresses: [{ isPrimary: true }], serviceAreas: [{ active: true }] } }
+  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...bakery, status: 'ACTIVE' } }) }
+  const render = setup(Review, { id, onChanged() { changed++ }, onClose() {}, onNavigate() {} }, { loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
+  const actions = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  assert.equal(actions.props.actions.find((action) => action.key === 'ACTIVE').disabled, false)
+  assert.equal(calls.length, 0)
+  await actions.props.onConfirm('ACTIVE')
+  assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'ACTIVE' })
+  assert.equal(changed, 1)
+  const updated = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  assert.equal(updated.props.status, 'ACTIVE'); assert.deepEqual(updated.props.actions.map((action) => action.key), ['CLOSED'])
 })
 test('Payment form applies valid date range to GET parameters and rejects reversed dates', () => {
   const render = setup(Payments, { onNavigate() {} })
@@ -61,6 +80,20 @@ test('Payment form applies valid date range to GET parameters and rejects revers
   nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
   assert.ok(nodes(render()).some((node) => node.type?.name === 'ApiErrorMessage' && node.props.error.status === 400))
   assert.equal(globalThis.__capCalls.at(-1).params.submittedFrom, params.submittedFrom)
+})
+
+test('Live bakery return keeps the exact status contract and never pretends the reason was saved', async () => {
+  const calls = [], bakery = { id, name: 'Tiệm kiểm thử', status: 'PENDING_APPROVAL' }
+  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...bakery, status: 'DRAFT' } }) }
+  const render = setup(Review, { id, onChanged() {}, onClose() {}, onNavigate() {} }, { loadAdminBakery: ready({ bakery, members: [] }) })
+  const actions = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
+  assert.equal(await actions.props.onConfirm('DRAFT', '  '), false)
+  assert.equal(calls.length, 0)
+  assert.match(actions.props.actions.find((action) => action.key === 'DRAFT').reasonHelp, /chưa được lưu/)
+  assert.equal(await actions.props.onConfirm('DRAFT', 'Bổ sung địa chỉ.'), true)
+  assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'DRAFT' })
+  const profile = nodes(render()).find((node) => node.type?.name === 'BakeryReviewProfile').props.profile
+  assert.equal(profile.returnReason, null)
 })
 test('Picker renders API records, pagination, state gates and retry; unavailable modules stay out of navigation', () => {
   globalThis.__capCalls = []; globalThis.__capState = (initial) => [initial, () => {}]

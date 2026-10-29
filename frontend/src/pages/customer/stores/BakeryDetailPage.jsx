@@ -1,3 +1,4 @@
+import { cleanPresentationLabel, publicCopy } from '../../../services/uiLabels.js'
 import { useState } from 'react'
 import { loadBakery } from '../../../services/vendorService.js'
 import { loadProducts } from '../../../services/cakeService.js'
@@ -24,13 +25,13 @@ export default function BakeryDetailPage({ routeSearch = '', onNavigate }) {
 
 export function BakeryDetails({ bakery }) {
   return <section className="rounded-2xl border border-outline-variant/20 bg-surface/90 p-6 shadow-sm">
-    {bakery.coverUrl && <CatalogImage src={bakery.coverUrl} alt={bakery.name} className="mb-6 h-48 w-full rounded-2xl object-cover sm:h-64" />}
+    {bakery.coverUrl && <CatalogImage src={bakery.coverUrl} alt={cleanPresentationLabel(bakery.name, 'Tiệm bánh')} className="mb-6 h-48 w-full rounded-2xl object-cover sm:h-64" />}
     <div className="flex flex-col sm:flex-row items-start gap-6">
-      <CatalogImage src={bakery.logoUrl} alt={bakery.name} className="h-24 w-24 shrink-0 rounded-2xl object-cover" />
+      <CatalogImage src={bakery.logoUrl} alt={cleanPresentationLabel(bakery.name, 'Tiệm bánh')} className="h-24 w-24 shrink-0 rounded-2xl object-cover" />
       <div>
-        <h1 className="font-headline-lg text-3xl sm:text-4xl text-primary font-bold">{bakery.name}</h1>
+        <h1 className="font-headline-lg text-3xl sm:text-4xl text-primary font-bold">{cleanPresentationLabel(bakery.name, 'Tiệm bánh')}</h1>
         <p className="mt-2 text-sm text-outline">{bakery.location || 'Tiệm chưa cung cấp địa chỉ.'}</p>
-        <p className="mt-4 whitespace-pre-line text-on-surface-variant">{bakery.description || 'Tiệm chưa cung cấp mô tả.'}</p>
+        <p className="mt-4 whitespace-pre-line text-on-surface-variant">{publicCopy(bakery.description, 'Tiệm chưa cung cấp mô tả.')}</p>
       </div>
     </div>
     {(bakery.operations?.businessHours || []).length > 0 && <details className="mt-6 text-primary">

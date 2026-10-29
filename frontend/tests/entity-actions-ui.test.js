@@ -62,3 +62,20 @@ test('Choice controls show Vietnamese labels while emitting the original enum an
   button(tree, 'Đang hoạt động').props.onClick(); assert.equal(selected, 'ACTIVE')
   for (const status of ['ACTIVE', 'DRAFT', 'CLOSED', 'SUSPENDED', 'PUBLISHED', 'ARCHIVED']) assert.notEqual(uiLabel(status), status)
 })
+
+test('Returning a profile requires a reason, trims it and clears it on cancel', async () => {
+  const calls = []
+  const render = setup({ status: 'PENDING_APPROVAL', actions: [{ key: 'DRAFT', label: 'Trả hồ sơ', reasonLabel: 'Lý do trả hồ sơ', reasonRequired: true }], onConfirm: async (...args) => calls.push(args) })
+  button(render(), 'Trả hồ sơ').props.onClick()
+  assert.equal(button(render(), 'Xác nhận trả hồ sơ').props.disabled, true)
+  await button(render(), 'Xác nhận trả hồ sơ').props.onClick()
+  assert.equal(calls.length, 0)
+  nodes(render()).find((node) => node.type === 'textarea').props.onChange({ target: { value: '  Bổ sung số nhà và đường.  ' } })
+  assert.equal(button(render(), 'Xác nhận trả hồ sơ').props.disabled, false)
+  await button(render(), 'Xác nhận trả hồ sơ').props.onClick()
+  assert.deepEqual(calls, [['DRAFT', 'Bổ sung số nhà và đường.']])
+  button(render(), 'Trả hồ sơ').props.onClick()
+  nodes(render()).find((node) => node.type === 'textarea').props.onChange({ target: { value: 'Không giữ ghi chú khi hủy' } })
+  button(render(), 'Quay lại').props.onClick(); button(render(), 'Trả hồ sơ').props.onClick()
+  assert.equal(nodes(render()).find((node) => node.type === 'textarea').props.value, '')
+})
