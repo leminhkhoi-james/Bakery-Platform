@@ -8,6 +8,17 @@ export function createDemoStore(storage) {
   let state
   try { const saved = JSON.parse(storage?.getItem(DEMO_STORAGE_KEY) || 'null'); if (validSave(saved)) state = saved } catch { /* A corrupt demo save is discarded; auth storage is never read. */ }
   state ||= createSeed()
+  // Repair legacy fixture mapping only; keep IDs, actors and user edits intact.
+  for (const request of state.requests) if (request.legacyId && request.deliveryDistrict?.includes(',')) request.deliveryDistrict = request.deliveryDistrict.split(',').at(-1).trim()
+  for (const bakery of state.bakeries) for (const area of bakery.operations?.serviceAreas || []) if (!Object.hasOwn(area, 'active')) area.active = true
+  // Preserve configured values from older local snapshots using the current wire names.
+  for (const bakery of state.bakeries) {
+    for (const address of bakery.operations?.addresses || []) if (!Object.hasOwn(address, 'isPrimary') && typeof address.primary === 'boolean') address.isPrimary = address.primary
+    for (const hour of bakery.operations?.businessHours || []) {
+      if (!Object.hasOwn(hour, 'opensAt') && typeof hour.openTime === 'string') hour.opensAt = hour.openTime
+      if (!Object.hasOwn(hour, 'closesAt') && typeof hour.closeTime === 'string') hour.closesAt = hour.closeTime
+    }
+  }
   const listeners = new Set()
   const notify = () => { for (const fn of listeners) fn() }
   const save = () => { try { storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch { /* Quota/private mode: demo remains in memory. */ } notify() }

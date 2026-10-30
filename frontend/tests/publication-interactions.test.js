@@ -25,7 +25,7 @@ before(async () => {
     },
     transform(code, id) {
       const path = id.replaceAll('\\', '/').split('?')[0]
-      if (['ProductManager.jsx', 'VendorSubscriptionPage.jsx', 'SubscriptionOrderDetail.jsx', 'AdminPaymentsPage.jsx', 'BakeryManager.jsx'].some((name) => path.endsWith('/' + name))) {
+      if (['ProductManager.jsx', 'VendorSubscriptionPage.jsx', 'VendorFrame.jsx', 'SubscriptionOrderDetail.jsx', 'AdminPaymentsPage.jsx', 'BakeryManager.jsx'].some((name) => path.endsWith('/' + name))) {
         return code.replace(/import React, \{ ([^}]+) \} from 'react'/, (_, hooks) => "import React from 'react'\n" + hooks.split(',').map((hook) => hook.trim() === 'useRef' ? 'const useRef = (value) => globalThis.__flowUseState({ current: value })[0]' : 'const useState = (value) => globalThis.__flowUseState(value)').join('\n'))
       }
     },
@@ -65,7 +65,8 @@ test('Vendor routes preserve real bakery UUID, existing order query and do not l
 })
 test('Actual Subscription sidebar navigation carries bakeryId even when entering directly from URL', () => {
   const calls = [], render = harness(VendorPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: (route) => calls.push(route) })
-  const sidebar = nodes(render()).find((node) => node.type?.name === 'VendorSidebar')
+  const frame = render()
+  const sidebar = nodes(harness(frame.type, frame.props)()).find((node) => node.type?.name === 'VendorSidebar')
   sidebar.props.onNavigate('vendor-menu')
   assert.deepEqual(calls, ['vendor-menu?bakeryId=' + bakeryId]); assert.equal(sidebar.props.showMockBadges, false)
 })
@@ -84,7 +85,7 @@ test('Created DRAFT stays editable/uploadable/publishable even when current prod
     assert.equal(form.props.product.id, productId)
     assert.ok(nodes(tree).some((node) => node.type?.name === 'ProductAssets' && node.props.initialSnapshot?.options?.groups.length === 0))
     const lifecycle = nodes(tree).find((node) => node.type?.name === 'EntityActionButtons'); assert.equal(lifecycle.props.actions.find((action) => action.key === 'publish').disabled, false)
-    assert.match(text(tree), new RegExp(displayReference(productId, 'PRD')))
+    assert.match(text(tree), /Fixture created/); assert.doesNotMatch(text(tree), new RegExp(productId))
   } finally { vendor.saveProduct = original }
 })
 test('Successful bakery creation stops the original form from resubmitting the same bakery inadvertently', async () => {

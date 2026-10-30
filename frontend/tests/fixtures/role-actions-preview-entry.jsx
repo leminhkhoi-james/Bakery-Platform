@@ -9,6 +9,8 @@ import '../../src/styles/artisan-workspace.css'
 import '../../src/styles/legacy-backgrounds.css'
 import '../../src/styles/design-system.css'
 const actors = ['CUSTOMER', 'BAKERY_OWNER', 'ADMIN'].map((role, i) => ({ id: `fa000000-0000-4000-8000-00000000000${i === 2 ? 4 : i + 1}`, displayName: ['Khách kiểm thử', 'Chủ tiệm kiểm thử', 'Quản trị kiểm thử'][i], email: `role${i}@example.invalid`, roles: [role] }))
+// Separate actor for verifying denial; never inherits the first owner's bakery graph.
+actors.push({ id: 'fa000000-0000-4000-8000-000000000005', displayName: 'Chủ tiệm khác', email: 'other-owner@example.invalid', roles: ['BAKERY_OWNER'] })
 const saved = sessionStorage.getItem('sweetcake.role-actions.qa')
 let currentUser = saved ? actors.find(actor => actor.id === saved) || null : null
 installDemoFallback(() => currentUser)
@@ -19,7 +21,7 @@ export default function Preview() {
  useEffect(() => { queueMicrotask(() => setStatus(currentUser ? 'authenticated' : 'anonymous')) }, [])
  const choose = actor => { persistActor(actor); setUser(actor); setStatus(actor ? 'authenticated' : 'anonymous') }
  return <AuthContext.Provider value={{ user, status, roles: user?.roles || [], isAuthenticated: !!user, logout: async () => choose(null), restoreSession: async () => {} }}>
- <div aria-label="Vai trò kiểm thử" style={{ position:'fixed', bottom:0, right:0, zIndex:100, padding:4, display:'flex', gap:8, flexWrap:'wrap', background:'#fff' }}>{actors.map((actor, i) => <button className="sc-button" key={actor.id} onClick={() => choose(actor)}>{['Khách hàng', 'Chủ tiệm', 'Quản trị viên'][i]}</button>)}<button className="sc-button" onClick={() => choose(null)}>Đăng xuất kiểm thử</button></div>
+ <div aria-label="Vai trò kiểm thử" style={{ position:'fixed', bottom:0, right:0, zIndex:100, padding:4, display:'flex', gap:8, flexWrap:'wrap', background:'#fff' }}>{actors.map((actor, i) => <button className="sc-button" key={actor.id} onClick={() => choose(actor)}>{['Khách hàng', 'Chủ tiệm', 'Quản trị viên', 'Chủ tiệm khác'][i]}</button>)}<button className="sc-button" onClick={() => choose(null)}>Đăng xuất kiểm thử</button></div>
  <App />
  </AuthContext.Provider>
 }

@@ -90,7 +90,7 @@ test('Vendor list empty/error/loading and non-owner controls follow membership r
   assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Chưa có danh mục/)
   setup({ loadCatalogEntities: ready([{ id, name: 'Backend fixture category' }]), loadVendorMembership: ready({ memberRole: 'INVALID', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
   const html = render(EntityManager, { bakeryId, kind: 'categories' })
-  assert.match(html, /Backend fixture category/); assert.match(html, /<button disabled=""[^>]*>(?:(?!<\/button>)[\s\S])*Sửa/)
+  assert.match(html, /Backend fixture category/); assert.match(html, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Chỉnh sửa/)
   setup({ loadCatalogEntities: { status: 'error', error: { status: 403 }, data: null, reload() {} } }, ['BAKERY_OWNER'])
   assert.match(render(EntityManager, { bakeryId, kind: 'members' }), /Thử lại/)
   setup(); assert.match(render(EntityManager, { bakeryId, kind: 'categories' }), /Đang tải/)
@@ -113,7 +113,7 @@ test('Known asset snapshot hides image UUIDs while retaining deletion and confir
   setup({ loadProductSnapshot: ready(null) }, ['BAKERY_OWNER'])
   const snapshot = { images: [{ id, displayOrder: 2, primary: true }], options: { groups: [] } }
   const html = render(Assets, { bakeryId, product: { id }, initialSnapshot: snapshot, onSnapshot() {}, onChanged() {} })
-  assert.ok(!html.includes(id)); assert.match(html, /Ảnh 3/); assert.match(html, /Xóa ảnh/); assert.match(html, /Lưu tùy chọn/)
+  assert.ok(!html.includes(id)); assert.match(html, /Ảnh chính/); assert.match(html, /Xóa ảnh/); assert.match(html, /Lưu tùy chọn/)
   assert.match(render(Options, { options: { groups: [] }, onSave() {} }), /Xác nhận lưu toàn bộ tùy chọn/)
 })
 

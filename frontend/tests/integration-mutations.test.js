@@ -42,12 +42,12 @@ test('Vendor real edit/delete callbacks issue PATCH/DELETE and reload resources 
   let reloads = 0; const calls = [], row = { id, name: 'Old', slug: 'old', displayOrder: 0, active: true }
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return options.method === 'DELETE' ? reply(null, 204) : reply({ ...row, name: 'Saved by server' }) }
   const render = harness(Entity, { bakeryId, kind: 'categories' }, { loadCatalogEntities: ready([row], () => reloads++), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
-  button(render(), 'Sửa').props.onClick()
+  nodes(render()).find(node => node.type?.name === 'VendorActionMenu').props.onConfirm('edit')
   const form = nodes(render()).find((node) => node.type?.name === 'CatalogEntityForm')
   await form.props.onSave({ ...row, name: 'Changed' })
   assert.equal(calls[0].options.method, 'PATCH'); assert.equal(reloads, 1)
-  nodes(render()).find((node) => node.type === 'input' && node.props.type === 'checkbox').props.onChange({ target: { checked: true } })
-  await button(render(), 'Xóa').props.onClick()
+  assert.equal(calls.length, 1) // Merely rendering the menu never deletes a record.
+  await nodes(render()).find(node => node.type?.name === 'VendorActionMenu').props.onConfirm('delete')
   assert.equal(calls[1].options.method, 'DELETE'); assert.equal(reloads, 2)
 })
 test('Product options handler keeps server-assigned IDs in parent snapshot and refreshes without fake local options', async () => {
@@ -130,7 +130,7 @@ test('Failed Vendor mutation exposes backend error, never emits success, and ref
   let reloads = 0; globalThis.fetch = async () => reply(null, 409)
   const row = { id, name: 'Category', slug: 'category', displayOrder: 0, active: true }
   const render = harness(Entity, { bakeryId, kind: 'categories' }, { loadCatalogEntities: ready([row], () => reloads++), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
-  button(render(), 'Sửa').props.onClick()
+  nodes(render()).find(node => node.type?.name === 'VendorActionMenu').props.onConfirm('edit')
   await nodes(render()).find((node) => node.type?.name === 'CatalogEntityForm').props.onSave(row)
   const tree = render()
   // The conflict must reach the still-open form, rather than the inert page behind its dialog.

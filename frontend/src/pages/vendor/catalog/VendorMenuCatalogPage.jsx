@@ -3,12 +3,11 @@ import VendorFrame, { BakerySelector } from '../../../components/management/Vend
 import ProductManager from '../../../components/management/ProductManager.jsx'
 import CatalogEntityManager from '../../../components/management/CatalogEntityManager.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
-import { SectionHeading } from '../../../components/common/WorkspaceUI.jsx'
 export default function VendorMenuCatalogPage({ onNavigate, routeSearch }) {
   const { bakeryId, selectBakery } = useVendorBakery(routeSearch)
   const [tab, setTab] = useState('products')
-  return <VendorFrame title="Quản lý mẫu bánh" activeTab="menu" bakeryId={bakeryId} onNavigate={onNavigate}><SectionHeading title="Thực đơn của tiệm" description="Mẫu bánh, danh mục, phụ kiện và đội ngũ trong cùng một không gian quản lý." icon="cake" /><BakerySelector key={'selector:' + bakeryId} bakeryId={bakeryId} onSelect={selectBakery} />
+  return <VendorFrame title="Quản lý mẫu bánh" activeTab="menu" bakeryId={bakeryId} onNavigate={onNavigate}><BakerySelector key={'selector:' + bakeryId} bakeryId={bakeryId} onSelect={selectBakery} />
     <nav aria-label="Quản lý cửa hàng" className="sc-tabs">{[['products', 'Sản phẩm'], ['categories', 'Danh mục'], ['add-ons', 'Phụ kiện'], ['members', 'Chủ tiệm']].map(([value, label]) => <button key={value} aria-pressed={tab === value} onClick={() => setTab(value)} className="transition-colors">{label}</button>)}</nav>
-    {bakeryId ? tab === 'products' ? <ProductManager key={'products:' + bakeryId} bakeryId={bakeryId} /> : <CatalogEntityManager key={bakeryId + tab} kind={tab} bakeryId={bakeryId} /> : <p>Chọn cửa hàng để tải dữ liệu thật.</p>}
+    {bakeryId ? tab === 'products' ? <ProductManager key={'products:' + bakeryId} bakeryId={bakeryId} /> : <CatalogEntityManager key={bakeryId + tab} kind={tab} bakeryId={bakeryId} /> : <p>Chọn cửa hàng để quản lý mẫu bánh.</p>}
   </VendorFrame>
 }

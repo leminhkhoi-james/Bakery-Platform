@@ -1,3 +1,4 @@
+import { requestMatchesBakery } from '../services/vendorRfqModels.js'
 import { addressPayload, normalizeAddressDefault } from './addressModels.js'
 import { DemoError } from './store.js'
 import { future, stamp } from './seed.js'
@@ -46,7 +47,7 @@ export function routeDemo(store, path, method, body, query, user) {
   }
   const create = (kind, data) => { const item = { ...data, id: store.id(), createdAt: stamp(), updatedAt: stamp() }; s[kind].unshift(item); return item }
   const update = (item, data) => Object.assign(item, data, { id: item.id, updatedAt: stamp() })
-  const chatDto = (chat) => { const lastReadAt = chat.participants.find((participant) => participant.userId === user?.id)?.lastReadAt || null; return { ...chat, currentUserLastReadAt: lastReadAt, unreadCount: s.messages.filter((message) => message.conversationId === chat.id && message.senderId !== user?.id && !message.deleted && (!lastReadAt || Date.parse(message.createdAt) > Date.parse(lastReadAt))).length } }
+  const chatDto = (chat) => { const lastReadAt = chat.participants.find((participant) => participant.userId === user?.id)?.lastReadAt || null; return { ...chat, customerName: s.users.find((person) => person.id === chat.customerId)?.name || null, requestTitle: s.requests.find((request) => request.id === chat.cakeRequestId)?.title || null, currentUserLastReadAt: lastReadAt, unreadCount: s.messages.filter((message) => message.conversationId === chat.id && message.senderId !== user?.id && !message.deleted && (!lastReadAt || Date.parse(message.createdAt) > Date.parse(lastReadAt))).length } }
   const chatAccess = (chat) => { requireUser(user); if (chat.customerId !== user.id) bakeryAccess(user, chat.bakeryId); if (!chat.participants.some((p) => p.userId === user.id)) throw new DemoError('Không tham gia hội thoại.', 403) }
   let result
   if (parts[0] === 'admin') {
@@ -139,11 +140,11 @@ export function routeDemo(store, path, method, body, query, user) {
         bakeryAccess(user, bakery.id, !get)
         if (!kind && method === 'PATCH') result = update(bakery, body)
         else if (kind === 'submit-for-approval' && method === 'POST') result = update(bakery, { status: 'PENDING_APPROVAL' })
-        else if (kind === 'operations') { if (get) result = bakery.operations; else if (method === 'PUT') { bakery.operations = body; bakery.primaryAddress = body.addresses.find((a) => a.primary) || body.addresses[0]; result = body } }
+        else if (kind === 'operations') { if (get) result = bakery.operations; else if (method === 'PUT') { bakery.operations = body; bakery.primaryAddress = body.addresses.find((a) => a.isPrimary) || body.addresses[0]; result = body } }
         else if (kind === 'subscription' && get) { const current = s.subscriptions.find((p) => p.bakeryId === bakery.id && p.status === 'ACTIVE') || null; result = { bakeryId: bakery.id, currentSubscription: current, scheduledSubscription: null, features: clone(current?.featuresSnapshot || {}) } }
         else if (kind === 'subscription-orders') {
           if (get) result = page(s.subscriptionOrders.filter((o) => o.bakeryId === bakery.id).map(subOrderDto))
-          else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); const plan = find('plans', body.planId); if (plan.status !== 'ACTIVE') throw new DemoError('Gói đã ngừng cung cấp hoặc được lưu trữ.', 422); result = create('subscriptionOrders', { bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId, planNameSnapshot: plan.name, planCodeSnapshot: plan.code, featuresSnapshot: clone(plan.features), billingPeriodMonths: plan.billingPeriodMonths, totalAmount: Math.round(Number(plan.monthlyPrice) * plan.billingPeriodMonths * 100) / 100, currency: plan.currency, status: 'PENDING_PAYMENT', expiresAt: future(3), payments: [] }) }
+          else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); if (s.subscriptionOrders.some(order => order.bakeryId === bakery.id && (order.status === 'PAYMENT_REVIEW' || order.status === 'PENDING_PAYMENT' && Date.parse(order.expiresAt) > Date.now()))) throw new DemoError('Tiệm có đơn mua gói đang chờ xử lý. Vui lòng kiểm tra lịch sử mua gói.', 409); const plan = find('plans', body.planId); if (plan.status !== 'ACTIVE') throw new DemoError('Gói đã ngừng cung cấp hoặc được lưu trữ.', 422); result = create('subscriptionOrders', { bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId, planNameSnapshot: plan.name, planCodeSnapshot: plan.code, featuresSnapshot: clone(plan.features), billingPeriodMonths: plan.billingPeriodMonths, totalAmount: Math.round(Number(plan.monthlyPrice) * plan.billingPeriodMonths * 100) / 100, currency: plan.currency, status: 'PENDING_PAYMENT', expiresAt: future(3), payments: [] }) }
         } else if (kind === 'products') {
           if (!parts[3]) { if (get) result = page(s.products.filter((p) => p.bakeryId === bakery.id)); else if (method === 'POST') result = create('products', { ...body, bakeryId: bakery.id, status: 'DRAFT', images: [], options: { groups: [] } }) }
           else {
@@ -160,25 +161,31 @@ export function routeDemo(store, path, method, body, query, user) {
           else if (!parts[3] && method === 'POST') {
             result = create(key, { ...body, bakeryId: bakery.id })
           }
-          else { const item = find(key, parts[3]); if (item.bakeryId !== bakery.id) throw new DemoError('Sai tiệm.', 403); if (method === 'PATCH') result = update(item, body); if (method === 'DELETE') { if (kind === 'members' && item.memberRole === 'OWNER') throw new DemoError('Không xóa chủ tiệm.', 409); if (kind === 'categories' && s.products.some((p) => p.categoryId === item.id)) throw new DemoError('Danh mục đang có sản phẩm.', 409); s[key] = s[key].filter((row) => row.id !== item.id); result = null } }
+          else { const item = find(key, parts[3]); if (item.bakeryId !== bakery.id) throw new DemoError('Sai tiệm.', 403); if (method === 'PATCH') result = update(item, body); if (method === 'DELETE') { if (kind === 'members' && item.memberRole === 'OWNER') throw new DemoError('Không xóa chủ tiệm.', 409); if (kind === 'categories') for (const product of s.products) if (product.categoryId === item.id) product.categoryId = null; if (kind === 'add-ons') update(item, { active: false }); else s[key] = s[key].filter((row) => row.id !== item.id); result = null } }
         }
       }
     }
   } else if (parts[0] === 'cake-requests') {
     requireUser(user)
     if (!parts[1]) {
-      if (get) { const scope = query.get('scope'); if (scope === 'all') requireUser(user, 'ADMIN'); result = page(s.requests.filter((r) => scope === 'mine' ? r.customerId === user.id : scope === 'all' || r.status === 'OPEN')) }
+      if (get) {
+        const scope = query.get('scope')
+        if (scope === 'all') requireUser(user, 'ADMIN')
+        let available = []
+        if (scope === 'available') { requireUser(user, 'BAKERY_OWNER'); available = s.bakeries.filter((bakery) => { try { bakeryAccess(user, bakery.id); return true } catch { return false } }) }
+        result = page(s.requests.filter((r) => scope === 'mine' ? r.customerId === user.id : scope === 'available' ? available.some((bakery) => requestMatchesBakery(r, bakery)) : scope === 'all' || r.status === 'OPEN'))
+      }
       else if (method === 'POST') { requireUser(user, 'CUSTOMER'); result = create('requests', { ...body, customerId: user.id, status: 'DRAFT', images: [], optionSelections: body.optionSelections || [], statusHistory: [], offers: [] }) }
     } else {
       const request = find('requests', parts[1])
-      if (parts[2] === 'offers' && method === 'POST') { bakeryAccess(user, body.bakeryId); if (request.status !== 'OPEN' || Date.parse(request.offerDeadline) < Date.now()) throw new DemoError('RFQ không nhận báo giá.', 409); result = create('offers', { ...priceOffer(body, body.bakeryId), cakeRequestId: request.id, status: 'PENDING', statusHistory: [] }) }
-      else if (get) { if (request.status !== 'OPEN' && !has(user, 'ADMIN')) own(user, request); result = requestDto(request) }
+      if (parts[2] === 'offers' && method === 'POST') { bakeryAccess(user, body.bakeryId); if (s.offers.some((offer) => offer.cakeRequestId === request.id && offer.bakeryId === body.bakeryId)) throw new DemoError('Tiệm đã gửi báo giá cho yêu cầu này.', 409); if (!requestMatchesBakery(request, find('bakeries', body.bakeryId))) throw new DemoError('Yêu cầu không thuộc khu vực phục vụ của tiệm.', 422); if (request.status !== 'OPEN' || Date.parse(request.offerDeadline) < Date.now()) throw new DemoError('RFQ không nhận báo giá.', 409); result = create('offers', { ...priceOffer(body, body.bakeryId), cakeRequestId: request.id, status: 'PENDING', statusHistory: [] }) }
+      else if (get) { if (request.status !== 'OPEN' && !has(user, 'ADMIN')) { const participated = s.offers.some((offer) => { if (offer.cakeRequestId !== request.id) return false; try { bakeryAccess(user, offer.bakeryId); return true } catch { return false } }); if (!participated) own(user, request) } result = requestDto(request) }
       else { own(user, request); if (method === 'PATCH' && !parts[2]) { if (request.status !== 'DRAFT') throw new DemoError('Chỉ sửa bản nháp.', 409); result = update(request, body) } else if (method === 'POST' && ['publish', 'cancel'].includes(parts[2])) { if (parts[2] === 'publish' && request.status !== 'DRAFT' || parts[2] === 'cancel' && !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Trạng thái RFQ không hợp lệ.', 409); result = update(request, { status: parts[2] === 'publish' ? 'OPEN' : 'CANCELLED' }) } else if (method === 'PUT' && parts[2] === 'selected-design') { const design = find('designs', body.generatedDesignId), job = find('jobs', design.generationJobId); if (job.cakeRequestId !== request.id || job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Thiết kế không hợp lệ cho yêu cầu này.', 409); result = update(request, { selectedDesignId: design.id }) } }
     }
     if (result?.id) result = requestDto(result)
   } else if (parts[0] === 'offers') {
     requireUser(user)
-    if (!parts[1] && get) result = page(s.offers.filter((o) => { const request = find('requests', o.cakeRequestId); if (request.customerId === user.id || has(user, 'ADMIN')) return true; try { bakeryAccess(user, o.bakeryId); return true } catch { return false } }))
+    if (!parts[1] && get) { if (query.get('scope') === 'sent') { requireUser(user, 'BAKERY_OWNER', 'ADMIN'); if (query.get('bakeryId')) bakeryAccess(user, query.get('bakeryId')) } result = page(s.offers.filter((o) => { const request = find('requests', o.cakeRequestId); if (request.customerId === user.id || has(user, 'ADMIN')) return true; try { bakeryAccess(user, o.bakeryId); return true } catch { return false } })) }
     else {
       const offer = find('offers', parts[1]), request = find('requests', offer.cakeRequestId)
       if (get) { if (request.customerId !== user.id && !has(user, 'ADMIN')) bakeryAccess(user, offer.bakeryId); result = offer }

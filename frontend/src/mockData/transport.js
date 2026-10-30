@@ -135,7 +135,8 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
     const pathIds = ids(path + url.search), bodyIds = ids(JSON.stringify(body, (key, value) => key === 'clientMessageId' ? undefined : value))
     const demoReference = [...pathIds, ...bodyIds].some(isDemoId)
     const collection = collectionPaths.test(path)
-    const key = path + (url.searchParams.get('scope') ? ':scope=' + url.searchParams.get('scope') : '')
+    const bakeryOrders = path === '/orders' && url.searchParams.get('scope') === 'bakery' || path === '/offers' && url.searchParams.get('scope') === 'sent' && url.searchParams.has('bakeryId') || path === '/conversations' && url.searchParams.has('bakeryId')
+    const key = path + (url.searchParams.get('scope') ? ':scope=' + url.searchParams.get('scope') : '') + (bakeryOrders ? ':bakeryId=' + (url.searchParams.get('bakeryId') || '') : '')
     if (path.startsWith('/admin/users/') && sources.get('/admin/users') === 'demo') return run(path, method, body, url.searchParams, options.signal, options.headers)
     if (demoReference) {
       const files = options.body instanceof FormData && [...options.body.entries()].some(([name, value]) => !['metadata', 'request'].includes(name) && value instanceof Blob && value.size > 0)
@@ -151,6 +152,9 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
       if (bodyIds.some((id) => !isDemoId(id))) return new Response(JSON.stringify({ message: 'DEMO: Không gắn dữ liệu thật vào bản ghi DEMO.' }), { status: 422, headers: { 'Content-Type': 'application/json' } })
       return run(path, method, body, url.searchParams, options.signal, options.headers)
     }
+    // Header-free opt-out for real request discovery, after reserved IDs have
+    // been isolated above so even this option cannot send mock records upstream.
+    if (options.allowMockFallback === false) return realFetch(input, options)
     let response
     try {
       response = await realFetch(input, options)
@@ -170,6 +174,13 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
       return run(path, method, body, url.searchParams, options.signal, options.headers)
     }
     if (!get || !collection) return response
+    // An empty real shop is still authoritative. It has no matching local graph:
+    // falling back would turn a valid empty list into a mock membership 403.
+    // It would also probe scope=bakery without its required bakeryId below.
+    if (bakeryOrders && !isDemoId(url.searchParams.get('bakeryId'))) {
+      if (response.ok) mark(key, 'real')
+      return response
+    }
     // No network errors, 401/403, 5xx, malformed payloads or real mutations are masked.
     if (![404, 405].includes(response.status) && !response.ok) return response
     let state = 'unsupported'

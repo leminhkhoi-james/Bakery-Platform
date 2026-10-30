@@ -13,6 +13,7 @@ export function mapConversation(dto, detail = false) {
   if (!dto || !['id', 'customerId', 'bakeryId', 'cakeRequestId'].every((key) => isCatalogId(dto[key]))) fail('Conversation DTO thiếu ID hợp lệ.')
   const result = { id: dto.id, customerId: dto.customerId, bakeryId: dto.bakeryId, cakeRequestId: dto.cakeRequestId, orderId: isCatalogId(dto.orderId) ? dto.orderId : null }
   for (const key of ['status', 'lastMessageAt', 'lastMessagePreview', 'createdAt', 'closeReason', 'currentUserLastReadAt']) result[key] = text(dto[key])
+  for (const key of ['customerName', 'requestTitle']) if (typeof dto[key] === 'string') result[key] = dto[key]
   result.unreadCount = Number.isSafeInteger(dto.unreadCount) && dto.unreadCount >= 0 ? dto.unreadCount : null
   if (detail) {
     if (!Array.isArray(dto.participants)) fail('Conversation detail thiếu participants.')

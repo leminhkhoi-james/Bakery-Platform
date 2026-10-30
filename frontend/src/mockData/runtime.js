@@ -10,7 +10,7 @@ export function installDemoFallback(getUser) {
   let storage
   try { storage = window.localStorage } catch { /* Use memory if browser storage is unavailable. */ }
   const store = createDemoStore(storage)
-  demoRuntime = createDemoTransport({ fetch: window.fetch.bind(window), getUser, store, origin: window.location.origin, baseUrl: import.meta.env?.VITE_API_BASE_URL || '/api/v1', fallbackOnGatewayError: true })
+  demoRuntime = createDemoTransport({ fetch: window.fetch.bind(window), getUser, store, origin: window.location.origin, baseUrl: import.meta.env?.VITE_API_BASE_URL || '/api/v1' })
   window.fetch = demoRuntime.fetch
   window.addEventListener('storage', (event) => { if (event.key === DEMO_STORAGE_KEY) store.sync(event.newValue) })
   return demoRuntime

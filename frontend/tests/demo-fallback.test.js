@@ -26,7 +26,7 @@ const data = async (res) => (await res.json()).data
 
 test('Plan edits, pause and archive keep purchased snapshots and block new purchases after availability ends', async () => {
   const app = setup(); app.as(vendor)
-  const plan = app.store.state.plans[0], bakery = app.store.state.bakeries[0]
+  const plan = app.store.state.plans[0], bakery = app.store.state.bakeries[1]
   plan.billingPeriodMonths = 3
   const order = await data(await request(app, '/bakeries/' + bakery.id + '/subscription-orders', 'POST', { planId: plan.id }))
   const before = structuredClone(order)
@@ -37,6 +37,8 @@ test('Plan edits, pause and archive keep purchased snapshots and block new purch
   assert.deepEqual(stored.featuresSnapshot, before.featuresSnapshot)
   assert.equal(stored.totalAmount, before.totalAmount); assert.equal(stored.planNameSnapshot, before.planNameSnapshot)
   app.as(vendor)
+  assert.equal((await request(app, '/bakeries/' + bakery.id + '/subscription-orders', 'POST', { planId: plan.id })).status, 409)
+  stored.status = 'EXPIRED'
   assert.equal((await request(app, '/bakeries/' + bakery.id + '/subscription-orders', 'POST', { planId: plan.id })).status, 422)
   app.as(admin)
   assert.equal((await request(app, '/admin/subscription-plans/' + plan.id, 'PATCH', { code: 'DIFFERENT' })).status, 409)
@@ -506,4 +508,28 @@ test('Owner status buttons use the existing service, retain notes/history and sy
     }
     assert.equal(app.calls.length, 0)
   } finally { globalThis.fetch = original }
+})
+
+// Matches the existing Subscription service open-order guard, including overdue review.
+test('Subscription purchases cannot create a second open order or bypass unresolved payment review', async () => {
+  const app = setup(); app.as(vendor)
+  const shop = app.store.state.bakeries[0], plan = app.store.state.plans[0]
+  const pending = app.store.state.subscriptionOrders.find(row => row.bakeryId === shop.id)
+  pending.expiresAt = '2000-01-01T00:00:00Z'
+  const count = app.store.state.subscriptionOrders.length
+  assert.equal((await request(app, '/bakeries/' + shop.id + '/subscription-orders', 'POST', { planId: plan.id })).status, 409)
+  assert.equal(app.store.state.subscriptionOrders.length, count)
+  assert.equal(app.calls.length, 0)
+})
+
+test('Category deletion detaches products and add-on deletion only stops selling without erasing references', async () => {
+  const app = setup(); app.as(vendor)
+  const product = app.store.state.products[0], categoryId = product.categoryId, count = app.store.state.products.length
+  assert.equal((await request(app, `/bakeries/${product.bakeryId}/categories/${categoryId}`, 'DELETE')).status, 200)
+  assert.equal(app.store.state.products.length, count)
+  assert.equal(product.categoryId, null)
+  const addon = app.store.state.addOns.find(row => row.bakeryId === product.bakeryId)
+  assert.equal((await request(app, `/bakeries/${addon.bakeryId}/add-ons/${addon.id}`, 'DELETE')).status, 200)
+  assert.equal(app.store.state.addOns.find(row => row.id === addon.id).active, false)
+  assert.equal(app.calls.length, 0)
 })

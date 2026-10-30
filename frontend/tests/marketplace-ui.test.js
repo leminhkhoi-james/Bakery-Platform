@@ -73,7 +73,7 @@ test('Customer/Vendor page entry states use true identity, real API loading and 
   const customer = withUser(Views.CustomerRequests, { onNavigate: () => {} })
   assert.match(customer, /Yêu cầu bánh của tôi/); assert.match(customer, /Đang tải/)
   const vendor = withUser(Vendor, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(vendor, /Fixture customer/); assert.match(vendor, /các tiệm bạn tham gia/); assert.match(vendor, /Đang tải/)
+  assert.match(vendor, /Fixture customer/); assert.match(vendor, /Đang tải dữ liệu/); assert.match(vendor, /Đang tải/)
   const ai = withUser(Ai.default, { onNavigate: () => {} })
   assert.match(ai, /Chọn yêu cầu/); assert.match(ai, /Đang tải/)
   const quote = withUser(Quote, { routeSearch: '?id=invalid', onNavigate: () => {} })

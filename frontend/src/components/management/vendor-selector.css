@@ -1,0 +1,9 @@
+.sc-managed-bakery-choice { padding-block: .85rem; }
+.sc-managed-bakery-row { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(12rem, 2fr); align-items: center; gap: .75rem; }
+.sc-managed-bakery-row label { display: flex; align-items: center; gap: .5rem; color: #722637; font-weight: 600; }
+.sc-managed-bakery-choice details > summary { cursor: pointer; font-size: .78rem; color: #705b50; }
+.sc-managed-bakery-choice details[open] { display: block; }
+.sc-managed-bakery-choice details form { display: grid; gap: .35rem; margin-top: .6rem; }
+.sc-managed-bakery-choice details input { min-width: 0; }
+.sc-managed-bakery-feedback { font-size: .8rem; color: #705b50; }
+@media (max-width: 639px) { .sc-managed-bakery-row { grid-template-columns: minmax(0, 1fr); } }

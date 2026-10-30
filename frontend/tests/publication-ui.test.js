@@ -104,8 +104,8 @@ test('New backend-confirmed DRAFT profile can configure operations and submit; u
   fixtures({ loadVendorMembership: membership, loadVendorProfile: { status: 'error', error: { status: 404 }, data: null } }, ['BAKERY_OWNER'])
   const profile = { id: bakeryId, name: 'Fixture newly created', status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }
   const html = render(BakeryManager, { bakeryId, initialProfile: profile })
-  assert.match(html, /Vận hành và giao hàng/); assert.match(html, /Gửi yêu cầu duyệt/)
-  assert.match(render(BakeryManager, { bakeryId }), /Chưa tải được cấu hình vận hành/)
+  assert.match(html, /Địa chỉ &amp; giao hàng/); assert.match(html, /Giờ mở cửa/); assert.match(html, /Gửi yêu cầu duyệt/)
+  assert.doesNotMatch(render(BakeryManager, { bakeryId }), /Lưu cấu hình vận hành/)
 })
 test('Only verified OWNER sees category creation in ProductManager', () => {
   const resources = { loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadManagedProducts: ready(page([])), loadManagedCategories: ready([]) }
@@ -122,8 +122,8 @@ for (const status of [401, 403, 404, 500, 503, 0]) test('Admin screens expose HT
 })
 
 test('Public ACTIVE bakery cannot be submitted again; loading Admin APIs do not display empty or fake counts', () => {
-  fixtures({ loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadVendorProfile: ready({ id: bakeryId, name: 'Public fixture' }) }, ['BAKERY_OWNER'])
-  assert.match(render(BakeryManager, { bakeryId }), /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Gửi yêu cầu duyệt/)
+  fixtures({ loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadVendorProfile: ready({ id: bakeryId, name: 'Public fixture', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
+  assert.doesNotMatch(render(BakeryManager, { bakeryId }), /Gửi yêu cầu duyệt/)
   fixtures()
   for (const Component of [Vendors, Payments, Dashboard]) {
     const html = render(Component)

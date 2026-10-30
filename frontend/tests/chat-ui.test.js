@@ -90,7 +90,7 @@ test('Customer and Vendor chat pages use protected identity and real loading sta
   const customer = withUser(CustomerPage, { routeSearch: '?conversationId=' + conversationId, onNavigate: () => {} })
   assert.match(customer, /Đang tải/); assert.match(customer, /yêu cầu bánh/); assert.match(customer, /Bấm Tải mới nhất/)
   const vendor = withUser(VendorPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(vendor, /Tài khoản thật/); assert.match(vendor, /các hội thoại thuộc tiệm đã chọn/)
+  assert.match(vendor, /Tài khoản thật/); assert.match(vendor, /Đang xác minh quyền quản lý/)
   for (const html of [customer, vendor]) assert.doesNotMatch(html, /46\.7M|15 đơn|Chef Jean|Chào bạn Hân/)
 })
 test('Invalid conversation URL cannot mount a timeline or silently invent a conversationId', () => {

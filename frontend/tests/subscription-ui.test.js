@@ -21,7 +21,7 @@ const plan = () => mapSubscriptionPlan({ id: randomUUID(), code: 'DYNAMIC', name
 test('Plan UI uses DTO name/description/price/period/status/arbitrary feature values', () => {
   const record = plan(), before = JSON.stringify(record)
   const html = render(view.PlanCards, { plans: [record] })
-  for (const text of ['Tên gói từ DTO', 'Mô tả từ DTO', '321.987 VND', '3 tháng', 'Đang mở bán', 'Quyền lợi bổ sung', 'custom-value', 'Không giới hạn', 'Không']) assert.ok(html.includes(text), text)
+  for (const text of ['Tên gói từ DTO', 'Mô tả từ DTO', '321.987 đ', '3 tháng', 'Đang mở bán', 'Quyền lợi bổ sung', 'custom-value', 'Không giới hạn', 'Không']) assert.ok(html.includes(text), text)
   assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực|UNKNOWN_FEATURE/)
   assert.equal(JSON.stringify(record), before)
 })
@@ -39,7 +39,7 @@ test('Loading and HTTP/network error states suppress stale/mock plan content', (
   assert.match(render(view.ResourceState, { resource: { status: 'loading' }, children: 'STALE_PLAN' }), /Đang tải/)
   for (const status of [401, 403, 404, 500, 0]) {
     const html = render(view.ResourceState, { resource: { status: 'error', error: { status, message: 'API failure' }, reload: () => {} }, children: 'STALE_PLAN' })
-    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : /Chưa thể thực hiện thao tác/); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
+    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : ({ 401: /đăng nhập lại/, 403: /không có quyền/, 404: /Không tìm thấy/ }[status])); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
   }
 })
 test('Vendor page has real identity/manual bakery selector and no invented active subscription', () => {
@@ -49,7 +49,7 @@ test('Vendor page has real identity/manual bakery selector and no invented activ
 })
 test('Vendor with UUID and owner role renders backend loading instead of demo periods/orders', () => {
   const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { email: 'test@example.invalid' }, roles: ['BAKERY_OWNER'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
-  assert.match(html, /Chủ tiệm có thể mua kỳ dịch vụ/); assert.match(html, /Đang tải/)
+  assert.match(html, /<h1[^>]*>Gói dịch vụ<\/h1>/); assert.match(html, /Các gói đang mở bán/); assert.match(html, /Đang tải/)
   assert.doesNotMatch(html.replace(/<option[^>]*>.*?<\/option>/g, ''), /Đang hiệu lực|Đã hoàn tất/)
 })
 test('Public plan page is accessible without auth context and starts in loading state', () => {

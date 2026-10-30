@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { dateTime } from '../../services/managementModels.js'
+import { formatOrderDate } from '../../services/orderPresentation.js'
 
-const participantLabel = (type) => ({ CUSTOMER: 'Khách hàng', BAKERY_OWNER: 'Chủ tiệm' }[type] || 'Participant')
+const participantLabel = (type) => ({ CUSTOMER: 'Khách hàng', BAKERY_OWNER: 'Chủ tiệm', BAKERY: 'Chủ tiệm' }[type] || 'Thành viên hội thoại')
 function Attachment({ attachment }) {
   const [broken, setBroken] = useState(false)
   return <div className="mt-2 rounded-xl border border-outline-variant/30 bg-surface p-3 text-on-surface"><p className="break-all text-sm">{attachment.originalFileName || 'Tệp đính kèm'} · {attachment.mediaType || 'Chưa rõ loại'} · {attachment.fileSize === null ? 'Chưa có dung lượng' : attachment.fileSize.toLocaleString('vi-VN') + ' byte'}</p>
@@ -9,7 +10,8 @@ function Attachment({ attachment }) {
   </div>
 }
 
-export function ChatMessages({ items, conversation, user, busy, onDelete }) {
+export function ChatMessages({ items, conversation, user, busy, onDelete, compact = false }) {
+  const formatTime = compact ? formatOrderDate : dateTime
   if (!items.length) return <p className="p-8 text-center text-on-surface-variant">Hội thoại chưa có tin nhắn.</p>
   return <ol aria-label="Tin nhắn" className="space-y-5">{items.toReversed().map((message) => {
     const own = message.senderId === user.id
@@ -18,7 +20,7 @@ export function ChatMessages({ items, conversation, user, busy, onDelete }) {
       <p className="max-w-full break-all text-xs text-on-surface-variant">{own ? 'Bạn' : message.messageType === 'SYSTEM' && !message.senderId ? 'Hệ thống' : participantLabel(participant?.participantType)}</p>
       <div className={'mt-1 max-w-[95%] break-words rounded-2xl p-4 sm:max-w-[85%] ' + (own ? 'rounded-br-none bg-primary text-on-primary' : 'rounded-bl-none bg-surface-container-high text-on-surface')}>
         {message.deleted ? <p className="italic">Tin nhắn đã được xóa.</p> : <>{message.content && <p className="whitespace-pre-wrap">{message.content}</p>}{!message.content && !message.attachments.length && <p>Chưa thể tải nội dung tin nhắn.</p>}{message.attachments.map((attachment) => <Attachment key={attachment.id + ':' + attachment.url} attachment={attachment} />)}</>}
-      </div><p className="mt-1 text-xs text-on-surface-variant">{dateTime(message.createdAt)}{message.editedAt ? ' · Đã sửa: ' + dateTime(message.editedAt) : ''}</p>
+      </div><p className="mt-1 text-xs text-on-surface-variant">{formatTime(message.createdAt)}{message.editedAt ? ' · Đã sửa: ' + formatTime(message.editedAt) : ''}</p>
       {own && !message.deleted && onDelete && <button disabled={busy} onClick={() => onDelete(message.id)} className="mt-1 text-xs underline disabled:opacity-40">Xóa tin nhắn của tôi</button>}
     </li>
   })}</ol>

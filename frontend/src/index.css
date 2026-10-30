@@ -551,7 +551,7 @@ html:has(.home-page-wrapper) footer {
 .sc-portal-header h1 { font-family: var(--font-serif); font-size: clamp(1.1rem, 2vw, 1.45rem); font-weight: 650; }
 .sc-kicker { color: #947562; font-size: .65rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; margin-bottom: .15rem; }
 .sc-identity { display: flex; align-items: center; gap: .65rem; max-width: 32%; font-size: .8rem; }
-.sc-identity span:not(.sc-avatar) { font-size: .7rem; color: #8b7970; }
+.sc-identity span:not(.sc-avatar) { font-size: .7rem; color: #59483f; }
 .sc-avatar { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; flex-shrink: 0; border-radius: 50%; color: var(--color-primary); background: #f4e9e3; border: 1px solid #e7d8cc; font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700; }
 .sc-icon { font-size: 1.25rem; line-height: 1; vertical-align: middle; }
 .sc-icon-button { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border: 1px solid #e9e0d8; border-radius: .7rem; flex-shrink: 0; background: white; }

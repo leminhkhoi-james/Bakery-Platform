@@ -86,9 +86,9 @@ export function RequestInfo({ request }) {
         <div className="flex items-center gap-2.5">
           <StatusBadge status={request.status} label={RFQ_STATUS_LABELS[request.status] || request.status} />
           <span className="rounded-full bg-surface-container px-2.5 py-0.5 text-xs font-semibold text-on-surface-variant">
-            {request.requestType || 'Tự thiết kế'}
+            {REQUEST_TYPE_LABELS[request.requestType] || 'Đặt bánh theo yêu cầu'}
           </span>
-          <span className="font-mono text-xs text-outline">{displayReference(request.id, 'RFQ')}</span>
+          <details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(request.id, 'RFQ')}</details>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
           <Icon name="verified" className="text-sm text-secondary" /> Yêu cầu đặt làm riêng
@@ -248,7 +248,7 @@ export function RequestListView({ resource, onPage, onOpen }) {
                       {REQUEST_TYPE_LABELS[request.requestType] || request.requestType || 'Tùy chỉnh'}
                     </span>
                   </div>
-                  <span className="font-mono text-xs text-outline">{displayReference(request.id, 'RFQ')}</span>
+                  <details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(request.id, 'RFQ')}</details>
                 </div>
 
                 <h2 className="font-serif text-xl font-bold text-primary">{request.title || displayReference(request.id, 'RFQ')}</h2>

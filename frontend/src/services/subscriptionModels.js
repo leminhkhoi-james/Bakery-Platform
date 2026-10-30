@@ -65,7 +65,7 @@ export function mapSubscriptionOrders(data) {
 
 export function formatSubscriptionMoney(value, currency) {
   if (value === null || value === undefined || !currency) return 'Chưa có thông tin giá'
-  return Number(value).toLocaleString('vi-VN') + ' ' + currency
+  return Number(value).toLocaleString('vi-VN') + ' ' + (currency === 'VND' ? 'đ' : currency)
 }
 export function formatSubscriptionDate(value) {
   return value && Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString('vi-VN') : 'Chưa có thông tin'

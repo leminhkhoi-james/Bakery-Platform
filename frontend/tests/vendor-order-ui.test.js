@@ -43,7 +43,7 @@ test('Order list starts loading with actual enum filters and no mock Kanban rows
 test('Product form has real DTO fields, required validation and immutable status guidance', () => {
   const html = render(ProductForm, { product: managedProduct, onSave: () => {}, onClose: () => {} })
   assert.match(html, /Sản phẩm backend/); assert.match(html, /san-pham-backend/); assert.match(html, /min="0"/); assert.match(html, /maxLength="180"/i)
-  assert.match(html, /bản nháp/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
+  assert.match(html, /Ảnh và tùy chọn được lưu riêng/); assert.doesNotMatch(html, /<select[^>]*>[^]*Công khai[^]*Đã ẩn/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
 })
 test('Bakery form never prefills demo contact/owner and create requires name/phone', () => {
   const html = render(BakeryProfileForm, { create: true, onSave: () => {} })
@@ -81,12 +81,12 @@ test('Customer profile order panel renders backend loading with real identity an
 })
 test('Vendor dashboard starts loading real counts and hides shared mock badges', () => {
   const html = authenticated(VendorDashboard, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(html, /Đang tải/); assert.match(html, /Tổng số đơn hàng/); assert.match(html, /Doanh thu chỉ được ghi nhận sau khi đối soát/)
+  assert.match(html, /Đang xác minh quyền quản lý/); assert.doesNotMatch(html, /sc-vendor-kpi-value/)
   assert.doesNotMatch(html, /46\.7M|15 đơn|78%|#ORD-2025/)
 })
 test('Vendor settings initializes from actual bakery selector and does not display fake saved settings', () => {
   const html = authenticated(VendorSettings, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(html, /Đang tải/); assert.match(html, /Tạo tiệm bánh mới/)
+  assert.match(html, /Đang tải/); assert.match(html, /Tạo tiệm mới/)
   assert.doesNotMatch(html, /La Crème|Jean-Luc|46\.7M|Thông tin đã lưu thành công/)
 })
 test('Vendor product list cannot expose editing controls before membership has been confirmed', () => {

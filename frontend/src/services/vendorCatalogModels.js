@@ -4,7 +4,8 @@ import { isCatalogId } from './catalogModels.js'
 export function mapManagedList(data, kind) {
   if (!Array.isArray(data) || data.some((row) => !isCatalogId(row?.id))) throw new ApiError('Danh sách quản lý không hợp lệ.', 502)
   return data.map((row) => {
-    if (kind === 'members' && (!isCatalogId(row.userId) || !['OWNER'].includes(row.memberRole) || !['INVITED', 'ACTIVE', 'INACTIVE'].includes(row.status))) throw new ApiError('Membership DTO không hợp lệ.', 502)
+    // Older saved memberships remain readable; edit authorization still requires OWNER.
+    if (kind === 'members' && (!isCatalogId(row.userId) || !['OWNER', 'MANAGER', 'STAFF'].includes(row.memberRole) || !['INVITED', 'ACTIVE', 'INACTIVE'].includes(row.status))) throw new ApiError('Membership DTO không hợp lệ.', 502)
     if (kind && kind !== 'members' && (typeof row.name !== 'string' || typeof row.active !== 'boolean')) throw new ApiError('Catalog DTO thiếu tên/trạng thái.', 502)
     if (kind === 'categories' && (typeof row.slug !== 'string' || !Number.isInteger(row.displayOrder) || row.displayOrder < 0)) throw new ApiError('Category DTO không hợp lệ.', 502)
     if (kind === 'add-ons' && (typeof row.category !== 'string' || row.price === null || !Number.isFinite(Number(row.price)) || Number(row.price) < 0)) throw new ApiError('Add-on DTO không hợp lệ.', 502)

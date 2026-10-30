@@ -1,3 +1,5 @@
+import { vendorMoney } from '../../services/vendorPresentation.js'
+import { ModalFormState } from '../common/ModalSurface.jsx'
 import { displayReference } from '../../services/displayReference.js'
 import { uiLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
@@ -10,7 +12,7 @@ import { loadBakery } from '../../services/vendorService.js'
 import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 
 const OFFER_STATUS_LABELS = {
-  PENDING: 'Chờ bạn phản hồi',
+  PENDING: 'Chờ khách hàng phản hồi',
   ACCEPTED: 'Đã chấp nhận',
   REJECTED: 'Đã từ chối',
   EXPIRED: 'Đã hết hạn',
@@ -29,11 +31,17 @@ function formatQuoteDateTime(isoString) {
   }
 }
 
-export function OfferInfo({ offer, bakery: externalBakery }) {
+function OwnerOfferInfo({ offer, bakery }) {
+  const overdue = offer.status === 'PENDING' && Number.isFinite(Date.parse(offer.expiresAt)) && Date.parse(offer.expiresAt) <= Date.now()
+  return <section className={panelClass}><div className="sc-toolbar-actions"><h2>Báo giá của tiệm</h2><StatusBadge status={offer.status} label={overdue ? 'Đã qua hạn phản hồi' : OFFER_STATUS_LABELS[offer.status] || uiLabel(offer.status)} /></div><p className="font-semibold">{bakery?.name || 'Chưa có tên cửa hàng'}</p><dl className="sc-vendor-summary-grid">{[['Giá bánh',vendorMoney(offer.cakePrice)],['Phí giao hàng',vendorMoney(offer.deliveryFee)],['Phụ kiện',vendorMoney(offer.addOnTotal)],['Tổng giá đã báo',vendorMoney(offer.totalPrice)],['Hoàn thành dự kiến',Number.isFinite(Date.parse(offer.estimatedCompletionAt)) ? formatQuoteDateTime(offer.estimatedCompletionAt) : 'Chưa cập nhật'],['Hiệu lực đến',Number.isFinite(Date.parse(offer.expiresAt)) ? formatQuoteDateTime(offer.expiresAt) : 'Chưa cập nhật']].map(([label,value]) => <div key={label}><dt>{label}</dt><dd className={label === 'Tổng giá đã báo' ? 'text-lg text-primary' : ''}>{value}</dd></div>)}</dl><div><h3>Lời nhắn &amp; điều kiện</h3><p className="whitespace-pre-wrap text-sm">{offer.message || 'Chưa có lời nhắn'}</p></div>{offer.items?.length > 0 && <ul className="text-sm space-y-2">{offer.items.map((item,i) => <li key={item.id || i}>{item.itemNameSnapshot || 'Phụ kiện'} · {item.quantity} × {vendorMoney(item.unitPrice)} · {vendorMoney(item.lineTotal)}</li>)}</ul>}<details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(offer.id,'QTE')}</details></section>
+}
+
+export function OfferInfo({ offer, bakery: externalBakery, owner = false }) {
   const bakeryRes = useCatalogResource(loadBakery, externalBakery ? null : (offer?.bakeryId ? { id: offer.bakeryId } : null))
   const bakery = externalBakery || bakeryRes?.data
-  const bakeryName = bakery?.name || (offer?.bakeryId === 'de000000-0000-4000-8000-000000000010' ? 'Sweet Bakery Q1' : 'Tiệm bánh đối tác')
-  const bakeryLocation = bakery?.location || 'TP. Hồ Chí Minh'
+  const bakeryName = bakery?.name || 'Chưa có tên cửa hàng'
+  const bakeryLocation = bakery?.location || 'Chưa có địa chỉ cửa hàng'
+  if (owner) return <OwnerOfferInfo offer={offer} bakery={bakery} />
 
   return (
     <section className="space-y-5 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
@@ -41,11 +49,11 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
         <div className="flex items-center gap-2.5">
           <StatusBadge status={offer.status} label={OFFER_STATUS_LABELS[offer.status] || uiLabel(offer.status)} />
-          <span className="text-xs text-outline font-mono">{displayReference(offer.id, 'QTE')}</span>
+          <details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(offer.id, 'QTE')}</details>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-xs font-medium text-on-surface-variant">
+        {!owner && <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-xs font-medium text-on-surface-variant">
           <Icon name="verified" className="text-sm text-secondary" /> Báo giá chính thức
-        </span>
+        </span>}
       </div>
 
       {/* Bakery Card */}
@@ -77,7 +85,7 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
           <span>Lời nhắn từ tiệm bánh</span>
         </div>
         <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-amber-950 font-medium italic">
-          "{offer.message || 'Tiệm sẵn sàng phục vụ theo mẫu thiết kế.'}"
+          "{offer.message || 'Chưa có lời nhắn'}"
         </p>
       </div>
 
@@ -115,7 +123,7 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-primary via-wine to-wine-dark p-5 text-white shadow-sm">
         <div>
           <p className="text-xs font-medium uppercase tracking-wider text-white/80">Tổng chi phí báo giá</p>
-          <p className="mt-0.5 text-xs text-white/70">Trọn gói không phát sinh khi nhận bánh</p>
+          <p className="mt-0.5 text-xs text-white/70">Tổng giá đã báo</p>
         </div>
         <div className="text-right">
           <span className="font-serif text-3xl font-bold tracking-tight text-white">{moneyVnd(offer.totalPrice)}</span>
@@ -190,13 +198,13 @@ export function OfferInfo({ offer, bakery: externalBakery }) {
 
       {/* Collapsible raw details for transparency */}
       <details className="text-[11px] text-outline">
-        <summary className="cursor-pointer hover:underline">Chi tiết kỹ thuật (ID)</summary>
+        <summary className="cursor-pointer hover:underline">Mã tham chiếu</summary>
         <p className="mt-1 break-all font-mono">Tiệm: {displayReference(offer.bakeryId, 'SHOP')} · Báo giá: {displayReference(offer.id, 'QTE')}</p>
       </details>
     </section>
   )
 }
-export default function OfferForm({ bakeryId, offer, disabled, busy, onSave }) {
+export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, footerExternal = false }) {
   const [values, setValues] = useState(() => ({
     bakeryId,
     cakePrice: '',
@@ -209,5 +217,5 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave }) {
   }))
   const addOns = useCatalogResource(loadRfqAddOns, { bakeryId })
   const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues({ ...values, [key]: event.target.value }) })
-  return <form className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}><h2 className="text-xl font-bold">{offer ? 'Sửa báo giá đang chờ' : 'Gửi báo giá'}</h2><fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">{[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => <label key={key}>{label}<input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} /></label>)}<label className="sm:col-span-2">Mô tả và điều kiện<textarea id="offer-message" maxLength={4000} className={inputClass} rows={4} {...field('message')} /></label><section className="sm:col-span-2 space-y-3"><h3 className="font-bold">Phụ kiện từ tiệm</h3><ApiState resource={addOns}>{addOns.data?.map((item) => <label key={item.id} className="flex flex-wrap items-center gap-3"><input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />{item.name} · {moneyVnd(item.price)}{values.items.some((row) => row.addOnId === item.id) && <input aria-label={'Số lượng ' + item.name} type="number" min={1} value={values.items.find((row) => row.addOnId === item.id).quantity} onChange={(event) => setValues({ ...values, items: values.items.map((row) => row.addOnId === item.id ? { ...row, quantity: event.target.value } : row) })} className="w-20 rounded border p-2" />}</label>)}</ApiState><p className="text-sm">Kiểm tra phụ kiện, thời gian hoàn thành và tổng tiền trước khi gửi báo giá.</p></section></fieldset><button id="offer-submit-btn" className={buttonClass} disabled={disabled || busy}>{busy ? 'Đang gửi…' : 'Lưu báo giá'}</button></form>
+  return <form id={footerExternal ? "vendor-offer-form" : undefined} className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}><ModalFormState value={values} busy={busy} /><h2 className="text-xl font-bold">{offer ? 'Sửa báo giá đang chờ' : 'Gửi báo giá'}</h2><fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">{[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => <label key={key}>{label}<input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} /></label>)}<label className="sm:col-span-2">Mô tả và điều kiện<textarea id="offer-message" maxLength={4000} className={inputClass} rows={4} {...field('message')} /></label><section className="sm:col-span-2 space-y-3"><h3 className="font-bold">Phụ kiện từ tiệm</h3><ApiState resource={addOns}>{addOns.data?.map((item) => <label key={item.id} className="flex flex-wrap items-center gap-3"><input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />{item.name} · {moneyVnd(item.price)}{values.items.some((row) => row.addOnId === item.id) && <input aria-label={'Số lượng ' + item.name} type="number" min={1} value={values.items.find((row) => row.addOnId === item.id).quantity} onChange={(event) => setValues({ ...values, items: values.items.map((row) => row.addOnId === item.id ? { ...row, quantity: event.target.value } : row) })} className="w-20 rounded border p-2" />}</label>)}</ApiState><p className="text-sm">Kiểm tra phụ kiện, thời gian hoàn thành và tổng tiền trước khi gửi báo giá.</p></section></fieldset>{!footerExternal && <button id="offer-submit-btn" className={buttonClass} disabled={disabled || busy}>{busy ? 'Đang gửi…' : 'Lưu báo giá'}</button>}</form>
 }
