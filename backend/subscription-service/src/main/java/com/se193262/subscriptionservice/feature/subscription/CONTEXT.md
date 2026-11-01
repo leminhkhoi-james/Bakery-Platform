@@ -12,6 +12,8 @@ after the current period. A scheduler activates due periods and expires ended
 periods. The internal entitlement endpoint uses service JWT audience/scope and
 returns inactive for bakeries without a current period. Public reads check Bakery
 membership or ADMIN role, with bakery existence validated through Bakery Service.
+The read routes accept CUSTOMER and BAKERY_OWNER user JWTs with ACTIVE OWNER
+membership, as well as ADMIN. Adding CUSTOMER does not remove the membership check.
 InternalSubscriptionController is the sole owner of the entitlement URI. It reads
 the approved period's feature snapshot, so plan edits/archival do not change
 existing subscriptions. The service keeps its own SecurityConfig/JwtDecoderConfig

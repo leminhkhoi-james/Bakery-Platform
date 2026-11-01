@@ -16,6 +16,16 @@ member creation/update/deletion are removed; adding co-owners or transferring
 ownership is outside the current contract. Order, Marketplace, Chat and Subscription
 require OWNER membership for bakery access, with existing explicit admin exceptions.
 
+### Subscription platform-role exception — 2026-11-01
+
+By user request, Subscription purchase/payment routes accept CUSTOMER as well as
+BAKERY_OWNER user JWTs. Subscription/order read routes also accept CUSTOMER so the
+purchase flow is accessible. The frontend subscription workspace allows these two
+roles; other vendor pages retain their BAKERY_OWNER requirement. All existing
+ACTIVE OWNER membership checks remain in place for the selected bakery. Admin
+payment review remains ADMIN-only. No personal subscription or schema change is
+introduced by this role-only update.
+
 ## Initial schema
 
 The user confirmed that no real data exists. Initial Identity role seeds and

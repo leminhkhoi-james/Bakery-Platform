@@ -1285,6 +1285,12 @@ moderation conflict.
 
 ## 11. Subscription — Subscription Service
 
+Subscription/order read routes accept user JWTs with `CUSTOMER`, `BAKERY_OWNER`
+or `ADMIN`; purchase/payment routes accept `CUSTOMER` or `BAKERY_OWNER`.
+Non-admin access still requires ACTIVE `OWNER` membership of the selected bakery.
+This role-only change does not enable personal subscriptions or access to another
+bakery's orders/payments. Payment review remains `ADMIN` only.
+
 ### GET /subscription-plans — Public
 
 Chỉ trả plan `ACTIVE`. **Success (200):** danh sách plan và features, không phân
@@ -1295,12 +1301,12 @@ trang vì là reference data nhỏ.
 **Success (200):** `SubscriptionPlanResponse`. **Errors:** `404` inactive hoặc
 không tồn tại.
 
-### GET /bakeries/{bakeryId}/subscription 🔒 bakery owner|ADMIN
+### GET /bakeries/{bakeryId}/subscription 🔒 CUSTOMER|BAKERY_OWNER|ADMIN
 
 **Success (200):** current active/scheduled period và entitlement features;
 `data.currentSubscription=null` nếu chưa có. **Errors:** `403`; `404` bakery.
 
-### POST /bakeries/{bakeryId}/subscription-orders 🔒 OWNER
+### POST /bakeries/{bakeryId}/subscription-orders 🔒 CUSTOMER|BAKERY_OWNER
 
 **Required Header:** `Idempotency-Key`.
 
@@ -1322,17 +1328,17 @@ key after the other operation completes. An order under `PAYMENT_REVIEW` still
 blocks a new purchase after its submission deadline until admin review resolves it.
 Replayed responses apply the same payment-proof visibility as order detail.
 
-### GET /bakeries/{bakeryId}/subscription-orders 🔒 bakery owner|ADMIN
+### GET /bakeries/{bakeryId}/subscription-orders 🔒 CUSTOMER|BAKERY_OWNER|ADMIN
 
 **Query:** common pagination; `status`; default sort `createdAt,desc`.
 **Success (200):** paginated subscription orders.
 
-### GET /subscription-orders/{orderId} 🔒 bakery owner|ADMIN
+### GET /subscription-orders/{orderId} 🔒 CUSTOMER|BAKERY_OWNER|ADMIN
 
 **Success (200):** order, safe payment summaries và activated period. Payment
 proof URL chỉ trả cho submitting bakery owner và admin. **Errors:** `403`; `404`.
 
-### POST /subscription-orders/{orderId}/payments 🔒 OWNER
+### POST /subscription-orders/{orderId}/payments 🔒 CUSTOMER|BAKERY_OWNER
 
 **Required Header:** `Idempotency-Key`. **Request:** `multipart/form-data`:
 
@@ -1781,11 +1787,11 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | GET | `/generated-designs/{designId}` | Owner/admin | Design detail |
 | GET | `/subscription-plans` | Public | List active plans |
 | GET | `/subscription-plans/{planId}` | Public | Plan detail |
-| GET | `/bakeries/{bakeryId}/subscription` | Bakery owner/admin | Current entitlement |
-| POST | `/bakeries/{bakeryId}/subscription-orders` | Owner | Create subscription order |
-| GET | `/bakeries/{bakeryId}/subscription-orders` | Bakery owner/admin | List subscription orders |
-| GET | `/subscription-orders/{orderId}` | Bakery owner/admin | Subscription order detail |
-| POST | `/subscription-orders/{orderId}/payments` | Owner | Submit payment evidence |
+| GET | `/bakeries/{bakeryId}/subscription` | CUSTOMER/BAKERY_OWNER + bakery ownership, or ADMIN | Current entitlement |
+| POST | `/bakeries/{bakeryId}/subscription-orders` | CUSTOMER/BAKERY_OWNER + bakery ownership | Create subscription order |
+| GET | `/bakeries/{bakeryId}/subscription-orders` | CUSTOMER/BAKERY_OWNER + bakery ownership, or ADMIN | List subscription orders |
+| GET | `/subscription-orders/{orderId}` | CUSTOMER/BAKERY_OWNER + bakery ownership, or ADMIN | Subscription order detail |
+| POST | `/subscription-orders/{orderId}/payments` | CUSTOMER/BAKERY_OWNER + bakery ownership | Submit payment evidence |
 
 ### Administration APIs
 

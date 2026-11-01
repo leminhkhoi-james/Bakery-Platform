@@ -59,12 +59,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/bakeries/{bakeryId}/subscription-orders",
                                 "/api/v1/subscription-orders/{orderId}/payments")
-                        .access(userRole("BAKERY_OWNER"))
+                        .access(userRole("BAKERY_OWNER", "CUSTOMER"))
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/bakeries/{bakeryId}/subscription",
                                 "/api/v1/bakeries/{bakeryId}/subscription-orders",
                                 "/api/v1/subscription-orders/{orderId}")
-                        .access(userRole("BAKERY_OWNER", "ADMIN"))
+                        .access(userRole("BAKERY_OWNER", "CUSTOMER", "ADMIN"))
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(resourceServer -> resourceServer
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))

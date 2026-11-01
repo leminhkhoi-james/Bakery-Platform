@@ -27,3 +27,10 @@ REST contracts.
 Platform roles are ADMIN, CUSTOMER and BAKERY_OWNER. Bakery membership only
 supports OWNER. Bakery access requires ownership of the requested bakery;
 only the owner can manage the bakery. See ADR-004.
+
+## Subscription role update — 2026-11-01
+
+CUSTOMER and BAKERY_OWNER user JWTs may create orders and read subscription/order
+data, subject to the existing ACTIVE OWNER bakery membership checks. ADMIN retains
+read/review access. This changes platform-role eligibility only; purchases remain
+bakery-scoped and do not create personal subscriptions or bakery ownership.

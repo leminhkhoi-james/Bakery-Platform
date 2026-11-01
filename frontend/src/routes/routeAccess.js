@@ -1,5 +1,6 @@
 export function requiredRoles(page) {
   if (page.startsWith('admin-')) return ['ADMIN']
+  if (page === 'vendor-subscription') return ['BAKERY_OWNER', 'CUSTOMER']
   if (page.startsWith('vendor-')) return ['BAKERY_OWNER']
   if (['payment', 'ai-studio', 'bidding', 'baker-quote', 'rfqs', 'rfq-new', 'request-detail'].includes(page)) return ['CUSTOMER']
   if (['profile', 'tracking', 'chat'].includes(page)) return []

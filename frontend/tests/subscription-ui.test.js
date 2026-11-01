@@ -56,3 +56,10 @@ test('Public plan page is accessible without auth context and starts in loading 
   const html = render(PublicPage, { onNavigate: () => {} })
   assert.match(html, /Gói dịch vụ cho tiệm bánh/); assert.match(html, /Đang tải/)
 })
+
+test('Customer subscription workspace exposes purchase flow and explains bakery ownership', () => {
+  const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { id: randomUUID() }, roles: ['CUSTOMER'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
+  assert.match(html, /Tài khoản khách hàng hoặc chủ tiệm có thể tạo đơn/)
+  assert.match(html, /khi có quyền chủ của cửa hàng đã chọn/)
+  assert.doesNotMatch(html, /Chỉ chủ tiệm được/)
+})

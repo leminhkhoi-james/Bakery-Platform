@@ -1,6 +1,18 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-10-28.
+> Cập nhật gần nhất: 2026-11-01.
+
+## Mở role CUSTOMER cho Subscription payment — 2026-11-01
+
+- Tạo subscription order/gửi payment nhận user JWT có CUSTOMER hoặc BAKERY_OWNER;
+  các API đọc subscription/order cũng nhận CUSTOMER. Giữ kiểm tra ACTIVE OWNER
+  của đúng bakery, proof privacy, idempotency và quyền ADMIN khi duyệt payment.
+  Đây là thay đổi role; gói vẫn gắn bakery, chưa có gói cá nhân.
+- Frontend cho CUSTOMER vào trang vendor-subscription và dùng luồng mua/gửi chứng
+  từ; các trang vendor khác giữ BAKERY_OWNER. Đồng bộ API spec, ADR-004 và CONTEXT.
+- Maven offline verify Subscription + platform-support thành công: 14 test pass,
+  5 test PostgreSQL/context bị skip vì Docker không khả dụng. Frontend 49 test
+  subscription/UI/auth pass, production build thành công. Chưa chạy HTTP end-to-end.
 
 ## DB và runtime Bakery/Subscription — 2026-10-28
 

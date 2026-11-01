@@ -13,6 +13,9 @@ creates one period from the order's feature snapshot. Idempotency key hashes and
 optimistic versioning protect retries and concurrent review. Owner membership is
 validated through Bakery Service; unavailable validation fails closed.
 
+User JWTs with CUSTOMER or BAKERY_OWNER may submit payment. Both still require
+ACTIVE OWNER membership of the order's bakery. Review remains ADMIN-only.
+
 ## Boundary
 
 This feature may persist only data owned by Subscription Service. References to

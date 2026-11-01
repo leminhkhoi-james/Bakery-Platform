@@ -63,6 +63,45 @@ class SecurityConfigTest {
     }
 
     @Test
+    @DisplayName("Customer và owner được tạo đơn/gửi payment; service JWT và role khác bị chặn")
+    void purchase_withCustomerOrOwnerUserToken_isAllowed() throws Exception {
+        List<String> paths = List.of("/api/v1/bakeries/" + BAKERY_ID + "/subscription-orders",
+                "/api/v1/subscription-orders/" + UUID.randomUUID() + "/payments");
+        for (String path : paths) {
+            mockMvc.perform(post(path)).andExpect(status().isUnauthorized());
+            for (String token : List.of("user-customer", "user-owner")) {
+                mockMvc.perform(post(path).header("Authorization", "Bearer " + token))
+                        .andExpect(status().isOk());
+            }
+            for (String token : List.of("service-customer", "user-admin", "user-unknown")) {
+                mockMvc.perform(post(path).header("Authorization", "Bearer " + token))
+                        .andExpect(status().isForbidden());
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("Customer được đọc subscription/order nhưng không được duyệt payment")
+    void subscriptionReads_withCustomerToken_areAllowedWhileAdminRoutesAreForbidden() throws Exception {
+        for (String path : List.of("/api/v1/bakeries/" + BAKERY_ID + "/subscription",
+                "/api/v1/bakeries/" + BAKERY_ID + "/subscription-orders",
+                "/api/v1/subscription-orders/" + UUID.randomUUID())) {
+            mockMvc.perform(get(path).header("Authorization", "Bearer user-customer"))
+                    .andExpect(status().isOk());
+            mockMvc.perform(get(path).header("Authorization", "Bearer service-customer"))
+                    .andExpect(status().isForbidden());
+        }
+        mockMvc.perform(get("/api/v1/admin/subscription-plans")
+                        .header("Authorization", "Bearer user-customer"))
+                .andExpect(status().isForbidden());
+        for (String action : List.of("approve", "reject")) {
+            mockMvc.perform(post("/api/v1/admin/bakery-payments/" + UUID.randomUUID() + "/" + action)
+                            .header("Authorization", "Bearer user-customer"))
+                    .andExpect(status().isForbidden());
+        }
+    }
+
+    @Test
     void entitlement_requiresScopedServiceTokenAndCorrelationId() throws Exception {
         String path = "/internal/v1/subscriptions/bakeries/" + BAKERY_ID + "/entitlement";
         mockMvc.perform(get(path)).andExpect(status().isUnauthorized());
@@ -100,6 +139,13 @@ class SecurityConfigTest {
         @PostMapping("/api/v1/bakeries/{bakeryId}/subscription-orders")
         String createOrder() { return "ok"; }
 
+        @PostMapping("/api/v1/subscription-orders/{orderId}/payments")
+        String submitPayment() { return "ok"; }
+
+        @GetMapping({"/api/v1/bakeries/{bakeryId}/subscription",
+                "/api/v1/bakeries/{bakeryId}/subscription-orders", "/api/v1/subscription-orders/{orderId}"})
+        String subscriptionRead() { return "ok"; }
+
         @GetMapping("/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement")
         String entitlement() { return "ok"; }
     }
@@ -110,7 +156,9 @@ class SecurityConfigTest {
         JwtDecoder jwtDecoder() {
             return token -> {
                 String tokenType = token.startsWith("service") ? "service" : "user";
-                String role = token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
+                String role = token.contains("admin") ? "ADMIN"
+                        : token.contains("customer") ? "CUSTOMER"
+                        : token.contains("unknown") ? "UNKNOWN" : "BAKERY_OWNER";
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(UUID.randomUUID().toString())

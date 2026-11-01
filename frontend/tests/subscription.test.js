@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto'
 import { subscriptionService as service } from '../src/services/subscriptionService.js'
 import { setAuthToken } from '../src/services/apiClient.js'
 import { mapSubscriptionPlan, mapBakerySubscription, mapSubscriptionOrders, subscriptionPermissions, canOrderPlan, canSubmitSubscriptionPayment } from '../src/services/subscriptionModels.js'
-import { requiredRoles } from '../src/routes/routeAccess.js'
+import { canAccess, requiredRoles } from '../src/routes/routeAccess.js'
 
 const bakeryId = randomUUID(), planId = randomUUID(), orderId = randomUUID(), key = randomUUID()
 const plan = { id: planId, code: 'BASIC', name: 'Tên từ API', description: 'Mô tả từ API', monthlyPrice: '123456.00', currency: 'VND', billingPeriodMonths: 2, status: 'ACTIVE', features: { MAX_PRODUCTS: '20', FEATURED_LISTING: 'false' } }
@@ -38,11 +38,15 @@ test('Plan detail uses actual UUID endpoint', async () => {
   handler = () => envelope(plan); assert.equal((await service.getPlan(planId)).id, planId)
   assert.equal(calls[0].url, '/api/v1/subscription-plans/' + planId)
 })
-test('Only owners can purchase; admins can read subscription history', () => {
+test('Customers and owners can purchase; admins can read subscription history', () => {
   assert.deepEqual(subscriptionPermissions(['ADMIN']), { canRead: true, canPurchase: false })
   assert.equal(subscriptionPermissions(['BAKERY_OWNER']).canPurchase, true)
-  assert.equal(subscriptionPermissions(['CUSTOMER']).canRead, false)
-  assert.deepEqual(requiredRoles('vendor-subscription'), ['BAKERY_OWNER'])
+  assert.deepEqual(subscriptionPermissions(['CUSTOMER']), { canRead: true, canPurchase: true })
+  assert.deepEqual(subscriptionPermissions([]), { canRead: false, canPurchase: false })
+  assert.deepEqual(requiredRoles('vendor-subscription'), ['BAKERY_OWNER', 'CUSTOMER'])
+  assert.equal(canAccess('vendor-subscription', { roles: ['CUSTOMER'] }), true)
+  assert.equal(canAccess('vendor-subscription', null), false)
+  assert.equal(canAccess('vendor-menu', { roles: ['CUSTOMER'] }), false)
 })
 test('Subscription uses Bearer JWT and preserves absent current/scheduled periods', async () => {
   handler = () => envelope({ bakeryId, currentSubscription: null, scheduledSubscription: null, features: {} })
@@ -77,10 +81,14 @@ test('Detailed order carries backend payment history and actual period', async (
   const result = await service.getOrder(orderId, bakeryId)
   assert.equal(result.payments[0].status, 'APPROVED'); assert.equal(result.period.status, 'SCHEDULED')
 })
-test('Only owner with unexpired pending order can submit payment', () => {
+test('Customers and owners with unexpired pending orders can submit payment', () => {
   assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], order), true)
   for (const status of ['PAYMENT_REVIEW', 'COMPLETED', 'REJECTED', 'EXPIRED', 'CANCELLED']) assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], { ...order, status }), false)
-  assert.equal(canSubmitSubscriptionPayment(['CUSTOMER'], order), false)
+  assert.equal(canSubmitSubscriptionPayment(['CUSTOMER'], order), true)
+  assert.equal(canSubmitSubscriptionPayment(['ADMIN'], order), false)
+  assert.equal(canSubmitSubscriptionPayment([], order), false)
+  assert.equal(canSubmitSubscriptionPayment(['CUSTOMER'], { ...order, status: 'PAYMENT_REVIEW' }), false)
+  assert.equal(canSubmitSubscriptionPayment(['CUSTOMER'], { ...order, expiresAt: '2000-01-01' }), false)
   assert.equal(canSubmitSubscriptionPayment(['BAKERY_OWNER'], { ...order, expiresAt: '2000-01-01' }), false)
 })
 test('Payment multipart contains writable metadata/proof, exact snapshot amount and idempotency key', async () => {
