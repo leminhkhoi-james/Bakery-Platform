@@ -76,17 +76,11 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
   }
 
   return (
-    <div className="w-full py-8 pb-16 bg-background min-h-[calc(100vh-16rem)]">
+    <div className="w-full py-8 pb-16 min-h-[calc(100vh-14rem)] flex items-center justify-center">
       <div className="flex flex-col w-full">
-        {/* Subtle Ambient Top Glow */}
-        <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-4 overflow-hidden">
-          {/* Ambient Blur Circles inside parent */}
-          <div className="absolute -top-24 right-10 w-96 h-96 rounded-full bg-secondary-container/15 blur-3xl pointer-events-none"></div>
-          <div className="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-primary-fixed/20 blur-3xl pointer-events-none"></div>
-
-
+        <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-4">
           {/* Centered Auth Card */}
-          <section className="relative z-10 w-full max-w-xl mx-auto bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_-12px_rgba(45,30,24,0.08)] border border-outline-variant/20 p-6 sm:p-10">
+          <section className="relative z-10 w-full max-w-xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-primary/15 p-6 sm:p-10">
             <div className="w-full space-y-6">
               {/* Switcher Tabs */}
               <div className="flex items-center justify-center p-1 bg-surface-container rounded-lg">
@@ -143,7 +137,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                       </label>
                       <div className="relative flex items-center">
                         <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/70 text-[20px] pointer-events-none">
-                          phone
+                          mail
                         </span>
                         <input
                           id="login-email"
