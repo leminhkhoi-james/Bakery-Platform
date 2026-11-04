@@ -79,20 +79,18 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-        {/* Left Gallery Showcase Card (5 cols on lg) */}
-        <div className="lg:col-span-5 space-y-2.5">
-          <div className="relative rounded-2xl overflow-hidden bg-white/95 backdrop-blur-md border border-primary/15 shadow-md p-2">
-            <div className="relative aspect-square w-full max-h-[360px] lg:max-h-[380px] overflow-hidden bg-surface-container rounded-xl">
-              <CatalogImage
-                src={product.images[imageIndex]?.url || product.image}
-                alt={product.title}
-                className="w-full h-full object-cover transition-all duration-500 hover:scale-105"
-              />
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Left Gallery Showcase Card (6 cols on lg, balanced with right card) */}
+        <div className="lg:col-span-6 flex flex-col rounded-2xl bg-white/95 backdrop-blur-md border border-primary/15 shadow-md p-4 sm:p-5">
+          <div className="relative flex-1 w-full min-h-[380px] sm:min-h-[440px] overflow-hidden bg-surface-container rounded-xl">
+            <CatalogImage
+              src={product.images[imageIndex]?.url || product.image}
+              alt={product.title}
+              className="w-full h-full object-cover transition-all duration-500 hover:scale-105"
+            />
           </div>
           {product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 gap-2 pt-3 shrink-0">
               {product.images.map((image, index) => (
                 <button
                   key={image.id || image.url}
@@ -107,8 +105,8 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
           )}
         </div>
 
-        {/* Right Product Details & Configuration Card (7 cols on lg - Compact & Ergonomic) */}
-        <div className="lg:col-span-7 flex flex-col space-y-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-primary/15 shadow-md">
+        {/* Right Product Details & Configuration Card (6 cols on lg - Symmetrical & Balanced) */}
+        <div className="lg:col-span-6 flex flex-col justify-between space-y-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-primary/15 shadow-md">
           {/* Header Row: Tags & Bakery */}
           <div className="flex items-center justify-between gap-2">
             {product.category && (
