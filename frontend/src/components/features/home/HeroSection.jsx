@@ -31,7 +31,7 @@ export const HeroSection = ({ onNavigate }) => {
             </div>
 
             {/* Mid Left Cloud Cluster (Pink Stripes + Heart) */}
-            <div className="absolute top-48 -left-24 sm:-left-44 md:-left-60 lg:-left-72 pointer-events-none select-none z-0 scale-75 sm:scale-90 md:scale-95">
+            <div className="absolute top-64 sm:top-72 md:top-[21.5rem] lg:top-[23rem] -left-24 sm:-left-44 md:-left-60 lg:-left-72 pointer-events-none select-none z-0 scale-75 sm:scale-90 md:scale-95">
               <div className="relative w-64 h-36">
                 <div className="absolute inset-0 rounded-full pattern-stripes-pink border-2 border-wine shadow-[3px_3px_0_#9f1e31]"></div>
                 <div className="absolute -top-8 left-10 w-32 h-32 rounded-full pattern-stripes-pink border-t-2 border-l-2 border-wine"></div>
@@ -52,7 +52,7 @@ export const HeroSection = ({ onNavigate }) => {
             </div>
 
             {/* Mid Right Cloud Cluster (Mint Dots + Strawberry & Heart) */}
-            <div className="absolute top-44 -right-20 sm:-right-40 md:-right-56 lg:-right-68 pointer-events-none select-none z-0 scale-75 sm:scale-90 md:scale-100">
+            <div className="absolute top-64 sm:top-72 md:top-[21rem] lg:top-[22.5rem] -right-20 sm:-right-40 md:-right-56 lg:-right-68 pointer-events-none select-none z-0 scale-75 sm:scale-90 md:scale-100">
               <div className="relative w-60 h-32">
                 <div className="absolute inset-0 rounded-full pattern-dots-mint border-2 border-wine shadow-[3px_3px_0_#9f1e31]"></div>
                 <div className="absolute -top-8 left-12 w-28 h-28 rounded-full pattern-dots-mint border-t-2 border-l-2 border-wine"></div>
