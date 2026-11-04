@@ -67,7 +67,7 @@ export const Header = ({
         <div
           className="w-full h-3.5 bg-repeat-x relative -mt-0.5"
           style={{
-            backgroundImage: 'radial-gradient(circle at 12px 0px, #ffc6db 9px, transparent 10px)',
+            backgroundImage: 'radial-gradient(circle at 12px 0px, #ffe2eb 9px, transparent 10px)',
             backgroundSize: '24px 12px'
           }}
         >
@@ -99,7 +99,7 @@ export const Header = ({
               return (
                 <div key={link.id} className="relative group/menu shrink-0">
                   <a
-                    className={`whitespace-nowrap px-2 xl:px-2.5 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
+                    className={`whitespace-nowrap px-2 xl:px-2 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-[11px] 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
                       isTabActive
                         ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                         : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -254,7 +254,7 @@ export const Header = ({
             return (
               <a
                 key={link.id}
-                className={`whitespace-nowrap px-2 xl:px-2.5 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
+                className={`whitespace-nowrap px-2 xl:px-2 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-[11px] 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
                   isTabActive
                     ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                     : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'

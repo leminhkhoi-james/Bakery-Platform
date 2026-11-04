@@ -8,7 +8,7 @@ export const CategoryBentoSection = ({ onNavigate }) => {
   const resource = useCatalogResource(loadProducts, { page: 1, size: 12, sort: 'createdAt,desc' })
   const categories = [...new Map((resource.data?.result || []).filter((product) => product.categoryId && product.category).map((product) => [product.categoryId, { id: product.categoryId, title: product.category, image: product.image }])).values()]
   return (
-    <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#fff7ed] bg-[radial-gradient(#f4c7c9_1.7px,transparent_1.7px)] bg-[size:24px_24px] border-b-2 border-wine" id="danh-muc-banh">
+    <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#fff8fa] bg-[radial-gradient(#ffd6e5_1.7px,transparent_1.7px)] bg-[size:24px_24px] border-b-2 border-wine" id="danh-muc-banh">
       <div className="max-w-[1220px] mx-auto px-6 text-center">
         <ScrollReveal animation="fade-up">
           <span className="dotted-frame-badge">Một chút cảm hứng ngọt ngào</span>
@@ -26,7 +26,7 @@ export const CategoryBentoSection = ({ onNavigate }) => {
           {categories.map((cat, idx) => (
             <ScrollReveal key={cat.id} animation="fade-up" delay={idx * 100}>
               <div className="dome-cake-card group h-full flex flex-col justify-between text-left">
-                <div className="h-64 overflow-hidden relative border-b-2 border-wine bg-[#fff0e6]">
+                <div className="h-64 overflow-hidden relative border-b-2 border-wine bg-[#fdf2f4]">
                   <CatalogImage
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     alt={'Mẫu bánh thuộc danh mục ' + cat.title}

@@ -30,7 +30,7 @@
   display: inline-block;
   width: 4px;
   height: 1.15rem;
-  background: linear-gradient(180deg, var(--color-primary, #6b212e), var(--color-secondary, #b87328));
+  background: linear-gradient(180deg, var(--color-primary, #6b212e), var(--color-secondary, #c05477));
   border-radius: 4px;
 }
 
@@ -459,13 +459,13 @@
 }
 
 .sc-dashboard-distribution meter::-webkit-meter-optimum-value {
-  background: linear-gradient(90deg, #b87328, #6b212e);
+  background: linear-gradient(90deg, #c05477, #6b212e);
   border-radius: 9999px;
   transition: width 0.3s ease;
 }
 
 .sc-dashboard-distribution meter::-moz-meter-bar {
-  background: linear-gradient(90deg, #b87328, #6b212e);
+  background: linear-gradient(90deg, #c05477, #6b212e);
   border-radius: 9999px;
 }
 
@@ -486,7 +486,7 @@
 }
 
 .sc-dashboard-link:hover {
-  color: var(--color-secondary, #b87328);
+  color: var(--color-secondary, #c05477);
   gap: 0.6rem;
   text-decoration: none;
 }
@@ -607,7 +607,7 @@
   display: block;
   font-size: 0.74rem;
   font-weight: 600;
-  color: var(--color-secondary, #b87328);
+  color: var(--color-secondary, #c05477);
   margin-top: 0.15rem;
 }
 

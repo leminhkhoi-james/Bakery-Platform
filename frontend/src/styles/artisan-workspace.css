@@ -1,6 +1,6 @@
 /* UI reference: SweetCake.zip. Presentation only; API state stays in each feature. */
 :is(.sc-customer, .sc-portal, .sc-drawer, .sc-catalog) {
-  --color-secondary: #b87328;
+  --color-secondary: #c05477;
   --color-secondary-container: #fef3c7;
   --color-secondary-fixed: #fde68a;
   --color-background: #f8fafc;
@@ -29,7 +29,7 @@
 .sc-avatar { background: #f1f5f9; border-color: #e2e8f0; }
 .sc-icon-button { border-color: #e2e8f0; background: #ffffff; }
 .sc-input { min-height: 2.75rem; border-color: #e2e8f0; border-radius: .75rem; background: #f8fafc; }
-.sc-input:focus { outline: 2px solid #b8860b66; outline-offset: 2px; }
+.sc-input:focus { outline: 2px solid #c0547766; outline-offset: 2px; }
 .sc-input::file-selector-button { padding: .35rem .65rem; margin-right: .75rem; border-radius: .4rem; background: #f1f5f9; color: #0f172a; }
 :is(.sc-customer, .sc-portal, .sc-drawer) label { min-width: 0; font-size: .8rem; line-height: 1.6; }
 .sc-toolbar, .sc-customer .sc-toolbar { border-color: #e2e8f0; border-radius: 1rem; background: #f1f5f9; padding: 1rem; }
@@ -44,7 +44,7 @@
 .sc-tabs button { min-height: 2.75rem; border-radius: .7rem; }
 .sc-tabs button[aria-pressed=true] { background: var(--color-primary); color: white; }
 .sc-metric { min-height: 10rem; padding: 1.5rem; }
-.sc-metric-icon { background: #fef3c7; color: #b87328; border-radius: 1rem; padding: .8rem; }
+.sc-metric-icon { background: #ffeaf1; color: #c05477; border-radius: 1rem; padding: .8rem; }
 .sc-drawer { background: #f8fafc; }
 .sc-drawer-heading { background: #f8fafc; border-color: #e2e8f0; padding: 1.25rem 1.5rem; }
 .sc-drawer-body { padding: 1.5rem; }
@@ -56,7 +56,7 @@
 .sc-profile-page .sc-profile-nav { background: #f1f5f9; padding: 1rem; border-radius: 1.25rem; }
 .sc-profile-page .sc-profile-content { min-height: 38rem; }
 .sc-profile-nav button { min-width: 0; min-height: 3rem; }
-.sc-profile-nav button[aria-pressed=true] { background: var(--color-primary); color: white; box-shadow: 0 4px 12px #8b5e3c20; }
+.sc-profile-nav button[aria-pressed=true] { background: var(--color-primary); color: white; box-shadow: 0 4px 12px #c0547720; }
 .sc-profile-fields > div { padding-block: 1.2rem; }
 .sc-order-history > .sc-panel { padding: clamp(1rem, 2vw, 2rem); }
 .sc-order-snapshot .sc-detail-grid > section { background: #f8fafc; border-color: #e2e8f0; border-radius: 1rem; }
@@ -72,7 +72,7 @@
 .sc-studio-form > h2 { display: flex; align-items: center; gap: .75rem; }
 .sc-studio-results { background: #ffffff; }
 .sc-studio-results > div > article { box-shadow: none; background: #f8fafc; }
-.sc-checkout-summary { border-top: 4px solid #b8860b; }
+.sc-checkout-summary { border-top: 4px solid #c05477; }
 .sc-catalog { background-color: transparent; }
 .sc-catalog-card { padding: .75rem; border: 1px solid #e2e8f0; border-radius: 1.5rem; background: white; box-shadow: 0 8px 24px -4px #2d1e1808; }
 .sc-catalog-card > button { aspect-ratio: 1 / 1; border-radius: 1rem; }

@@ -94,7 +94,7 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
             {filteredBakeries.map((bakery, idx) => (
               <ScrollReveal key={bakery.id} animation="fade-up" delay={idx * 100}>
                 <div className="dome-cake-card group flex flex-col h-full">
-                  <div className="h-32 sm:h-36 overflow-hidden relative border-b-2 border-wine bg-[#fff0e6]">
+                  <div className="h-32 sm:h-36 overflow-hidden relative border-b-2 border-wine bg-[#fdf2f4]">
                     <CatalogImage
                       alt={bakery.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

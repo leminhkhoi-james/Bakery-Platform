@@ -37,13 +37,13 @@ export const Footer = ({ onNavigate }) => {
       {/* Top Decorator: Vintage Polka Dot Scallop Ribbon Trim at Top of Footer */}
       <div className="relative w-full select-none overflow-hidden" aria-hidden="true">
         {/* Polka Dot Pink Curtain Ribbon */}
-        <div className="h-3.5 w-full bg-[#ffc6db] pattern-dots-pink border-b border-wine"></div>
+        <div className="h-3.5 w-full bg-[#ffe2eb] pattern-dots-pink border-b border-wine"></div>
 
         {/* White Pearl Scallop Ruffle Edge */}
         <div
           className="w-full h-3 bg-repeat-x relative -mt-0.5"
           style={{
-            backgroundImage: 'radial-gradient(circle at 10px 0px, #ffc6db 7px, transparent 8px)',
+            backgroundImage: 'radial-gradient(circle at 10px 0px, #ffe2eb 7px, transparent 8px)',
             backgroundSize: '20px 10px'
           }}
         >
@@ -66,7 +66,7 @@ export const Footer = ({ onNavigate }) => {
             <p className="text-sm text-wine/80 font-bold leading-relaxed">
               Nền tảng thương mại điện tử kết nối các tiệm bánh nghệ nhân, mang đến những kiệt tác ngọt ngào cho mọi khoảnh khắc đáng nhớ.
             </p>
-            <div className="inline-flex items-center gap-2 bg-[#ffc6db]/50 border border-wine/40 rounded-full px-3 py-1 text-xs font-extrabold text-wine">
+            <div className="inline-flex items-center gap-2 bg-[#ffe2eb]/50 border border-wine/40 rounded-full px-3 py-1 text-xs font-extrabold text-wine">
               <span>🍓 Sugary Sparks x SweetCake</span>
             </div>
           </div>

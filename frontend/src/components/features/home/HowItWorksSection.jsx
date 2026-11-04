@@ -24,7 +24,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                 <div className="bg-paper border-2 border-wine rounded-2xl p-6 shadow-[5px_6px_0_#e1a0af] flex flex-col justify-between h-full">
                   <div>
                     {/* Dotted Circle Step Number */}
-                    <div className="font-savoure italic text-2xl font-bold text-wine w-14 h-14 rounded-full border-2 border-dashed border-wine bg-butter flex items-center justify-center mb-5 shadow-xs">
+                    <div className="font-savoure italic text-2xl font-bold text-wine w-14 h-14 rounded-full border-2 border-dashed border-wine bg-[#fff0f4] flex items-center justify-center mb-5 shadow-xs">
                       {step.stepNum < 10 ? `0${step.stepNum}` : step.stepNum}
                     </div>
 
@@ -68,7 +68,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
           <div
             className="w-full h-full bg-repeat-x"
             style={{
-              backgroundImage: 'radial-gradient(circle at 12px 0px, #ffc6db 8px, transparent 9px)',
+              backgroundImage: 'radial-gradient(circle at 12px 0px, #ffe2eb 8px, transparent 9px)',
               backgroundSize: '24px 10px',
             }}
           />
@@ -85,7 +85,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
           <div className="relative w-44 h-24">
             <div className="absolute inset-0 rounded-full pattern-dots-mint border-2 border-wine shadow-[3px_3px_0_#9f1e31]"></div>
             <div className="absolute -top-4 left-6 w-20 h-20 rounded-full pattern-dots-mint border-t-2 border-l-2 border-wine"></div>
-            <div className="absolute -bottom-2 right-6 bg-[#be4876] text-white rounded-full w-7 h-7 flex items-center justify-center border border-wine text-xs shadow-xs">
+            <div className="absolute -bottom-2 right-6 bg-[#d46387] text-white rounded-full w-7 h-7 flex items-center justify-center border border-wine text-xs shadow-xs">
               🍓
             </div>
           </div>
@@ -117,7 +117,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                   </div>
 
                   {/* Main Arch Card */}
-                  <div className="bg-[#ffeaf1] border-3 border-wine rounded-[160px_160px_32px_32px] p-7 sm:p-9 shadow-[10px_10px_0_#6fb9c6] text-center w-full transition-transform duration-300 group-hover:-translate-y-1">
+                  <div className="bg-[#fff2f6] border-3 border-wine rounded-[160px_160px_32px_32px] p-7 sm:p-9 shadow-[10px_10px_0_#6fb9c6] text-center w-full transition-transform duration-300 group-hover:-translate-y-1">
                     {/* Inner Stitched Dotted Border */}
                     <div className="border-2 border-dashed border-wine/30 rounded-[135px_135px_22px_22px] px-5 py-7 bg-white/90 flex flex-col items-center">
                       {/* Illustrated Heart Icon with Sparkles */}
@@ -138,7 +138,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
 
                       {/* Bakery Assurance Seal Badge */}
                       <div className="w-full pt-4 border-t border-dashed border-wine/25 flex flex-col items-center gap-1">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-butter border border-wine/40 rounded-full text-[11px] font-bold text-wine shadow-xs">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#fff0f4] border border-wine/40 rounded-full text-[11px] font-bold text-wine shadow-xs">
                           <span>★</span>
                           <span className="uppercase tracking-wider">SweetCake Assurance</span>
                           <span>★</span>
@@ -172,7 +172,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                         <strong className="text-wine font-bold text-base sm:text-lg">
                           Tiệm nghệ nhân xác nhận mẫu
                         </strong>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ffc6db] border border-wine/30 text-wine">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ffe2eb] border border-wine/30 text-wine">
                           Chuẩn xác
                         </span>
                       </div>
@@ -184,7 +184,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
 
                   {/* Item 2 */}
                   <li className="bg-surface-bright/95 backdrop-blur-xs border-2 border-wine rounded-2xl p-4 sm:p-5 shadow-[4px_4px_0_#9f1e31] transition-all duration-300 hover:translate-x-1.5 hover:shadow-[6px_6px_0_#9f1e31] flex items-start gap-4">
-                    <div className="w-11 h-11 shrink-0 rounded-xl bg-[#ffc6db] border-2 border-wine flex items-center justify-center text-wine shadow-xs mt-0.5">
+                    <div className="w-11 h-11 shrink-0 rounded-xl bg-[#ffe2eb] border-2 border-wine flex items-center justify-center text-wine shadow-xs mt-0.5">
                       <span className="material-symbols-outlined text-2xl">schedule</span>
                     </div>
                     <div className="flex-1">
@@ -192,7 +192,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                         <strong className="text-wine font-bold text-base sm:text-lg">
                           Hẹn giờ &amp; Báo giá cụ thể
                         </strong>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-butter border border-wine/30 text-wine">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#fff0f4] border border-wine/30 text-wine">
                           Minh bạch
                         </span>
                       </div>

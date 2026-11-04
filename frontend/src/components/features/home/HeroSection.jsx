@@ -24,7 +24,7 @@ export const HeroSection = ({ onNavigate }) => {
                 <div className="absolute inset-0 rounded-full pattern-dots-mint border-2 border-wine shadow-[2px_2px_0_#9f1e31]"></div>
                 <div className="absolute -top-6 left-8 w-24 h-24 rounded-full pattern-dots-mint border-t-2 border-l-2 border-wine"></div>
                 <div className="absolute -top-3 right-6 w-20 h-20 rounded-full pattern-dots-mint border-t-2 border-r-2 border-wine"></div>
-                <div className="absolute -bottom-2 right-10 bg-[#be4876] text-white rounded-full w-6 h-6 flex items-center justify-center border border-wine text-xs shadow-xs">
+                <div className="absolute -bottom-2 right-10 bg-[#d46387] text-white rounded-full w-6 h-6 flex items-center justify-center border border-wine text-xs shadow-xs">
                   🎀
                 </div>
               </div>
@@ -76,16 +76,16 @@ export const HeroSection = ({ onNavigate }) => {
                     SweetCake
                   </h2>
                 </div>
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#ffc6db] border-2 border-wine rounded-full flex items-center justify-center shadow text-xs">
+                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#ffe2eb] border-2 border-wine rounded-full flex items-center justify-center shadow text-xs">
                   🎀
                 </div>
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#ffc6db] border-2 border-wine rounded-full flex items-center justify-center shadow text-xs">
+                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#ffe2eb] border-2 border-wine rounded-full flex items-center justify-center shadow text-xs">
                   🎀
                 </div>
               </div>
 
               {/* Awning Canopy (Striped Mint & White with Wine Hearts) */}
-              <div className="relative w-full overflow-hidden rounded-t-3xl border-4 border-wine bg-[#ffe2e9] shadow-[0_6px_0_#741329] z-20">
+              <div className="relative w-full overflow-hidden rounded-t-3xl border-4 border-wine bg-[#fff0f4] shadow-[0_6px_0_#741329] z-20">
                 <div className="h-24 w-full flex">
                   <div className="flex-1 bg-white border-r-2 border-wine"></div>
                   <div className="flex-1 bg-[#6fb9c6] border-r-2 border-wine"></div>
@@ -100,25 +100,25 @@ export const HeroSection = ({ onNavigate }) => {
                   <div className="flex-1 bg-white"></div>
                 </div>
                 <div className="w-full h-7 bg-wine flex justify-around items-center px-2">
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
-                  <span className="text-[#ffe2e9] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
+                  <span className="text-[#fff0f4] text-xs">♥</span>
                 </div>
               </div>
 
               {/* Side Curtains / Pink Drapes (z-25 so they drape ON TOP of clouds) */}
-              <div className="absolute -left-5 top-14 w-11 h-48 bg-[#be4876] border-2 border-wine rounded-b-full transform -rotate-3 z-25 flex flex-col justify-end items-center pb-3">
+              <div className="absolute -left-5 top-14 w-11 h-48 bg-[#d46387] border-2 border-wine rounded-b-full transform -rotate-3 z-25 flex flex-col justify-end items-center pb-3">
                 <div className="w-6 h-6 rounded-full bg-white border-2 border-wine flex items-center justify-center text-xs">
                   🎀
                 </div>
               </div>
-              <div className="absolute -right-5 top-14 w-11 h-48 bg-[#be4876] border-2 border-wine rounded-b-full transform rotate-3 z-25 flex flex-col justify-end items-center pb-3">
+              <div className="absolute -right-5 top-14 w-11 h-48 bg-[#d46387] border-2 border-wine rounded-b-full transform rotate-3 z-25 flex flex-col justify-end items-center pb-3">
                 <div className="w-6 h-6 rounded-full bg-white border-2 border-wine flex items-center justify-center text-xs">
                   🎀
                 </div>
@@ -143,9 +143,9 @@ export const HeroSection = ({ onNavigate }) => {
                 <svg className="w-44 h-52 sm:w-52 sm:h-60 md:w-60 md:h-68 drop-shadow-md" fill="none" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
                   {/* Cat Ears */}
                   <polygon fill="#FFFFFF" points="50,65 25,10 80,45" stroke="#9f1e31" strokeJoin="round" strokeWidth="3.5" />
-                  <polygon fill="#ffc6db" points="45,55 35,25 70,45" />
+                  <polygon fill="#ffe2eb" points="45,55 35,25 70,45" />
                   <polygon fill="#FFFFFF" points="190,65 215,10 160,45" stroke="#9f1e31" strokeJoin="round" strokeWidth="3.5" />
-                  <polygon fill="#ffc6db" points="195,55 205,25 170,45" />
+                  <polygon fill="#ffe2eb" points="195,55 205,25 170,45" />
                   {/* White Head */}
                   <path d="M45,85 C35,130 55,170 120,170 C185,170 205,130 195,85 C185,45 55,45 45,85 Z" fill="#FFFFFF" stroke="#9f1e31" strokeWidth="3.5" />
                   {/* Whiskers */}
@@ -161,8 +161,8 @@ export const HeroSection = ({ onNavigate }) => {
                   <circle cx="162" cy="120" fill="#FFFFFF" r="3" />
                   <text fill="#FFFFFF" fontSize="8" x="153" y="117">♥</text>
                   {/* Blushing Cheeks */}
-                  <ellipse cx="65" cy="132" fill="#ffc6db" opacity="0.9" rx="10" ry="6" />
-                  <ellipse cx="175" cy="132" fill="#ffc6db" opacity="0.9" rx="10" ry="6" />
+                  <ellipse cx="65" cy="132" fill="#ffe2eb" opacity="0.9" rx="10" ry="6" />
+                  <ellipse cx="175" cy="132" fill="#ffe2eb" opacity="0.9" rx="10" ry="6" />
                   {/* Nose & Mouth */}
                   <polygon fill="#9f1e31" points="120,126 116,122 124,122" />
                   <path d="M112,132 C116,136 120,133 120,133 C120,133 124,136 128,132" fill="none" stroke="#9f1e31" strokeLinecap="round" strokeWidth="2.5" />
@@ -175,12 +175,12 @@ export const HeroSection = ({ onNavigate }) => {
                   <path d="M128,185 L140,225 L124,215 L120,190" fill="#6fb9c6" stroke="#9f1e31" strokeWidth="2" />
                   {/* Apron Bib & Heart Pocket */}
                   <rect fill="#FFFFFF" height="60" rx="6" stroke="#9f1e31" strokeWidth="2.5" width="70" x="85" y="200" />
-                  <path d="M120,215 C115,208 105,210 105,220 C105,228 120,236 120,236 C120,236 135,228 135,220 C135,210 125,208 120,215 Z" fill="#ffc6db" stroke="#9f1e31" strokeWidth="1.5" />
+                  <path d="M120,215 C115,208 105,210 105,220 C105,228 120,236 120,236 C120,236 135,228 135,220 C135,210 125,208 120,215 Z" fill="#ffe2eb" stroke="#9f1e31" strokeWidth="1.5" />
                   {/* Paws Holding Whisk */}
                   <circle cx="70" cy="210" fill="#FFFFFF" r="16" stroke="#9f1e31" strokeWidth="3" />
                   <circle cx="170" cy="210" fill="#FFFFFF" r="16" stroke="#9f1e31" strokeWidth="3" />
                   <line stroke="#6fb9c6" strokeLinecap="round" strokeWidth="4" x1="168" x2="190" y1="195" y2="155" />
-                  <circle cx="192" cy="153" fill="#ffc6db" r="8" stroke="#9f1e31" strokeWidth="2" />
+                  <circle cx="192" cy="153" fill="#ffe2eb" r="8" stroke="#9f1e31" strokeWidth="2" />
                 </svg>
               </div>
 
@@ -228,7 +228,7 @@ export const HeroSection = ({ onNavigate }) => {
               <div className="absolute -top-8 left-6 flex items-end gap-3 pointer-events-auto">
                 <div className="relative bg-white border-2 border-wine rounded-t-full w-12 h-12 p-1 flex flex-col items-center justify-end shadow-xs">
                   <span className="absolute -top-2.5 text-xs">🍓</span>
-                  <div className="w-9 h-5 bg-[#C98B62] rounded border border-wine flex items-center justify-center text-[8px] text-white font-bold">
+                  <div className="w-9 h-5 bg-[#ffd6e5] rounded border border-wine flex items-center justify-center text-[8px] text-white font-bold">
                     CAKE
                   </div>
                 </div>
@@ -245,13 +245,13 @@ export const HeroSection = ({ onNavigate }) => {
 
               {/* Counter Skirt (Gingham Caro Red + Badges) */}
               <div className="relative w-full h-20 pattern-gingham-red border-4 border-t-0 border-wine shadow-[0_6px_0_#741329] rounded-b-xl flex items-center justify-around px-4">
-                <div className="px-3 py-1 bg-[#ffc6db] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
+                <div className="px-3 py-1 bg-[#ffe2eb] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
                   <span>🎀</span> <span>Handmade</span>
                 </div>
-                <div className="px-3 py-1 bg-[#ffc6db] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
+                <div className="px-3 py-1 bg-[#ffe2eb] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
                   <span>🍓</span> <span>Fresh Daily</span>
                 </div>
-                <div className="px-3 py-1 bg-[#ffc6db] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
+                <div className="px-3 py-1 bg-[#ffe2eb] border-2 border-wine rounded-full text-xs font-bold shadow-xs flex items-center gap-1 text-wine">
                   <span>🎀</span> <span>Custom Style</span>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export const HeroSection = ({ onNavigate }) => {
             {/* Left Editorial Copy */}
             <div className="lg:col-span-7 flex flex-col items-start">
               <ScrollReveal animation="fade-up" delay={100}>
-                <span className="inline-block -rotate-3 bg-white border-2 border-wine rounded-full text-wine px-5 py-2 mb-5 text-sm font-extrabold shadow-[3px_3px_0_#ffc6db]">
+                <span className="inline-block -rotate-3 bg-white border-2 border-wine rounded-full text-wine px-5 py-2 mb-5 text-sm font-extrabold shadow-[3px_3px_0_#ffe2eb]">
                   ✦ Bánh kem theo ý bạn ✦
                 </span>
               </ScrollReveal>
@@ -351,7 +351,7 @@ export const HeroSection = ({ onNavigate }) => {
                   {/* Backdrop radial glow */}
                   <div className="absolute inset-0 bg-radial from-[#ffe2ec] via-[#ffe2ec]/70 to-transparent rounded-full -z-10 scale-125 blur-xl"></div>
 
-                  <div className="relative rounded-[160px_160px_28px_28px] border-4 border-wine bg-white p-4 shadow-[10px_10px_0_#ffc6db] overflow-hidden">
+                  <div className="relative rounded-[160px_160px_28px_28px] border-4 border-wine bg-white p-4 shadow-[10px_10px_0_#ffe2eb] overflow-hidden">
                     <img
                       className="w-full h-[380px] object-cover rounded-[140px_140px_20px_20px] transition-transform duration-700 hover:scale-105"
                       alt="Bánh kem nghệ nhân SweetCake"

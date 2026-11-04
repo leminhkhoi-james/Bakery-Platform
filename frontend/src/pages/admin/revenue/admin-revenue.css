@@ -123,7 +123,7 @@
 
 .sc-revenue-row-label .sc-icon {
   font-size: 1.05rem;
-  color: #b87328;
+  color: #c05477;
 }
 
 .sc-revenue-segmented-control {
@@ -392,7 +392,7 @@
 }
 
 .sc-revenue-status-match {
-  color: #b87328;
+  color: #c05477;
 }
 
 /* Error message */
@@ -593,7 +593,7 @@
 
 .sc-revenue-plan-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #b87328, #6b212e);
+  background: linear-gradient(90deg, #c05477, #6b212e);
   border-radius: 9999px;
   transition: width 0.4s ease;
 }

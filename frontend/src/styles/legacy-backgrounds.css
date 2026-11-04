@@ -37,7 +37,7 @@
   pointer-events: none;
   user-select: none;
   z-index: 0;
-  --sc-glow-gold: rgba(184, 115, 40, 0.04);
+  --sc-glow-gold: rgba(212, 99, 135, 0.04);
   --sc-glow-champagne: rgba(226, 232, 240, 0.4);
 }
 .sc-background-glow { position: absolute; display: block; border-radius: 50%; filter: blur(4rem); }
@@ -60,13 +60,13 @@
 .home-page-wrapper .striped-idea-bg::after { width: min(20rem, 100%); height: 20rem; right: 0; bottom: 0; background: #ffdbe61a; filter: blur(2.5rem); }
 .home-page-wrapper .striped-idea-bg { isolation: isolate; }
 .home-page-wrapper .striped-idea-bg > * { position: relative; z-index: 1; }
-.sc-background-ornaments[data-background="bidding"] { --sc-glow-gold: #b8860b0d; --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
+.sc-background-ornaments[data-background="bidding"] { --sc-glow-gold: #c054770d; --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
 .sc-background-ornaments[data-background="bidding"] .sc-background-glow--gold { top: 3rem; left: 33%; right: auto; }
 .sc-background-ornaments[data-background="bidding"] .sc-background-glow--champagne { left: auto; right: 3rem; }
-.sc-background-ornaments[data-background="profile"] { --sc-glow-gold: rgba(184, 115, 40, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
-.sc-background-ornaments[data-background="explore"] .sc-background-glow--gold { top: auto; bottom: -2.5rem; right: -2.5rem; width: 12rem; height: 12rem; background: #b8860b26; filter: blur(2.5rem); }
+.sc-background-ornaments[data-background="profile"] { --sc-glow-gold: rgba(212, 99, 135, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
+.sc-background-ornaments[data-background="explore"] .sc-background-glow--gold { top: auto; bottom: -2.5rem; right: -2.5rem; width: 12rem; height: 12rem; background: #c0547726; filter: blur(2.5rem); }
 .sc-background-ornaments[data-background="explore"] .sc-background-glow--champagne { opacity: .3; }
-.sc-background-ornaments[data-background="stores"] { background: linear-gradient(to bottom, #8b5e3c0d, #f8fafc 24rem); }
+.sc-background-ornaments[data-background="stores"] { background: linear-gradient(to bottom, #d463870d, #f8fafc 24rem); }
 .sc-background-ornaments[data-background="stores"] .sc-background-glow { display: none; }
 /* The legacy profile and cart banners used two clipped, blurred light sources. */
 .sc-customer-heading { position: relative; isolation: isolate; overflow: hidden; }
@@ -87,12 +87,12 @@
   border-color: #e2e8f0;
   background-color: #ffffff;
 }
-[data-customer-page="stores"] .sc-catalog > div:first-child { background: linear-gradient(to bottom, #8b5e3c0d, #f8fafc); }
+[data-customer-page="stores"] .sc-catalog > div:first-child { background: linear-gradient(to bottom, #d463870d, #f8fafc); }
 [data-customer-page="product-detail"] .sc-catalog .group > .aspect-\[4\/5\] { background-color: #f8fafc; }
 /* Portal surfaces retain the champagne sidebar and translucent header. */
 .sc-portal aside:is([class~="w-72"], [class~="w-64"]) { background: #ffffff; border-color: #e2e8f0; }
 .sc-portal-header { background: #ffffff; backdrop-filter: blur(20px); box-shadow: 0 1px 8px #2d1e180a; }
-.sc-portal .sc-background-ornaments { --sc-glow-gold: rgba(184, 115, 40, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.3); }
+.sc-portal .sc-background-ornaments { --sc-glow-gold: rgba(212, 99, 135, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.3); }
 .sc-metric { position: relative; isolation: isolate; overflow: hidden; background-color: #f8fafc; }
 .sc-metric > * { position: relative; z-index: 1; }
 .sc-metric::before { content: ''; position: absolute; right: -2rem; top: -2rem; width: 8rem; height: 8rem; border-radius: 50%; background: rgba(184, 115, 40, 0.04); filter: blur(2.5rem); pointer-events: none; transition: transform .25s; }
