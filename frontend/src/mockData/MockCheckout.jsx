@@ -49,7 +49,7 @@ export default function MockCheckout({ offerId, items = [], onConfirmed, onNavig
     } catch (failure) { setError(failure) } finally { setBusy(false) }
   }
   return <form onSubmit={submit} className="space-y-4">
-    <div className="flex items-center gap-1.5 rounded-xl bg-surface-container-high px-3 py-2 text-xs text-on-surface-variant">
+    <div className="flex items-center gap-1.5 rounded-xl bg-primary-fixed/40 border border-primary/20 px-3 py-2 text-xs text-wine">
       <Icon name="info" className="text-sm text-secondary shrink-0" />
       <span>Trang này không thu tiền. Vui lòng trao đổi phương thức thanh toán với tiệm.</span>
     </div>
@@ -69,8 +69,8 @@ export default function MockCheckout({ offerId, items = [], onConfirmed, onNavig
     </label>
 
     {chosenAddress && !addressDraft && (
-      <div className="space-y-1.5 rounded-2xl bg-surface-container-low p-3.5 text-xs border border-outline-variant/30">
-        <p className="font-bold text-on-surface text-sm flex items-center justify-between">
+      <div className="space-y-1.5 rounded-xl bg-[#fff8fa] p-3 text-xs border border-primary/15 shadow-2xs">
+        <p className="font-bold text-wine text-xs sm:text-sm flex items-center justify-between">
           <span>{chosenAddress.recipientName}</span>
           <span className="font-mono text-outline font-normal">{chosenAddress.recipientPhone}</span>
         </p>
