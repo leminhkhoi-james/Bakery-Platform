@@ -487,9 +487,9 @@
 .striped-candy-bg {
   /* Dreamy fairy-tale landscape background */
   --sc-fairy-scene:
-    linear-gradient(rgba(255, 240, 245, 0.25), rgba(255, 240, 245, 0.45)),
+    linear-gradient(rgba(255, 248, 250, 0.90), rgba(255, 248, 250, 0.95)),
     url('/images/fairy-bg.jpg');
-  background-color: #fff5f8;
+  background-color: #fff8fa;
   background-image: var(--sc-fairy-scene);
   background-size: cover;
   background-position: center top;
