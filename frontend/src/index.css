@@ -104,6 +104,12 @@
 }
 
 @layer base {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
   body {
     font-family: var(--font-sans);
     font-size: var(--sc-text-body);
@@ -637,6 +643,7 @@ textarea.sc-input { min-height: 5rem; resize: vertical; }
 }
 
 @media (min-width: 768px) { .sc-portal-header .sc-menu-button { display: none; } }
+.sc-customer-layout { width: 100%; max-width: 100%; overflow-x: clip; }
 .sc-customer-heading { padding: 1.35rem 1.5rem; border: 1px solid #e2e8f0; border-radius: 1.1rem; background: linear-gradient(110deg, #ffffff, #ffffff 70%); }
 .sc-profile-avatar { width: 3.75rem; height: 3.75rem; font-size: 1.8rem; background: #ffffff; }
 /* Reserve scrollbar space so longer order lists do not shift the profile shell. */

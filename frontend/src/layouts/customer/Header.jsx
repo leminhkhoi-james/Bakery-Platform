@@ -82,14 +82,14 @@ export const Header = ({
       </div>
 
       {/* MAIN NAVIGATION BAR (Below the top curtain ribbon) */}
-      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-8 2xl:px-12 flex items-center justify-between gap-2 xl:gap-4">
+      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-3 sm:px-6 lg:px-5 xl:px-4 2xl:px-12 flex items-center justify-between gap-1.5 xl:gap-2 2xl:gap-4 min-w-0">
         {/* Brand Logo */}
         <div className="sc-customer-brand flex items-center gap-2 shrink-0"><button id="customer-menu-toggle" type="button" className="sc-customer-menu-button" aria-label="Mở điều hướng" aria-expanded={isMobileNavOpen} aria-controls="customer-mobile-navigation" onClick={() => { setIsMobileNavOpen(!isMobileNavOpen); setIsProfileMenuOpen(false) }}><span aria-hidden="true" className="material-symbols-outlined">{isMobileNavOpen ? 'close' : 'menu'}</span></button>
           <BrandLogo onClick={(e) => handleNav(e, 'home')} />
         </div>
 
         {/* Nav Links */}
-        <nav className="hidden xl:flex items-center gap-1.5 2xl:gap-2.5 font-savoure whitespace-nowrap shrink-0">
+        <nav className="hidden xl:flex items-center gap-1 xl:gap-1.5 2xl:gap-2.5 font-savoure whitespace-nowrap min-w-0">
           {CUSTOMER_NAV_LINKS.map((link) => {
             const isTabActive =
               scrolledActiveTab === link.route ||
@@ -99,7 +99,7 @@ export const Header = ({
               return (
                 <div key={link.id} className="relative group/menu shrink-0">
                   <a
-                    className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                    className={`whitespace-nowrap px-2 xl:px-2.5 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
                       isTabActive
                         ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                         : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -254,7 +254,7 @@ export const Header = ({
             return (
               <a
                 key={link.id}
-                className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                className={`whitespace-nowrap px-2 xl:px-2.5 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
                   isTabActive
                     ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                     : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -263,7 +263,7 @@ export const Header = ({
                 onClick={(e) => handleNav(e, link.route)}
               >
                 {link.icon && (
-                  <span className="material-symbols-outlined text-base text-current shrink-0">
+                  <span className="material-symbols-outlined text-sm xl:text-sm 2xl:text-base text-current shrink-0">
                     {link.icon}
                   </span>
                 )}
@@ -279,9 +279,9 @@ export const Header = ({
         </nav>
 
         {/* Actions & Utilities */}
-        <div className="flex items-center gap-2 sm:gap-3 2xl:gap-4 shrink-0">
+        <div className="flex items-center gap-1.5 xl:gap-2 2xl:gap-3 shrink-0">
           {/* Quick Search */}
-          <div className="relative hidden md:block w-40 lg:w-44 xl:w-52 2xl:w-64 shrink">
+          <div className="relative hidden md:block w-32 lg:w-36 xl:w-40 2xl:w-60 shrink">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
               search
             </span>

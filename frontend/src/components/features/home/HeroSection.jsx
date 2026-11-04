@@ -276,7 +276,7 @@ export const HeroSection = ({ onNavigate }) => {
           PART 2: MAIN HERO SECTION EDITORIAL
           ("Một chiếc bánh, thật là bạn.")
          ========================================== */}
-      <section className="snap-section relative z-10 w-full striped-hero-bg pt-10 sm:pt-14 pb-0 border-b-2 border-wine scroll-mt-24 sm:scroll-mt-28 min-h-[calc(100vh-5.5rem)] flex flex-col justify-between">
+      <section className="snap-section relative z-10 w-full overflow-hidden striped-hero-bg pt-10 sm:pt-14 pb-0 border-b-2 border-wine scroll-mt-24 sm:scroll-mt-28 min-h-[calc(100vh-5.5rem)] flex flex-col justify-between">
         <div className="max-w-[1220px] w-full mx-auto px-6 lg:px-8 my-auto py-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center min-h-[440px]">
             {/* Left Editorial Copy */}
