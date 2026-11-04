@@ -6,22 +6,65 @@ import { formatOrderDate, formatOrderMoney, orderDisplayNumber, configurationEnt
 import './order-tracking.css'
 
 const stages = [ ['PENDING', 'schedule'], ['CONFIRMED', 'task_alt'], ['BAKING', 'cake'], ['READY', 'inventory_2'], ['DELIVERING', 'local_shipping'], ['COMPLETED', 'check_circle'] ]
+
 export function OrderTrackingHeader({ order }) {
-  return <div className="sc-order-tracking-header"><div><h2>{orderDisplayNumber(order)}</h2><p><Icon name="storefront" />{order.bakeryName || 'Chưa có tên cửa hàng'}</p></div><StatusBadge status={order.status} label={orderStatusLabel(order.status)} /></div>
+  return (
+    <div className="sc-order-tracking-header">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="w-12 h-12 rounded-xl bg-primary-fixed/50 border border-primary/20 flex items-center justify-center text-primary shrink-0 shadow-2xs">
+          <Icon name="receipt_long" className="text-2xl" />
+        </div>
+        <div className="min-w-0">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-secondary block truncate">
+            {order.bakeryName ? `Tiệm: ${order.bakeryName}` : 'SweetCake Bakery'}
+          </span>
+          <p className="flex items-center gap-1.5 text-xs text-on-surface-variant font-medium mt-0.5">
+            <Icon name="storefront" className="text-sm text-secondary shrink-0" />
+            <span>Tiệm làm bánh đối tác</span>
+          </p>
+        </div>
+      </div>
+      <div className="text-right shrink-0">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-outline block">
+          Đơn hàng
+        </span>
+        <h2>{orderDisplayNumber(order)}</h2>
+        <div className="mt-1 flex justify-end">
+          <StatusBadge status={order.status} label={orderStatusLabel(order.status)} />
+        </div>
+      </div>
+    </div>
+  )
 }
+
 export function OrderProgress({ order }) {
   if (order.status === 'CANCELLED') return <section className="sc-order-cancelled" aria-label="Đơn hàng đã hủy"><Icon name="cancel" /><div><strong>Quy trình giao nhận đã dừng</strong><p>{orderHistoryNote(orderHistoryEntries(order.statusHistory).findLast((event) => event.toStatus === 'CANCELLED')?.note) || 'Xem lịch sử cập nhật để biết thêm chi tiết.'}</p></div></section>
   const current = stages.findIndex(([status]) => status === order.status)
   if (current < 0) return <p className="sc-order-muted">Chưa có thông tin tiến độ giao nhận.</p>
   return <div className="sc-order-progress-scroll" role="region" aria-label="Tiến trình giao nhận" tabIndex={0}><ol className="sc-order-progress">{stages.map(([status, icon], index) => <li key={status} aria-current={index === current ? 'step' : undefined} className={index < current ? 'is-complete' : index === current ? 'is-current' : ''}><span className="sc-order-step-icon"><Icon name={index < current ? 'check' : icon} /></span><span>{orderStatusLabel(status)}</span></li>)}</ol></div>
 }
+
 export default function OrderTrackingView({ order, showHeader = true, actionsSlot }) {
   const address = order.deliveryAddress
   const history = orderHistoryEntries(order.statusHistory)
   return <div className="sc-order-tracking-view">
     {showHeader && <OrderTrackingHeader order={order} />}
+    
+    {/* Haravan-Style Order Greeting Banner */}
+    <div className="sc-order-greeting-banner">
+      <h3 className="font-savoure text-lg sm:text-xl font-bold text-wine">
+        Cảm ơn bạn đã đặt bánh!
+      </h3>
+      <p className="text-xs sm:text-sm text-on-surface-variant mt-1 leading-relaxed">
+        {order.status === 'CANCELLED'
+          ? 'Đơn hàng này hiện đã dừng xử lý theo yêu cầu.'
+          : `Xin chào ${cleanPresentationLabel(order.customerName, 'Quý khách')}, chúng tôi đã nhận được đặt hàng của bạn và tiệm bánh đã sẵn sàng để chuẩn bị đơn.`}
+      </p>
+    </div>
+
     <OrderProgress order={order} />
     {actionsSlot}
+
     <div className="sc-order-tracking-columns"><div className="sc-order-tracking-main">
       <section className="sc-order-tracking-card"><h3><Icon name="cake" />Sản phẩm trong đơn</h3>{order.items?.length ? <ul className="sc-order-items">{order.items.map((item) => {
         const options = configurationEntries(item.configuration)
