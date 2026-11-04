@@ -281,12 +281,13 @@ export const Header = ({
         {/* Actions & Utilities */}
         <div className="flex items-center gap-1.5 xl:gap-2 2xl:gap-3 shrink-0">
           {/* Quick Search */}
-          <div className="relative hidden md:block w-24 lg:w-28 xl:w-28 2xl:w-52 shrink-0 transition-all focus-within:w-36 xl:focus-within:w-44">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
+          <div className="relative hidden md:block w-28 lg:w-32 xl:w-32 2xl:w-52 shrink-0 transition-all focus-within:w-40 xl:focus-within:w-48">
+            <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/70 text-base leading-none pointer-events-none">
               search
             </span>
             <input
-              className="w-full pl-6 pr-2 py-1 sm:py-1.5 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-[11px] sm:text-xs text-primary placeholder:text-primary/60 transition-all outline-none font-bold"
+              aria-label="Tìm theo tên bánh"
+              className="w-full pl-9 pr-3 py-1.5 sm:py-2 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-[11px] sm:text-xs text-primary placeholder:text-primary/55 placeholder:font-medium transition-all outline-none font-semibold text-ellipsis"
               placeholder="Tìm theo tên bánh..."
               type="text"
               value={searchValue}
