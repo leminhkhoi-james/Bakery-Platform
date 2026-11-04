@@ -3,7 +3,7 @@ import ScrollReveal from '../../common/ScrollReveal.jsx'
 export const HeroSection = ({ onNavigate }) => {
   return (
     <>
-      <section className="snap-section relative w-full overflow-hidden sunburst-bg -mt-24 sm:-mt-28 pt-24 sm:pt-28 border-b-2 border-wine scroll-mt-24 min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
+      <section className="snap-section relative w-full overflow-hidden sunburst-bg border-b-2 border-wine scroll-mt-24 min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
         {/* Background Radial Glow */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_248px,rgba(255,240,245,0.45),transparent_70%)] pointer-events-none"></div>
 

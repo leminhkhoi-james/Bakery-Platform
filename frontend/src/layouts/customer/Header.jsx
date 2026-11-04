@@ -57,7 +57,7 @@ export const Header = ({
   }
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 bg-surface shadow-xs flex flex-col">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-surface shadow-xs flex flex-col">
       {/* TOP POLKA DOT SCALLOP CURTAIN RIBBON (Placed ABOVE menu items) */}
       <div className="relative w-full overflow-hidden select-none z-10">
         {/* Polka Dot Pink Curtain Ribbon */}
@@ -82,14 +82,14 @@ export const Header = ({
       </div>
 
       {/* MAIN NAVIGATION BAR (Below the top curtain ribbon) */}
-      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-3 sm:px-6 lg:px-5 xl:px-4 2xl:px-12 flex items-center justify-between gap-1.5 xl:gap-2 2xl:gap-4 min-w-0">
+      <div className="h-16 sm:h-18 max-w-[1600px] w-full mx-auto px-2 sm:px-4 lg:px-4 xl:px-3 2xl:px-8 flex items-center justify-between gap-1 xl:gap-1.5 2xl:gap-3 min-w-0">
         {/* Brand Logo */}
         <div className="sc-customer-brand flex items-center gap-2 shrink-0"><button id="customer-menu-toggle" type="button" className="sc-customer-menu-button" aria-label="Mở điều hướng" aria-expanded={isMobileNavOpen} aria-controls="customer-mobile-navigation" onClick={() => { setIsMobileNavOpen(!isMobileNavOpen); setIsProfileMenuOpen(false) }}><span aria-hidden="true" className="material-symbols-outlined">{isMobileNavOpen ? 'close' : 'menu'}</span></button>
           <BrandLogo onClick={(e) => handleNav(e, 'home')} />
         </div>
 
         {/* Nav Links */}
-        <nav className="hidden xl:flex items-center gap-1 xl:gap-1.5 2xl:gap-2.5 font-savoure whitespace-nowrap min-w-0">
+        <nav className="hidden xl:flex items-center gap-0.5 xl:gap-1 2xl:gap-2 font-savoure whitespace-nowrap shrink-0">
           {CUSTOMER_NAV_LINKS.map((link) => {
             const isTabActive =
               scrolledActiveTab === link.route ||
@@ -99,7 +99,7 @@ export const Header = ({
               return (
                 <div key={link.id} className="relative group/menu shrink-0">
                   <a
-                    className={`whitespace-nowrap px-2 xl:px-2 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-[11px] 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
+                    className={`whitespace-nowrap px-2 xl:px-2 2xl:px-3.5 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
                       isTabActive
                         ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                         : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -254,7 +254,7 @@ export const Header = ({
             return (
               <a
                 key={link.id}
-                className={`whitespace-nowrap px-2 xl:px-2 2xl:px-4 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-[11px] 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 xl:gap-1 2xl:gap-1.5 shrink-0 ${
+                className={`whitespace-nowrap px-2 xl:px-2 2xl:px-3.5 py-1 xl:py-1 2xl:py-1.5 rounded-full text-xs xl:text-xs 2xl:text-sm font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
                   isTabActive
                     ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
                     : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
@@ -281,12 +281,12 @@ export const Header = ({
         {/* Actions & Utilities */}
         <div className="flex items-center gap-1.5 xl:gap-2 2xl:gap-3 shrink-0">
           {/* Quick Search */}
-          <div className="relative hidden md:block w-32 lg:w-36 xl:w-40 2xl:w-60 shrink">
+          <div className="relative hidden md:block w-28 lg:w-32 xl:w-36 2xl:w-56 shrink min-w-[90px] transition-all focus-within:w-44 xl:focus-within:w-52">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-lg">
               search
             </span>
             <input
-              className="w-full pl-9 pr-4 py-1.5 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-sm text-primary placeholder:text-primary/60 transition-all outline-none font-bold"
+              className="w-full pl-8 pr-3 py-1.5 rounded-full bg-surface border border-primary/30 focus:border-primary focus:bg-white text-xs sm:text-sm text-primary placeholder:text-primary/60 transition-all outline-none font-bold"
               placeholder="Tìm theo tên bánh..."
               type="text"
               value={searchValue}
