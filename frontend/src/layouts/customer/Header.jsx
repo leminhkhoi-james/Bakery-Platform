@@ -102,7 +102,7 @@ export const Header = ({
                     className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       isTabActive
                         ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
-                        : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
+                        : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
                     }`}
                     href={link.href}
                     onClick={(e) => handleNav(e, link.route)}
@@ -257,7 +257,7 @@ export const Header = ({
                 className={`whitespace-nowrap px-3 xl:px-3.5 2xl:px-4 py-1.5 rounded-full text-sm 2xl:text-base font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                   isTabActive
                     ? 'bg-primary text-on-primary font-extrabold shadow-md scale-[1.02]'
-                    : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
+                    : link.id === 'partnership' ? 'text-secondary bg-secondary/10 hover:bg-secondary/20 border border-secondary/30' : 'text-primary hover:text-primary-container hover:bg-primary-fixed-dim/60'
                 }`}
                 href={link.href}
                 onClick={(e) => handleNav(e, link.route)}

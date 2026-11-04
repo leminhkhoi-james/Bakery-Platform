@@ -1,27 +1,235 @@
-import { createSeed, createCustomerAddresses, demoId, DEMO_STORAGE_KEY, isDemoId, stamp } from './seed.js'
+import { createSeed, createCustomerAddresses, demoId, DEMO_STORAGE_KEY, isDemoId, stamp, future } from './seed.js'
 
 export class DemoError extends Error {
   constructor(message, status = 422) { super('DEMO: ' + message); this.status = status }
 }
-const validSave = (value) => value?.version === 2 && Number.isInteger(value.nextId) && value.nextId >= 1000 && value.actors && typeof value.actors === 'object' && !Array.isArray(value.actors) && ['addresses', 'users', 'bakeries', 'categories', 'products', 'requests', 'offers', 'orders', 'plans', 'subscriptionOrders', 'payments', 'conversations', 'messages', 'subscriptions', 'jobs', 'designs', 'addOns', 'members'].every((key) => Array.isArray(value[key]))
+export const validSave = (value) => value?.version === 2 && Number.isInteger(value.nextId) && value.nextId >= 1000 && value.actors && typeof value.actors === 'object' && !Array.isArray(value.actors) && ['addresses', 'users', 'bakeries', 'categories', 'products', 'requests', 'offers', 'orders', 'plans', 'subscriptionOrders', 'payments', 'conversations', 'messages', 'subscriptions', 'jobs', 'designs', 'addOns', 'members'].every((key) => Array.isArray(value[key]))
+
+export function migrateDemoState(state) {
+  let changed = false
+  // Repair legacy fixture mapping only; keep IDs, actors and user edits intact.
+  for (const request of state.requests || []) {
+    if (request.legacyId && request.deliveryDistrict?.includes(',')) {
+      request.deliveryDistrict = request.deliveryDistrict.split(',').at(-1).trim()
+      changed = true
+    }
+  }
+  for (const bakery of state.bakeries || []) {
+    for (const area of bakery.operations?.serviceAreas || []) {
+      if (!Object.hasOwn(area, 'active')) { area.active = true; changed = true }
+    }
+    for (const address of bakery.operations?.addresses || []) {
+      if (!Object.hasOwn(address, 'isPrimary') && typeof address.primary === 'boolean') {
+        address.isPrimary = address.primary
+        changed = true
+      }
+    }
+    for (const hour of bakery.operations?.businessHours || []) {
+      if (!Object.hasOwn(hour, 'opensAt') && typeof hour.openTime === 'string') { hour.opensAt = hour.openTime; changed = true }
+      if (!Object.hasOwn(hour, 'closesAt') && typeof hour.closeTime === 'string') { hour.closesAt = hour.closeTime; changed = true }
+    }
+  }
+
+  // Ensure initial seed payments are present if missing from older local storage
+  const seed = createSeed()
+  for (const seedPayment of seed.payments || []) {
+    if (!state.payments.some((p) => p.id === seedPayment.id)) {
+      const seedOrder = seed.subscriptionOrders.find((o) => o.id === seedPayment.subscriptionOrderId)
+      if (seedOrder && !state.subscriptionOrders.some((o) => o.id === seedOrder.id)) {
+        state.subscriptionOrders.unshift(seedOrder)
+      }
+      state.payments.unshift(seedPayment)
+      changed = true
+    }
+  }
+
+  // Keep payment and subscription order amounts aligned with current plan prices for pending reviews
+  for (const order of state.subscriptionOrders || []) {
+    if (order.status === 'PAYMENT_REVIEW') {
+      const match = state.plans.find((p) => p.id === order.planId)
+      if (match && order.totalAmount !== match.monthlyPrice) {
+        order.totalAmount = match.monthlyPrice
+        const p = state.payments.find((pay) => pay.subscriptionOrderId === order.id)
+        if (p && p.amount !== match.monthlyPrice) {
+          p.amount = match.monthlyPrice
+        }
+        changed = true
+      }
+    }
+  }
+
+  // Ensure submittedByName is populated on all payments
+  for (const payment of state.payments || []) {
+    if (!payment.submittedByName) {
+      const bakery = state.bakeries.find((b) => b.id === payment.bakeryId)
+      const user = state.users.find((u) => u.id === payment.submittedByUserId || u.id === bakery?.ownerId)
+      payment.submittedByName = user?.name || bakery?.name || 'Chủ tiệm'
+      changed = true
+    }
+  }
+
+  // Ensure seed customer orders are distributed to shops (e.g. Artisan Sweet Atelier) across older client saves
+  for (const seedOrder of seed.orders || []) {
+    const existing = (state.orders || []).find((o) => o.id === seedOrder.id)
+    if (existing) {
+      if (existing.bakeryId !== seedOrder.bakeryId) {
+        existing.bakeryId = seedOrder.bakeryId
+        changed = true
+      }
+    } else {
+      if (!state.orders) state.orders = []
+      state.orders.push(seedOrder)
+      changed = true
+    }
+  }
+
+  return changed
+}
+
+export function mergeDemoStates(local, remote) {
+  if (!validSave(remote)) return local
+  if (!validSave(local)) return remote
+
+  const actors = { ...(remote.actors || {}), ...(local.actors || {}) }
+
+  const plans = (local.plans || []).map((lp) => {
+    const rp = (remote.plans || []).find((p) => p.id === lp.id)
+    if (!rp) return lp
+    const lpTime = lp.updatedAt ? Date.parse(lp.updatedAt) : 0
+    const rpTime = rp.updatedAt ? Date.parse(rp.updatedAt) : 0
+    if (lpTime > rpTime) return lp
+    if (rpTime > lpTime) return rp
+    if (lp.monthlyPrice !== 49000 && lp.code === 'DEMO_0') return lp
+    if (rp.monthlyPrice !== 49000 && rp.code === 'DEMO_0') return rp
+    return rp
+  })
+  for (const rp of remote.plans || []) {
+    if (!plans.some((p) => p.id === rp.id)) plans.push(rp)
+  }
+
+  const orderMap = new Map()
+  for (const o of [...(local.subscriptionOrders || []), ...(remote.subscriptionOrders || [])]) {
+    if (!orderMap.has(o.id)) orderMap.set(o.id, o)
+  }
+  const subscriptionOrders = Array.from(orderMap.values())
+
+  const paymentMap = new Map()
+  for (const p of [...(local.payments || []), ...(remote.payments || [])]) {
+    if (!paymentMap.has(p.id)) paymentMap.set(p.id, p)
+  }
+  const payments = Array.from(paymentMap.values())
+
+  const bakeryMap = new Map()
+  for (const b of [...(local.bakeries || []), ...(remote.bakeries || [])]) {
+    if (!bakeryMap.has(b.id)) bakeryMap.set(b.id, b)
+  }
+  const bakeries = Array.from(bakeryMap.values())
+
+  const memberMap = new Map()
+  for (const m of [...(local.members || []), ...(remote.members || [])]) {
+    if (!memberMap.has(m.id)) memberMap.set(m.id, m)
+  }
+  const members = Array.from(memberMap.values())
+
+  const subMap = new Map()
+  for (const s of [...(local.subscriptions || []), ...(remote.subscriptions || [])]) {
+    if (!subMap.has(s.id)) subMap.set(s.id, s)
+  }
+  const subscriptions = Array.from(subMap.values())
+
+  const nextId = Math.max(local.nextId || 1000000, remote.nextId || 1000000)
+
+  return {
+    version: 2,
+    actors,
+    addressOwners: [...new Set([...(local.addressOwners || []), ...(remote.addressOwners || [])])],
+    users: local.users || remote.users,
+    bakeries,
+    categories: local.categories || remote.categories,
+    products: local.products || remote.products,
+    requests: local.requests || remote.requests,
+    offers: local.offers || remote.offers,
+    orders: local.orders || remote.orders,
+    plans,
+    subscriptionOrders,
+    payments,
+    conversations: local.conversations || remote.conversations,
+    messages: local.messages || remote.messages,
+    addresses: local.addresses || remote.addresses,
+    subscriptions,
+    jobs: local.jobs || remote.jobs,
+    designs: local.designs || remote.designs,
+    addOns: local.addOns || remote.addOns,
+    members,
+    nextId
+  }
+}
+
 export function createDemoStore(storage) {
   let state
   try { const saved = JSON.parse(storage?.getItem(DEMO_STORAGE_KEY) || 'null'); if (validSave(saved)) state = saved } catch { /* A corrupt demo save is discarded; auth storage is never read. */ }
   state ||= createSeed()
-  // Repair legacy fixture mapping only; keep IDs, actors and user edits intact.
-  for (const request of state.requests) if (request.legacyId && request.deliveryDistrict?.includes(',')) request.deliveryDistrict = request.deliveryDistrict.split(',').at(-1).trim()
-  for (const bakery of state.bakeries) for (const area of bakery.operations?.serviceAreas || []) if (!Object.hasOwn(area, 'active')) area.active = true
-  // Preserve configured values from older local snapshots using the current wire names.
-  for (const bakery of state.bakeries) {
-    for (const address of bakery.operations?.addresses || []) if (!Object.hasOwn(address, 'isPrimary') && typeof address.primary === 'boolean') address.isPrimary = address.primary
-    for (const hour of bakery.operations?.businessHours || []) {
-      if (!Object.hasOwn(hour, 'opensAt') && typeof hour.openTime === 'string') hour.opensAt = hour.openTime
-      if (!Object.hasOwn(hour, 'closesAt') && typeof hour.closeTime === 'string') hour.closesAt = hour.closeTime
-    }
-  }
+  migrateDemoState(state)
   const listeners = new Set()
   const notify = () => { for (const fn of listeners) fn() }
-  const save = () => { try { storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch { /* Quota/private mode: demo remains in memory. */ } notify() }
+  const broadcastSync = (snapshot) => {
+    if (typeof window !== 'undefined' && typeof window.fetch === 'function' && window.location?.origin) {
+      try {
+        window.fetch('/__sweetcake_demo_sync__', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(snapshot),
+        }).catch(() => {})
+      } catch {}
+    }
+  }
+  const pullSync = async () => {
+    if (typeof window !== 'undefined' && typeof window.fetch === 'function' && window.location?.origin) {
+      try {
+        const res = await window.fetch('/__sweetcake_demo_sync__')
+        if (res.ok) {
+          const remote = await res.json()
+          if (remote && validSave(remote)) {
+            const plansDiff = JSON.stringify(state.plans) !== JSON.stringify(remote.plans)
+            const ordersDiff = JSON.stringify(state.subscriptionOrders) !== JSON.stringify(remote.subscriptionOrders)
+            const customerOrdersDiff = JSON.stringify(state.orders) !== JSON.stringify(remote.orders)
+            const paymentsDiff = JSON.stringify(state.payments) !== JSON.stringify(remote.payments)
+            const bakeriesDiff = JSON.stringify(state.bakeries) !== JSON.stringify(remote.bakeries)
+            if (plansDiff || ordersDiff || customerOrdersDiff || paymentsDiff || bakeriesDiff) {
+              const merged = mergeDemoStates(state, remote)
+              migrateDemoState(merged)
+              state = merged
+              try { storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch {}
+              notify()
+              broadcastSync(state)
+            }
+          } else if (!remote && state) {
+            broadcastSync(state)
+          }
+        }
+      } catch {}
+    }
+  }
+  const save = () => {
+    try { storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch { /* Quota/private mode: demo remains in memory. */ }
+    notify()
+    broadcastSync(state)
+  }
+  save()
+  void pullSync()
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    const handleSync = () => {
+      if (typeof document === 'undefined' || !document.hidden) {
+        void pullSync()
+      }
+    }
+    window.addEventListener('focus', handleSync)
+    window.addEventListener('visibilitychange', handleSync)
+    if (typeof window.__SWEETCAKE_DEMO_SYNC_TIMER__ !== 'undefined') {
+      clearInterval(window.__SWEETCAKE_DEMO_SYNC_TIMER__)
+    }
+    window.__SWEETCAKE_DEMO_SYNC_TIMER__ = setInterval(handleSync, 3000)
+  }
   const id = () => demoId(state.nextId++)
   const roles = (user) => user?.roles || []
   const has = (user, ...allowed) => roles(user).some((role) => allowed.includes(role))
@@ -120,11 +328,121 @@ export function createDemoStore(storage) {
     if (targetStatus === 'COMPLETED') order.completedAt = changedAt
     return order
   }
+  function reload() {
+    try {
+      const raw = storage?.getItem(DEMO_STORAGE_KEY)
+      if (raw) {
+        const next = JSON.parse(raw)
+        if (validSave(next)) {
+          const plansDiff = JSON.stringify(state.plans) !== JSON.stringify(next.plans)
+          const ordersDiff = JSON.stringify(state.subscriptionOrders) !== JSON.stringify(next.subscriptionOrders)
+          const paymentsDiff = JSON.stringify(state.payments) !== JSON.stringify(next.payments)
+          const bakeriesDiff = JSON.stringify(state.bakeries) !== JSON.stringify(next.bakeries)
+          if (plansDiff || ordersDiff || paymentsDiff || bakeriesDiff) {
+            migrateDemoState(next)
+            state = next
+            if (storage) {
+              try { storage.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch {}
+            }
+            notify()
+            return true
+          }
+        }
+      }
+    } catch {}
+    void pullSync()
+    return false
+  }
+  function recordPartnerPayment({ plan, bakeryName, phone, district, city, paymentReference, proofUrl }) {
+    const nextId = state.nextId || 1000000
+    const orderId = demoId(nextId)
+    const paymentId = demoId(nextId + 1)
+    state.nextId = nextId + 2
+
+    const cleanName = (bakeryName || '').trim() || 'Tiệm Bánh Sweet Home'
+    let bakery = state.bakeries.find((b) => b.name.toLowerCase() === cleanName.toLowerCase())
+    if (!bakery) {
+      const newBakeryId = demoId(state.nextId++)
+      const address = {
+        id: demoId(state.nextId++),
+        recipientName: cleanName,
+        recipientPhone: phone || '0901234567',
+        addressLine: district ? (district + ', TP. Hồ Chí Minh') : '18 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh',
+        district: district || 'Quận 1',
+        city: 'TP. Hồ Chí Minh',
+        isPrimary: true
+      }
+      bakery = {
+        id: newBakeryId,
+        ownerId: state.users?.[1]?.id || state.users?.[0]?.id,
+        name: cleanName,
+        slug: 'demo-bakery-' + state.nextId,
+        status: 'ACTIVE',
+        description: 'Tiệm bánh đối tác đăng ký mới trên nền tảng',
+        logoUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600',
+        coverUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600',
+        primaryAddress: address,
+        operations: {
+          addresses: [address],
+          serviceAreas: [{ city: 'TP. Hồ Chí Minh', district: district || 'Quận 1', deliveryFee: 30000, active: true }],
+          businessHours: Array.from({ length: 7 }, (_, day) => ({ dayOfWeek: day + 1, opensAt: '08:00', closesAt: '21:00', closed: false }))
+        },
+        createdAt: stamp()
+      }
+      state.bakeries.unshift(bakery)
+      state.members.push({
+        id: demoId(state.nextId++),
+        bakeryId: newBakeryId,
+        userId: bakery.ownerId,
+        memberRole: 'OWNER',
+        status: 'ACTIVE',
+        displayNameSnapshot: cleanName
+      })
+    }
+    const bakeryId = bakery.id
+
+    const orderNumber = 'SUB-' + Math.floor(100000 + Math.random() * 900000)
+    const subOrder = {
+      id: orderId,
+      bakeryId,
+      planId: plan.id,
+      orderNumber,
+      planNameSnapshot: plan.name,
+      planCodeSnapshot: plan.code,
+      featuresSnapshot: structuredClone(plan.features || {}),
+      billingPeriodMonths: plan.billingPeriodMonths || 1,
+      totalAmount: plan.monthlyPrice,
+      currency: plan.currency || 'VND',
+      status: 'PAYMENT_REVIEW',
+      expiresAt: future(3),
+      createdAt: stamp(),
+      payments: []
+    }
+    state.subscriptionOrders.unshift(subOrder)
+
+    const payment = {
+      id: paymentId,
+      bakeryId,
+      subscriptionOrderId: orderId,
+      amount: plan.monthlyPrice,
+      currency: plan.currency || 'VND',
+      status: 'SUBMITTED',
+      paymentMethod: 'Chuyển khoản Vietcombank (QR)',
+      paymentReference: paymentReference || ('FT' + Date.now().toString().slice(-8)),
+      submittedByName: cleanName,
+      submittedByUserId: bakery.ownerId,
+      proofUrl: proofUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600',
+      submittedAt: stamp()
+    }
+    state.payments.unshift(payment)
+    save()
+    return { bakery, subOrder, payment }
+  }
   return {
-    get state() { return state }, id, save, bind, find, has, requireUser, bakeryAccess, own, createOrder, transitionOrder,
+    get state() { return state }, id, save, bind, find, has, requireUser, bakeryAccess, own, createOrder, transitionOrder, reload, recordPartnerPayment,
     subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn) },
     reset() { state = createSeed(); save() },
-    sync(value) { try { const next = JSON.parse(value); if (validSave(next)) { state = next; notify() } } catch { /* Ignore corrupt cross-tab demo state. */ } },
+    sync(value) { try { const next = typeof value === 'string' ? JSON.parse(value) : value; if (validSave(next)) { const merged = mergeDemoStates(state, next); migrateDemoState(merged); state = merged; notify() } } catch { /* Ignore corrupt cross-tab demo state. */ } },
     isRecord(value) { return isDemoId(value) },
   }
 }

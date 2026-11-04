@@ -44,6 +44,7 @@ const AdminPaymentsPage = lazy(() => import('../pages/admin/vendors/AdminPayment
 const AdminPlansPage = lazy(() => import('../pages/admin/vendors/AdminPlansPage.jsx'))
 const AdminModerationPage = lazy(() => import('../pages/admin/vendors/AdminModerationPage.jsx'))
 const AdminOrdersEscrowPage = lazy(() => import('../pages/admin/orders/AdminOrdersEscrowPage'))
+const AdminRevenuePage = lazy(() => import('../pages/admin/revenue/AdminRevenuePage'))
 
 class RouteBoundary extends React.Component {
   state = { failed: false }
@@ -82,6 +83,7 @@ function PageRoutes({
     currentPage === 'admin-vendors' ||
     currentPage === 'admin-payments' ||
     currentPage === 'admin-plans' ||
+    currentPage === 'admin-revenue' ||
     currentPage === 'admin-moderation' ||
     currentPage === 'admin-users'
 
@@ -113,6 +115,8 @@ function PageRoutes({
           <AdminVendorsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-users' ? (
           <AdminUsersPage onNavigate={onNavigate} />
+        ) : currentPage === 'admin-revenue' ? (
+          <AdminRevenuePage onNavigate={onNavigate} />
         ) : (
           <AdminDashboardPage onNavigate={onNavigate} />
         )}

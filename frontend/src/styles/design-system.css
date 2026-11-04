@@ -117,8 +117,8 @@ button:disabled { opacity: .45; }
 .sc-table td { padding: 1rem; }
 .sc-table small { font-size: var(--sc-text-xs); color: var(--sc-color-muted); }
 .sc-table-wrap { border-radius: var(--sc-radius-card); border-color: var(--sc-color-border); }
-.sc-button.sc-order-secondary { background: var(--color-surface, #fffdfa); color: var(--sc-color-primary); border-color: var(--sc-color-border); }
-.sc-button.sc-order-secondary:hover:not(:disabled) { background: var(--color-surface-container-low, #f5efe6); }
+.sc-button.sc-order-secondary { background: var(--color-surface, #ffffff); color: var(--sc-color-primary); border-color: var(--sc-color-border); }
+.sc-button.sc-order-secondary:hover:not(:disabled) { background: var(--color-surface-container-low, #f8fafc); }
 
 /* Shared action surfaces keep the existing SweetCake palette and control tokens. */
 .sc-entity-actions { display: grid; gap: .8rem; min-width: 0; }
@@ -127,12 +127,12 @@ button:disabled { opacity: .45; }
 .sc-current-status { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: var(--sc-text-xs); }
 .sc-action-row { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; min-width: 0; }
 .sc-action-button { min-height: var(--sc-control-height); white-space: normal; text-align: center; }
-.sc-button.sc-action-button--secondary, .sc-button.sc-choice-button { color: var(--sc-color-primary); background: var(--color-surface, #fffdfa); border-color: var(--sc-color-border); }
+.sc-button.sc-action-button--secondary, .sc-button.sc-choice-button { color: var(--sc-color-primary); background: var(--color-surface, #ffffff); border-color: var(--sc-color-border); }
 .sc-button.sc-action-button--warning { color: #87541d; background: #fff2dc; border-color: #e6c99a; }
 .sc-button.sc-action-button--danger { color: var(--sc-color-primary); background: #fbecef; border-color: #dbb5be; }
 .sc-button.sc-choice-button.is-selected { background: var(--sc-color-primary); color: white; border-color: var(--sc-color-primary); }
-.sc-button:is(.sc-action-button--secondary, .sc-action-button--warning, .sc-action-button--danger, .sc-choice-button):hover:not(:disabled):not(.is-selected) { background: var(--color-surface-container-low, #f5efe6); color: var(--sc-color-primary); }
-.sc-action-confirm { display: grid; gap: .8rem; padding: 1rem; border: 1px solid var(--sc-color-border); border-radius: var(--sc-radius-control); background: var(--color-surface-container-low, #f5efe6); }
+.sc-button:is(.sc-action-button--secondary, .sc-action-button--warning, .sc-action-button--danger, .sc-choice-button):hover:not(:disabled):not(.is-selected) { background: var(--color-surface-container-low, #f8fafc); color: var(--sc-color-primary); }
+.sc-action-confirm { display: grid; gap: .8rem; padding: 1rem; border: 1px solid var(--sc-color-border); border-radius: var(--sc-radius-control); background: var(--color-surface-container-low, #f8fafc); }
 .sc-action-confirm p, .sc-entity-actions > p { font-size: var(--sc-text-sm); line-height: 1.6; overflow-wrap: anywhere; }
 .sc-action-acknowledgement { display: flex; align-items: flex-start; gap: .6rem; }
 .sc-choice-field { min-width: 0; display: grid; gap: .4rem; }

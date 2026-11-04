@@ -21,6 +21,7 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
   const run = async (path, method, body, query, signal, headers) => {
     signal?.throwIfAborted()
     try {
+      if (fallbackOnGatewayError && getUser()?.id) store.bind(getUser())
       const token = new Headers(headers).get('Idempotency-Key')
       const receiptKey = token && method !== 'GET' ? `${getUser()?.id}:${method}:${path}:${token}` : null
       const fingerprint = JSON.stringify(body)
@@ -40,7 +41,15 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
     if (/^\/(auth|users|roles)(\/|$)/.test(path)) {
       try {
         const response = await realFetch(input, options)
-        if (response.status < 500 && response.status !== 0) return response
+        if (response.status < 500 && response.status !== 0) {
+          if (fallbackOnGatewayError && path === '/auth/me' && method === 'GET' && response.ok) {
+            try {
+              const user = unwrap(await response.clone().json())
+              if (user?.id) store.bind(user)
+            } catch {}
+          }
+          return response
+        }
       } catch {
         // Backend unavailable, fall through to demo fallback
       }
@@ -165,7 +174,7 @@ export function createDemoTransport({ fetch: realFetch, getUser = () => null, st
       }
       throw err
     }
-    if (fallbackOnGatewayError && [502, 503, 504].includes(response.status)) {
+    if (fallbackOnGatewayError && [500, 502, 503, 504].includes(response.status)) {
       mark(key, 'demo')
       return run(path, method, body, url.searchParams, options.signal, options.headers)
     }

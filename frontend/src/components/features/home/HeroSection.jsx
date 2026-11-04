@@ -5,7 +5,7 @@ export const HeroSection = ({ onNavigate }) => {
     <>
       <section className="snap-section relative w-full overflow-hidden sunburst-bg -mt-24 sm:-mt-28 pt-24 sm:pt-28 border-b-2 border-wine scroll-mt-24 min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
         {/* Background Radial Glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_248px,rgba(255,255,255,0.75),transparent_70%)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_248px,rgba(255,240,245,0.45),transparent_70%)] pointer-events-none"></div>
 
         {/* ==========================================
             PART 1: KAWAII VINTAGE BAKERY KIOSK STAGE
@@ -36,7 +36,7 @@ export const HeroSection = ({ onNavigate }) => {
                 <div className="absolute inset-0 rounded-full pattern-stripes-pink border-2 border-wine shadow-[3px_3px_0_#9f1e31]"></div>
                 <div className="absolute -top-8 left-10 w-32 h-32 rounded-full pattern-stripes-pink border-t-2 border-l-2 border-wine"></div>
                 <div className="absolute -top-4 right-10 w-28 h-28 rounded-full pattern-stripes-pink border-t-2 border-r-2 border-wine"></div>
-                <div className="absolute top-1/2 left-8 w-6 h-6 rounded-full bg-[#ffe4a6] border-2 border-wine"></div>
+                <div className="absolute top-1/2 left-8 w-6 h-6 rounded-full bg-[#ffd6e5] border-2 border-wine"></div>
                 <div className="absolute top-8 right-16 text-wine text-xl font-bold">♥</div>
               </div>
             </div>
@@ -59,7 +59,7 @@ export const HeroSection = ({ onNavigate }) => {
                 <div className="absolute -top-2 right-12 w-8 h-8 rounded-full bg-wine border-2 border-white shadow flex items-center justify-center text-white text-xs">
                   🍓
                 </div>
-                <div className="absolute bottom-4 right-14 w-8 h-8 rounded-full bg-[#ffe4a6] border-2 border-wine flex items-center justify-center text-wine text-xs font-bold">
+                <div className="absolute bottom-4 right-14 w-8 h-8 rounded-full bg-[#ffd6e5] border-2 border-wine flex items-center justify-center text-wine text-xs font-bold">
                   ♥
                 </div>
               </div>
@@ -69,7 +69,7 @@ export const HeroSection = ({ onNavigate }) => {
             {/* Main Kiosk Booth Canopy (Higher Z-Index: z-20 so it sits ON TOP of clouds) */}
             <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center z-20">
               {/* Ornate Candy Signboard */}
-              <div className="relative z-30 -mb-5 px-8 py-3 bg-[#fffaf3] border-4 border-wine rounded-3xl shadow-[0_4px_0_#741329] flex items-center justify-center">
+              <div className="relative z-30 -mb-5 px-8 py-3 bg-[#ffffff] border-4 border-wine rounded-3xl shadow-[0_4px_0_#741329] flex items-center justify-center">
                 <div className="absolute -inset-1.5 border border-dashed border-wine rounded-3xl pointer-events-none"></div>
                 <div className="text-center px-6">
                   <h2 className="font-sweetcake text-3xl md:text-5xl text-wine font-bold tracking-wide drop-shadow-xs">
@@ -128,12 +128,12 @@ export const HeroSection = ({ onNavigate }) => {
             {/* Booth Interior: Cat Baker & Manga Speech Bubbles */}
             <div className="relative w-full max-w-3xl min-h-[270px] flex items-center justify-center -mt-2 z-30">
               {/* Left Pillar Pole */}
-              <div className="absolute left-4 top-0 bottom-0 w-4 bg-[#ffe4a6] border-x-2 border-wine flex flex-col justify-between py-4">
+              <div className="absolute left-4 top-0 bottom-0 w-4 bg-[#ffd6e5] border-x-2 border-wine flex flex-col justify-between py-4">
                 <div className="w-full h-4 bg-wine/30"></div>
                 <div className="w-full h-4 bg-wine/30"></div>
               </div>
               {/* Right Pillar Pole */}
-              <div className="absolute right-4 top-0 bottom-0 w-4 bg-[#ffe4a6] border-x-2 border-wine flex flex-col justify-between py-4">
+              <div className="absolute right-4 top-0 bottom-0 w-4 bg-[#ffd6e5] border-x-2 border-wine flex flex-col justify-between py-4">
                 <div className="w-full h-4 bg-wine/30"></div>
                 <div className="w-full h-4 bg-wine/30"></div>
               </div>
@@ -167,7 +167,7 @@ export const HeroSection = ({ onNavigate }) => {
                   <polygon fill="#9f1e31" points="120,126 116,122 124,122" />
                   <path d="M112,132 C116,136 120,133 120,133 C120,133 124,136 128,132" fill="none" stroke="#9f1e31" strokeLinecap="round" strokeWidth="2.5" />
                   {/* Baker Costume Body */}
-                  <path d="M75,168 L50,260 L190,260 L165,168 Z" fill="#ffe4a6" stroke="#9f1e31" strokeWidth="3.5" />
+                  <path d="M75,168 L50,260 L190,260 L165,168 Z" fill="#ffd6e5" stroke="#9f1e31" strokeWidth="3.5" />
                   {/* Teal Ribbon */}
                   <path d="M120,172 L95,190 L120,182 L145,190 Z" fill="#6fb9c6" stroke="#9f1e31" strokeWidth="2.5" />
                   <circle cx="120" cy="178" fill="#5AAEA1" r="8" stroke="#9f1e31" strokeWidth="2" />
@@ -263,7 +263,7 @@ export const HeroSection = ({ onNavigate }) => {
           <div 
             className="w-full mt-6 h-8 border-t-[3px] border-b-[3px] border-[#9f1e31] shadow-sm"
             style={{
-              backgroundColor: '#fffaf3',
+              backgroundColor: '#ffffff',
               backgroundImage: 'conic-gradient(#9f1e31 90deg, transparent 90deg 180deg, #9f1e31 180deg 270deg, transparent 270deg)',
               backgroundSize: '24px 24px',
               backgroundPosition: '0 0'
@@ -282,20 +282,20 @@ export const HeroSection = ({ onNavigate }) => {
             {/* Left Editorial Copy */}
             <div className="lg:col-span-7 flex flex-col items-start">
               <ScrollReveal animation="fade-up" delay={100}>
-                <span className="inline-block -rotate-3 bg-[#fffaf3] border-2 border-wine rounded-full text-wine px-5 py-2 mb-5 text-sm font-extrabold shadow-[3px_3px_0_#ffc6db]">
+                <span className="inline-block -rotate-3 bg-white border-2 border-wine rounded-full text-wine px-5 py-2 mb-5 text-sm font-extrabold shadow-[3px_3px_0_#ffc6db]">
                   ✦ Bánh kem theo ý bạn ✦
                 </span>
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={150}>
-                <h1 className="font-savoure text-5xl sm:text-6xl lg:text-7xl font-bold text-wine tracking-normal leading-[1.05] mb-6 drop-shadow-[3px_3px_0_#ffe2cd]">
+                <h1 className="font-savoure text-5xl sm:text-6xl lg:text-7xl font-bold text-wine tracking-normal leading-[1.05] mb-6 drop-shadow-[3px_3px_0_#ffd6e5]">
                   Một chiếc bánh,<br />
                   <em className="font-normal italic text-brand-pink">thật là bạn.</em>
                 </h1>
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={200}>
-                <p className="text-base sm:text-lg text-on-surface bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed shadow-sm">
+                <p className="text-base sm:text-lg text-on-surface bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed shadow-sm">
                   Kể cho chúng mình chiếc bánh bạn đang nghĩ tới. SweetCake giúp bạn tìm mẫu phù hợp từ hơn 200+ bánh có sẵn hoặc kết nối với tiệm nghệ nhân có thể làm theo ý tưởng ấy.
                 </p>
               </ScrollReveal>
@@ -349,9 +349,9 @@ export const HeroSection = ({ onNavigate }) => {
               <ScrollReveal animation="zoom-in" delay={250}>
                 <div className="relative max-w-md w-full">
                   {/* Backdrop radial glow */}
-                  <div className="absolute inset-0 bg-radial from-[#fff3d2] via-[#fff3d2]/70 to-transparent rounded-full -z-10 scale-125 blur-xl"></div>
+                  <div className="absolute inset-0 bg-radial from-[#ffe2ec] via-[#ffe2ec]/70 to-transparent rounded-full -z-10 scale-125 blur-xl"></div>
 
-                  <div className="relative rounded-[160px_160px_28px_28px] border-4 border-wine bg-[#fffaf3] p-4 shadow-[10px_10px_0_#ffc6db] overflow-hidden">
+                  <div className="relative rounded-[160px_160px_28px_28px] border-4 border-wine bg-white p-4 shadow-[10px_10px_0_#ffc6db] overflow-hidden">
                     <img
                       className="w-full h-[380px] object-cover rounded-[140px_140px_20px_20px] transition-transform duration-700 hover:scale-105"
                       alt="Bánh kem nghệ nhân SweetCake"

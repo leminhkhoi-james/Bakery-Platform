@@ -18,13 +18,13 @@ function Period({ title, period, plans }) {
   return <div className="rounded-xl bg-background p-4"><h3 className="font-bold">{title}</h3>{period ? <><p>{cleanPresentationLabel(plans?.find(plan => plan.id === period.planId)?.name, 'Gói dịch vụ đã đăng ký')} · {subscriptionStatusLabel(period.status)}</p><p className="text-sm">{formatSubscriptionDate(period.periodStart)} → {formatSubscriptionDate(period.periodEnd)}</p></> : <p>{title === 'Kỳ hiện tại' ? 'Tiệm chưa đăng ký gói dịch vụ' : 'Chưa có kỳ dịch vụ kế tiếp'}</p>}</div>
 }
 
-function BakeryWorkspace({ bakeryId, roles, plans, onBusy }) {
+function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
   const subscription = useCatalogResource(loadBakerySubscription, { bakeryId })
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
   const history = useCatalogResource(loadSubscriptionOrders, { bakeryId, page, size: 10, sort: 'createdAt,desc', status })
   const inFlight = useRef(false)
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(() => (initialPlanId && plans.data?.find((p) => p.id === initialPlanId && canOrderPlan(p))) || null)
   const [attempt, setAttempt] = useState(null)
   const [busy, setBusy] = useState(false)
   const [detailBusy, setDetailBusy] = useState(false)
@@ -62,6 +62,6 @@ export default function VendorSubscriptionPage({ routeSearch = '', onNavigate })
   const plans = useCatalogResource(loadSubscriptionPlans)
   return <VendorFrame title="Gói dịch vụ" activeTab="subscription" bakeryId={bakeryId} onNavigate={onNavigate}>
     <BakerySelector key={bakeryId} bakeryId={bakeryId} onSelect={(value) => { setBakeryId(value); onNavigate('vendor-subscription?bakeryId=' + value) }} disabled={busy} />
-    {bakeryId ? <><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
+    {bakeryId ? <><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
   </VendorFrame>
 }

@@ -1,5 +1,5 @@
-import { demoRuntime } from '../../mockData/runtime.js'
-import React from 'react'
+import { demoRuntime, getDemoStore } from '../../mockData/runtime.js'
+import React, { useEffect, useState } from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 
 /**
@@ -13,6 +13,15 @@ export default function AdminSidebar({
   onCloseMobile,
   pendingVendorsCount = 0,
 }) {
+  const store = (typeof getDemoStore === 'function' ? getDemoStore() : null) || demoRuntime?.store
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    if (!store?.subscribe) return
+    return store.subscribe(() => setTick((v) => v + 1))
+  }, [store])
+
+  const pendingPaymentsCount = store?.state?.payments?.filter((p) => p.status === 'SUBMITTED')?.length || 0
+  const pendingVendors = pendingVendorsCount || store?.state?.bakeries?.filter((b) => b.status === 'PENDING_APPROVAL')?.length || 0
   const handleNav = (route) => {
     if (onNavigate) {
       onNavigate(route)
@@ -26,6 +35,9 @@ export default function AdminSidebar({
     if (!t) return 'admin-dashboard'
     if (['admin-dashboard', 'dashboard', 'tong-quan', 'master-admin'].includes(t)) {
       return 'admin-dashboard'
+    }
+    if (['admin-revenue', 'revenue', 'doanh-thu'].includes(t)) {
+      return 'admin-revenue'
     }
     if (['admin-vendors', 'vendors', 'tiem-banh', 'duyet-xuong'].includes(t)) {
       return 'admin-vendors'
@@ -49,18 +61,17 @@ export default function AdminSidebar({
       icon: 'dashboard',
     },
     {
+      id: 'admin-revenue',
+      route: 'admin-revenue',
+      label: 'Doanh thu',
+      icon: 'account_balance_wallet',
+    },
+    {
       id: 'admin-vendors',
       route: 'admin-vendors',
       label: 'Tiệm bánh',
       icon: 'storefront',
-      badge: pendingVendorsCount > 0 ? `${pendingVendorsCount}` : null,
-    },
-    {
-      id: 'admin-orders',
-      route: 'admin-orders',
-      label: 'Đơn hàng',
-      icon: 'lock_clock',
-      badge: null,
+      badge: pendingVendors > 0 ? `${pendingVendors}` : null,
     },
     { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium' },
     {
@@ -68,8 +79,8 @@ export default function AdminSidebar({
       route: 'admin-payments',
       label: 'Duyệt gói dịch vụ',
       icon: 'receipt_long',
+      badge: pendingPaymentsCount > 0 ? `${pendingPaymentsCount}` : null,
     },
-    { id: 'admin-moderation', route: 'admin-moderation', label: 'Kiểm duyệt', icon: 'fact_check' },
     { id: 'admin-users', route: 'admin-users', label: 'Người dùng', icon: 'group' },
   ]
 
@@ -91,11 +102,11 @@ export default function AdminSidebar({
               </button>
             )}
           </div>
-          <div className="flex items-center gap-2 mt-2 px-2.5 py-1 rounded-xl bg-secondary-container/60 border border-secondary/20">
-            <span className="material-symbols-outlined text-secondary text-sm">
+          <div className="flex items-center gap-2 mt-2 px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-xs">
+            <span className="material-symbols-outlined text-primary text-sm">
               verified
             </span>
-            <span className="text-admin-body font-label-md font-bold text-on-secondary-container tracking-wide uppercase">
+            <span className="text-admin-body font-label-md font-bold text-slate-800 tracking-wide uppercase">
               ADMIN
             </span>
           </div>

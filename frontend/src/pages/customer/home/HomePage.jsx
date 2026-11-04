@@ -15,7 +15,7 @@ export const HomePage = ({ onAddToCart, onNavigate }) => {
   }, [])
 
   return (
-    <div className="home-page-wrapper w-full bg-[#fff4e9] min-h-screen pt-20">
+    <div className="home-page-wrapper w-full bg-[#fff0f5] min-h-screen pt-20">
       <div className="flex flex-col w-full">
         {/* 1. HERO SECTION */}
         <HeroSection onNavigate={onNavigate} />

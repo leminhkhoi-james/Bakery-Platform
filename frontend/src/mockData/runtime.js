@@ -5,12 +5,25 @@ import { isDemoId } from './seed.js'
 
 export let demoRuntime = null
 export const isMockRecord = (id) => Boolean(demoRuntime && isDemoId(id))
+export function getDemoStore() {
+  return demoRuntime?.store || (typeof window !== 'undefined' ? window.__SWEETCAKE_DEMO_STORE__ : null)
+}
 export function installDemoFallback(getUser) {
   if (import.meta.env?.VITE_ENABLE_MOCK_FALLBACK !== 'true' || demoRuntime) return demoRuntime
   let storage
   try { storage = window.localStorage } catch { /* Use memory if browser storage is unavailable. */ }
   const store = createDemoStore(storage)
-  demoRuntime = createDemoTransport({ fetch: window.fetch.bind(window), getUser, store, origin: window.location.origin, baseUrl: import.meta.env?.VITE_API_BASE_URL || '/api/v1' })
+  if (typeof window !== 'undefined') {
+    window.__SWEETCAKE_DEMO_STORE__ = store
+  }
+  demoRuntime = createDemoTransport({
+    fetch: window.fetch.bind(window),
+    getUser,
+    store,
+    origin: window.location.origin,
+    baseUrl: import.meta.env?.VITE_API_BASE_URL || '/api/v1',
+    fallbackOnGatewayError: true,
+  })
   window.fetch = demoRuntime.fetch
   window.addEventListener('storage', (event) => { if (event.key === DEMO_STORAGE_KEY) store.sync(event.newValue) })
   return demoRuntime

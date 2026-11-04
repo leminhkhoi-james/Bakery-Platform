@@ -17,7 +17,7 @@ export function decimalMoney(value, label, optional = false) {
   return Number(value)
 }
 const optionalId = (value) => value ? requireId(value) : null
-const safeUrl = (value) => typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null
+const safeUrl = (value) => typeof value === 'string' && (/^https?:\/\//i.test(value) || /^data:image\/(png|jpeg|jpg|webp);base64,/i.test(value)) ? value : null
 export function rfqPayload(input) {
   if (!REQUEST_TYPES.includes(input.requestType)) throw new ApiError('Loại RFQ không hợp lệ.', 422)
   const body = { requestType: input.requestType, title: requireText(input.title, 'Tiêu đề', 180), description: requireText(input.description, 'Mô tả', 10000), neededAt: futureDate(input.neededAt, 'Ngày cần bánh'), deliveryDistrict: requireText(input.deliveryDistrict, 'Quận/huyện', 120), deliveryCity: requireText(input.deliveryCity, 'Tỉnh/thành', 120) }
@@ -62,10 +62,13 @@ export function mapRequest(dto, detail = false) {
   for (const key of ['requestType', 'title', 'description', 'occasion', 'neededAt', 'deliveryDistrict', 'deliveryCity', 'status', 'offerDeadline', 'createdAt', 'updatedAt']) result[key] = text(dto[key])
   for (const key of ['budgetMin', 'budgetMax']) result[key] = catalogMoney(dto[key])
   result.servingSize = Number.isInteger(dto.servingSize) ? dto.servingSize : null
+  if (dto.preference) result.preference = dto.preference
   if (detail) {
     if (!['images', 'statusHistory', 'optionSelections', 'offers'].every((key) => Array.isArray(dto[key]))) throw new ApiError('RFQ detail thiếu danh sách theo DTO.', 502)
     result.preference = dto.preference ?? null; result.optionSelections = dto.optionSelections; result.offers = dto.offers
     result.images = dto.images.map((image) => ({ ...image, url: safeUrl(image.url) })); result.statusHistory = dto.statusHistory
+  } else if (Array.isArray(dto.images)) {
+    result.images = dto.images.map((image) => ({ ...image, url: safeUrl(image.url) }))
   }
   return result
 }

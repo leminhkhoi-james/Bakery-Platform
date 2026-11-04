@@ -1,28 +1,28 @@
 /* Background recipes from SweetCake.zip, kept separate from API-backed content.
    Existing kiosk, stripes, scallops and local fairy wallpaper remain intact. */
 :is(.sc-customer-layout:not([data-customer-page="home"]), .sc-customer, .sc-catalog, .sc-portal, .sc-drawer) {
-  --color-primary-fixed: #ebdccb;
-  --color-primary-fixed-dim: #d8c3a5;
-  --color-secondary-container: #f4e8cd;
-  --color-secondary-fixed: #f7ecbe;
-  --color-secondary-fixed-dim: #e5c973;
-  --color-tertiary: #a0724e;
-  --color-tertiary-container: #f5ebe1;
-  --color-tertiary-fixed: #f2e4d5;
-  --color-tertiary-fixed-dim: #d9c1ac;
-  --color-surface-dim: #efe7dc;
-  --color-surface-container: #d8c3a5;
-  --color-surface-container-high: #cdb798;
-  --color-surface-container-highest: #c2ac8d;
-  --color-surface-variant: #c2ac8d;
+  --color-primary-fixed: #f5dcd7;
+  --color-primary-fixed-dim: #f0eae5;
+  --color-secondary-container: #fce7eb;
+  --color-secondary-fixed: #fbcfe8;
+  --color-secondary-fixed-dim: #f9a8d4;
+  --color-tertiary: #64748b;
+  --color-tertiary-container: #f1f5f9;
+  --color-tertiary-fixed: #f1f5f9;
+  --color-tertiary-fixed-dim: #e2e8f0;
+  --color-surface-dim: #f1f5f9;
+  --color-surface-container: #f1f5f9;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #cbd5e1;
+  --color-surface-variant: #f1f5f9;
 }
 .sc-customer-layout:not([data-customer-page="home"]) {
-  --color-background: #faf7f2;
-  --color-surface: #faf7f2;
+  --color-background: #fff0f5;
+  --color-surface: #ffffff;
   --color-primary: var(--sc-color-primary);
   --color-primary-container: var(--sc-color-primary-hover);
-  --color-secondary-container: #f4e8cd;
-  background-color: #faf7f2;
+  --color-secondary-container: #fce7eb;
+  background-color: #fff0f5;
 }
 .sc-customer-stage, .sc-portal-main { position: relative; isolation: isolate; }
 .sc-customer-stage > :not(.sc-background-ornaments), .sc-portal-main > .sc-workspace {
@@ -37,8 +37,8 @@
   pointer-events: none;
   user-select: none;
   z-index: 0;
-  --sc-glow-gold: #f7ecbe4d;
-  --sc-glow-champagne: #ebdccb66;
+  --sc-glow-gold: rgba(184, 115, 40, 0.04);
+  --sc-glow-champagne: rgba(226, 232, 240, 0.4);
 }
 .sc-background-glow { position: absolute; display: block; border-radius: 50%; filter: blur(4rem); }
 .sc-background-glow--gold { width: 24rem; height: 24rem; top: -8rem; right: 25%; background: var(--sc-glow-gold); }
@@ -55,18 +55,18 @@
   pointer-events: none;
   z-index: 0;
 }
-.home-page-wrapper .sunburst-bg::before { width: 24rem; height: 24rem; right: -8rem; top: -8rem; background: #f4e8cd33; filter: blur(4rem); }
-.home-page-wrapper .sunburst-bg::after { width: 20rem; height: 20rem; left: 2.5rem; top: 50%; background: #ebdccb33; filter: blur(4rem); }
-.home-page-wrapper .striped-idea-bg::after { width: min(20rem, 100%); height: 20rem; right: 0; bottom: 0; background: #f4e8cd1a; filter: blur(2.5rem); }
+.home-page-wrapper .sunburst-bg::before { width: 24rem; height: 24rem; right: -8rem; top: -8rem; background: #fff0f540; filter: blur(4rem); }
+.home-page-wrapper .sunburst-bg::after { width: 20rem; height: 20rem; left: 2.5rem; top: 50%; background: #fff0f540; filter: blur(4rem); }
+.home-page-wrapper .striped-idea-bg::after { width: min(20rem, 100%); height: 20rem; right: 0; bottom: 0; background: #ffdbe61a; filter: blur(2.5rem); }
 .home-page-wrapper .striped-idea-bg { isolation: isolate; }
 .home-page-wrapper .striped-idea-bg > * { position: relative; z-index: 1; }
-.sc-background-ornaments[data-background="bidding"] { --sc-glow-gold: #b8860b0d; --sc-glow-champagne: #f2e4d54d; }
+.sc-background-ornaments[data-background="bidding"] { --sc-glow-gold: #b8860b0d; --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
 .sc-background-ornaments[data-background="bidding"] .sc-background-glow--gold { top: 3rem; left: 33%; right: auto; }
 .sc-background-ornaments[data-background="bidding"] .sc-background-glow--champagne { left: auto; right: 3rem; }
-.sc-background-ornaments[data-background="profile"] { --sc-glow-gold: #f7ecbe33; --sc-glow-champagne: #f2e4d54d; }
+.sc-background-ornaments[data-background="profile"] { --sc-glow-gold: rgba(184, 115, 40, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.4); }
 .sc-background-ornaments[data-background="explore"] .sc-background-glow--gold { top: auto; bottom: -2.5rem; right: -2.5rem; width: 12rem; height: 12rem; background: #b8860b26; filter: blur(2.5rem); }
 .sc-background-ornaments[data-background="explore"] .sc-background-glow--champagne { opacity: .3; }
-.sc-background-ornaments[data-background="stores"] { background: linear-gradient(to bottom, #8b5e3c0d, #faf7f2 24rem); }
+.sc-background-ornaments[data-background="stores"] { background: linear-gradient(to bottom, #8b5e3c0d, #f8fafc 24rem); }
 .sc-background-ornaments[data-background="stores"] .sc-background-glow { display: none; }
 /* The legacy profile and cart banners used two clipped, blurred light sources. */
 .sc-customer-heading { position: relative; isolation: isolate; overflow: hidden; }
@@ -78,32 +78,32 @@
   pointer-events: none;
   z-index: 0;
 }
-.sc-customer-heading::before { width: 24rem; height: 24rem; right: -4rem; top: -5rem; background: #f7ecbe33; filter: blur(4rem); }
-.sc-customer-heading::after { width: 20rem; height: 20rem; right: 25%; bottom: -6rem; background: #f2e4d54d; filter: blur(2.5rem); }
-[data-customer-page="cart"] .sc-customer-heading::before { right: -6rem; top: -6rem; background: #f7ecbe66; }
-[data-customer-page="cart"] .sc-customer-heading::after { left: 2.5rem; right: auto; bottom: -4rem; background: #ebdccb4d; filter: blur(4rem); }
+.sc-customer-heading::before { width: 24rem; height: 24rem; right: -4rem; top: -5rem; background: rgba(184, 115, 40, 0.04); filter: blur(4rem); }
+.sc-customer-heading::after { width: 20rem; height: 20rem; right: 25%; bottom: -6rem; background: rgba(226, 232, 240, 0.4); filter: blur(2.5rem); }
+[data-customer-page="cart"] .sc-customer-heading::before { right: -6rem; top: -6rem; background: #ffd6e540; }
+[data-customer-page="cart"] .sc-customer-heading::after { left: 2.5rem; right: auto; bottom: -4rem; background: #ffffff4d; filter: blur(4rem); }
 /* Restore the glass/cream surface in front of the decorative catalog canvas. */
 .sc-catalog > section:first-child > div, .sc-catalog #filterSidebar {
-  border-color: #e0d4c566;
-  background-color: #f5efe6e6;
+  border-color: #e2e8f0;
+  background-color: #ffffff;
 }
-[data-customer-page="stores"] .sc-catalog > div:first-child { background: linear-gradient(to bottom, #8b5e3c0d, #faf7f2); }
-[data-customer-page="product-detail"] .sc-catalog .group > .aspect-\[4\/5\] { background-color: #f5efe6; }
+[data-customer-page="stores"] .sc-catalog > div:first-child { background: linear-gradient(to bottom, #8b5e3c0d, #f8fafc); }
+[data-customer-page="product-detail"] .sc-catalog .group > .aspect-\[4\/5\] { background-color: #f8fafc; }
 /* Portal surfaces retain the champagne sidebar and translucent header. */
-.sc-portal aside:is([class~="w-72"], [class~="w-64"]) { background: #fbf9f5; border-color: #e0d4c533; }
-.sc-portal-header { background: #fbf9f5e6; backdrop-filter: blur(20px); box-shadow: 0 1px 8px #2d1e180a; }
-.sc-portal .sc-background-ornaments { --sc-glow-gold: #f7ecbe26; --sc-glow-champagne: #f2e4d526; }
-.sc-metric { position: relative; isolation: isolate; overflow: hidden; background-color: #f5efe6; }
+.sc-portal aside:is([class~="w-72"], [class~="w-64"]) { background: #ffffff; border-color: #e2e8f0; }
+.sc-portal-header { background: #ffffff; backdrop-filter: blur(20px); box-shadow: 0 1px 8px #2d1e180a; }
+.sc-portal .sc-background-ornaments { --sc-glow-gold: rgba(184, 115, 40, 0.04); --sc-glow-champagne: rgba(226, 232, 240, 0.3); }
+.sc-metric { position: relative; isolation: isolate; overflow: hidden; background-color: #f8fafc; }
 .sc-metric > * { position: relative; z-index: 1; }
-.sc-metric::before { content: ''; position: absolute; right: -2rem; top: -2rem; width: 8rem; height: 8rem; border-radius: 50%; background: #f7ecbe4d; filter: blur(2.5rem); pointer-events: none; transition: transform .25s; }
+.sc-metric::before { content: ''; position: absolute; right: -2rem; top: -2rem; width: 8rem; height: 8rem; border-radius: 50%; background: rgba(184, 115, 40, 0.04); filter: blur(2.5rem); pointer-events: none; transition: transform .25s; }
 .sc-metric:hover::before { transform: scale(1.25); }
-.sc-portal--vendor .sc-background-ornaments[data-background="dashboard"] { background: linear-gradient(110deg, #fff1f233, #fff1f21a 50%, #fffbeb33); }
+.sc-portal--vendor .sc-background-ornaments[data-background="dashboard"] { background: linear-gradient(110deg, #fff1f233, #fff1f21a 50%, #fff1f233); }
 /* Dot texture is decoration behind real history; no simulated map or GPS. */
 .sc-order-snapshot > section:last-of-type {
   padding: 1.25rem;
-  border: 1px solid #e0d4c566;
+  border: 1px solid #e2e8f0;
   border-radius: 1rem;
-  background-color: #f5efe6;
+  background-color: #f8fafc;
   background-image: radial-gradient(#d2c3be66 1px, transparent 1px);
   background-size: 16px 16px;
 }
@@ -132,18 +132,18 @@
 .sc-fairy-stage .sc-customer > p, .sc-fairy-stage .sc-customer > label {
   display: block;
   padding: .8rem 1rem;
-  border: 1px solid #e0d4c566;
+  border: 1px solid #e2e8f0;
   border-radius: .8rem;
-  background: #fffaf5ed;
+  background: #ffffffed;
 }
-.sc-fairy-stage .sc-customer > h2 { color: #6b212e; text-shadow: 0 1px 5px #fffaf5; }
-.sc-fairy-stage .sc-catalog #filterSidebar { background: #fffaf5f5; }
+.sc-fairy-stage .sc-customer > h2 { color: #6b212e; text-shadow: 0 1px 5px #ffffff; }
+.sc-fairy-stage .sc-catalog #filterSidebar { background: #fffffff5; }
 /* Keep the profile banner readable and preserve its existing internal alignment. */
 .sc-fairy-stage .sc-profile-page .sc-customer-heading {
   padding: 1.75rem 2rem;
   border: 1px solid var(--sc-color-border);
   border-radius: var(--sc-radius-card);
-  background: #fffaf5ed;
+  background: #ffffffed;
   box-shadow: var(--sc-shadow-card);
 }
 @media (max-width: 639px) {
@@ -159,7 +159,7 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-color: #fff4e9;
+    background-color: #fff5f8;
     background-image: var(--sc-fairy-scene);
     background-size: cover;
     background-position: center top;

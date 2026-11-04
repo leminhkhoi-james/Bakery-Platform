@@ -17,11 +17,11 @@ import ProductAssets from './ProductAssets.jsx'
 import { CatalogEntityForm } from './CatalogEntityManager.jsx'
 import { DetailDrawer, EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 
-const productActionLabel = { publish: 'Kích hoạt bán', hide: 'Ẩn sản phẩm', archive: 'Lưu trữ' }
+const productActionLabel = { publish: 'Mở bán trên cửa hàng', hide: 'Tạm ẩn sản phẩm', archive: 'Ngừng bán (Đưa vào lưu kho)' }
 const productActionItems = (product, canEdit) => productActions(product.status).map((action) => ({ key: action, label: productActionLabel[action],
   icon: { publish: 'storefront', hide: 'visibility_off', archive: 'archive' }[action], tone: { publish: 'primary', hide: 'warning', archive: 'danger' }[action],
   disabled: !canEdit, disabledReason: 'Cần quyền chủ tiệm.',
-  description: { publish: 'Mẫu bánh sẽ hiển thị để khách đặt hàng khi đủ điều kiện mở bán.', hide: 'Mẫu bánh tạm ngừng hiển thị để đặt mới. Các đơn đã đặt vẫn được giữ.', archive: 'Lưu trữ mẫu bánh này. Các đơn đã đặt vẫn giữ nguyên thông tin.' }[action],
+  description: { publish: 'Mẫu bánh sẽ hiển thị trên cửa hàng để khách hàng có thể tìm thấy và đặt mua khi tiệm đang mở cửa.', hide: 'Tạm ngừng hiển thị mẫu bánh này trên cửa hàng. Các đơn đã đặt trước đó vẫn được giữ nguyên.', archive: 'Ngừng kinh doanh mẫu bánh này và chuyển vào kho lưu trữ. Lưu ý: Thao tác này để ngừng bán bánh, không dùng để lưu chỉnh sửa thông tin.' }[action],
 }))
 
 export function CategoryForm({ busy, onSave }) {
@@ -59,7 +59,7 @@ export default function ProductManager({ bakeryId }) {
   const products = useCatalogResource(loadManagedProducts, { bakeryId, page, size: 12, query, status, sort, categoryId })
   const categories = useCatalogResource(loadManagedCategories, { bakeryId })
   const [editing, setEditing] = useState(null), [adding, setAdding] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [snapshots, setSnapshots] = useState({})
-  const [editorRevision, setEditorRevision] = useState(0), [categoryAdding, setCategoryAdding] = useState(false)
+  const [editorRevision, setEditorRevision] = useState(0), [categoryAdding, setCategoryAdding] = useState(false), [editorTab, setEditorTab] = useState('info')
   const inFlight = useRef(false)
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
   async function mutate(action, keepEditor = false) {
@@ -83,10 +83,113 @@ export default function ProductManager({ bakeryId }) {
       {membership.status === 'loading' ? <p>Đang xác minh quyền quản lý…</p> : membership.error ? <><p className="text-sm">Chưa xác minh được quyền chủ tiệm. Các thao tác thay đổi đang được khóa.</p><ApiErrorMessage error={membership.error} retry={membership.reload} /></> : null}
       <div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{['DRAFT', 'PUBLISHED', 'HIDDEN', 'ARCHIVED'].map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{categories.data?.map((category) => <option key={category.id} value={category.id}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label><label>Sắp xếp<select value={sort} onChange={changeFilter(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="name,asc">Tên A–Z</option><option value="basePrice,asc">Giá tăng dần</option><option value="basePrice,desc">Giá giảm dần</option></select></label></div>
       {categories.error && <ApiErrorMessage error={categories.error} retry={categories.reload} />}<RefreshButton disabled={busy} onClick={products.reload} className="underline">Tải lại sản phẩm</RefreshButton>
-      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions"><button disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null) }} className={buttonClass}><Icon name="edit" />Chỉnh sửa</button><VendorActionMenu error={error && <ApiErrorMessage error={error} />} actions={productActionItems(product, canEdit)} busy={busy || products.refreshing} onConfirm={(action) => mutate(() => vendorManagementService.changeProduct(bakeryId, product, action))} /></div></div></article>)}</div> : <EmptyPanel title="Chưa có sản phẩm phù hợp." description="Thêm sản phẩm mới hoặc thay đổi bộ lọc để bắt đầu." icon="cake" />}<CatalogPagination meta={products.data.meta} onPage={setPage} /></>}</ApiState>
+      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions"><button disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}><Icon name="edit" />Chỉnh sửa</button><VendorActionMenu error={error && <ApiErrorMessage error={error} />} actions={productActionItems(product, canEdit)} busy={busy || products.refreshing} onConfirm={(action) => mutate(() => vendorManagementService.changeProduct(bakeryId, product, action))} /></div></div></article>)}</div> : <EmptyPanel title="Chưa có sản phẩm phù hợp." description="Thêm sản phẩm mới hoặc thay đổi bộ lọc để bắt đầu." icon="cake" />}<CatalogPagination meta={products.data.meta} onPage={setPage} /></>}</ApiState>
     </section>
-    {canEdit && (adding || editing) && <DetailDrawer className="sc-vendor-drawer" footer={<><button type="button" data-modal-close className="sc-button sc-action-button--secondary" disabled={busy}>Đóng</button><button form="vendor-product-form" type="submit" className="sc-button" disabled={busy}>{busy ? 'Đang lưu…' : 'Lưu sản phẩm'}</button></>} title={editing ? 'Chỉnh sửa mẫu bánh' : 'Thêm mẫu bánh'} busy={busy} onClose={() => { setAdding(false); setEditing(null) }}><ProductForm footerExternal key={(editing?.id || 'new') + ':' + editorRevision} product={editing} categories={categories.data || []} busy={busy} onClose={() => { setAdding(false); setEditing(null) }} onSave={(values) => mutate(() => vendorManagementService.saveProduct(bakeryId, editing?.id, values), true)} />
-    {editing && <section className={panelClass}><p className="break-all text-sm">{vendorName(editing.name)}</p><EntityActionButtons showHeading={false} status={editing.status} actions={productActionItems(editing, canEdit)} busy={busy} refreshing={products.refreshing} onConfirm={(action) => mutate(() => vendorManagementService.changeProduct(bakeryId, editing, action))} /><ProductAssets key={editing.id} bakeryId={bakeryId} product={editing} initialSnapshot={snapshots[editing.id]} onSnapshot={(snapshot) => setSnapshots((current) => ({ ...current, [editing.id]: snapshot }))} onChanged={products.reload} onBusy={setBusy} /></section>}{error && <ApiErrorMessage error={error} />}{notice && <p role="status" className="sc-feedback">{notice}</p>}</DetailDrawer>}
+    {canEdit && (adding || editing) && (
+      <DetailDrawer
+        className="sc-vendor-drawer"
+        footer={
+          <div className="flex items-center justify-between w-full">
+            <div className="text-xs text-on-surface-variant hidden sm:block">
+              {editorTab === 'info' && 'Nhớ nhấn Lưu sản phẩm sau khi sửa thông tin'}
+              {editorTab === 'images' && 'Ảnh chính sẽ hiển thị đại diện trên thực đơn'}
+              {editorTab === 'options' && 'Tùy chọn giúp khách hàng tùy biến chiếc bánh'}
+              {editorTab === 'status' && 'Quản lý trạng thái mở bán trên sàn SweetCake'}
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              <button type="button" data-modal-close className="sc-button sc-action-button--secondary" disabled={busy}>
+                Đóng
+              </button>
+              {editorTab === 'info' && (
+                <button form="vendor-product-form" type="submit" className="sc-button" disabled={busy}>
+                  {busy ? 'Đang lưu…' : 'Lưu sản phẩm'}
+                </button>
+              )}
+            </div>
+          </div>
+        }
+        title={editing ? 'Chỉnh sửa mẫu bánh' : 'Thêm mẫu bánh'}
+        busy={busy}
+        onClose={() => { setAdding(false); setEditing(null) }}
+      >
+        {editing && (
+          <nav aria-label="Phân mục chỉnh sửa" className="sc-tabs sc-vendor-editor-tabs mb-4">
+            {[
+              ['info', 'Thông tin cơ bản', 'edit_note'],
+              ['images', 'Hình ảnh', 'photo_library'],
+              ['options', 'Tùy chọn & Topping', 'tune'],
+              ['status', 'Trạng thái mở bán', 'storefront'],
+            ].map(([key, label, icon]) => (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={editorTab === key}
+                onClick={() => setEditorTab(key)}
+                className="flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Icon name={icon} />
+                <span>{label}</span>
+              </button>
+            ))}
+          </nav>
+        )}
+
+        <div className={editorTab === 'info' ? 'block' : 'hidden'}>
+          <ProductForm
+            footerExternal
+            key={(editing?.id || 'new') + ':' + editorRevision}
+            product={editing}
+            categories={categories.data || []}
+            busy={busy}
+            onClose={() => { setAdding(false); setEditing(null) }}
+            onSave={(values) => mutate(() => vendorManagementService.saveProduct(bakeryId, editing?.id, values), true)}
+          />
+        </div>
+
+        {editing && (
+          <div className={editorTab === 'status' ? 'block' : 'hidden'}>
+            <section className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-outline-variant/20">
+                <div>
+                  <h4 className="font-bold text-base text-primary">Trạng thái kinh doanh</h4>
+                  <p className="text-xs text-on-surface-variant mt-0.5">{vendorName(editing.name)}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-on-surface-variant">Hiện tại:</span>
+                  <StatusBadge status={editing.status} />
+                </div>
+              </div>
+              <EntityActionButtons
+                showHeading={false}
+                status={editing.status}
+                actions={productActionItems(editing, canEdit)}
+                busy={busy}
+                refreshing={products.refreshing}
+                onConfirm={(action) => mutate(() => vendorManagementService.changeProduct(bakeryId, editing, action))}
+              />
+            </section>
+          </div>
+        )}
+
+        {editing && (
+          <div className={editorTab === 'images' || editorTab === 'options' ? 'block' : 'hidden'}>
+            <ProductAssets
+              key={editing.id}
+              bakeryId={bakeryId}
+              product={editing}
+              activeTab={editorTab}
+              initialSnapshot={snapshots[editing.id]}
+              onSnapshot={(snapshot) => setSnapshots((current) => ({ ...current, [editing.id]: snapshot }))}
+              onChanged={products.reload}
+              onBusy={setBusy}
+            />
+          </div>
+        )}
+
+        {error && <ApiErrorMessage error={error} />}
+        {notice && <p role="status" className="sc-feedback">{notice}</p>}
+      </DetailDrawer>
+    )}
     {!(canEdit && (adding || editing)) && <>{error && <ApiErrorMessage error={error} />}{notice && <p role="status">{notice}</p>}</>}
   </div>
 }

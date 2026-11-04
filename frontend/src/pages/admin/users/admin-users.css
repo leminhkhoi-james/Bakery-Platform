@@ -1,11 +1,11 @@
-.sc-drawer.sc-user-form-dialog, .sc-drawer.sc-user-decision-dialog { overflow: clip; background: #fffaf5; }
+.sc-drawer.sc-user-form-dialog, .sc-drawer.sc-user-decision-dialog { overflow: clip; background: #f8fafc; }
 .sc-drawer.sc-user-form-dialog { width: min(31.25rem, calc(100vw - 2rem)); }
 .sc-drawer.sc-user-decision-dialog { width: min(34rem, calc(100vw - 2rem)); }
 .sc-user-form-dialog[open], .sc-user-decision-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
 :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-heading { position: static; padding: .8rem 1rem; }
 :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-heading h2 { font-size: 1.05rem; }
 :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .85rem 1rem; }
-:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer { padding: .7rem 1rem; border-top: 1px solid #e0cfc1; background: #faf4ec; }
+:is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer { padding: .7rem 1rem; border-top: 1px solid #e2e8f0; background: #ffffff; }
 :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer .sc-action-row { justify-content: flex-end; flex-wrap: nowrap; gap: .5rem; }
 :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer .sc-button { width: auto; min-height: 2.3rem; padding: .45rem .75rem; font-size: .8rem; white-space: nowrap; }
 .sc-user-form fieldset { display: grid; min-width: 0; gap: .8rem; }

@@ -20,7 +20,82 @@ export function VendorRfqState({ resource, children }) {
 }
 
 function Cards({ resource, sent, onOpen }) {
-  return <VendorRfqState resource={resource}>{resource.data && (resource.data.result.length ? <div className="sc-owner-rfq-cards">{resource.data.result.map((row) => <article key={row.id} className="sc-owner-rfq-card"><StatusBadge status={row.status} label={sent ? sentOfferStatusLabel(row.status, row.expiresAt) : rfqStatusLabel(row.status)} /><h2>{cleanPresentationLabel(sent ? row.requestTitle : row.title, sent ? 'Yêu cầu không còn khả dụng' : 'Yêu cầu đặt bánh')}</h2>{!sent && <p className="sc-rfq-location"><Icon name="location_on" />{[row.deliveryDistrict, row.deliveryCity].filter(Boolean).join(', ') || 'Chưa có địa điểm'}</p>}<dl><div><dt>{sent ? 'Giá đã báo' : 'Ngân sách'}</dt><dd className={sent ? 'sc-rfq-price' : ''}>{sent ? formatOrderMoney(row.totalPrice, 'VND') : budget(row)}</dd></div><div><dt>{sent ? 'Hiệu lực đến' : 'Cần bánh lúc'}</dt><dd>{formatOrderDate(sent ? row.expiresAt : row.neededAt)}</dd></div></dl><button className="sc-button" onClick={() => onOpen(row.id)}><Icon name="visibility" />Xem chi tiết</button></article>)}</div> : <EmptyPanel title={sent ? 'Chưa có báo giá phù hợp' : 'Chưa có yêu cầu phù hợp'} description={sent ? 'Báo giá đã gửi của tiệm sẽ xuất hiện tại đây.' : 'Yêu cầu mới trong khu vực phục vụ của tiệm sẽ xuất hiện tại đây.'} icon={sent ? 'description' : 'request_quote'} />)}</VendorRfqState>
+  return (
+    <VendorRfqState resource={resource}>
+      {resource.data &&
+        (resource.data.result.length ? (
+          <div className="sc-owner-rfq-cards">
+            {resource.data.result.map((row) => {
+              const previewImg = !sent
+                ? row.preference?.extraOptions?.cake3DSnapshotUrl ||
+                  row.preference?.extraOptions?.selectedAiImageUrl ||
+                  row.images?.[0]?.url ||
+                  null
+                : null
+              return (
+                <article key={row.id} className="sc-owner-rfq-card">
+                  <StatusBadge
+                    status={row.status}
+                    label={sent ? sentOfferStatusLabel(row.status, row.expiresAt) : rfqStatusLabel(row.status)}
+                  />
+                  <h2>
+                    {cleanPresentationLabel(
+                      sent ? row.requestTitle : row.title,
+                      sent ? 'Yêu cầu không còn khả dụng' : 'Yêu cầu đặt bánh'
+                    )}
+                  </h2>
+                  {previewImg && (
+                    <div className="my-2 overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low">
+                      <img
+                        src={previewImg}
+                        alt="Mẫu bánh khách yêu cầu"
+                        className="h-36 w-full object-cover"
+                      />
+                    </div>
+                  )}
+                  {!sent && row.description && (
+                    <p className="line-clamp-2 text-xs text-on-surface-variant">{row.description}</p>
+                  )}
+                  {!sent && (
+                    <p className="sc-rfq-location">
+                      <Icon name="location_on" />
+                      {[row.deliveryDistrict, row.deliveryCity].filter(Boolean).join(', ') || 'Chưa có địa điểm'}
+                      {row.servingSize ? ` · Khẩu phần: ${row.servingSize} người` : ''}
+                    </p>
+                  )}
+                  <dl>
+                    <div>
+                      <dt>{sent ? 'Giá đã báo' : 'Ngân sách'}</dt>
+                      <dd className={sent ? 'sc-rfq-price' : ''}>
+                        {sent ? formatOrderMoney(row.totalPrice, 'VND') : budget(row)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{sent ? 'Hiệu lực đến' : 'Cần bánh lúc'}</dt>
+                      <dd>{formatOrderDate(sent ? row.expiresAt : row.neededAt)}</dd>
+                    </div>
+                  </dl>
+                  <button className="sc-button" onClick={() => onOpen(row.id)}>
+                    <Icon name="visibility" />
+                    {sent ? 'Xem chi tiết báo giá' : 'Xem chi tiết & Báo giá'}
+                  </button>
+                </article>
+              )
+            })}
+          </div>
+        ) : (
+          <EmptyPanel
+            title={sent ? 'Chưa có báo giá phù hợp' : 'Chưa có yêu cầu phù hợp'}
+            description={
+              sent
+                ? 'Báo giá đã gửi của tiệm sẽ xuất hiện tại đây.'
+                : 'Yêu cầu mới trong khu vực phục vụ của tiệm sẽ xuất hiện tại đây.'
+            }
+            icon={sent ? 'description' : 'request_quote'}
+          />
+        ))}
+    </VendorRfqState>
+  )
 }
 const budget = (row) => row.budgetMin == null && row.budgetMax == null ? 'Chưa có ngân sách' : row.budgetMin != null && row.budgetMax != null ? formatOrderMoney(row.budgetMin, 'VND') + ' – ' + formatOrderMoney(row.budgetMax, 'VND') : row.budgetMin != null ? 'Từ ' + formatOrderMoney(row.budgetMin, 'VND') : 'Đến ' + formatOrderMoney(row.budgetMax, 'VND')
 

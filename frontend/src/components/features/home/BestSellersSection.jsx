@@ -7,7 +7,7 @@ import ProductCard from '../../catalog/ProductCard.jsx'
 export const BestSellersSection = ({ onNavigate }) => {
   const resource = useCatalogResource(loadProducts, { page: 1, size: 4, sort: 'createdAt,desc' })
   return (
-    <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#fffaf3] border-b-2 border-[#9f1e31]" id="mau-banh-ban-chay">
+    <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#fff8fa] border-b-2 border-[#9f1e31]" id="mau-banh-ban-chay">
       <div className="max-w-[1220px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">

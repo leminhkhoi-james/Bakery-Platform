@@ -48,11 +48,59 @@ export function createSeed() {
   const offers = BIDS_DATA.map((source, i) => ({ id: demoId(300 + i), cakeRequestId: requests[0].id, bakeryId: bakeries[i % STORES.length].id, status: 'PENDING', cakePrice: source.price, deliveryFee: 30000, addOnTotal: 0, totalPrice: source.price + 30000, estimatedCompletionAt: future(source.durationDays || 2), expiresAt: future(2), message: source.pitchQuote, items: [], statusHistory: [], createdAt: stamp(), updatedAt: stamp() }))
   const stages = { pending: 'PENDING', scheduled: 'CONFIRMED', baking: 'BAKING', delivering: 'DELIVERING', completed: 'COMPLETED' }
   const orderFixtures = [...Object.entries(INITIAL_KANBAN_ORDERS).flatMap(([stage, rows]) => rows.map((row) => ({ ...row, status: stages[stage] }))), ...DEFAULT_PAST_ORDERS.map((row) => ({ ...row, status: 'COMPLETED' }))]
-  const orders = orderFixtures.map((source, i) => ({ id: demoId(400 + i), customerId, bakeryId: bakeries[0].id, bakeryName: bakeries[0].name, customerName: source.customer || users[0].name, customerPhone: source.phone || DEFAULT_CUSTOMER_PROFILE.phone, orderNumber: 'MẪU-' + source.id.replace(/^#/, ''), status: source.status, orderSource: 'DIRECT_CATALOG', currency: 'VND', subtotal: source.price, deliveryFee: 30000, totalAmount: source.price + 30000, neededAt: source.status === 'COMPLETED' ? future(-2 - i) : future(2 + i), createdAt: future(-10 - i), completedAt: source.status === 'COMPLETED' ? future(-2 - i + .01) : null, customerNote: source.description || source.subtitle || '', items: [{ id: demoId(80000 + i), sourceProductId: products.find((p) => p.name === source.title)?.id || null, name: source.title, quantity: 1, unitPrice: source.price, lineTotal: source.price, itemType: 'CATALOG_PRODUCT', configuration: {} }], statusHistory: [{ fromStatus: null, toStatus: source.status, changedAt: stamp() }], deliveryAddress: { recipientName: users[0].name, recipientPhone: source.phone || DEFAULT_CUSTOMER_PROFILE.phone, addressLine: source.address || DEFAULT_CUSTOMER_PROFILE.address, district: 'Bình Thạnh', city: 'TP. Hồ Chí Minh' }, review: null }))
+  const orders = orderFixtures.map((source, i) => {
+    const targetBakery = [2, 3, 4, 5].includes(i) ? bakeries[4] : bakeries[0]
+    return {
+      id: demoId(400 + i),
+      customerId,
+      bakeryId: targetBakery.id,
+      bakeryName: targetBakery.name,
+      customerName: source.customer || users[0].name,
+      customerPhone: source.phone || DEFAULT_CUSTOMER_PROFILE.phone,
+      orderNumber: 'MẪU-' + source.id.replace(/^#/, ''),
+      status: source.status,
+      orderSource: 'DIRECT_CATALOG',
+      currency: 'VND',
+      subtotal: source.price,
+      deliveryFee: 30000,
+      totalAmount: source.price + 30000,
+      neededAt: source.status === 'COMPLETED' ? future(-2 - i) : future(2 + i),
+      createdAt: future(-10 - i),
+      completedAt: source.status === 'COMPLETED' ? future(-2 - i + .01) : null,
+      customerNote: source.description || source.subtitle || '',
+      items: [{
+        id: demoId(80000 + i),
+        sourceProductId: products.find((p) => p.name === source.title)?.id || products.find((p) => p.bakeryId === targetBakery.id)?.id || null,
+        name: source.title,
+        quantity: 1,
+        unitPrice: source.price,
+        lineTotal: source.price,
+        itemType: 'CATALOG_PRODUCT',
+        configuration: {},
+      }],
+      statusHistory: [{ fromStatus: null, toStatus: source.status, changedAt: stamp() }],
+      deliveryAddress: {
+        recipientName: users[0].name,
+        recipientPhone: source.phone || DEFAULT_CUSTOMER_PROFILE.phone,
+        addressLine: source.address || DEFAULT_CUSTOMER_PROFILE.address,
+        district: 'Bình Thạnh',
+        city: 'TP. Hồ Chí Minh',
+      },
+      review: null,
+    }
+  })
 
-  const plans = ['Khởi đầu', 'Nghệ nhân', 'Chuyên nghiệp'].map((name, i) => ({ id: demoId(500 + i), code: 'DEMO_' + i, name, description: 'Gói minh họa; không thu phí.', monthlyPrice: 199000 + i * 200000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: String(20 + i * 30), support: 'Hỗ trợ đối tác' } }))
-  const subscriptionOrders = [{ id: demoId(510), bakeryId: bakeries[0].id, planId: plans[1].id, orderNumber: 'DEMO-SUB-101', planNameSnapshot: plans[1].name, planCodeSnapshot: plans[1].code, featuresSnapshot: plans[1].features, billingPeriodMonths: 1, totalAmount: plans[1].monthlyPrice, currency: 'VND', status: 'PAYMENT_REVIEW', expiresAt: future(3), createdAt: stamp() }]
-  const payments = [{ id: demoId(520), bakeryId: bakeries[0].id, subscriptionOrderId: demoId(510), amount: plans[1].monthlyPrice, currency: 'VND', status: 'SUBMITTED', paymentMethod: 'BANK_TRANSFER', paymentReference: 'DEMO-ONLY', submittedAt: stamp() }]
+  const plans = [
+    { id: demoId(500), code: 'DEMO_0', name: 'Khởi đầu', description: 'Gói siêu tiết kiệm dành cho tiệm làm bánh tại nhà và người mới khởi nghiệp bán bánh kem.', monthlyPrice: 49000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '15', offers: '30', featured: 'false', support: 'Hỗ trợ trực tuyến cộng đồng' } },
+    { id: demoId(501), code: 'DEMO_1', name: 'Nghệ nhân', description: 'Gói phổ biến và tối ưu nhất cho tiệm bánh nghệ nhân, studio bánh kem đang phát triển.', monthlyPrice: 99000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '60', offers: '-1', featured: 'true', support: 'Hỗ trợ ưu tiên & Đề xuất nổi bật' } },
+    { id: demoId(502), code: 'DEMO_2', name: 'Chuyên nghiệp', description: 'Giải pháp toàn diện dành cho chuỗi tiệm bánh lớn và xưởng bánh tiệc cưới, sự kiện.', monthlyPrice: 189000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '-1', offers: '-1', featured: 'true', support: 'Hỗ trợ chuyên gia 24/7 & Top trang chủ' } },
+  ]
+  const subscriptionOrders = [
+    { id: demoId(510), bakeryId: bakeries[0].id, planId: plans[1].id, orderNumber: 'DEMO-SUB-101', planNameSnapshot: plans[1].name, planCodeSnapshot: plans[1].code, featuresSnapshot: plans[1].features, billingPeriodMonths: 1, totalAmount: plans[1].monthlyPrice, currency: 'VND', status: 'PAYMENT_REVIEW', expiresAt: future(3), createdAt: stamp() }
+  ]
+  const payments = [
+    { id: demoId(520), bakeryId: bakeries[0].id, subscriptionOrderId: demoId(510), amount: plans[1].monthlyPrice, currency: 'VND', status: 'SUBMITTED', paymentMethod: 'Chuyển khoản Vietcombank (QR)', paymentReference: 'FT2611039821', submittedByName: 'La Crème Pâtisserie', submittedAt: stamp() }
+  ]
   const conversations = [{ id: demoId(600), customerId, bakeryId: bakeries[0].id, cakeRequestId: requests[0].id, status: 'OPEN', unreadCount: 1, lastMessageAt: stamp(), lastMessagePreview: DEFAULT_BAKER_CHAT_MESSAGES[0].text, createdAt: stamp(), participants: [{ userId: customerId, participantType: 'CUSTOMER' }, { userId: ownerId, participantType: 'BAKERY' }] }]
   const messages = DEFAULT_BAKER_CHAT_MESSAGES.map((source, i) => ({ id: demoId(610 + i * 2), conversationId: demoId(600), clientMessageId: demoId(611 + i * 2), senderId: source.sender === 'user' ? customerId : ownerId, messageType: 'TEXT', content: source.text, attachments: [], deleted: false, createdAt: stamp() }))
   const addresses = createCustomerAddresses(customerId, (i) => demoId(90000 + i), users[0].name)

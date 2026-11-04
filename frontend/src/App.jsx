@@ -57,6 +57,11 @@ function App() {
     'cong-thanh-toan': 'payment',
 
     // Order Tracking
+    'subscription-plans': 'subscription-plans',
+    'tro-thanh-doi-tac': 'subscription-plans',
+    'doi-tac': 'subscription-plans',
+    'partnership': 'subscription-plans',
+    'goi-dich-vu': 'subscription-plans',
     'order-tracking': 'tracking',
     'theo-doi-don-hang': 'tracking',
     'don-hang': 'tracking',

@@ -35,6 +35,14 @@ export const CUSTOMER_NAV_LINKS = [
     route: 'bidding',
     href: '/bidding',
   },
+  {
+    id: 'partnership',
+    label: 'Trở thành đối tác',
+    route: 'subscription-plans',
+    href: '/subscription-plans',
+    activeAliases: ['subscription-plans', 'partnership', 'doi-tac', 'tro-thanh-doi-tac'],
+    icon: 'storefront',
+  },
 ];
 
 export const FOOTER_DATA = {

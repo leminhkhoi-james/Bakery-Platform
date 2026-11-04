@@ -53,6 +53,11 @@ function QuoteContext({ offer, onNavigate }) {
   }
 
   const canAccept = acceptableOffer(offer, rfq, user)
+  const designPreviewUrl =
+    rfq.preference?.extraOptions?.cake3DSnapshotUrl ||
+    rfq.preference?.extraOptions?.selectedAiImageUrl ||
+    rfq.images?.[0]?.url ||
+    null
 
   return (
     <div className="space-y-6">
@@ -63,14 +68,14 @@ function QuoteContext({ offer, onNavigate }) {
           onClick={() => onNavigate('bidding?cakeRequestId=' + offer.cakeRequestId)}
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:underline transition-colors"
         >
-          <Icon name="arrow_back" className="text-base" /> Quay lại danh sách báo giá
+          <Icon name="arrow_back" className="text-base" /> Quay lại danh sách so sánh báo giá
         </button>
         <button
           type="button"
           onClick={() => onNavigate('request-detail?id=' + offer.cakeRequestId)}
           className="inline-flex items-center gap-1 text-xs text-outline hover:text-primary hover:underline transition-colors"
         >
-          <Icon name="visibility" className="text-sm" /> Xem yêu cầu RFQ gốc
+          <Icon name="visibility" className="text-sm" /> Xem yêu cầu đặt bánh gốc
         </button>
       </div>
 
@@ -85,29 +90,41 @@ function QuoteContext({ offer, onNavigate }) {
             <div className="flex items-center justify-between border-b border-outline-variant/20 pb-3">
               <div className="flex items-center gap-2">
                 <Icon name="cake" className="text-primary text-xl" />
-                <h3 className="font-serif text-lg font-bold text-primary">Yêu cầu bánh gốc (RFQ)</h3>
+                <h3 className="font-serif text-lg font-bold text-primary">Mẫu bánh & Yêu cầu đặt bánh gốc</h3>
               </div>
               <StatusBadge status={rfq.status} />
             </div>
 
+            {designPreviewUrl && (
+              <div className="overflow-hidden rounded-2xl border border-amber-200/80 bg-surface-container-low p-3">
+                <img
+                  src={designPreviewUrl}
+                  alt="Mẫu bánh đã chọn"
+                  className="max-h-56 w-full rounded-xl object-contain"
+                />
+              </div>
+            )}
+
             <div className="space-y-2 text-sm">
               <h4 className="text-base font-bold text-on-surface">{rfq.title || 'Yêu cầu làm bánh'}</h4>
               {rfq.description && (
-                <p className="line-clamp-2 text-xs text-on-surface-variant leading-relaxed">{rfq.description}</p>
+                <p className="text-xs text-on-surface-variant leading-relaxed whitespace-pre-wrap">{rfq.description}</p>
               )}
               <div className="grid gap-2 sm:grid-cols-2 pt-2 text-xs">
                 <p className="flex items-center gap-1 text-outline">
-                  <Icon name="location_on" className="text-xs text-secondary" /> Giao tới: <strong className="text-on-surface font-medium">{rfq.deliveryDistrict}, {rfq.deliveryCity}</strong>
+                  <Icon name="location_on" className="text-xs text-secondary" /> Khu vực nhận:{' '}
+                  <strong className="text-on-surface font-medium">{rfq.deliveryDistrict}, {rfq.deliveryCity}</strong>
                 </p>
                 <p className="flex items-center gap-1 text-outline">
-                  <Icon name="calendar_today" className="text-xs text-primary" /> Cần ngày: <strong className="text-on-surface font-medium">{formatRfqDate(rfq.neededAt)}</strong>
+                  <Icon name="calendar_today" className="text-xs text-primary" /> Cần bánh lúc:{' '}
+                  <strong className="text-on-surface font-medium">{formatRfqDate(rfq.neededAt)}</strong>
                 </p>
               </div>
             </div>
 
-            {rfq.images && rfq.images.length > 0 && (
+            {rfq.images && rfq.images.length > 1 && (
               <div className="pt-2 border-t border-outline-variant/20">
-                <p className="text-xs font-semibold text-outline mb-2">Ảnh tham khảo đính kèm:</p>
+                <p className="text-xs font-semibold text-outline mb-2">Ảnh đính kèm:</p>
                 <div className="flex items-center gap-3 overflow-x-auto pb-1">
                   {rfq.images.slice(0, 4).map((img) => (
                     <img
@@ -127,31 +144,31 @@ function QuoteContext({ offer, onNavigate }) {
             <section className="space-y-3 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
               <div className="flex items-center gap-2">
                 <Icon name="chat" className="text-primary text-xl" />
-                <h3 className="font-serif text-lg font-bold text-primary">Trao đổi với tiệm bánh</h3>
+                <h3 className="font-serif text-lg font-bold text-primary">Trao đổi trực tiếp với tiệm bánh</h3>
               </div>
               <p className="text-xs text-on-surface-variant">
-                Gửi tin nhắn trực tiếp để thống nhất chi tiết tạo hình, vị bánh hoặc thời gian giao bánh chính xác.
+                Bạn có thể nhắn tin với tiệm để thống nhất chi tiết kem phủ, hương vị, kích thước hoặc phương thức giao nhận trước khi xác nhận đặt đơn cuối cùng.
               </p>
               <ChatForRequest request={rfq} bakeryId={offer.bakeryId} onNavigate={onNavigate} />
             </section>
           )}
         </div>
 
-        {/* Right column: Sticky Checkout Panel */}
+        {/* Right column: Sticky Final Order Confirmation Panel (Section 5.3) */}
         <div className="space-y-4 lg:col-span-5 lg:sticky lg:top-24">
-          <section className="space-y-5 rounded-3xl border-2 border-primary/10 bg-surface p-6 shadow-md">
+          <section className="space-y-5 rounded-3xl border-2 border-primary/15 bg-surface p-6 shadow-md">
             <div className="border-b border-outline-variant/20 pb-4">
-              <p className="sc-kicker text-xs">Xác nhận đơn bánh</p>
-              <h2 className="font-serif text-2xl font-bold text-primary">Chấp nhận báo giá</h2>
-              <p className="mt-1 text-xs text-on-surface-variant">
-                Chọn địa chỉ giao hàng và xác nhận để tiệm bắt đầu chuẩn bị bánh.
+              <p className="sc-kicker text-xs">Bước xác nhận cuối cùng</p>
+              <h2 className="font-serif text-2xl font-bold text-primary">Chấp nhận báo giá & Tạo đơn</h2>
+              <p className="mt-1 text-xs text-on-surface-variant leading-relaxed">
+                Kiểm tra lại giá đề xuất, thời gian hoàn thành, chọn địa chỉ nhận bánh và xác nhận cuối cùng để tạo đơn hàng chính thức (các báo giá khác của yêu cầu này sẽ tự động đóng).
               </p>
             </div>
 
-            {/* Quick Price Recap Box */}
+            {/* Agreed Price & Timeline Summary Box */}
             <div className="space-y-2 rounded-2xl bg-surface-container-low p-4 text-sm border border-outline-variant/20">
               <div className="flex justify-between text-on-surface-variant">
-                <span>Tiền làm bánh:</span>
+                <span>Giá bánh tiệm đề xuất:</span>
                 <span className="font-semibold text-on-surface">{moneyVnd(offer.cakePrice)}</span>
               </div>
               <div className="flex justify-between text-on-surface-variant">
@@ -164,8 +181,12 @@ function QuoteContext({ offer, onNavigate }) {
                   <span className="font-semibold text-on-surface">{moneyVnd(offer.addOnTotal)}</span>
                 </div>
               )}
+              <div className="flex justify-between text-xs text-on-surface-variant pt-1 border-t border-outline-variant/20">
+                <span>Dự kiến hoàn thành:</span>
+                <span className="font-semibold text-on-surface">{formatRfqDate(offer.estimatedCompletionAt)}</span>
+              </div>
               <div className="border-t border-outline-variant/30 pt-3 flex justify-between items-baseline">
-                <span className="font-bold text-on-surface">Tổng thanh toán:</span>
+                <span className="font-bold text-on-surface">Tổng giá trị thống nhất:</span>
                 <span className="font-serif text-2xl font-bold text-primary">{moneyVnd(offer.totalPrice)}</span>
               </div>
             </div>

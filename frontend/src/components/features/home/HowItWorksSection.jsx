@@ -97,7 +97,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
             <div className="absolute inset-0 rounded-full pattern-dots-pink border-2 border-wine shadow-[3px_3px_0_#9f1e31]"></div>
             <div className="absolute -top-5 right-8 w-20 h-20 rounded-full pattern-dots-pink border-t-2 border-r-2 border-wine"></div>
             <div className="absolute bottom-2 left-6 text-wine font-bold text-sm">★</div>
-            <div className="absolute -top-2 left-8 bg-[#ffe4a6] text-wine rounded-full w-6 h-6 flex items-center justify-center border border-wine text-xs font-bold shadow-xs">
+            <div className="absolute -top-2 left-8 bg-[#ffd6e5] text-wine rounded-full w-6 h-6 flex items-center justify-center border border-wine text-xs font-bold shadow-xs">
               ♥
             </div>
           </div>
@@ -117,9 +117,9 @@ export const HowItWorksSection = ({ onNavigate }) => {
                   </div>
 
                   {/* Main Arch Card */}
-                  <div className="bg-[#fff3e5] border-3 border-wine rounded-[160px_160px_32px_32px] p-7 sm:p-9 shadow-[10px_10px_0_#6fb9c6] text-center w-full transition-transform duration-300 group-hover:-translate-y-1">
+                  <div className="bg-[#ffeaf1] border-3 border-wine rounded-[160px_160px_32px_32px] p-7 sm:p-9 shadow-[10px_10px_0_#6fb9c6] text-center w-full transition-transform duration-300 group-hover:-translate-y-1">
                     {/* Inner Stitched Dotted Border */}
-                    <div className="border-2 border-dashed border-wine/30 rounded-[135px_135px_22px_22px] px-5 py-7 bg-[#fffaf3]/85 flex flex-col items-center">
+                    <div className="border-2 border-dashed border-wine/30 rounded-[135px_135px_22px_22px] px-5 py-7 bg-white/90 flex flex-col items-center">
                       {/* Illustrated Heart Icon with Sparkles */}
                       <div className="relative mb-3 flex items-center justify-center">
                         <span className="text-wine/30 absolute -top-1 -right-3 text-sm">✦</span>
@@ -164,7 +164,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                 <ul className="space-y-4">
                   {/* Item 1 */}
                   <li className="bg-surface-bright/95 backdrop-blur-xs border-2 border-wine rounded-2xl p-4 sm:p-5 shadow-[4px_4px_0_#9f1e31] transition-all duration-300 hover:translate-x-1.5 hover:shadow-[6px_6px_0_#9f1e31] flex items-start gap-4">
-                    <div className="w-11 h-11 shrink-0 rounded-xl bg-[#ffe4a6] border-2 border-wine flex items-center justify-center text-wine shadow-xs mt-0.5">
+                    <div className="w-11 h-11 shrink-0 rounded-xl bg-[#ffd6e5] border-2 border-wine flex items-center justify-center text-wine shadow-xs mt-0.5">
                       <span className="material-symbols-outlined text-2xl">palette</span>
                     </div>
                     <div className="flex-1">

@@ -40,11 +40,11 @@ export default function VendorSidebar({
               </button>
             )}
           </div>
-          <div className="flex items-center gap-2 mt-3 px-3 py-1.5 rounded-xl bg-secondary-container/60 border border-secondary/20">
-            <span className="material-symbols-outlined text-secondary text-sm">
+          <div className="flex items-center gap-2 mt-3 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+            <span className="material-symbols-outlined text-primary text-sm">
               verified
             </span>
-            <span className="text-xs font-label-md font-bold text-on-secondary-container tracking-wide">
+            <span className="text-xs font-label-md font-bold text-slate-800 tracking-wide">
               XƯỞNG BÁNH ĐỐI TÁC
             </span>
           </div>

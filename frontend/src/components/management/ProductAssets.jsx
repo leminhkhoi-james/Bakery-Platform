@@ -31,7 +31,7 @@ function FilePreview({ file }) {
   useEffect(() => () => URL.revokeObjectURL(url), [url])
   return <VendorImage src={url} alt={file.name} />
 }
-export default function ProductAssets({ bakeryId, product, initialSnapshot, onSnapshot, onChanged, onBusy }) {
+export default function ProductAssets({ bakeryId, product, initialSnapshot, onSnapshot, onChanged, onBusy, activeTab = 'all' }) {
   const resource = useCatalogResource(loadProductSnapshot, { bakeryId, productId: product.id, fresh: Boolean(initialSnapshot) })
   const [confirmed, setConfirmed] = useState(initialSnapshot || null), [revision, setRevision] = useState(0), [files, setFiles] = useState([]), [primary, setPrimary] = useState(''), [orders, setOrders] = useState([]), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [deleteId, setDelete] = useState('')
   const inFlight = useRef(false)
@@ -44,7 +44,7 @@ export default function ProductAssets({ bakeryId, product, initialSnapshot, onSn
     try { await action(); setNotice('Đã lưu và đồng bộ thông tin sản phẩm.'); onChanged(); resource.reload() }
     catch (failure) { setError(failure); resource.reload() } finally { inFlight.current = false; setBusy(false); onBusy?.(false) }
   }
-  return <div className="space-y-4"><ModalFormState value={{ files: files.map((file) => [file.name, file.size, file.lastModified]), primary, orders }} busy={busy} /><section className={panelClass}><h3 className="font-bold">Ảnh sản phẩm</h3>
+  return <div className="space-y-4"><ModalFormState value={{ files: files.map((file) => [file.name, file.size, file.lastModified]), primary, orders }} busy={busy} /><section className={panelClass + (activeTab === 'options' ? ' hidden' : ' block')}><h3 className="font-bold text-base text-primary flex items-center gap-2">Ảnh sản phẩm</h3>
     {resource.status === 'loading' && !snapshot && <p>Đang tải ảnh và tùy chọn…</p>}
     {resource.error && (resource.error.status === 404 ? <p role="status">Chưa tải được đầy đủ ảnh và tùy chọn sản phẩm. Vui lòng tải lại trước khi chỉnh sửa.</p> : <ApiErrorMessage error={resource.error} retry={resource.reload} />)}
     <p className="text-sm">Ảnh PNG/JPEG/WebP, tối đa 5 MiB mỗi ảnh và 10 ảnh mỗi sản phẩm. Chọn ảnh chính cho các ảnh mới tải lên.</p>
@@ -55,6 +55,6 @@ export default function ProductAssets({ bakeryId, product, initialSnapshot, onSn
     </fieldset></form>
     {snapshot?.images?.length ? <ul className="grid gap-3 sm:grid-cols-2">{snapshot.images.map(image => <li key={image.id} className="space-y-2"><VendorImage src={image.url} alt={image.primary ? 'Ảnh chính sản phẩm' : 'Ảnh sản phẩm'} /><p className="text-sm">{image.primary ? 'Ảnh chính' : 'Ảnh bổ sung'}</p><div className="sc-actions">{/^https?:\/\//i.test(image.url || '') && <a className="sc-button sc-button--secondary" href={image.url} target="_blank" rel="noreferrer">Xem ảnh</a>}<button type="button" disabled={busy} className="sc-button sc-button--secondary" onClick={() => setDelete(image.id)}>Xóa ảnh</button></div></li>)}</ul> : <p>Chưa có ảnh sản phẩm.</p>}
     {deleteId && <VendorConfirm title="Xóa ảnh sản phẩm" label="Xác nhận xóa" danger busy={busy} error={error && <ApiErrorMessage error={error} />} onClose={() => setDelete('')} onConfirm={() => mutate(async () => { await vendorCatalogService.deleteImage(bakeryId, product.id, deleteId); remember({ ...snapshot, images: snapshot.images.filter(item => item.id !== deleteId) }); setDelete('') })}><p>{snapshot.images.find(image => image.id === deleteId)?.primary ? 'Đây là ảnh chính của sản phẩm. Kiểm tra điều kiện mở bán trước khi xóa.' : 'Ảnh này sẽ được xóa khỏi sản phẩm.'}</p></VendorConfirm>}
-  </section>{snapshot?.options ? <OptionsEditor key={revision} options={snapshot.options} busy={busy} onSave={(input) => mutate(async () => { const options = await vendorCatalogService.saveOptions(bakeryId, product.id, input); remember({ ...snapshot, options }, true) })} /> : <p>Chưa tải đủ tùy chọn. Vui lòng tải lại trước khi chỉnh sửa.</p>}{error && <ApiErrorMessage error={error} />}{notice && <p role="status">{notice}</p>}</div>
+  </section><div className={activeTab === 'images' ? 'hidden' : 'block'}>{snapshot?.options ? <OptionsEditor key={revision} options={snapshot.options} busy={busy} onSave={(input) => mutate(async () => { const options = await vendorCatalogService.saveOptions(bakeryId, product.id, input); remember({ ...snapshot, options }, true) })} /> : <p>Chưa tải đủ tùy chọn. Vui lòng tải lại trước khi chỉnh sửa.</p>}</div>{error && <ApiErrorMessage error={error} />}{notice && <p role="status">{notice}</p>}</div>
 }
 

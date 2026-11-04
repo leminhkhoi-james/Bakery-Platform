@@ -14,6 +14,7 @@ export async function readBody(body) {
   return typeof body === 'string' && body ? JSON.parse(body) : body || {}
 }
 export function routeDemo(store, path, method, body, query, user) {
+  store.reload?.()
   store.bind(user)
   const s = store.state, get = method === 'GET', parts = path.split('/').filter(Boolean)
   const { find, requireUser, bakeryAccess, own, has } = store
@@ -21,7 +22,16 @@ export function routeDemo(store, path, method, body, query, user) {
     let result = items.filter((row) => {
       for (const key of ['status', 'bakeryId', 'categoryId', 'requestType', 'cakeRequestId', 'orderSource', 'city', 'district']) {
         const value = query.get(key)
-        if (value && String(row[key] ?? row.primaryAddress?.[key] ?? (key === 'district' ? row.deliveryDistrict : key === 'city' ? row.deliveryCity : '') ?? '').toLocaleLowerCase('vi') !== ({ hcm: 'tp. hồ chí minh', hn: 'hà nội' }[value.toLowerCase()] || value.toLocaleLowerCase('vi'))) return false
+        if (value) {
+          if (key === 'categoryId') {
+            const matchesId = String(row.categoryId || '') === value
+            const targetCat = s.categories.find((c) => c.id === value)
+            const matchesCategoryName = !query.get('bakeryId') && targetCat && String(row.category?.name || '').toLocaleLowerCase('vi') === targetCat.name.toLocaleLowerCase('vi')
+            if (!matchesId && !matchesCategoryName) return false
+          } else if (String(row[key] ?? row.primaryAddress?.[key] ?? (key === 'district' ? row.deliveryDistrict : key === 'city' ? row.deliveryCity : '') ?? '').toLocaleLowerCase('vi') !== ({ hcm: 'tp. hồ chí minh', hn: 'hà nội' }[value.toLowerCase()] || value.toLocaleLowerCase('vi'))) {
+            return false
+          }
+        }
       }
       const needle = (query.get('query') || query.get('search') || '').toLocaleLowerCase('vi')
       if (needle && ![row.name, row.title, row.description, row.orderNumber].join(' ').toLocaleLowerCase('vi').includes(needle)) return false
@@ -175,12 +185,43 @@ export function routeDemo(store, path, method, body, query, user) {
         if (scope === 'available') { requireUser(user, 'BAKERY_OWNER'); available = s.bakeries.filter((bakery) => { try { bakeryAccess(user, bakery.id); return true } catch { return false } }) }
         result = page(s.requests.filter((r) => scope === 'mine' ? r.customerId === user.id : scope === 'available' ? available.some((bakery) => requestMatchesBakery(r, bakery)) : scope === 'all' || r.status === 'OPEN'))
       }
-      else if (method === 'POST') { requireUser(user, 'CUSTOMER'); result = create('requests', { ...body, customerId: user.id, status: 'DRAFT', images: [], optionSelections: body.optionSelections || [], statusHistory: [], offers: [] }) }
+      else if (method === 'POST') {
+        requireUser(user, 'CUSTOMER')
+        const snapshotUrl = body.preference?.extraOptions?.cake3DSnapshotUrl
+        const initialImages = snapshotUrl ? [{ id: store.id(), url: snapshotUrl, displayOrder: 1 }] : []
+        result = create('requests', { ...body, customerId: user.id, status: 'DRAFT', images: initialImages, optionSelections: body.optionSelections || [], statusHistory: [], offers: [] })
+      }
     } else {
       const request = find('requests', parts[1])
       if (parts[2] === 'offers' && method === 'POST') { bakeryAccess(user, body.bakeryId); if (s.offers.some((offer) => offer.cakeRequestId === request.id && offer.bakeryId === body.bakeryId)) throw new DemoError('Tiệm đã gửi báo giá cho yêu cầu này.', 409); if (!requestMatchesBakery(request, find('bakeries', body.bakeryId))) throw new DemoError('Yêu cầu không thuộc khu vực phục vụ của tiệm.', 422); if (request.status !== 'OPEN' || Date.parse(request.offerDeadline) < Date.now()) throw new DemoError('RFQ không nhận báo giá.', 409); result = create('offers', { ...priceOffer(body, body.bakeryId), cakeRequestId: request.id, status: 'PENDING', statusHistory: [] }) }
       else if (get) { if (request.status !== 'OPEN' && !has(user, 'ADMIN')) { const participated = s.offers.some((offer) => { if (offer.cakeRequestId !== request.id) return false; try { bakeryAccess(user, offer.bakeryId); return true } catch { return false } }); if (!participated) own(user, request) } result = requestDto(request) }
-      else { own(user, request); if (method === 'PATCH' && !parts[2]) { if (request.status !== 'DRAFT') throw new DemoError('Chỉ sửa bản nháp.', 409); result = update(request, body) } else if (method === 'POST' && ['publish', 'cancel'].includes(parts[2])) { if (parts[2] === 'publish' && request.status !== 'DRAFT' || parts[2] === 'cancel' && !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Trạng thái RFQ không hợp lệ.', 409); result = update(request, { status: parts[2] === 'publish' ? 'OPEN' : 'CANCELLED' }) } else if (method === 'PUT' && parts[2] === 'selected-design') { const design = find('designs', body.generatedDesignId), job = find('jobs', design.generationJobId); if (job.cakeRequestId !== request.id || job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Thiết kế không hợp lệ cho yêu cầu này.', 409); result = update(request, { selectedDesignId: design.id }) } }
+      else {
+        own(user, request)
+        if (method === 'PATCH' && !parts[2]) {
+          if (!['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Chỉ sửa bản nháp hoặc yêu cầu đang mở.', 409)
+          const snapshotUrl = body.preference?.extraOptions?.cake3DSnapshotUrl
+          const updatedImages = snapshotUrl
+            ? [{ id: store.id(), url: snapshotUrl, displayOrder: 1 }, ...(request.images || []).filter((img) => !String(img.url || '').startsWith('data:image/'))]
+            : request.images
+          result = update(request, { ...body, images: updatedImages })
+        } else if (method === 'POST' && ['publish', 'cancel'].includes(parts[2])) {
+          if (parts[2] === 'publish' && request.status !== 'DRAFT' || parts[2] === 'cancel' && !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Trạng thái RFQ không hợp lệ.', 409)
+          result = update(request, { status: parts[2] === 'publish' ? 'OPEN' : 'CANCELLED' })
+        } else if (method === 'PUT' && parts[2] === 'selected-design') {
+          const design = find('designs', body.generatedDesignId), job = find('jobs', design.generationJobId)
+          if (job.cakeRequestId !== request.id || job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Thiết kế không hợp lệ cho yêu cầu này.', 409)
+          const selectedImg = design.imageUrl ? [{ id: design.id, url: design.imageUrl, displayOrder: 0 }] : []
+          const remainingImgs = (request.images || []).filter((img) => img.url !== design.imageUrl)
+          const nextPreference = {
+            ...(request.preference || {}),
+            extraOptions: {
+              ...(request.preference?.extraOptions || {}),
+              selectedAiImageUrl: design.imageUrl || null,
+            },
+          }
+          result = update(request, { selectedDesignId: design.id, images: [...selectedImg, ...remainingImgs], preference: nextPreference })
+        }
+      }
     }
     if (result?.id) result = requestDto(result)
   } else if (parts[0] === 'offers') {
@@ -219,7 +260,13 @@ export function routeDemo(store, path, method, body, query, user) {
   else if (parts[0] === 'subscription-orders') {
     const order = find('subscriptionOrders', parts[1]); bakeryAccess(user, order.bakeryId)
     if (get) result = subOrderDto(order)
-    else if (parts[2] === 'payments' && method === 'POST') { requireUser(user, 'BAKERY_OWNER'); if (order.status !== 'PENDING_PAYMENT') throw new DemoError('Đơn không chờ thanh toán.', 409); result = create('payments', { ...body, bakeryId: order.bakeryId, subscriptionOrderId: order.id, status: 'SUBMITTED', submittedAt: stamp() }); order.status = 'PAYMENT_REVIEW' }
+    else if (parts[2] === 'payments' && method === 'POST') {
+      requireUser(user, 'BAKERY_OWNER', 'CUSTOMER');
+      if (order.status !== 'PENDING_PAYMENT') throw new DemoError('Đơn không chờ thanh toán.', 409);
+      const submittedByName = body.submittedByName || user?.displayName || user?.fullName || user?.name || s.bakeries.find((b) => b.id === order.bakeryId)?.name || 'Chủ tiệm';
+      result = create('payments', { ...body, bakeryId: order.bakeryId, subscriptionOrderId: order.id, status: 'SUBMITTED', submittedByName, submittedByUserId: user?.id, submittedAt: stamp() });
+      order.status = 'PAYMENT_REVIEW'
+    }
   } else if (parts[0] === 'generation-jobs') {
     requireUser(user, 'CUSTOMER', 'ADMIN')
     if (!parts[1] && get) { const current = Math.max(0, Number(query.get('page')) || 0); query.set('page', String(current + 1)); const listed = page(s.jobs.filter((job) => job.customerId === user.id || has(user, 'ADMIN'))); result = { content: listed.result, page: current, size: listed.meta.pageSize, totalElements: listed.meta.total, totalPages: listed.meta.pages } }
@@ -235,10 +282,14 @@ export function routeDemo(store, path, method, body, query, user) {
           if (!['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Yêu cầu không còn cho chỉnh sửa.', 409)
           const revision = (job?.currentRevision || 0) + 1, promptRevision = { id: store.id(), revisionNumber: revision, prompt: body.prompt, negativePrompt: body.negativePrompt }
           result = job ? update(job, { status: 'QUEUED', currentRevision: revision, startedAt: stamp(), completedAt: null, promptRevisions: [...job.promptRevisions, promptRevision] }) : create('jobs', { customerId: user.id, cakeRequestId: request.id, status: 'QUEUED', modelName: 'Mẫu dựng sẵn · không gọi AI provider', currentRevision: revision, startedAt: stamp(), promptRevisions: [promptRevision], sourceImages: [] })
-          for (let i = 0; i < (body.generationParameters?.numberOfDesigns || 1); i++) create('designs', { generationJobId: result.id, imageUrl: AI_RENDER_IMAGES[i % AI_RENDER_IMAGES.length], thumbnailUrl: AI_RENDER_IMAGES[i % AI_RENDER_IMAGES.length], moderationStatus: 'APPROVED', moderationReason: 'Ảnh mockdata có sẵn, không phải ảnh AI tạo từ prompt.', width: 1024, height: 1024 })
+          if (job) s.designs = s.designs.filter((d) => d.generationJobId !== job.id)
+          for (let i = 0; i < (body.generationParameters?.numberOfDesigns || 1); i++) {
+            const imgUrl = AI_RENDER_IMAGES[(i + revision - 1) % AI_RENDER_IMAGES.length]
+            create('designs', { generationJobId: result.id, imageUrl: imgUrl, thumbnailUrl: imgUrl, moderationStatus: 'APPROVED', moderationReason: 'Ảnh mockdata có sẵn, không phải ảnh AI tạo từ prompt.', width: 1024, height: 1024 })
+          }
         }
       } else {
-        if (['QUEUED', 'PROCESSING'].includes(job.status)) { const elapsed = Date.now() - Date.parse(job.startedAt); const status = elapsed > 3000 ? 'SUCCEEDED' : elapsed > 1000 ? 'PROCESSING' : 'QUEUED'; if (status !== job.status) { update(job, { status, ...(status === 'SUCCEEDED' ? { completedAt: stamp() } : {}) }); store.save() } }
+        if (['QUEUED', 'PROCESSING'].includes(job.status)) { const elapsed = Date.now() - Date.parse(job.startedAt); const status = elapsed > 1200 ? 'SUCCEEDED' : elapsed > 400 ? 'PROCESSING' : 'QUEUED'; if (status !== job.status) { update(job, { status, ...(status === 'SUCCEEDED' ? { completedAt: stamp() } : {}) }); store.save() } }
         result = { job, currentRevision: job.currentRevision, promptRevisions: job.promptRevisions, sourceImages: job.sourceImages, generatedDesigns: s.designs.filter((design) => design.generationJobId === job.id) }
       }
     }

@@ -59,7 +59,20 @@ export const StoreDirectoryPage = ({
               <h1 className="font-headline-lg text-3xl sm:text-4xl lg:text-[40px] text-primary font-bold tracking-normal">
                 Danh Sách Cửa Hàng Bánh
               </h1>
+              <p className="font-body-md text-on-surface-variant mt-1 max-w-xl text-sm">
+                Khám phá các nghệ nhân làm bánh kem tài hoa và tiệm bánh nghệ thuật trên toàn quốc.
+              </p>
             </div>
+            {!customCake && (
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('subscription-plans')}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-on-secondary font-bold text-xs sm:text-sm shadow-sm hover:bg-secondary-hover transition-all cursor-pointer shrink-0 self-start md:self-center"
+              >
+                <span className="material-symbols-outlined text-base">storefront</span>
+                <span>Trở thành đối tác tiệm bánh</span>
+              </button>
+            )}
 
             {/* AI Custom Cake Flash Banner if coming from Studio */}
             {customCake && (

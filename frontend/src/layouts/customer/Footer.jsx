@@ -33,7 +33,7 @@ export const Footer = ({ onNavigate }) => {
   }
 
   return (
-    <footer className="scroll-mt-24 w-full bg-[#fffaf3] text-wine border-t-4 border-wine relative z-20 font-savoure">
+    <footer className="scroll-mt-24 w-full bg-[#fff8fa] text-wine border-t-4 border-wine relative z-20 font-savoure">
       {/* Top Decorator: Vintage Polka Dot Scallop Ribbon Trim at Top of Footer */}
       <div className="relative w-full select-none overflow-hidden" aria-hidden="true">
         {/* Polka Dot Pink Curtain Ribbon */}

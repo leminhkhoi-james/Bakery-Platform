@@ -4,7 +4,7 @@ import CatalogImage from './CatalogImage.jsx'
 
 export default function ProductCard({ product, onNavigate, variant = 'catalog' }) {
   const open = () => onNavigate?.('product-detail', product)
-  return <article className={variant === 'home' ? 'dome-cake-card group flex h-full flex-col overflow-hidden bg-[#fffaf3]' : 'sc-catalog-card group hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between'}>
+  return <article className={variant === 'home' ? 'dome-cake-card group flex h-full flex-col overflow-hidden bg-white' : 'sc-catalog-card group hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between'}>
     <button onClick={open} className="relative mb-4 block aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#faf8f8]" aria-label={'Xem ' + cleanPresentationLabel(product.title, 'mẫu bánh')}>
       <CatalogImage src={product.image} alt={cleanPresentationLabel(product.title, 'Mẫu bánh')} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
     </button>

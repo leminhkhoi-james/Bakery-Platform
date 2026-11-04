@@ -27,6 +27,24 @@ export default function OrderTrackingView({ order, showHeader = true, actionsSlo
         const options = configurationEntries(item.configuration)
         return <li key={item.id}><div className="sc-order-item-heading"><div><h4>{item.name || 'Chưa có tên sản phẩm'}</h4><p>{uiLabel(item.itemType === 'CAKE' ? 'CATALOG_PRODUCT' : item.itemType)}<span aria-hidden="true"> · </span>{item.quantity ?? '—'} × {formatOrderMoney(item.unitPrice, order.currency)}</p></div><strong>{formatOrderMoney(item.lineTotal, order.currency)}</strong></div>{options.length > 0 && <details className="sc-order-options"><summary>Cấu hình đã đặt</summary><dl>{options.map((option, index) => <div key={index}><dt>{option.label}</dt><dd>{option.value}</dd></div>)}</dl></details>}</li>
       })}</ul> : <p className="sc-order-muted">Chưa có thông tin sản phẩm.</p>}</section>
+      {['DELIVERING', 'COMPLETED'].includes(order.status) && (
+        <section className="sc-order-tracking-card sc-order-delivery-card border-2 border-secondary/30 bg-surface-container-lowest shadow-sm" aria-label="Thông tin giao hàng hiện tại">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <h3 className="text-secondary font-bold flex items-center gap-2"><Icon name="local_shipping" />{order.status === 'DELIVERING' ? 'Bánh đang trên đường giao' : 'Giao hàng thành công'}</h3>
+            <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-secondary/15 text-secondary">{order.status === 'DELIVERING' ? 'Đang vận chuyển' : 'Đã giao tới khách'}</span>
+          </div>
+          <p className="text-sm text-on-surface-variant mb-3">
+            {order.status === 'DELIVERING' ? 'Tiệm bánh đã bàn giao cho nhân viên giao hàng. Bánh đang được bảo quản và vận chuyển cẩn thận.' : 'Đơn hàng đã được giao an toàn đến địa chỉ người nhận.'}
+          </p>
+          <dl className="sc-order-facts text-sm">
+            {history.findLast((e) => e.toStatus === 'DELIVERING')?.note && (
+              <div><dt>Ghi chú vận chuyển</dt><dd className="font-semibold text-primary">{history.findLast((e) => e.toStatus === 'DELIVERING').note}</dd></div>
+            )}
+            <div><dt>Thời gian hẹn</dt><dd>{formatOrderDate(order.neededAt)}</dd></div>
+            {address?.recipientPhone && <div><dt>SĐT nhận bánh</dt><dd className="font-medium text-primary">{address.recipientPhone}</dd></div>}
+          </dl>
+        </section>
+      )}
       <section className="sc-order-tracking-card"><h3><Icon name="person" />Khách hàng & giao nhận</h3><dl className="sc-order-facts"><div><dt>Khách hàng</dt><dd>{cleanPresentationLabel(order.customerName, 'Chưa có tên')}<span className="sc-order-secondary-text">{order.customerPhone || 'Chưa có điện thoại'}</span></dd></div><div><dt>Ngày đặt</dt><dd>{formatOrderDate(order.createdAt)}</dd></div><div><dt>Hẹn giao</dt><dd>{formatOrderDate(order.neededAt)}</dd></div>{order.customerNote && <div><dt>Ghi chú</dt><dd className="sc-order-note">{order.customerNote}</dd></div>}</dl></section>
       <section className="sc-order-tracking-card"><h3><Icon name="location_on" />Địa chỉ nhận bánh</h3>{address ? <div className="sc-order-address"><strong>{cleanPresentationLabel(address.recipientName || order.customerName, 'Người nhận')}</strong>{address.recipientPhone && <p>{address.recipientPhone}</p>}<p>{[address.addressLine, address.ward, address.district, address.city].filter(Boolean).join(', ') || 'Chưa có thông tin địa chỉ giao hàng.'}</p>{address.deliveryNote && <p className="sc-order-note">{address.deliveryNote}</p>}</div> : <p className="sc-order-muted">Chưa có thông tin địa chỉ giao hàng.</p>}</section>
     </div><aside className="sc-order-tracking-summary"><section className="sc-order-tracking-card sc-order-totals"><h3><Icon name="receipt_long" />Tổng tiền đơn hàng</h3><dl><div><dt>Tiền hàng</dt><dd>{formatOrderMoney(order.subtotal, order.currency)}</dd></div><div><dt>Phí giao hàng</dt><dd>{formatOrderMoney(order.deliveryFee, order.currency)}</dd></div><div className="sc-order-grand-total"><dt>Tổng cộng</dt><dd>{formatOrderMoney(order.totalAmount, order.currency)}</dd></div></dl></section><section className="sc-order-tracking-card"><h3><Icon name="account_balance_wallet" />Thanh toán</h3><p className="sc-order-payment-note">Thanh toán trực tiếp theo thỏa thuận với tiệm.</p><p className="sc-order-muted">Tổng tiền đơn hàng không phải là xác nhận đã thanh toán. Liên hệ tiệm để đối chiếu khoản đã thanh toán hoặc trao đổi khi hủy đơn.</p><div className="sc-order-source"><span>Nguồn đơn</span><strong>{uiLabel(order.orderSource, 'Chưa có thông tin')}</strong></div></section></aside></div>

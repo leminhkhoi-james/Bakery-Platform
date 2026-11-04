@@ -1,10 +1,10 @@
 import { displayReference } from '../../services/displayReference.js'
 import { uiLabel } from '../../services/uiLabels.js'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { rfqService, loadRfqs, loadRfq, loadOffers } from '../../services/rfqService.js'
-import { REQUEST_STATUSES, OFFER_STATUSES, editableRequest, ownsRequest, moneyVnd } from '../../services/marketplaceModels.js'
+import { REQUEST_STATUSES, OFFER_STATUSES, editableRequest, ownsRequest, moneyVnd, toLocalInput } from '../../services/marketplaceModels.js'
 import { chatService } from '../../services/chatService.js'
 import CatalogPagination from '../catalog/CatalogPagination.jsx'
 import { ApiErrorMessage, buttonClass, inputClass, panelClass } from '../management/ApiState.jsx'
@@ -14,6 +14,8 @@ import ConfirmAction from '../common/ConfirmAction.jsx'
 import { requestContextFromSearch } from '../../services/requestContextModels.js'
 import { EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { useMarketplaceAction } from '../../hooks/useMarketplaceAction.js'
+import ThreeCakeCanvas from '../../pages/customer/ai-studio/ThreeCakeCanvas.jsx'
+
 export function ReferenceImage({ url, label = 'Ảnh tham khảo' }) {
   const [failed, setFailed] = useState(false)
   return url && !failed ? (
@@ -66,6 +68,17 @@ const REQUEST_TYPE_LABELS = {
   TARGETED_PRODUCT_CUSTOM: 'Đặt theo mẫu tiệm',
 }
 
+const PREFERENCE_FIELD_LABELS = {
+  cakeSize: 'Kích thước tầng',
+  cakeShape: 'Hình dáng bánh',
+  flavor: 'Hương vị cốt bánh',
+  filling: 'Nhân kem / mứt',
+  frosting: 'Lớp kem phủ ngoài',
+  colorPalette: 'Bảng phối màu',
+  decorationNotes: 'Chi tiết trang trí & lời chúc',
+  allergyNotes: 'Lưu ý dị ứng',
+}
+
 function formatRfqDateTime(isoString) {
   if (!isoString) return 'Chưa xác định'
   try {
@@ -78,9 +91,30 @@ function formatRfqDateTime(isoString) {
   }
 }
 
+const QUICK_BUDGET_RANGES = [
+  { label: '300k – 500k', min: 300000, max: 500000 },
+  { label: '500k – 800k', min: 500000, max: 800000 },
+  { label: '800k – 1.2Tr', min: 800000, max: 1200000 },
+  { label: '1.2Tr – 2.5Tr', min: 1200000, max: 2500000 },
+]
+
 export function RequestInfo({ request }) {
+  const cake3DConfig = request.preference?.extraOptions?.cake3DConfig
+  const cake3DSnapshotUrl = request.preference?.extraOptions?.cake3DSnapshotUrl
+  const [live3DMode, setLive3DMode] = useState(Boolean(cake3DConfig))
+  const [show3DCutaway, setShow3DCutaway] = useState(false)
+  const selectedAiImageUrl =
+    request.preference?.extraOptions?.selectedAiImageUrl ||
+    (request.selectedDesignId && request.images?.[0]?.url ? request.images[0].url : null)
+  const hasBudget = request.budgetMin != null || request.budgetMax != null
+  const extraImages = (request.images || []).filter(
+    (img) =>
+      (!cake3DSnapshotUrl || img.url !== cake3DSnapshotUrl) &&
+      (!selectedAiImageUrl || img.url !== selectedAiImageUrl)
+  )
+
   return (
-    <section className="space-y-6 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
+    <section className="space-y-5 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
       {/* Header with status badge & request ID */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
         <div className="flex items-center gap-2.5">
@@ -90,96 +124,195 @@ export function RequestInfo({ request }) {
           </span>
           <details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(request.id, 'RFQ')}</details>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-800 border border-rose-200">
           <Icon name="verified" className="text-sm text-secondary" /> Yêu cầu đặt làm riêng
         </span>
       </div>
 
-      {/* Title & Description */}
+      {/* Title */}
       <div>
         <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary leading-tight">
           {request.title || 'Yêu cầu chưa có tiêu đề'}
         </h2>
-        {request.description && (
-          <div className="mt-3 rounded-2xl bg-surface-container-low p-4 text-sm leading-relaxed text-on-surface-variant border border-outline-variant/20">
-            <p className="whitespace-pre-wrap">{request.description}</p>
-          </div>
-        )}
       </div>
 
-      {/* Budget & Location Grid */}
+      {/* Top Hero Key Metrics: Budget, Location, Needed Time, Offer Deadline */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-outline">
-            <Icon name="payments" className="text-base text-primary" />
-            <span>Ngân sách dự kiến</span>
+        <div
+          className={`rounded-2xl border p-4 ${
+            hasBudget
+              ? 'border-primary/20 bg-primary/5'
+              : 'border-rose-300 bg-rose-50/70'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+              <Icon name="payments" className="text-base text-primary" />
+              <span>Ngân sách mong muốn</span>
+            </div>
+            {!hasBudget && (
+              <span className="rounded-full bg-rose-200/80 px-2 py-0.5 text-[10px] font-bold text-rose-950">
+                Chưa nhập giá
+              </span>
+            )}
           </div>
-          <p className="mt-2 text-xl font-bold text-primary">
-            {moneyVnd(request.budgetMin)} — {moneyVnd(request.budgetMax)}
+          {hasBudget ? (
+            <p className="mt-1.5 font-serif text-xl font-bold text-primary">
+              {moneyVnd(request.budgetMin)} — {moneyVnd(request.budgetMax)}
+            </p>
+          ) : (
+            <p className="mt-1.5 text-sm font-bold text-rose-950">
+              Chưa nhập khoảng ngân sách ({moneyVnd(request.budgetMin)})
+            </p>
+          )}
+          <p className="mt-0.5 text-[11px] text-on-surface-variant">
+            {hasBudget
+              ? 'Khoảng ngân sách để các tiệm bánh cân đối báo giá'
+              : 'Nhập ngân sách ở khung bên phải để tiệm bánh báo giá sát nhất'}
           </p>
-          <p className="mt-1 text-xs text-on-surface-variant">Khoảng giá mong muốn</p>
         </div>
 
         <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-outline">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-outline">
             <Icon name="location_on" className="text-base text-secondary" />
-            <span>Địa điểm giao bánh</span>
+            <span>Khu vực nhận bánh</span>
           </div>
-          <p className="mt-2 text-lg font-bold text-on-surface">
+          <p className="mt-1.5 text-base font-bold text-on-surface">
             {request.deliveryDistrict}, {request.deliveryCity}
           </p>
-          <p className="mt-1 text-xs text-on-surface-variant">Khu vực nhận bánh chính thức</p>
+          <p className="mt-0.5 text-[11px] text-on-surface-variant">
+            Cần giao lúc: <strong className="text-on-surface">{formatRfqDateTime(request.neededAt)}</strong>
+          </p>
         </div>
       </div>
 
-      {/* Date Timeline Cards */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="flex items-start gap-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon name="event" className="text-xl" />
+      {/* 3D Cake Design Showcase (Exact 3D Cake Image & Interactive 3D Viewer) */}
+      {(cake3DSnapshotUrl || cake3DConfig) && (
+        <div className="space-y-3 rounded-3xl border border-rose-200/90 bg-gradient-to-b from-[#fff5f8] via-[#fdf2f4] to-[#fce7eb] p-4 sm:p-5 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
+                <Icon name="view_in_ar" className="text-lg" />
+              </span>
+              <div>
+                <h4 className="text-sm font-bold text-stone-900">Mẫu bánh 3D đã thiết kế</h4>
+                <p className="text-[11px] text-stone-600">Đúng mẫu bánh 3D bạn đã tạo — Gửi trực tiếp cho tiệm bánh</p>
+              </div>
+            </div>
+            {cake3DConfig && (
+              <div className="flex flex-wrap items-center gap-2">
+                {live3DMode && (
+                  <button
+                    type="button"
+                    onClick={() => setShow3DCutaway((v) => !v)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                      show3DCutaway ? 'bg-primary text-white' : 'bg-white/90 text-stone-700 hover:bg-white'
+                    }`}
+                  >
+                    {show3DCutaway ? 'Ẩn lát cắt' : 'Xem lát cắt lớp bánh'}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setLive3DMode((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-wine-dark px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs cursor-pointer"
+                >
+                  <Icon name="360" className="text-sm text-rose-300" />
+                  {live3DMode ? 'Xem hình chụp 3D' : 'Xoay mô hình 3D 360°'}
+                </button>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-xs font-medium text-outline">Cần bánh lúc</p>
-            <p className="mt-0.5 text-sm font-semibold text-on-surface">{formatRfqDateTime(request.neededAt)}</p>
-          </div>
-        </div>
 
-        <div className="flex items-start gap-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/15 text-secondary">
-            <Icon name="timer" className="text-xl" />
+          {live3DMode && cake3DConfig ? (
+            <ThreeCakeCanvas
+              compact
+              config={cake3DConfig}
+              spongeColor={cake3DConfig.spongeColor || '#f6e3ba'}
+              fillingColor={cake3DConfig.fillingColor || '#e04f6b'}
+              showCrossSection={show3DCutaway}
+              autoRotate
+            />
+          ) : cake3DSnapshotUrl ? (
+            <div className="flex justify-center">
+              <img
+                src={cake3DSnapshotUrl}
+                alt="Mẫu bánh 3D đã thiết kế"
+                className="max-h-72 w-full rounded-2xl object-contain border border-stone-200/80 bg-white/50 shadow-xs"
+              />
+            </div>
+          ) : (
+            cake3DConfig && (
+              <ThreeCakeCanvas
+                compact
+                config={cake3DConfig}
+                spongeColor={cake3DConfig.spongeColor || '#f6e3ba'}
+                fillingColor={cake3DConfig.fillingColor || '#e04f6b'}
+                showCrossSection={show3DCutaway}
+                autoRotate
+              />
+            )
+          )}
+        </div>
+      )}
+
+      {/* Selected AI Cake Design Showcase */}
+      {selectedAiImageUrl && !cake3DConfig && (
+        <div className="space-y-3 rounded-3xl border border-primary/25 bg-primary/5 p-4 sm:p-5 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-on-primary shadow-xs">
+                <Icon name="auto_awesome" className="text-lg" />
+              </span>
+              <div>
+                <h4 className="text-sm font-bold text-primary">Mẫu bánh AI minh họa khách đã chọn</h4>
+                <p className="text-[11px] text-on-surface-variant">
+                  Ảnh mẫu AI đính kèm theo yêu cầu để các tiệm bánh xem xét khả năng thực hiện và gửi báo giá
+                </p>
+              </div>
+            </div>
+            {request.selectedDesignId && (
+              <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-semibold text-primary border border-primary/20">
+                {displayReference(request.selectedDesignId, 'ART')}
+              </span>
+            )}
           </div>
-          <div>
-            <p className="text-xs font-medium text-outline">Hạn nhận báo giá</p>
-            <p className="mt-0.5 text-sm font-semibold text-on-surface">{formatRfqDateTime(request.offerDeadline)}</p>
+          <div className="flex justify-center">
+            <ReferenceImage url={selectedAiImageUrl} label="Mẫu bánh AI khách đã chọn" />
           </div>
         </div>
-      </div>
+      )}
 
       {/* Custom Specifications & Preferences */}
       {(request.occasion || request.servingSize != null || (request.preference && Object.keys(request.preference).length > 0)) && (
         <div className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
           <h4 className="flex items-center gap-2 text-sm font-bold text-primary">
-            <Icon name="tune" className="text-base" /> Quy cách & Tuỳ chọn thiết kế
+            <Icon name="tune" className="text-base" /> Thông số & Cấu hình chiếc bánh
           </h4>
-          <div className="grid gap-3 sm:grid-cols-2 text-sm">
+          <div className="grid gap-2.5 sm:grid-cols-2 text-sm">
             {request.occasion && (
-              <div className="flex items-center justify-between rounded-xl bg-surface px-3 py-2 border border-outline-variant/20">
-                <span className="text-outline text-xs">Dịp / Sự kiện:</span>
-                <span className="font-semibold text-on-surface">{request.occasion}</span>
+              <div className="rounded-xl bg-surface px-3.5 py-2.5 border border-outline-variant/20">
+                <p className="text-[11px] font-medium text-outline">Dịp / Sự kiện</p>
+                <p className="mt-0.5 font-semibold text-on-surface">{request.occasion}</p>
               </div>
             )}
             {request.servingSize != null && (
-              <div className="flex items-center justify-between rounded-xl bg-surface px-3 py-2 border border-outline-variant/20">
-                <span className="text-outline text-xs">Khẩu phần phục vụ:</span>
-                <span className="font-semibold text-on-surface">{request.servingSize} người</span>
+              <div className="rounded-xl bg-surface px-3.5 py-2.5 border border-outline-variant/20">
+                <p className="text-[11px] font-medium text-outline">Khẩu phần phục vụ</p>
+                <p className="mt-0.5 font-semibold text-on-surface">{request.servingSize} người</p>
               </div>
             )}
             {request.preference && Object.entries(request.preference)
               .filter(([, value]) => typeof value === 'string' && value)
               .map(([key, value]) => (
-                <div key={key} className="flex items-center justify-between rounded-xl bg-surface px-3 py-2 border border-outline-variant/20">
-                  <span className="text-outline text-xs capitalize">{key === 'cakeSize' ? 'Kích thước tầng' : key === 'flavor' ? 'Hương vị cốt & kem' : key}:</span>
-                  <span className="font-semibold text-on-surface text-right truncate max-w-[60%]">{value}</span>
+                <div
+                  key={key}
+                  className={`rounded-xl bg-surface px-3.5 py-2.5 border border-outline-variant/20 ${
+                    key === 'decorationNotes' || key === 'allergyNotes' ? 'sm:col-span-2' : ''
+                  }`}
+                >
+                  <p className="text-[11px] font-medium text-outline">{PREFERENCE_FIELD_LABELS[key] || key}</p>
+                  <p className="mt-0.5 font-semibold text-on-surface break-words">{value}</p>
                 </div>
               ))}
           </div>
@@ -203,14 +336,25 @@ export function RequestInfo({ request }) {
         </div>
       )}
 
+      {/* Description & Timeline Secondary Box */}
+      {request.description && (
+        <div className="rounded-2xl bg-surface-container-low p-4 text-xs leading-relaxed text-on-surface-variant border border-outline-variant/20 space-y-1.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="font-bold text-primary">Mô tả chi tiết gửi tiệm bánh</span>
+            <span className="text-[11px] text-outline">Hạn nhận báo giá: {formatRfqDateTime(request.offerDeadline)}</span>
+          </div>
+          <p className="whitespace-pre-wrap">{request.description}</p>
+        </div>
+      )}
+
       {/* Reference Images Gallery */}
-      {request.images && request.images.length > 0 && (
+      {extraImages.length > 0 && (
         <div className="space-y-3">
           <h4 className="flex items-center gap-2 text-sm font-bold text-primary">
-            <Icon name="photo_library" className="text-base" /> Ảnh tham khảo & Mẫu bánh ({request.images.length})
+            <Icon name="photo_library" className="text-base" /> Ảnh tham khảo đính kèm thêm ({extraImages.length})
           </h4>
           <div className="grid gap-3 sm:grid-cols-2">
-            {request.images.map((image) => (
+            {extraImages.map((image) => (
               <div key={image.id} className="group overflow-hidden rounded-2xl border border-outline-variant/30 bg-surface-container-low shadow-xs">
                 <ReferenceImage key={image.id} url={image.url} />
               </div>
@@ -221,15 +365,16 @@ export function RequestInfo({ request }) {
 
       {/* Selected Mã thiết kế */}
       {request.selectedDesignId && (
-        <div className="flex items-center gap-2 rounded-2xl bg-amber-50 px-4 py-3 text-xs text-amber-900 border border-amber-200">
-          <Icon name="auto_awesome" className="text-base text-amber-700" />
+        <div className="flex items-center gap-2 rounded-2xl bg-rose-50 px-4 py-3 text-xs text-rose-900 border border-rose-200">
+          <Icon name="auto_awesome" className="text-base text-rose-700" />
           <span>Mẫu thiết kế AI được chọn: <strong className="font-mono">{displayReference(request.selectedDesignId, 'ART')}</strong></span>
         </div>
       )}
     </section>
   )
 }
-export function RequestListView({ resource, onPage, onOpen }) {
+
+export function RequestListView({ resource, onPage, onOpen, onNavigate }) {
   return (
     <MarketplaceState resource={resource}>
       {resource.data && (
@@ -253,6 +398,16 @@ export function RequestListView({ resource, onPage, onOpen }) {
 
                 <h2 className="font-serif text-xl font-bold text-primary">{request.title || displayReference(request.id, 'RFQ')}</h2>
 
+                {(request.preference?.extraOptions?.cake3DSnapshotUrl || request.preference?.extraOptions?.selectedAiImageUrl || request.images?.[0]?.url) && (
+                  <div className="overflow-hidden rounded-2xl border border-rose-200/70 bg-gradient-to-b from-[#fff5f8] to-[#fce7eb] p-2">
+                    <img
+                      src={request.preference?.extraOptions?.cake3DSnapshotUrl || request.preference?.extraOptions?.selectedAiImageUrl || request.images?.[0]?.url}
+                      alt="Mẫu bánh đã thiết kế"
+                      className="h-44 w-full rounded-xl object-contain"
+                    />
+                  </div>
+                )}
+
                 <p className="flex items-center gap-2 text-sm text-on-surface-variant">
                   <Icon name="location_on" className="text-base text-primary" />
                   <span>{request.deliveryDistrict}, {request.deliveryCity}</span>
@@ -272,9 +427,36 @@ export function RequestListView({ resource, onPage, onOpen }) {
                   </span>
                 </div>
 
-                <button className={buttonClass + ' w-full py-2.5 text-sm font-bold shadow-xs'} onClick={() => onOpen(request.id)}>
-                  Xem chi tiết yêu cầu
-                </button>
+                <div className="space-y-2 pt-1">
+                  <button className={buttonClass + ' w-full py-2.5 text-sm font-bold shadow-xs'} onClick={() => onOpen(request.id)}>
+                    Xem chi tiết yêu cầu
+                  </button>
+
+                  {onNavigate && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {['DRAFT', 'OPEN'].includes(request.status) && (
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('ai-studio?cakeRequestId=' + request.id)}
+                          className="rounded-xl border border-primary/25 bg-surface-container-low py-2 px-3 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <Icon name="auto_awesome" className="text-sm text-secondary" />
+                          Thiết kế 3D / AI
+                        </button>
+                      )}
+                      {['OPEN', 'OFFER_SELECTED', 'ORDERED'].includes(request.status) && (
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('bidding?cakeRequestId=' + request.id)}
+                          className="rounded-xl border border-secondary/30 bg-secondary/10 py-2 px-3 text-xs font-bold text-secondary hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <Icon name="local_offer" className="text-sm" />
+                          So sánh báo giá
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </article>
             ))}
           </div>
@@ -293,6 +475,7 @@ export function RequestListView({ resource, onPage, onOpen }) {
     </MarketplaceState>
   )
 }
+
 export function RequestFilters({ filters, onChange }) {
   const set = (key, value) => onChange({ ...filters, [key]: value, page: 1 })
   return (
@@ -327,18 +510,257 @@ export function RequestFilters({ filters, onChange }) {
     </div>
   )
 }
+
 export function CustomerRequests({ onNavigate, create = false, routeSearch = '' }) {
   const [filters, setFilters] = useState({ scope: 'mine', page: 1, size: 12, sort: 'createdAt,desc' })
   const resource = useCatalogResource(loadRfqs, filters)
   let context = {}, contextError = null
   try { if (create) context = requestContextFromSearch(routeSearch) } catch (failure) { contextError = failure }
   const action = useMarketplaceAction(resource.reload)
-  return <main className="sc-customer mx-auto max-w-6xl space-y-6 px-4 py-8"><div className="sc-customer-heading"><p className="sc-kicker">Bánh riêng cho khoảnh khắc của bạn</p><h1 className="font-serif text-3xl font-semibold text-primary">Yêu cầu bánh của tôi</h1></div><div className="flex flex-wrap gap-4"><button className={buttonClass} onClick={() => onNavigate(create ? 'rfqs' : 'rfq-new')}>{create ? 'Danh sách yêu cầu' : 'Tạo yêu cầu mới'}</button><button className="underline" onClick={() => onNavigate('ai-studio')}>AI Cake Studio</button></div>{action.error && <ApiErrorMessage error={action.error} />}{create ? <><MarketplaceState resource={resource} />{contextError && <ApiErrorMessage error={contextError} />}<RequestForm initialValues={context} disabled={resource.status !== 'ready' || Boolean(contextError)} busy={action.busy} onSave={(input) => action.run(async () => { const request = await rfqService.createRfq(input); onNavigate('request-detail?id=' + request.id) })} /></> : <><RequestFilters filters={filters} onChange={setFilters} /><RequestListView resource={resource} onPage={(page) => setFilters({ ...filters, page })} onOpen={(id) => onNavigate('request-detail?id=' + id)} /></>}</main>
+  return (
+    <main className="sc-customer mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <div className="sc-customer-heading flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="sc-kicker">Bánh riêng cho khoảnh khắc của bạn</p>
+          <h1 className="font-serif text-3xl font-semibold text-primary">Yêu cầu bánh của tôi</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button className={buttonClass} onClick={() => onNavigate(create ? 'rfqs' : 'rfq-new')}>
+            {create ? 'Danh sách yêu cầu' : 'Tạo yêu cầu mới'}
+          </button>
+          <button
+            type="button"
+            className="rounded-xl border border-primary/30 bg-surface px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/5 cursor-pointer"
+            onClick={() => onNavigate('ai-studio?mode=3d')}
+          >
+            🎂 Thiết kế bánh 3D
+          </button>
+          <button className="underline text-sm font-semibold text-primary cursor-pointer" onClick={() => onNavigate('ai-studio')}>
+            AI Cake Studio
+          </button>
+        </div>
+      </div>
+      {action.error && <ApiErrorMessage error={action.error} />}
+      {create ? (
+        <>
+          <MarketplaceState resource={resource} />
+          {contextError && <ApiErrorMessage error={contextError} />}
+          <RequestForm
+            initialValues={context}
+            disabled={resource.status !== 'ready' || Boolean(contextError)}
+            busy={action.busy}
+            onSave={(input) => action.run(async () => {
+              const request = await rfqService.createRfq(input)
+              onNavigate('request-detail?id=' + request.id)
+            })}
+          />
+        </>
+      ) : (
+        <>
+          <RequestFilters filters={filters} onChange={setFilters} />
+          <RequestListView
+            resource={resource}
+            onPage={(page) => setFilters({ ...filters, page })}
+            onOpen={(id) => onNavigate('request-detail?id=' + id)}
+            onNavigate={onNavigate}
+          />
+        </>
+      )}
+    </main>
+  )
 }
+
+function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }) {
+  const [budgetMin, setBudgetMin] = useState(request?.budgetMin ?? '')
+  const [budgetMax, setBudgetMax] = useState(request?.budgetMax ?? '')
+  const [deliveryDistrict, setDeliveryDistrict] = useState(request?.deliveryDistrict || 'Quận 1')
+  const [deliveryCity, setDeliveryCity] = useState(request?.deliveryCity || 'TP. Hồ Chí Minh')
+  const [neededAt, setNeededAt] = useState(() => toLocalInput(request?.neededAt))
+  const [savedToast, setSavedToast] = useState(false)
+
+  useEffect(() => {
+    setBudgetMin(request?.budgetMin ?? '')
+    setBudgetMax(request?.budgetMax ?? '')
+    setDeliveryDistrict(request?.deliveryDistrict || 'Quận 1')
+    setDeliveryCity(request?.deliveryCity || 'TP. Hồ Chí Minh')
+    setNeededAt(toLocalInput(request?.neededAt))
+  }, [request?.updatedAt, request?.budgetMin, request?.budgetMax, request?.deliveryDistrict, request?.deliveryCity, request?.neededAt])
+
+  const buildUpdatedPayload = () => ({
+    ...request,
+    budgetMin: budgetMin === '' ? null : Number(budgetMin),
+    budgetMax: budgetMax === '' ? null : Number(budgetMax),
+    deliveryDistrict: deliveryDistrict.trim() || request.deliveryDistrict || 'Quận 1',
+    deliveryCity: deliveryCity.trim() || request.deliveryCity || 'TP. Hồ Chí Minh',
+    neededAt: neededAt ? new Date(neededAt).toISOString() : request.neededAt,
+  })
+
+  return (
+    <div className="space-y-3.5 rounded-2xl border-2 border-rose-300/90 bg-gradient-to-b from-rose-50/90 to-white p-4 shadow-xs">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start gap-2">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
+            <Icon name="payments" className="text-base" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-stone-900">1. Nhập ngân sách & Giao nhận</p>
+            <p className="text-[11px] text-stone-600">
+              Chọn nhanh hoặc nhập khoảng ngân sách mong muốn để các tiệm bánh gửi báo giá phù hợp nhất.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Budget Range Chips */}
+      <div className="space-y-1.5">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900">
+          Chọn nhanh khoảng ngân sách:
+        </span>
+        <div className="grid grid-cols-2 gap-1.5">
+          {QUICK_BUDGET_RANGES.map((range) => {
+            const active = Number(budgetMin) === range.min && Number(budgetMax) === range.max
+            return (
+              <button
+                key={range.label}
+                type="button"
+                disabled={busy}
+                onClick={() => {
+                  setBudgetMin(String(range.min))
+                  setBudgetMax(String(range.max))
+                }}
+                className={`rounded-xl border px-2.5 py-2 text-xs font-bold transition-all cursor-pointer ${
+                  active
+                    ? 'border-primary bg-primary text-white shadow-xs'
+                    : 'border-rose-300/80 bg-white text-stone-800 hover:border-primary/50 hover:bg-rose-50/50'
+                }`}
+              >
+                {range.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Manual Budget Min / Max Inputs */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <label className="space-y-1 text-xs">
+          <span className="font-semibold text-stone-700">Tối thiểu (VNĐ)</span>
+          <input
+            type="number"
+            min={0}
+            step={50000}
+            disabled={busy}
+            value={budgetMin}
+            onChange={(e) => setBudgetMin(e.target.value)}
+            placeholder="VD: 500000"
+            className={inputClass + ' w-full bg-white text-xs font-bold'}
+          />
+        </label>
+        <label className="space-y-1 text-xs">
+          <span className="font-semibold text-stone-700">Tối đa (VNĐ)</span>
+          <input
+            type="number"
+            min={0}
+            step={50000}
+            disabled={busy}
+            value={budgetMax}
+            onChange={(e) => setBudgetMax(e.target.value)}
+            placeholder="VD: 800000"
+            className={inputClass + ' w-full bg-white text-xs font-bold'}
+          />
+        </label>
+      </div>
+
+      {/* Delivery District / City & NeededAt */}
+      <div className="grid grid-cols-2 gap-2.5 pt-1 border-t border-rose-200/60">
+        <label className="space-y-1 text-xs">
+          <span className="font-semibold text-stone-700">Quận / Huyện nhận</span>
+          <input
+            type="text"
+            maxLength={120}
+            disabled={busy}
+            value={deliveryDistrict}
+            onChange={(e) => setDeliveryDistrict(e.target.value)}
+            placeholder="VD: Quận 1"
+            className={inputClass + ' w-full bg-white text-xs'}
+          />
+        </label>
+        <label className="space-y-1 text-xs">
+          <span className="font-semibold text-stone-700">Tỉnh / Thành phố</span>
+          <input
+            type="text"
+            maxLength={120}
+            disabled={busy}
+            value={deliveryCity}
+            onChange={(e) => setDeliveryCity(e.target.value)}
+            placeholder="VD: TP. Hồ Chí Minh"
+            className={inputClass + ' w-full bg-white text-xs'}
+          />
+        </label>
+        <label className="col-span-2 space-y-1 text-xs">
+          <span className="font-semibold text-stone-700">Thời gian cần nhận bánh</span>
+          <input
+            type="datetime-local"
+            disabled={busy}
+            value={neededAt}
+            onChange={(e) => setNeededAt(e.target.value)}
+            className={inputClass + ' w-full bg-white text-xs'}
+          />
+        </label>
+      </div>
+
+      {savedToast && (
+        <p className="rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+          ✓ Đã cập nhật ngân sách & thông tin giao nhận!
+        </p>
+      )}
+
+      {/* Save / Publish Action Buttons */}
+      <div className="space-y-2 pt-1">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={async () => {
+            await onSaveOnly(buildUpdatedPayload())
+            setSavedToast(true)
+            setTimeout(() => setSavedToast(false), 3000)
+          }}
+          className="w-full rounded-xl border border-primary/30 bg-white py-2.5 px-3 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <Icon name="save" className="text-sm" />
+          Lưu ngân sách & thông tin
+        </button>
+
+        <button
+          type="button"
+          className={buttonClass + ' w-full py-3 text-sm font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer'}
+          disabled={busy}
+          onClick={() => onSaveAndPublish(buildUpdatedPayload())}
+        >
+          <Icon name="send" className="text-base" />
+          2. Gửi yêu cầu để nhận báo giá ngay
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function CustomerRequestDetail({ id, onNavigate }) {
   const { user } = useAuth(), resource = useCatalogResource(loadRfq, { id })
   const [editing, setEditing] = useState(false), [reason, setReason] = useState(''), [files, setFiles] = useState([])
   const action = useMarketplaceAction(resource.reload), request = resource.data
+
+  const currentStepIndex = !request
+    ? 0
+    : request.status === 'DRAFT'
+      ? 1
+      : request.status === 'OPEN'
+        ? 2
+        : request.status === 'OFFER_SELECTED'
+          ? 3
+          : request.status === 'ORDERED'
+            ? 4
+            : 0
 
   return (
     <main className="sc-customer mx-auto max-w-6xl space-y-6 px-4 py-8">
@@ -361,161 +783,245 @@ export function CustomerRequestDetail({ id, onNavigate }) {
 
       <MarketplaceState resource={resource}>
         {request && (ownsRequest(request, user) ? (
-          <div className="grid gap-8 lg:grid-cols-12 items-start">
-            {/* Left column: Request Details & Status History */}
-            <div className="space-y-6 lg:col-span-7">
-              <RequestInfo request={request} />
-
-              {/* Status History */}
-              <section className="space-y-3 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
-                <div className="flex items-center gap-2 border-b border-outline-variant/20 pb-3">
-                  <Icon name="history" className="text-primary text-xl" />
-                  <h3 className="font-serif text-lg font-bold text-primary">Lịch sử trạng thái</h3>
-                </div>
-                {request.statusHistory && request.statusHistory.length > 0 ? (
-                  <div className="space-y-2 pt-1">
-                    {request.statusHistory.map((row, index) => (
-                      <div key={index} className="flex items-center justify-between text-xs text-on-surface-variant py-1 border-b border-outline-variant/10 last:border-0">
-                        <span className="font-semibold text-on-surface">{row.fromStatus} → {row.toStatus}</span>
-                        <span>{formatRfqDateTime(row.changedAt)} {row.reason ? `(${row.reason})` : ''}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs text-outline">Chưa có lịch sử trạng thái.</p>
-                )}
-              </section>
-            </div>
-
-            {/* Right column: Action Panel (Sticky) */}
-            <div className="space-y-5 lg:col-span-5 lg:sticky lg:top-24">
-              <section className="space-y-5 rounded-3xl border-2 border-primary/10 bg-surface p-6 shadow-md">
-                <div className="border-b border-outline-variant/20 pb-4">
-                  <p className="sc-kicker text-xs">Thao tác yêu cầu</p>
-                  <h2 className="font-serif text-2xl font-bold text-primary">Quản lý báo giá & Thiết kế</h2>
-                  <p className="mt-1 text-xs text-on-surface-variant">
-                    So sánh các báo giá gửi từ tiệm hoặc sử dụng AI để sáng tạo thêm thiết kế.
-                  </p>
-                </div>
-
-                {/* Primary CTA: Bidding comparison */}
-                <button
-                  type="button"
-                  className={buttonClass + ' w-full py-3.5 text-base font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2'}
-                  onClick={() => onNavigate('bidding?cakeRequestId=' + id)}
-                >
-                  <Icon name="local_offer" className="text-xl" /> So sánh báo giá
-                </button>
-
-                {/* AI Studio CTA */}
-                <button
-                  type="button"
-                  className="w-full rounded-2xl border-2 border-primary/20 bg-surface-container-low py-3 px-4 text-sm font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-2"
-                  onClick={() => onNavigate('ai-studio?cakeRequestId=' + id)}
-                >
-                  <Icon name="auto_awesome" className="text-lg text-secondary" /> Thiết kế AI cho yêu cầu này
-                </button>
-
-                {/* Chat with target bakery if assigned */}
-                {request.targetBakeryId && !['DRAFT', 'CANCELLED'].includes(request.status) && (
-                  <div className="pt-2 border-t border-outline-variant/20">
-                    <ChatForRequest request={request} bakeryId={request.targetBakeryId} onNavigate={onNavigate} />
-                  </div>
-                )}
-
-                {/* Edit & Image Upload if DRAFT */}
-                {editableRequest(request, user) && (
-                  <div className="space-y-4 pt-2 border-t border-outline-variant/20">
-                    <button
-                      disabled={action.busy}
-                      className="w-full rounded-2xl border border-outline-variant/40 bg-surface py-2.5 px-4 text-xs font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center justify-center gap-1.5"
-                      onClick={() => setEditing(!editing)}
+          <div className="space-y-6">
+            {/* 4-Step Workflow Progress Bar */}
+            <section aria-label="Tiến độ yêu cầu đặt bánh" className="grid gap-2.5 sm:grid-cols-4 rounded-2xl border border-outline-variant/30 bg-surface p-3.5 text-xs shadow-xs">
+              {[
+                { step: 1, title: '1. Thiết kế & Ngân sách', desc: 'Chọn mẫu bánh 3D/AI & nhập ngân sách' },
+                { step: 2, title: '2. Mở nhận báo giá', desc: 'Tiệm bánh đối tác gửi báo giá' },
+                { step: 3, title: '3. So sánh & Chọn tiệm', desc: 'Trao đổi chat & chốt báo giá' },
+                { step: 4, title: '4. Làm bánh & Giao nhận', desc: 'Theo dõi tiến độ đơn hàng' },
+              ].map((item) => {
+                const done = currentStepIndex > item.step
+                const active = currentStepIndex === item.step
+                return (
+                  <div
+                    key={item.step}
+                    className={`flex items-start gap-2.5 rounded-xl p-2.5 border ${
+                      active
+                        ? 'border-primary bg-primary/5 ring-1 ring-primary/30'
+                        : done
+                          ? 'border-emerald-300 bg-emerald-50/50'
+                          : 'border-outline-variant/20 bg-surface-container-low'
+                    }`}
+                  >
+                    <span
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+                        active
+                          ? 'bg-primary text-on-primary'
+                          : done
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-outline-variant/40 text-on-surface'
+                      }`}
                     >
-                      <Icon name="edit" className="text-sm text-secondary" /> {editing ? 'Đóng chỉnh sửa' : 'Sửa bản nháp'}
-                    </button>
-
-                    {editing && (
-                      <RequestForm
-                        key={request.updatedAt}
-                        request={request}
-                        busy={action.busy}
-                        onClose={() => setEditing(false)}
-                        onSave={(input) => action.run(async () => { await rfqService.updateRfq(id, input); setEditing(false) })}
-                      />
-                    )}
-
-                    <section className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4 text-xs">
-                      <p className="font-semibold text-primary">Tải lên ảnh tham khảo:</p>
-                      <p className="text-outline">PNG/JPEG/WebP, 1–10 tệp, tối đa 10 MiB/tệp. </p>
-                      <input
-                        aria-label="Ảnh tham khảo RFQ"
-                        type="file"
-                        multiple
-                        accept="image/png,image/jpeg,image/webp"
-                        disabled={action.busy}
-                        onChange={(e) => setFiles(Array.from(e.target.files))}
-                        className={inputClass + ' w-full text-xs'}
-                      />
-                      <button
-                        className={buttonClass + ' w-full py-2 text-xs'}
-                        disabled={action.busy || !files.length}
-                        onClick={() => action.run(async () => { await rfqService.uploadImages(id, files); setFiles([]) })}
-                      >
-                        Tải ảnh lên
-                      </button>
-
-                      {request.images.map((image) => (
-                        <ConfirmAction
-                          key={image.id}
-                          label={'Xóa ảnh ' + image.displayOrder}
-                          description="Xác nhận xóa ảnh tham khảo này."
-                          busy={action.busy}
-                          onConfirm={() => action.run(() => rfqService.deleteImage(id, image.id))}
-                        />
-                      ))}
-
-                      <button
-                        className={buttonClass + ' w-full py-3 text-sm font-bold'}
-                        disabled={action.busy}
-                        onClick={() => action.run(() => rfqService.publishRfq(id))}
-                      >
-                        Gửi yêu cầu để nhận báo giá
-                      </button>
-                    </section>
-                  </div>
-                )}
-
-                {/* Cancel Request if DRAFT or OPEN */}
-                {['DRAFT', 'OPEN'].includes(request.status) && (
-                  <details className="group rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5 text-xs">
-                    <summary className="cursor-pointer font-semibold text-outline hover:text-red-700 flex items-center justify-between">
-                      <span className="flex items-center gap-1.5 text-red-700">
-                        <Icon name="cancel" className="text-sm" /> Hủy yêu cầu
-                      </span>
-                      <Icon name="expand_more" className="group-open:rotate-180 transition-transform text-outline" />
-                    </summary>
-                    <div className="mt-3 space-y-2.5 pt-3 border-t border-outline-variant/20">
-                      <label className="block space-y-1">
-                        <span className="text-outline">Lý do hủy yêu cầu:</span>
-                        <input
-                          maxLength={2000}
-                          value={reason}
-                          placeholder="Nhập lý do hủy yêu cầu..."
-                          onChange={(e) => setReason(e.target.value)}
-                          className={inputClass + ' w-full'}
-                        />
-                      </label>
-                      <ConfirmAction
-                        key={id}
-                        label="Hủy yêu cầu"
-                        description="Xác nhận hủy yêu cầu báo giá này."
-                        busy={action.busy}
-                        onConfirm={() => action.run(() => rfqService.cancelRfq(id, reason))}
-                      />
+                      {done ? '✓' : item.step}
+                    </span>
+                    <div>
+                      <p className="font-bold text-primary">{item.title}</p>
+                      <p className="text-[11px] text-on-surface-variant">{item.desc}</p>
                     </div>
-                  </details>
-                )}
-              </section>
+                  </div>
+                )
+              })}
+            </section>
+
+            {/* Full-width Draft Form Editor when toggled */}
+            {editing && editableRequest(request, user) && (
+              <RequestForm
+                key={request.updatedAt}
+                request={request}
+                busy={action.busy}
+                onClose={() => setEditing(false)}
+                onSave={(input) => action.run(async () => { await rfqService.updateRfq(id, input); setEditing(false) })}
+              />
+            )}
+
+            <div className="grid gap-8 lg:grid-cols-12 items-start">
+              {/* Left column: Request Details & Status History */}
+              <div className="space-y-6 lg:col-span-7">
+                <RequestInfo request={request} />
+
+                {/* Status History */}
+                <section className="space-y-3 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
+                  <div className="flex items-center gap-2 border-b border-outline-variant/20 pb-3">
+                    <Icon name="history" className="text-primary text-xl" />
+                    <h3 className="font-serif text-lg font-bold text-primary">Lịch sử trạng thái</h3>
+                  </div>
+                  {request.statusHistory && request.statusHistory.length > 0 ? (
+                    <div className="space-y-2 pt-1">
+                      {request.statusHistory.map((row, index) => (
+                        <div key={index} className="flex items-center justify-between text-xs text-on-surface-variant py-1 border-b border-outline-variant/10 last:border-0">
+                          <span className="font-semibold text-on-surface">{row.fromStatus} → {row.toStatus}</span>
+                          <span>{formatRfqDateTime(row.changedAt)} {row.reason ? `(${row.reason})` : ''}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-outline">Chưa có lịch sử trạng thái.</p>
+                  )}
+                </section>
+              </div>
+
+              {/* Right column: Action Panel (Sticky) */}
+              <div className="space-y-5 lg:col-span-5 lg:sticky lg:top-24">
+                <section className="space-y-4 rounded-3xl border-2 border-primary/10 bg-surface p-6 shadow-md">
+                  <div className="border-b border-outline-variant/20 pb-3">
+                    <p className="sc-kicker text-xs">Thao tác yêu cầu</p>
+                    <h2 className="font-serif text-2xl font-bold text-primary">Ngân sách & Báo giá</h2>
+                    <p className="mt-0.5 text-xs text-on-surface-variant">
+                      Nhập ngân sách mong muốn, gửi yêu cầu cho các tiệm bánh hoặc chỉnh sửa lại mẫu 3D.
+                    </p>
+                  </div>
+
+                  {/* Direct Quick Budget & Delivery Card + Publish CTA when RFQ is still in DRAFT */}
+                  {editableRequest(request, user) && (
+                    <QuickBudgetDeliveryCard
+                      request={request}
+                      busy={action.busy}
+                      onSaveOnly={(payload) => action.run(() => rfqService.updateRfq(id, payload))}
+                      onSaveAndPublish={(payload) =>
+                        action.run(async () => {
+                          await rfqService.updateRfq(id, payload)
+                          await rfqService.publishRfq(id)
+                        })
+                      }
+                    />
+                  )}
+
+                  {/* Primary CTA: Bidding comparison */}
+                  <button
+                    type="button"
+                    className={
+                      (editableRequest(request, user)
+                        ? 'w-full rounded-2xl border-2 border-primary/25 bg-surface-container-low py-3 px-4 text-sm font-bold text-primary hover:bg-primary/5 transition-colors'
+                        : buttonClass + ' w-full py-3.5 text-base font-bold shadow-md hover:shadow-lg transition-all') +
+                      ' flex items-center justify-center gap-2 cursor-pointer'
+                    }
+                    onClick={() => onNavigate('bidding?cakeRequestId=' + id)}
+                  >
+                    <Icon name="local_offer" className="text-lg" /> So sánh báo giá từ các tiệm
+                  </button>
+
+                  {/* Order Tracking CTA when already ordered */}
+                  {['ORDERED', 'OFFER_SELECTED'].includes(request.status) && (
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl border-2 border-emerald-600/30 bg-emerald-50 py-3 px-4 text-sm font-bold text-emerald-900 hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                      onClick={() => onNavigate('tracking')}
+                    >
+                      <Icon name="local_shipping" className="text-lg text-emerald-700" /> Xem đơn hàng & Theo dõi tiến độ
+                    </button>
+                  )}
+
+                  {/* AI & 3D Studio CTAs */}
+                  <div className="grid gap-2.5 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl border-2 border-secondary/30 bg-secondary/10 py-2.5 px-3 text-xs font-bold text-secondary hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      onClick={() => onNavigate('ai-studio?cakeRequestId=' + id + '&mode=3d')}
+                    >
+                      <Icon name="view_in_ar" className="text-base" /> Sửa lại mẫu bánh 3D
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl border-2 border-primary/20 bg-surface-container-low py-2.5 px-3 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      onClick={() => onNavigate('ai-studio?cakeRequestId=' + id)}
+                    >
+                      <Icon name="auto_awesome" className="text-base text-secondary" /> Tạo thêm ảnh bằng AI
+                    </button>
+                  </div>
+
+                  {/* Chat with target bakery if assigned */}
+                  {request.targetBakeryId && !['DRAFT', 'CANCELLED'].includes(request.status) && (
+                    <div className="pt-2 border-t border-outline-variant/20">
+                      <ChatForRequest request={request} bakeryId={request.targetBakeryId} onNavigate={onNavigate} />
+                    </div>
+                  )}
+
+                  {/* Secondary Full Draft Edit & Image Upload if DRAFT */}
+                  {editableRequest(request, user) && (
+                    <div className="space-y-3 pt-2 border-t border-outline-variant/20">
+                      <button
+                        disabled={action.busy}
+                        className="w-full rounded-2xl border border-outline-variant/40 bg-surface py-2.5 px-4 text-xs font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                        onClick={() => setEditing(!editing)}
+                      >
+                        <Icon name="edit" className="text-sm text-secondary" />
+                        {editing ? 'Đóng biểu mẫu chỉnh sửa chi tiết' : 'Sửa toàn bộ thông tin bản nháp'}
+                      </button>
+
+                      <details className="group rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5 text-xs">
+                        <summary className="cursor-pointer font-semibold text-primary flex items-center justify-between">
+                          <span className="flex items-center gap-1.5">
+                            <Icon name="add_photo_alternate" className="text-base text-secondary" /> Tải thêm ảnh tham khảo ngoài
+                          </span>
+                          <Icon name="expand_more" className="group-open:rotate-180 transition-transform text-outline" />
+                        </summary>
+                        <div className="mt-3 space-y-2.5 pt-2 border-t border-outline-variant/20">
+                          <p className="text-outline">PNG/JPEG/WebP, 1–10 tệp, tối đa 10 MiB/tệp.</p>
+                          <input
+                            aria-label="Ảnh tham khảo RFQ"
+                            type="file"
+                            multiple
+                            accept="image/png,image/jpeg,image/webp"
+                            disabled={action.busy}
+                            onChange={(e) => setFiles(Array.from(e.target.files))}
+                            className={inputClass + ' w-full text-xs'}
+                          />
+                          <button
+                            className={buttonClass + ' w-full py-2 text-xs'}
+                            disabled={action.busy || !files.length}
+                            onClick={() => action.run(async () => { await rfqService.uploadImages(id, files); setFiles([]) })}
+                          >
+                            Tải ảnh lên
+                          </button>
+
+                          {request.images.map((image) => (
+                            <ConfirmAction
+                              key={image.id}
+                              label={'Xóa ảnh ' + image.displayOrder}
+                              description="Xác nhận xóa ảnh tham khảo này."
+                              busy={action.busy}
+                              onConfirm={() => action.run(() => rfqService.deleteImage(id, image.id))}
+                            />
+                          ))}
+                        </div>
+                      </details>
+                    </div>
+                  )}
+
+                  {/* Cancel Request if DRAFT or OPEN */}
+                  {['DRAFT', 'OPEN'].includes(request.status) && (
+                    <details className="group rounded-2xl border border-outline-variant/30 bg-surface-container-low p-3.5 text-xs">
+                      <summary className="cursor-pointer font-semibold text-outline hover:text-red-700 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5 text-red-700">
+                          <Icon name="cancel" className="text-sm" /> Hủy yêu cầu
+                        </span>
+                        <Icon name="expand_more" className="group-open:rotate-180 transition-transform text-outline" />
+                      </summary>
+                      <div className="mt-3 space-y-2.5 pt-3 border-t border-outline-variant/20">
+                        <label className="block space-y-1">
+                          <span className="text-outline">Lý do hủy yêu cầu:</span>
+                          <input
+                            maxLength={2000}
+                            value={reason}
+                            placeholder="Nhập lý do hủy yêu cầu..."
+                            onChange={(e) => setReason(e.target.value)}
+                            className={inputClass + ' w-full'}
+                          />
+                        </label>
+                        <ConfirmAction
+                          key={id}
+                          label="Hủy yêu cầu"
+                          description="Xác nhận hủy yêu cầu báo giá này."
+                          busy={action.busy}
+                          onConfirm={() => action.run(() => rfqService.cancelRfq(id, reason))}
+                        />
+                      </div>
+                    </details>
+                  )}
+                </section>
+              </div>
             </div>
           </div>
         ) : (
@@ -527,14 +1033,67 @@ export function CustomerRequestDetail({ id, onNavigate }) {
     </main>
   )
 }
+
 export function ChatForRequest({ request, bakeryId, onNavigate }) {
   const { user } = useAuth(), action = useMarketplaceAction()
   const valid = ownsRequest(request, user) && !['DRAFT', 'CANCELLED'].includes(request.status)
   return <div className="space-y-2">{action.error && <ApiErrorMessage error={action.error} />}<button className={buttonClass} disabled={!valid || action.busy} onClick={() => action.run(async () => { const conversation = await chatService.createConversation({ cakeRequestId: request.id, bakeryId }, { userId: user.id, roles: user.roles }); onNavigate('chat?conversationId=' + conversation.id) })}>Mở hội thoại với tiệm</button><p className="text-sm">Trao đổi trực tiếp với tiệm về yêu cầu và báo giá này.</p></div>
 }
+
 export function OfferCards({ resource, onPage, onOpen }) {
-  return <MarketplaceState resource={resource}>{resource.data && <><div className="grid gap-4 md:grid-cols-2">{resource.data.result.map((offer) => <article className={panelClass + ' sc-offer-card'} key={offer.id}><p className="break-all">Tiệm: {displayReference(offer.bakeryId, 'SHOP')}</p><p><StatusBadge status={offer.status} /></p><h3 className="text-xl font-bold">{moneyVnd(offer.totalPrice)}</h3><p>Hoàn thành: {offer.estimatedCompletionAt || 'Chưa có'}</p><p>Hết hạn: {offer.expiresAt}</p><button className={buttonClass} onClick={() => onOpen(offer.id)}>Chi tiết báo giá</button></article>)}</div>{!resource.data.result.length && <section className={panelClass}><EmptyPanel title="Chưa có báo giá." description="Báo giá từ tiệm sẽ xuất hiện tại đây khi có dữ liệu phù hợp." icon="description" /></section>}<CatalogPagination meta={resource.data.meta} onPage={onPage} /></>}</MarketplaceState>
+  return (
+    <MarketplaceState resource={resource}>
+      {resource.data && (
+        <>
+          <div className="grid gap-4 md:grid-cols-2">
+            {resource.data.result.map((offer) => (
+              <article className={panelClass + ' sc-offer-card space-y-3 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm'} key={offer.id}>
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/20 pb-3">
+                  <p className="break-all text-xs font-bold text-primary">
+                    Tiệm: {displayReference(offer.bakeryId, 'SHOP')}
+                  </p>
+                  <StatusBadge status={offer.status} label={OFFER_STATUS_LABELS[offer.status] || offer.status} />
+                </div>
+
+                <div>
+                  <span className="text-xs text-outline">Tổng chi phí đề xuất:</span>
+                  <h3 className="font-serif text-2xl font-bold text-primary">{moneyVnd(offer.totalPrice)}</h3>
+                  {(offer.cakePrice != null || offer.deliveryFee != null) && (
+                    <p className="text-xs text-on-surface-variant mt-0.5">
+                      Tiền bánh: {moneyVnd(offer.cakePrice)} · Phí giao: {moneyVnd(offer.deliveryFee)}
+                    </p>
+                  )}
+                </div>
+
+                {offer.message && (
+                  <p className="rounded-xl bg-surface-container-low p-3 text-xs italic text-on-surface-variant border border-outline-variant/20">
+                    “{offer.message}”
+                  </p>
+                )}
+
+                <div className="grid gap-1 text-xs text-on-surface-variant">
+                  <p>Hoàn thành: <strong className="text-on-surface">{formatRfqDateTime(offer.estimatedCompletionAt)}</strong></p>
+                  <p>Hết hạn: <strong className="text-on-surface">{formatRfqDateTime(offer.expiresAt)}</strong></p>
+                </div>
+
+                <button className={buttonClass + ' w-full py-2.5 text-sm font-bold'} onClick={() => onOpen(offer.id)}>
+                  Chi tiết báo giá
+                </button>
+              </article>
+            ))}
+          </div>
+          {!resource.data.result.length && (
+            <section className={panelClass}>
+              <EmptyPanel title="Chưa có báo giá." description="Báo giá từ tiệm sẽ xuất hiện tại đây khi có dữ liệu phù hợp." icon="description" />
+            </section>
+          )}
+          <CatalogPagination meta={resource.data.meta} onPage={onPage} />
+        </>
+      )}
+    </MarketplaceState>
+  )
 }
+
 export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
   const [filters, setFilters] = useState({ scope, cakeRequestId, bakeryId, page: 1, size: 12, sort: 'createdAt,desc', status: '' })
   const resource = useCatalogResource(loadOffers, filters)

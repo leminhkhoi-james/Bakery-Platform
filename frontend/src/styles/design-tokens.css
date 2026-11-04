@@ -2,13 +2,13 @@
   --sc-font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sc-color-primary: #6b212e;
   --sc-color-primary-hover: #4f1722;
-  --sc-color-text: #382d25;
-  --sc-color-muted: #695e57;
+  --sc-color-text: #0f172a;
+  --sc-color-muted: #64748b;
   --sc-color-accent: #a56623;
-  --sc-color-border: #e7d8cc;
+  --sc-color-border: #e2e8f0;
   --sc-color-focus: #b87328;
-  --sc-color-pink: #f5dcd7;
-  --sc-color-cream: #fffdfa;
+  --sc-color-pink: #ffe4ec;
+  --sc-color-cream: #ffffff;
   --sc-text-xs: .75rem;
   --sc-text-sm: .875rem;
   --sc-text-body: .875rem;
@@ -32,8 +32,8 @@
   --sc-radius-card: 1.25rem;
   --sc-radius-badge: .5rem;
   --sc-control-height: 2.75rem;
-  --sc-shadow-card: 0 8px 24px -4px #4023160a;
-  --sc-shadow-hover: 0 12px 30px -6px #40231618;
+  --sc-shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --sc-shadow-hover: 0 10px 25px -4px rgba(15, 23, 42, 0.08);
   --sc-transition: 160ms ease;
 }
 @media (max-width: 639px) {

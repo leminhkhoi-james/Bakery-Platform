@@ -21,6 +21,18 @@ export const CustomAtelierSection = ({ onNavigate }) => {
     setShowPreview(true)
   }
 
+  const navigateWithIdea = (mode = 'prompt') => {
+    if (!onNavigate) return
+    const params = new URLSearchParams()
+    if (mode === '3d') params.set('mode', '3d')
+    const combinedPrompt = ideaText.trim()
+      ? `${ideaText.trim()} (Tone màu chủ đạo: ${selectedTone})`
+      : ''
+    if (combinedPrompt) params.set('prompt', combinedPrompt)
+    const queryStr = params.toString()
+    onNavigate(queryStr ? `ai-studio?${queryStr}` : 'ai-studio')
+  }
+
   return (
     <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 striped-idea-bg border-b-2 border-wine relative" id="tao-banh-theo-y">
       <div className="max-w-[1220px] mx-auto px-6">
@@ -33,8 +45,8 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                 Bạn kể ý tưởng.<br />
                 <em className="font-normal italic text-brand-pink">Bánh sẽ thành hình.</em>
               </h2>
-              <p className="text-on-surface text-base sm:text-lg bg-[#fffaf3]/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed">
-                “Con tôi thích màu hồng, các vì sao và vị dâu tây...” Chỉ cần bắt đầu như thế! Bạn có thể chọn thêm cốt bánh bông mềm, kem cheese mịn màng hay thông điệp ý nghĩa.
+              <p className="text-on-surface text-base sm:text-lg bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-wine/20 max-w-xl mb-8 leading-relaxed">
+                “Con tôi thích màu hồng, các vì sao và vị dâu tây...” Chỉ cần bắt đầu như thế! Bạn có thể chọn thêm cốt bánh bông mềm, kem cheese mịn màng hay tự tay xoay chỉnh bánh 3D 360°.
               </p>
             </ScrollReveal>
 
@@ -60,17 +72,27 @@ export const CustomAtelierSection = ({ onNavigate }) => {
             </div>
 
             <ScrollReveal animation="fade-up" delay={400}>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <a
                   className="cakematch-btn"
                   href="/ai-studio"
                   onClick={(e) => {
                     e.preventDefault()
-                    onNavigate && onNavigate('ai-studio')
+                    navigateWithIdea('prompt')
                   }}
                 >
                   <span>Mở SweetAI Studio đầy đủ</span>
                   <span className="material-symbols-outlined text-base">arrow_outward</span>
+                </a>
+                <a
+                  className="cakematch-btn-secondary"
+                  href="/ai-studio?mode=3d"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    navigateWithIdea('3d')
+                  }}
+                >
+                  <span>🎂 Thiết kế bánh 3D (LayerZ)</span>
                 </a>
               </div>
             </ScrollReveal>
@@ -138,7 +160,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                     href="/ai-studio"
                     onClick={(e) => {
                       e.preventDefault()
-                      onNavigate && onNavigate('ai-studio')
+                      navigateWithIdea('prompt')
                     }}
                   >
                     <span>Đặt mẫu custom</span>
@@ -146,7 +168,7 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                 </div>
 
                 <p className="text-xs text-on-surface-variant mt-4">
-                  Tiếp tục để chọn vị bánh, trang trí và gửi yêu cầu đến các tiệm nghệ nhân.
+                  Tiếp tục để chọn vị bánh, trang trí 3D và gửi yêu cầu đến các tiệm nghệ nhân.
                 </p>
 
                 {/* Live Preview Sketch Result */}
@@ -159,13 +181,20 @@ export const CustomAtelierSection = ({ onNavigate }) => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <h4 className="font-savoure text-lg font-bold text-wine italic mb-1">
                         Phác thảo ý tưởng bánh ({selectedTone})
                       </h4>
                       <p className="text-xs text-on-surface line-clamp-2">
                         “{ideaText}”
                       </p>
+                      <button
+                        type="button"
+                        onClick={() => navigateWithIdea('prompt')}
+                        className="mt-2 text-xs font-bold text-wine underline cursor-pointer"
+                      >
+                        Đưa ý tưởng này vào AI Studio →
+                      </button>
                     </div>
                   </div>
                 )}
