@@ -1,5 +1,11 @@
 # Bakery feature
 
+Customer onboarding submits a profile and initial operations in one transaction.
+The applicant receives scoped OWNER membership for Subscription checkout. Bakery
+grants access to the seller workspace through Identity after verifying that the
+shop and its subscription are active. Both admin approvals trigger this check
+after commit. The pending membership flag enables automatic retries. See ADR-005.
+
 ## Responsibility
 
 Bakery profiles, approval state and operating configuration.

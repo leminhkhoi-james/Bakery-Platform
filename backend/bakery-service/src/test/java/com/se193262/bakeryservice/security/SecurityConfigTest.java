@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -114,6 +115,21 @@ class SecurityConfigTest {
     }
 
     @Test
+    @DisplayName("Membership lookup accepts the service scope at both authorization layers")
+    void internalMemberships_withScopedServiceToken_passesMethodAuthorization() throws Exception {
+        String path = "/internal/v1/users/" + USER_ID + "/bakery-memberships";
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-membership")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-profile")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-membership")
+                        .header("X-Correlation-Id", "request-1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Public bakery detail does not require JWT")
     void bakeryDetail_withoutToken_isPublic() throws Exception {
         mockMvc.perform(get("/api/v1/bakeries/" + BAKERY_ID)).andExpect(status().isOk());
@@ -181,6 +197,10 @@ class SecurityConfigTest {
         @GetMapping("/internal/v1/bakeries/{bakeryId}")
         String internalBakery() { return "ok"; }
 
+        @GetMapping("/internal/v1/users/{userId}/bakery-memberships")
+        @PreAuthorize("hasAuthority('SCOPE_bakery:membership:read')")
+        String internalMemberships() { return "ok"; }
+
         @GetMapping("/api/v1/bakeries/{bakeryId}")
         String publicBakery() { return "ok"; }
     }
@@ -197,13 +217,18 @@ class SecurityConfigTest {
                 String tokenType = token.startsWith("service") ? "service" : "user";
                 String role = token.contains("customer") ? "CUSTOMER"
                         : token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
+                String scope = switch (token) {
+                    case "service-profile" -> "bakery:profile:read";
+                    case "service-membership", "user-membership" -> "bakery:membership:read";
+                    default -> "";
+                };
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
                         .subject(USER_ID.toString())
                         .claim("token_type", tokenType)
                         .claim("roles", List.of(role))
                         .audience(List.of(token.startsWith("service") ? "bakery-service" : "bakery-platform-api"))
-                        .claim("scope", token.equals("service-profile") ? "bakery:profile:read" : "")
+                        .claim("scope", scope)
                         .build();
             };
         }

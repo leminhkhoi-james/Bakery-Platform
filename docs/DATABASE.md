@@ -78,7 +78,7 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
 | `bakeries` | `id` | `name`, thông tin liên hệ, ảnh, `status`, timestamps, `version` | Hồ sơ chính của tiệm bánh |
-| `bakery_members` | `id` | `bakery_id`, `user_id`*, `display_name_snapshot`, `member_role`, `status`, `joined_at` | Chủ sở hữu tiệm; member_role chỉ nhận OWNER |
+| `bakery_members` | `id` | `bakery_id`, `user_id`*, `display_name_snapshot`, `member_role`, `status`, `owner_activation_pending`, `joined_at` | Chủ sở hữu tiệm; member_role chỉ nhận OWNER |
 | `bakery_addresses` | `id` | `bakery_id`, địa chỉ, tọa độ, `is_primary`, timestamps | Chi nhánh hoặc địa điểm của tiệm |
 | `service_areas` | `id` | `bakery_id`, `city`, `district`, `delivery_fee`, `minimum_order`, `active` | Khu vực tiệm nhận giao bánh |
 | `business_hours` | `id` | `bakery_id`, `day_of_week`, giờ mở/đóng, `closed` | Lịch hoạt động trong tuần |
@@ -93,6 +93,11 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 `V2__member_display_snapshot.sql` bổ sung tên hiển thị chụp từ Identity khi tạo
 OWNER. Tên này không đổi theo profile Identity về sau. Danh sách chủ tiệm chỉ
 đọc snapshot đã lưu, không có luồng bổ sung dữ liệu cũ.
+
+`V3__pending_owner_activation.sql` lưu cờ chờ cấp quyền chủ tiệm và partial
+index cho membership đang hoạt động còn chờ. Migration đánh dấu các OWNER
+đang hoạt động trước đó để đối chiếu một lần với Identity. Bakery xóa cờ
+sau khi Identity xác nhận role đã có hoặc cấp role thành công.
 
 ### Relationships
 

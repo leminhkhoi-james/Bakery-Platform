@@ -1,6 +1,32 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-01.
+> Cập nhật gần nhất: 2026-11-06.
+
+## Bakery internal JWT scope — 2026-11-06
+
+- Bakery ánh xạ `scope` thành authority `SCOPE_*` bên cạnh platform role.
+  Sửa lỗi API membership nội bộ trả 403 ở lớp method security dù JWT service
+  có scope hợp lệ, khiến Marketplace trả 503 khi tải yêu cầu và báo giá.
+  Giữ kiểm tra loại token, audience và correlation ID ở lớp HTTP.
+- 10 test SecurityConfig pass. Sau khi cập nhật riêng Bakery, token Marketplace
+  đọc membership thành công và API yêu cầu/báo giá qua Vite đều trả 200.
+
+## Đăng ký đối tác và thanh toán sandbox — 2026-11-06
+
+- Lần duyệt cuối tự kích hoạt quyền chủ tiệm theo cả hai thứ tự duyệt.
+  Bakery lưu cờ chờ và tự đối chiếu lại khi các service tạm gián đoạn.
+- Tài khoản CUSTOMER gửi hồ sơ qua API onboarding và dùng membership của
+  đúng tiệm để mua gói. Khi hồ sơ được duyệt và gói có hiệu lực, Bakery
+  xác minh điều kiện và yêu cầu Identity cấp thêm BAKERY_OWNER cho cùng
+  tài khoản. Token refresh chứa quyền mới.
+- Mã sandbox chỉ hoạt động khi cấu hình local, lưu payment thật trong
+  Subscription DB và giữ bước admin duyệt. Dùng lại mã trên đơn khác không
+  trùng tham chiếu, retry cùng yêu cầu không tạo thêm payment.
+- Đã chạy test Maven cho Identity, Bakery, Subscription và platform-support
+  với PostgreSQL Testcontainers. Kiểm tra HTTP trên Docker local đi từ
+  CUSTOMER mới đến token BAKERY_OWNER của cùng user ID, gồm mã sai, retry,
+  chặn hoàn tất sớm và chặn truy cập tiệm của người khác. Đồng bộ API spec
+  và ADR-005.
 
 ## Mở role CUSTOMER cho Subscription payment — 2026-11-01
 

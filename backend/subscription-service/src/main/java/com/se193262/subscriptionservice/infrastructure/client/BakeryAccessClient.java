@@ -2,6 +2,8 @@ package com.se193262.subscriptionservice.infrastructure.client;
 
 import com.se193262.subscriptionservice.exception.AppException;
 import com.se193262.platform.client.ServiceHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @Component
 public class BakeryAccessClient {
+    private static final Logger log = LoggerFactory.getLogger(BakeryAccessClient.class);
     private final RestClient client;
     private final String serviceToken;
     private final ServiceHttpClient tokenClient;
@@ -35,6 +38,21 @@ public class BakeryAccessClient {
         Profile profile = call("/internal/v1/bakeries/{bakeryId}", Profile.class, bakeryId);
         if (!bakeryId.equals(profile.id())) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Invalid Bakery profile response");
+        }
+    }
+
+    public void notifySubscriptionApproved(UUID bakeryId) {
+        try {
+            String bearer = tokenClient.serviceToken("bakery-service", "bakery:onboarding:activate");
+            client.put().uri("/internal/v1/bakeries/{bakeryId}/onboarding/activate", bakeryId)
+                    .headers(headers -> {
+                        headers.setBearerAuth(bearer);
+                        headers.set("X-Correlation-Id", UUID.randomUUID().toString());
+                    })
+                    .retrieve().toBodilessEntity();
+        } catch (RestClientException | com.se193262.platform.exception.AppException failure) {
+            log.warn("Bakery activation notification for {} failed ({}). Bakery will retry activation.",
+                    bakeryId, failure.getClass().getSimpleName());
         }
     }
 

@@ -75,4 +75,16 @@ public class UserContextService {
                 .optional()
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
     }
+
+    @Transactional
+    public void grantBakeryOwner(UUID userId) {
+        if (!((List<?>) user(userId).get("roles")).contains("CUSTOMER")) {
+            throw new ResourceNotFoundException("Active customer not found");
+        }
+        jdbc.sql("""
+                INSERT INTO user_roles (user_id, role_id)
+                SELECT :userId, id FROM roles WHERE code = 'BAKERY_OWNER'
+                ON CONFLICT (user_id, role_id) DO NOTHING
+                """).param("userId", userId).update();
+    }
 }

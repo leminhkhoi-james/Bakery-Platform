@@ -2,11 +2,13 @@ package com.se193262.bakeryservice.feature.bakery.controller;
 
 import com.se193262.bakeryservice.feature.bakery.dto.BakeryInternalProfileResponse;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryInternalService;
+import com.se193262.bakeryservice.feature.bakery.service.BakeryOnboardingService;
 import com.se193262.bakeryservice.feature.member.dto.BakeryAuthorizationResponse;
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +19,17 @@ import java.util.UUID;
 @RequestMapping("/internal/v1/bakeries")
 public class InternalBakeryController {
     private final BakeryInternalService service;
+    private final BakeryOnboardingService onboarding;
 
-    public InternalBakeryController(BakeryInternalService service) {
+    public InternalBakeryController(BakeryInternalService service, BakeryOnboardingService onboarding) {
         this.service = service;
+        this.onboarding = onboarding;
+    }
+
+    @PutMapping("/{bakeryId}/onboarding/activate")
+    public ResponseEntity<Void> activate(@PathVariable UUID bakeryId) {
+        onboarding.reconcileActivation(bakeryId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{bakeryId}")

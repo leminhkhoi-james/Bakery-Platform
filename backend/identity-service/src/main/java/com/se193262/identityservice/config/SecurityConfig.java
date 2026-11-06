@@ -81,6 +81,8 @@ public class SecurityConfig {
                                         .access(serviceScope("identity:address:read"))
                                         .requestMatchers(HttpMethod.GET, "/internal/v1/users/*")
                                         .access(serviceScope("identity:user:read"))
+                                        .requestMatchers(HttpMethod.PUT, "/internal/v1/users/*/bakery-owner")
+                                        .access(serviceScope("identity:bakery-owner:grant"))
                                         .requestMatchers("/internal/v1/**")
                                         .denyAll()
                                         .requestMatchers("/api/v1/admin/**")

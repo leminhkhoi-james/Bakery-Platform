@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -39,6 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @Transactional
+@TestPropertySource(properties = "SUBSCRIPTION_PAYMENT_SANDBOX_CODE=LOCAL-TEST-CODE")
 class SubscriptionDataIntegrationTests extends PostgresIntegrationTest {
     @Autowired SubscriptionPlanService planService;
     @Autowired SubscriptionOrderService orderService;
@@ -51,6 +53,34 @@ class SubscriptionDataIntegrationTests extends PostgresIntegrationTest {
     @Autowired BakerySubscriptionRepository subscriptionRepository;
     @Autowired TransactionTemplate transactions;
     @Autowired JdbcClient jdbc;
+
+    @Test
+    @DisplayName("A reusable sandbox code records distinct payments and rejects invalid codes")
+    void submit_sandboxCode_reusesCodeAcrossOrdersWithDistinctReferences() {
+        UUID ownerId = UUID.randomUUID();
+        SubscriptionOrderDto first = orderService.create(UUID.randomUUID(), ownerId,
+                UUID.randomUUID().toString(), planRequest());
+        SubscriptionOrderDto second = orderService.create(UUID.randomUUID(), ownerId,
+                UUID.randomUUID().toString(), planRequest());
+        BakeryPaymentDto invalid = new BakeryPaymentDto(null, null, null, "SANDBOX", "wrong-code",
+                first.totalAmount(), first.currency(), null, null, null, null, null);
+        String firstKey = UUID.randomUUID().toString();
+        assertThatThrownBy(() -> paymentService.submit(first.id(), ownerId, firstKey, invalid, null))
+                .isInstanceOf(AppException.class).hasMessage("Invalid sandbox payment code or proof");
+        assertThat(orderService.get(first.id(), ownerId, false).status())
+                .isEqualTo(SubscriptionOrderStatus.PENDING_PAYMENT);
+
+        BakeryPaymentDto sandbox = new BakeryPaymentDto(null, null, null, "SANDBOX", "LOCAL-TEST-CODE",
+                first.totalAmount(), first.currency(), null, null, null, null, null);
+        BakeryPaymentDto firstPayment = paymentService.submit(first.id(), ownerId, firstKey, sandbox, null);
+        BakeryPaymentDto secondPayment = paymentService.submit(second.id(), ownerId,
+                UUID.randomUUID().toString(), sandbox, null);
+        assertThat(firstPayment.status()).isEqualTo(PaymentStatus.SUBMITTED);
+        assertThat(firstPayment.paymentReference())
+                .isNotEqualTo(secondPayment.paymentReference()).doesNotContain("LOCAL-TEST-CODE");
+        assertThat(paymentService.submit(first.id(), ownerId, firstKey, sandbox, null).id())
+                .isEqualTo(firstPayment.id());
+    }
 
     @Test
     @DisplayName("Purchase, payment approval and retries preserve plan snapshots")

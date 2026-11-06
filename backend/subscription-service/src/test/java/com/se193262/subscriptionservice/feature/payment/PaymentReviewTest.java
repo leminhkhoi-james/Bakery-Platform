@@ -20,6 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.support.SimpleTransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -33,6 +36,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentReviewTest {
@@ -41,10 +46,13 @@ class PaymentReviewTest {
     @Mock BakerySubscriptionRepository subscriptions;
     @Mock BakeryAccessClient bakeryClient;
     @Mock PaymentProofStorage proofStorage;
+    @Mock TransactionTemplate transactions;
     @InjectMocks BakeryPaymentServiceImpl service;
 
     @Test
     void approvalCreatesOnePeriodFromOrderSnapshotAndRetryReturnsSamePeriod() {
+        when(transactions.execute(any())).thenAnswer(invocation ->
+                invocation.<TransactionCallback<?>>getArgument(0).doInTransaction(new SimpleTransactionStatus()));
         SubscriptionPlan plan = new SubscriptionPlan("PRO", "Pro", BigDecimal.valueOf(100));
         plan.update(null, null, null, null, null, 1, null, Map.of("MAX_PRODUCTS", "10"));
         SubscriptionOrder order = new SubscriptionOrder("SUB-1", UUID.randomUUID(), plan,
@@ -81,6 +89,7 @@ class PaymentReviewTest {
                 .subscription().id()).isEqualTo(saved.get().getId());
         assertThatThrownBy(() -> service.approve(payment.getId(), adminId,
                 UUID.randomUUID().toString(), "matched")).isInstanceOf(AppException.class);
+        verify(bakeryClient, times(2)).notifySubscriptionApproved(order.getBakeryId());
     }
 
     @Test

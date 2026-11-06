@@ -1,5 +1,9 @@
 # User feature
 
+Bakery can grant BAKERY_OWNER to an active CUSTOMER through a dedicated scoped
+internal endpoint after validating the partner application and subscription.
+The grant is idempotent and retains the CUSTOMER role. See ADR-005.
+
 ## Responsibility
 
 User profiles, platform roles and administrative user management.

@@ -3,6 +3,7 @@ package com.se193262.bakeryservice.feature.catalog;
 import com.se193262.bakeryservice.exception.GlobalExceptionHandler;
 import com.se193262.bakeryservice.feature.bakery.controller.InternalBakeryController;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryInternalService;
+import com.se193262.bakeryservice.feature.bakery.service.BakeryOnboardingService;
 import com.se193262.bakeryservice.feature.catalog.controller.InternalCatalogController;
 import com.se193262.bakeryservice.feature.catalog.service.CatalogQuoteService;
 import com.se193262.platform.exception.BusinessException;
@@ -29,7 +30,8 @@ class InternalCatalogRoutingTest {
 
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.standaloneSetup(new InternalBakeryController(bakeryService),
+        mvc = MockMvcBuilders.standaloneSetup(
+                        new InternalBakeryController(bakeryService, mock(BakeryOnboardingService.class)),
                         new CatalogController(customizationService),
                         new InternalCatalogController(directOrderService))
                 .setControllerAdvice(new GlobalExceptionHandler()).build();

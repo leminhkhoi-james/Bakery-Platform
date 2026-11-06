@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface BakeryService {
 
     BakeryDto create(BakeryDto request, UUID ownerUserId);
+    BakeryDto createForOnboarding(BakeryDto request, UUID customerId);
 
     BakeryDto get(UUID bakeryId);
 

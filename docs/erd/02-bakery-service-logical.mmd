@@ -20,6 +20,7 @@ erDiagram
         varchar display_name_snapshot "Name captured from Identity"
         varchar member_role "OWNER only"
         varchar status
+        boolean owner_activation_pending "Awaiting Identity role grant"
         timestamptz joined_at
     }
 

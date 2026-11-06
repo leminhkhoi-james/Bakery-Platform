@@ -1,5 +1,9 @@
 # Authentication feature
 
+Bakery's service client can request the Identity scope
+`identity:bakery-owner:grant` for partner onboarding. Access-token refresh
+includes the updated platform roles. See ADR-005.
+
 ## Responsibility
 
 Registration, login, token refresh and token revocation.

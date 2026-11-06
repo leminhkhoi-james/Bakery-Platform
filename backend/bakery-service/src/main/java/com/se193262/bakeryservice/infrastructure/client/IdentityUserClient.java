@@ -71,5 +71,16 @@ public class IdentityUserClient {
         }
     }
 
+    public void grantBakeryOwner(UUID userId) {
+        try {
+            String bearer = tokenClient.serviceToken("identity-service", "identity:bakery-owner:grant");
+            client.put().uri("/internal/v1/users/{userId}/bakery-owner", userId)
+                    .headers(headers -> headers.setBearerAuth(bearer))
+                    .retrieve().toBodilessEntity();
+        } catch (RestClientException | com.se193262.platform.exception.AppException exception) {
+            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Could not activate the bakery owner role");
+        }
+    }
+
     public record UserProfile(UUID id, String displayName, String status, List<String> roles) { }
 }

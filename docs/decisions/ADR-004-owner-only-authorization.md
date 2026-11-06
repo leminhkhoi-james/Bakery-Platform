@@ -11,6 +11,8 @@ Creating a bakery requires BAKERY_OWNER and creates its OWNER membership from JW
 Bakery management requires BAKERY_OWNER plus ACTIVE OWNER membership of that bakery.
 Admin routes retain their explicit administration policy.
 
+Partner onboarding is a separate path defined in [ADR-005](ADR-005-partner-onboarding-and-sandbox.md).
+
 Member listing and internal membership authorization remain available. Public
 member creation/update/deletion are removed; adding co-owners or transferring
 ownership is outside the current contract. Order, Marketplace, Chat and Subscription

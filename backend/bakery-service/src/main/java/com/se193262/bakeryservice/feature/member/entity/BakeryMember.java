@@ -45,6 +45,9 @@ public class BakeryMember {
     @Column(name = "status", nullable = false, length = 30)
     private BakeryMemberStatus status = BakeryMemberStatus.ACTIVE;
 
+    @Column(name = "owner_activation_pending", nullable = false)
+    private boolean ownerActivationPending;
+
     @CreationTimestamp
     @Column(name = "joined_at", nullable = false, updatable = false)
     private Instant joinedAt;
@@ -67,6 +70,8 @@ public class BakeryMember {
         if (role != null) this.memberRole = role;
         if (status != null) this.status = status;
     }
+
+    public void requestOwnerActivation() { ownerActivationPending = true; }
 
     public UUID getId() { return id; }
     public Bakery getBakery() { return bakery; }

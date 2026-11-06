@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.DelegatingJwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -52,12 +53,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bakeries/onboarding")
+                        .access(userRole("CUSTOMER"))
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bakeries/onboarding",
+                                "/api/v1/bakeries/{bakeryId}/onboarding/complete")
+                        .access(userRole("CUSTOMER"))
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/bakeries", "/api/v1/bakeries/{bakeryId}",
                                 "/api/v1/products", "/api/v1/products/{productId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/internal/v1/bakeries/{bakeryId}")
                         .access(serviceScope("bakery:profile:read"))
+                        .requestMatchers(HttpMethod.PUT, "/internal/v1/bakeries/{bakeryId}/onboarding/activate")
+                        .access(serviceScope("bakery:onboarding:activate"))
                         .requestMatchers(HttpMethod.GET,
                                 "/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization",
                                 "/internal/v1/users/{userId}/bakery-memberships")
@@ -129,8 +137,10 @@ public class SecurityConfig {
         JwtGrantedAuthoritiesConverter roles = new JwtGrantedAuthoritiesConverter();
         roles.setAuthoritiesClaimName("roles");
         roles.setAuthorityPrefix("ROLE_");
+        JwtGrantedAuthoritiesConverter scopes = new JwtGrantedAuthoritiesConverter();
+        scopes.setAuthoritiesClaimName("scope");
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(roles);
+        converter.setJwtGrantedAuthoritiesConverter(new DelegatingJwtGrantedAuthoritiesConverter(roles, scopes));
         return converter;
     }
 

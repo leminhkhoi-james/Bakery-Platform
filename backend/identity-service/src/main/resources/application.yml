@@ -69,11 +69,11 @@ security.service-clients:
     bakery-service:
       secret-hash: ${BAKERY_CLIENT_SECRET_HASH:}
       grants:
-        identity-service: "identity:user:read"
+        identity-service: "identity:user:read identity:bakery-owner:grant"
         subscription-service: "subscription:entitlement:read"
     subscription-service:
       secret-hash: ${SUBSCRIPTION_CLIENT_SECRET_HASH:}
       grants:
-        bakery-service: "bakery:profile:read bakery:membership:read"
+        bakery-service: "bakery:profile:read bakery:membership:read bakery:onboarding:activate"
 
 management.endpoint.health.group.readiness.include: readinessState,db

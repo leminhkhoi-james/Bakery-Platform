@@ -19,3 +19,5 @@ See docs/decisions/ADR-004-owner-only-authorization.md.
 
 Membership data belongs to Bakery; user_id remains an external UUID reference.
 Owner display names are captured from Identity when a bakery is created.
+Onboarding memberships retain a pending role activation flag until Identity
+confirms the platform role. See ADR-005.

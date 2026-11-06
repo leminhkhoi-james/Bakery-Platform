@@ -20,6 +20,13 @@ public class UserContextController {
         return service.user(id);
     }
 
+    @PutMapping("/{id}/bakery-owner")
+    @PreAuthorize("hasAuthority('SCOPE_identity:bakery-owner:grant')")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    public void grantBakeryOwner(@PathVariable UUID id) {
+        service.grantBakeryOwner(id);
+    }
+
     @GetMapping("/{userId}/addresses/{addressId}")
     @PreAuthorize("hasAuthority('SCOPE_identity:address:read')")
     public Map<String, Object> address(@PathVariable UUID userId, @PathVariable UUID addressId) {

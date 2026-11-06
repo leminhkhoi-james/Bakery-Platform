@@ -68,18 +68,34 @@ public class BakeryServiceImpl implements BakeryService {
     @Override
     @Transactional
     public BakeryDto create(BakeryDto request, UUID ownerUserId) {
+        return createBakery(request, ownerUserId, false);
+    }
+
+    @Override
+    @Transactional
+    public BakeryDto createForOnboarding(BakeryDto request, UUID customerId) {
+        return createBakery(request, customerId, true);
+    }
+
+    private BakeryDto createBakery(BakeryDto request, UUID ownerUserId, boolean onboarding) {
         rejectServerFields(request);
         if (ownerUserId == null) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Owner user ID is required");
         }
         String name = required(request.name(), "name");
         String phoneNumber = required(request.phoneNumber(), "phoneNumber");
-        var ownerProfile = identityUserClient.requireOwner(ownerUserId);
+        var owner = onboarding ? identityUserClient.getUser(ownerUserId) : identityUserClient.requireOwner(ownerUserId);
+        if (onboarding && (owner.roles() == null || !owner.roles().contains("CUSTOMER"))) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Customer role is required");
+        }
         Bakery bakery = new Bakery(name, phoneNumber, normalized(request.email()));
         bakery.updateProfile(null, request.description(), null, null);
         bakeryRepository.saveAndFlush(bakery);
-        bakeryMemberRepository.save(new BakeryMember(bakery, ownerUserId, BakeryMemberRole.OWNER,
-                ownerProfile.displayName()));
+        BakeryMember member = new BakeryMember(bakery, ownerUserId, BakeryMemberRole.OWNER, owner.displayName());
+        if (onboarding) {
+            member.requestOwnerActivation();
+        }
+        bakeryMemberRepository.save(member);
         return toDto(bakery);
     }
 

@@ -6,6 +6,7 @@ import com.se193262.bakeryservice.feature.bakery.dto.AdminBakeryDetailResponse;
 import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryService;
 import com.se193262.bakeryservice.feature.bakery.service.AdminBakeryService;
+import com.se193262.bakeryservice.feature.bakery.service.BakeryOnboardingService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
 import com.se193262.bakeryservice.shared.dto.PageResult;
 import jakarta.validation.Valid;
@@ -25,10 +26,13 @@ import java.util.UUID;
 public class AdminBakeryController {
     private final BakeryService bakeryService;
     private final AdminBakeryService adminBakeryService;
+    private final BakeryOnboardingService onboarding;
 
-    public AdminBakeryController(BakeryService bakeryService, AdminBakeryService adminBakeryService) {
+    public AdminBakeryController(BakeryService bakeryService, AdminBakeryService adminBakeryService,
+            BakeryOnboardingService onboarding) {
         this.bakeryService = bakeryService;
         this.adminBakeryService = adminBakeryService;
+        this.onboarding = onboarding;
     }
 
     @GetMapping
@@ -50,6 +54,6 @@ public class AdminBakeryController {
     @PatchMapping("/{bakeryId}/status")
     public ResponseEntity<ApiResponse<BakeryDto>> changeStatus(@PathVariable UUID bakeryId,
             @Valid @RequestBody ChangeBakeryStatusRequest request) {
-        return ResponseEntity.ok(ApiResponse.success(bakeryService.changeStatus(bakeryId, request.status())));
+        return ResponseEntity.ok(ApiResponse.success(onboarding.changeBakeryStatus(bakeryId, request.status())));
     }
 }

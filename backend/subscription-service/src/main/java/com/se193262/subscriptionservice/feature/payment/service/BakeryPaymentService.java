@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BakeryPaymentService {
+    boolean isSandboxEnabled();
+
     BakeryPaymentDto submit(UUID orderId, UUID userId, String idempotencyKey,
                             BakeryPaymentDto request, MultipartFile proof);
     PageResult<BakeryPaymentDto> listForReview(PaymentStatus status, UUID bakeryId,

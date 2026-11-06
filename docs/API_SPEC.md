@@ -434,6 +434,36 @@ Tạo bakery `DRAFT` và current user làm member `OWNER`. **Success (201):**
 `BakeryManagementResponse`. **Errors:** `400` validation; `503` Identity
 validation unavailable.
 
+### GET /bakeries/onboarding 🔒 CUSTOMER
+
+Trả hồ sơ tiệm của tài khoản hiện tại hoặc `data: null` nếu chưa có.
+
+### POST /bakeries/onboarding 🔒 CUSTOMER
+
+Nhận `name`, `phoneNumber`, `email` (tùy chọn) và `operations` theo cấu trúc bên
+dưới. Cần địa chỉ chính và một khu vực giao hàng hoạt động. Tạo hồ sơ và
+membership `OWNER` cho JWT subject, rồi gửi duyệt trong cùng transaction.
+**200:** hồ sơ `PENDING_APPROVAL`. Nếu hồ sơ bị trả về `DRAFT`, khách có thể
+gửi lại với thông tin mới. Gửi lại hồ sơ đã chờ duyệt hoặc đã duyệt trả
+hồ sơ hiện có. **409:** đang xử lý yêu cầu đồng thời. **422:** thiếu điều kiện.
+
+Membership này cho phép tạo đơn và gửi thanh toán Subscription cho đúng tiệm.
+Quyền quản lý tiệm và catalog tiếp tục yêu cầu platform role `BAKERY_OWNER`.
+
+Khi hồ sơ `ACTIVE` và kỳ Subscription đang có hiệu lực, lần duyệt cuối tự
+kích hoạt quyền `BAKERY_OWNER` qua Identity. Bakery tự thử lại các lần cấp
+quyền chưa thành công. Client refresh access token sau khi Identity cập nhật
+role để mở Kênh người bán.
+
+### POST /bakeries/{bakeryId}/onboarding/complete 🔒 CUSTOMER
+
+Endpoint tương thích cho client cũ. Yêu cầu membership `OWNER` đang hoạt
+động của JWT subject, hồ sơ tiệm `ACTIVE` và kỳ Subscription đang có hiệu lực.
+**204:** đã cấp hoặc đã có quyền.
+**403:** không sở hữu tiệm. **409:** hồ sơ hoặc gói chưa hoạt động.
+**503:** không xác minh được dịch vụ phụ thuộc, có thể thử lại. Sau khi hoàn
+tất, refresh access token hoặc đăng nhập lại để dùng quyền mới.
+
 ### PATCH /bakeries/{bakeryId} 🔒 OWNER
 
 **Request:** subset của create body. Không sửa status qua endpoint này.
@@ -727,6 +757,9 @@ Allowed commands: approve `PENDING_APPROVAL→ACTIVE`, reject
 
 **Success (200):** `AdminBakeryResponse`. **Errors:** `409` optimistic/wrong
 state; `422` approval checklist chưa đạt.
+
+Sau khi lưu trạng thái `ACTIVE`, Bakery tự kiểm tra quyền chủ tiệm đang chờ.
+Nếu gói đã có hiệu lực, Bakery gọi Identity để cấp thêm `BAKERY_OWNER`.
 
 ---
 
@@ -1301,6 +1334,11 @@ trang vì là reference data nhỏ.
 **Success (200):** `SubscriptionPlanResponse`. **Errors:** `404` inactive hoặc
 không tồn tại.
 
+### GET /subscription-plans/payment-options — Public
+
+**200:** `{ "sandboxEnabled": true }` khi backend có mã thử nghiệm được cấu hình.
+Response chỉ báo khả năng sử dụng sandbox.
+
 ### GET /bakeries/{bakeryId}/subscription 🔒 CUSTOMER|BAKERY_OWNER|ADMIN
 
 **Success (200):** current active/scheduled period và entitlement features;
@@ -1362,6 +1400,16 @@ chuyển `PENDING_PAYMENT→PAYMENT_REVIEW` khi submission hợp lệ.
 **Success (201):** `BakeryPaymentResponse` status `SUBMITTED`; proof là signed
 URL chỉ cho authorized viewer. **Errors:** `409` duplicate reference/wrong order
 state/idempotency mismatch; `422` amount/evidence mismatch; `503` storage.
+
+Local sandbox dùng cùng endpoint và vòng đời trên. Gửi `paymentMethod: "SANDBOX"`,
+mã thử nghiệm trong `paymentReference`, cùng amount/currency từ đơn. Không gửi
+tệp chứng từ. Backend kiểm tra mã và lưu tham chiếu riêng theo đơn và
+`Idempotency-Key`. Mã cấu hình dùng lại được cho nhiều đơn. **403** khi sandbox
+chưa bật, **422** khi mã sai. Thanh toán mô phỏng hợp lệ tạo payment `SUBMITTED`
+và đơn `PAYMENT_REVIEW`; chỉ admin duyệt mới hoàn tất đơn và kích hoạt gói.
+
+Bật trên Docker local bằng `SUBSCRIPTION_PAYMENT_SANDBOX_CODE=BAKERY-TEST` trong
+`.env` ở gốc repo, sau đó tạo lại container Subscription. Mặc định để trống.
 
 ### GET /admin/subscription-plans 🔒 ADMIN
 
@@ -1428,6 +1476,10 @@ Atomically trong subscription DB: payment `SUBMITTED→APPROVED`, order
 `409` wrong state/concurrent approval/active-period invariant; `422` order data
 invalid.
 
+Sau khi transaction commit, Subscription thông báo Bakery kiểm tra quyền chủ
+tiệm đang chờ. Nếu hồ sơ đã duyệt và gói hiện có hiệu lực, quyền được cấp tự
+động. Lỗi thông báo được Bakery đối chiếu lại từ trạng thái đã lưu.
+
 ### POST /admin/bakery-payments/{paymentId}/reject 🔒 ADMIN
 
 ```json
@@ -1468,6 +1520,22 @@ nhưng không expose entity. Lỗi authentication/authorization vẫn là `401/4
 ```
 
 **Errors:** `404` user; `503` Identity dependencies unavailable.
+
+### PUT /internal/v1/users/{userId}/bakery-owner — Identity
+
+**Required scope:** `identity:bakery-owner:grant`, cấp riêng cho service client
+Bakery. Chỉ cấp thêm role cố định `BAKERY_OWNER` cho tài khoản `CUSTOMER` đang
+hoạt động. Bakery phải kiểm tra trạng thái hồ sơ, ownership và entitlement
+trước khi gọi. **204:** thành công, kể cả khi role đã tồn tại. **404:** không
+có tài khoản customer đang hoạt động.
+
+### PUT /internal/v1/bakeries/{bakeryId}/onboarding/activate — Bakery
+
+**Required scope:** `bakery:onboarding:activate`, cấp riêng cho Subscription.
+Header `X-Correlation-Id` là bắt buộc. Thông báo sau khi thanh toán được duyệt.
+Bakery tự xác minh hồ sơ, membership đang chờ và kỳ Subscription có hiệu lực.
+**204:** đã tiếp nhận kiểm tra,
+kể cả khi chưa đủ điều kiện hoặc role đã được cấp. Có thể gọi lại.
 
 ### GET /internal/v1/users/{userId}/addresses/{addressId} — Identity
 
