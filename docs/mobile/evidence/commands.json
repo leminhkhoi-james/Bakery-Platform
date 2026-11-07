@@ -1,0 +1,26 @@
+{
+  "format": {
+    "command": "format .",
+    "exitCode": 0,
+    "seconds": 1.39,
+    "evidence": "final-format.txt"
+  },
+  "analyze": {
+    "command": "analyze",
+    "exitCode": 0,
+    "seconds": 5.16,
+    "evidence": "final-analyze.txt"
+  },
+  "build": {
+    "command": "build apk --debug",
+    "exitCode": 0,
+    "seconds": 22.97,
+    "evidence": "final-build.txt"
+  },
+  "test": {
+    "command": "test --reporter expanded",
+    "exitCode": 0,
+    "seconds": 34.18,
+    "evidence": "final-test.txt"
+  }
+}

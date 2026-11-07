@@ -1,6 +1,27 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-06.
+> Cập nhật gần nhất: 2026-11-07.
+
+## Flutter SweetCake UI local — 2026-11-07
+
+- Đã mở rộng scaffold `mobile` hiện hữu thành 35 màn hình tương ứng Web:
+  7 Public, 11 Customer, 9 Bakery Owner và 8 Admin, cùng form/detail/sheet.
+  Theme wine/hồng, wordmark/mascot, font và ảnh bundle kế thừa Web.
+- Repository fixture theo domain, navigation/persona demo, tìm/lọc, giỏ,
+  RFQ/offer, timeline/review, chat, catalog, vận hành tiệm, gói/chứng từ và
+  quản trị đều có thao tác local. Không có Backend/API/JWT/DB/payment/AI thật.
+  Revenue tiệm được ghi rõ chưa có nguồn dữ liệu; không dựng escrow/payout.
+- `pub get`, format, analyze không issue, 26 Flutter test và debug APK pass.
+  Android emulator mở 35 route và qua integration assertions cho giỏ, chat,
+  RFQ và admin review. Có ảnh runtime và báo cáo tiếng Việt trong
+  [docs/mobile](mobile/BAKERY_PLATFORM_FLUTTER_MOBILE_UI_IMPLEMENTATION_REPORT_VI.md).
+  iOS build/runtime chưa xác minh vì thiếu macOS/Xcode; TalkBack/VoiceOver và
+  hiệu năng release chưa kiểm thử thủ công.
+- Thay đổi chỉ ở `mobile` và `docs`; đối chiếu hash 2.754 file tracked ngoài
+  hai vùng này không có thay đổi. Giữ nguyên Backend, Frontend, Docker,
+  `design-web.md`, secrets và skill hiện hữu. Không stage/commit.
+
+Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trước.
 
 ## Bakery internal JWT scope — 2026-11-06
 

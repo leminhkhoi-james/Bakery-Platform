@@ -1,0 +1,19 @@
+Resolving dependencies...
+Downloading packages...
+  cupertino_icons 1.0.9 (2.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.4 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart
+00:00 +0: Bottom navigation tìm sản phẩm và đổi persona qua bộ chọn demo
+00:02 +1: Chi tiết bánh thay size, thêm giỏ và giữ tổng sau tăng số lượng
+00:02 +2: RFQ báo lỗi bắt buộc rồi lưu bản nháp qua form
+00:03 +3: So sánh chọn preview không chấp nhận giao dịch
+00:03 +4: Chủ tiệm tạo sản phẩm DRAFT và đổi trạng thái catalog local
+00:04 +5: Đơn gói dùng snapshot, gửi chứng từ local vào hàng chờ
+00:04 +6: Admin điều hướng quản lý người dùng và tạo người dùng local
+00:04 +7: All tests passed!

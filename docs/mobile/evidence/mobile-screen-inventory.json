@@ -1,0 +1,352 @@
+[
+  {
+    "screen": "home",
+    "path": "/",
+    "title": "SweetCake",
+    "role": "Guest / mọi vai",
+    "domain": "Catalog",
+    "capability": "Hero, mascot, danh mục, bánh mới, tiệm và CTA",
+    "verification": "Điều hướng thanh dưới, chọn persona",
+    "screenshot": "00-home.png"
+  },
+  {
+    "screen": "explore",
+    "path": "/explore",
+    "title": "Khám phá bánh",
+    "role": "Guest / mọi vai",
+    "domain": "Catalog",
+    "capability": "Tìm kiếm, danh mục, sắp xếp giá, tải thêm",
+    "verification": "Tìm không có kết quả rồi xóa tìm kiếm",
+    "screenshot": "01-explore.png"
+  },
+  {
+    "screen": "product",
+    "path": "/product-detail",
+    "title": "Chi tiết bánh",
+    "role": "Guest / mọi vai",
+    "domain": "Catalog / Cart",
+    "capability": "Ảnh phóng to, size, vị, add-on, số lượng, giá",
+    "verification": "Chọn size 16 cm, thêm giỏ và đối chiếu giá",
+    "screenshot": "02-product.png"
+  },
+  {
+    "screen": "stores",
+    "path": "/stores",
+    "title": "Tiệm bánh đối tác",
+    "role": "Guest / mọi vai",
+    "domain": "Bakery",
+    "capability": "Tìm tiệm và lọc khu vực",
+    "verification": "Mở/layout/trạng thái; thao tác bộ lọc rà source",
+    "screenshot": "03-stores.png"
+  },
+  {
+    "screen": "bakery",
+    "path": "/bakery-detail",
+    "title": "Chi tiết tiệm",
+    "role": "Guest / mọi vai",
+    "domain": "Bakery / Catalog",
+    "capability": "Thông tin vận hành, thực đơn, mở chat",
+    "verification": "Mở/layout/trạng thái; liên kết rà source",
+    "screenshot": "04-bakery.png"
+  },
+  {
+    "screen": "plans",
+    "path": "/subscription-plans",
+    "title": "Gói đối tác",
+    "role": "Guest / mọi vai",
+    "domain": "Subscription",
+    "capability": "Ba gói, hạn mức và chọn gói",
+    "verification": "Mở/layout/trạng thái; liên kết rà source",
+    "screenshot": "05-plans.png"
+  },
+  {
+    "screen": "login",
+    "path": "/login",
+    "title": "Chào mừng đến SweetCake",
+    "role": "Guest / mọi vai",
+    "domain": "Identity UI",
+    "capability": "Đăng nhập/đăng ký local, validation, quên mật khẩu chưa hỗ trợ",
+    "verification": "Mở/layout/trạng thái; xác thực thật ngoài phạm vi",
+    "screenshot": "06-login.png"
+  },
+  {
+    "screen": "cart",
+    "path": "/cart",
+    "title": "Giỏ bánh của bạn",
+    "role": "CUSTOMER / Guest",
+    "domain": "Cart",
+    "capability": "Sửa số lượng, bỏ bánh, tổng snapshot, lưu preview",
+    "verification": "Android thêm giỏ, tăng lượng, lưu preview",
+    "screenshot": "07-cart.png"
+  },
+  {
+    "screen": "profile",
+    "path": "/profile",
+    "title": "Tài khoản của tôi",
+    "role": "CUSTOMER",
+    "domain": "Identity UI",
+    "capability": "Hồ sơ, sửa tên/email/địa chỉ, liên kết tác vụ",
+    "verification": "Sửa hồ sơ qua sheet, kiểm tra vòng đời controller",
+    "screenshot": "08-profile.png"
+  },
+  {
+    "screen": "tracking",
+    "path": "/tracking",
+    "title": "Đơn bánh của tôi",
+    "role": "CUSTOMER",
+    "domain": "Order",
+    "capability": "Tìm/lọc đơn, detail, timeline, hủy/hoàn tất, review",
+    "verification": "Mở/layout/trạng thái; state machine domain",
+    "screenshot": "09-tracking.png"
+  },
+  {
+    "screen": "payment",
+    "path": "/payment",
+    "title": "Thông tin thanh toán",
+    "role": "CUSTOMER",
+    "domain": "Order / Chat",
+    "capability": "Thông tin thỏa thuận trực tiếp với tiệm",
+    "verification": "Mở/layout/trạng thái; không có payment giả",
+    "screenshot": "10-payment.png"
+  },
+  {
+    "screen": "studio",
+    "path": "/ai-studio",
+    "title": "Xưởng ý tưởng",
+    "role": "CUSTOMER",
+    "domain": "Cake AI UI",
+    "capability": "Prompt, màu/tầng/vị, ảnh mẫu, lưu draft/revision, RFQ handoff",
+    "verification": "Mở/layout/trạng thái; không có AI/3D thật",
+    "screenshot": "11-studio.png"
+  },
+  {
+    "screen": "requests",
+    "path": "/rfqs",
+    "title": "Yêu cầu của tôi",
+    "role": "CUSTOMER",
+    "domain": "Marketplace",
+    "capability": "Tìm/lọc RFQ, tạo yêu cầu, mở detail",
+    "verification": "Android retry khôi phục danh sách",
+    "screenshot": "12-requests.png"
+  },
+  {
+    "screen": "requestNew",
+    "path": "/rfq-new",
+    "title": "Tạo yêu cầu bánh",
+    "role": "CUSTOMER",
+    "domain": "Marketplace",
+    "capability": "Form, ngân sách, ngày, loại, mẫu bánh, lưu DRAFT",
+    "verification": "Widget validation và Android tạo nháp",
+    "screenshot": "13-requestNew.png"
+  },
+  {
+    "screen": "requestDetail",
+    "path": "/request-detail",
+    "title": "Chi tiết yêu cầu",
+    "role": "CUSTOMER",
+    "domain": "Marketplace",
+    "capability": "Xem RFQ, sửa DRAFT, publish/cancel local, mở báo giá",
+    "verification": "Android mở bản nháp vừa lưu; domain publish/cancel",
+    "screenshot": "14-requestDetail.png"
+  },
+  {
+    "screen": "comparison",
+    "path": "/bidding",
+    "title": "So sánh báo giá",
+    "role": "CUSTOMER",
+    "domain": "Marketplace",
+    "capability": "Sắp tổng giá, đối chiếu và chọn preview",
+    "verification": "Widget chọn preview, vẫn giữ PENDING",
+    "screenshot": "15-comparison.png"
+  },
+  {
+    "screen": "offer",
+    "path": "/baker-quote",
+    "title": "Chi tiết báo giá",
+    "role": "CUSTOMER",
+    "domain": "Marketplace",
+    "capability": "Breakdown giá, hiệu lực, preview, chat",
+    "verification": "Mở/layout/trạng thái; không tạo giao dịch",
+    "screenshot": "16-offer.png"
+  },
+  {
+    "screen": "chat",
+    "path": "/chat",
+    "title": "Tin nhắn",
+    "role": "CUSTOMER",
+    "domain": "Chat",
+    "capability": "Danh sách, unread, thread, gửi/ảnh/xóa/đóng local",
+    "verification": "Android gửi tin; domain chặn tin rỗng và hội thoại đóng",
+    "screenshot": "17-chat.png"
+  },
+  {
+    "screen": "vendorDashboard",
+    "path": "/vendor-dashboard",
+    "title": "Tổng quan tiệm",
+    "role": "BAKERY_OWNER",
+    "domain": "Bakery / Catalog / Order",
+    "capability": "Chỉ số fixture theo tiệm, liên kết tác vụ",
+    "verification": "Mở/layout/trạng thái; chọn persona owner",
+    "screenshot": "18-vendorDashboard.png"
+  },
+  {
+    "screen": "vendorCatalog",
+    "path": "/vendor-menu",
+    "title": "Catalog của tiệm",
+    "role": "BAKERY_OWNER",
+    "domain": "Catalog",
+    "capability": "Danh mục, sản phẩm, ảnh, option, add-on, xuất bản/lưu trữ",
+    "verification": "Widget tạo sản phẩm DRAFT",
+    "screenshot": "19-vendorCatalog.png"
+  },
+  {
+    "screen": "vendorOrders",
+    "path": "/vendor-orders",
+    "title": "Đơn của tiệm",
+    "role": "BAKERY_OWNER",
+    "domain": "Order",
+    "capability": "Lọc đơn theo tiệm, detail, chuyển trạng thái có xác nhận",
+    "verification": "Widget PENDING→CONFIRMED, Android detail",
+    "screenshot": "20-vendorOrders.png"
+  },
+  {
+    "screen": "vendorRequests",
+    "path": "/vendor-rfq",
+    "title": "Yêu cầu khả dụng",
+    "role": "BAKERY_OWNER",
+    "domain": "Marketplace",
+    "capability": "RFQ OPEN, tìm kiếm, lọc tiệm đích",
+    "verification": "Mở/layout/trạng thái; điều kiện tiệm đích rà source",
+    "screenshot": "21-vendorRequests.png"
+  },
+  {
+    "screen": "vendorOffer",
+    "path": "/vendor-quote-submit",
+    "title": "Soạn báo giá",
+    "role": "BAKERY_OWNER",
+    "domain": "Marketplace",
+    "capability": "Soạn/sửa/rút một báo giá mỗi tiệm/yêu cầu",
+    "verification": "Mở/layout/trạng thái; domain chặn báo giá trùng sau rút",
+    "screenshot": "22-vendorOffer.png"
+  },
+  {
+    "screen": "vendorProfile",
+    "path": "/vendor-profile",
+    "title": "Hồ sơ và vận hành",
+    "role": "BAKERY_OWNER",
+    "domain": "Bakery",
+    "capability": "Chọn tiệm, sửa vận hành, membership, gửi hồ sơ local",
+    "verification": "Mở/layout/trạng thái; phạm vi OWNER rà source",
+    "screenshot": "23-vendorProfile.png"
+  },
+  {
+    "screen": "vendorRevenue",
+    "path": "/vendor-revenue",
+    "title": "Thông tin doanh thu",
+    "role": "BAKERY_OWNER",
+    "domain": "Bakery UI",
+    "capability": "Thông báo doanh thu chưa có API, liên kết đơn/gói",
+    "verification": "Mở/layout/trạng thái; không bịa số dư",
+    "screenshot": "24-vendorRevenue.png"
+  },
+  {
+    "screen": "vendorChat",
+    "path": "/vendor-chat",
+    "title": "Tin nhắn của tiệm",
+    "role": "BAKERY_OWNER",
+    "domain": "Chat",
+    "capability": "Hội thoại theo tiệm, thread, gửi/ảnh/xóa local",
+    "verification": "Mở/layout/trạng thái; dùng cùng Chat repository",
+    "screenshot": "25-vendorChat.png"
+  },
+  {
+    "screen": "vendorSubscription",
+    "path": "/vendor-subscription",
+    "title": "Gói thuê của tiệm",
+    "role": "BAKERY_OWNER / CUSTOMER onboarding demo",
+    "domain": "Subscription",
+    "capability": "Chọn gói, tạo đơn, tham chiếu/ảnh mẫu, lịch sử",
+    "verification": "Widget tạo đơn và gửi chứng từ vào PAYMENT_REVIEW",
+    "screenshot": "26-vendorSubscription.png"
+  },
+  {
+    "screen": "adminDashboard",
+    "path": "/admin-dashboard",
+    "title": "Tổng quan nền tảng",
+    "role": "ADMIN",
+    "domain": "Admin UI",
+    "capability": "Hàng chờ, chỉ số fixture, điều hướng quản trị",
+    "verification": "Widget điều hướng đến quản lý người dùng",
+    "screenshot": "27-adminDashboard.png"
+  },
+  {
+    "screen": "adminUsers",
+    "path": "/admin-users",
+    "title": "Người dùng",
+    "role": "ADMIN",
+    "domain": "Identity UI",
+    "capability": "Tìm/lọc/phân trang, thêm/sửa/khóa/xóa local",
+    "verification": "Widget tạo user; API thật chưa có",
+    "screenshot": "28-adminUsers.png"
+  },
+  {
+    "screen": "adminBakeries",
+    "path": "/admin-vendors",
+    "title": "Duyệt tiệm bánh",
+    "role": "ADMIN",
+    "domain": "Bakery",
+    "capability": "Lọc hồ sơ, xem, duyệt/bổ sung/tạm dừng local",
+    "verification": "Mở/layout/trạng thái; chuyển trạng thái rà source",
+    "screenshot": "29-adminBakeries.png"
+  },
+  {
+    "screen": "adminPayments",
+    "path": "/admin-payments",
+    "title": "Duyệt thanh toán gói",
+    "role": "ADMIN",
+    "domain": "Subscription",
+    "capability": "Hàng chờ chứng từ, duyệt/từ chối có lý do",
+    "verification": "Android duyệt local; domain từ chối phải có lý do",
+    "screenshot": "30-adminPayments.png"
+  },
+  {
+    "screen": "adminPlans",
+    "path": "/admin-plans",
+    "title": "Quản lý gói",
+    "role": "ADMIN",
+    "domain": "Subscription",
+    "capability": "Tạo/sửa gói, hạn mức, ngừng cung cấp",
+    "verification": "Mở/layout/trạng thái; đơn cũ giữ giá snapshot",
+    "screenshot": "31-adminPlans.png"
+  },
+  {
+    "screen": "adminOrders",
+    "path": "/admin-orders",
+    "title": "Đơn trên nền tảng",
+    "role": "ADMIN",
+    "domain": "Order",
+    "capability": "Danh sách/detail, timeline và state controls local",
+    "verification": "Mở/layout/trạng thái; chung state machine Order",
+    "screenshot": "32-adminOrders.png"
+  },
+  {
+    "screen": "adminModeration",
+    "path": "/admin-moderation",
+    "title": "Kiểm duyệt",
+    "role": "ADMIN",
+    "domain": "Cake AI / Order",
+    "capability": "Duyệt thiết kế, lý do từ chối, ẩn/hiện review",
+    "verification": "Mở/layout/trạng thái; quyết định local",
+    "screenshot": "33-adminModeration.png"
+  },
+  {
+    "screen": "adminRevenue",
+    "path": "/admin-revenue",
+    "title": "Doanh thu gói thuê",
+    "role": "ADMIN",
+    "domain": "Subscription",
+    "capability": "Tổng giá trị gói PAID, đối chiếu theo gói",
+    "verification": "Mở/layout/trạng thái; không gồm doanh thu bánh",
+    "screenshot": "34-adminRevenue.png"
+  }
+]
