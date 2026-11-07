@@ -1,0 +1,131 @@
+# Đọc cùng các Compose gốc; chỉ điều chỉnh cấu hình local, không thay nghiệp vụ.
+name: bakery-local
+x-app: &local-app
+  restart: unless-stopped
+  environment: &java-environment
+    JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+services:
+  identity-db:
+    restart: unless-stopped
+  marketplace-db:
+    restart: unless-stopped
+  bakery-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  subscription-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  order-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  chat-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  bakery-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:19002:9000"
+      - "127.0.0.1:19003:9001"
+  subscription-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:19004:9000"
+      - "127.0.0.1:19005:9001"
+  chat-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:19006:9000"
+      - "127.0.0.1:19007:9001"
+  identity-service:
+    <<: *local-app
+    build:
+      context: ./backend/identity-service/target/docker-runtime
+      dockerfile: Dockerfile
+      args:
+        HEALTH_PATH: /.well-known/jwks.json
+    ports: !override
+      - "127.0.0.1:18081:8080"
+    environment:
+      <<: *java-environment
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/run/config/service-clients.yml
+      IDENTITY_CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    volumes:
+      - type: bind
+        source: ${LOCAL_SERVICE_CLIENTS_FILE:?Run scripts/start-local-runtime.py prepare}
+        target: /run/config/service-clients.yml
+        read_only: true
+        bind:
+          create_host_path: false
+  bakery-service:
+    <<: *local-app
+    build:
+      context: ./backend/bakery-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:18082:8082"
+    environment:
+      <<: *java-environment
+      BAKERY_MINIO_PUBLIC_ENDPOINT: http://localhost:19002
+  marketplace-service:
+    <<: *local-app
+    build:
+      context: ./backend/marketplace-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:18083:8080"
+    environment:
+      <<: *java-environment
+      MARKETPLACE_SERVICE_BASE_URL: http://marketplace-service:8080
+      FIREBASE_PROJECT_ID: ""
+      FIREBASE_STORAGE_BUCKET: ""
+  subscription-service:
+    <<: *local-app
+    build:
+      context: ./backend/subscription-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:18084:8084"
+    environment:
+      <<: *java-environment
+      SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT: http://localhost:19004
+  order-service:
+    <<: *local-app
+    build:
+      context: ./backend/order-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:18086:8080"
+    environment:
+      <<: *java-environment
+      CLIENTS_BAKERY_SCOPE: bakery:profile:read bakery:membership:read bakery:catalog:quote
+  chat-service:
+    <<: *local-app
+    build:
+      context: ./backend/chat-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:18087:8080"
+    environment:
+      <<: *java-environment
+      CHAT_STORAGE_ENDPOINT: http://chat-storage:9000
+  cake-ai-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    profiles: [cake-ai]
+  cake-ai-service:
+    profiles: [cake-ai]
+    ports: !override
+      - "127.0.0.1:18085:8080"
+  api-gateway:
+    profiles: [gateway]
+    build:
+      context: ./backend/api-gateway/target/docker-runtime
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:18080:8080"
+    environment:
+      <<: *java-environment

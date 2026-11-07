@@ -40,3 +40,5 @@ build/
 **/.keys/
 **/*.pem
 **/*.key
+
+docs/audit
