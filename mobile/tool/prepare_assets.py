@@ -21,5 +21,5 @@ def photo(pair):
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:records+=list(pool.map(photo,enumerate(urls,1)))
 for x in records:
     p=M/x['asset'];x['bytes']=p.stat().st_size;x['sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
-(ROOT/'docs/mobile/evidence/assets.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+(ROOT/'mobile/docs/demo-preview/evidence/assets.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps({'localAssets':len(records),'photos':len(urls),'fontDownloadsAtRuntime':False}))

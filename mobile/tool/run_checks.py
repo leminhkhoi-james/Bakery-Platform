@@ -4,13 +4,14 @@ import json, os, shutil, subprocess, sys, time
 
 ROOT = Path(__file__).resolve().parents[2]
 MOBILE = ROOT / 'mobile'
-OUT = ROOT / 'docs/mobile/evidence'
+OUT = ROOT / 'mobile/docs/evidence/api-integration-phases-1-4'
+OUT.mkdir(parents=True,exist_ok=True)
 flutter = os.environ.get('FLUTTER_BIN') or shutil.which('flutter')
 if not flutter:
     raise SystemExit('Cần Flutter trong PATH hoặc đặt FLUTTER_BIN trước khi chạy.')
 dart = str(Path(flutter).with_name('dart.bat' if os.name == 'nt' else 'dart'))
 steps = {
-    'format': [dart, 'format', '.'],
+    'format': [dart, 'format', '--output=none', '--set-exit-if-changed', 'lib', 'test', 'integration_test', 'test_driver', 'tool/live_ui_driver.dart'],
     'analyze': [flutter, 'analyze'],
     'test': [flutter, 'test', '--reporter', 'expanded'],
     'build': [flutter, 'build', 'apk', '--debug'],

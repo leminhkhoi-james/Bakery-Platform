@@ -8,4 +8,8 @@ Customer dùng nền hồng, mascot mèo, hình bánh và panel bo mềm. Owner/
 
 Native navigation dùng thanh dưới tối đa năm nhóm, drawer/menu cho chức năng ít dùng, rail khi tablet; detail dùng navigation stack và system back. Nút, form, sheet, dialog dùng control Flutter có theme; không tái tạo hover/CSS/desktop sidebar trên phone.
 
-Một chip Demo toàn app và thông báo tại mutation đủ phân biệt dữ liệu local, không phủ banner lớn trên từng trang. Không báo chuyển tiền hay AI generation thành công. Motion ngắn 160–240 ms và tôn trọng disableAnimations; không ép snap/parallax của Web lên scroll touch.
+Luồng mặc định dùng API thật cho Phases 1–4, không có chip Demo hoặc đổi persona. Preview cũ chỉ được khởi tạo bằng entrypoint/test riêng với `DemoWorkspace`; không nhận tài khoản/ID live. Các chức năng ngoài phạm vi hiện thông báo không khả dụng. Không báo chuyển tiền hay AI generation thành công. Motion ngắn 160–240 ms và tôn trọng disableAnimations; không ép snap/parallax của Web lên scroll touch.
+
+Form live giữ dữ liệu khi validation/network lỗi, chặn nhấn lặp, xác nhận khi rời dữ liệu chưa lưu và cảnh báo kết quả mutation chưa chắc chắn. Full replacement operations/options hiển thị phạm vi thay thế, giữ ID do server cấp. Chọn file dùng document picker của hệ điều hành và kiểm tra byte/MIME/kích thước; không yêu cầu quyền đọc toàn bộ thư viện ảnh. Danh sách không có dữ liệu khác với lỗi kết nối; lỗi ảnh không được thay bằng ảnh demo.
+
+Taste và Impeccable được áp dụng theo visual world đã chốt, không chọn lại concept. Review render thực tế gồm Home, public product, Owner, Admin, payment và ACTIVE/SCHEDULED; Web headless hiển thị cùng bản ghi để so palette/type/ảnh. Widget live kiểm tra form cuộn ở 320px với text scale 1.0/1.8. Chưa xác nhận TalkBack, iOS hoặc hiệu năng release bằng kiểm thử thiết bị thực.

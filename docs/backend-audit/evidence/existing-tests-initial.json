@@ -1,0 +1,100 @@
+{
+  "exitCode": 1,
+  "seconds": 50.05,
+  "command": "mvnw.cmd -B -ntp -pl identity-service,bakery-service,marketplace-service,subscription-service,order-service,chat-service,api-gateway -am test",
+  "cwd": "TEMP source copy",
+  "suites": [
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.config.BakeryJwtAuthenticationConverterTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.config.JwtConfigTest",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.AuthenticationServiceImplTest",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.JwtTokenServiceTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.ServiceTokenServiceTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.TokenSessionServiceTest",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.IdentityServiceApplicationTests",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.MigrationSyncTest",
+      "tests": 1,
+      "errors": 1,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": [
+        {
+          "type": "java.nio.file.NoSuchFileException",
+          "message": "C:\\Users\\phuck\\AppData\\Local\\Temp\\bakery-backend-audit-20261107\\source\\database\\postgresql\\identity-service\\V1__init_schema.sql"
+        }
+      ]
+    },
+    {
+      "module": "platform-support",
+      "suite": "com.se193262.platform.client.ServiceHttpClientTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    }
+  ],
+  "totals": {
+    "tests": 26,
+    "errors": 1,
+    "failures": 0,
+    "skipped": 0
+  }
+}

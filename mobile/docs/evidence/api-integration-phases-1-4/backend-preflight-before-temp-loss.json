@@ -1,0 +1,104 @@
+[
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "GET",
+    "path": "/api/v1/products?page=1&size=1",
+    "port": 18092,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:53.843267+00:00",
+    "shape": [
+      "meta",
+      "result"
+    ]
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "GET",
+    "path": "/api/v1/bakeries?page=1&size=1",
+    "port": 18092,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:57.481343+00:00",
+    "shape": [
+      "meta",
+      "result"
+    ]
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "GET",
+    "path": "/api/v1/subscription-plans",
+    "port": 18094,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:57.710839+00:00",
+    "shape": "array"
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "GET",
+    "path": "/api/v1/subscription-plans/payment-options",
+    "port": 18094,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:57.773206+00:00",
+    "shape": [
+      "sandboxEnabled"
+    ]
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "POST",
+    "path": "/api/v1/auth/login",
+    "port": 18091,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:59.474126+00:00",
+    "tokenFields": [
+      "accessToken",
+      "tokenType",
+      "expiresIn"
+    ],
+    "cookieAttributes": [
+      {
+        "name": "refresh_token",
+        "path": "/api/v1/auth",
+        "secure": false,
+        "httpOnly": true,
+        "hasExpiry": true
+      }
+    ]
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "port": 18091,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:59.655717+00:00",
+    "roles": [
+      "ADMIN",
+      "CUSTOMER"
+    ]
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "port": 18091,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:59.850994+00:00"
+  },
+  {
+    "layer": "BACKEND_PREFLIGHT",
+    "method": "POST",
+    "path": "/api/v1/auth/logout",
+    "port": 18091,
+    "status": 200,
+    "result": "PASS",
+    "at": "2026-11-07T07:29:59.968215+00:00"
+  }
+]

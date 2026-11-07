@@ -1,0 +1,132 @@
+erDiagram
+  add_ons {
+    uuid id
+    uuid bakery_id
+    varchar name
+    text description
+    varchar category
+    numeric price
+    varchar image_object_key
+    bool active
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  bakeries {
+    uuid id
+    varchar name
+    text description
+    varchar phone_number
+    varchar email
+    varchar logo_object_key
+    varchar cover_object_key
+    varchar status
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  bakery_addresses {
+    uuid id
+    uuid bakery_id
+    varchar address_line
+    varchar ward
+    varchar district
+    varchar city
+    numeric latitude
+    numeric longitude
+    bool is_primary
+    timestamptz created_at
+    timestamptz updated_at
+  }
+  bakery_members {
+    uuid id
+    uuid bakery_id
+    uuid user_id
+    varchar member_role
+    varchar status
+    timestamptz joined_at
+    varchar display_name_snapshot
+    bool owner_activation_pending
+  }
+  business_hours {
+    uuid id
+    uuid bakery_id
+    int2 day_of_week
+    time opens_at
+    time closes_at
+    bool closed
+  }
+  product_categories {
+    uuid id
+    uuid bakery_id
+    varchar name
+    varchar slug
+    int4 display_order
+    bool active
+    timestamptz created_at
+    timestamptz updated_at
+  }
+  product_images {
+    uuid id
+    uuid product_id
+    varchar object_key
+    varchar media_type
+    int4 display_order
+    bool is_primary
+    timestamptz created_at
+  }
+  product_option_groups {
+    uuid id
+    uuid product_id
+    varchar name
+    varchar selection_type
+    bool required
+    int4 minimum_selections
+    int4 maximum_selections
+    int4 display_order
+  }
+  product_option_values {
+    uuid id
+    uuid option_group_id
+    varchar name
+    text description
+    numeric price_adjustment
+    bool active
+    int4 display_order
+  }
+  products {
+    uuid id
+    uuid bakery_id
+    uuid category_id
+    varchar name
+    varchar slug
+    text description
+    numeric base_price
+    varchar status
+    bool customizable
+    int4 default_serving_size
+    int4 minimum_notice_hours
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  service_areas {
+    uuid id
+    uuid bakery_id
+    varchar city
+    varchar district
+    numeric delivery_fee
+    numeric minimum_order
+    bool active
+  }
+  bakeries ||--o{ add_ons : "bakery_id"
+  bakeries ||--o{ bakery_addresses : "bakery_id"
+  bakeries ||--o{ bakery_members : "bakery_id"
+  bakeries ||--o{ business_hours : "bakery_id"
+  bakeries ||--o{ product_categories : "bakery_id"
+  products ||--o{ product_images : "product_id"
+  products ||--o{ product_option_groups : "product_id"
+  product_option_groups ||--o{ product_option_values : "option_group_id"
+  bakeries ||--o{ products : "bakery_id"
+  product_categories o|--o{ products : "category_id"
+  bakeries ||--o{ service_areas : "bakery_id"

@@ -1,0 +1,566 @@
+[
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+    "sha256": "25130b597755ca7c39597948cb8e90e95f8e914c5a9b06ac94172741b422e876",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AuthenticationServiceImpl"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationController.java",
+    "sha256": "8b261a44ad9ef302aace322b3a558edda4e074cf625dd51eaee0f1aea39eaae0",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AuthenticationController"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/JwtTokenService.java",
+    "sha256": "45737d2ebf500e742cb03fc85b70b57554cf3a5de6d1c68d0d61f78883a5a178",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "JwtTokenService"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/ServiceTokenController.java",
+    "sha256": "5461722d307d4b25febc02cc728454b85700b5ef14864e7883c8331ba9912d31",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ServiceTokenController"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextController.java",
+    "sha256": "dde42e195dd8592937f2208b0bfc7579d5643a0732475a12bf172c4898a1755e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "UserContextController"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+    "sha256": "1d0ad156e62282eda14443803d2be72d204c3dc1ade7b3dea2f1a2772ec8e612",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "TokenSessionService"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/ServiceTokenService.java",
+    "sha256": "4ffe9e25d7c525d0867da580bbc31dc9040799cd059eb4c7ac19ed45f72d0bc3",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ServiceTokenService"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+    "sha256": "32c4e97e196df46391cb8d3b2616ba2869c020046078193629be65992ead3cec",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "UserContextService"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/SecurityConfig.java",
+    "sha256": "dc4fd67f0bf3a50651cd942356b6a5422d82d6bf3ff2e9128e424173f80a96f2",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SecurityConfig"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtConfig.java",
+    "sha256": "c48120d949108c0e20b6cfc29de4f1e3c7e4aed0158cbd02aca5bd9cc9332054",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "JwtConfig"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+    "sha256": "b93f60fe8153edef6bd911143c382bb02b50b494a8e11f62fe99db1ef4a762ac",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeRequestServiceImpl"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+    "sha256": "249ba91f52104e37a0d2c0e5269386cd2a52a0a5d8f641c06c4231c2dfed4471",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferServiceImpl"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+    "sha256": "b7969cb37a2195ce6e26a179a69133c7ee164ca9b541e30bb3ef14b4c9aa0612",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferData"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferRules.java",
+    "sha256": "646dc3efe44bade1c00a0167ad9e5b6ca59ec5f6fb9a923f61706b797e7db8a9",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferRules"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestRules.java",
+    "sha256": "06f28f378172dcf7627455b65d7cd5a6f04acf83aa701ce02527b040d2d6cf61",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeRequestRules"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+    "sha256": "1f1008db7b64abe89ab3887b48642093648ad9b19760ceae6f58371eb5ec3769",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "MarketplaceAccess"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferAcceptanceServiceImpl.java",
+    "sha256": "b77dde32629189e44f373dab1e615a2fa79f14d4fb59b0ab7a6128bbebb87a13",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferAcceptanceServiceImpl"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferAcceptanceWorkflow.java",
+    "sha256": "e5ec4c2239661eb6773a1011b0f2a1603627507433f816d827e765a337eb2104",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferAcceptanceWorkflow"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+    "sha256": "a4efda89ec3bc57dab675d25da297a3f8132a2b8edd505c0f66d9af04d112487",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AcceptanceTransactions"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderCreationServiceImpl.java",
+    "sha256": "a6911cea0b3a97b852d7ce08df766b1a1ec28e1b974ac00fadb865bcd7fc7c49",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OrderCreationServiceImpl"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderServiceImpl.java",
+    "sha256": "576b25148b0f564c738bfd5db1fc2e66294ee73e9f15e4b96ac865c09158cbee",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferOrderServiceImpl"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderRepository.java",
+    "sha256": "bc0f4b81f27e8e8626696ef7d7ca9a2b840dceb8d8a60b0f860f5b08c93f45e3",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferOrderRepository"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderManagementServiceImpl.java",
+    "sha256": "86f0d2a34945e5903bdc43b98c8685b40685b4de3393870fbf800f2c3269234e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OrderManagementServiceImpl"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+    "sha256": "70c1b8dd9fe2d3f6f73f8a030225ceeab0d2cdd32464cb446075f5871e438033",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ReviewServiceImpl"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+    "sha256": "6012d756b4a7622cac6cafe8e9db4b59d2d391093662c98357518d1b9c926e4e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SubscriptionOrderServiceImpl"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+    "sha256": "233a4d532347ef4329c55c241c2341f20967b171b01ffdc307acc24b3f115e00",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryPaymentServiceImpl"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/dto/BakeryDto.java",
+    "sha256": "d7574bfa3ac5bed0d8c8929445b01358df975b44bd09163a3cd97b32cacd4c8b",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryDto"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/dto/BakeryOperationsDto.java",
+    "sha256": "1d990453c800bf164436bda163621687f8bd41981d106d9767579e4abce949e9",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryOperationsDto"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/dto/RegisterRequest.java",
+    "sha256": "7ed42ea66a6022c384cc5bcd0b43f31042ecb268f408a2be76d372a00af88647",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "RegisterRequest"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/dto/SubscriptionPlanDto.java",
+    "sha256": "44ac4d30c72443c3b820b7c30261ecf87aacf50d2cdb5054609171be65b36362",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SubscriptionPlanDto"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/dto/BakeryOnboardingRequest.java",
+    "sha256": "b5d28c71647d5eeac55843c56b146f018711fb6656e50318a04833caba993b74",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryOnboardingRequest"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/dto/CreateCakeRequestRequest.java",
+    "sha256": "d4b9f238100868980ecc2a4d1126811e6ac95e81ed0ba292f2cae9b78d9bce9e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CreateCakeRequestRequest"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/dto/CreateOfferRequest.java",
+    "sha256": "f149db8135e546cdf47a18d63dcd6e6815d06da2146242a4c54bc78346af615e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CreateOfferRequest"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/dto/CreateConversationRequest.java",
+    "sha256": "cd420cd637019d5bfb3346ecc56ecc7144c6dfb55a530985f1ada408956a4d43",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CreateConversationRequest"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/dto/MessageMetadata.java",
+    "sha256": "9fc1a87a2eaebf559738867ce836bbe05152c342c6cc8ecb7ce446e80cc534ac",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "MessageMetadata"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+    "sha256": "385b64d5f62775701f0c6a8124441df1718041e0dc27ee69e608ff4b693935f8",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryServiceImpl"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/controller/BakeryController.java",
+    "sha256": "5fe57055f94f97791e3770faf03758b87a4707d0d173289a6f12b7d3e7cb3966",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryController"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/controller/SubscriptionOrderController.java",
+    "sha256": "7d7ce11c7fc702fe2661750b7ac8e27f6ea0a33191b5bb1b6d14c628e314abdf",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SubscriptionOrderController"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/controller/BakeryPaymentController.java",
+    "sha256": "e9096475c0fb0f9760478ff4b8b1d12020f1e6b9e374814c156abd9cc67ca9d3",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryPaymentController"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/controller/AdminBakeryPaymentController.java",
+    "sha256": "6e1b0c2cd1af065473a103b0a5583ed3477d5ef816e79e95960634bb0fd4b593",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AdminBakeryPaymentController"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/dto/ProductDto.java",
+    "sha256": "aa9295ad4bc45d6fec914e58306f8732309eb07fc7e512105c4868e4fec9bccc",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ProductDto"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/dto/AddOnDto.java",
+    "sha256": "3ec1f539c8b939838140973b92216a5d07da7068e52fba9e32e0497a18217d6e",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AddOnDto"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+    "sha256": "49779565e2ac19848407fd7628fdcd0871f2eeec09e1b53fa88fcd7405d9087b",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ConversationService"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+    "sha256": "b67630d680e11a6d56f346da400a7202640b6e0ea52d0fa44cbb715e9cad343b",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "MessageService"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/security/SecurityConfig.java",
+    "sha256": "49f57308ae54441dab58c170bd961f86531be8026dddb150ddf332d82fdc7302",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SecurityConfig"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/security/SecurityConfig.java",
+    "sha256": "40b6e70e4461c4fec258dbe7de2cb2aa930f02f6f2f3bf5a4e41b4a895bcc6c6",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SecurityConfig"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/infrastructure/client/ServiceTokenProvider.java",
+    "sha256": "3a0bc93a2e4203ceef257cde3e811ff3d68f32319a0851e4419c8c0ce18cc2e8",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ServiceTokenRequest"
+  },
+  {
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/ServiceTokenRequest.java",
+    "sha256": "f0d60a85d3291280f15a058311000d08921692fe7af3bf5e048f31e5f54927be",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ServiceTokenRequest"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationServiceImpl.java",
+    "sha256": "fb047d4f338b8d0c6637cf19be8489713b6a148179e167d3604011b291cd1915",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationServiceImpl"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationWorker.java",
+    "sha256": "a998f24a5eff3bc7dd654f3a7f5cf5261433064b81dac2166b52a3090e06a6a6",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationWorker"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+    "sha256": "a0d364394d3b4431862053fddb43f71e0bd8efa1b1d33b5f46dbd2804943c5d2",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AddOnServiceImpl"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+    "sha256": "7fe14dbe0672601dfe5f954a1011ae21305bee718d1684278cbf8afff5f6d9fa",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CatalogQuoteService"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+    "sha256": "6822e37b1b0874ad20fa4f8f5aef224bb28a6cce6c21ccc1697c2d3fda34faaa",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OrderQueryPersistenceService"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestType.java",
+    "sha256": "cb3a53d54e8b2c39b5567ee01688cba730e51f63c4673ef73aa235135021e0f6",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "RequestType"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestController.java",
+    "sha256": "2fbd92a0cf4ec25bfc6d58528eaa243a9c978b260fdf9e653560047cbb34c003",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeRequestController"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+    "sha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationController"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/dto/PatchCakeRequestRequest.java",
+    "sha256": "bbbf9b10755b4dee43fce59e1e1fca03fc4664dc904ec864fbe4bf15ba8ad847",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "PatchCakeRequestRequest"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/dto/PatchOfferRequest.java",
+    "sha256": "98f427842d6fff39f8fc8b5256f1129cf0dfae556b32aac7f97f8abce8800561",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "PatchOfferRequest"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationQueue.java",
+    "sha256": "d7856ab3ce34d0ccc52f680adc875dded76dfb155589cc17cf048f9108b856f1",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationQueue"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/infrastructure/scheduler/MarketplaceScheduler.java",
+    "sha256": "104b4b2e6c362b669581715989dda4ecb19f6c0752497cbfdcfabfe64a0a6674",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "MarketplaceScheduler"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/SecurityConfig.java",
+    "sha256": "05902863fe5b3ce59b5922951ff1224f1ac1fa181451a25bfb90d03846a63e93",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SecurityConfig"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/ChatMessageRepository.java",
+    "sha256": "8f6509a35d0cf624d810108dd160ee029e031472e9ace052d1e666d03dc05017",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ChatMessageRepository"
+  },
+  {
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/ResourceSecurityConfiguration.java",
+    "sha256": "f66abcc2698f8fd8a63492aa2609ce2e1b27757e9231691707deae200d3081e0",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ResourceSecurityConfiguration"
+  },
+  {
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/exception/PlatformExceptionHandler.java",
+    "sha256": "714b7ea46c5ff76386cad48de8b3f9052d326a832f9ae900365be593e32c750d",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "PlatformExceptionHandler"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/dto/CreateDirectOrderRequest.java",
+    "sha256": "f05d6f575979f8886a00ce62895a968b7c5c953ecb1fa1a6dce6e3bacc7a9e44",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CreateDirectOrderRequest"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/infrastructure/client/IdentityClient.java",
+    "sha256": "3f74835606536cfab75035ea2d4a9eb705b7b916dfc416f396ec44d8722721c0",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "IdentityClient"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/controller/InternalBakeryController.java",
+    "sha256": "11a2ffe9f426d0475e70d269cc3d4aecfbe9ed214a91af85af14250fee10b14b",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "InternalBakeryController"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/dto/AcceptOfferRequest.java",
+    "sha256": "470b1f53e64cbd2e266999fcc0378cee87a89446ca718486c92c36a6b4860811",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AcceptOfferRequest"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderController.java",
+    "sha256": "03ae9ef10614cccd4744b4d210d1e2f81c4ba247bbf967b1c104ebd9ee60e0cc",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OfferOrderController"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderStatus.java",
+    "sha256": "b32ba2cb0fbf981dc95367892f577fff506bd846e73806daa5fffef37ee60577",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "OrderStatus"
+  },
+  {
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/CustomerOrder.java",
+    "sha256": "feb3abd865584127efd275498f3a38d8b84f36feb76accf707e3851b64d6e16b",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CustomerOrder"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/MarketplaceExpirationService.java",
+    "sha256": "676a4efe21508673734b26386f17b99e5578ea15e39f80dd6bb8e79f6ca4774c",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "MarketplaceExpirationService"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscription/service/impl/BakerySubscriptionServiceImpl.java",
+    "sha256": "bc5195999fe14783071f60c565d62e36e514d1b8a5bf7cd96f775a63b0ccd423",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakerySubscriptionServiceImpl"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationInputs.java",
+    "sha256": "ae4929217dc8ff7f79f1344e9931a4b1a24872f0c02c2b753b83f365c82b2c98",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationInputs"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/client/GeminiClient.java",
+    "sha256": "fbd5ac60c7984a2bc2bb19a7fca3bdefc6b245df55cdcec980f432d0f4d4dd80",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GeminiClient"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/entity/BakeryStatus.java",
+    "sha256": "31f996f7ad0ad8a1f5bc1a547c85a2651ab64cda799732ec01583a3976593bc6",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryStatus"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/entity/Product.java",
+    "sha256": "a87d0db4c6b5dd4fc2e44fabeb4520ad0daefab9025337ada7615eaea69804ff",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "Product"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+    "sha256": "886b95d343c1b0ba8ae0948cfaecbf0fb02d35bbdc297439e96c1aeebe33ba15",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SubscriptionPlanServiceImpl"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/dto/CatalogContracts.java",
+    "sha256": "98abc7fec15127f18e7c0c6817db49925abef88bcb9be798d63cc8dc04ad2cc2",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "QuoteRequest"
+  },
+  {
+    "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/infrastructure/scheduler/SubscriptionLifecycleJob.java",
+    "sha256": "9df9c599b2d2262257de9ef9f85540c03163ecaa9a1a2eefe30da2a5871f4064",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "SubscriptionLifecycleJob"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogController.java",
+    "sha256": "087df0519aadd80b232455856cc9eed71cdb4e3bc5627582bce86c4bd2e8aa7d",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CatalogController"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationReader.java",
+    "sha256": "505b48b6f1bf85aabf0d699503fd38c9583c9a8bb3241ac244121227001231e0",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "GenerationReader"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/infrastructure/storage/BakeryImageStorage.java",
+    "sha256": "f6360a58db7988c72c4b9adcc559fe21f85691f3e808a3f28699173f864e7d87",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "BakeryImageStorage"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogService.java",
+    "sha256": "d2c5c2926749776a6886d1162750e29e03e14852b82594872beca7b67abd63ae",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CatalogService"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+    "sha256": "73cda6aacf8dc8a9f62d398c6a592118b8fa3a530a2c443bd170af55154c3a0a",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeRequestReader"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/shared/QueryPaging.java",
+    "sha256": "503419510b1c0854a2b4f97d680ae0576b1aec9c89eec27d367dfbac66929b4a",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "QueryPaging"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestImageService.java",
+    "sha256": "b8dba12edec73cc36e4366406d77d4c1b629ffa9e663448e7692ffb3ce769f70",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "RequestImageService"
+  },
+  {
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestImageServiceImpl.java",
+    "sha256": "7d67c37dcddb3b142abbf189ef749a2496a0537b27201585669ad47130632bca",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "RequestImageServiceImpl"
+  },
+  {
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/AttachmentValidator.java",
+    "sha256": "3d5a97116aae71d1306338fa2d0c42217129c4e4e15b2ab3d28c03790f858636",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "AttachmentValidator"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationController.java",
+    "sha256": "8d00825a5b95fae65d3ad6075f97b295d0db98841097a1a7cc155ce753d2208c",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "DesignValidationController"
+  },
+  {
+    "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+    "sha256": "28f5d080d958b1c38172f308509485a71134fdbfa351b2e8f5343dbe2e4df4b0",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "ProductCategoryServiceImpl"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "sha256": "efb2e81fae1c38bf3cfe3d80eabeea7d4d37a41c75190977db6e11b0a46e5752",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeAiProperties"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiConfig.java",
+    "sha256": "adab056be4a287390fb88d03529556ef041cc137dd1417e223bce16998a7354f",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "CakeAiConfig"
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java",
+    "sha256": "b045222d05da5ac6b2ae42c93a8651ca28f41456f6847ac30d3c6d4bf9fbbbac",
+    "mode": "FULL_SOURCE_EMITTED_WITH_LINE_NUMBERS",
+    "class": "FirebaseStorageAdapter"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "command": "flutter run -d emulator-5554 --debug --no-resident",
+  "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+  "exitCode": 0,
+  "entrypoint": "lib/main.dart",
+  "processChanged": true,
+  "profileObservedViaScreenshot": true,
+  "rolesInAccessibilityTree": {
+    "CUSTOMER": false,
+    "BAKERY_OWNER": false
+  },
+  "storageCleared": false,
+  "appDataReset": false,
+  "androidStudio": "NOT_VERIFIED"
+}

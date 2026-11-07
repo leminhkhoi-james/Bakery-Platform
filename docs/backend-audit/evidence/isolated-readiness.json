@@ -1,0 +1,46 @@
+[
+  {
+    "service": "identity-service",
+    "port": 18091,
+    "openapiStatus": 200,
+    "operations": 10,
+    "healthStatus": 200,
+    "health": "UP"
+  },
+  {
+    "service": "bakery-service",
+    "port": 18092,
+    "openapiStatus": 200,
+    "operations": 42,
+    "healthStatus": 401
+  },
+  {
+    "service": "marketplace-service",
+    "port": 18093,
+    "openapiStatus": 200,
+    "operations": 18,
+    "healthStatus": 200,
+    "health": "UP"
+  },
+  {
+    "service": "subscription-service",
+    "port": 18094,
+    "openapiStatus": 200,
+    "operations": 16,
+    "healthStatus": 401
+  },
+  {
+    "service": "order-service",
+    "port": 18096,
+    "openapiStatus": 200,
+    "operations": 10,
+    "healthStatus": 401
+  },
+  {
+    "service": "chat-service",
+    "port": 18097,
+    "openapiStatus": 200,
+    "operations": 8,
+    "healthStatus": 401
+  }
+]

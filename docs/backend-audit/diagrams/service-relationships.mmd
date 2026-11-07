@@ -1,0 +1,28 @@
+flowchart LR
+  Client[Client mobile trong tuong lai] -. Gateway chua route .-> Gateway[Gateway bootstrap]
+  Client --> Identity
+  Client --> Bakery
+  Client --> Marketplace
+  Client --> Order
+  Client --> Chat
+  Client --> Subscription
+  Bakery --> Identity
+  Bakery --> Subscription
+  Subscription --> Bakery
+  Marketplace --> Bakery
+  Marketplace --> Subscription
+  Marketplace --> Order
+  Marketplace -. AI dang blocked .-> CakeAI
+  CakeAI -. context .-> Marketplace
+  Order --> Identity
+  Order --> Bakery
+  Order --> Marketplace
+  Chat --> Marketplace
+  Chat --> Bakery
+  Bakery --> BakeryDB[(bakery_db)]
+  Marketplace --> MarketplaceDB[(marketplace_db)]
+  Order --> OrderDB[(order_db)]
+  Identity --> IdentityDB[(identity_db)]
+  Chat --> ChatDB[(chat_db)]
+  Subscription --> SubDB[(subscription_db)]
+  CakeAI -. schema only .-> AiDB[(cake_ai_db)]

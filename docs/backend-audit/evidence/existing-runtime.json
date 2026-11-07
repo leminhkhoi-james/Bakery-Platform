@@ -1,0 +1,1063 @@
+[
+  {
+    "service": "order-service",
+    "container": "bakery-local-order-service-1",
+    "image": "bakery-local-order-service",
+    "imageId": "sha256:521c06ea548b704321a043c12005195b279064e407aa3beb75e7427131e4fdf5",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8080/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18086"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_SERVICE_URL",
+      "CLIENTS_BAKERY_SCOPE",
+      "HEALTH_PATH",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_SERVICE_URL",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "MARKETPLACE_SERVICE_URL",
+      "ORDER_DB_PASSWORD",
+      "ORDER_DB_URL",
+      "ORDER_DB_USERNAME",
+      "ORDER_SERVICE_CLIENT_ID",
+      "ORDER_SERVICE_CLIENT_SECRET",
+      "PATH",
+      "SERVER_PORT"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [],
+    "healthHttpStatus": 401,
+    "applicationHealth": null,
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "POST",
+        "path": "/internal/v1/orders/from-offer"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/orders/{orderId}/status-transitions"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/orders/{orderId}/review"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/orders/{orderId}/review"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/orders/{orderId}/review"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/orders/direct"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/admin/reviews/{orderId}/status"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/orders/{orderId}/context"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/orders"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/orders/{orderId}"
+      }
+    ]
+  },
+  {
+    "service": "api-gateway",
+    "container": "bakery-local-api-gateway-1",
+    "image": "bakery-local-api-gateway",
+    "imageId": "sha256:5e4b2c71601db31ff4d806fab573bf571d4ff3f87626c8d5a2c5602ca37f8f1b",
+    "status": "exited",
+    "health": "unhealthy",
+    "ports": {},
+    "environmentNames": [
+      "HEALTH_PATH",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "PATH"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": []
+  },
+  {
+    "service": "marketplace-service",
+    "container": "bakery-local-marketplace-service-1",
+    "image": "bakery-local-marketplace-service",
+    "imageId": "sha256:9f5c98dbd267c621eb86750a12423c7806f1552192f2ec2e171499d1d3a8d0b2",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8080/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18083"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_SERVICE_BASE_URL",
+      "CAKE_AI_SERVICE_BASE_URL",
+      "FIREBASE_PROJECT_ID",
+      "FIREBASE_STORAGE_BUCKET",
+      "GOOGLE_APPLICATION_CREDENTIALS",
+      "HEALTH_PATH",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_SERVICE_BASE_URL",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "MARKETPLACE_DB_PASSWORD",
+      "MARKETPLACE_DB_URL",
+      "MARKETPLACE_DB_USERNAME",
+      "MARKETPLACE_SERVICE_BASE_URL",
+      "ORDER_SERVICE_BASE_URL",
+      "PATH",
+      "SERVICE_CLIENT_ID",
+      "SERVICE_CLIENT_SECRET",
+      "SUBSCRIPTION_SERVICE_BASE_URL"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [],
+    "healthHttpStatus": 200,
+    "applicationHealth": "UP",
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "PUT",
+        "path": "/api/v1/cake-requests/{id}/selected-design"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/offers/{id}/withdraw"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/offers/{id}/accept"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/cake-requests"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/cake-requests"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/cake-requests/{id}/publish"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/cake-requests/{id}/offers"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/cake-requests/{id}/images"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/cake-requests/{id}/cancel"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/offers/{id}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/offers/{id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/cake-requests/{id}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/cake-requests/{id}"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/offers/{id}/order-source"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/cake-requests/{id}/context"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/cake-requests/{id}/chat-authorization"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/offers"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/cake-requests/{id}/images/{imageId}"
+      }
+    ]
+  },
+  {
+    "service": "identity-service",
+    "container": "bakery-local-identity-service-1",
+    "image": "bakery-local-identity-service",
+    "imageId": "sha256:45faa1d4df00686a1a91b21ca793b7bba16394813939f6a2d1ceb8e030b4da33",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8080/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18081"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_CLIENT_SECRET_HASH",
+      "CHAT_SERVICE_CLIENT_SECRET_HASH",
+      "HEALTH_PATH",
+      "IDENTITY_CORS_ALLOWED_ORIGINS",
+      "IDENTITY_DB_PASSWORD",
+      "IDENTITY_DB_URL",
+      "IDENTITY_DB_USERNAME",
+      "IDENTITY_JWT_PRIVATE_KEY_PATH",
+      "IDENTITY_JWT_PUBLIC_KEY_PATH",
+      "IDENTITY_REFRESH_COOKIE_SECURE",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "MARKETPLACE_CLIENT_SECRET_HASH",
+      "ORDER_CLIENT_SECRET_HASH",
+      "PATH",
+      "SPRING_CONFIG_ADDITIONAL_LOCATION",
+      "SUBSCRIPTION_CLIENT_SECRET_HASH"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "bind",
+        "destination": "/run/config/service-clients.yml",
+        "readOnly": true,
+        "volume": null
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/identity-private.pem",
+        "readOnly": true,
+        "volume": null
+      },
+      {
+        "type": "bind",
+        "destination": "/run/secrets/identity-public.pem",
+        "readOnly": true,
+        "volume": null
+      }
+    ],
+    "healthHttpStatus": 200,
+    "applicationHealth": "UP",
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "POST",
+        "path": "/internal/v1/auth/service-token"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/register"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/refresh"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/logout"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/users/{userId}/addresses/{addressId}"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/users/{id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/.well-known/jwks.json"
+      }
+    ]
+  },
+  {
+    "service": "subscription-service",
+    "container": "bakery-local-subscription-service-1",
+    "image": "bakery-local-subscription-service",
+    "imageId": "sha256:829431fb61c6c1759ae9468dc619ae4054d0edf95f8b83e4c07608a043a72f0c",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8084/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18084"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_SERVICE_URL",
+      "HEALTH_PATH",
+      "IDENTITY_JWKS_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "PATH",
+      "SERVER_PORT",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_BAKERY_SERVICE_TOKEN",
+      "SUBSCRIPTION_CLIENT_SECRET",
+      "SUBSCRIPTION_DB_PASSWORD",
+      "SUBSCRIPTION_DB_URL",
+      "SUBSCRIPTION_DB_USERNAME",
+      "SUBSCRIPTION_MINIO_ACCESS_KEY",
+      "SUBSCRIPTION_MINIO_BUCKET",
+      "SUBSCRIPTION_MINIO_ENDPOINT",
+      "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT",
+      "SUBSCRIPTION_MINIO_SECRET_KEY"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [],
+    "healthHttpStatus": 401,
+    "applicationHealth": null,
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "POST",
+        "path": "/api/v1/subscription-orders/{orderId}/payments"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/subscription-orders"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/subscription-orders"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/subscription-plans"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/subscription-plans"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/subscription-plans/{planId}/archive"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/bakery-payments/{paymentId}/reject"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/bakery-payments/{paymentId}/approve"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/admin/subscription-plans/{planId}"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/subscription-plans"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/subscription-plans/{planId}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/subscription-orders/{orderId}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/subscription"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/bakery-payments"
+      }
+    ]
+  },
+  {
+    "service": "bakery-service",
+    "container": "bakery-local-bakery-service-1",
+    "image": "bakery-local-bakery-service",
+    "imageId": "sha256:ba37c990f67fde43764254aec26d3d0d56f7aab403d12f2c840d5f0e59b3f7be",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8082/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18082"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_CLIENT_SECRET",
+      "BAKERY_DB_PASSWORD",
+      "BAKERY_DB_URL",
+      "BAKERY_DB_USERNAME",
+      "BAKERY_IDENTITY_SERVICE_TOKEN",
+      "BAKERY_MINIO_ACCESS_KEY",
+      "BAKERY_MINIO_BUCKET",
+      "BAKERY_MINIO_ENDPOINT",
+      "BAKERY_MINIO_PUBLIC_ENDPOINT",
+      "BAKERY_MINIO_SECRET_KEY",
+      "HEALTH_PATH",
+      "IDENTITY_JWKS_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "PATH",
+      "SERVER_PORT",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_SERVICE_TOKEN",
+      "SUBSCRIPTION_SERVICE_URL"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [],
+    "healthHttpStatus": 401,
+    "applicationHealth": null,
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "PUT",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/options"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/bakeries/{bakeryId}/operations"
+      },
+      {
+        "method": "POST",
+        "path": "/internal/v1/catalog/quotes"
+      },
+      {
+        "method": "POST",
+        "path": "/internal/v1/catalog/customization-quotes"
+      },
+      {
+        "method": "POST",
+        "path": "/internal/v1/catalog/add-on-quotes"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/submit-for-approval"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/products"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/products"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/publish"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/images"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/hide"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/archive"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/logo"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/cover"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/categories"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/categories"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/add-ons"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/add-ons"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}/image"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/bakeries/{bakeryId}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/admin/bakeries/{bakeryId}/status"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/users/{userId}/bakery-memberships"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/bakeries/{bakeryId}"
+      },
+      {
+        "method": "GET",
+        "path": "/internal/v1/bakeries/{bakeryId}/members/{userId}/authorization"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/products"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/products/{productId}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/bakeries/{bakeryId}/members"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/bakeries"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/bakeries/{bakeryId}"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/bakeries/{bakeryId}/products/{productId}/images/{imageId}"
+      }
+    ]
+  },
+  {
+    "service": "chat-service",
+    "container": "bakery-local-chat-service-1",
+    "image": "bakery-local-chat-service",
+    "imageId": "sha256:944c7ab49e477fef37207070c250715da08bf914026365609dda2ef653bf60ed",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "8080/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "18087"
+        }
+      ]
+    },
+    "environmentNames": [
+      "BAKERY_SERVICE_URL",
+      "CHAT_DB_PASSWORD",
+      "CHAT_DB_URL",
+      "CHAT_DB_USERNAME",
+      "CHAT_SERVICE_CLIENT_ID",
+      "CHAT_SERVICE_CLIENT_SECRET",
+      "CHAT_SERVICE_JWT_AUDIENCE",
+      "CHAT_STORAGE_ACCESS_KEY",
+      "CHAT_STORAGE_BUCKET",
+      "CHAT_STORAGE_ENDPOINT",
+      "CHAT_STORAGE_SECRET_KEY",
+      "HEALTH_PATH",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "JAVA_HOME",
+      "JAVA_TOOL_OPTIONS",
+      "JAVA_VERSION",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "MARKETPLACE_SERVICE_URL",
+      "PATH",
+      "SERVER_PORT"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [],
+    "healthHttpStatus": 401,
+    "applicationHealth": null,
+    "openapiHttpStatus": 200,
+    "openapiOperations": [
+      {
+        "method": "GET",
+        "path": "/api/v1/conversations"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/conversations"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/conversations/{conversationId}/read"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/conversations/{conversationId}/messages"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/conversations/{conversationId}/messages"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/conversations/{conversationId}/close"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/conversations/{conversationId}"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/conversations/{conversationId}/messages/{messageId}"
+      }
+    ]
+  },
+  {
+    "service": "subscription-db",
+    "container": "bakery-local-subscription-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_subscription-db-data"
+      }
+    ]
+  },
+  {
+    "service": "chat-db",
+    "container": "bakery-local-chat-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_chat-db-data"
+      }
+    ]
+  },
+  {
+    "service": "order-db",
+    "container": "bakery-local-order-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_order-db-data"
+      }
+    ]
+  },
+  {
+    "service": "identity-db",
+    "container": "bakery-local-identity-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_identity-data"
+      }
+    ]
+  },
+  {
+    "service": "marketplace-db",
+    "container": "bakery-local-marketplace-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_marketplace-data"
+      }
+    ]
+  },
+  {
+    "service": "bakery-db",
+    "container": "bakery-local-bakery-db-1",
+    "image": "postgres:17-alpine",
+    "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": null
+    },
+    "environmentNames": [
+      "DOCKER_PG_LLVM_DEPS",
+      "GOSU_VERSION",
+      "LANG",
+      "PATH",
+      "PGDATA",
+      "PG_MAJOR",
+      "PG_SHA256",
+      "PG_VERSION",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/var/lib/postgresql/data",
+        "readOnly": false,
+        "volume": "bakery-local_bakery-db-data"
+      }
+    ]
+  },
+  {
+    "service": "subscription-storage",
+    "container": "bakery-local-subscription-storage-1",
+    "image": "bakery-platform-minio:local",
+    "imageId": "sha256:011505b2ecd81c8af5bf5067edf5ee7ea4b6e6dd19c91576e3522dc438945572",
+    "status": "running",
+    "health": null,
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19004"
+        }
+      ],
+      "9001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19005"
+        }
+      ]
+    },
+    "environmentNames": [
+      "MINIO_ROOT_PASSWORD",
+      "MINIO_ROOT_USER",
+      "PATH"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/data",
+        "readOnly": false,
+        "volume": "bakery-local_subscription-storage-data"
+      }
+    ]
+  },
+  {
+    "service": "bakery-storage",
+    "container": "bakery-local-bakery-storage-1",
+    "image": "bakery-platform-minio:local",
+    "imageId": "sha256:011505b2ecd81c8af5bf5067edf5ee7ea4b6e6dd19c91576e3522dc438945572",
+    "status": "running",
+    "health": null,
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19002"
+        }
+      ],
+      "9001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19003"
+        }
+      ]
+    },
+    "environmentNames": [
+      "MINIO_ROOT_PASSWORD",
+      "MINIO_ROOT_USER",
+      "PATH"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/data",
+        "readOnly": false,
+        "volume": "bakery-local_bakery-storage-data"
+      }
+    ]
+  },
+  {
+    "service": "chat-storage",
+    "container": "bakery-local-chat-storage-1",
+    "image": "bakery-platform-minio:local",
+    "imageId": "sha256:011505b2ecd81c8af5bf5067edf5ee7ea4b6e6dd19c91576e3522dc438945572",
+    "status": "running",
+    "health": "healthy",
+    "ports": {
+      "9000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19006"
+        }
+      ],
+      "9001/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "19007"
+        }
+      ]
+    },
+    "environmentNames": [
+      "MINIO_ROOT_PASSWORD",
+      "MINIO_ROOT_USER",
+      "PATH"
+    ],
+    "networks": [
+      "bakery-local_default"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "destination": "/data",
+        "readOnly": false,
+        "volume": "bakery-local_chat-storage-data"
+      }
+    ]
+  }
+]

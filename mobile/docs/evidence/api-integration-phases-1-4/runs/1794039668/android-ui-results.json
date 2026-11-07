@@ -1,0 +1,97 @@
+[
+  {
+    "action": "Category PATCH refetched and rendered after reload fix",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:33.724225Z"
+  },
+  {
+    "action": "Add-on PATCH refetched and rendered",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:36.769555Z"
+  },
+  {
+    "action": "Add-on soft disable DELETE returns 204 and persisted inactive state",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:38.468136Z"
+  },
+  {
+    "action": "Secondary product image upload/delete verified with primary image retained",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:50.712715Z"
+  },
+  {
+    "action": "Dedicated earlier draft archived through UI; published product retained",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:53.414305Z"
+  },
+  {
+    "action": "Category DELETE refetched; no fake local success",
+    "result": "PASS",
+    "at": "2026-11-07T08:13:55.559460Z"
+  },
+  {
+    "action": "Admin plan PATCH preserves code and existing order snapshots",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:09.350290Z"
+  },
+  {
+    "action": "Native adapter replay and conflict probe",
+    "layer": "ADAPTER_PROBE",
+    "result": "PASS",
+    "sameId": true,
+    "replayStatus": 201,
+    "conflictStatus": 409
+  },
+  {
+    "action": "Second logical renewal created through UI with new key; replay/conflict evidence separate",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:21.254574Z"
+  },
+  {
+    "action": "Renewal approved through UI; server schedules following period",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:37.368405Z"
+  },
+  {
+    "action": "Admin plan archive executed and list refetched",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:39.108959Z"
+  },
+  {
+    "action": "Current ACTIVE and future SCHEDULED periods rendered from server",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:54.692444Z"
+  },
+  {
+    "action": "Original completed order retains amount snapshot after plan price edit/archive",
+    "result": "PASS",
+    "at": "2026-11-07T08:14:55.335499Z"
+  },
+  {
+    "action": "Legacy Owner creates branch and submits complete operations without fabricating private GET",
+    "result": "PASS",
+    "at": "2026-11-07T08:15:10.364196Z"
+  },
+  {
+    "action": "Admin detail verifies persisted legacy branch after Owner session closed",
+    "result": "PASS",
+    "at": "2026-11-07T08:15:26.355496Z"
+  },
+  {
+    "action": "Restart/login discovers canonical first membership; secondary-selector limitation remains explicit",
+    "result": "PASS",
+    "at": "2026-11-07T08:15:37.408244Z"
+  },
+  {
+    "resourceIds": {
+      "bakery": "33e60a6f-7751-423d-a6f0-584df99a06d6",
+      "product": "361b1c6a-8305-4ddb-bea6-60004f29f986",
+      "plan": "b63c82fd-e163-4b6b-a3a8-5e9ae3b6f97b",
+      "order": "70a8c5bd-5fea-4a9a-bae0-ac5efce7f67e",
+      "renewal": "6d989576-a762-4392-8150-7e8f5088b73f",
+      "renewalPayment": "ccb9760d-eb71-48ed-a07a-371724458782",
+      "branch": "bdbc3954-9858-457a-8a4f-20ee3d1c2958"
+    },
+    "result": "RECORDED"
+  }
+]

@@ -3,7 +3,7 @@ from pathlib import Path
 import json, re
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'docs/mobile'
+OUT = ROOT / 'mobile/docs/demo-preview'
 source = (ROOT/'mobile/lib/app/router/screen_id.dart').read_text(encoding='utf-8')
 routes = re.findall(r"^\s*(\w+)\('([^']+)', '([^']+)', '(public|customer|vendor|admin)'\)", source, re.M)
 details = [

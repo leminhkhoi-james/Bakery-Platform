@@ -1,0 +1,118 @@
+{
+  "project": "bakery-audit-20261107",
+  "ports": {
+    "identity-service": 18091,
+    "bakery-service": 18092,
+    "marketplace-service": 18093,
+    "subscription-service": 18094,
+    "order-service": 18096,
+    "chat-service": 18097
+  },
+  "networkInternal": false,
+  "databaseNames": [
+    "identity_db",
+    "bakery_db",
+    "marketplace_db",
+    "subscription_db",
+    "order_db",
+    "chat_db"
+  ],
+  "credentialPolicy": "CSPRNG riêng cho DB/MinIO audit; tái dùng credential service và RSA hiện hữu qua mount readonly; không ghi vào repo",
+  "grantSource": "application.yml hiện tại, hợp với grants runtime sẵn có; chỉ bản audit tách biệt",
+  "serviceGrants": [
+    {
+      "client": "marketplace-service",
+      "audience": "bakery-service",
+      "scopeNames": [
+        "bakery:catalog:quote",
+        "bakery:membership:read",
+        "bakery:profile:read"
+      ]
+    },
+    {
+      "client": "marketplace-service",
+      "audience": "subscription-service",
+      "scopeNames": [
+        "subscription:entitlement:read"
+      ]
+    },
+    {
+      "client": "marketplace-service",
+      "audience": "cake-ai-service",
+      "scopeNames": [
+        "cake-ai:design:validate"
+      ]
+    },
+    {
+      "client": "marketplace-service",
+      "audience": "order-service",
+      "scopeNames": [
+        "order:create-from-offer"
+      ]
+    },
+    {
+      "client": "order-service",
+      "audience": "marketplace-service",
+      "scopeNames": [
+        "marketplace:offer:read"
+      ]
+    },
+    {
+      "client": "order-service",
+      "audience": "identity-service",
+      "scopeNames": [
+        "identity:address:read",
+        "identity:user:read"
+      ]
+    },
+    {
+      "client": "order-service",
+      "audience": "bakery-service",
+      "scopeNames": [
+        "bakery:catalog:quote",
+        "bakery:membership:read",
+        "bakery:profile:read"
+      ]
+    },
+    {
+      "client": "chat-service",
+      "audience": "marketplace-service",
+      "scopeNames": [
+        "marketplace:request:chat:authorize"
+      ]
+    },
+    {
+      "client": "chat-service",
+      "audience": "bakery-service",
+      "scopeNames": [
+        "bakery:membership:read"
+      ]
+    },
+    {
+      "client": "bakery-service",
+      "audience": "identity-service",
+      "scopeNames": [
+        "identity:bakery-owner:grant",
+        "identity:user:read"
+      ]
+    },
+    {
+      "client": "bakery-service",
+      "audience": "subscription-service",
+      "scopeNames": [
+        "subscription:entitlement:read"
+      ]
+    },
+    {
+      "client": "subscription-service",
+      "audience": "bakery-service",
+      "scopeNames": [
+        "bakery:membership:read",
+        "bakery:onboarding:activate",
+        "bakery:profile:read"
+      ]
+    }
+  ],
+  "externalDependencies": "Firebase/AI không có credential được cấu hình; không mô phỏng thành công.",
+  "networkSafety": "Bridge riêng, host ports chỉ loopback; toàn bộ URL runtime được assert local/internal, không nạp Firebase/AI credential."
+}

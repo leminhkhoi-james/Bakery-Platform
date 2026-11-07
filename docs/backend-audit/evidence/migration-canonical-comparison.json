@@ -1,0 +1,138 @@
+[
+  {
+    "module": "bakery-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": false,
+    "normalizedEqual": false,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "bakery-service",
+    "migration": "V2__member_display_snapshot.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "bakery-service",
+    "migration": "V3__pending_owner_activation.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "cake-ai-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "cake-ai-service",
+    "migration": "V2__generation_executions.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "chat-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "identity-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "identity-service",
+    "migration": "V2__seed_reference_data.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "marketplace-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "marketplace-service",
+    "migration": "V2__acceptance_workflow.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "order-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": false,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "order-service",
+    "migration": "V2__order_creation_idempotency.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "order-service",
+    "migration": "V3__offer_idempotency.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "subscription-service",
+    "migration": "V1__init_schema.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "subscription-service",
+    "migration": "V2__seed_reference_data.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "subscription-service",
+    "migration": "V3__payment_idempotency.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  },
+  {
+    "module": "subscription-service",
+    "migration": "V4__subscription_snapshots.sql",
+    "canonicalExists": true,
+    "bytesEqual": true,
+    "normalizedEqual": true,
+    "lineIndentNormalizedEqual": true
+  }
+]

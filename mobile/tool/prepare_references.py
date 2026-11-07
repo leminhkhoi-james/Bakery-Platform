@@ -1,7 +1,7 @@
 """Ghi baseline và đọc toàn bộ tài liệu tham chiếu; không thay source tham chiếu."""
 from pathlib import Path
 import hashlib,json,re,subprocess,collections
-ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'docs/mobile/evidence';OUT.mkdir(parents=True,exist_ok=True)
+ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'mobile/docs/demo-preview/evidence';OUT.mkdir(parents=True,exist_ok=True)
 head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 tracked=subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0')
 files={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in tracked if p and (ROOT/p).is_file()}

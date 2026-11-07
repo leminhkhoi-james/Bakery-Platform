@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "diagrams": [
+    {
+      "file": "acceptance-sequence.mmd",
+      "status": "PASS",
+      "diagramType": "sequence"
+    },
+    {
+      "file": "acceptance-state.mmd",
+      "status": "PASS",
+      "diagramType": "stateDiagram"
+    },
+    {
+      "file": "ai-state.mmd",
+      "status": "PASS",
+      "diagramType": "stateDiagram"
+    },
+    {
+      "file": "bakery-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "cake-ai-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "chat-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "identity-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "logical-data-links.mmd",
+      "status": "PASS",
+      "diagramType": "flowchart-v2"
+    },
+    {
+      "file": "marketplace-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "marketplace-state.mmd",
+      "status": "PASS",
+      "diagramType": "stateDiagram"
+    },
+    {
+      "file": "onboarding-sequence.mmd",
+      "status": "PASS",
+      "diagramType": "sequence"
+    },
+    {
+      "file": "order-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "order-state.mmd",
+      "status": "PASS",
+      "diagramType": "stateDiagram"
+    },
+    {
+      "file": "service-relationships.mmd",
+      "status": "PASS",
+      "diagramType": "flowchart-v2"
+    },
+    {
+      "file": "subscription-service-er.mmd",
+      "status": "PASS",
+      "diagramType": "er"
+    },
+    {
+      "file": "subscription-state.mmd",
+      "status": "PASS",
+      "diagramType": "stateDiagram"
+    }
+  ]
+}

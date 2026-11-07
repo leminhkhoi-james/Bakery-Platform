@@ -3,8 +3,8 @@ from pathlib import Path
 import hashlib, json, os, shutil, struct, subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT/'docs/mobile/evidence'
-SHOTS = ROOT/'docs/mobile/screenshots'
+OUT = ROOT/'mobile/docs/demo-preview/evidence'
+SHOTS = ROOT/'mobile/docs/demo-preview/screenshots'
 adb = os.environ.get('ADB_BIN') or shutil.which('adb')
 if not adb: raise SystemExit('Cần adb trong PATH hoặc ADB_BIN.')
 def shell(*args): return subprocess.check_output([adb, '-s','emulator-5554', 'shell', *args], text=True, encoding='utf-8').strip()

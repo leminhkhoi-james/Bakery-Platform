@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  crypto: 3.0.7
+  flutter_secure_storage: 10.3.4
+  file_picker: 10.3.10
   flutter:
     sdk: flutter
   flutter_localizations:

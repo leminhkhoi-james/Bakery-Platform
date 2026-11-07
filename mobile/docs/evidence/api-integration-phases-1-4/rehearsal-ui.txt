@@ -1,0 +1,7 @@
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+PASS: README Phase 1: live public home loaded
+PASS: README Phase 2: actual Owner login/me after app start
+PASS: README Phase 3: persisted Owner bakery discovered
+PASS: README Phase 4: persisted ACTIVE/SCHEDULED periods
+PASS: README Admin: legitimate protected payment list
+{"exitCode": 0, "evidence": "android-ui-driver.log"}

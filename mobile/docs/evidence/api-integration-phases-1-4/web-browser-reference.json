@@ -1,0 +1,37 @@
+[
+  {
+    "route": "/",
+    "exitCode": 0,
+    "htmlBytes": 278955,
+    "screenshot": "web-home.png",
+    "method": "Actual headless Chrome; desktop GUI kernel unavailable; no credentials supplied"
+  },
+  {
+    "route": "/subscription-plans#pricing-section",
+    "exitCode": 0,
+    "htmlBytes": 279013,
+    "screenshot": "web-plans.png",
+    "method": "Actual headless Chrome; desktop GUI kernel unavailable; no credentials supplied"
+  },
+  {
+    "route": "/stores",
+    "exitCode": 0,
+    "htmlBytes": 238334,
+    "screenshot": "web-bakeries.png",
+    "method": "Actual headless Chrome; desktop GUI kernel unavailable; no credentials supplied"
+  },
+  {
+    "route": "/product-detail?id=361b1c6a-8305-4ddb-bea6-60004f29f986",
+    "exitCode": 0,
+    "htmlBytes": 236402,
+    "screenshot": "web-live-product.png",
+    "method": "Actual headless Chrome; desktop GUI kernel unavailable; no credentials supplied"
+  },
+  {
+    "route": "/bakery-detail?id=33e60a6f-7751-423d-a6f0-584df99a06d6",
+    "exitCode": 0,
+    "htmlBytes": 234886,
+    "screenshot": "web-live-bakery.png",
+    "method": "Actual headless Chrome; desktop GUI kernel unavailable; no credentials supplied"
+  }
+]

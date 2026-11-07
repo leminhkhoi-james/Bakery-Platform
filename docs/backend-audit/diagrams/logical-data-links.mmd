@@ -1,0 +1,12 @@
+flowchart LR
+  User[Identity users] -. logical UUID .-> Membership[Bakery members]
+  User -. logical UUID .-> RFQ[Marketplace RFQ]
+  Product[Bakery product] -. snapshot .-> Offer[Marketplace offer]
+  RFQ -. snapshot .-> Order[Order customer_orders]
+  Offer -. idempotent order creation .-> Order
+  Address[Identity address] -. immutable snapshot .-> Delivery[Order delivery_address_snapshots]
+  RFQ -. context UUID .-> Conversation[Chat conversation]
+  RFQ -. context UUID .-> Job[Cake AI job]
+  Plan[Subscription plan] --> SubOrder[Subscription order]
+  SubOrder --> Period[Subscription period]
+  Period -. entitlement REST .-> Product

@@ -1,0 +1,164 @@
+[
+  {
+    "source": "backend/bakery-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "bakery-service",
+    "createTables": [
+      "bakeries",
+      "bakery_members",
+      "bakery_addresses",
+      "service_areas",
+      "business_hours",
+      "add_ons",
+      "product_categories",
+      "products",
+      "product_images",
+      "product_option_groups",
+      "product_option_values"
+    ],
+    "lines": 186
+  },
+  {
+    "source": "backend/bakery-service/src/main/resources/db/migration/V2__member_display_snapshot.sql",
+    "module": "bakery-service",
+    "createTables": [],
+    "lines": 2
+  },
+  {
+    "source": "backend/bakery-service/src/main/resources/db/migration/V3__pending_owner_activation.sql",
+    "module": "bakery-service",
+    "createTables": [],
+    "lines": 12
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "cake-ai-service",
+    "createTables": [
+      "generation_jobs",
+      "source_images",
+      "prompt_revisions",
+      "generated_designs"
+    ],
+    "lines": 71
+  },
+  {
+    "source": "backend/cake-ai-service/src/main/resources/db/migration/V2__generation_executions.sql",
+    "module": "cake-ai-service",
+    "createTables": [
+      "generation_executions",
+      "generation_idempotency"
+    ],
+    "lines": 46
+  },
+  {
+    "source": "backend/chat-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "chat-service",
+    "createTables": [
+      "conversations",
+      "conversation_participants",
+      "messages",
+      "message_attachments",
+      "message_receipts"
+    ],
+    "lines": 86
+  },
+  {
+    "source": "backend/identity-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "identity-service",
+    "createTables": [
+      "users",
+      "customer_profiles",
+      "user_addresses",
+      "roles",
+      "user_roles",
+      "refresh_tokens"
+    ],
+    "lines": 82
+  },
+  {
+    "source": "backend/identity-service/src/main/resources/db/migration/V2__seed_reference_data.sql",
+    "module": "identity-service",
+    "createTables": [],
+    "lines": 7
+  },
+  {
+    "source": "backend/marketplace-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "marketplace-service",
+    "createTables": [
+      "cake_requests",
+      "request_images",
+      "cake_preferences",
+      "request_option_selections",
+      "request_status_history",
+      "offers",
+      "offer_items",
+      "offer_status_history"
+    ],
+    "lines": 157
+  },
+  {
+    "source": "backend/marketplace-service/src/main/resources/db/migration/V2__acceptance_workflow.sql",
+    "module": "marketplace-service",
+    "createTables": [
+      "offer_acceptance_workflows"
+    ],
+    "lines": 26
+  },
+  {
+    "source": "backend/order-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "order-service",
+    "createTables": [
+      "customer_orders",
+      "order_items",
+      "delivery_address_snapshots",
+      "order_status_history",
+      "order_reviews"
+    ],
+    "lines": 105
+  },
+  {
+    "source": "backend/order-service/src/main/resources/db/migration/V2__order_creation_idempotency.sql",
+    "module": "order-service",
+    "createTables": [
+      "order_idempotency_records"
+    ],
+    "lines": 18
+  },
+  {
+    "source": "backend/order-service/src/main/resources/db/migration/V3__offer_idempotency.sql",
+    "module": "order-service",
+    "createTables": [
+      "order_offer_creations"
+    ],
+    "lines": 6
+  },
+  {
+    "source": "backend/subscription-service/src/main/resources/db/migration/V1__init_schema.sql",
+    "module": "subscription-service",
+    "createTables": [
+      "subscription_plans",
+      "plan_features",
+      "subscription_orders",
+      "bakery_payments",
+      "bakery_subscriptions"
+    ],
+    "lines": 108
+  },
+  {
+    "source": "backend/subscription-service/src/main/resources/db/migration/V2__seed_reference_data.sql",
+    "module": "subscription-service",
+    "createTables": [],
+    "lines": 31
+  },
+  {
+    "source": "backend/subscription-service/src/main/resources/db/migration/V3__payment_idempotency.sql",
+    "module": "subscription-service",
+    "createTables": [],
+    "lines": 6
+  },
+  {
+    "source": "backend/subscription-service/src/main/resources/db/migration/V4__subscription_snapshots.sql",
+    "module": "subscription-service",
+    "createTables": [],
+    "lines": 18
+  }
+]

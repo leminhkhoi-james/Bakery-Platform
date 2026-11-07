@@ -1,0 +1,1 @@
+{"identityResponseKeys": ["addressLine", "city", "district", "latitude", "longitude", "recipientName", "recipientPhone", "ward"], "hasId": false, "typedOrderRequiresId": true, "source": "IdentityClient.AddressResponse / OrderCreationServiceImpl.validateAddress"}

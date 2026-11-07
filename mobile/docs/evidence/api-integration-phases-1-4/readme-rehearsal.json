@@ -1,0 +1,132 @@
+{
+  "steps": [
+    {
+      "step": "docker",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "docker info --format \"{{.ServerVersion}}\"",
+      "exitCode": 0,
+      "seconds": 2.31,
+      "freshShell": true,
+      "evidence": "rehearsal-docker.txt"
+    },
+    {
+      "step": "identity-db",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "docker start bakery-local-identity-db-1",
+      "exitCode": 0,
+      "seconds": 0.47,
+      "freshShell": true,
+      "evidence": "rehearsal-identity-db.txt"
+    },
+    {
+      "step": "jars",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "if (-not (Test-Path H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\jars\\identity-service.jar)) { python -B mobile/tool/prepare_runtime_sources.py }",
+      "exitCode": 0,
+      "seconds": 0.41,
+      "freshShell": true,
+      "evidence": "rehearsal-jars.txt"
+    },
+    {
+      "step": "runtime",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "python -B mobile/tool/recreate_runtime_h.py",
+      "exitCode": 0,
+      "seconds": 5.34,
+      "freshShell": true,
+      "evidence": "rehearsal-runtime.txt"
+    },
+    {
+      "step": "preflight",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "python -B mobile/tool/runtime_preflight.py",
+      "exitCode": 0,
+      "seconds": 1.03,
+      "freshShell": true,
+      "evidence": "rehearsal-preflight.txt"
+    },
+    {
+      "step": "web",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "python -B mobile/tool/run_reference_web.py",
+      "exitCode": 0,
+      "seconds": 0.97,
+      "freshShell": true,
+      "evidence": "rehearsal-web.txt"
+    },
+    {
+      "step": "doctor",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "flutter doctor -v",
+      "exitCode": 0,
+      "seconds": 7.07,
+      "freshShell": true,
+      "evidence": "rehearsal-doctor.txt"
+    },
+    {
+      "step": "emulators",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "flutter emulators",
+      "exitCode": 0,
+      "seconds": 2.42,
+      "freshShell": true,
+      "evidence": "rehearsal-emulators.txt"
+    },
+    {
+      "step": "devices",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "flutter devices; adb devices; adb -s emulator-5554 shell getprop sys.boot_completed",
+      "exitCode": 0,
+      "seconds": 2.9,
+      "freshShell": true,
+      "evidence": "rehearsal-devices.txt"
+    },
+    {
+      "step": "reverse",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "adb -s emulator-5554 reverse tcp:18101 tcp:18101; adb -s emulator-5554 reverse tcp:18102 tcp:18102; adb -s emulator-5554 reverse tcp:18104 tcp:18104; adb -s emulator-5554 reverse tcp:19022 tcp:19022",
+      "exitCode": 0,
+      "seconds": 0.87,
+      "freshShell": true,
+      "evidence": "rehearsal-reverse.txt"
+    },
+    {
+      "step": "pub-get",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "flutter pub get",
+      "exitCode": 0,
+      "seconds": 2.92,
+      "freshShell": true,
+      "evidence": "rehearsal-pub-get.txt"
+    },
+    {
+      "step": "ui",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "$env:MOBILE_LIVE_STAGE='rehearsal'; python -B tool/run_live_verification.py",
+      "exitCode": 1,
+      "seconds": 92.84,
+      "freshShell": true,
+      "evidence": "rehearsal-ui.txt"
+    },
+    {
+      "step": "ui",
+      "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+      "command": "$env:MOBILE_LIVE_STAGE='rehearsal'; python -B tool/run_live_verification.py",
+      "exitCode": 0,
+      "seconds": 104.37,
+      "freshShell": true,
+      "evidence": "rehearsal-ui.txt"
+    },
+    {
+      "step": "restart-bakery",
+      "cwd": "H:\\MSS\\Bakery-Platform",
+      "command": "docker compose -p bakery-mobile-20261107 -f H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\compose.json restart mobile-bakery",
+      "exitCode": 0,
+      "seconds": 4.5,
+      "freshShell": true,
+      "evidence": "rehearsal-restart-bakery.txt"
+    }
+  ],
+  "machine": "existing Windows installation and cached infrastructure; not clean machine",
+  "androidStudio": "NOT_VERIFIED"
+}

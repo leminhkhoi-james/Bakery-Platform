@@ -1,0 +1,90 @@
+erDiagram
+  customer_orders {
+    uuid id
+    varchar order_number
+    uuid customer_id
+    uuid bakery_id
+    uuid cake_request_id
+    uuid offer_id
+    varchar order_source
+    varchar customer_name_snapshot
+    varchar customer_phone_snapshot
+    varchar bakery_name_snapshot
+    numeric subtotal
+    numeric delivery_fee
+    numeric total_amount
+    varchar currency
+    varchar status
+    timestamptz needed_at
+    timestamptz accepted_at
+    timestamptz completed_at
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+    text customer_note
+  }
+  delivery_address_snapshots {
+    uuid order_id
+    varchar recipient_name
+    varchar recipient_phone
+    varchar address_line
+    varchar ward
+    varchar district
+    varchar city
+    numeric latitude
+    numeric longitude
+    text delivery_note
+  }
+  order_idempotency_records {
+    uuid id
+    varchar operation
+    uuid idempotency_key
+    uuid customer_id
+    varchar payload_hash
+    uuid order_id
+    timestamptz created_at
+  }
+  order_items {
+    uuid id
+    uuid order_id
+    uuid source_product_id
+    uuid source_offer_item_id
+    varchar item_type
+    varchar name_snapshot
+    text description_snapshot
+    jsonb configuration_snapshot
+    int4 quantity
+    numeric unit_price
+    numeric line_total
+  }
+  order_offer_creations {
+    varchar idempotency_key
+    uuid offer_id
+    varchar payload_fingerprint
+    timestamptz created_at
+  }
+  order_reviews {
+    uuid order_id
+    uuid customer_id
+    int2 rating
+    text comment
+    varchar status
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  order_status_history {
+    uuid id
+    uuid order_id
+    varchar from_status
+    varchar to_status
+    uuid changed_by
+    text note
+    timestamptz changed_at
+  }
+  customer_orders ||--o| delivery_address_snapshots : "order_id"
+  customer_orders ||--o{ order_idempotency_records : "order_id"
+  customer_orders ||--o{ order_items : "order_id"
+  customer_orders ||--o| order_offer_creations : "offer_id"
+  customer_orders ||--o| order_reviews : "order_id"
+  customer_orders ||--o{ order_status_history : "order_id"

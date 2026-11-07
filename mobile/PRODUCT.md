@@ -4,19 +4,23 @@
 
 ## Platform
 
-`adaptive`: ứng dụng Flutter Android/iOS, prototype UI hoàn toàn local theo yêu cầu ngày 2026-11-07. Hình ảnh SweetCake được kế thừa từ Web. Material navigation trên Android, hành vi back/inset/reduced motion phù hợp iOS; chưa có môi trường Xcode để xác minh iOS runtime.
+adaptive
+
+Ứng dụng Flutter Android/iOS native, giữ thiết kế SweetCake. Nhiệm vụ hiện tại tích hợp API thật Phases 1–4; iOS runtime cần macOS/Xcode.
 
 ## Người dùng và công việc
 
-Khách khám phá bánh/tiệm, cấu hình bánh, xem giỏ/đơn, so sánh RFQ và trò chuyện. Chủ tiệm quản lý catalog, vận hành, đơn, RFQ/offer, hội thoại và gói thuê. Admin duyệt tiệm/payment gói, quản lý plan/order và moderation. Có persona Guest, CUSTOMER, BAKERY_OWNER, ADMIN để xem demo; không phải xác thực thật.
+Khách khám phá bánh, tiệm và gói thuê từ API công khai. Customer đăng ký, đăng nhập và gửi hồ sơ mở tiệm. Owner quản lý hồ sơ, vận hành, catalog và gói thuê của tiệm có membership hợp lệ. Admin duyệt tiệm, duyệt payment subscription và quản lý plan. Quyền lấy từ Identity; không có công tắc persona trong ứng dụng live.
 
 ## Ràng buộc đã được người dùng xác nhận
 
-Chỉ sửa implementation trong `mobile`, tài liệu trong `docs`. Không sửa Backend/Web, root config hoặc skill. Không networking, JWT, database, provider AI, payment hoặc gửi tin thật. Tất cả mutation dùng fixture local, phản hồi phải ghi rõ demo. Không dựng escrow/payout mua bánh. Nền tảng chỉ theo dõi payment subscription của bakery.
+Chỉ sửa `mobile/`, kể cả tài liệu và bằng chứng. Ngoài thư mục này chỉ đọc. Tích hợp public catalog/plans, Identity, onboarding/catalog Owner và subscription/Admin liên quan. Không dùng persona demo để xác thực; không trộn fixture với dữ liệu live. Marketplace/RFQ/Offer, Order/Checkout/Review, Chat, AI, Admin Users/Revenue/Settlement ngoài phạm vi. Không sửa Backend/Web/config/secrets/skill và không dùng SQL. Nền tảng chỉ theo dõi payment subscription của bakery; không thực hiện chuyển tiền thật.
 
 ## Thành công
 
-Mọi capability của 35 route Web có UI native tương ứng; navigation, form validation, local search/filter/cart/RFQ/offer/chat/catalog/review hoạt động. Có loading/empty/error/retry và kiểm tra viewport nhỏ/text scale. Build Android, kiểm thử widget, chạy emulator và chụp ảnh thật nếu công cụ khả dụng. Không báo iOS hoặc Backend integration PASS khi chưa thực hiện.
+Phases 1–4 dùng dữ liệu thật, có loading/empty/error/retry, session an toàn và xác nhận lại dữ liệu sau mutation. Customer đi qua onboarding, Admin approval và subscription để nhận quyền Owner hợp lệ. Publish phụ thuộc entitlement Backend. Gia hạn tạo kỳ SCHEDULED sau kỳ ACTIVE. Android emulator và Web tham chiếu đọc cùng ID/giá/ảnh. Không biến 2xx hoặc UI demo cũ thành khẳng định mọi nhánh nghiệp vụ đã được kiểm chứng.
+
+35 route demo trước đây vẫn được giữ cho regression và preview riêng. Cart/RFQ/Offer/Chat/AI/Review trong preview không được coi là chức năng live. API còn thiếu discovery đầy đủ tiệm của user và dữ liệu options/images draft sau restart; UI công khai giới hạn, không đoán ID hoặc gửi thay thế thiếu dữ liệu.
 
 ## Nguồn
 

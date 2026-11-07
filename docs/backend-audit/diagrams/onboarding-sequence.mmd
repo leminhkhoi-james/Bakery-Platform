@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant U as CUSTOMER
+  participant B as Bakery
+  participant A as ADMIN
+  participant S as Subscription
+  participant I as Identity
+  U->>B: submit onboarding
+  B->>B: PENDING_APPROVAL + member activation pending
+  A->>B: approve ACTIVE
+  U->>S: order plan + payment evidence
+  A->>S: approve payment
+  S->>S: commit ACTIVE period
+  S->>B: notify activation after commit
+  B->>I: grant BAKERY_OWNER
+  B->>B: mark activation complete
+  U->>I: refresh/login to receive new roles

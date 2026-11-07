@@ -1,0 +1,43 @@
+[!] Flutter (Channel [user-branch], 3.47.1, on Microsoft Windows [Version 10.0.26300.9711], locale en-US) [404ms]
+    ! Flutter version 3.47.1 on channel [user-branch] at D:\HomeMind\audit-tools\flutter
+      Currently on an unknown channel. Run `flutter channel` to switch to an official channel.
+      If that doesn't fix the issue, try deleting the 'bin/cache/flutter.version.json' file in your Flutter SDK directory and then reinstall Flutter by following instructions at https://flutter.dev/setup.
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 6655482ec0 (3 months ago), 2026-08-19 10:07:23 -0700
+    • Engine revision 5d53178869
+    • Dart version 3.13.1
+    • DevTools version 2.60.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-record-use, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration, enable-riscv64
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[√] Windows Version (Windows 11 or higher, 26H2, 2009) [1,925ms]
+
+[!] Android toolchain - develop for Android devices (Android SDK version 36.0.0) [4.8s]
+    • Android SDK at D:\HomeMind\audit-tools\android-sdk
+    • Emulator version 37.2.12.0 (build_id 16428233) (CL:N/A)
+    • Platform android-36, build-tools 36.0.0
+    • ANDROID_HOME = D:\HomeMind\audit-tools\android-sdk
+    • Java binary at: C:\Program Files\Java\jdk-21\bin\java
+      This JDK is specified in your Flutter configuration.
+      To change the current JDK, run: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version Java(TM) SE Runtime Environment (build 21.0.8+12-LTS-250)
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[√] Chrome - develop for the web [16ms]
+    • Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[X] Visual Studio - develop Windows apps [14ms]
+    X Visual Studio not installed; this is necessary to develop Windows apps.
+      Download at https://visualstudio.microsoft.com/downloads/.
+      Please install the "Desktop development with C++" workload, including all of its default components
+
+[√] Connected device (4 available) [750ms]
+    • sdk gphone64 x86 64 (mobile) • emulator-5554 • android-x64    • Android 16 (API 36) (emulator)
+    • Windows (desktop)            • windows       • windows-x64    • Microsoft Windows [Version 10.0.26300.9711]
+    • Chrome (web)                 • chrome        • web-javascript • Google Chrome 156.0.8078.80
+    • Edge (web)                   • edge          • web-javascript • Microsoft Edge 156.0.4314.42
+
+[√] Network resources [956ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 3 categories.

@@ -1,0 +1,10 @@
+{
+  "entrypoint": "lib/main.dart",
+  "method": "native UI login completed before force-stop; normal OS activity start; no FlutterDriver extension",
+  "processChanged": true,
+  "appDataCleared": false,
+  "loginCredentialsInArgv": false,
+  "screenshot": "main-stable-os-restarted-profile.png",
+  "visualResult": "REQUIRES_REVIEW",
+  "initialTransitionObservation": "After switching test APK to main and interrupting early startup, profile showed guest. Reauthenticated through actual native main UI before stable restart."
+}

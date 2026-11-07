@@ -1,0 +1,38 @@
+[
+  {
+    "service": "identity-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 0
+  },
+  {
+    "service": "bakery-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 0
+  },
+  {
+    "service": "marketplace-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 0
+  },
+  {
+    "service": "subscription-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 0
+  },
+  {
+    "service": "order-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 0
+  },
+  {
+    "service": "chat-service",
+    "startupLogged": true,
+    "defaultProfileLogged": true,
+    "postgresNullBindErrorCount": 9
+  }
+]

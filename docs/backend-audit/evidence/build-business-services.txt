@@ -1,0 +1,283 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Bakery Platform Backend                                            [pom]
+[INFO] platform-support                                                   [jar]
+[INFO] Identity Service                                                   [jar]
+[INFO] Bakery Service                                                     [jar]
+[INFO] Marketplace Service                                                [jar]
+[INFO] Order Service                                                      [jar]
+[INFO] Chat Service                                                       [jar]
+[INFO] Subscription Service                                               [jar]
+[INFO] API Gateway                                                        [jar]
+[INFO] 
+[INFO] ----------------< com.se193262:bakery-platform-backend >----------------
+[INFO] Building Bakery Platform Backend 0.0.1-SNAPSHOT                    [1/9]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------< com.se193262:platform-support >--------------------
+[INFO] Building platform-support 0.0.1-SNAPSHOT                           [2/9]
+[INFO]   from platform-support\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ platform-support ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\main\resources
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ platform-support ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 11 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ platform-support ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ platform-support ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ platform-support ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ platform-support ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\target\platform-support-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------< com.se193262:identity-service >--------------------
+[INFO] Building Identity Service 0.0.1-SNAPSHOT                           [3/9]
+[INFO]   from identity-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ identity-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ identity-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 63 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ identity-service ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ identity-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 11 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ identity-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ identity-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\identity-service\target\identity-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ identity-service ---
+[INFO] Attaching repackaged archive C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\identity-service\target\identity-service-0.0.1-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] --------------------< com.se193262:bakery-service >---------------------
+[INFO] Building Bakery Service 0.0.1-SNAPSHOT                             [4/9]
+[INFO]   from bakery-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ bakery-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ bakery-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 98 source files with javac [debug parameters release 21] to target\classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/bakery-service/src/main/java/com/se193262/bakeryservice/infrastructure/client/IdentityUserClient.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/bakery-service/src/main/java/com/se193262/bakeryservice/infrastructure/client/IdentityUserClient.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ bakery-service ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ bakery-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 13 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ bakery-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ bakery-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\bakery-service\target\bakery-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ bakery-service ---
+[INFO] Attaching repackaged archive C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\bakery-service\target\bakery-service-0.0.1-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ------------------< com.se193262:marketplace-service >------------------
+[INFO] Building Marketplace Service 0.0.1-SNAPSHOT                        [5/9]
+[INFO]   from marketplace-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ marketplace-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ marketplace-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 86 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ marketplace-service ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\marketplace-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ marketplace-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/marketplace-service/src/test/java/com/se193262/marketplaceservice/MarketplaceServiceApplicationTests.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\marketplace-service\src\test\java\com\se193262\marketplaceservice\MarketplaceServiceApplicationTests.java uses or overrides a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/marketplace-service/src/test/java/com/se193262/marketplaceservice/MarketplaceServiceApplicationTests.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ marketplace-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ marketplace-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\marketplace-service\target\marketplace-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ marketplace-service ---
+[INFO] Attaching repackaged archive C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\marketplace-service\target\marketplace-service-0.0.1-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------< com.se193262:order-service >---------------------
+[INFO] Building Order Service 0.0.1-SNAPSHOT                              [6/9]
+[INFO]   from order-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ order-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ order-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 85 source files with javac [debug parameters release 21] to target\classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/order-service/src/main/java/com/se193262/orderservice/exception/GlobalExceptionHandler.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\order-service\src\main\java\com\se193262\orderservice\exception\GlobalExceptionHandler.java uses or overrides a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/order-service/src/main/java/com/se193262/orderservice/exception/GlobalExceptionHandler.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ order-service ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\order-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ order-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 6 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/order-service/src/test/java/com/se193262/orderservice/OrderServiceApplicationTests.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\order-service\src\test\java\com\se193262\orderservice\OrderServiceApplicationTests.java uses or overrides a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/order-service/src/test/java/com/se193262/orderservice/OrderServiceApplicationTests.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ order-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ order-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\order-service\target\order-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ order-service ---
+[INFO] Attaching repackaged archive C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\order-service\target\order-service-0.0.1-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ---------------------< com.se193262:chat-service >----------------------
+[INFO] Building Chat Service 0.0.1-SNAPSHOT                               [7/9]
+[INFO]   from chat-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ chat-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ chat-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 66 source files with javac [debug parameters release 21] to target\classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ chat-service ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ chat-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 4 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/test/java/com/se193262/chatservice/ChatServiceApplicationTests.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\src\test\java\com\se193262\chatservice\ChatServiceApplicationTests.java uses or overrides a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/test/java/com/se193262/chatservice/ChatServiceApplicationTests.java: Recompile with -Xlint:deprecation for details.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/test/java/com/se193262/chatservice/feature/conversation/ConversationOwnerAuthorizationTest.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\src\test\java\com\se193262\chatservice\feature\conversation\ConversationOwnerAuthorizationTest.java uses unchecked or unsafe operations.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/chat-service/src/test/java/com/se193262/chatservice/feature/conversation/ConversationOwnerAuthorizationTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ chat-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ chat-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\target\chat-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ chat-service ---
+[INFO] Replacing main artifact C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\target\chat-service-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\chat-service\target\chat-service-0.0.1-SNAPSHOT.jar.original
+[INFO] 
+[INFO] -----------------< com.se193262:subscription-service >------------------
+[INFO] Building Subscription Service 0.0.1-SNAPSHOT                       [8/9]
+[INFO]   from subscription-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ subscription-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ subscription-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 46 source files with javac [debug parameters release 21] to target\classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ subscription-service ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ subscription-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ subscription-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ subscription-service ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\subscription-service\target\subscription-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ subscription-service ---
+[INFO] Attaching repackaged archive C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\subscription-service\target\subscription-service-0.0.1-SNAPSHOT-exec.jar with classifier exec
+[INFO] 
+[INFO] ----------------------< com.se193262:api-gateway >----------------------
+[INFO] Building API Gateway 0.0.1-SNAPSHOT                                [9/9]
+[INFO]   from api-gateway\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ api-gateway ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ api-gateway ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ api-gateway ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\api-gateway\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ api-gateway ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ api-gateway ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ api-gateway ---
+[INFO] Building jar: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\api-gateway\target\api-gateway-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ api-gateway ---
+[INFO] Replacing main artifact C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\api-gateway\target\api-gateway-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\api-gateway\target\api-gateway-0.0.1-SNAPSHOT.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Bakery Platform Backend 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bakery Platform Backend ............................ SUCCESS [  0.003 s]
+[INFO] platform-support ................................... SUCCESS [  8.596 s]
+[INFO] Identity Service ................................... SUCCESS [ 10.809 s]
+[INFO] Bakery Service ..................................... SUCCESS [ 10.506 s]
+[INFO] Marketplace Service ................................ SUCCESS [ 15.182 s]
+[INFO] Order Service ...................................... SUCCESS [  5.171 s]
+[INFO] Chat Service ....................................... SUCCESS [  5.117 s]
+[INFO] Subscription Service ............................... SUCCESS [  5.504 s]
+[INFO] API Gateway ........................................ SUCCESS [  1.360 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:02 min
+[INFO] Finished at: 2026-11-07T12:14:26+07:00
+[INFO] ------------------------------------------------------------------------

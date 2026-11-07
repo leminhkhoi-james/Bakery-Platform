@@ -1,0 +1,4755 @@
+{
+  "BKR-001": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.listForAdmin",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 178,
+        "operation": "search"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.listForAdmin",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 178,
+        "operation": "search"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.listForAdmin",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 178,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-002": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryMemberServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/member/service/impl/BakeryMemberServiceImpl.java",
+        "line": 26,
+        "operation": "existsById"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryMemberServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/member/service/impl/BakeryMemberServiceImpl.java",
+        "line": 26,
+        "operation": "findAllByBakery_IdOrderByJoinedAtAsc"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-003": {
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.changeStatus",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 157,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.changeStatus",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 157,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.changeStatus",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 157,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryOnboardingServiceImpl.reconcileActivation",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 85,
+        "operation": "findPendingActivations"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryOnboardingServiceImpl.reconcileActivation",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 85,
+        "operation": "markOwnerActivationComplete"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryOnboardingServiceImpl.grantOwner",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 102,
+        "operation": "markOwnerActivationComplete"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-004": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "PublicBakeryService.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/PublicBakeryService.java",
+        "line": 44,
+        "operation": "search"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "PublicBakeryService.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/PublicBakeryService.java",
+        "line": 44,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-005": {
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.createBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 80,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "bakery_members": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.createBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 80,
+        "operation": "save"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-006": {
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryOnboardingServiceImpl.get",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 39,
+        "operation": "findFirstByUserIdAndStatusOrderByJoinedAtAscIdAsc"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-007": {
+    "bakery_members": [
+      {
+        "mode": "CHECK/LOCK",
+        "method": "BakeryOnboardingServiceImpl.submit",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 47,
+        "operation": "tryLockOnboarding"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryOnboardingServiceImpl.get",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 39,
+        "operation": "findFirstByUserIdAndStatusOrderByJoinedAtAscIdAsc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.createBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 80,
+        "operation": "save"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 108,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.createBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 80,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-008": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "PublicBakeryService.get",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/PublicBakeryService.java",
+        "line": 72,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-009": {
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 108,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-010": {
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 36,
+        "operation": "findAllByBakery_IdOrderByNameAsc"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 95,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-011": {
+    "add_ons": [
+      {
+        "mode": "WRITE",
+        "method": "AddOnServiceImpl.create",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 44,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 95,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-012": {
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 71,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AddOnServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 71,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-013": {
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 57,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AddOnServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 57,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-014": {
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "AddOnServiceImpl.uploadImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 80,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AddOnServiceImpl.uploadImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/addon/service/impl/AddOnServiceImpl.java",
+        "line": 80,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-015": {
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 33,
+        "operation": "findAllByBakery_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 84,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-016": {
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.create",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 41,
+        "operation": "existsByBakery_IdAndSlug"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductCategoryServiceImpl.create",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 41,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 84,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-017": {
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 72,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductCategoryServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 72,
+        "operation": "delete"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductCategoryServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 72,
+        "operation": "flush"
+      }
+    ],
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 72,
+        "operation": "findAllByCategory_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductCategoryServiceImpl.delete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 72,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-018": {
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 56,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductCategoryServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 56,
+        "operation": "existsByBakery_IdAndSlugAndIdNot"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductCategoryServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/category/service/impl/ProductCategoryServiceImpl.java",
+        "line": 56,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-019": {
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.uploadCover",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 224,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-020": {
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.uploadLogo",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 211,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-021": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryMemberServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/member/service/impl/BakeryMemberServiceImpl.java",
+        "line": 26,
+        "operation": "existsById"
+      }
+    ],
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryMemberServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/member/service/impl/BakeryMemberServiceImpl.java",
+        "line": 26,
+        "operation": "findAllByBakery_IdOrderByJoinedAtAsc"
+      }
+    ]
+  },
+  "BKR-022": {
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryOnboardingServiceImpl.complete",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 64,
+        "operation": "findByBakery_IdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryOnboardingServiceImpl.grantOwner",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 102,
+        "operation": "markOwnerActivationComplete"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-023": {
+    "bakery_addresses": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceAddresses",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 293,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceServiceAreas",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 324,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 123,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "deleteAll"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.replaceBusinessHours",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 348,
+        "operation": "saveAll"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-024": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 73,
+        "operation": "findManagement"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 334,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-025": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.create",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 87,
+        "operation": "existsByBakery_IdAndSlug"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.create",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 87,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 334,
+        "operation": "findById"
+      }
+    ],
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.resolveCategory",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 339,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-026": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 106,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 106,
+        "operation": "existsByBakery_IdAndSlugAndIdNot"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.update",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 106,
+        "operation": "flush"
+      }
+    ],
+    "product_categories": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.resolveCategory",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 339,
+        "operation": "findById"
+      }
+    ]
+  },
+  "BKR-027": {
+    "products": [
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.archive",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 293,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.findProduct",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 303,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ]
+  },
+  "BKR-028": {
+    "products": [
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.hide",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 283,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.findProduct",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 303,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ]
+  },
+  "BKR-029": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.uploadImages",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 202,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ],
+    "product_images": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.uploadImages",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 202,
+        "operation": "countByProduct_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.uploadImages",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 202,
+        "operation": "existsByProduct_IdAndIsPrimaryTrue"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.uploadImages",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 202,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "BKR-030": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.deleteImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 242,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ],
+    "product_images": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.deleteImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 242,
+        "operation": "findByIdAndProduct_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.deleteImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 242,
+        "operation": "delete"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.deleteImage",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 242,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-031": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "findByIdAndBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "getReferenceById"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "flush"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "findAllByOptionGroup_Product_Id"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "save"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.replaceOptions",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 127,
+        "operation": "flush"
+      }
+    ]
+  },
+  "BKR-032": {
+    "product_images": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.publish",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 254,
+        "operation": "existsByProduct_IdAndIsPrimaryTrue"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.publish",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 254,
+        "operation": "findAllByOptionGroup_Product_Id"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.publish",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 254,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "products": [
+      {
+        "mode": "WRITE",
+        "method": "ProductServiceImpl.publish",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 254,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "ProductServiceImpl.findProduct",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java",
+        "line": 303,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ]
+  },
+  "BKR-033": {
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "findAllByBakery_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryServiceImpl.submitForApproval",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 137,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.findBakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 237,
+        "operation": "findById"
+      }
+    ],
+    "business_hours": [
+      {
+        "mode": "READ",
+        "method": "BakeryServiceImpl.toOperations",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryServiceImpl.java",
+        "line": 388,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-034": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 65,
+        "operation": "findPublicCandidates"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.list",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 65,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "product_images": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByOptionGroup_Product_Id"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByBakery_IdOrderByNameAsc"
+      }
+    ]
+  },
+  "BKR-035": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.get",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 103,
+        "operation": "findById"
+      }
+    ],
+    "product_images": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByOptionGroup_Product_Id"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "PublicProductService.toResponse",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/PublicProductService.java",
+        "line": 115,
+        "operation": "findAllByBakery_IdOrderByNameAsc"
+      }
+    ]
+  },
+  "BKR-036": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryInternalService.profile",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/BakeryInternalService.java",
+        "line": 34,
+        "operation": "findById"
+      }
+    ],
+    "bakery_addresses": [
+      {
+        "mode": "READ",
+        "method": "BakeryInternalService.profile",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/BakeryInternalService.java",
+        "line": 34,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "BakeryInternalService.profile",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/BakeryInternalService.java",
+        "line": 34,
+        "operation": "findAllByBakery_Id"
+      }
+    ]
+  },
+  "BKR-037": {
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "BakeryInternalService.authorization",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/BakeryInternalService.java",
+        "line": 49,
+        "operation": "existsById"
+      }
+    ],
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryInternalService.authorization",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/BakeryInternalService.java",
+        "line": 49,
+        "operation": "findByBakery_IdAndUserId"
+      }
+    ]
+  },
+  "BKR-038": {
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "BakeryOnboardingServiceImpl.reconcileActivation",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 85,
+        "operation": "findPendingActivations"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryOnboardingServiceImpl.reconcileActivation",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 85,
+        "operation": "markOwnerActivationComplete"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryOnboardingServiceImpl.grantOwner",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/service/impl/BakeryOnboardingServiceImpl.java",
+        "line": 102,
+        "operation": "markOwnerActivationComplete"
+      }
+    ]
+  },
+  "BKR-039": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 81,
+        "operation": "SQL from"
+      }
+    ],
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 81,
+        "operation": "SQL from"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.bakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 24,
+        "operation": "SQL from"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.bakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 24,
+        "operation": "SQL from"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.options",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 135,
+        "operation": "SQL join"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.options",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 135,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "BKR-040": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 81,
+        "operation": "SQL from"
+      }
+    ],
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 81,
+        "operation": "SQL from"
+      }
+    ],
+    "bakeries": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.bakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 24,
+        "operation": "SQL from"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.bakery",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 24,
+        "operation": "SQL from"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.options",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 135,
+        "operation": "SQL join"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.options",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 135,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "BKR-041": {
+    "products": [
+      {
+        "mode": "READ",
+        "method": "CatalogQuoteService.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+        "line": 54,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ],
+    "service_areas": [
+      {
+        "mode": "READ",
+        "method": "CatalogQuoteService.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+        "line": 54,
+        "operation": "findAllByBakery_Id"
+      }
+    ],
+    "product_option_values": [
+      {
+        "mode": "READ",
+        "method": "CatalogQuoteService.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+        "line": 54,
+        "operation": "findAllByOptionGroup_Product_Id"
+      }
+    ],
+    "product_option_groups": [
+      {
+        "mode": "READ",
+        "method": "CatalogQuoteService.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+        "line": 54,
+        "operation": "findAllByProduct_IdOrderByDisplayOrderAsc"
+      }
+    ],
+    "add_ons": [
+      {
+        "mode": "READ",
+        "method": "CatalogQuoteService.quote",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java",
+        "line": 54,
+        "operation": "findByIdAndBakery_Id"
+      }
+    ]
+  },
+  "BKR-042": {
+    "bakery_members": [
+      {
+        "mode": "READ",
+        "method": "CatalogServiceImpl.memberships",
+        "source": "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "line": 63,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-001": {
+    "generated_designs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.design",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 91,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.moderate",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 108,
+        "operation": "SQL update"
+      }
+    ],
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-002": {
+    "generated_designs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.design",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 91,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-003": {
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.count",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 37,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.list",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 29,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-004": {
+    "generation_jobs": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertJob",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 45,
+        "operation": "SQL into"
+      },
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL update"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_idempotency": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.saveIdempotency",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 135,
+        "operation": "SQL into"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.replay",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 126,
+        "operation": "SQL from"
+      }
+    ],
+    "prompt_revisions": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL into"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.revisions",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 67,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_executions": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL into"
+      }
+    ]
+  },
+  "CAI-005": {
+    "prompt_revisions": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.revisions",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 67,
+        "operation": "SQL from"
+      }
+    ],
+    "source_images": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.sourcesApproved",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 121,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.sources",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 73,
+        "operation": "SQL from"
+      }
+    ],
+    "generated_designs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.designs",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 86,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-006": {
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "WRITE",
+        "method": "GenerationQueue.cancel",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationQueue.java",
+        "line": 74,
+        "operation": "SQL update"
+      }
+    ],
+    "generation_executions": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationQueue.cancel",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationQueue.java",
+        "line": 74,
+        "operation": "SQL update"
+      }
+    ],
+    "prompt_revisions": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.revisions",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 67,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-007": {
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.job",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 20,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL update"
+      }
+    ],
+    "prompt_revisions": [
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.revisions",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 67,
+        "operation": "SQL from"
+      },
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL into"
+      }
+    ],
+    "generation_idempotency": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.saveIdempotency",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 135,
+        "operation": "SQL into"
+      },
+      {
+        "mode": "READ",
+        "method": "GenerationRepository.replay",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 126,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_executions": [
+      {
+        "mode": "WRITE",
+        "method": "GenerationRepository.insertRevision",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationRepository.java",
+        "line": 52,
+        "operation": "SQL into"
+      }
+    ]
+  },
+  "CAI-008": {
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "DesignValidationService.context",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationService.java",
+        "line": 49,
+        "operation": "SQL from"
+      }
+    ]
+  },
+  "CAI-009": {
+    "generated_designs": [
+      {
+        "mode": "READ",
+        "method": "DesignValidationService.validate",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationService.java",
+        "line": 20,
+        "operation": "SQL from"
+      }
+    ],
+    "generation_jobs": [
+      {
+        "mode": "READ",
+        "method": "DesignValidationService.validate",
+        "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationService.java",
+        "line": 20,
+        "operation": "SQL join"
+      }
+    ]
+  },
+  "CHT-001": {
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.list",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 77,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      }
+    ],
+    "messages": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.list",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 77,
+        "operation": "findLatest"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.list",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 77,
+        "operation": "countUnread"
+      }
+    ],
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.findPage",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 162,
+        "operation": "findVisibleTo"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.findPage",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 162,
+        "operation": "findByBakery"
+      }
+    ]
+  },
+  "CHT-002": {
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 43,
+        "operation": "findByCakeRequestIdAndBakeryId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.createNew",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 147,
+        "operation": "findByCakeRequestIdAndBakeryId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 24,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.toResponse",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 214,
+        "operation": "findByConversationIdAndLeftAtIsNull"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 24,
+        "operation": "save"
+      }
+    ]
+  },
+  "CHT-003": {
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.toResponse",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 214,
+        "operation": "findByConversationIdAndLeftAtIsNull"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ]
+  },
+  "CHT-004": {
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.close",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 64,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.toResponse",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 214,
+        "operation": "findByConversationIdAndLeftAtIsNull"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ],
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.close",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ]
+  },
+  "CHT-005": {
+    "messages": [
+      {
+        "mode": "READ",
+        "method": "MessageService.list",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 103,
+        "operation": "findPageBefore"
+      }
+    ],
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessageService.toResponses",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 148,
+        "operation": "findAllById"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ],
+    "message_receipts": [
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.markDelivered",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 112,
+        "operation": "markDeliveredIfMissing"
+      },
+      {
+        "mode": "WRITE",
+        "method": "MessageReceiptRepository.markDeliveredIfMissing",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageReceiptRepository.java",
+        "line": 12,
+        "operation": "SQL into"
+      }
+    ],
+    "message_attachments": [
+      {
+        "mode": "READ",
+        "method": "MessageService.toResponses",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 148,
+        "operation": "findByMessageIdInOrderByDisplayOrder"
+      }
+    ]
+  },
+  "CHT-006": {
+    "messages": [
+      {
+        "mode": "READ",
+        "method": "MessageService.send",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 70,
+        "operation": "findByClientMessageId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessageService.send",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 70,
+        "operation": "findByClientMessageId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 52,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 52,
+        "operation": "save"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessagePersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 52,
+        "operation": "findByConversationIdAndLeftAtIsNull"
+      },
+      {
+        "mode": "READ",
+        "method": "MessageService.toResponses",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 148,
+        "operation": "findAllById"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ],
+    "message_attachments": [
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 52,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "MessageService.toResponses",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 148,
+        "operation": "findByMessageIdInOrderByDisplayOrder"
+      }
+    ],
+    "message_receipts": [
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.create",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 52,
+        "operation": "save"
+      }
+    ]
+  },
+  "CHT-007": {
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessagePersistenceService.deleteMessage",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 117,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ],
+    "messages": [
+      {
+        "mode": "READ",
+        "method": "MessagePersistenceService.deleteMessage",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 117,
+        "operation": "findByIdAndConversationId"
+      }
+    ],
+    "message_attachments": [
+      {
+        "mode": "READ",
+        "method": "MessagePersistenceService.markDeleted",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 93,
+        "operation": "findByMessageIdOrderByDisplayOrder"
+      }
+    ]
+  },
+  "CHT-008": {
+    "messages": [
+      {
+        "mode": "READ",
+        "method": "MessageService.markRead",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 125,
+        "operation": "findByIdAndConversationId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessageService.markRead",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessageService.java",
+        "line": 125,
+        "operation": "existsById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "MessagePersistenceService.markRead",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 102,
+        "operation": "markReadThrough"
+      },
+      {
+        "mode": "READ",
+        "method": "ChatMessageRepository.markReadThrough",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/ChatMessageRepository.java",
+        "line": 59,
+        "operation": "SQL from"
+      }
+    ],
+    "conversations": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.getConversation",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 143,
+        "operation": "findById"
+      }
+    ],
+    "conversation_participants": [
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.requireParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 109,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "MessagePersistenceService.markRead",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/MessagePersistenceService.java",
+        "line": 102,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationService.ensureCustomerParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationService.java",
+        "line": 195,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "READ",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "findByConversationIdAndUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ConversationPersistenceService.addParticipant",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/conversation/ConversationPersistenceService.java",
+        "line": 33,
+        "operation": "save"
+      }
+    ],
+    "message_receipts": [
+      {
+        "mode": "WRITE",
+        "method": "ChatMessageRepository.markReadThrough",
+        "source": "backend/chat-service/src/main/java/com/se193262/chatservice/feature/message/ChatMessageRepository.java",
+        "line": 59,
+        "operation": "SQL into"
+      }
+    ]
+  },
+  "IDN-001": {},
+  "IDN-002": {
+    "users": [
+      {
+        "mode": "READ",
+        "method": "AuthenticationServiceImpl.login",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+        "line": 82,
+        "operation": "findById"
+      }
+    ],
+    "refresh_tokens": [
+      {
+        "mode": "WRITE",
+        "method": "TokenSessionService.createSession",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 47,
+        "operation": "save"
+      }
+    ]
+  },
+  "IDN-003": {
+    "refresh_tokens": [
+      {
+        "mode": "READ",
+        "method": "TokenSessionService.logout",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 85,
+        "operation": "findByTokenHashForUpdate"
+      }
+    ]
+  },
+  "IDN-004": {
+    "users": [
+      {
+        "mode": "READ",
+        "method": "AuthenticationServiceImpl.getCurrentUser",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+        "line": 111,
+        "operation": "findById"
+      }
+    ]
+  },
+  "IDN-005": {
+    "refresh_tokens": [
+      {
+        "mode": "READ",
+        "method": "TokenSessionService.refresh",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 63,
+        "operation": "findByTokenHashForUpdate"
+      },
+      {
+        "mode": "CHECK/LOCK",
+        "method": "TokenSessionService.refresh",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 63,
+        "operation": "revokeAllActiveByUserId"
+      },
+      {
+        "mode": "CHECK/LOCK",
+        "method": "TokenSessionService.rejectRevokedOrExpired",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 94,
+        "operation": "revokeAllActiveByUserId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "TokenSessionService.createSession",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 47,
+        "operation": "save"
+      }
+    ],
+    "users": [
+      {
+        "mode": "READ",
+        "method": "TokenSessionService.refresh",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/TokenSessionService.java",
+        "line": 63,
+        "operation": "findById"
+      }
+    ]
+  },
+  "IDN-006": {
+    "users": [
+      {
+        "mode": "READ",
+        "method": "AuthenticationServiceImpl.register",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+        "line": 58,
+        "operation": "existsByEmail"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AuthenticationServiceImpl.register",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+        "line": 58,
+        "operation": "save"
+      }
+    ],
+    "roles": [
+      {
+        "mode": "READ",
+        "method": "AuthenticationServiceImpl.register",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/AuthenticationServiceImpl.java",
+        "line": 58,
+        "operation": "findByCode"
+      }
+    ]
+  },
+  "IDN-007": {},
+  "IDN-008": {
+    "users": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ],
+    "user_roles": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ],
+    "roles": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL JOIN"
+      }
+    ]
+  },
+  "IDN-009": {
+    "user_roles": [
+      {
+        "mode": "WRITE",
+        "method": "UserContextService.grantBakeryOwner",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 79,
+        "operation": "SQL INTO"
+      },
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ],
+    "roles": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.grantBakeryOwner",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 79,
+        "operation": "SQL FROM"
+      },
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL JOIN"
+      }
+    ],
+    "users": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ]
+  },
+  "IDN-010": {
+    "user_addresses": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.address",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 44,
+        "operation": "SQL FROM"
+      }
+    ],
+    "users": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ],
+    "user_roles": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL FROM"
+      }
+    ],
+    "roles": [
+      {
+        "mode": "READ",
+        "method": "UserContextService.user",
+        "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "line": 20,
+        "operation": "SQL JOIN"
+      }
+    ]
+  },
+  "MKT-001": {
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestServiceImpl.list",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 126,
+        "operation": "findAll"
+      }
+    ]
+  },
+  "MKT-002": {
+    "cake_requests": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestServiceImpl.create",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 62,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "deleteById"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "deleteByCakeRequestId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.history",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 58,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ],
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ]
+  },
+  "MKT-003": {
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestServiceImpl.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 112,
+        "operation": "exists"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ]
+  },
+  "MKT-004": {
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestServiceImpl.patch",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 80,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ],
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestServiceImpl.patch",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 80,
+        "operation": "existsByCakeRequestId"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestServiceImpl.patch",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 80,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "deleteById"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "deleteByCakeRequestId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.configuration",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 25,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ]
+  },
+  "MKT-005": {
+    "cake_requests": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestServiceImpl.cancel",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 187,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ],
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "OfferTransitions.pendingTo",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 38,
+        "operation": "findTop100ByCakeRequestIdAndStatusAndIdNot"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.pendingTo",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 38,
+        "operation": "flush"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.history",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 58,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ],
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.change",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 21,
+        "operation": "save"
+      }
+    ]
+  },
+  "MKT-006": {
+    "request_images": [
+      {
+        "mode": "WRITE",
+        "method": "RequestImageServiceImpl.upload",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestImageServiceImpl.java",
+        "line": 42,
+        "operation": "saveAllAndFlush"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ]
+  },
+  "MKT-007": {
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "RequestImageServiceImpl.delete",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestImageServiceImpl.java",
+        "line": 101,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "RequestImageServiceImpl.delete",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/RequestImageServiceImpl.java",
+        "line": 101,
+        "operation": "delete"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ]
+  },
+  "MKT-008": {
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "OfferServiceImpl.create",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 53,
+        "operation": "existsByCakeRequestIdAndBakeryId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferServiceImpl.create",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 53,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferServiceImpl.create",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 53,
+        "operation": "flush"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ],
+    "offer_items": [
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "deleteByOfferId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findByOfferIdOrderByIdAsc"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.change",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 21,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findTop100ByOfferIdOrderByChangedAtDesc"
+      }
+    ]
+  },
+  "MKT-009": {
+    "cake_requests": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestServiceImpl.publish",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 174,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.history",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 58,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ],
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ]
+  },
+  "MKT-010": {
+    "cake_requests": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestServiceImpl.selectDesign",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestServiceImpl.java",
+        "line": 204,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ],
+    "request_images": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByDisplayOrderAsc"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 56,
+        "operation": "findTop100ByCakeRequestIdOrderByChangedAtDesc"
+      }
+    ]
+  },
+  "MKT-011": {
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "OfferServiceImpl.list",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 149,
+        "operation": "findAll"
+      }
+    ]
+  },
+  "MKT-012": {
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "OfferServiceImpl.offer",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 84,
+        "operation": "findById"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_items": [
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findByOfferIdOrderByIdAsc"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findTop100ByOfferIdOrderByChangedAtDesc"
+      }
+    ]
+  },
+  "MKT-013": {
+    "offers": [
+      {
+        "mode": "WRITE",
+        "method": "OfferServiceImpl.patch",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 94,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferServiceImpl.offer",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 84,
+        "operation": "findById"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ],
+    "offer_items": [
+      {
+        "mode": "READ",
+        "method": "OfferData.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 34,
+        "operation": "findByOfferIdOrderByIdAsc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "deleteByOfferId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "flush"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferData.apply",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 51,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findByOfferIdOrderByIdAsc"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findTop100ByOfferIdOrderByChangedAtDesc"
+      }
+    ]
+  },
+  "MKT-014": {
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.reserve",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 44,
+        "operation": "findByCustomerIdAndIdempotencyKey"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AcceptanceTransactions.reserve",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 44,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      },
+      {
+        "mode": "CHECK/LOCK",
+        "method": "AcceptanceTransactions.claim",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 105,
+        "operation": "claim"
+      },
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.claim",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 105,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.complete",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 119,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "AcceptanceTransactions.complete",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 119,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.failure",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 149,
+        "operation": "findById"
+      }
+    ],
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.reserve",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 44,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "AcceptanceTransactions.complete",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/AcceptanceTransactions.java",
+        "line": 119,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferTransitions.pendingTo",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 38,
+        "operation": "findTop100ByCakeRequestIdAndStatusAndIdNot"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.pendingTo",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 38,
+        "operation": "flush"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.change",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 21,
+        "operation": "save"
+      }
+    ],
+    "request_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "CakeRequestData.history",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestData.java",
+        "line": 58,
+        "operation": "save"
+      }
+    ]
+  },
+  "MKT-015": {
+    "offers": [
+      {
+        "mode": "WRITE",
+        "method": "OfferServiceImpl.withdraw",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 125,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferServiceImpl.offer",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferServiceImpl.java",
+        "line": 84,
+        "operation": "findById"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceAccess.mutable",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceAccess.java",
+        "line": 37,
+        "operation": "existsByCakeRequestIdAndStatusIn"
+      }
+    ],
+    "offer_status_history": [
+      {
+        "mode": "WRITE",
+        "method": "OfferTransitions.change",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferTransitions.java",
+        "line": 21,
+        "operation": "save"
+      },
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findTop100ByOfferIdOrderByChangedAtDesc"
+      }
+    ],
+    "offer_items": [
+      {
+        "mode": "READ",
+        "method": "OfferData.detail",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferData.java",
+        "line": 23,
+        "operation": "findByOfferIdOrderByIdAsc"
+      }
+    ]
+  },
+  "MKT-016": {
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceChatAuthorizationService.authorize",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceChatAuthorizationService.java",
+        "line": 27,
+        "operation": "findById"
+      }
+    ],
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "MarketplaceChatAuthorizationService.hasEligibleOffer",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceChatAuthorizationService.java",
+        "line": 41,
+        "operation": "existsByCakeRequestIdAndBakeryIdAndStatusAndExpiresAtAfter"
+      },
+      {
+        "mode": "READ",
+        "method": "MarketplaceChatAuthorizationService.hasEligibleOffer",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/MarketplaceChatAuthorizationService.java",
+        "line": 41,
+        "operation": "existsByCakeRequestIdAndBakeryIdAndStatus"
+      }
+    ]
+  },
+  "MKT-017": {
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ]
+  },
+  "MKT-018": {
+    "offer_acceptance_workflows": [
+      {
+        "mode": "READ",
+        "method": "OfferAcceptanceServiceImpl.orderSource",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferAcceptanceServiceImpl.java",
+        "line": 86,
+        "operation": "findByOfferIdAndStatusIn"
+      }
+    ],
+    "offers": [
+      {
+        "mode": "READ",
+        "method": "OfferAcceptanceServiceImpl.orderSource",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferAcceptanceServiceImpl.java",
+        "line": 86,
+        "operation": "findById"
+      }
+    ],
+    "offer_items": [
+      {
+        "mode": "READ",
+        "method": "OfferAcceptanceServiceImpl.orderSource",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/offer/OfferAcceptanceServiceImpl.java",
+        "line": 86,
+        "operation": "findByOfferIdOrderByIdAsc"
+      }
+    ],
+    "cake_requests": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.request",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 45,
+        "operation": "findById"
+      }
+    ],
+    "cake_preferences": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findById"
+      }
+    ],
+    "request_option_selections": [
+      {
+        "mode": "READ",
+        "method": "CakeRequestReader.command",
+        "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestReader.java",
+        "line": 49,
+        "operation": "findByCakeRequestIdOrderByIdAsc"
+      }
+    ]
+  },
+  "ORD-001": {
+    "order_reviews": [
+      {
+        "mode": "READ",
+        "method": "ReviewServiceImpl.moderate",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 77,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ReviewServiceImpl.moderate",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 77,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "ORD-002": {
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "OrderQueryPersistenceService.list",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+        "line": 25,
+        "operation": "findAll"
+      }
+    ]
+  },
+  "ORD-003": {
+    "order_idempotency_records": [
+      {
+        "mode": "READ",
+        "method": "OrderPersistenceService.findReplay",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderPersistenceService.java",
+        "line": 25,
+        "operation": "findByOperationAndCustomerIdAndIdempotencyKey"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OrderPersistenceService.saveNew",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderPersistenceService.java",
+        "line": 38,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "OrderPersistenceService.saveNew",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderPersistenceService.java",
+        "line": 38,
+        "operation": "findByOfferId"
+      },
+      {
+        "mode": "WRITE",
+        "method": "OrderPersistenceService.saveNew",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderPersistenceService.java",
+        "line": 38,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "ORD-004": {
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "OrderQueryPersistenceService.findOrder",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+        "line": 62,
+        "operation": "findById"
+      }
+    ]
+  },
+  "ORD-005": {
+    "order_reviews": [
+      {
+        "mode": "WRITE",
+        "method": "ReviewServiceImpl.delete",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 68,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "READ",
+        "method": "ReviewServiceImpl.findOwnedReview",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 85,
+        "operation": "findByCustomerIdAndId"
+      }
+    ]
+  },
+  "ORD-006": {
+    "order_reviews": [
+      {
+        "mode": "WRITE",
+        "method": "ReviewServiceImpl.update",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 59,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "READ",
+        "method": "ReviewServiceImpl.findOwnedReview",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 85,
+        "operation": "findByCustomerIdAndId"
+      }
+    ]
+  },
+  "ORD-007": {
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "ReviewServiceImpl.create",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 36,
+        "operation": "findById"
+      }
+    ],
+    "order_reviews": [
+      {
+        "mode": "READ",
+        "method": "ReviewServiceImpl.create",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 36,
+        "operation": "existsById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "ReviewServiceImpl.create",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/review/ReviewServiceImpl.java",
+        "line": 36,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "ORD-008": {
+    "customer_orders": [
+      {
+        "mode": "WRITE",
+        "method": "OrderQueryPersistenceService.transition",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+        "line": 46,
+        "operation": "saveAndFlush"
+      },
+      {
+        "mode": "READ",
+        "method": "OrderQueryPersistenceService.findOrder",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+        "line": 62,
+        "operation": "findById"
+      }
+    ]
+  },
+  "ORD-009": {
+    "order_offer_creations": [
+      {
+        "mode": "READ",
+        "method": "OfferOrderRepository.existing",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderRepository.java",
+        "line": 27,
+        "operation": "SQL from"
+      }
+    ],
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "OfferOrderRepository.existing",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderRepository.java",
+        "line": 27,
+        "operation": "SQL join"
+      }
+    ],
+    "order_items": [
+      {
+        "mode": "WRITE",
+        "method": "OfferOrderRepository.item",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OfferOrderRepository.java",
+        "line": 147,
+        "operation": "SQL into"
+      }
+    ]
+  },
+  "ORD-010": {
+    "customer_orders": [
+      {
+        "mode": "READ",
+        "method": "OrderQueryPersistenceService.findOrder",
+        "source": "backend/order-service/src/main/java/com/se193262/orderservice/feature/order/OrderQueryPersistenceService.java",
+        "line": 62,
+        "operation": "findById"
+      }
+    ]
+  },
+  "SUB-001": {
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.listForReview",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 175,
+        "operation": "findAll"
+      }
+    ]
+  },
+  "SUB-002": {
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "flush"
+      }
+    ],
+    "bakery_subscriptions": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "findBySourceOrder_Id"
+      },
+      {
+        "mode": "CHECK/LOCK",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "tryLockBakery"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "findBySourceOrder_Id"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "findAllByBakeryIdOrderByPeriodStartDesc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "findAllByBakeryIdOrderByPeriodStartDesc"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "subscription_orders": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.approveInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 210,
+        "operation": "flush"
+      }
+    ]
+  },
+  "SUB-003": {
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.reject",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 261,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.reject",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 261,
+        "operation": "flush"
+      }
+    ],
+    "subscription_orders": [
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.reject",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 261,
+        "operation": "flush"
+      }
+    ]
+  },
+  "SUB-004": {
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.listAdmin",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 43,
+        "operation": "findAll"
+      }
+    ]
+  },
+  "SUB-005": {
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.create",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 49,
+        "operation": "existsByCode"
+      },
+      {
+        "mode": "WRITE",
+        "method": "SubscriptionPlanServiceImpl.create",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 49,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "SUB-006": {
+    "subscription_orders": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.update",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 69,
+        "operation": "existsByPlan_Id"
+      }
+    ],
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.update",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 69,
+        "operation": "existsByCodeAndIdNot"
+      },
+      {
+        "mode": "WRITE",
+        "method": "SubscriptionPlanServiceImpl.update",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 69,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.findPlan",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 105,
+        "operation": "findById"
+      }
+    ]
+  },
+  "SUB-007": {
+    "subscription_plans": [
+      {
+        "mode": "WRITE",
+        "method": "SubscriptionPlanServiceImpl.archive",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 94,
+        "operation": "flush"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.findPlan",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 105,
+        "operation": "findById"
+      }
+    ]
+  },
+  "SUB-008": {
+    "bakery_subscriptions": [
+      {
+        "mode": "READ",
+        "method": "BakerySubscriptionServiceImpl.getForBakery",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscription/service/impl/BakerySubscriptionServiceImpl.java",
+        "line": 45,
+        "operation": "findAllByBakeryIdAndStatusInOrderByPeriodStartAsc"
+      }
+    ]
+  },
+  "SUB-009": {
+    "subscription_orders": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.list",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 112,
+        "operation": "findAllByBakeryId"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.list",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 112,
+        "operation": "findAllByBakeryIdAndStatus"
+      }
+    ]
+  },
+  "SUB-010": {
+    "bakery_subscriptions": [
+      {
+        "mode": "CHECK/LOCK",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "tryLockBakery"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.details",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 141,
+        "operation": "findBySourceOrder_Id"
+      }
+    ],
+    "subscription_orders": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "findByOrderNumber"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "existsByBakeryIdAndStatus"
+      },
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "existsByBakeryIdAndStatusInAndExpiresAtAfter"
+      },
+      {
+        "mode": "WRITE",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "saveAndFlush"
+      }
+    ],
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.createInTransaction",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 67,
+        "operation": "findById"
+      }
+    ],
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.details",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 141,
+        "operation": "findAllByOrder_IdOrderBySubmittedAtAsc"
+      }
+    ]
+  },
+  "SUB-011": {
+    "subscription_orders": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.get",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 133,
+        "operation": "findById"
+      }
+    ],
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.details",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 141,
+        "operation": "findAllByOrder_IdOrderBySubmittedAtAsc"
+      }
+    ],
+    "bakery_subscriptions": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionOrderServiceImpl.details",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "line": 141,
+        "operation": "findBySourceOrder_Id"
+      }
+    ]
+  },
+  "SUB-012": {
+    "subscription_orders": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.submit",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 73,
+        "operation": "findById"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.persistSubmission",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 133,
+        "operation": "findById"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.persistSubmission",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 133,
+        "operation": "flush"
+      }
+    ],
+    "bakery_payments": [
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.submit",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 73,
+        "operation": "findByIdempotencyKeyHash"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.persistSubmission",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 133,
+        "operation": "findByIdempotencyKeyHash"
+      },
+      {
+        "mode": "READ",
+        "method": "BakeryPaymentServiceImpl.persistSubmission",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 133,
+        "operation": "findByPaymentReference"
+      },
+      {
+        "mode": "WRITE",
+        "method": "BakeryPaymentServiceImpl.persistSubmission",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "line": 133,
+        "operation": "saveAndFlush"
+      }
+    ]
+  },
+  "SUB-013": {
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.listPublic",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 31,
+        "operation": "findAllByStatusOrderByMonthlyPriceAsc"
+      }
+    ]
+  },
+  "SUB-014": {},
+  "SUB-015": {
+    "subscription_plans": [
+      {
+        "mode": "READ",
+        "method": "SubscriptionPlanServiceImpl.getPublic",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/plan/service/impl/SubscriptionPlanServiceImpl.java",
+        "line": 37,
+        "operation": "findByIdAndStatus"
+      }
+    ]
+  },
+  "SUB-016": {
+    "bakery_subscriptions": [
+      {
+        "mode": "READ",
+        "method": "BakerySubscriptionServiceImpl.getForBakery",
+        "source": "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscription/service/impl/BakerySubscriptionServiceImpl.java",
+        "line": 45,
+        "operation": "findAllByBakeryIdAndStatusInOrderByPeriodStartAsc"
+      }
+    ]
+  }
+}
