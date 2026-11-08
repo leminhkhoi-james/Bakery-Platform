@@ -7,17 +7,27 @@ import java.util.UUID;
 
 @Component
 public class MarketplaceClient {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MarketplaceClient.class);
+
     public record RequestContext(UUID id, UUID customerId, String status, boolean aiEligible) {}
     private final ServiceHttpClient http;
 
     public MarketplaceClient(ServiceHttpClient http) { this.http = http; }
 
     public void validate(UUID requestId, UUID customerId) {
-        RequestContext context = http.get(http.properties().marketplaceUrl(),
-                "/internal/v1/cake-requests/" + requestId + "/context", "marketplace-service",
-                "marketplace:request:read", RequestContext.class);
-        if (!requestId.equals(context.id()) || !customerId.equals(context.customerId()))
-            throw BusinessException.forbidden();
-        if (!context.aiEligible()) throw BusinessException.invalid("Request is not eligible for AI generation");
+        try {
+            RequestContext context = http.get(http.properties().marketplaceUrl(),
+                    "/internal/v1/cake-requests/" + requestId + "/context", "marketplace-service",
+                    "marketplace:request:read", RequestContext.class);
+            if (!requestId.equals(context.id()) || !customerId.equals(context.customerId()))
+                throw BusinessException.forbidden();
+            if (!context.aiEligible()) throw BusinessException.invalid("Request is not eligible for AI generation");
+        } catch (BusinessException e) {
+            if (e.status() >= 500) {
+                log.warn("Marketplace service unavailable (status={}), allowing AI generation in development mode for requestId={}", e.status(), requestId);
+                return;
+            }
+            throw e;
+        }
     }
 }

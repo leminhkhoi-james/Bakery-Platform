@@ -1,0 +1,26 @@
+{
+  "format": {
+    "command": "format --output=none --set-exit-if-changed lib test integration_test test_driver tool/live_ui_driver.dart",
+    "exitCode": 0,
+    "seconds": 2.19,
+    "evidence": "final-format.txt"
+  },
+  "analyze": {
+    "command": "analyze",
+    "exitCode": 0,
+    "seconds": 11.04,
+    "evidence": "final-analyze.txt"
+  },
+  "test": {
+    "command": "test --reporter expanded",
+    "exitCode": 0,
+    "seconds": 63.75,
+    "evidence": "final-test.txt"
+  },
+  "build": {
+    "command": "build apk --debug",
+    "exitCode": 0,
+    "seconds": 39.08,
+    "evidence": "final-build.txt"
+  }
+}

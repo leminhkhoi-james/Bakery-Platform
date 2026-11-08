@@ -1,0 +1,62 @@
+{
+  "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\compose.json": {
+    "sha256": "b009bc6950acc56a986fa69a2d372576837521e05cfe196a3e88d613facb4d26",
+    "size": 9316,
+    "mtimeNs": 1794037594371080000
+  },
+  "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\service-clients.yml": {
+    "sha256": "f281ca924cc1b13caf134c0373e6f7221ac7142d39ab891374d61ac92ebd72e4",
+    "size": 1493,
+    "mtimeNs": 1794037592011097500
+  },
+  "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\runtime-generated.json": {
+    "sha256": "7e5fcfe0770fa1ae4f819df2e372419b9ba1781098c80eb088a57fd33bd997aa",
+    "size": 249,
+    "mtimeNs": 1794037594111998200
+  },
+  "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\input-source.json": {
+    "sha256": "e368168e81045653e9e521adb502f07b2cd886609e0590ada29f17824c99f179",
+    "size": 173,
+    "mtimeNs": 1794037594372302900
+  },
+  "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\mobile-live-user.json": {
+    "sha256": "ba31985668ddc7b901229396811cf8a0139053508bf502128329cf04c08d4e03",
+    "size": 116,
+    "mtimeNs": 1794037822052375100
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\bakery-platform-mss-15ca53466ff7.json": {
+    "sha256": "bcd4d4f2390e1890be48e750b312a8c8f38dd91e5e7b3436722b46c94332fb44",
+    "size": 2397,
+    "mtimeNs": 1794013465624313500
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\identity-private.pem": {
+    "sha256": "6b0472299c190eaea829ee21d48491ef0c8b14853988a07f1dd0a3b8bf1420e4",
+    "size": 2484,
+    "mtimeNs": 1793977888771517400
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\identity-public.pem": {
+    "sha256": "9a4be5d76f57d2e630a94430ecfa8a0a3c4af287bcf3cd45ec3c7ba1e0078659",
+    "size": 625,
+    "mtimeNs": 1793977891389693100
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\local-runtime-sources.json": {
+    "sha256": "a71bc0a1896653656608e27aec42461e5fe1b7523293a7306ac4542f3cdf30e9",
+    "size": 2851,
+    "mtimeNs": 1793981246009381200
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\local-runtime.env": {
+    "sha256": "84e48cc33e4c707b6afd7cb447a2648f413a2cf79c7ac0f439b2158284d8fd36",
+    "size": 2443,
+    "mtimeNs": 1793979157744750900
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\local-service-clients.yml": {
+    "sha256": "b468e0744dcdcf09771eaf8f975d278c68224ec27cdd03c3eb7a07cd689d2624",
+    "size": 1438,
+    "mtimeNs": 1793979157741811900
+  },
+  "H:\\MSS\\.secrets\\bakery-platform\\local-smoke-users.json": {
+    "sha256": "a918682e5dc034af074820a77697451336108b4c0d209bf6ccc0d144c9e96d3f",
+    "size": 498,
+    "mtimeNs": 1793979782095828100
+  }
+}

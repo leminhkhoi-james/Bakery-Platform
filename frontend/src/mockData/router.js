@@ -3,6 +3,7 @@ import { addressPayload, normalizeAddressDefault } from './addressModels.js'
 import { DemoError } from './store.js'
 import { future, stamp } from './seed.js'
 import { AI_RENDER_IMAGES } from './customer/aiDesigns.js'
+import { matchPhotorealisticCakeImage } from '../services/cakeImageMatcher.js'
 
 export const collectionPaths = /^\/(products|bakeries|cake-requests|offers|orders|conversations|subscription-plans|generation-jobs|admin\/bakeries|admin\/bakery-payments|admin\/subscription-plans|admin\/users)$/
 const clone = (value) => structuredClone(value)
@@ -64,29 +65,43 @@ export function routeDemo(store, path, method, body, query, user) {
     requireUser(user, 'ADMIN')
     if (parts[1] === 'bakeries') {
       if (!parts[2] && get) result = page(s.bakeries)
-      else { const bakery = find('bakeries', parts[2]); if (get) {
-        const current = s.subscriptions.find((item) => item.bakeryId === bakery.id && item.status === 'ACTIVE')
-        const registered = s.subscriptions.some((item) => item.bakeryId === bakery.id) || s.subscriptionOrders.some((item) => item.bakeryId === bakery.id)
-        result = { bakery, operations: bakery.operations, members: s.members.filter((m) => m.bakeryId === bakery.id), subscription: { active: Boolean(current), planCode: current?.planCode || s.plans.find((item) => item.id === current?.planId)?.code || null, periodEnd: current?.periodEnd || null, registrationStatus: registered ? 'REGISTERED' : 'NOT_REGISTERED' } }
-      } else if (parts[3] === 'status' && method === 'PATCH') { const allowed = { DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }; if (!allowed[bakery.status]?.includes(body.status)) throw new DemoError('Trạng thái không hợp lệ.', 409); result = update(bakery, { status: body.status, reviewDecision: { status: body.status === 'DRAFT' ? 'RETURNED' : body.status, reason: body.status === 'DRAFT' ? body.reviewNote?.trim() || null : null, reviewedAt: stamp() } }) } }
+      else {
+        const bakery = find('bakeries', parts[2]); if (get) {
+          const current = s.subscriptions.find((item) => item.bakeryId === bakery.id && item.status === 'ACTIVE')
+          const registered = s.subscriptions.some((item) => item.bakeryId === bakery.id) || s.subscriptionOrders.some((item) => item.bakeryId === bakery.id)
+          result = { bakery, operations: bakery.operations, members: s.members.filter((m) => m.bakeryId === bakery.id), subscription: { active: Boolean(current), planCode: current?.planCode || s.plans.find((item) => item.id === current?.planId)?.code || null, periodEnd: current?.periodEnd || null, registrationStatus: registered ? 'REGISTERED' : 'NOT_REGISTERED' } }
+        } else if (parts[3] === 'status' && method === 'PATCH') { const allowed = { DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }; if (!allowed[bakery.status]?.includes(body.status)) throw new DemoError('Trạng thái không hợp lệ.', 409); result = update(bakery, { status: body.status, reviewDecision: { status: body.status === 'DRAFT' ? 'RETURNED' : body.status, reason: body.status === 'DRAFT' ? body.reviewNote?.trim() || null : null, reviewedAt: stamp() } }) }
+      }
     } else if (parts[1] === 'users') {
-      if (!parts[2] && get) result = page(s.users.filter((person) => (!query.get('role') || person.roles.includes(query.get('role'))) && (!query.get('email') || [person.name, person.email].join(' ').toLocaleLowerCase('vi').includes(query.get('email').toLocaleLowerCase('vi')))))
+      // Mirrors docs/API_SPEC.md §2: list, detail, PATCH /{id}/status, PUT /{id}/roles.
+      if (!parts[2] && get) result = page(s.users.filter((person) => (!query.get('role') || person.roles.includes(query.get('role'))) && (!query.get('status') || person.status === query.get('status')) && (!query.get('email') || (person.email || '').toLocaleLowerCase('vi').includes(query.get('email').toLocaleLowerCase('vi')))))
       else if (!parts[2] && method === 'POST') {
         if (!body.name?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email || '')) throw new DemoError('Vui lòng kiểm tra họ tên và email.', 422)
         if (s.users.some((person) => person.email?.toLowerCase() === body.email.trim().toLowerCase())) throw new DemoError('Email đã được sử dụng.', 409)
         result = create('users', { name: body.name.trim(), email: body.email.trim(), roles: ['CUSTOMER'], status: 'ACTIVE' })
       }
-      else {
+      else if (parts[2]) {
         const person = find('users', parts[2])
-        if (Object.values(s.actors).includes(person.id) || person.id === user.id || person.roles.includes('ADMIN')) throw new DemoError('Tài khoản đăng nhập hoặc tài khoản quản trị được bảo vệ.', 403)
-        if (method === 'PATCH') {
-          if (body.status && !['ACTIVE', 'SUSPENDED'].includes(body.status)) throw new DemoError('Trạng thái người dùng không hợp lệ.', 422)
-          if (body.name !== undefined && !body.name.trim() || body.email !== undefined && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) throw new DemoError('Vui lòng kiểm tra họ tên và email.', 422)
-          if (body.email && s.users.some((other) => other.id !== person.id && other.email?.toLowerCase() === body.email.trim().toLowerCase())) throw new DemoError('Email đã được sử dụng.', 409)
-          result = update(person, { name: body.name?.trim() ?? person.name, email: body.email?.trim() ?? person.email, status: body.status ?? person.status })
-        } else if (method === 'DELETE') {
+        if (get && !parts[3]) result = person
+        else if (!parts[3] && method === 'DELETE') {
+          if (Object.values(s.actors).includes(person.id) || person.id === user.id || person.roles.includes('ADMIN')) throw new DemoError('Tài khoản quản trị hoặc tài khoản đăng nhập được bảo vệ.', 403)
           if (s.orders.some((o) => o.customerId === person.id) || s.bakeries.some((b) => b.ownerId === person.id)) throw new DemoError('Người dùng có dữ liệu liên kết.', 409)
           s.users = s.users.filter((p) => p.id !== person.id); result = null
+        } else if (!parts[3] && method === 'PATCH') {
+          if (Object.values(s.actors).includes(person.id) || person.id === user.id) throw new DemoError('Tài khoản quản trị hoặc tài khoản đăng nhập được bảo vệ.', 403)
+          if (body.email && s.users.some((other) => other.id !== person.id && other.email?.toLowerCase() === body.email.trim().toLowerCase())) throw new DemoError('Email đã được sử dụng.', 409)
+          result = update(person, { name: body.name?.trim() ?? person.name, email: body.email?.trim() ?? person.email, status: body.status ?? person.status })
+        } else if (parts[3] === 'status' && method === 'PATCH') {
+          if (!['ACTIVE', 'BLOCKED', 'DELETED'].includes(body.status)) throw new DemoError('Trạng thái người dùng không hợp lệ.', 400)
+          if (person.id === user.id) throw new DemoError('Không thể tự khóa hoặc xóa tài khoản đang đăng nhập.', 409)
+          if (person.status === 'DELETED') throw new DemoError('Không thể chuyển trạng thái từ Đã xóa.', 422)
+          result = update(person, { status: body.status })
+        } else if (parts[3] === 'roles' && method === 'PUT') {
+          const roles = Array.isArray(body.roles) ? [...new Set(body.roles)] : []
+          if (!roles.length) throw new DemoError('Người dùng phải có ít nhất một vai trò.', 422)
+          if (roles.some((role) => !['CUSTOMER', 'BAKERY_OWNER', 'ADMIN'].includes(role))) throw new DemoError('Vai trò không tồn tại.', 404)
+          if (person.id === user.id && !roles.includes('ADMIN')) throw new DemoError('Không thể tự gỡ quyền quản trị.', 422)
+          result = update(person, { roles })
         }
       }
     } else if (parts[1] === 'generated-designs' && method === 'PATCH' && parts[3] === 'moderation') {
@@ -141,7 +156,14 @@ export function routeDemo(store, path, method, body, query, user) {
     result = parts[1] ? productDto(find('products', parts[1])) : page(s.products.filter((p) => p.status === 'PUBLISHED').map(productDto).map((dto) => ({ ...dto, id: dto.product.id, name: dto.product.name, basePrice: dto.product.basePrice, categoryId: dto.product.categoryId })))
   } else if (parts[0] === 'bakeries') {
     if (!parts[1]) {
-      if (get) result = page(s.bakeries.filter((b) => b.status === 'ACTIVE'))
+      if (get) {
+        const activeSubscribedBakeryIds = new Set(
+          (s.subscriptions || [])
+            .filter((sub) => sub.status === 'ACTIVE' && Date.parse(sub.periodEnd) > Date.now())
+            .map((sub) => sub.bakeryId)
+        )
+        result = page(s.bakeries.filter((b) => b.status === 'ACTIVE' && (activeSubscribedBakeryIds.has(b.id) || b.id === s.bakeries[0].id)))
+      }
       else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); result = create('bakeries', { ...body, name: body.name + ' · DEMO', ownerId: user.id, status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }); s.members.push({ id: store.id(), bakeryId: result.id, userId: user.id, memberRole: 'OWNER', status: 'ACTIVE' }) }
     } else {
       const bakery = find('bakeries', parts[1]), kind = parts[2]
@@ -204,9 +226,57 @@ export function routeDemo(store, path, method, body, query, user) {
             ? [{ id: store.id(), url: snapshotUrl, displayOrder: 1 }, ...(request.images || []).filter((img) => !String(img.url || '').startsWith('data:image/'))]
             : request.images
           result = update(request, { ...body, images: updatedImages })
-        } else if (method === 'POST' && ['publish', 'cancel'].includes(parts[2])) {
+        } else if (method === 'POST' && ['publish', 'cancel', 'simulate-offers'].includes(parts[2])) {
           if (parts[2] === 'publish' && request.status !== 'DRAFT' || parts[2] === 'cancel' && !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Trạng thái RFQ không hợp lệ.', 409)
-          result = update(request, { status: parts[2] === 'publish' ? 'OPEN' : 'CANCELLED' })
+          if (parts[2] === 'simulate-offers') {
+            const partnerBakeries = s.bakeries.slice(0, 3)
+            const baseBudget = request.budgetMax || 600000
+            const pitchTemplates = [
+              {
+                priceRatio: 0.95,
+                deliveryFee: 30000,
+                durationDays: 2,
+                pitchQuote: 'Tiệm Sweet Bakery cam kết làm chuẩn 95% theo mẫu thiết kế AI. Sử dụng cốt bánh Chiffon mềm ẩm, kem whipping tươi béo nhẹ, ít ngọt. Tặng kèm bộ nến sinh nhật cao cấp.',
+              },
+              {
+                priceRatio: 1.05,
+                deliveryFee: 25000,
+                durationDays: 3,
+                pitchQuote: 'La Crème Pâtisserie chuyên dòng bánh fondant nghệ thuật tạo hình 3D. Thợ bánh 10 năm kinh nghiệm trực tiếp thực hiện, tặng kèm dao nĩa nến và miễn phí viết chữ nghệ thuật.',
+              },
+              {
+                priceRatio: 0.88,
+                deliveryFee: 35000,
+                durationDays: 1,
+                pitchQuote: 'Moon Cake Haute Atelier nhận đơn giao nhanh trong ngày. Bánh tươi làm trong ngày giao, kem bơ New Zealand thượng hạng, bảo hành tạo hình khi giao tận nơi.',
+              },
+            ]
+            const newOffers = []
+            partnerBakeries.forEach((bakery, i) => {
+              if (!s.offers.some((o) => o.cakeRequestId === request.id && o.bakeryId === bakery.id)) {
+                const template = pitchTemplates[i % pitchTemplates.length]
+                const cakePrice = Math.round((baseBudget * template.priceRatio) / 10000) * 10000
+                const offer = create('offers', {
+                  cakeRequestId: request.id,
+                  bakeryId: bakery.id,
+                  status: 'PENDING',
+                  cakePrice,
+                  deliveryFee: template.deliveryFee,
+                  addOnTotal: 0,
+                  totalPrice: cakePrice + template.deliveryFee,
+                  estimatedCompletionAt: future(template.durationDays),
+                  expiresAt: future(2),
+                  message: template.pitchQuote,
+                  items: [],
+                  statusHistory: [],
+                })
+                newOffers.push(offer)
+              }
+            })
+            result = { count: newOffers.length, offers: newOffers }
+          } else {
+            result = update(request, { status: parts[2] === 'publish' ? 'OPEN' : 'CANCELLED' })
+          }
         } else if (method === 'PUT' && parts[2] === 'selected-design') {
           const design = find('designs', body.generatedDesignId), job = find('jobs', design.generationJobId)
           if (job.cakeRequestId !== request.id || job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Thiết kế không hợp lệ cho yêu cầu này.', 409)
@@ -281,11 +351,11 @@ export function routeDemo(store, path, method, body, query, user) {
           const request = find('requests', job?.cakeRequestId || body.cakeRequestId); own(user, request)
           if (!['DRAFT', 'OPEN'].includes(request.status)) throw new DemoError('Yêu cầu không còn cho chỉnh sửa.', 409)
           const revision = (job?.currentRevision || 0) + 1, promptRevision = { id: store.id(), revisionNumber: revision, prompt: body.prompt, negativePrompt: body.negativePrompt }
-          result = job ? update(job, { status: 'QUEUED', currentRevision: revision, startedAt: stamp(), completedAt: null, promptRevisions: [...job.promptRevisions, promptRevision] }) : create('jobs', { customerId: user.id, cakeRequestId: request.id, status: 'QUEUED', modelName: 'Mẫu dựng sẵn · không gọi AI provider', currentRevision: revision, startedAt: stamp(), promptRevisions: [promptRevision], sourceImages: [] })
+          result = job ? update(job, { status: 'QUEUED', currentRevision: revision, startedAt: stamp(), completedAt: null, promptRevisions: [...job.promptRevisions, promptRevision] }) : create('jobs', { customerId: user.id, cakeRequestId: request.id, status: 'QUEUED', modelName: 'SweetCake AI Studio v2.5 · Neural Design', currentRevision: revision, startedAt: stamp(), promptRevisions: [promptRevision], sourceImages: [] })
           if (job) s.designs = s.designs.filter((d) => d.generationJobId !== job.id)
           for (let i = 0; i < (body.generationParameters?.numberOfDesigns || 1); i++) {
-            const imgUrl = AI_RENDER_IMAGES[(i + revision - 1) % AI_RENDER_IMAGES.length]
-            create('designs', { generationJobId: result.id, imageUrl: imgUrl, thumbnailUrl: imgUrl, moderationStatus: 'APPROVED', moderationReason: 'Ảnh mockdata có sẵn, không phải ảnh AI tạo từ prompt.', width: 1024, height: 1024 })
+            const imgUrl = matchPhotorealisticCakeImage(body.prompt, i + revision - 1)
+            create('designs', { generationJobId: result.id, imageUrl: imgUrl, thumbnailUrl: imgUrl, moderationStatus: 'APPROVED', moderationReason: 'Mẫu thiết kế tạo tự động theo prompt mô tả.', width: 1024, height: 1024 })
           }
         }
       } else {

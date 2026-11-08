@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "entrypoint": "lib/main.dart",
+  "reviewMethod": "Direct visual inspection of native screenshots after each checkpoint",
+  "driverExtensionUsed": false,
+  "credentialPersistence": "No password persisted by host controller; app uses its existing secure session store, then explicit logout clears the test session",
+  "registration": "UI confirms account created and opens login with the synthetic email retained",
+  "hostReconciliation": "Same new account login 200, me 200, CUSTOMER; identifier recorded in canonical-registration.json",
+  "nativeLogin": "Profile shows expected synthetic display name/email, CUSTOMER and ACTIVE",
+  "coldProcessRestart": "After am force-stop and Activity start, profile shows same synthetic identity",
+  "logout": "Guest UI shown; notice confirms server revoked refresh token",
+  "registerHttpStatusDirectlyCapturedInMain": false,
+  "limitations": "Visual verification supplements existing transport-hook evidence; it does not increase the distinct UI API operation count or prove preservation of pre-task app data"
+}

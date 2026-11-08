@@ -1,6 +1,27 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-06.
+> Cập nhật gần nhất: 2026-11-07.
+
+## Flutter SweetCake UI local — 2026-11-07
+
+- Đã mở rộng scaffold `mobile` hiện hữu thành 35 màn hình tương ứng Web:
+  7 Public, 11 Customer, 9 Bakery Owner và 8 Admin, cùng form/detail/sheet.
+  Theme wine/hồng, wordmark/mascot, font và ảnh bundle kế thừa Web.
+- Repository fixture theo domain, navigation/persona demo, tìm/lọc, giỏ,
+  RFQ/offer, timeline/review, chat, catalog, vận hành tiệm, gói/chứng từ và
+  quản trị đều có thao tác local. Không có Backend/API/JWT/DB/payment/AI thật.
+  Revenue tiệm được ghi rõ chưa có nguồn dữ liệu; không dựng escrow/payout.
+- `pub get`, format, analyze không issue, 26 Flutter test và debug APK pass.
+  Android emulator mở 35 route và qua integration assertions cho giỏ, chat,
+  RFQ và admin review. Có ảnh runtime và báo cáo tiếng Việt trong
+  [docs/mobile](mobile/BAKERY_PLATFORM_FLUTTER_MOBILE_UI_IMPLEMENTATION_REPORT_VI.md).
+  iOS build/runtime chưa xác minh vì thiếu macOS/Xcode; TalkBack/VoiceOver và
+  hiệu năng release chưa kiểm thử thủ công.
+- Thay đổi chỉ ở `mobile` và `docs`; đối chiếu hash 2.754 file tracked ngoài
+  hai vùng này không có thay đổi. Giữ nguyên Backend, Frontend, Docker,
+  `design-web.md`, secrets và skill hiện hữu. Không stage/commit.
+
+Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trước.
 
 ## Bakery internal JWT scope — 2026-11-06
 
@@ -27,6 +48,47 @@
   CUSTOMER mới đến token BAKERY_OWNER của cùng user ID, gồm mã sai, retry,
   chặn hoàn tất sớm và chặn truy cập tiệm của người khác. Đồng bộ API spec
   và ADR-005.
+
+## Identity admin và Chat history repair — 2026-11-08
+
+- Identity có `PATCH /api/v1/users/me` và các API admin protected gồm list/filter,
+  xem user, đổi trạng thái và thay thế roles. Block/xóa mềm revoke toàn bộ refresh
+  token; admin không thể tự đổi status hoặc roles của chính mình.
+- Chat history cursor đã bỏ phép so sánh UUID bằng JPQL không portable. Trang đầu
+  và trang cursor giờ dùng truy vấn riêng; cursor dùng UUID ordering của PostgreSQL.
+- Chưa chạy được Maven verification trong môi trường hiện tại vì wrapper không khởi
+  động được từ PowerShell và Java trên PATH là 8, trong khi project yêu cầu Java 21.
+
+## Audit toàn hệ thống, Docker local và nền tảng mobile — 2026-11-06
+
+- Đã tạo báo cáo hiện trạng và báo cáo thực thi tiếng Việt trong `docs/audit/`:
+  107 API source, 209 Java record, ma trận 106 nhánh lời gọi Web, 35 route,
+  49 bảng/16 migration và bằng chứng HTTP/browser. Không sửa business logic
+  `backend` hoặc giao diện/hành vi `frontend`.
+- `bakery-local` chạy sáu microservice, sáu PostgreSQL và ba MinIO; Web thật tại
+  `http://localhost:5173` nối Docker qua proxy Vite hiện có. Có 25/25 HTTP check
+  Docker local pass, ba role đăng nhập UI và ảnh sản phẩm MinIO đã xác minh.
+  Restart giữ user/product/ảnh và cấu hình. RSA có sẵn giữ nguyên; credential
+  local thiếu được resolve/lưu bên ngoài Git trong external secrets.
+- Chưa phải full-stack thành công: Cake AI thiếu dependency Google Storage để
+  compile; Gateway bootstrap thoát exit 0, chưa có HTTP routing. Bakery internal
+  SCOPE, Order address DTO, Chat cursor query và admin users API thiếu vẫn là
+  blocker. Scope quote Order đã cấu hình đúng ở local override, source default
+  được giữ nguyên. Firebase/AI provider chưa có credential được xác minh.
+- Frontend build/lint pass, 607 test pass; Backend clean reactor có 142/144 test
+  pass và 2 errors (Order test seed Instant, Chat query); Cake AI compile fail.
+  Không xem OpenAPI hoặc container Up là bằng chứng mọi nghiệp vụ hoạt động.
+- `mobile` có scaffold Flutter Android/iOS tối thiểu từ CLI; pub get/analyze/
+  widget test và Android debug APK pass. iOS build/sign chưa kiểm chứng trên
+  Windows. Chưa thêm màn hình, theme, API client hoặc state-management package.
+- Taste 2.5.0 và Impeccable 4.8.0 được pin commit/cài project-local tại
+  `.agents/skills`; không thêm hook/global config hoặc redesign Web. `design-web.md`
+  trích token, component, responsive, motion/assets và mapping Flutter tương lai.
+- Hướng dẫn chạy/restart: `docs/audit/LOCAL_RUNTIME_VI.md`, launcher
+  `scripts/start-local-runtime.py`, `scripts/start-web-local.ps1`. Chưa commit,
+  stage, push hoặc thay dữ liệu PostgreSQL host cũ. Quy tắc `.gitignore` thêm
+  `docs/audit` xuất hiện trong lúc thực thi được giữ nguyên; các báo cáo hiện ở
+  filesystem nhưng bị Git ignore.
 
 ## Mở role CUSTOMER cho Subscription payment — 2026-11-01
 
@@ -97,7 +159,6 @@
   không failure/error/skip. Frontend 448/448 test pass, production build pass;
   lint không có error (còn warning có sẵn). Script JWT kiểm tra cú pháp pass.
   Chưa chạy HTTP end-to-end/DB integration hoặc reset database phát triển.
-
 
 ## Hoàn thiện giao diện Marketplace, AI Studio, Quote Detail & Demo Runtime — 2026-10-28
 

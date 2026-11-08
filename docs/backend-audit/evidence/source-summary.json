@@ -1,0 +1,28 @@
+{
+  "relevantFilesRead": 644,
+  "productionJava": 509,
+  "testJava": 58,
+  "classes": 543,
+  "methods": 2059,
+  "controllerClasses": 42,
+  "parseErrors": [],
+  "applicationHttpOperations": 113,
+  "byService": {
+    "bakery-service": 42,
+    "cake-ai-service": 9,
+    "chat-service": 8,
+    "identity-service": 10,
+    "marketplace-service": 18,
+    "order-service": 10,
+    "subscription-service": 16
+  },
+  "byMethod": {
+    "GET": 45,
+    "PATCH": 11,
+    "POST": 46,
+    "DELETE": 6,
+    "PUT": 5
+  },
+  "unresolvedAnyMappings": [],
+  "parser": "tree-sitter Java AST; heuristic type/call binding, not Java compiler semantic analysis"
+}

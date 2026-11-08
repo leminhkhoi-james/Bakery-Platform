@@ -4,7 +4,9 @@ import { Icon } from '../../../components/common/WorkspaceUI.jsx'
 
 export default function BiddingComparisonPage({ routeSearch = '', onNavigate }) {
   const id = new URLSearchParams(routeSearch).get('cakeRequestId')
+
   if (!id) return <CustomerRequests onNavigate={onNavigate} />
+
   return (
     <main className="sc-customer mx-auto max-w-6xl space-y-6 px-4 py-8">
       <div className="sc-customer-heading flex flex-wrap items-center justify-between gap-4">

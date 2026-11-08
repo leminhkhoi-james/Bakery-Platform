@@ -1,0 +1,119 @@
+[
+  {
+    "service": "bakery-service",
+    "source": 42,
+    "existing": {
+      "count": 38,
+      "missingFromRuntime": [
+        [
+          "GET",
+          "/api/v1/bakeries/onboarding"
+        ],
+        [
+          "POST",
+          "/api/v1/bakeries/onboarding"
+        ],
+        [
+          "POST",
+          "/api/v1/bakeries/{bakeryId}/onboarding/complete"
+        ],
+        [
+          "PUT",
+          "/internal/v1/bakeries/{bakeryId}/onboarding/activate"
+        ]
+      ],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 42,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  },
+  {
+    "service": "cake-ai-service",
+    "source": 9,
+    "existing": "NOT_AVAILABLE",
+    "isolated": "NOT_AVAILABLE"
+  },
+  {
+    "service": "chat-service",
+    "source": 8,
+    "existing": {
+      "count": 8,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 8,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  },
+  {
+    "service": "identity-service",
+    "source": 10,
+    "existing": {
+      "count": 9,
+      "missingFromRuntime": [
+        [
+          "PUT",
+          "/internal/v1/users/{id}/bakery-owner"
+        ]
+      ],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 10,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  },
+  {
+    "service": "marketplace-service",
+    "source": 18,
+    "existing": {
+      "count": 18,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 18,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  },
+  {
+    "service": "order-service",
+    "source": 10,
+    "existing": {
+      "count": 10,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 10,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  },
+  {
+    "service": "subscription-service",
+    "source": 16,
+    "existing": {
+      "count": 15,
+      "missingFromRuntime": [
+        [
+          "GET",
+          "/api/v1/subscription-plans/payment-options"
+        ]
+      ],
+      "extraRuntime": []
+    },
+    "isolated": {
+      "count": 16,
+      "missingFromRuntime": [],
+      "extraRuntime": []
+    }
+  }
+]

@@ -47,6 +47,16 @@ public class CustomerProfile {
         this.updatedAt = updatedAt;
     }
 
+    public void update(LocalDate dateOfBirth, String preferredLanguage, Instant now) {
+        if (dateOfBirth != null) {
+            this.dateOfBirth = dateOfBirth;
+        }
+        if (preferredLanguage != null) {
+            this.preferredLanguage = preferredLanguage;
+        }
+        this.updatedAt = now;
+    }
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }

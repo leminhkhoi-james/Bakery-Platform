@@ -1,0 +1,1280 @@
+{
+  "layer": "BACKEND_HTTP",
+  "at": "2026-11-07T16:19:25.998934+00:00",
+  "requests": [
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [
+        "email",
+        "password"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "f2fcadc1-40d2-49f7-bff0-c12c2381ea71"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "email",
+        "password",
+        "displayName"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [
+        "email",
+        "password"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "f2fcadc1-40d2-49f7-bff0-c12c2381ea71"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/onboarding",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [
+        "PENDING_APPROVAL"
+      ],
+      "requestFields": [
+        "name",
+        "phoneNumber",
+        "operations"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/onboarding",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [
+        "PENDING_APPROVAL"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/admin/bakeries",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3",
+        "bdbc3954-9858-457a-8a4f-20ee3d1c2958",
+        "54369b1d-530d-4595-8d13-ee22e488d0b4",
+        "73773ad0-5887-405a-871f-d125197676f5",
+        "33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "61b03a57-8536-4daf-831d-1af251783ab7",
+        "333adb52-69a6-4317-bf92-2d7bc1207bd1"
+      ],
+      "states": [
+        "PENDING_APPROVAL",
+        "PENDING_APPROVAL",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/admin/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3",
+        "0854739a-2d26-43a8-9bd5-370f30cf3d0b"
+      ],
+      "states": [
+        "PENDING_APPROVAL",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PATCH",
+      "path": "/api/v1/admin/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/status",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "status"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/admin/subscription-plans",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33625602-637d-4488-9ef7-b1a0925efdbb"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "code",
+        "name",
+        "monthlyPrice",
+        "currency",
+        "billingPeriodMonths",
+        "status",
+        "features"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/admin/subscription-plans",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "00000000-0000-0000-0000-000000000101",
+        "33625602-637d-4488-9ef7-b1a0925efdbb",
+        "b63c82fd-e163-4b6b-a3a8-5e9ae3b6f97b",
+        "00000000-0000-0000-0000-000000000103",
+        "00000000-0000-0000-0000-000000000102"
+      ],
+      "states": [
+        "ACTIVE",
+        "ACTIVE",
+        "ARCHIVED",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/subscription-plans",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33625602-637d-4488-9ef7-b1a0925efdbb",
+        "00000000-0000-0000-0000-000000000101",
+        "00000000-0000-0000-0000-000000000102",
+        "00000000-0000-0000-0000-000000000103"
+      ],
+      "states": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/subscription-plans/33625602-637d-4488-9ef7-b1a0925efdbb",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33625602-637d-4488-9ef7-b1a0925efdbb"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/subscription-plans/payment-options",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/subscription-orders",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "1090ce82-65bb-432a-9186-45121094749c"
+      ],
+      "states": [
+        "PENDING_PAYMENT"
+      ],
+      "requestFields": [
+        "planId"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/subscription-orders",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "1090ce82-65bb-432a-9186-45121094749c"
+      ],
+      "states": [
+        "PENDING_PAYMENT"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/subscription-orders/1090ce82-65bb-432a-9186-45121094749c",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "1090ce82-65bb-432a-9186-45121094749c"
+      ],
+      "states": [
+        "PENDING_PAYMENT"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/subscription-orders/1090ce82-65bb-432a-9186-45121094749c/payments",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71"
+      ],
+      "states": [
+        "SUBMITTED"
+      ],
+      "requestFields": [
+        "paymentMethod",
+        "paymentReference",
+        "amount",
+        "currency"
+      ],
+      "multipartParts": [
+        "proof"
+      ]
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/admin/bakery-payments",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "41e06a71-1fe6-41ae-b488-99d3384cd615",
+        "39426979-566e-47de-860e-41d6fe46ffad",
+        "ccb9760d-eb71-48ed-a07a-371724458782",
+        "ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71"
+      ],
+      "states": [
+        "REJECTED",
+        "APPROVED",
+        "APPROVED",
+        "SUBMITTED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/admin/bakery-payments/ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71/reject",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71",
+        "1090ce82-65bb-432a-9186-45121094749c",
+        "ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71"
+      ],
+      "states": [
+        "REJECTED",
+        "PENDING_PAYMENT",
+        "REJECTED"
+      ],
+      "requestFields": [
+        "reviewNote"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/subscription-orders/1090ce82-65bb-432a-9186-45121094749c/payments",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4d10660d-0672-42dd-92b5-d2bceda2b716"
+      ],
+      "states": [
+        "SUBMITTED"
+      ],
+      "requestFields": [
+        "paymentMethod",
+        "paymentReference",
+        "amount",
+        "currency"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/admin/bakery-payments/4d10660d-0672-42dd-92b5-d2bceda2b716/approve",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4d10660d-0672-42dd-92b5-d2bceda2b716",
+        "1090ce82-65bb-432a-9186-45121094749c",
+        "4d10660d-0672-42dd-92b5-d2bceda2b716",
+        "4c74300c-cce8-4943-844a-ef7acd0cb0e2",
+        "4c74300c-cce8-4943-844a-ef7acd0cb0e2"
+      ],
+      "states": [
+        "APPROVED",
+        "COMPLETED",
+        "APPROVED",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "reviewNote"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/subscription",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4c74300c-cce8-4943-844a-ef7acd0cb0e2"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/onboarding/complete",
+      "httpStatus": 204,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "f2fcadc1-40d2-49f7-bff0-c12c2381ea71"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PATCH",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "name"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/onboarding",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PUT",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/operations",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [],
+      "requestFields": [
+        "addresses",
+        "serviceAreas",
+        "businessHours"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/members",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0854739a-2d26-43a8-9bd5-370f30cf3d0b"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/logo",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": [
+        "file"
+      ]
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/cover",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": [
+        "file"
+      ]
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/categories",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "753e98c8-43dc-4981-a57c-314773b96a77"
+      ],
+      "states": [],
+      "requestFields": [
+        "name",
+        "slug",
+        "displayOrder",
+        "active"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/categories",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "753e98c8-43dc-4981-a57c-314773b96a77"
+      ],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PATCH",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/categories/753e98c8-43dc-4981-a57c-314773b96a77",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "753e98c8-43dc-4981-a57c-314773b96a77"
+      ],
+      "states": [],
+      "requestFields": [
+        "name"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/add-ons",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4b905d3b-fd1f-4773-8cf6-199a9a6b2be8"
+      ],
+      "states": [],
+      "requestFields": [
+        "name",
+        "category",
+        "price",
+        "active"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/add-ons",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4b905d3b-fd1f-4773-8cf6-199a9a6b2be8"
+      ],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PATCH",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/add-ons/4b905d3b-fd1f-4773-8cf6-199a9a6b2be8",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4b905d3b-fd1f-4773-8cf6-199a9a6b2be8"
+      ],
+      "states": [],
+      "requestFields": [
+        "price"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/add-ons/4b905d3b-fd1f-4773-8cf6-199a9a6b2be8/image",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": [
+        "file"
+      ]
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "DRAFT"
+      ],
+      "requestFields": [
+        "categoryId",
+        "name",
+        "slug",
+        "basePrice",
+        "customizable",
+        "defaultServingSize",
+        "minimumNoticeHours"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "DRAFT"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PATCH",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "DRAFT"
+      ],
+      "requestFields": [
+        "description"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PUT",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/options",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "fd4c54a8-f419-455f-a1d3-aef6fb956885",
+        "744ebafd-c4d8-44f2-b4db-ec370afb610f"
+      ],
+      "states": [],
+      "requestFields": [
+        "groups"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/images",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "d7ca7a1f-2400-484e-825f-34361c539a0d",
+        "ff10f029-e7e7-44a0-a152-5cb4425011a3"
+      ],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": [
+        "files",
+        "files"
+      ]
+    },
+    {
+      "service": "bakery",
+      "method": "DELETE",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/images/ff10f029-e7e7-44a0-a152-5cb4425011a3",
+      "httpStatus": 204,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/publish",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "PUBLISHED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/hide",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "HIDDEN"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0/publish",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0"
+      ],
+      "states": [
+        "PUBLISHED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/products/a91ae318-6797-4d37-ab56-c4f07bd8dbf0",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0",
+        "753e98c8-43dc-4981-a57c-314773b96a77",
+        "d7ca7a1f-2400-484e-825f-34361c539a0d",
+        "fd4c54a8-f419-455f-a1d3-aef6fb956885",
+        "744ebafd-c4d8-44f2-b4db-ec370afb610f",
+        "4b905d3b-fd1f-4773-8cf6-199a9a6b2be8"
+      ],
+      "states": [
+        "PUBLISHED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/products",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "a91ae318-6797-4d37-ab56-c4f07bd8dbf0",
+        "753e98c8-43dc-4981-a57c-314773b96a77",
+        "d7ca7a1f-2400-484e-825f-34361c539a0d",
+        "361b1c6a-8305-4ddb-bea6-60004f29f986",
+        "17c2ecda-5b23-4981-9353-fccb8cad79f1"
+      ],
+      "states": [
+        "PUBLISHED",
+        "PUBLISHED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "61b03a57-8536-4daf-831d-1af251783ab7",
+        "61b03a57-8536-4daf-831d-1af251783ab7",
+        "333adb52-69a6-4317-bf92-2d7bc1207bd1",
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "0dac9c70-9573-4eac-81e9-9210802d7376",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "305cdac4-3cb8-4f47-a66b-086ccb905f73",
+        "73dec7a8-7104-459e-980a-33158d1b77a3"
+      ],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "f48d8544-ad7a-4663-8915-a150625631c4"
+      ],
+      "states": [
+        "DRAFT"
+      ],
+      "requestFields": [
+        "name",
+        "slug",
+        "basePrice",
+        "defaultServingSize",
+        "minimumNoticeHours",
+        "customizable"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/products/f48d8544-ad7a-4663-8915-a150625631c4/archive",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "f48d8544-ad7a-4663-8915-a150625631c4"
+      ],
+      "states": [
+        "ARCHIVED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "DELETE",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/categories/753e98c8-43dc-4981-a57c-314773b96a77",
+      "httpStatus": 204,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "DELETE",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/add-ons/4b905d3b-fd1f-4773-8cf6-199a9a6b2be8",
+      "httpStatus": 204,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "PATCH",
+      "path": "/api/v1/admin/subscription-plans/33625602-637d-4488-9ef7-b1a0925efdbb",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33625602-637d-4488-9ef7-b1a0925efdbb"
+      ],
+      "states": [
+        "ACTIVE"
+      ],
+      "requestFields": [
+        "monthlyPrice"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/subscription-orders",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "027f8167-8208-4812-b8bf-a860d6e04b17"
+      ],
+      "states": [
+        "PENDING_PAYMENT"
+      ],
+      "requestFields": [
+        "planId"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/subscription-orders/027f8167-8208-4812-b8bf-a860d6e04b17/payments",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "90b490af-cd6a-43cc-b5c6-aba53f06947e"
+      ],
+      "states": [
+        "SUBMITTED"
+      ],
+      "requestFields": [
+        "paymentMethod",
+        "paymentReference",
+        "amount",
+        "currency"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/admin/bakery-payments/90b490af-cd6a-43cc-b5c6-aba53f06947e/approve",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "90b490af-cd6a-43cc-b5c6-aba53f06947e",
+        "027f8167-8208-4812-b8bf-a860d6e04b17",
+        "90b490af-cd6a-43cc-b5c6-aba53f06947e",
+        "4bf832be-8838-467b-82f5-1f991fadc76d",
+        "4bf832be-8838-467b-82f5-1f991fadc76d"
+      ],
+      "states": [
+        "APPROVED",
+        "COMPLETED",
+        "APPROVED",
+        "SCHEDULED",
+        "SCHEDULED"
+      ],
+      "requestFields": [
+        "reviewNote"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/bakeries/0dac9c70-9573-4eac-81e9-9210802d7376/subscription",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "4c74300c-cce8-4943-844a-ef7acd0cb0e2",
+        "4bf832be-8838-467b-82f5-1f991fadc76d"
+      ],
+      "states": [
+        "ACTIVE",
+        "SCHEDULED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "GET",
+      "path": "/api/v1/subscription-orders/1090ce82-65bb-432a-9186-45121094749c",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "1090ce82-65bb-432a-9186-45121094749c",
+        "ab8c1768-e9e4-4a67-b0e8-cfbe3aaddd71",
+        "4d10660d-0672-42dd-92b5-d2bceda2b716",
+        "4c74300c-cce8-4943-844a-ef7acd0cb0e2"
+      ],
+      "states": [
+        "COMPLETED",
+        "REJECTED",
+        "APPROVED",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "subscription",
+      "method": "POST",
+      "path": "/api/v1/admin/subscription-plans/33625602-637d-4488-9ef7-b1a0925efdbb/archive",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "33625602-637d-4488-9ef7-b1a0925efdbb"
+      ],
+      "states": [
+        "ARCHIVED"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries",
+      "httpStatus": 201,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "d7262cd8-c9bf-446e-b44a-88d385c707b8"
+      ],
+      "states": [
+        "DRAFT"
+      ],
+      "requestFields": [
+        "name",
+        "phoneNumber"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "PUT",
+      "path": "/api/v1/bakeries/d7262cd8-c9bf-446e-b44a-88d385c707b8/operations",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "38ce87ce-45e6-4016-a7b0-96bb01b902a5",
+        "a37ed852-8612-46a7-9751-8d63b9a6ec65"
+      ],
+      "states": [],
+      "requestFields": [
+        "addresses",
+        "serviceAreas",
+        "businessHours"
+      ],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "POST",
+      "path": "/api/v1/bakeries/d7262cd8-c9bf-446e-b44a-88d385c707b8/submit-for-approval",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "d7262cd8-c9bf-446e-b44a-88d385c707b8",
+        "38ce87ce-45e6-4016-a7b0-96bb01b902a5",
+        "a37ed852-8612-46a7-9751-8d63b9a6ec65"
+      ],
+      "states": [
+        "PENDING_APPROVAL"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/admin/bakeries/d7262cd8-c9bf-446e-b44a-88d385c707b8",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [
+        "d7262cd8-c9bf-446e-b44a-88d385c707b8",
+        "38ce87ce-45e6-4016-a7b0-96bb01b902a5",
+        "a37ed852-8612-46a7-9751-8d63b9a6ec65",
+        "c2dca186-b448-405a-982e-5b5f2285ac71"
+      ],
+      "states": [
+        "PENDING_APPROVAL",
+        "ACTIVE"
+      ],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    },
+    {
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "httpStatus": 200,
+      "expected": "2xx",
+      "result": "PASS",
+      "ids": [],
+      "states": [],
+      "requestFields": [],
+      "multipartParts": []
+    }
+  ],
+  "resources": {
+    "user": "f2fcadc1-40d2-49f7-bff0-c12c2381ea71",
+    "bakery": "0dac9c70-9573-4eac-81e9-9210802d7376",
+    "plan": "33625602-637d-4488-9ef7-b1a0925efdbb",
+    "order": "1090ce82-65bb-432a-9186-45121094749c",
+    "product": "a91ae318-6797-4d37-ab56-c4f07bd8dbf0",
+    "renewal": "027f8167-8208-4812-b8bf-a860d6e04b17",
+    "branch": "d7262cd8-c9bf-446e-b44a-88d385c707b8"
+  },
+  "businessChecks": [
+    {
+      "check": "Customer me is newly registered record",
+      "result": "PASS"
+    },
+    {
+      "check": "Owner role granted through actual onboarding contract",
+      "result": "PASS"
+    },
+    {
+      "check": "Signed product media GET 200 and exact uploaded bytes",
+      "result": "PASS"
+    },
+    {
+      "check": "Renewal produces future scheduled period",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed order retains original snapshot",
+      "result": "PASS"
+    },
+    {
+      "check": "No unexpected HTTP failures",
+      "result": "PASS"
+    }
+  ],
+  "credentialsPersisted": false
+}

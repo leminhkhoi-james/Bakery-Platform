@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-08T01:11:57.769032+00:00",
+  "checkOnly": false,
+  "actions": [],
+  "services": {},
+  "source": {},
+  "result": "BLOCKED_BY_ENVIRONMENT",
+  "errorType": "RuntimeError",
+  "reason": "Docker operation failed: info (exit 1); no raw environment output recorded"
+}

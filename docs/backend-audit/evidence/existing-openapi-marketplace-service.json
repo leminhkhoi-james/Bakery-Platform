@@ -1,0 +1,1662 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bakery Platform Marketplace Service API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/cake-requests/{id}/selected-design": {
+      "put": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "design",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectDesignRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offers/{id}/withdraw": {
+      "post": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "withdraw",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOfferResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offers/{id}/accept": {
+      "post": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "accept",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptOfferRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAcceptanceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests": {
+      "get": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "filters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageResponseCakeRequestSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCakeRequestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}/publish": {
+      "post": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "publish",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}/offers": {
+      "post": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "create_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOfferRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOfferResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}/images": {
+      "post": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "upload",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "displayOrder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "files"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListRequestImageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}/cancel": {
+      "post": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offers/{id}": {
+      "get": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "detail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOfferResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "patch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchOfferRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOfferResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}": {
+      "get": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "detail_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "patch_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchCakeRequestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCakeRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/offers/{id}/order-source": {
+      "get": {
+        "tags": [
+          "marketplace-context-controller"
+        ],
+        "operationId": "source",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfferOrderSource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/cake-requests/{id}/context": {
+      "get": {
+        "tags": [
+          "marketplace-context-controller"
+        ],
+        "operationId": "context",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/cake-requests/{id}/chat-authorization": {
+      "get": {
+        "tags": [
+          "marketplace-context-controller"
+        ],
+        "operationId": "chatAuthorization",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "bakeryId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatAuthorizationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offers": {
+      "get": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "filters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePageResponseOfferResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cake-requests/{id}/images/{imageId}": {
+      "delete": {
+        "tags": [
+          "cake-request-controller"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SelectDesignRequest": {
+        "type": "object",
+        "properties": {
+          "generatedDesignId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "generatedDesignId"
+        ]
+      },
+      "ApiResponseCakeRequestResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CakeRequestResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CakeRequestResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetBakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseProductId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "selectedDesignId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestType": {
+            "type": "string",
+            "enum": [
+              "OPEN_CUSTOM",
+              "TARGETED_PRODUCT_CUSTOM"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "occasion": {
+            "type": "string"
+          },
+          "servingSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "budgetMin": {
+            "type": "number"
+          },
+          "budgetMax": {
+            "type": "number"
+          },
+          "neededAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryDistrict": {
+            "type": "string"
+          },
+          "deliveryCity": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "OPEN",
+              "OFFER_SELECTED",
+              "CLOSED",
+              "CANCELLED"
+            ]
+          },
+          "offerDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "preference": {
+            "$ref": "#/components/schemas/Preference"
+          },
+          "optionSelections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionSnapshot"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequestImageResponse"
+            }
+          },
+          "statusHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HistoryResponse"
+            }
+          },
+          "selectedDesign": {
+            "$ref": "#/components/schemas/SelectedDesignSummary"
+          },
+          "offers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfferSummary"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "HistoryResponse": {
+        "type": "object",
+        "properties": {
+          "fromStatus": {
+            "type": "string"
+          },
+          "toStatus": {
+            "type": "string"
+          },
+          "changedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "changedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OfferSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "REJECTED",
+              "WITHDRAWN",
+              "EXPIRED"
+            ]
+          },
+          "totalPrice": {
+            "type": "number"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OptionSnapshot": {
+        "type": "object",
+        "properties": {
+          "optionGroupId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "optionValueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "groupNameSnapshot": {
+            "type": "string"
+          },
+          "valueNameSnapshot": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Preference": {
+        "type": "object",
+        "properties": {
+          "cakeSize": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 0
+          },
+          "cakeShape": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 0
+          },
+          "flavor": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "filling": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "frosting": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "colorPalette": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "decorationNotes": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "allergyNotes": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "extraOptions": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "RequestImageResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mediaType": {
+            "type": "string"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "SelectedDesignSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "ReasonRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          }
+        }
+      },
+      "ApiResponseOfferResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OfferResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "addOnId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "itemNameSnapshot": {
+            "type": "string"
+          },
+          "descriptionSnapshot": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "lineTotal": {
+            "type": "number"
+          }
+        }
+      },
+      "OfferResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cakeRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          },
+          "cakePrice": {
+            "type": "number"
+          },
+          "deliveryFee": {
+            "type": "number"
+          },
+          "addOnTotal": {
+            "type": "number"
+          },
+          "totalPrice": {
+            "type": "number"
+          },
+          "estimatedCompletionAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "REJECTED",
+              "WITHDRAWN",
+              "EXPIRED"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "statusHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HistoryResponse"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "AcceptOfferRequest": {
+        "type": "object",
+        "properties": {
+          "deliveryAddressId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerNote": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "deliveryAddressId"
+        ]
+      },
+      "AcceptanceResponse": {
+        "type": "object",
+        "properties": {
+          "offerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cakeRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "offerStatus": {
+            "type": "string"
+          },
+          "requestStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseAcceptanceResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AcceptanceResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateCakeRequestRequest": {
+        "type": "object",
+        "properties": {
+          "requestType": {
+            "type": "string",
+            "enum": [
+              "OPEN_CUSTOM",
+              "TARGETED_PRODUCT_CUSTOM"
+            ]
+          },
+          "targetBakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseProductId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "minLength": 0
+          },
+          "occasion": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "servingSize": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "budgetMin": {
+            "type": "number",
+            "minimum": 0
+          },
+          "budgetMax": {
+            "type": "number",
+            "minimum": 0
+          },
+          "neededAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryDistrict": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "deliveryCity": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "offerDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "preference": {
+            "$ref": "#/components/schemas/Preference"
+          },
+          "optionSelections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "maxItems": 100,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "deliveryCity",
+          "deliveryDistrict",
+          "description",
+          "neededAt",
+          "requestType",
+          "title"
+        ]
+      },
+      "Option": {
+        "type": "object",
+        "properties": {
+          "optionGroupId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "optionValueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "optionGroupId",
+          "optionValueId"
+        ]
+      },
+      "AddOn": {
+        "type": "object",
+        "properties": {
+          "addOnId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "addOnId"
+        ]
+      },
+      "CreateOfferRequest": {
+        "type": "object",
+        "properties": {
+          "bakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "cakePrice": {
+            "type": "number",
+            "minimum": 0
+          },
+          "deliveryFee": {
+            "type": "number",
+            "minimum": 0
+          },
+          "estimatedCompletionAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddOn"
+            },
+            "maxItems": 100,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "bakeryId",
+          "cakePrice",
+          "deliveryFee",
+          "estimatedCompletionAt",
+          "expiresAt"
+        ]
+      },
+      "ApiResponseListRequestImageResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequestImageResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PatchOfferRequest": {
+        "type": "object",
+        "properties": {
+          "changes": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PatchCakeRequestRequest": {
+        "type": "object",
+        "properties": {
+          "changes": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "OfferOrderSource": {
+        "type": "object",
+        "properties": {
+          "offerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cakeRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "neededAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryCity": {
+            "type": "string"
+          },
+          "deliveryDistrict": {
+            "type": "string"
+          },
+          "cakePrice": {
+            "type": "number"
+          },
+          "deliveryFee": {
+            "type": "number"
+          },
+          "addOnTotal": {
+            "type": "number"
+          },
+          "totalPrice": {
+            "type": "number"
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        }
+      },
+      "ChatAuthorizationResponse": {
+        "type": "object",
+        "properties": {
+          "cakeRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestStatus": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "OPEN",
+              "OFFER_SELECTED",
+              "CLOSED",
+              "CANCELLED"
+            ]
+          },
+          "authorized": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponsePageResponseOfferResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageResponseOfferResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PageResponseOfferResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfferResponse"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        }
+      },
+      "ApiResponsePageResponseCakeRequestSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageResponseCakeRequestSummaryResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CakeRequestSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetBakeryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestType": {
+            "type": "string",
+            "enum": [
+              "OPEN_CUSTOM",
+              "TARGETED_PRODUCT_CUSTOM"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "budgetMin": {
+            "type": "number"
+          },
+          "budgetMax": {
+            "type": "number"
+          },
+          "neededAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryCity": {
+            "type": "string"
+          },
+          "deliveryDistrict": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "OPEN",
+              "OFFER_SELECTED",
+              "CLOSED",
+              "CANCELLED"
+            ]
+          },
+          "offerDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseCakeRequestSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CakeRequestSummaryResponse"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

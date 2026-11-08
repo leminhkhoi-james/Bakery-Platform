@@ -116,7 +116,7 @@ export const INITIAL_USERS = [
     trustScore: 100,
     trustLabel: 'Bảo chứng tuyệt đối',
     isStar: false,
-    tasteNotes: 'Khách hàng sự kiện cưới hỏi cao cấp, yêu cầu xe lạnh 4-6°C',
+    tasteNotes: 'Khách hàng sự kiện cưới hỏi cao cấp, yêu cầu giao hàng đúng hẹn',
   },
   {
     id: 'CUST-3901',

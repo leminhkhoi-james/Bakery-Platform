@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "markdownFiles": 13,
+  "linksChecked": 16712,
+  "apiSections": 113,
+  "workflowSections": 37,
+  "sourceOperations": 113,
+  "executedOperations": 104,
+  "business2xxOperations": 97,
+  "jsonEvidenceFiles": 50,
+  "secretValuesCheckedCount": 30,
+  "secretMatchFiles": [],
+  "gitOutsideDocsChanges": [],
+  "stagedFiles": [],
+  "protectedFilesChecked": 10582,
+  "errors": []
+}

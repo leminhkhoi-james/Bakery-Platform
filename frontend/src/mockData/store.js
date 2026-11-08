@@ -43,6 +43,31 @@ export function migrateDemoState(state) {
     }
   }
 
+  // Ensure active partner subscriptions are present if missing from older local storage
+  if (!state.subscriptions) state.subscriptions = []
+  for (const seedSub of seed.subscriptions || []) {
+    const existing = state.subscriptions.find((s) => s.bakeryId === seedSub.bakeryId)
+    if (!existing) {
+      state.subscriptions.push(seedSub)
+      changed = true
+    } else if (existing.bakeryId === seed.bakeries[4]?.id) {
+      existing.planCode = 'PREMIUM'
+      existing.planName = 'Cao cấp'
+      existing.planId = seedSub.planId
+      existing.periodStart = seedSub.periodStart
+      existing.periodEnd = seedSub.periodEnd
+      existing.featuresSnapshot = seedSub.featuresSnapshot
+      existing.status = 'ACTIVE'
+      changed = true
+    }
+  }
+
+  // Update state.plans to match seed plans if older demo codes exist
+  if (state.plans?.some((p) => p.code?.startsWith('DEMO_'))) {
+    state.plans = seed.plans
+    changed = true
+  }
+
   // Keep payment and subscription order amounts aligned with current plan prices for pending reviews
   for (const order of state.subscriptionOrders || []) {
     if (order.status === 'PAYMENT_REVIEW') {

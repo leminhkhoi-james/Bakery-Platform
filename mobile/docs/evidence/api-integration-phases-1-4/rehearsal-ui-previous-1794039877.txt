@@ -1,0 +1,3 @@
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Live UI stopped at readme-rehearsal (DriverError); see sanitized evidence.
+{"exitCode": 1, "evidence": "android-ui-driver.log"}

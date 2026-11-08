@@ -1,0 +1,418 @@
+Resolving dependencies...
+Downloading packages...
+  cupertino_icons 1.0.9 (2.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.4 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart
+00:00 +0: Bottom navigation tìm sản phẩm và đổi persona qua bộ chọn demo
+00:02 +1: Chi tiết bánh thay size, thêm giỏ và giữ tổng sau tăng số lượng
+00:02 +2: RFQ báo lỗi bắt buộc rồi lưu bản nháp qua form
+00:03 +3: So sánh chọn preview không chấp nhận giao dịch
+00:03 +4: Chủ tiệm tạo sản phẩm DRAFT và đổi trạng thái catalog local
+00:04 +5: Đơn gói dùng snapshot, gửi chứng từ local vào hàng chờ
+00:04 +6: Admin điều hướng quản lý người dùng và tạo người dùng local
+00:05 +7: Chủ tiệm cập nhật đơn theo state machine bằng dialog rồi xem timeline
+00:05 +8: Sửa hồ sơ local đóng sheet không dùng controller đã dispose
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building RawGestureDetector(state:
+RawGestureDetectorState#7d05d(gestures: [tap, long press, tap and horizontal drag],
+excludeFromSemantics: true, behavior: translucent)):
+A TextEditingController was used after being disposed.
+Once you have called dispose() on a TextEditingController, it can no longer be used.
+
+The relevant error-causing widget was:
+  TextFormField
+  TextFormField:file:///H:/MSS/Bakery-Platform/mobile/lib/core/widgets/sweetcake_widgets.dart:616:12
+
+When the exception was thrown, this was the stack:
+#0      ChangeNotifier.debugAssertNotDisposed.<anonymous closure> (package:flutter/src/foundation/change_notifier.dart:184:9)
+#1      ChangeNotifier.debugAssertNotDisposed (package:flutter/src/foundation/change_notifier.dart:191:6)
+#2      ChangeNotifier.addListener (package:flutter/src/foundation/change_notifier.dart:273:27)
+#3      _MergingListenable.addListener (package:flutter/src/foundation/change_notifier.dart:503:14)
+#4      _AnimatedState.didUpdateWidget (package:flutter/src/widgets/transitions.dart:119:25)
+#5      StatefulElement.update (package:flutter/src/widgets/framework.dart:6004:55)
+#6      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#7      SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#8      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#9      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#10     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#11     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#12     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#13     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#17     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#18     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#19     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#20     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#21     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#22     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#23     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#24     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#25     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#26     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#27     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#28     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#29     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#30     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#31     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#32     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#33     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#34     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#35     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#36     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#37     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#38     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#39     ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#40     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#41     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#42     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#43     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#44     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#45     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#46     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#47     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#48     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#49     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#50     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#51     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#52     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#53     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#56     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#57     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#58     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#61     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#62     WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#63     main.tap (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:10:236)
+<asynchronous suspension>
+#64     main.<anonymous closure> (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:69:129)
+<asynchronous suspension>
+#65     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#66     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building RawGestureDetector(state:
+RawGestureDetectorState#64c14(gestures: [tap, long press, tap and horizontal drag],
+excludeFromSemantics: true, behavior: translucent)):
+A TextEditingController was used after being disposed.
+Once you have called dispose() on a TextEditingController, it can no longer be used.
+
+The relevant error-causing widget was:
+  TextFormField
+  TextFormField:file:///H:/MSS/Bakery-Platform/mobile/lib/core/widgets/sweetcake_widgets.dart:616:12
+
+When the exception was thrown, this was the stack:
+#0      ChangeNotifier.debugAssertNotDisposed.<anonymous closure> (package:flutter/src/foundation/change_notifier.dart:184:9)
+#1      ChangeNotifier.debugAssertNotDisposed (package:flutter/src/foundation/change_notifier.dart:191:6)
+#2      ChangeNotifier.addListener (package:flutter/src/foundation/change_notifier.dart:273:27)
+#3      _MergingListenable.addListener (package:flutter/src/foundation/change_notifier.dart:503:14)
+#4      _AnimatedState.didUpdateWidget (package:flutter/src/widgets/transitions.dart:119:25)
+#5      StatefulElement.update (package:flutter/src/widgets/framework.dart:6004:55)
+#6      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#7      SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#8      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#9      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#10     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#11     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#12     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#13     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#17     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#18     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#19     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#20     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#21     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#22     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#23     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#24     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#25     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#26     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#27     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#28     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#29     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#30     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#31     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#32     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#33     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#34     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#35     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#36     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#37     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#38     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#39     ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#40     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#41     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#42     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#43     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#44     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#45     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#46     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#47     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#48     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#49     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#50     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#51     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#52     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#53     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#56     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#57     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#58     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#61     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#62     WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#63     main.tap (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:10:236)
+<asynchronous suspension>
+#64     main.<anonymous closure> (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:69:129)
+<asynchronous suspension>
+#65     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#66     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building RawGestureDetector(state:
+RawGestureDetectorState#fa57f(gestures: [tap, long press, tap and horizontal drag],
+excludeFromSemantics: true, behavior: translucent)):
+A TextEditingController was used after being disposed.
+Once you have called dispose() on a TextEditingController, it can no longer be used.
+
+The relevant error-causing widget was:
+  TextFormField
+  TextFormField:file:///H:/MSS/Bakery-Platform/mobile/lib/core/widgets/sweetcake_widgets.dart:616:12
+
+When the exception was thrown, this was the stack:
+#0      ChangeNotifier.debugAssertNotDisposed.<anonymous closure> (package:flutter/src/foundation/change_notifier.dart:184:9)
+#1      ChangeNotifier.debugAssertNotDisposed (package:flutter/src/foundation/change_notifier.dart:191:6)
+#2      ChangeNotifier.addListener (package:flutter/src/foundation/change_notifier.dart:273:27)
+#3      _MergingListenable.addListener (package:flutter/src/foundation/change_notifier.dart:503:14)
+#4      _AnimatedState.didUpdateWidget (package:flutter/src/widgets/transitions.dart:119:25)
+#5      StatefulElement.update (package:flutter/src/widgets/framework.dart:6004:55)
+#6      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#7      SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#8      Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#9      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#10     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#11     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#12     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#13     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#17     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#18     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#19     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#20     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#21     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#22     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#23     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#24     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#25     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#26     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#27     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#28     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#29     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#30     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#31     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#32     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#33     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#34     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#35     StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#36     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#37     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#38     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#39     ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#40     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#41     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#42     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#43     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#44     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#45     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#46     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#47     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#48     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#49     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#50     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#51     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#52     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#53     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#56     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#57     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#58     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#61     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#62     WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#63     main.tap (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:10:236)
+<asynchronous suspension>
+#64     main.<anonymous closure> (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:69:129)
+<asynchronous suspension>
+#65     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#66     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building Overlay-[LabeledGlobalKey<OverlayState>#28ba5](state:
+OverlayState#32b34(entries: [OverlayEntry#e5148(opaque: true; maintainState: false),
+OverlayEntry#b8b21(opaque: false; maintainState: true), OverlayEntry#71348(opaque: true;
+maintainState: false), OverlayEntry#d15f5(opaque: false; maintainState: true)])):
+'package:flutter/src/widgets/framework.dart': Failed assertion: line 6281 pos 12:
+'_dependents.isEmpty': is not true.
+
+Either the assertion indicates an error in the framework itself, or we should provide substantially
+more information in this error message to help you determine and fix the underlying cause.
+In either case, please report this assertion by filing a bug on GitHub:
+  https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+
+The relevant error-causing widget was:
+  MaterialApp MaterialApp:file:///H:/MSS/Bakery-Platform/mobile/lib/main.dart:35:12
+
+When the exception was thrown, this was the stack:
+#2      InheritedElement.debugDeactivated (package:flutter/src/widgets/framework.dart:6281:12)
+#3      _InactiveElements._deactivateRecursively.<anonymous closure> (package:flutter/src/widgets/framework.dart:2145:15)
+#4      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2147:6)
+#5      SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#6      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#7      ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#8      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#9      ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#10     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#11     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#12     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#13     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#14     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#15     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#16     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#17     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#18     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#19     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#20     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#21     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#22     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#23     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#24     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#25     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#26     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#27     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#28     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#29     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#30     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#31     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#32     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#33     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#34     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#35     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#36     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#37     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#38     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#39     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#40     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#41     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#42     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#43     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#44     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#45     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#46     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#47     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#48     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#49     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#50     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#51     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#52     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#53     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#54     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#55     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#56     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#57     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#58     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#59     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7114:14)
+#60     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#61     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#62     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#63     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#64     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#65     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#66     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#67     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#68     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#69     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5884:14)
+#70     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2143:13)
+#71     _InactiveElements.add (package:flutter/src/widgets/framework.dart:2157:9)
+#72     Element.deactivateChild (package:flutter/src/widgets/framework.dart:4649:30)
+#73     Element.updateChildren (package:flutter/src/widgets/framework.dart:4315:11)
+#74     MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7308:17)
+#75     Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#76     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#77     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#78     Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#79     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#80     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#81     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#82     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#83     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#84     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#85     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#86     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#89     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#90     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#91     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+<asynchronous suspension>
+#92     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#93     main.tap (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:10:228)
+<asynchronous suspension>
+#94     main.<anonymous closure> (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:69:129)
+<asynchronous suspension>
+#95     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#96     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from class _AssertionError, dart:async, and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: 'Multiple exceptions (4) were detected during the running of the current test, and at
+least one was unexpected.'
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart:70:56)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart line 70
+The test description was:
+  Sửa hồ sơ local đóng sheet không dùng controller đã dispose
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +8 -1: Sửa hồ sơ local đóng sheet không dùng controller đã dispose [E]
+  Test failed. See exception logs above.
+  The test description was: Sửa hồ sơ local đóng sheet không dùng controller đã dispose
+  
+00:05 +8 -1: Some tests failed.
+
+Failing tests:
+  H:/MSS/Bakery-Platform/mobile/test/ui_workflows_test.dart: Sửa hồ sơ local đóng sheet không dùng controller đã dispose

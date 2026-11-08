@@ -1,0 +1,70 @@
+Launching lib\main.dart on sdk gphone64 x86 64 in debug mode...
+Running Gradle task 'assembleDebug'...                          
+
+H:\MSS\Bakery-Platform\mobile\android>if "Windows_NT" == "Windows_NT" setlocal
+
+H:\MSS\Bakery-Platform\mobile\android>set DEFAULT_JVM_OPTS= 
+
+H:\MSS\Bakery-Platform\mobile\android>set DIRNAME=H:\MSS\Bakery-Platform\mobile\android\ 
+
+H:\MSS\Bakery-Platform\mobile\android>if "H:\MSS\Bakery-Platform\mobile\android\" == "" set DIRNAME=. 
+
+H:\MSS\Bakery-Platform\mobile\android>set APP_BASE_NAME=gradlew 
+
+H:\MSS\Bakery-Platform\mobile\android>set APP_HOME=H:\MSS\Bakery-Platform\mobile\android\ 
+
+H:\MSS\Bakery-Platform\mobile\android>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+H:\MSS\Bakery-Platform\mobile\android>set JAVA_HOME=C:\Program Files\Java\jdk-21 
+
+H:\MSS\Bakery-Platform\mobile\android>set JAVA_EXE=C:\Program Files\Java\jdk-21/bin/java.exe 
+
+H:\MSS\Bakery-Platform\mobile\android>if exist "C:\Program Files\Java\jdk-21/bin/java.exe" goto init 
+
+H:\MSS\Bakery-Platform\mobile\android>if not "Windows_NT" == "Windows_NT" goto win9xME_args 
+
+H:\MSS\Bakery-Platform\mobile\android>if "@eval[2+2]" == "4" goto 4NT_args 
+
+H:\MSS\Bakery-Platform\mobile\android>set CMD_LINE_ARGS= 
+
+H:\MSS\Bakery-Platform\mobile\android>set _SKIP=2 
+
+H:\MSS\Bakery-Platform\mobile\android>if "x-q" == "x" goto execute 
+
+H:\MSS\Bakery-Platform\mobile\android>set CMD_LINE_ARGS=-q -Ptarget-platform=android-x64 -Ptarget=H:\MSS\Bakery-Platform\mobile\lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuMQ==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NjY1NTQ4MmVjMA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NWQ1MzE3ODg2OQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pfilesystem-scheme=org-dartlang-root -Pflutter.androidSdkRoot=D:\HomeMind\audit-tools\android-sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=D:\HomeMind\audit-tools\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug 
+
+H:\MSS\Bakery-Platform\mobile\android>goto execute 
+
+H:\MSS\Bakery-Platform\mobile\android>set CLASSPATH=H:\MSS\Bakery-Platform\mobile\android\\gradle\wrapper\gradle-wrapper.jar 
+
+H:\MSS\Bakery-Platform\mobile\android>"C:\Program Files\Java\jdk-21/bin/java.exe"    "-Dorg.gradle.appname=gradlew" -classpath "H:\MSS\Bakery-Platform\mobile\android\\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain -q -Ptarget-platform=android-x64 -Ptarget=H:\MSS\Bakery-Platform\mobile\lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuMQ==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NjY1NTQ4MmVjMA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NWQ1MzE3ODg2OQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pfilesystem-scheme=org-dartlang-root -Pflutter.androidSdkRoot=D:\HomeMind\audit-tools\android-sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=D:\HomeMind\audit-tools\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug 
+
+H:\MSS\Bakery-Platform\mobile\android>if "0" == "0" goto mainEnd 
+
+H:\MSS\Bakery-Platform\mobile\android>if "Windows_NT" == "Windows_NT" endlocal
+Running Gradle task 'assembleDebug'...                             27.2s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           3.1s
+I/FlutterActivityAndFragmentDelegate( 7962): If you are attempting to set --enable-dart-profiling via Intent extras to launch a Flutter component outside of using the Flutter CLI, note that support for setting engine flags on Android via Intent will soon be dropped; see https://github.com/flutter/flutter/issues/180686 for more information on this breaking change. To migrate, set --enable-dart-profiling or any other flags specified via Intent extras on the command line instead or see https://github.com/flutter/flutter/blob/main/docs/engine/Flutter-Android-Engine-Flags.md for alternative methods.
+D/FlutterJNI( 7962): Beginning load of flutter...
+D/FlutterJNI( 7962): flutter (null) was loaded normally!
+I/flutter ( 7962): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+D/nativeloader( 7962): Load /data/app/~~oOc8Vt0I-tDIOkk7ZTJJZQ==/com.example.bakery_mobile-I1tsDcQjXA_8UVHk5lQe4Q==/base.apk!/lib/x86_64/libdartjni.so using class loader ns clns-9 (caller=/data/app/~~oOc8Vt0I-tDIOkk7ZTJJZQ==/com.example.bakery_mobile-I1tsDcQjXA_8UVHk5lQe4Q==/base.apk!classes6.dex): ok
+Syncing files to device sdk gphone64 x86 64...                  
+I/e.bakery_mobile( 7962): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app) using reflection: allowed
+I/e.bakery_mobile( 7962): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app) using reflection: allowed
+I/e.bakery_mobile( 7962): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app) using reflection: allowed
+I/e.bakery_mobile( 7962): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app) using reflection: allowed
+D/AccessibilityBridge( 7962): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer( 7962): Width is zero. 0,0
+D/CompatChangeReporter( 7962): Compat change id reported: 377864165; UID 10235; state: ENABLED
+W/HWUI    ( 7962): Unknown dataspace 0
+Syncing files to device sdk gphone64 x86 64...                     260ms
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): file_picker
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors

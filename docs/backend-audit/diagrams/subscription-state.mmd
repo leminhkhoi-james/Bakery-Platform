@@ -1,0 +1,16 @@
+stateDiagram-v2
+  state SubscriptionOrder {
+    [*] --> PENDING_PAYMENT
+    PENDING_PAYMENT --> PAYMENT_REVIEW
+    PENDING_PAYMENT --> EXPIRED
+    PAYMENT_REVIEW --> COMPLETED
+    PAYMENT_REVIEW --> PENDING_PAYMENT
+    PAYMENT_REVIEW --> EXPIRED
+  }
+  state Period {
+    [*] --> ACTIVE
+    [*] --> SCHEDULED
+    SCHEDULED --> ACTIVE
+    ACTIVE --> EXPIRED_PERIOD
+    SCHEDULED --> EXPIRED_PERIOD
+  }

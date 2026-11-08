@@ -28,7 +28,7 @@ spring:
 
 platform:
   remote:
-    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8080}
+    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
     client-id: bakery-service
     client-secret: ${BAKERY_CLIENT_SECRET:}
     connect-timeout: 2s
@@ -41,7 +41,7 @@ security:
 
 clients:
   identity:
-    url: ${IDENTITY_SERVICE_URL:http://localhost:8080}
+    url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
     service-token: ${BAKERY_IDENTITY_SERVICE_TOKEN:}
   subscription:
     url: ${SUBSCRIPTION_SERVICE_URL:http://localhost:8084}

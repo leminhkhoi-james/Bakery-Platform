@@ -1,0 +1,22 @@
+[
+  {
+    "action": "Continued existing persisted category without repeating its create",
+    "result": "PASS",
+    "at": "2026-11-07T08:00:43.123476Z"
+  },
+  {
+    "action": "Owner product create with real ID and list refetch",
+    "result": "PASS",
+    "at": "2026-11-07T08:00:49.068240Z"
+  },
+  {
+    "action": "Full replacement options sent through native editor",
+    "result": "PASS",
+    "at": "2026-11-07T08:00:54.067543Z"
+  },
+  {
+    "action": "catalog-media",
+    "result": "FAIL_MOBILE_OR_BACKEND",
+    "errorType": "StateError"
+  }
+]

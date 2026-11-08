@@ -15,7 +15,7 @@ export const ORDER_STATUS_LABELS = {
   [ORDER_STATUS.PROCESSING]: 'Đang xử lý',
   [ORDER_STATUS.BAKING]: 'Đang làm bánh',
   [ORDER_STATUS.READY]: 'Bánh hoàn tất',
-  [ORDER_STATUS.DELIVERING]: 'Đang giao xe lạnh',
+  [ORDER_STATUS.DELIVERING]: 'Đang giao hàng',
   [ORDER_STATUS.COMPLETED]: 'Đã giao thành công',
   [ORDER_STATUS.CANCELLED]: 'Đã hủy đơn',
 }

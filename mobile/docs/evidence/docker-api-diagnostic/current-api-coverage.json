@@ -1,0 +1,947 @@
+{
+  "operations": [
+    {
+      "id": "BKR-001",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/admin/bakeries",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-002",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/admin/bakeries/{bakeryId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-003",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PATCH",
+      "route": "/api/v1/admin/bakeries/{bakeryId}/status",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-004",
+      "phase": 1,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-005",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-006",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/onboarding",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-007",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/onboarding",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-008",
+      "phase": 1,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-009",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-010",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-011",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-012",
+      "phase": 3,
+      "service": "bakery",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        204
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-013",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-014",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}/image",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-015",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/categories",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-016",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/categories",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-017",
+      "phase": 3,
+      "service": "bakery",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        204
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-018",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-019",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/cover",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-020",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/logo",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-021",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/members",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-022",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/onboarding/complete",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        204
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-023",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PUT",
+      "route": "/api/v1/bakeries/{bakeryId}/operations",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-024",
+      "phase": 3,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/products",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-025",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-026",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-027",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/archive",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-028",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/hide",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-029",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/images",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-030",
+      "phase": 3,
+      "service": "bakery",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/images/{imageId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        204
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-031",
+      "phase": 3,
+      "service": "bakery",
+      "method": "PUT",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/options",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-032",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/publish",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-033",
+      "phase": 3,
+      "service": "bakery",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/submit-for-approval",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "BKR-034",
+      "phase": 1,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/products",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "BKR-035",
+      "phase": 1,
+      "service": "bakery",
+      "method": "GET",
+      "route": "/api/v1/products/{productId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "IDN-002",
+      "phase": 2,
+      "service": "identity",
+      "method": "POST",
+      "route": "/api/v1/auth/login",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "IDN-003",
+      "phase": 2,
+      "service": "identity",
+      "method": "POST",
+      "route": "/api/v1/auth/logout",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "IDN-004",
+      "phase": 2,
+      "service": "identity",
+      "method": "GET",
+      "route": "/api/v1/auth/me",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "IDN-005",
+      "phase": 2,
+      "service": "identity",
+      "method": "POST",
+      "route": "/api/v1/auth/refresh",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "IDN-006",
+      "phase": 2,
+      "service": "identity",
+      "method": "POST",
+      "route": "/api/v1/auth/register",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": [
+        201,
+        409
+      ]
+    },
+    {
+      "id": "SUB-001",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/admin/bakery-payments",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "SUB-002",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/admin/bakery-payments/{paymentId}/approve",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-003",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/admin/bakery-payments/{paymentId}/reject",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-004",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/admin/subscription-plans",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "SUB-005",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/admin/subscription-plans",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-006",
+      "phase": 4,
+      "service": "subscription",
+      "method": "PATCH",
+      "route": "/api/v1/admin/subscription-plans/{planId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-007",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/admin/subscription-plans/{planId}/archive",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-008",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "SUB-009",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription-orders",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "SUB-010",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription-orders",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-011",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/subscription-orders/{orderId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-012",
+      "phase": 4,
+      "service": "subscription",
+      "method": "POST",
+      "route": "/api/v1/subscription-orders/{orderId}/payments",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        201
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-013",
+      "phase": 1,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    },
+    {
+      "id": "SUB-014",
+      "phase": 4,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans/payment-options",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": false,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": []
+    },
+    {
+      "id": "SUB-015",
+      "phase": 1,
+      "service": "subscription",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans/{planId}",
+      "adapterImplemented": true,
+      "backendReached": true,
+      "backend2xx": true,
+      "androidUi2xx": true,
+      "uiBusinessResult": "See individual UI checkpoints/screenshots; a transport 2xx alone is not a UI business assertion",
+      "backendStatuses": [
+        200
+      ],
+      "androidUiStatuses": [
+        200
+      ]
+    }
+  ],
+  "uniqueInventory": 55,
+  "backendHttp2xxOperations": 55,
+  "androidUi2xxOperations": 20,
+  "byService": {
+    "identity": {
+      "inventory": 5,
+      "backend2xx": 5,
+      "androidUi2xx": 5
+    },
+    "bakery": {
+      "inventory": 35,
+      "backend2xx": 35,
+      "androidUi2xx": 9
+    },
+    "subscription": {
+      "inventory": 15,
+      "backend2xx": 15,
+      "androidUi2xx": 6
+    }
+  },
+  "backendRequestCount": 69,
+  "uiCoverageRule": "Current run only; normalized service+method+route. Historical 55/55 UI not reused; injected invalid/rejected connections excluded from positive UI counts."
+}

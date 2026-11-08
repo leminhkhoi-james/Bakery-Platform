@@ -20,18 +20,18 @@ export const HOW_IT_WORKS_STEPS = [
   },
   {
     stepNum: '03',
-    title: 'Ký Quỹ Escrow An Toàn',
-    desc: 'Sweet Cake giữ tiền cọc an toàn ở tài khoản trung gian. Tiền chỉ được thanh toán cho tiệm khi bạn duyệt ảnh bánh hoàn thiện đạt tiêu chuẩn.',
-    highlightWord: 'chỉ được thanh toán',
+    title: 'Thỏa Thuận Cọc Minh Bạch',
+    desc: 'SweetCake lưu trữ thỏa thuận đặt cọc và cam kết mẫu bánh 100%. Nền tảng đối soát và bảo vệ quyền lợi khách hàng suốt quá trình làm bánh.',
+    highlightWord: 'bảo vệ quyền lợi',
     tagIcon: 'shield',
-    tagLabel: 'Bảo vệ ví tiền 100%',
+    tagLabel: 'Bảo vệ quyền lợi 100%',
   },
   {
     stepNum: '04',
-    title: 'Giao Xe Lạnh 4°C - 6°C',
-    desc: 'Đội xe chuyên dụng giao bánh tận cửa hoặc bàn tiệc. Form bánh nguyên vẹn, kem lạnh mịn màng tươi rói, không chảy sụp bất kể nắng mưa.',
-    tagIcon: 'ac_unit',
-    tagLabel: 'Hộp giữ nhiệt chuyên biệt',
+    title: 'Giao Hàng Chuyên Dụng Đúng Giờ',
+    desc: 'Đội ngũ giao bánh tận cửa hoặc bàn tiệc. Form bánh nguyên vẹn, kem tươi mịn màng thơm ngon, không xô lệch bất kể thời tiết.',
+    tagIcon: 'local_shipping',
+    tagLabel: 'Thùng chống sốc bảo vệ bánh',
   },
 ];
 

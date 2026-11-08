@@ -1,0 +1,127 @@
+erDiagram
+  cake_preferences {
+    uuid cake_request_id
+    varchar cake_size
+    varchar cake_shape
+    varchar flavor
+    varchar filling
+    varchar frosting
+    varchar color_palette
+    text decoration_notes
+    text allergy_notes
+    jsonb extra_options
+  }
+  cake_requests {
+    uuid id
+    uuid customer_id
+    uuid target_bakery_id
+    uuid base_product_id
+    uuid selected_design_id
+    varchar request_type
+    varchar title
+    text description
+    varchar occasion
+    int4 serving_size
+    numeric budget_min
+    numeric budget_max
+    timestamptz needed_at
+    varchar delivery_district
+    varchar delivery_city
+    varchar status
+    timestamptz offer_deadline
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  offer_acceptance_workflows {
+    uuid id
+    uuid cake_request_id
+    uuid offer_id
+    uuid customer_id
+    varchar idempotency_key
+    varchar payload_fingerprint
+    uuid delivery_address_id
+    varchar customer_note
+    varchar status
+    int4 attempt_count
+    timestamptz next_retry_at
+    timestamptz lease_until
+    uuid lease_owner
+    uuid order_id
+    varchar order_number
+    int4 error_status
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  offer_items {
+    uuid id
+    uuid offer_id
+    uuid add_on_id
+    varchar item_name_snapshot
+    text description_snapshot
+    int4 quantity
+    numeric unit_price
+    numeric line_total
+  }
+  offer_status_history {
+    uuid id
+    uuid offer_id
+    varchar from_status
+    varchar to_status
+    uuid changed_by
+    text reason
+    timestamptz changed_at
+  }
+  offers {
+    uuid id
+    uuid cake_request_id
+    uuid bakery_id
+    text message
+    numeric cake_price
+    numeric delivery_fee
+    numeric add_on_total
+    numeric total_price
+    timestamptz estimated_completion_at
+    timestamptz expires_at
+    varchar status
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  request_images {
+    uuid id
+    uuid cake_request_id
+    varchar object_key
+    varchar media_type
+    int4 display_order
+    timestamptz created_at
+    int8 size_bytes
+  }
+  request_option_selections {
+    uuid id
+    uuid cake_request_id
+    uuid option_group_id
+    uuid option_value_id
+    varchar group_name_snapshot
+    varchar value_name_snapshot
+    int4 quantity
+  }
+  request_status_history {
+    uuid id
+    uuid cake_request_id
+    varchar from_status
+    varchar to_status
+    uuid changed_by
+    text reason
+    timestamptz changed_at
+  }
+  cake_requests ||--o| cake_preferences : "cake_request_id"
+  cake_requests ||--o{ offer_acceptance_workflows : "cake_request_id"
+  offers ||--o{ offer_acceptance_workflows : "offer_id"
+  offers ||--o{ offer_items : "offer_id"
+  offers ||--o{ offer_status_history : "offer_id"
+  cake_requests ||--o{ offers : "cake_request_id"
+  cake_requests ||--o{ request_images : "cake_request_id"
+  cake_requests ||--o{ request_option_selections : "cake_request_id"
+  cake_requests ||--o{ request_status_history : "cake_request_id"

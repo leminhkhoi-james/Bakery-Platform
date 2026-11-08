@@ -1,0 +1,24 @@
+{
+  "entrypoint": "lib/main.dart",
+  "apkInstalledWithReplace": true,
+  "dataCleared": false,
+  "credentialsInArgs": false,
+  "tokenInjected": false,
+  "storageNamespace": "sweetcake.identity.v1",
+  "restarts": [
+    {
+      "attempt": 1,
+      "processChanged": true,
+      "screenshot": "main-namespaced-cold-restart-1.png",
+      "visualResult": "NOT_VERIFIED_SETUP"
+    },
+    {
+      "attempt": 2,
+      "processChanged": true,
+      "screenshot": "main-namespaced-cold-restart-2.png",
+      "visualResult": "NOT_VERIFIED_SETUP"
+    }
+  ],
+  "setupResult": "NOT_VERIFIED_AUTOMATED_LOGIN_NOT_ESTABLISHED",
+  "note": "Coordinate-based setup ran before UI settled. Guest screenshots do not test persistence. Confirmed native login and settled restart are recorded separately."
+}

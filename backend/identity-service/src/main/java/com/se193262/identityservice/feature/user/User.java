@@ -99,6 +99,27 @@ public class User {
         this.customerProfile = customerProfile;
     }
 
+    public void updateProfile(String displayName, String phoneNumber, Instant now) {
+        if (displayName != null) {
+            this.displayName = displayName;
+        }
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
+        this.updatedAt = now;
+    }
+
+    public void changeStatus(UserStatus status, Instant now) {
+        this.status = status;
+        this.updatedAt = now;
+    }
+
+    public void replaceRoles(Set<Role> roles, Instant now) {
+        this.roles.clear();
+        this.roles.addAll(roles);
+        this.updatedAt = now;
+    }
+
     public UUID getId() {
         return id;
     }

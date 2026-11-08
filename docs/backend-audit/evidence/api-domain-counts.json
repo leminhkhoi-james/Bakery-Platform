@@ -1,0 +1,15 @@
+{
+  "Bakery/profile/onboarding/membership": 19,
+  "Catalog/products/options/add-ons/quotes": 23,
+  "Cake AI/design/generation": 9,
+  "Chat/conversation/message": 8,
+  "Identity/session/service auth": 10,
+  "RFQ/context": 11,
+  "Offer/acceptance": 7,
+  "Review/moderation": 4,
+  "Order/lifecycle/context": 6,
+  "Subscription payment/review": 4,
+  "Subscription plan/options": 7,
+  "Subscription entitlement/period": 2,
+  "Subscription order": 3
+}

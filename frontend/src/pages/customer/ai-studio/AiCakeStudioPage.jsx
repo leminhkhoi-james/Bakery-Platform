@@ -2,8 +2,8 @@
 
 import { displayReference } from '../../../services/displayReference.js'
 import { publicCopy } from '../../../services/uiLabels.js'
-import { STYLE_PROMPTS } from '../../../mockData/customer/aiDesigns.js'
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { aiService, loadAiJobs, loadAiJob } from '../../../services/aiService.js'
@@ -200,15 +200,6 @@ export function AiWorkflowStepper({ currentStep = 1 }) {
   )
 }
 
-const QUICK_PROMPT_TAGS = [
-  'Bánh sinh nhật màu xanh pastel chủ đề biển có vỏ sò',
-  'Ghi tên người nhận & số tuổi lên mặt bánh',
-  'Bánh 2 tầng sang trọng',
-  'Tone hồng phấn Pastel Hàn Quốc',
-  'Cốt Vani nhân Dâu tây Đà Lạt ít ngọt',
-  'Trang trí Macaron Pháp & vương miện',
-]
-
 export function GenerationForm({ cakeRequestId, existingRequest, jobId, disabled, onSubmitted, onNavigate, initialMode = 'prompt', initialPrompt = '', compactRevision = false }) {
   const [studioMode, setStudioMode] = useState(initialMode)
   const [prompt, setPrompt] = useState(initialPrompt || existingRequest?.description || '')
@@ -328,40 +319,6 @@ export function GenerationForm({ cakeRequestId, existingRequest, jobId, disabled
                     : 'Bước 1. Khách mô tả ý tưởng chiếc bánh mong muốn'}
                 </h2>
                 <span className="text-[11px] text-outline">Tối đa 4000 ký tự</span>
-              </div>
-
-              {/* 1-Click Preset Theme Buttons */}
-              <div className="space-y-1.5">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-outline mr-1">Chủ đề gợi ý:</span>
-                  {STYLE_PROMPTS.map((style) => (
-                    <button
-                      type="button"
-                      key={style.label}
-                      disabled={disabled || action.busy || !!attempt}
-                      className="cursor-pointer rounded-xl border border-primary/20 bg-primary/5 px-2.5 py-1 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-white"
-                      onClick={() => setPrompt(style.text)}
-                    >
-                      ✨ {style.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* 1-Click Append Detail Chips */}
-                <div className="flex flex-wrap items-center gap-1">
-                  <span className="text-[11px] font-semibold text-outline mr-1">+ Ghép chi tiết:</span>
-                  {QUICK_PROMPT_TAGS.map((tag) => (
-                    <button
-                      type="button"
-                      key={tag}
-                      disabled={disabled || action.busy || !!attempt}
-                      onClick={() => appendTagToPrompt(tag)}
-                      className="cursor-pointer rounded-lg border border-outline-variant/40 bg-surface-container-low px-2 py-0.5 text-[11px] font-medium text-on-surface hover:border-secondary hover:text-secondary transition-colors"
-                    >
-                      + {tag}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               {/* Prompt Input */}
@@ -515,79 +472,79 @@ export function DesignResults({ detail, busy, onSelect, favorites = [], onToggle
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 items-stretch">
         {detail.generatedDesigns.map((design, idx) => {
           const isFav = favorites.some((fav) => fav.id === design.id)
           const isSelected = selectedDesignId === design.id
           return (
             <article
               key={design.id}
-              className={`space-y-3 rounded-2xl border p-4 shadow-xs transition-all hover:shadow-md ${
+              className={`group flex flex-col justify-between h-full rounded-2xl border p-4 shadow-sm transition-all hover:shadow-md bg-white/95 backdrop-blur-xs ${
                 isSelected
                   ? 'border-2 border-primary bg-primary/5 ring-2 ring-primary/15'
-                  : 'border-outline-variant/30 bg-surface-container-lowest'
+                  : 'border-outline-variant/30 hover:border-primary/40'
               }`}
             >
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5">
-                  <StatusBadge status={design.moderationStatus} label={MODERATION_STATUS_LABELS[design.moderationStatus] || design.moderationStatus} />
-                  <span className="text-xs font-bold text-primary">Mẫu #{idx + 1}</span>
-                </div>
-                {onToggleFavorite && design.moderationStatus === 'APPROVED' && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onToggleFavorite({
-                        id: design.id,
-                        imageUrl: design.imageUrl,
-                        prompt: promptText,
-                        cakeRequestId: detail.job?.cakeRequestId,
-                        jobId: detail.job?.id,
-                        savedAt: new Date().toISOString(),
-                      })
-                    }
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition-colors cursor-pointer ${
-                      isFav
-                        ? 'bg-rose-100 text-rose-700 border border-rose-300'
-                        : 'bg-surface-container text-on-surface-variant hover:bg-rose-50 hover:text-rose-600'
-                    }`}
-                  >
-                    <Icon name={isFav ? 'favorite' : 'favorite_border'} className="text-sm" />
-                    {isFav ? 'Đã lưu yêu thích' : 'Lưu mẫu yêu thích'}
-                  </button>
-                )}
-              </div>
-
-              {/* Design Image Card */}
-              <div className="overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-container-low">
-                {design.moderationStatus === 'APPROVED' ? (
-                  <ReferenceImage url={design.imageUrl} label="Thiết kế bánh" />
-                ) : (
-                  <div className="p-6 text-center text-xs text-outline">
-                    Ảnh đang trong quá trình kiểm duyệt hoặc chưa đạt chuẩn an toàn.
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <StatusBadge status={design.moderationStatus} label={MODERATION_STATUS_LABELS[design.moderationStatus] || design.moderationStatus} />
+                    <span className="text-xs font-bold text-primary">Mẫu #{idx + 1}</span>
                   </div>
-                )}
+                  {onToggleFavorite && design.moderationStatus === 'APPROVED' && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onToggleFavorite({
+                          id: design.id,
+                          imageUrl: design.imageUrl,
+                          prompt: promptText,
+                          cakeRequestId: detail.job?.cakeRequestId,
+                          jobId: detail.job?.id,
+                          savedAt: new Date().toISOString(),
+                        })
+                      }
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                        isFav
+                          ? 'bg-rose-100 text-rose-700 border border-rose-300'
+                          : 'bg-surface-container/70 text-on-surface-variant hover:bg-rose-50 hover:text-rose-600'
+                      }`}
+                      title={isFav ? 'Bỏ lưu yêu thích' : 'Lưu mẫu bánh này'}
+                    >
+                      <Icon name={isFav ? 'favorite' : 'favorite_border'} className="text-sm" />
+                      <span>{isFav ? 'Đã lưu' : 'Lưu mẫu'}</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Design Image Card: Uniform 4:3 Aspect Ratio with zoom hover */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-container-low shadow-inner">
+                  {design.moderationStatus === 'APPROVED' ? (
+                    <img
+                      src={design.imageUrl}
+                      alt={`Mẫu thiết kế #${idx + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center p-6 text-center text-xs text-outline">
+                      Ảnh đang trong quá trình kiểm duyệt hoặc chưa đạt chuẩn an toàn.
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Technical Detail Collapsible */}
-              <details className="text-xs text-outline">
-                <summary className="flex cursor-pointer items-center gap-1 font-semibold text-secondary hover:underline">
-                  <Icon name="visibility" className="text-sm" /> Xem chi tiết thiết kế ({publicCopy(design.moderationReason, 'Phác thảo tham khảo')})
-                </summary>
-                <div className="mt-2 border-t border-outline-variant/20 pt-2">
-                  <DesignDetail id={design.id} jobId={detail.job.id} />
-                </div>
-              </details>
-
-              {/* Action Button: Step 4 */}
-              <button
-                className={buttonClass + ' flex w-full items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all hover:shadow-md cursor-pointer'}
-                disabled={busy || detail.job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !onSelect}
-                onClick={() => onSelect?.(design.id, design)}
-              >
-                <Icon name="check_circle" className="text-base" />
-                {isSelected ? 'Đang chọn mẫu này (Xem Bước 4 bên dưới)' : 'Bước 4: Chọn mẫu này & Tạo yêu cầu bánh'}
-              </button>
+              {/* Action Button: Step 4 - Always pinned at bottom for horizontal alignment */}
+              <div className="pt-3 mt-3 border-t border-outline-variant/15">
+                <button
+                  className={buttonClass + ' flex w-full items-center justify-center gap-2 py-2.5 px-3 text-xs sm:text-sm font-bold shadow-sm transition-all hover:shadow-md cursor-pointer rounded-xl'}
+                  disabled={busy || detail.job.status !== 'SUCCEEDED' || design.moderationStatus !== 'APPROVED' || !onSelect}
+                  onClick={() => onSelect?.(design.id, design)}
+                >
+                  <Icon name="check_circle" className="text-base" />
+                  <span>{isSelected ? 'Đang chọn mẫu này' : 'Chọn mẫu này để nhận báo giá'}</span>
+                </button>
+              </div>
             </article>
           )
         })}
@@ -629,6 +586,15 @@ function Step4CreateRequestFromAiPanel({
   const [specialNotes, setSpecialNotes] = useState(() => existingRequest?.preference?.decorationNotes || '')
   const [allergyNotes, setAllergyNotes] = useState(() => existingRequest?.preference?.allergyNotes || '')
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [])
+
   if (!selectedDesign) return null
 
   const buildPayload = () => {
@@ -664,28 +630,32 @@ function Step4CreateRequestFromAiPanel({
     }
   }
 
-  return (
+  const dialogContent = (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Bước 4 và 5: Xác nhận mẫu AI đã chọn và Tạo yêu cầu nhận báo giá"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto"
+      aria-label="Xác nhận mẫu AI và gửi yêu cầu nhận báo giá"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-3 sm:p-5 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && onCancel) onCancel()
+      }}
     >
       <section
         id="step-4-create-request-panel"
-        className="my-auto w-full max-w-4xl space-y-3.5 rounded-3xl border-2 border-primary bg-surface p-4 sm:p-5 shadow-2xl max-h-[92vh] overflow-y-auto"
+        className="my-auto w-full max-w-2xl flex flex-col rounded-3xl border border-outline-variant/30 bg-surface shadow-2xl overflow-hidden max-h-[88vh]"
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/25 pb-2.5">
+        {/* Sticky Dialog Header */}
+        <div className="flex items-center justify-between border-b border-outline-variant/20 px-5 py-4 bg-surface shrink-0">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-on-primary font-bold text-sm">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-white font-bold text-sm shadow-xs">
               4
             </span>
             <div>
               <h3 className="font-serif text-base sm:text-lg font-bold text-primary">
-                Bước 4 & 5. Xác nhận mẫu AI đã chọn & Tạo yêu cầu nhận báo giá
+                Gửi yêu cầu nhận báo giá
               </h3>
               <p className="text-[11px] text-on-surface-variant">
-                Bổ sung ngân sách dự kiến, số lượng, ngày giờ cần bánh, địa điểm giao/nhận và ghi chú để gửi tới các tiệm bánh.
+                Các tiệm bánh lân cận sẽ xem mẫu và gửi bảng báo giá cho bạn lựa chọn
               </p>
             </div>
           </div>
@@ -693,277 +663,229 @@ function Step4CreateRequestFromAiPanel({
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-xl border border-outline-variant/40 bg-surface-container-low px-3 py-1.5 text-xs font-bold text-on-surface hover:bg-surface-container cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              title="Đóng / Chọn mẫu khác"
             >
-              ✕ Đóng / Chọn mẫu ảnh khác
+              ✕
             </button>
           )}
         </div>
 
-      {/* Selected AI Design Preview + Corresponding Description */}
-      <div className="grid gap-4 rounded-2xl border border-amber-200/80 bg-amber-50/50 p-4 sm:grid-cols-12 items-center">
-        <div className="sm:col-span-4">
-          <img
-            src={selectedDesign.imageUrl}
-            alt="Mẫu bánh AI khách đã chọn"
-            className="max-h-48 w-full rounded-xl object-cover border border-amber-300 bg-white shadow-xs"
-          />
-        </div>
-        <div className="sm:col-span-8 space-y-2.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-900">
-              ✓ Mẫu AI được chọn gửi tiệm bánh
-            </span>
-            <span className="font-mono text-xs text-outline">{displayReference(selectedDesign.id, 'ART')}</span>
-          </div>
-          <label className="block space-y-1">
-            <span className="text-xs font-bold text-stone-800">Tiêu đề yêu cầu đặt bánh</span>
-            <input
-              type="text"
-              required
-              maxLength={180}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={inputClass + ' w-full bg-white text-sm font-semibold'}
+        {/* Scrollable Dialog Body */}
+        <div className="overflow-y-auto p-5 space-y-4 flex-1 overscroll-contain">
+          {/* Selected Cake Card */}
+          <div className="flex items-center gap-3.5 rounded-2xl border border-primary/20 bg-primary/5 p-3">
+            <img
+              src={selectedDesign.imageUrl}
+              alt="Mẫu bánh AI khách đã chọn"
+              className="h-20 w-20 shrink-0 rounded-xl object-cover border border-primary/25 shadow-xs"
             />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-xs font-bold text-stone-800">Mô tả chi tiết kèm theo mẫu ảnh AI</span>
-            <textarea
-              rows={2}
-              required
-              maxLength={10000}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={inputClass + ' w-full bg-white text-xs'}
-            />
-          </label>
-        </div>
-      </div>
-
-      {/* Form Fields for Step 4: Budget, Quantity/Servings, Needed Date/Time, Delivery/Pickup Location, Notes */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Left Box: Budget & Quantity/Servings */}
-        <div className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
-          <h4 className="flex items-center gap-1.5 text-sm font-bold text-primary">
-            <Icon name="payments" className="text-base text-secondary" />
-            1. Ngân sách dự kiến & Số lượng bánh
-          </h4>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-            {BUDGET_PRESETS.map((preset) => {
-              const active = budgetMin === preset.min && budgetMax === preset.max
-              return (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => {
-                    setBudgetMin(preset.min)
-                    setBudgetMax(preset.max)
-                  }}
-                  className={`rounded-xl border py-1.5 px-2 text-xs font-bold transition-all cursor-pointer ${
-                    active
-                      ? 'border-primary bg-primary text-white shadow-xs'
-                      : 'border-stone-200 bg-white text-stone-700 hover:border-amber-500'
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              )
-            })}
+            <div className="min-w-0 flex-1 space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                  ✓ Mẫu đã chọn
+                </span>
+                <span className="font-mono text-[10px] text-outline">{displayReference(selectedDesign.id, 'ART')}</span>
+              </div>
+              <p className="text-xs font-bold text-primary line-clamp-1">
+                {title}
+              </p>
+              <p className="text-[11px] text-on-surface-variant line-clamp-2 leading-relaxed">
+                {description}
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5">
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Ngân sách tối thiểu (VNĐ)</span>
-              <input
-                type="number"
-                min={0}
-                step="10000"
-                value={budgetMin}
-                onChange={(e) => setBudgetMin(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs font-semibold'}
-              />
-            </label>
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Ngân sách tối đa (VNĐ)</span>
-              <input
-                type="number"
-                min={0}
-                step="10000"
-                value={budgetMax}
-                onChange={(e) => setBudgetMax(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs font-semibold'}
-              />
-            </label>
+          {/* Section 1: Budget */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                <Icon name="payments" className="text-sm text-secondary" />
+                Ngân sách dự kiến của bạn:
+              </span>
+              <span className="text-xs font-bold text-primary font-mono">
+                {Number(budgetMin).toLocaleString('vi-VN')}đ – {Number(budgetMax).toLocaleString('vi-VN')}đ
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {BUDGET_PRESETS.map((preset) => {
+                const active = budgetMin === preset.min && budgetMax === preset.max
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => {
+                      setBudgetMin(preset.min)
+                      setBudgetMax(preset.max)
+                    }}
+                    className={`rounded-xl border py-2 px-2 text-xs font-bold transition-all cursor-pointer text-center ${
+                      active
+                        ? 'border-primary bg-primary text-white shadow-xs'
+                        : 'border-outline-variant/30 bg-surface-container-low text-on-surface hover:border-primary/50'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2.5">
+          {/* Section 2: Quantity & Event */}
+          <div className="grid grid-cols-3 gap-3">
             <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Số lượng bánh</span>
+              <span className="text-xs font-semibold text-on-surface">Số lượng bánh</span>
               <input
                 type="number"
                 min={1}
                 max={20}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs font-semibold'}
+                className={inputClass + ' w-full text-xs font-bold py-2 bg-surface-container-lowest'}
               />
             </label>
             <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Số người dùng</span>
+              <span className="text-xs font-semibold text-on-surface">Số người ăn</span>
               <input
                 type="number"
                 min={1}
                 max={200}
                 value={servingSize}
                 onChange={(e) => setServingSize(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs font-semibold'}
+                className={inputClass + ' w-full text-xs font-bold py-2 bg-surface-container-lowest'}
               />
             </label>
             <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Dịp đặt bánh</span>
+              <span className="text-xs font-semibold text-on-surface">Dịp tiệc</span>
               <input
                 type="text"
                 maxLength={100}
                 value={occasion}
                 onChange={(e) => setOccasion(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              />
-            </label>
-          </div>
-        </div>
-
-        {/* Right Box: Date/Time, Delivery/Pickup & Special Notes */}
-        <div className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
-          <h4 className="flex items-center gap-1.5 text-sm font-bold text-primary">
-            <Icon name="local_shipping" className="text-base text-secondary" />
-            2. Thời gian cần bánh & Địa điểm giao / nhận
-          </h4>
-
-          <div className="grid grid-cols-2 gap-2.5">
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Ngày giờ cần nhận bánh *</span>
-              <input
-                type="datetime-local"
-                required
-                value={neededAt}
-                onChange={(e) => setNeededAt(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              />
-            </label>
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Hạn nhận báo giá</span>
-              <input
-                type="datetime-local"
-                value={offerDeadline}
-                onChange={(e) => setOfferDeadline(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
+                placeholder="VD: Sinh nhật"
+                className={inputClass + ' w-full text-xs py-2 bg-surface-container-lowest'}
               />
             </label>
           </div>
 
-          <div className="grid grid-cols-3 gap-2.5">
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Hình thức nhận</span>
-              <select
-                value={fulfillmentMethod}
-                onChange={(e) => setFulfillmentMethod(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              >
-                <option value="Giao tận nơi">Giao tận nơi</option>
-                <option value="Nhận tại tiệm">Tự đến tiệm lấy</option>
-              </select>
-            </label>
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Quận / Huyện *</span>
-              <input
-                type="text"
-                required
-                maxLength={120}
-                value={deliveryDistrict}
-                onChange={(e) => setDeliveryDistrict(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              />
-            </label>
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Tỉnh / Thành phố *</span>
-              <input
-                type="text"
-                required
-                maxLength={120}
-                value={deliveryCity}
-                onChange={(e) => setDeliveryCity(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              />
-            </label>
-          </div>
+          {/* Section 3: Time & Location */}
+          <div className="space-y-3 rounded-2xl border border-outline-variant/30 bg-surface-container-low/40 p-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-on-surface flex items-center gap-1">
+                  <Icon name="event" className="text-sm text-secondary" /> Ngày giờ cần nhận bánh *
+                </span>
+                <input
+                  type="datetime-local"
+                  required
+                  value={neededAt}
+                  onChange={(e) => setNeededAt(e.target.value)}
+                  className={inputClass + ' w-full text-xs py-2 bg-white'}
+                />
+              </label>
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-on-surface flex items-center gap-1">
+                  <Icon name="local_shipping" className="text-sm text-secondary" /> Phương thức nhận
+                </span>
+                <select
+                  value={fulfillmentMethod}
+                  onChange={(e) => setFulfillmentMethod(e.target.value)}
+                  className={inputClass + ' w-full text-xs py-2 bg-white'}
+                >
+                  <option value="Giao tận nơi">Giao tận nơi</option>
+                  <option value="Nhận tại tiệm">Tự đến tiệm lấy</option>
+                </select>
+              </label>
+            </div>
 
-          <div className="grid grid-cols-2 gap-2.5">
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Ghi chú trang trí / chữ viết lên bánh</span>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-on-surface">Quận / Huyện *</span>
+                <input
+                  type="text"
+                  required
+                  maxLength={120}
+                  value={deliveryDistrict}
+                  onChange={(e) => setDeliveryDistrict(e.target.value)}
+                  className={inputClass + ' w-full text-xs py-2 bg-white'}
+                />
+              </label>
+              <label className="space-y-1">
+                <span className="text-xs font-semibold text-on-surface">Tỉnh / Thành phố *</span>
+                <input
+                  type="text"
+                  required
+                  maxLength={120}
+                  value={deliveryCity}
+                  onChange={(e) => setDeliveryCity(e.target.value)}
+                  className={inputClass + ' w-full text-xs py-2 bg-white'}
+                />
+              </label>
+            </div>
+
+            <label className="block space-y-1">
+              <span className="text-xs font-semibold text-on-surface">
+                Ghi chú thêm cho tiệm bánh (chữ viết lên bánh, dị ứng, lưu ý...)
+              </span>
               <input
                 type="text"
                 maxLength={500}
-                placeholder="VD: Cốt vani ít ngọt, viết chữ Happy Birthday..."
+                placeholder="VD: Viết chữ Happy Birthday, cốt ít ngọt, không đậu phộng..."
                 value={specialNotes}
                 onChange={(e) => setSpecialNotes(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
-              />
-            </label>
-            <label className="space-y-1">
-              <span className="block text-xs font-semibold text-on-surface">Lưu ý dị ứng (nếu có)</span>
-              <input
-                type="text"
-                maxLength={500}
-                placeholder="VD: Không đậu phộng, không rượu..."
-                value={allergyNotes}
-                onChange={(e) => setAllergyNotes(e.target.value)}
-                className={inputClass + ' w-full bg-white text-xs'}
+                className={inputClass + ' w-full text-xs py-2 bg-white'}
               />
             </label>
           </div>
+
+          {/* Section 4: Confirmation checkbox */}
+          <label className="flex items-start gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/70 p-3 text-xs text-amber-950 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={confirmedSample}
+              onChange={(e) => setConfirmedSample(e.target.checked)}
+              className="mt-0.5 h-4 w-4 accent-primary shrink-0"
+            />
+            <span className="text-[11px] leading-relaxed">
+              Tôi xác nhận chọn mẫu bánh AI này để gửi tới các tiệm bánh báo giá và hiểu rằng tiệm sẽ dựa vào ảnh để tư vấn chiếc bánh thực tế.
+            </span>
+          </label>
         </div>
-      </div>
 
-      {/* Customer confirmation checkbox required by Section 4 */}
-      <label className="flex items-start gap-2.5 rounded-2xl border border-outline-variant/40 bg-surface-container-low p-3.5 text-xs text-on-surface cursor-pointer">
-        <input
-          type="checkbox"
-          checked={confirmedSample}
-          onChange={(e) => setConfirmedSample(e.target.checked)}
-          className="mt-0.5 h-4 w-4 accent-primary"
-        />
-        <span>
-          <strong>Xác nhận mẫu bánh trước khi gửi yêu cầu:</strong> Tôi hiểu ảnh AI chỉ là ảnh minh họa theo mô tả, không cam kết bánh thực tế giống 100% ảnh chụp. Tôi xác nhận chọn mẫu này để các tiệm bánh xem xét khả năng thực hiện và gửi báo giá.
-        </span>
-      </label>
-
-      {/* Step 5 Action Buttons */}
-      <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
-        <button
-          type="button"
-          disabled={busy || !confirmedSample}
-          onClick={() => onSubmitRequest(buildPayload(), false)}
-          className="rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-stone-700 hover:bg-stone-100 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-        >
-          <Icon name="save" className="text-base text-secondary" />
-          Lưu bản nháp yêu cầu
-        </button>
-
-        <button
-          type="button"
-          disabled={busy || !confirmedSample}
-          onClick={() => onSubmitRequest(buildPayload(), true)}
-          className={buttonClass + ' flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50'}
-        >
-          <Icon name="campaign" className="text-lg" />
-          {busy ? 'Đang đăng yêu cầu…' : 'Bước 5: Xác nhận mẫu & Đăng yêu cầu nhận báo giá ngay'}
-        </button>
-      </div>
+        {/* Sticky Dialog Footer */}
+        <div className="border-t border-outline-variant/20 bg-surface px-5 py-3.5 flex items-center justify-between gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-xl border border-outline-variant/40 bg-surface px-4 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container cursor-pointer"
+          >
+            Quay lại
+          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={busy || !confirmedSample}
+              onClick={() => onSubmitRequest(buildPayload(), false)}
+              className="rounded-xl border border-outline-variant/40 bg-surface px-3.5 py-2 text-xs font-bold text-on-surface hover:bg-surface-container cursor-pointer disabled:opacity-50"
+            >
+              Lưu nháp
+            </button>
+            <button
+              type="button"
+              disabled={busy || !confirmedSample}
+              onClick={() => onSubmitRequest(buildPayload(), true)}
+              className={buttonClass + ' flex items-center gap-1.5 px-5 py-2 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50'}
+            >
+              <Icon name="send" className="text-base" />
+              <span>{busy ? 'Đang gửi…' : 'Gửi yêu cầu nhận báo giá'}</span>
+            </button>
+          </div>
+        </div>
       </section>
     </div>
   )
+
+  return typeof document !== 'undefined' ? createPortal(dialogContent, document.body) : dialogContent
 }
 
 function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
@@ -1017,7 +939,7 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
   return (
     <MarketplaceState kind="Cake AI" resource={resource}>
       {resource.data && (
-        <div className="space-y-3.5">
+        <div className="space-y-3.5 pt-2">
           <AiWorkflowStepper currentStep={status === 'SUCCEEDED' ? 3 : 2} />
 
           {/* Compact Top Navigation Bar */}
@@ -1062,10 +984,10 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
             </div>
           </div>
 
-          {/* 2-Column Side-by-Side Split Layout: Left (7 cols) = Generated Images | Right (5 cols, sticky) = Step 3 Instant Regenerate & Edit Prompt (ZERO vertical scroll!) */}
-          <div className="grid gap-4 lg:grid-cols-12 items-start">
-            {/* Left Column (7 cols): Generated Cake Designs right at eye level */}
-            <div className="lg:col-span-7 space-y-3.5">
+          {/* 2-Column Side-by-Side Split Layout: Left (8 cols = 2 x 4 cols) | Right (4 cols, sticky = 1 x 4 cols) -> PERFECT 4:4:4 SYMMETRY! */}
+          <div className="grid gap-5 lg:grid-cols-12 items-start">
+            {/* Left Column (8 cols): 2 Generated Cake Designs (4 cols each) */}
+            <div className="lg:col-span-8 space-y-4">
               {runningJob(status) && (
                 <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-3.5 text-xs text-amber-950">
                   <p className="flex items-center gap-2 font-semibold">
@@ -1101,9 +1023,9 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
               />
             </div>
 
-            {/* Right Column (5 cols, sticky): Bước 3 — Tạo lại mẫu / Chỉnh sửa mô tả ngay cạnh ảnh (không cần cuộn xuống!) */}
-            <div className="lg:col-span-5 space-y-3.5 lg:sticky lg:top-20">
-              <section className="space-y-3 rounded-3xl border border-outline-variant/30 bg-surface p-4 sm:p-5 shadow-sm">
+            {/* Right Column (4 cols, sticky): Bước 3 — Tạo lại mẫu / Chỉnh sửa mô tả ngay cạnh ảnh */}
+            <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-36">
+              <section className="space-y-3.5 rounded-3xl border border-outline-variant/30 bg-surface/95 backdrop-blur-md p-4 sm:p-5 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/20 pb-2.5">
                   <div className="flex items-center gap-2">
                     <StatusBadge status={job.status} label={JOB_STATUS_LABELS[job.status] || ('Trạng thái: ' + job.status)} />
@@ -1117,113 +1039,50 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
                 </div>
 
                 {/* Step 3 Right inside the sticky sidebar */}
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="font-serif text-sm sm:text-base font-bold text-primary flex items-center gap-1.5">
                       <Icon name="edit" className="text-base text-secondary" />
-                      Bước 3. Chưa ưng ý? Sửa mô tả & Tạo lại
+                      Bước 3. Sửa mô tả & Tạo lại
                     </h3>
-                  </div>
-
-                  {/* Quick 1-click theme pills */}
-                  <div className="flex flex-wrap items-center gap-1">
-                    {STYLE_PROMPTS.map((style) => (
-                      <button
-                        type="button"
-                        key={style.label}
-                        disabled={action.busy || runningJob(status)}
-                        onClick={() => setRevisePrompt(style.text)}
-                        className="cursor-pointer rounded-lg border border-primary/20 bg-primary/5 px-2 py-0.5 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
-                      >
-                        ✨ {style.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Quick detail tags */}
-                  <div className="flex flex-wrap items-center gap-1">
-                    {QUICK_PROMPT_TAGS.slice(0, 4).map((tag) => (
-                      <button
-                        type="button"
-                        key={tag}
-                        disabled={action.busy || runningJob(status)}
-                        onClick={() =>
-                          setRevisePrompt((prev) => {
-                            const clean = prev.trim()
-                            if (!clean) return tag
-                            if (clean.toLowerCase().includes(tag.toLowerCase())) return clean
-                            return `${clean.replace(/[.,;]+$/, '')}, ${tag}`
-                          })
-                        }
-                        className="cursor-pointer rounded-lg border border-outline-variant/40 bg-surface-container-low px-2 py-0.5 text-[10px] font-medium text-on-surface hover:border-secondary hover:text-secondary"
-                      >
-                        + {tag}
-                      </button>
-                    ))}
                   </div>
 
                   <label className="block">
                     <span className="sr-only">Mô tả ý tưởng để tạo lại</span>
                     <textarea
-                      rows={3}
+                      rows={5}
                       maxLength={4000}
                       value={revisePrompt}
                       onChange={(e) => setRevisePrompt(e.target.value)}
                       disabled={action.busy || runningJob(status)}
-                      placeholder="Sửa lại màu sắc, chủ đề, chi tiết trang trí..."
+                      placeholder="Nhập mô tả màu sắc, phong cách, chi tiết bánh cần điều chỉnh..."
                       className={inputClass + ' w-full text-xs leading-relaxed bg-surface-container-lowest'}
                     />
                   </label>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <label className="space-y-0.5">
-                      <span className="text-[11px] font-semibold text-outline">Tỉ lệ khung hình</span>
-                      <select
-                        value={reviseRatio}
-                        onChange={(e) => setReviseRatio(e.target.value)}
-                        disabled={action.busy || runningJob(status)}
-                        className={inputClass + ' w-full py-1 text-xs'}
-                      >
-                        <option value="1:1">1:1 (Vuông)</option>
-                        <option value="4:3">4:3 (Ngang)</option>
-                        <option value="3:4">3:4 (Cao tầng)</option>
-                      </select>
-                    </label>
-                    <label className="space-y-0.5">
-                      <span className="text-[11px] font-semibold text-outline">Số mẫu tạo lại (1–4)</span>
-                      <input
-                        type="number"
-                        min={1}
-                        max={4}
-                        value={reviseCount}
-                        onChange={(e) => setReviseCount(e.target.value)}
-                        disabled={action.busy || runningJob(status)}
-                        className={inputClass + ' w-full py-1 text-xs'}
-                      />
-                    </label>
-                  </div>
-
-                  {/* Two instant regeneration buttons right at eye level */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  {/* Instant regeneration button */}
+                  <div>
                     <button
                       type="button"
                       disabled={action.busy || runningJob(status) || !revisePrompt.trim()}
                       onClick={() => handleRegenerateNow(revisePrompt)}
-                      className={buttonClass + ' flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold shadow-sm cursor-pointer'}
+                      className={buttonClass + ' w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold shadow-sm cursor-pointer'}
                     >
                       <Icon name="auto_awesome" className="text-base" />
                       {action.busy ? 'Đang tạo lại…' : 'Vẽ lại theo mô tả'}
                     </button>
+                  </div>
 
-                    <button
-                      type="button"
-                      disabled={action.busy || runningJob(status)}
-                      onClick={() => handleRegenerateNow(latestPrompt || revisePrompt)}
-                      className="rounded-xl border border-primary/30 bg-primary/5 py-2.5 px-3 text-xs font-bold text-primary hover:bg-primary/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                    >
-                      <Icon name="autorenew" className="text-base" />
-                      Đổi mẫu ngẫu nhiên khác
-                    </button>
+                  {/* Design & Order Tips Card - Balances height with Left Column */}
+                  <div className="rounded-2xl border border-amber-200/80 bg-amber-50/60 p-3 text-xs space-y-1 text-amber-950">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-900 text-[11px]">
+                      <Icon name="lightbulb" className="text-sm text-secondary" />
+                      Mẹo tinh chỉnh mẫu bánh
+                    </div>
+                    <ul className="space-y-0.5 text-[11px] leading-relaxed text-amber-900/90 pl-1">
+                      <li>• Nêu rõ <strong>màu sắc & chủ đề</strong> (vd: hồng pastel, vương miện).</li>
+                      <li>• Sau khi ưng ý, bấm <strong>"Chọn mẫu này để nhận báo giá"</strong>.</li>
+                    </ul>
                   </div>
                 </div>
 
@@ -1494,7 +1353,7 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
   }
 
   return (
-    <main className="sc-customer sc-studio-page mx-auto max-w-6xl space-y-5 px-4 py-5">
+    <div className="sc-customer sc-studio-page mx-auto max-w-6xl space-y-5 px-4 py-5">
       {/* Compact Top Header */}
       <div className="sc-customer-heading flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -1548,45 +1407,6 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
                         Bước 1. Mô tả chiếc bánh bạn mong muốn
                       </h2>
                       <span className="text-[11px] text-outline">Tối đa 4000 ký tự</span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-outline mr-1">Chủ đề mẫu:</span>
-                        {STYLE_PROMPTS.map((style) => (
-                          <button
-                            type="button"
-                            key={style.label}
-                            disabled={quickAction.busy}
-                            className="cursor-pointer rounded-xl border border-primary/20 bg-primary/5 px-2.5 py-1 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-white"
-                            onClick={() => setDraft3DPrompt(style.text)}
-                          >
-                            ✨ {style.label}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-1">
-                        <span className="text-[11px] font-semibold text-outline mr-1">+ Ghép nhanh ý tưởng:</span>
-                        {QUICK_PROMPT_TAGS.map((tag) => (
-                          <button
-                            type="button"
-                            key={tag}
-                            disabled={quickAction.busy}
-                            onClick={() =>
-                              setDraft3DPrompt((prev) => {
-                                const clean = prev.trim()
-                                if (!clean) return tag
-                                if (clean.toLowerCase().includes(tag.toLowerCase())) return clean
-                                return `${clean.replace(/[.,;]+$/, '')}, ${tag}`
-                              })
-                            }
-                            className="cursor-pointer rounded-lg border border-outline-variant/40 bg-surface-container-low px-2 py-0.5 text-[11px] font-medium text-on-surface hover:border-secondary hover:text-secondary transition-colors"
-                          >
-                            + {tag}
-                          </button>
-                        ))}
-                      </div>
                     </div>
 
                     <label className="block">
@@ -1823,6 +1643,6 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
           </div>
         </details>
       </div>
-    </main>
+    </div>
   )
 }

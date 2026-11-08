@@ -1,0 +1,7 @@
+{
+  "algorithm": "RS256",
+  "rsaModulusBits": [
+    3072
+  ],
+  "privateKeyExported": false
+}

@@ -1,219 +1,38 @@
-/* Dialog drawer when opened in admin/vendor modal */
-.sc-drawer.sc-order-dialog {
-  inset: 0;
-  margin: auto;
-  width: min(68rem, calc(100vw - 2rem));
-  height: fit-content;
-  max-height: calc(100dvh - 2rem);
-  border-radius: 1.25rem;
-  overflow-y: auto;
-  background: #fdf8fa;
-}
+.sc-drawer.sc-order-dialog { inset: 0; margin: auto; width: min(68rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1.25rem; overflow-y: auto; background: #fdf8fa; }
 .sc-order-dialog .sc-drawer-heading { padding: 1rem 1.25rem; gap: 1rem; z-index: 3; }
 .sc-order-dialog .sc-drawer-heading > div { flex: 1; min-width: 0; }
 .sc-order-dialog .sc-drawer-heading > button { flex-shrink: 0; }
 .sc-order-dialog .sc-drawer-body { padding: 1rem 1.25rem; }
-
 .sc-order-detail { min-width: 0; }
-.sc-order-detail > button:first-child {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  margin-left: auto;
-  font-size: .75rem;
-  font-weight: 700;
-  padding: .35rem .85rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(107, 33, 46, 0.2);
-  color: var(--sc-color-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  min-height: 1.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 0.5rem;
-}
-.sc-order-detail > button:first-child:hover:not(:disabled) {
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(107, 33, 46, 0.12);
-}
-
-/* Unified Master Receipt Card (Haravan Invoice style) */
-.sc-order-tracking-view {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  min-width: 0;
-  background: #ffffff;
-  border-radius: 1.25rem;
-  border: 1px solid rgba(107, 33, 46, 0.12);
-  box-shadow: 0 12px 36px -4px rgba(107, 33, 46, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-  padding: 1.75rem 2rem;
-}
-
-/* Top Receipt Header */
-.sc-order-tracking-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  min-width: 0;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(107, 33, 46, 0.1);
-}
+.sc-order-detail > button:first-child { display: inline-flex; align-items: center; gap: .35rem; margin-left: auto; font-size: .75rem; font-weight: 700; padding: .4rem .85rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(107, 33, 46, 0.2); color: var(--sc-color-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); min-height: 1.75rem; cursor: pointer; transition: all 0.2s; }
+.sc-order-detail > button:first-child:hover:not(:disabled) { background: #ffffff; box-shadow: 0 2px 6px rgba(107, 33, 46, 0.12); }
+.sc-order-tracking-view { display: grid; gap: 1.25rem; min-width: 0; }
+.sc-order-tracking-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-width: 0; padding: 1.25rem 1.5rem; border-radius: 1rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(107, 33, 46, 0.15); box-shadow: 0 4px 16px rgba(107, 33, 46, 0.06); }
 .sc-order-tracking-header > div { min-width: 0; }
-:is(.sc-order-dialog, .sc-order-tracking-view) .sc-order-tracking-header h2 {
-  margin: 0;
-  font-size: 1.35rem;
-  font-weight: 800;
-  font-family: var(--sc-font-serif, serif);
-  color: var(--sc-color-primary);
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-.sc-order-tracking-header p {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  margin: .35rem 0 0;
-  font-size: .85rem;
-  font-weight: 600;
-  color: var(--color-secondary, #c05477);
-  overflow-wrap: anywhere;
-}
+:is(.sc-order-dialog, .sc-order-tracking-view) .sc-order-tracking-header h2 { margin: 0; font-size: 1.35rem; font-weight: 800; font-family: var(--sc-font-serif, serif); color: var(--sc-color-primary); line-height: 1.35; overflow-wrap: anywhere; }
+.sc-order-tracking-header p { display: flex; align-items: center; gap: .35rem; margin: .35rem 0 0; font-size: .85rem; font-weight: 600; color: var(--color-secondary, #c05477); overflow-wrap: anywhere; }
 .sc-order-tracking-header p .sc-icon { font-size: 1.05rem; flex-shrink: 0; }
 .sc-order-tracking-header .sc-status { flex-shrink: 0; font-weight: 700; }
-
-/* Haravan-style Greeting Banner */
-.sc-order-greeting-banner {
-  padding: 1.15rem 1.4rem;
-  background: linear-gradient(135deg, #fff8fa 0%, #fff0f5 100%);
-  border-radius: 0.85rem;
-  border: 1px solid rgba(107, 33, 46, 0.12);
-}
-
-/* Stepper Progress Bar inside receipt */
-.sc-order-progress-scroll {
-  overflow-x: auto;
-  padding: 1.15rem 0.75rem;
-  border: 1px solid rgba(107, 33, 46, 0.08);
-  border-radius: 0.85rem;
-  background: #fafafc;
-}
-.sc-order-progress {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  min-width: 35rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.sc-order-progress li {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: .45rem;
-  font-size: .74rem;
-  line-height: 1.4;
-  text-align: center;
-  color: var(--sc-color-muted);
-  padding: 0 .35rem;
-}
-.sc-order-progress li::before {
-  content: '';
-  position: absolute;
-  top: 1.15rem;
-  left: -50%;
-  width: 100%;
-  height: 2px;
-  background: #e5d6dc;
-  z-index: 0;
-  border-radius: 9999px;
-}
+.sc-order-progress-scroll { overflow-x: auto; padding: 1.25rem 1rem; border: 1px solid rgba(107, 33, 46, 0.15); border-radius: 1rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(107, 33, 46, 0.06); }
+.sc-order-progress { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); min-width: 35rem; list-style: none; padding: 0; margin: 0; }
+.sc-order-progress li { position: relative; display: flex; align-items: center; flex-direction: column; gap: .5rem; font-size: .75rem; line-height: 1.4; text-align: center; color: var(--sc-color-muted); padding: 0 .35rem; }
+.sc-order-progress li::before { content: ''; position: absolute; top: 1.2rem; left: -50%; width: 100%; height: 3px; background: #f2dbe2; z-index: 0; border-radius: 9999px; }
 .sc-order-progress li:first-child::before { content: none; }
-.sc-order-step-icon {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
-}
-.sc-order-step-icon .sc-icon { font-size: 1.1rem; }
+.sc-order-step-icon { position: relative; z-index: 1; display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: #fff5f8; border: 2px solid #ffffff; box-shadow: 0 2px 6px rgba(107, 33, 46, 0.08); transition: all 0.25s ease; }
+.sc-order-step-icon .sc-icon { font-size: 1.15rem; }
 .sc-order-progress .is-complete { color: var(--sc-color-primary); }
-.sc-order-progress .is-complete::before,
-.sc-order-progress .is-current::before { background: var(--sc-color-primary); }
-.sc-order-progress .is-complete .sc-order-step-icon {
-  background: #fce7eb;
-  border-color: #f8c8d5;
-  color: var(--sc-color-primary);
-}
-.sc-order-progress .is-current {
-  color: var(--sc-color-primary);
-  font-weight: 750;
-}
-.sc-order-progress .is-current .sc-order-step-icon {
-  background: var(--sc-color-primary);
-  border-color: #ffffff;
-  color: white;
-  box-shadow: 0 0 0 4px #ffe6ee, 0 3px 8px rgba(107, 33, 46, 0.2);
-  transform: scale(1.05);
-}
-
-.sc-order-cancelled {
-  display: flex;
-  align-items: flex-start;
-  gap: .65rem;
-  padding: 1rem 1.25rem;
-  background: #fff0f5;
-  border: 1px solid rgba(107, 33, 46, 0.2);
-  border-radius: 0.85rem;
-  color: var(--sc-color-primary);
-}
+.sc-order-progress .is-complete::before, .sc-order-progress .is-current::before { background: var(--sc-color-primary); }
+.sc-order-progress .is-complete .sc-order-step-icon { background: #fce7eb; color: var(--sc-color-primary); }
+.sc-order-progress .is-current { color: var(--sc-color-primary); font-weight: 750; }
+.sc-order-progress .is-current .sc-order-step-icon { background: var(--sc-color-primary); color: white; box-shadow: 0 0 0 4px #ffe6ee, 0 4px 12px rgba(107, 33, 46, 0.2); transform: scale(1.06); }
+.sc-order-cancelled { display: flex; align-items: flex-start; gap: .65rem; padding: 1rem 1.25rem; background: #fff0f5; border: 1px solid rgba(107, 33, 46, 0.2); border-radius: 1rem; color: var(--sc-color-primary); }
 .sc-order-cancelled p { margin-top: .25rem; font-size: .8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
-
-/* 2 Columns inside Receipt */
-.sc-order-tracking-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(17rem, 1fr);
-  gap: 1.5rem;
-  align-items: start;
-}
-.sc-order-tracking-main,
-.sc-order-tracking-summary {
-  display: grid;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-/* Sections inside Receipt */
-.sc-order-tracking-card {
-  padding: 1.25rem 1.35rem;
-  border: 1px solid rgba(107, 33, 46, 0.09);
-  border-radius: 0.85rem;
-  background: #fafafc;
-  min-width: 0;
-}
-.sc-order-tracking-view .sc-order-tracking-card h3 {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  color: var(--sc-color-primary);
-  font-size: .95rem;
-  font-weight: 750;
-  margin: 0 0 .85rem;
-  padding-bottom: .6rem;
-  border-bottom: 1px solid rgba(107, 33, 46, 0.1);
-}
-.sc-order-tracking-card h3 .sc-icon { font-size: 1.15rem; color: var(--sc-color-primary); }
-
-/* Item List */
+.sc-order-tracking-columns { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr); gap: 1.25rem; align-items: start; }
+.sc-order-tracking-main, .sc-order-tracking-summary { display: grid; gap: 1.25rem; min-width: 0; }
+.sc-order-tracking-card { padding: 1.25rem 1.5rem; border: 1px solid rgba(107, 33, 46, 0.15); border-radius: 1rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(107, 33, 46, 0.06); min-width: 0; transition: all 0.2s ease; }
+.sc-order-tracking-card:hover { box-shadow: 0 6px 20px rgba(107, 33, 46, 0.09); }
+.sc-order-tracking-view .sc-order-tracking-card h3 { display: flex; align-items: center; gap: .5rem; color: var(--sc-color-primary); font-size: 1rem; font-weight: 750; margin: 0 0 .85rem; padding-bottom: .65rem; border-bottom: 1px solid rgba(107, 33, 46, 0.12); }
+.sc-order-tracking-card h3 .sc-icon { font-size: 1.2rem; color: var(--sc-color-primary); }
 .sc-order-items { list-style: none; margin: 0; padding: 0; display: grid; gap: .85rem; }
 .sc-order-items > li + li { border-top: 1px solid rgba(107, 33, 46, 0.1); padding-top: .85rem; }
 .sc-order-item-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
@@ -221,43 +40,29 @@
 .sc-order-tracking-view .sc-order-item-heading h4 { font-size: .95rem; font-weight: 700; line-height: 1.45; margin: 0; overflow-wrap: anywhere; color: var(--sc-color-primary); }
 .sc-order-item-heading p { margin-top: .25rem; font-size: .78rem; color: var(--sc-color-muted); line-height: 1.6; }
 .sc-order-item-heading > strong { font-size: 1rem; color: var(--sc-color-primary); white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 750; }
-
 .sc-order-options { margin-top: .5rem; font-size: .75rem; }
 .sc-order-options summary { cursor: pointer; color: var(--color-secondary, #c05477); font-weight: 600; padding: 0.25rem 0.5rem; background: #fff5f8; border-radius: 0.5rem; display: inline-flex; align-items: center; gap: 0.25rem; border: 1px solid rgba(192, 84, 119, 0.2); }
-.sc-order-options dl { margin-top: .5rem; background: #ffffff; border: 1px solid rgba(107, 33, 46, 0.1); border-radius: 0.65rem; padding: 0.65rem 0.85rem; }
+.sc-order-options dl { margin-top: .5rem; background: #fff8fa; border: 1px solid rgba(107, 33, 46, 0.1); border-radius: 0.75rem; padding: 0.65rem 0.85rem; }
 .sc-order-options dl > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .75rem; padding: .25rem 0; }
 .sc-order-options dt { font-weight: 650; color: var(--sc-color-primary); font-size: 0.78rem; }
 .sc-order-options dd { overflow-wrap: anywhere; font-weight: 500; font-size: 0.78rem; }
-
-.sc-order-facts { display: grid; gap: .65rem; font-size: .8rem; line-height: 1.5; }
+.sc-order-facts { display: grid; gap: .7rem; font-size: .8rem; line-height: 1.5; }
 .sc-order-facts > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem; }
 .sc-order-facts dt, .sc-order-source > span { color: #7d6d66; font-size: .76rem; font-weight: 600; }
 .sc-order-facts dd { margin: 0; font-weight: 600; color: var(--sc-color-text); overflow-wrap: anywhere; }
 .sc-order-secondary-text { display: block; margin-top: .15rem; color: var(--sc-color-muted); }
 .sc-order-address { display: grid; gap: .35rem; font-size: .8rem; line-height: 1.5; overflow-wrap: anywhere; }
-.sc-order-note { white-space: pre-wrap; overflow-wrap: anywhere; background: #ffffff; padding: 0.4rem 0.6rem; border-radius: 0.5rem; border: 1px dashed rgba(107, 33, 46, 0.2); }
-
-/* Totals Box */
-.sc-order-totals {
-  background: #fafafc;
-  border-color: rgba(107, 33, 46, 0.12);
-}
+.sc-order-note { white-space: pre-wrap; overflow-wrap: anywhere; background: #fff8fa; padding: 0.4rem 0.6rem; border-radius: 0.5rem; border: 1px dashed rgba(107, 33, 46, 0.2); }
+.sc-order-totals { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border-color: rgba(107, 33, 46, 0.18); box-shadow: 0 4px 16px rgba(107, 33, 46, 0.07); }
 .sc-order-totals dl { display: grid; gap: .75rem; }
 .sc-order-totals dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; font-size: .82rem; }
 .sc-order-totals dd { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.sc-order-totals .sc-order-grand-total { border-top: 1px solid rgba(107, 33, 46, 0.15); padding: .85rem .75rem; border-radius: .65rem; background: #fff0f5; color: var(--sc-color-primary); }
-.sc-order-grand-total dd { font-size: 1.35rem; font-weight: 750; line-height: 1.25; }
+.sc-order-totals .sc-order-grand-total { border-top: 1px solid rgba(107, 33, 46, 0.15); padding: .85rem .75rem; border-radius: .75rem; background: #fff0f5; color: var(--sc-color-primary); }
+.sc-order-grand-total dd { font-size: 1.4rem; font-weight: 750; line-height: 1.25; }
 .sc-order-payment-note { font-size: .82rem; font-weight: 600; margin-bottom: .45rem; line-height: 1.6; }
 .sc-order-muted { color: var(--sc-color-muted); font-size: .78rem; line-height: 1.6; }
 .sc-order-source { display: grid; gap: .2rem; padding-top: .75rem; margin-top: .75rem; border-top: 1px solid var(--sc-color-border); font-size: .75rem; }
-
-/* History Details */
-details.sc-order-history {
-  border: 1px solid rgba(107, 33, 46, 0.09);
-  border-radius: 0.85rem;
-  background: #fafafc;
-  padding: 1.15rem 1.35rem;
-}
+details.sc-order-history { border: 1px solid rgba(107, 33, 46, 0.15); border-radius: 1rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); padding: 1.25rem 1.5rem; box-shadow: 0 4px 16px rgba(107, 33, 46, 0.06); }
 details.sc-order-history > summary { display: flex; align-items: center; gap: .5rem; cursor: pointer; font-size: .95rem; font-weight: 700; color: var(--sc-color-primary); list-style: none; }
 details.sc-order-history > summary::-webkit-details-marker { display: none; }
 details.sc-order-history > summary small { margin-left: auto; color: var(--sc-color-muted); font-size: .7rem; font-weight: 400; }
@@ -272,11 +77,7 @@ details.sc-order-history .sc-order-history-help { margin-top: .75rem; font-size:
 details.sc-order-history .sc-order-history-actor { color: var(--sc-color-muted); font-size: .74rem; }
 details.sc-order-history .sc-order-history-actor span { color: var(--sc-color-text); font-weight: 550; }
 details.sc-order-history li > p { margin-top: .35rem; font-size: .78rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
-
-@media (max-width: 767px) {
-  .sc-order-tracking-view { padding: 1.25rem 1rem; border-radius: 1rem; }
-  .sc-order-tracking-columns { grid-template-columns: minmax(0, 1fr); }
-}
+@media (max-width: 767px) { .sc-order-tracking-columns { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 639px) {
   .sc-drawer.sc-order-dialog { width: calc(100vw - 1rem); height: fit-content; max-height: calc(100dvh - 1rem); margin: auto; border-radius: 1rem; }
   .sc-order-dialog .sc-drawer-heading, .sc-order-dialog .sc-drawer-body { padding: .85rem; }
@@ -314,3 +115,18 @@ details.sc-order-history li > p { margin-top: .35rem; font-size: .78rem; line-he
   color: var(--color-secondary, #c05477);
   margin-top: 0.25rem;
 }
+
+/* Order Review Card */
+.sc-order-review-card {
+  border: 1px solid rgba(107, 33, 46, 0.15);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 16px rgba(107, 33, 46, 0.06);
+  padding: 1.25rem 1.5rem;
+}
+@media (max-width: 639px) {
+  .sc-order-review-card {
+    padding: 1rem;
+  }
+}
+

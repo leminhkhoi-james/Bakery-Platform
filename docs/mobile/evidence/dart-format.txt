@@ -1,0 +1,12 @@
+Formatted lib\core\widgets\sweetcake_scaffold.dart
+Formatted lib\core\widgets\sweetcake_widgets.dart
+Formatted lib\features\catalog\presentation\catalog_pages.dart
+Formatted lib\features\customer\presentation\profile_page.dart
+Formatted lib\features\marketplace\presentation\offer_pages.dart
+Formatted lib\features\marketplace\presentation\request_pages.dart
+Formatted test\domain_workflows_test.dart
+Formatted test\screen_coverage_test.dart
+Formatted test\ui_workflows_test.dart
+Formatted integration_test\mobile_demo_test.dart
+Formatted test_driver\integration_test.dart
+Formatted 40 files (11 changed) in 0.36 seconds.

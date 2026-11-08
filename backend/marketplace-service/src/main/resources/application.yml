@@ -23,11 +23,11 @@ platform:
     user-audience: bakery-platform-api
   remote:
     identity-url: ${IDENTITY_SERVICE_BASE_URL:http://localhost:8081}
-    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8083}
+    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8082}
     subscription-url: ${SUBSCRIPTION_SERVICE_BASE_URL:http://localhost:8084}
     cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
     order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
-    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8082}
+    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8083}
     client-id: ${SERVICE_CLIENT_ID:marketplace-service}
     client-secret: ${SERVICE_CLIENT_SECRET:}
     connect-timeout: 2s
@@ -50,5 +50,8 @@ marketplace:
     connect-timeout: ${FIREBASE_CONNECT_TIMEOUT:2s}
     read-timeout: ${FIREBASE_READ_TIMEOUT:30s}
   scheduler-delay-ms: ${MARKETPLACE_SCHEDULER_DELAY_MS:30000}
+
+server:
+  port: ${SERVER_PORT:8083}
 
 management.endpoint.health.group.readiness.include: readinessState,db

@@ -14,7 +14,7 @@ export const INITIAL_TRANSACTIONS = [
     netAmount: 855000,
     status: 'locked',
     statusLabel: 'Đang khóa Escrow',
-    statusDesc: 'Khách thanh toán 100% cọc • Chờ giao xe lạnh',
+    statusDesc: 'Khách thanh toán 100% cọc • Chờ giao hàng',
     paymentMethod: 'Escrow Vault An Toàn',
   },
   {
@@ -28,7 +28,7 @@ export const INITIAL_TRANSACTIONS = [
     netAmount: 3465000,
     status: 'locked',
     statusLabel: 'Đang khóa Escrow',
-    statusDesc: 'Xe lạnh 51D-892.44 đang giao tới Landmark 81',
+    statusDesc: 'Tài xế 51D-892.44 đang giao tới Landmark 81',
     paymentMethod: 'Escrow Vault An Toàn',
   },
   {
@@ -70,7 +70,7 @@ export const INITIAL_TRANSACTIONS = [
     netAmount: 468000,
     status: 'released',
     statusLabel: 'Đã giải ngân vào ví',
-    statusDesc: 'Giao xe lạnh hoàn tất đúng giờ',
+    statusDesc: 'Giao hàng hoàn tất đúng giờ',
     paymentMethod: 'Ví khả dụng',
   },
   {

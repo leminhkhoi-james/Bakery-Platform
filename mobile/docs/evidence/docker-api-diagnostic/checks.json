@@ -1,0 +1,32 @@
+{
+  "pub-get": {
+    "command": "D:\\HomeMind\\audit-tools\\flutter\\bin\\flutter.BAT pub get",
+    "exitCode": 0,
+    "seconds": 1.83,
+    "evidence": "pub-get.txt"
+  },
+  "format": {
+    "command": "D:\\HomeMind\\audit-tools\\flutter\\bin\\dart.BAT format --output=none --set-exit-if-changed lib test integration_test test_driver tool\\capture_diagnostic_state.dart tool\\diagnostic_ui_driver.dart tool\\live_ui_driver.dart",
+    "exitCode": 0,
+    "seconds": 2.63,
+    "evidence": "format.txt"
+  },
+  "analyze": {
+    "command": "D:\\HomeMind\\audit-tools\\flutter\\bin\\flutter.BAT analyze",
+    "exitCode": 0,
+    "seconds": 13.26,
+    "evidence": "analyze.txt"
+  },
+  "test": {
+    "command": "D:\\HomeMind\\audit-tools\\flutter\\bin\\flutter.BAT test --reporter expanded",
+    "exitCode": 0,
+    "seconds": 47.71,
+    "evidence": "test.txt"
+  },
+  "build": {
+    "command": "D:\\HomeMind\\audit-tools\\flutter\\bin\\flutter.BAT build apk --debug",
+    "exitCode": 0,
+    "seconds": 109.94,
+    "evidence": "build.txt"
+  }
+}

@@ -16,7 +16,7 @@ class FirebaseStorageAdapterTest {
     @BeforeEach void prepare() {
         client = mock(Storage.class);
         adapter = new FirebaseStorageAdapter(new CakeAiProperties("", "", "", "", Duration.ofSeconds(1),
-                Duration.ofSeconds(1), 2, Duration.ofMinutes(30), "test-project", "private-bucket"));
+                Duration.ofSeconds(1), 2, Duration.ofMinutes(30), "test-project", "private-bucket", "http://localhost:8085"));
         ReflectionTestUtils.setField(adapter, "storage", client);
     }
 

@@ -1,0 +1,114 @@
+[
+  {
+    "action": "Continued existing persisted category without repeating its create",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:05.022497Z"
+  },
+  {
+    "action": "Continued persisted draft/options; no replacement without full read after restart",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:05.835567Z"
+  },
+  {
+    "action": "Native file picker uploads real product image to storage",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:14.041543Z"
+  },
+  {
+    "action": "Product published with actual subscription entitlement",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:15.212088Z"
+  },
+  {
+    "action": "Published product detail and signed storage image rendered on Android",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:20.361679Z"
+  },
+  {
+    "action": "Public search navigates using server product ID",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:22.407419Z"
+  },
+  {
+    "action": "Public bakery directory and detail render persisted operations",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:24.420240Z"
+  },
+  {
+    "action": "Bakery profile patch refetched",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:26.767264Z"
+  },
+  {
+    "action": "Operations PUT preserves lists and server IDs",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:29.767809Z"
+  },
+  {
+    "action": "Logo upload through native picker",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:36.656241Z"
+  },
+  {
+    "action": "Cover upload through native picker",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:43.718544Z"
+  },
+  {
+    "action": "Owner membership read uses actual API",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:44.371500Z"
+  },
+  {
+    "action": "Owner add-on create and reload",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:48.776953Z"
+  },
+  {
+    "action": "Add-on image uploaded to real storage",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:56.319645Z"
+  },
+  {
+    "action": "Hide removes publication through actual Backend state",
+    "result": "PASS",
+    "at": "2026-11-07T08:05:58.202390Z"
+  },
+  {
+    "action": "Product patch refetched and reopened",
+    "result": "PASS",
+    "at": "2026-11-07T08:06:02.748256Z"
+  },
+  {
+    "action": "Owner cannot enter Admin workflows",
+    "result": "PASS",
+    "at": "2026-11-07T08:06:03.474497Z"
+  },
+  {
+    "action": "Connection failure and retry at test boundary without stopping shared services",
+    "result": "PASS",
+    "at": "2026-11-07T08:06:06.560739Z"
+  },
+  {
+    "action": "Actual refresh-cookie rotation through profile action",
+    "result": "PASS",
+    "at": "2026-11-07T08:06:08.844272Z"
+  },
+  {
+    "action": "Secure-storage session restored after Flutter application recreation",
+    "result": "PASS",
+    "at": "2026-11-07T08:06:13.142756Z"
+  },
+  {
+    "resourceIds": {
+      "bakery": "33e60a6f-7751-423d-a6f0-584df99a06d6",
+      "plan": "b63c82fd-e163-4b6b-a3a8-5e9ae3b6f97b",
+      "order": "70a8c5bd-5fea-4a9a-bae0-ac5efce7f67e",
+      "payment": "39426979-566e-47de-860e-41d6fe46ffad",
+      "retryPayment": "39426979-566e-47de-860e-41d6fe46ffad",
+      "category": "8366bcc7-d342-4d46-81b9-75934a872ff2",
+      "product": "361b1c6a-8305-4ddb-bea6-60004f29f986"
+    },
+    "result": "RECORDED"
+  }
+]

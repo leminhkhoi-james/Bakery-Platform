@@ -1,0 +1,12 @@
+{
+  "entrypoint": "lib/main.dart",
+  "method": "visually confirmed native main login before force-stop; normal OS activity start; no FlutterDriver extension",
+  "storageNamespace": "sweetcake.identity.v1",
+  "processChanged": true,
+  "appDataCleared": false,
+  "loginCredentialsInArgv": false,
+  "screenshot": "main-cold-restart-settled-profile.png",
+  "visualResult": "PASS_RESTORED_OWNER_AFTER_PROCESS_RESTART",
+  "visualEvidence": "Confirmed actual CUSTOMER and BAKERY_OWNER profile after new Android process; no credentials entered after restart.",
+  "startupObservation": "Initial timed capture still loading; later settled render verified. No startup latency benchmark claimed."
+}

@@ -48,16 +48,16 @@ export const INITIAL_ADMIN_ORDERS = [
     cakeImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDW9YG_C2M9nJ2MFdOlxALvM_K-6pVWLgUkquU_KJ71ZXPYWGh4OQIFkANb-D_vZSHb_nvTLgszauPcOjeF16R09lmecxSXcM_9ddEq7DhTxr_fMrsdQnCOYi3hJudwfEfcrZE5y4VMQSV9cTHWiAJX7rDF15RWEE_T4zStVxudoUvsh7PMm0b4Lk-2tZNRT12cFiGGxHZW638CDG-rPVfKKVcLnMFeJPpwBAuzROA2ugxm_rd6JwDn',
     progressStage: 'delivering',
-    stageLabel: 'Xe lạnh 4.8°C (Sweet-SH02)',
+    stageLabel: 'Đang vận chuyển (Sweet-SH02)',
     stageStep: 'Giai đoạn 3/4',
     progressPercent: 82,
-    telemetryInfo: 'Khoang lạnh ISO 4°C - 6°C • Đến sau 12p',
+    telemetryInfo: 'Thùng chống sốc bảo vệ bánh • Đến sau 12p',
     escrowStatus: 'waiting_release',
     escrowStatusLabel: 'Chờ Khách Nhận',
     escrowContractId: '3.850.000đ đóng băng',
     escrowPledge: '3.850.000đ',
     isDelivered: false,
-    deliveryVehicle: 'Xe Van Suzuki Carry (51D-892.44) • 4.8°C',
+    deliveryVehicle: 'Xe giao hàng Suzuki (51D-892.44)',
   },
   {
     id: 'ORD-2025-9968',
@@ -161,7 +161,7 @@ export const INITIAL_ADMIN_ORDERS = [
     cakeImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCVn2OrQKD9lH_3S3Os_i8iDt3_GsKUy8nP8136M6B7FTZ7Lb1y4-J73EXLaZmgdPTauMCeer3bV3wDxytfXntISInDv55-ZVldUO5SJvcGgPcG9Tsi5Z4j9OuTGt5PJw3NL70eYq8jb0LRID5BkDivJiilcaCkNA8X8QXfE9EEFgrk2HTvCuINUPJQGswULdnBjAZHymjSj51Tbloh-qgoH5pqm-YrofYGGatioA9yNR8HQO5d1XaL',
     progressStage: 'delivering',
-    stageLabel: 'Xe lạnh 4.5°C (Sweet-SH09)',
+    stageLabel: 'Đang vận chuyển (Sweet-SH09)',
     stageStep: 'Giai đoạn 3/4',
     progressPercent: 88,
     telemetryInfo: 'Chống rung Shock-absorber • Đến sau 5p',

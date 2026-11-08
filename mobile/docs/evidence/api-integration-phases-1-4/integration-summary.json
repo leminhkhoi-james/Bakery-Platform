@@ -1,0 +1,1068 @@
+{
+  "uniqueOperations": 55,
+  "implemented": 55,
+  "androidUiHttp2xx": 55,
+  "byService": {
+    "bakery-service": 35,
+    "identity-service": 5,
+    "subscription-service": 15
+  },
+  "byPhase": {
+    "3": 31,
+    "1": 6,
+    "2": 5,
+    "4": 13
+  },
+  "operations": [
+    {
+      "id": "BKR-001",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/admin/bakeries",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 6,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-002",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/admin/bakeries/{bakeryId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 7,
+      "uiStatuses": [
+        200,
+        403
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-003",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PATCH",
+      "route": "/api/v1/admin/bakeries/{bakeryId}/status",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-004",
+      "phase": 1,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-005",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-006",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/onboarding",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 139,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-007",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/onboarding",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-008",
+      "phase": 1,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 140,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-009",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-010",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 42,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-011",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-012",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        204
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-013",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-014",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/add-ons/{addOnId}/image",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-015",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/categories",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 41,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-016",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/categories",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-017",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        204
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-018",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/categories/{categoryId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-019",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/cover",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-020",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/logo",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-021",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/members",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-022",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/onboarding/complete",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        204
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-023",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PUT",
+      "route": "/api/v1/bakeries/{bakeryId}/operations",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-024",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/products",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 67,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-025",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-026",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PATCH",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-027",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/archive",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-028",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/hide",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-029",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/images",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-030",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "DELETE",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/images/{imageId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        204
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-031",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "PUT",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/options",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-032",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/products/{productId}/publish",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-033",
+      "phase": 3,
+      "service": "bakery-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/submit-for-approval",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-034",
+      "phase": 1,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/products",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 68,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794037972/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039774/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "BKR-035",
+      "phase": 1,
+      "service": "bakery-service",
+      "method": "GET",
+      "route": "/api/v1/products/{productId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 14,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "IDN-002",
+      "phase": 2,
+      "service": "identity-service",
+      "method": "POST",
+      "route": "/api/v1/auth/login",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 19,
+      "uiStatuses": [
+        200,
+        401
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "IDN-003",
+      "phase": 2,
+      "service": "identity-service",
+      "method": "POST",
+      "route": "/api/v1/auth/logout",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 14,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "IDN-004",
+      "phase": 2,
+      "service": "identity-service",
+      "method": "GET",
+      "route": "/api/v1/auth/me",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 22,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038649/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "IDN-005",
+      "phase": 2,
+      "service": "identity-service",
+      "method": "POST",
+      "route": "/api/v1/auth/refresh",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 3,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039139/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "IDN-006",
+      "phase": 2,
+      "service": "identity-service",
+      "method": "POST",
+      "route": "/api/v1/auth/register",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794037972/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-001",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/admin/bakery-payments",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 12,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-002",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/admin/bakery-payments/{paymentId}/approve",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-003",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/admin/bakery-payments/{paymentId}/reject",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-004",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/admin/subscription-plans",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 14,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-005",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/admin/subscription-plans",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-006",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "PATCH",
+      "route": "/api/v1/admin/subscription-plans/{planId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-007",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/admin/subscription-plans/{planId}/archive",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 1,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-008",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 18,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-009",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription-orders",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 17,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-010",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/bakeries/{bakeryId}/subscription-orders",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 2,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": [
+        201,
+        409
+      ]
+    },
+    {
+      "id": "SUB-011",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/subscription-orders/{orderId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 35,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-012",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "POST",
+      "route": "/api/v1/subscription-orders/{orderId}/payments",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 3,
+      "uiStatuses": [
+        201
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-013",
+      "phase": 1,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 31,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-014",
+      "phase": 4,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans/payment-options",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 12,
+      "uiStatuses": [
+        200
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    },
+    {
+      "id": "SUB-015",
+      "phase": 1,
+      "service": "subscription-service",
+      "method": "GET",
+      "route": "/api/v1/subscription-plans/{planId}",
+      "adapter": "IMPLEMENTED",
+      "androidUi": "EXERCISED_HTTP_2XX",
+      "successfulUiRequests": 26,
+      "uiStatuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "evidence/api-integration-phases-1-4/runs/1794038386/android-ui-requests.json",
+        "evidence/api-integration-phases-1-4/runs/1794039668/android-ui-requests.json"
+      ],
+      "adapterProbeStatuses": []
+    }
+  ],
+  "countRule": "service + method + normalized route; ADAPTER_PROBE and BACKEND_READ_RECONCILIATION excluded from Android UI totals",
+  "uniqueTraceEvents": 655,
+  "uiResults": {
+    "android-ui-results.json": {
+      "pass": 5,
+      "failureActions": [],
+      "probe": 0
+    },
+    "runs/1794037972/android-ui-results.json": {
+      "pass": 1,
+      "failureActions": [
+        "registration"
+      ],
+      "probe": 0
+    },
+    "runs/1794038028/android-ui-results.json": {
+      "pass": 1,
+      "failureActions": [
+        "registration"
+      ],
+      "probe": 0
+    },
+    "runs/1794038386/android-ui-results.json": {
+      "pass": 14,
+      "failureActions": [
+        "catalog-category"
+      ],
+      "probe": 0
+    },
+    "runs/1794038649/android-ui-results.json": {
+      "pass": 3,
+      "failureActions": [
+        "catalog-media"
+      ],
+      "probe": 0
+    },
+    "runs/1794039139/android-ui-results.json": {
+      "pass": 20,
+      "failureActions": [],
+      "probe": 0
+    },
+    "runs/1794039668/android-ui-results.json": {
+      "pass": 15,
+      "failureActions": [],
+      "probe": 1
+    },
+    "runs/1794039774/android-ui-results.json": {
+      "pass": 0,
+      "failureActions": [
+        "readme-rehearsal"
+      ],
+      "probe": 0
+    }
+  }
+}

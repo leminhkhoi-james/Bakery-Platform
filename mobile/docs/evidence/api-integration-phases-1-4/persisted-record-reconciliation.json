@@ -1,0 +1,204 @@
+{
+  "checks": [
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "port": 18101,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "port": 18101,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "roles": [
+        "BAKERY_OWNER",
+        "CUSTOMER"
+      ]
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/onboarding",
+      "port": 18102,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "id": "33e60a6f-7751-423d-a6f0-584df99a06d6",
+      "bakeryStatus": "ACTIVE"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "public",
+      "method": "GET",
+      "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+      "port": 18102,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "id": "361b1c6a-8305-4ddb-bea6-60004f29f986",
+      "bakeryId": "33e60a6f-7751-423d-a6f0-584df99a06d6",
+      "imageCount": 1,
+      "optionGroups": 1
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "public",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6",
+      "port": 18102,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6/subscription",
+      "port": 18104,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "currentStatus": "ACTIVE",
+      "scheduledStatus": "SCHEDULED"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6/subscription-orders",
+      "port": 18104,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "orders": [
+        {
+          "id": "6d989576-a762-4392-8150-7e8f5088b73f",
+          "status": "COMPLETED",
+          "amount": "120000.0"
+        },
+        {
+          "id": "70a8c5bd-5fea-4a9a-bae0-ac5efce7f67e",
+          "status": "COMPLETED",
+          "amount": "100000.0"
+        }
+      ]
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "port": 18101,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6/products",
+      "port": 18102,
+      "status": 403,
+      "expected": 403,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6/members",
+      "port": 18102,
+      "status": 403,
+      "expected": 403,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "GET",
+      "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6/subscription",
+      "port": 18104,
+      "status": 403,
+      "expected": 403,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "GET",
+      "path": "/api/v1/admin/subscription-plans",
+      "port": 18104,
+      "status": 403,
+      "expected": 403,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "web-proxy",
+      "method": "GET",
+      "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+      "port": 5174,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS",
+      "matchesPublicRecord": true
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "owner",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "port": 18101,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS"
+    },
+    {
+      "layer": "BACKEND_READ_RECONCILIATION",
+      "actor": "other-owner",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "port": 18101,
+      "status": 200,
+      "expected": 200,
+      "result": "PASS"
+    }
+  ],
+  "media": [
+    {
+      "kind": "product",
+      "status": 200,
+      "bytes": 42397,
+      "sha256": "20b66c25d2589383403c8febd7760ccebe2fe1d5e10e085aa2e44105ced9d487",
+      "signedUrlStored": false
+    },
+    {
+      "kind": "logo",
+      "status": 200,
+      "bytes": 42397,
+      "sha256": "20b66c25d2589383403c8febd7760ccebe2fe1d5e10e085aa2e44105ced9d487",
+      "signedUrlStored": false
+    },
+    {
+      "kind": "cover",
+      "status": 200,
+      "bytes": 42397,
+      "sha256": "20b66c25d2589383403c8febd7760ccebe2fe1d5e10e085aa2e44105ced9d487",
+      "signedUrlStored": false
+    }
+  ],
+  "scope": "All record reconciliation GETs; only authentication login/logout POSTs. These are not Android UI PASS counts.",
+  "allExpected": true
+}

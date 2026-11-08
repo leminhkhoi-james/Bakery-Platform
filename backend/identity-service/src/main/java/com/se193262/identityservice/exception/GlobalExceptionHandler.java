@@ -54,6 +54,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(ApiResponse.error(400, "Invalid request"));
     }
 
+    @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
+    ResponseEntity<ApiResponse<Void>> handleResponseStatus(
+            org.springframework.web.server.ResponseStatusException exception) {
+        HttpStatus status = HttpStatus.valueOf(exception.getStatusCode().value());
+        String message = exception.getReason() == null ? "Request failed" : exception.getReason();
+        return ResponseEntity.status(status).body(ApiResponse.error(status.value(), message));
+    }
+
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
     ResponseEntity<ApiResponse<Void>> handleAccessDenied(Exception exception) {
         return ResponseEntity.status(403).body(ApiResponse.error(403, "Access denied"));

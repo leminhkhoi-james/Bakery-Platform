@@ -18,6 +18,7 @@ export const demoId = (n) => `de000000-0000-4000-8000-${String(n).padStart(12, '
 export const isDemoId = (id) => /^de000000-0000-4000-8000-\d{12}$/.test(id || '')
 export const DEMO_STORAGE_KEY = 'sweetcake.demo.v2'
 export const future = (days) => new Date(Date.now() + days * 86400000).toISOString()
+export const past = (days) => new Date(Date.now() - days * 86400000).toISOString()
 export const stamp = () => new Date().toISOString()
 export const cakeImage = INITIAL_CAKES[0].image
 
@@ -91,21 +92,69 @@ export function createSeed() {
   })
 
   const plans = [
-    { id: demoId(500), code: 'DEMO_0', name: 'Khởi đầu', description: 'Gói siêu tiết kiệm dành cho tiệm làm bánh tại nhà và người mới khởi nghiệp bán bánh kem.', monthlyPrice: 49000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '15', offers: '30', featured: 'false', support: 'Hỗ trợ trực tuyến cộng đồng' } },
-    { id: demoId(501), code: 'DEMO_1', name: 'Nghệ nhân', description: 'Gói phổ biến và tối ưu nhất cho tiệm bánh nghệ nhân, studio bánh kem đang phát triển.', monthlyPrice: 99000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '60', offers: '-1', featured: 'true', support: 'Hỗ trợ ưu tiên & Đề xuất nổi bật' } },
-    { id: demoId(502), code: 'DEMO_2', name: 'Chuyên nghiệp', description: 'Giải pháp toàn diện dành cho chuỗi tiệm bánh lớn và xưởng bánh tiệc cưới, sự kiện.', monthlyPrice: 189000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '-1', offers: '-1', featured: 'true', support: 'Hỗ trợ chuyên gia 24/7 & Top trang chủ' } },
+    { id: demoId(500), code: 'BASIC', name: 'Cơ bản', description: 'Gói dành cho tiệm mới tham gia nền tảng', monthlyPrice: 30000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '20', offers: '50', featured: 'false', support: 'Hỗ trợ trực tuyến cộng đồng' } },
+    { id: demoId(501), code: 'PRO', name: 'Chuyên nghiệp', description: 'Gói dành cho tiệm có nhiều sản phẩm và offer', monthlyPrice: 100000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '100', offers: '300', featured: 'false', support: 'Hỗ trợ ưu tiên & Đề xuất nổi bật' } },
+    { id: demoId(502), code: 'PREMIUM', name: 'Cao cấp', description: 'Gói có ưu tiên hiển thị trên nền tảng', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '-1', offers: '-1', featured: 'true', support: 'Hỗ trợ chuyên gia 24/7 & Top trang chủ' } },
+  ]
+  const subscriptions = [
+    {
+      id: demoId(701),
+      bakeryId: bakeries[1].id,
+      planId: plans[1].id,
+      planCode: plans[1].code,
+      status: 'ACTIVE',
+      periodStart: past(10),
+      periodEnd: future(20),
+      featuresSnapshot: plans[1].features,
+      createdAt: past(10),
+    },
+    {
+      id: demoId(702),
+      bakeryId: bakeries[2].id,
+      planId: plans[1].id,
+      planCode: plans[1].code,
+      status: 'ACTIVE',
+      periodStart: past(15),
+      periodEnd: future(15),
+      featuresSnapshot: plans[1].features,
+      createdAt: past(15),
+    },
+    {
+      id: demoId(703),
+      bakeryId: bakeries[3].id,
+      planId: plans[0].id,
+      planCode: plans[0].code,
+      status: 'ACTIVE',
+      periodStart: past(5),
+      periodEnd: future(25),
+      featuresSnapshot: plans[0].features,
+      createdAt: past(5),
+    },
+    {
+      id: demoId(704),
+      bakeryId: bakeries[4].id,
+      planId: plans[2].id,
+      planCode: plans[2].code,
+      status: 'ACTIVE',
+      periodStart: past(7),
+      periodEnd: future(23),
+      featuresSnapshot: plans[2].features,
+      createdAt: past(7),
+    },
   ]
   const subscriptionOrders = [
-    { id: demoId(510), bakeryId: bakeries[0].id, planId: plans[1].id, orderNumber: 'DEMO-SUB-101', planNameSnapshot: plans[1].name, planCodeSnapshot: plans[1].code, featuresSnapshot: plans[1].features, billingPeriodMonths: 1, totalAmount: plans[1].monthlyPrice, currency: 'VND', status: 'PAYMENT_REVIEW', expiresAt: future(3), createdAt: stamp() }
+    { id: demoId(510), bakeryId: bakeries[0].id, planId: plans[1].id, orderNumber: 'DEMO-SUB-101', planNameSnapshot: plans[1].name, planCodeSnapshot: plans[1].code, featuresSnapshot: plans[1].features, billingPeriodMonths: 1, totalAmount: plans[1].monthlyPrice, currency: 'VND', status: 'PAYMENT_REVIEW', expiresAt: future(3), createdAt: stamp() },
+    { id: demoId(511), bakeryId: bakeries[4].id, planId: plans[2].id, orderNumber: 'DEMO-SUB-102', planNameSnapshot: plans[2].name, planCodeSnapshot: plans[2].code, featuresSnapshot: plans[2].features, billingPeriodMonths: 1, totalAmount: plans[2].monthlyPrice, currency: 'VND', status: 'COMPLETED', createdAt: past(7), completedAt: past(7) },
   ]
   const payments = [
-    { id: demoId(520), bakeryId: bakeries[0].id, subscriptionOrderId: demoId(510), amount: plans[1].monthlyPrice, currency: 'VND', status: 'SUBMITTED', paymentMethod: 'Chuyển khoản Vietcombank (QR)', paymentReference: 'FT2611039821', submittedByName: 'La Crème Pâtisserie', submittedAt: stamp() }
+    { id: demoId(520), bakeryId: bakeries[0].id, subscriptionOrderId: demoId(510), amount: plans[1].monthlyPrice, currency: 'VND', status: 'SUBMITTED', paymentMethod: 'Chuyển khoản Vietcombank (QR)', paymentReference: 'FT2611039821', submittedByName: 'La Crème Pâtisserie', submittedAt: stamp() },
+    { id: demoId(521), bakeryId: bakeries[4].id, subscriptionOrderId: demoId(511), amount: plans[2].monthlyPrice, currency: 'VND', status: 'APPROVED', paymentMethod: 'Chuyển khoản Vietcombank (QR)', paymentReference: 'FT2611028471', submittedByName: 'Artisan Sweet Atelier', submittedAt: past(7), reviewedAt: past(7) },
   ]
   const conversations = [{ id: demoId(600), customerId, bakeryId: bakeries[0].id, cakeRequestId: requests[0].id, status: 'OPEN', unreadCount: 1, lastMessageAt: stamp(), lastMessagePreview: DEFAULT_BAKER_CHAT_MESSAGES[0].text, createdAt: stamp(), participants: [{ userId: customerId, participantType: 'CUSTOMER' }, { userId: ownerId, participantType: 'BAKERY' }] }]
   const messages = DEFAULT_BAKER_CHAT_MESSAGES.map((source, i) => ({ id: demoId(610 + i * 2), conversationId: demoId(600), clientMessageId: demoId(611 + i * 2), senderId: source.sender === 'user' ? customerId : ownerId, messageType: 'TEXT', content: source.text, attachments: [], deleted: false, createdAt: stamp() }))
   const addresses = createCustomerAddresses(customerId, (i) => demoId(90000 + i), users[0].name)
   const jobs = [{ id: demoId(91000), customerId, cakeRequestId: requests[0].id, status: 'SUCCEEDED', modelName: 'Mẫu dựng sẵn · không gọi AI provider', currentRevision: 1, createdAt: stamp(), completedAt: stamp(), updatedAt: stamp(), promptRevisions: [{ id: demoId(92000), revisionNumber: 1, prompt: AI_SHOWCASE_DATA.promptText }], sourceImages: [] }]
   const designs = AI_RENDER_IMAGES.map((url, i) => ({ id: demoId(93000 + i), generationJobId: jobs[0].id, imageUrl: url, thumbnailUrl: url, moderationStatus: 'APPROVED', moderationReason: 'Ảnh mẫu có sẵn trong mockdata, không phải kết quả gọi AI thật.', width: 1024, height: 1024 }))
-  users.push(...INITIAL_USERS.slice(1).map((source, i) => ({ ...source, id: demoId(60000 + i), roles: ['CUSTOMER'], status: source.status === 'active' ? 'ACTIVE' : 'SUSPENDED' })))
-  return { version: 2, actors: {}, addressOwners: [customerId], users, bakeries, categories, products, requests, offers, orders, plans, subscriptionOrders, payments, conversations, messages, addresses, subscriptions: [], jobs, designs, addOns, members: [], nextId: 1000000 }
+  users.push(...INITIAL_USERS.slice(1).map((source, i) => ({ ...source, id: demoId(60000 + i), roles: ['CUSTOMER'], status: source.status === 'active' ? 'ACTIVE' : 'BLOCKED' })))
+  return { version: 2, actors: {}, addressOwners: [customerId], users, bakeries, categories, products, requests, offers, orders, plans, subscriptionOrders, payments, conversations, messages, addresses, subscriptions, jobs, designs, addOns, members: [], nextId: 1000000 }
 }

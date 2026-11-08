@@ -138,7 +138,7 @@ export const INITIAL_KANBAN_ORDERS = {
       },
     ],
 
-    // CỘT 4: Đang giao xe lạnh (Tài xế, GPS, Nhiệt độ 4.5°C)
+    // CỘT 4: Đang giao hàng (Tài xế, GPS, Bảo đảm dáng bánh)
     delivering: [
       {
         id: '#ORD-2025-9958',
@@ -153,16 +153,16 @@ export const INITIAL_KANBAN_ORDERS = {
         driverName: 'Nguyễn Văn Hùng',
         driverPhone: '0908 123 456',
         licensePlate: '59-C1 882.19',
-        vanCode: 'Xe Lạnh SH04',
-        tempC: '4.5°C',
+        vanCode: 'Đội xe SH04',
+        tempC: 'Bảo đảm dáng',
         remainingMins: 'Còn ~12 phút',
         image:
           'https://lh3.googleusercontent.com/aida-public/AB6AXuCOCINIeq92usLKKBjllKJEw2BGksgvlM54RNO5sH1zI9aREyYgU7f6Cn-IS9rk7clD0h1eFbRtS6-dAapJ8HtdskQhg5_Kf3AX7TiRWAOngK8uVWBA-0uYjSmz3m84tFu7tvSAkBchlAJw0ffXDJ7LZvm_1k8sqdVnbMrnXb32QSBLmOzkhbgkSXWD_L2MnNY0x3XVBLRLE481ngVQwvlG8jbCLxp298aHIcwV3QbtONav7jhoAeHW',
         isUrgent: false,
         timeline: [
           { time: '10:00', text: 'Tiệm hoàn thành bánh & chụp ảnh duyệt' },
-          { time: '13:45', text: 'Đóng thùng lạnh bàn giao tài xế Xe SH04' },
-          { time: '14:00', text: 'Đang di chuyển trên đường (Nhiệt độ 4.5°C)' },
+          { time: '13:45', text: 'Đóng thùng chống sốc bàn giao tài xế Xe SH04' },
+          { time: '14:00', text: 'Đang di chuyển trên đường' },
         ],
       },
     ],

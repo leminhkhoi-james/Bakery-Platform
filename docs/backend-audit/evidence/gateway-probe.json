@@ -1,0 +1,9 @@
+{
+  "container": "bakery-audit-20261107-gateway-probe",
+  "state": "exited",
+  "exitCode": 0,
+  "healthHttp": "CONNECTION_REFUSED",
+  "startedLog": true,
+  "webServerStarted": false,
+  "conclusion": "Bootstrap non-web, không có route forwarding trong source/pom hiện tại."
+}

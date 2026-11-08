@@ -217,5 +217,57 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
   }))
   const addOns = useCatalogResource(loadRfqAddOns, { bakeryId })
   const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues({ ...values, [key]: event.target.value }) })
-  return <form id={footerExternal ? "vendor-offer-form" : undefined} className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}><ModalFormState value={values} busy={busy} /><h2 className="text-xl font-bold">{offer ? 'Sửa báo giá đang chờ' : 'Gửi báo giá'}</h2><fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">{[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => <label key={key}>{label}<input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} /></label>)}<label className="sm:col-span-2">Mô tả và điều kiện<textarea id="offer-message" maxLength={4000} className={inputClass} rows={4} {...field('message')} /></label><section className="sm:col-span-2 space-y-3"><h3 className="font-bold">Phụ kiện từ tiệm</h3><ApiState resource={addOns}>{addOns.data?.map((item) => <label key={item.id} className="flex flex-wrap items-center gap-3"><input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />{item.name} · {moneyVnd(item.price)}{values.items.some((row) => row.addOnId === item.id) && <input aria-label={'Số lượng ' + item.name} type="number" min={1} value={values.items.find((row) => row.addOnId === item.id).quantity} onChange={(event) => setValues({ ...values, items: values.items.map((row) => row.addOnId === item.id ? { ...row, quantity: event.target.value } : row) })} className="w-20 rounded border p-2" />}</label>)}</ApiState><p className="text-sm">Kiểm tra phụ kiện, thời gian hoàn thành và tổng tiền trước khi gửi báo giá.</p></section></fieldset>{!footerExternal && <button id="offer-submit-btn" className={buttonClass} disabled={disabled || busy}>{busy ? 'Đang gửi…' : 'Lưu báo giá'}</button>}</form>
+  return (
+    <form id={footerExternal ? "vendor-offer-form" : undefined} className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}>
+      <ModalFormState value={values} busy={busy} />
+      <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-outline-variant/20">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
+          <Icon name="request_quote" className="text-lg" />
+        </span>
+        <h2 className="text-lg font-bold text-primary">{offer ? 'Chỉnh sửa báo giá' : 'Soạn báo giá gửi khách'}</h2>
+      </div>
+      <fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">
+        {[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => (
+          <label key={key} className="text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
+            <span>{label}</span>
+            <input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} />
+          </label>
+        ))}
+        <label className="sm:col-span-2 text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
+          <span>Lời nhắn & cam kết từ tiệm (loại kem, cốt bánh, quà tặng kèm)</span>
+          <textarea id="offer-message" maxLength={4000} placeholder="Ví dụ: Tiệm cam kết làm chuẩn 95% theo mẫu thiết kế. Tặng kèm nến sinh nhật cao cấp và dao cắt bánh..." className={inputClass} rows={3} {...field('message')} />
+        </label>
+        <section className="sm:col-span-2 space-y-2 pt-2 border-t border-outline-variant/15">
+          <h3 className="font-bold text-xs text-primary flex items-center gap-1.5">
+            <Icon name="add_circle" className="text-sm" /> Phụ kiện kèm theo (tùy chọn)
+          </h3>
+          <ApiState resource={addOns}>
+            {addOns.data?.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {addOns.data.map((item) => (
+                  <label key={item.id} className="flex items-center justify-between p-2 rounded-xl border border-outline-variant/20 bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+                    <span className="flex items-center gap-2">
+                      <input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />
+                      <span className="font-medium text-on-surface">{item.name}</span>
+                    </span>
+                    <span className="text-primary font-bold">{moneyVnd(item.price)}</span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-outline italic">Tiệm chưa có phụ kiện mẫu sẵn.</p>
+            )}
+          </ApiState>
+        </section>
+      </fieldset>
+      {!footerExternal && (
+        <div className="mt-5 pt-3 border-t border-outline-variant/15 flex justify-end">
+          <button id="offer-submit-btn" className={buttonClass + " px-6 py-2.5 text-sm font-semibold"} disabled={disabled || busy}>
+            <Icon name="send" className="text-sm mr-1.5" />
+            {busy ? 'Đang gửi…' : 'Gửi báo giá cho khách'}
+          </button>
+        </div>
+      )}
+    </form>
+  )
 }

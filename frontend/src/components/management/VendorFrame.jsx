@@ -11,6 +11,9 @@ import './vendor-selector.css'
 import '../common/portal-header.css'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadManagedBakeries, dashboardErrorMessage } from '../../services/vendorDashboardService.js'
+import { rfqService } from '../../services/rfqService.js'
+import { moneyVnd } from '../../services/marketplaceModels.js'
+import VendorNotificationBell from './VendorNotificationBell.jsx'
 
 export function BakerySelector(props) {
   return props.available ? <BakeryChoice {...props} /> : <LoadedBakerySelector {...props} />
@@ -47,6 +50,88 @@ function BakeryChoice({ bakeryId, onSelect, disabled = false, available, showErr
 export default function VendorFrame({ title, activeTab, bakeryId, onNavigate, children }) {
   const { user } = useAuth()
   const [mobile, setMobile] = useState(false)
+  const [bannerDismissed, setBannerDismissed] = useState(false)
   const navigate = (route) => onNavigate(vendorRoute(route, bakeryId))
-  return <div className="sc-portal sc-portal--vendor"><VendorSidebar activeTab={activeTab} onNavigate={navigate} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} showMockBadges={false} /><PortalHeader title={title} showPortalLabel={false} user={user} portal="Đối tác" onMenu={() => setMobile(true)} onNavigate={onNavigate} /><main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className="sc-workspace">{children}</div></main></div>
+
+  const rfqsResource = useCatalogResource(rfqService.getRfqs, { scope: 'available', status: 'OPEN', page: 1, size: 8 })
+  const openRfqs = rfqsResource.data?.result || []
+  const rfqCount = openRfqs.length
+  const latestRfq = openRfqs[0]
+
+  const currentCakeRequestId = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('cakeRequestId')
+    : null
+
+  const showBanner = !bannerDismissed && rfqCount > 0 && !currentCakeRequestId && activeTab !== 'rfq'
+
+  const notificationBell = (
+    <VendorNotificationBell
+      openRfqs={openRfqs}
+      onNavigate={navigate}
+      bakeryId={bakeryId}
+    />
+  )
+
+  return (
+    <div className="sc-portal sc-portal--vendor">
+      <VendorSidebar
+        activeTab={activeTab}
+        onNavigate={navigate}
+        isMobileOpen={mobile}
+        onCloseMobile={() => setMobile(false)}
+        showMockBadges={false}
+        rfqCount={rfqCount}
+      />
+      <PortalHeader
+        title={title}
+        showPortalLabel={false}
+        user={user}
+        portal="Đối tác"
+        onMenu={() => setMobile(true)}
+        onNavigate={onNavigate}
+        action={notificationBell}
+      />
+      <main id="workspace-content" className="sc-portal-main">
+        <BackgroundOrnaments variant={activeTab} />
+        <div className="sc-workspace">
+          {showBanner && latestRfq && (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-gradient-to-r from-rose-50 via-pink-50 to-rose-50/80 px-4 py-3 shadow-xs mb-1">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white shadow-xs animate-pulse">
+                  <Icon name="campaign" className="text-xl" />
+                </span>
+                <div className="min-w-0 text-xs sm:text-sm">
+                  <p className="font-bold text-rose-950 flex items-center gap-2">
+                    <span>Có {rfqCount} yêu cầu làm bánh mới cần báo giá</span>
+                    <span className="rounded-full bg-rose-200/90 px-2 py-0.5 text-[10px] font-bold text-rose-900">Mới nhận</span>
+                  </p>
+                  <p className="text-stone-700 truncate mt-0.5">
+                    <strong>{latestRfq.title}</strong> — <span className="text-primary font-bold">{moneyVnd(latestRfq.budgetMin)} - {moneyVnd(latestRfq.budgetMax)}</span> · {latestRfq.deliveryDistrict || 'TP.HCM'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => navigate('vendor-quote-submit?cakeRequestId=' + latestRfq.id)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-wine-dark px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer"
+                >
+                  <Icon name="send" className="text-sm" /> Báo giá ngay
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBannerDismissed(true)}
+                  className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg cursor-pointer"
+                  title="Đóng thông báo"
+                >
+                  <Icon name="close" className="text-base" />
+                </button>
+              </div>
+            </div>
+          )}
+          {children}
+        </div>
+      </main>
+    </div>
+  )
 }

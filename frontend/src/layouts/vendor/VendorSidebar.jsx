@@ -83,15 +83,17 @@ export default function VendorSidebar({
                     {item.label}
                   </span>
                 </div>
-                {showMockBadges && badgeText && (
+                {((showMockBadges && badgeText) || (item.badgeKey === 'rfqCount' && rfqCount > 0)) && (
                   <span
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive
                         ? 'bg-on-primary/20 text-on-primary'
+                        : item.badgeKey === 'rfqCount'
+                        ? 'bg-rose-600 text-white shadow-xs'
                         : 'bg-secondary-fixed text-on-secondary-fixed'
                     }`}
                   >
-                    {badgeText}
+                    {item.badgeKey === 'rfqCount' ? `${rfqCount}${item.badgeSuffix || ' mới'}` : badgeText}
                   </span>
                 )}
               </button>

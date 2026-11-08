@@ -1,0 +1,6637 @@
+[
+  {
+    "caseId": "TC-0001",
+    "api": "BKR-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 31,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0002",
+    "api": "BKR-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0003",
+    "api": "BKR-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0004",
+    "api": "BKR-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 237,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0005",
+    "api": "BKR-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0006",
+    "api": "BKR-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0007",
+    "api": "BKR-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0008",
+    "api": "BKR-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 404,
+    "result": "PASS",
+    "elapsedMs": 55,
+    "responseShape": "NoneType",
+    "error": "Bakery not found"
+  },
+  {
+    "caseId": "TC-0009",
+    "api": "BKR-009",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0010",
+    "api": "BKR-010",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0011",
+    "api": "BKR-011",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0012",
+    "api": "BKR-012",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0013",
+    "api": "BKR-013",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 16,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0014",
+    "api": "BKR-014",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 16,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0015",
+    "api": "BKR-015",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0016",
+    "api": "BKR-016",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0017",
+    "api": "BKR-017",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0018",
+    "api": "BKR-018",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0019",
+    "api": "BKR-019",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0020",
+    "api": "BKR-020",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0021",
+    "api": "BKR-021",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0022",
+    "api": "BKR-022",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0023",
+    "api": "BKR-023",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0024",
+    "api": "BKR-024",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0025",
+    "api": "BKR-025",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0026",
+    "api": "BKR-026",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 16,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0027",
+    "api": "BKR-027",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0028",
+    "api": "BKR-028",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0029",
+    "api": "BKR-029",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0030",
+    "api": "BKR-030",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0031",
+    "api": "BKR-031",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0032",
+    "api": "BKR-032",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0033",
+    "api": "BKR-033",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0034",
+    "api": "BKR-034",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 38,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0035",
+    "api": "BKR-035",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 404,
+    "result": "PASS",
+    "elapsedMs": 13,
+    "responseShape": "NoneType",
+    "error": "Product not found"
+  },
+  {
+    "caseId": "TC-0036",
+    "api": "BKR-036",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 4,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0037",
+    "api": "BKR-037",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0038",
+    "api": "BKR-038",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0039",
+    "api": "BKR-039",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0040",
+    "api": "BKR-040",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0041",
+    "api": "BKR-041",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 14,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0042",
+    "api": "BKR-042",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 5,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0043",
+    "api": "CHT-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 36,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0044",
+    "api": "CHT-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0045",
+    "api": "CHT-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0046",
+    "api": "CHT-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0047",
+    "api": "CHT-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0048",
+    "api": "CHT-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0049",
+    "api": "CHT-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0050",
+    "api": "CHT-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0051",
+    "api": "IDN-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 343,
+    "responseShape": [
+      "keys"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0052",
+    "api": "IDN-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 400,
+    "result": "PASS",
+    "elapsedMs": 358,
+    "responseShape": [
+      "email",
+      "password"
+    ],
+    "error": "Validation failed"
+  },
+  {
+    "caseId": "TC-0053",
+    "api": "IDN-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 27,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0054",
+    "api": "IDN-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0055",
+    "api": "IDN-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 73,
+    "responseShape": "NoneType",
+    "error": "Refresh token is missing, expired, revoked, or invalid"
+  },
+  {
+    "caseId": "TC-0056",
+    "api": "IDN-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 400,
+    "result": "PASS",
+    "elapsedMs": 25,
+    "responseShape": [
+      "displayName",
+      "email",
+      "password"
+    ],
+    "error": "Validation failed"
+  },
+  {
+    "caseId": "TC-0057",
+    "api": "IDN-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 400,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": [
+      "audience",
+      "clientId",
+      "clientSecret",
+      "scope"
+    ],
+    "error": "Validation failed"
+  },
+  {
+    "caseId": "TC-0058",
+    "api": "IDN-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0059",
+    "api": "IDN-009",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0060",
+    "api": "IDN-010",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0061",
+    "api": "MKT-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 69,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0062",
+    "api": "MKT-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 12,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0063",
+    "api": "MKT-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0064",
+    "api": "MKT-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 18,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0065",
+    "api": "MKT-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0066",
+    "api": "MKT-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0067",
+    "api": "MKT-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0068",
+    "api": "MKT-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0069",
+    "api": "MKT-009",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0070",
+    "api": "MKT-010",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 21,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0071",
+    "api": "MKT-011",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0072",
+    "api": "MKT-012",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 10,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0073",
+    "api": "MKT-013",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0074",
+    "api": "MKT-014",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0075",
+    "api": "MKT-015",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0076",
+    "api": "MKT-016",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0077",
+    "api": "MKT-017",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0078",
+    "api": "MKT-018",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication required"
+  },
+  {
+    "caseId": "TC-0079",
+    "api": "ORD-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 61,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0080",
+    "api": "ORD-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0081",
+    "api": "ORD-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0082",
+    "api": "ORD-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0083",
+    "api": "ORD-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0084",
+    "api": "ORD-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0085",
+    "api": "ORD-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0086",
+    "api": "ORD-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 10,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0087",
+    "api": "ORD-009",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0088",
+    "api": "ORD-010",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 8,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0089",
+    "api": "SUB-001",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 26,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0090",
+    "api": "SUB-002",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 58,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0091",
+    "api": "SUB-003",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 10,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0092",
+    "api": "SUB-004",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 10,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0093",
+    "api": "SUB-005",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0094",
+    "api": "SUB-006",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0095",
+    "api": "SUB-007",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0096",
+    "api": "SUB-008",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0097",
+    "api": "SUB-009",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0098",
+    "api": "SUB-010",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0099",
+    "api": "SUB-011",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 6,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0100",
+    "api": "SUB-012",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0101",
+    "api": "SUB-013",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 243,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0102",
+    "api": "SUB-014",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 200,
+    "result": "FAIL",
+    "elapsedMs": 11,
+    "responseShape": [
+      "sandboxEnabled"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0103",
+    "api": "SUB-015",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      200,
+      404
+    ],
+    "actualStatus": 404,
+    "result": "PASS",
+    "elapsedMs": 40,
+    "responseShape": "NoneType",
+    "error": "Active plan not found"
+  },
+  {
+    "caseId": "TC-0104",
+    "api": "SUB-016",
+    "name": "Kiểm tra bề mặt khi chưa đăng nhập",
+    "actor": "anonymous",
+    "kind": "ANONYMOUS_SURFACE",
+    "expectedStatus": [
+      400,
+      401,
+      403,
+      415
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Authentication is required or token is invalid"
+  },
+  {
+    "caseId": "TC-0105",
+    "api": "IDN-006",
+    "name": "Tạo tài khoản tổng hợp admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1071,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0106",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 939,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0107",
+    "api": "IDN-006",
+    "name": "Tạo tài khoản tổng hợp ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 361,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0108",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 349,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0109",
+    "api": "IDN-006",
+    "name": "Tạo tài khoản tổng hợp ownerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 321,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0110",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 334,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0111",
+    "api": "IDN-006",
+    "name": "Tạo tài khoản tổng hợp customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 310,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0112",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 329,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0113",
+    "api": "IDN-006",
+    "name": "Tạo tài khoản tổng hợp customerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 322,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0114",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 342,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0115",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 331,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0116",
+    "api": "SUB-005",
+    "name": "Admin tạo gói ACTIVE",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1383,
+    "responseShape": [
+      "billingPeriodMonths",
+      "code",
+      "currency",
+      "description",
+      "features",
+      "id",
+      "monthlyPrice",
+      "name",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0117",
+    "api": "BKR-006",
+    "name": "Onboarding ban đầu",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 1022,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0118",
+    "api": "BKR-007",
+    "name": "CUSTOMER gửi onboarding",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201,
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 1665,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0119",
+    "api": "BKR-003",
+    "name": "Admin duyệt bakery ACTIVE",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 463,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0120",
+    "api": "SUB-010",
+    "name": "Tạo đơn thuê bao",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 681,
+    "responseShape": [
+      "bakeryId",
+      "billingPeriodMonths",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "expiresAt",
+      "featuresSnapshot",
+      "id",
+      "orderNumber",
+      "payments",
+      "period",
+      "planCodeSnapshot",
+      "planId",
+      "planNameSnapshot",
+      "requestedByUserId",
+      "status",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0121",
+    "api": "SUB-012",
+    "name": "Gửi chứng từ nội bộ tổng hợp, không chuyển tiền",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 218,
+    "responseShape": [
+      "amount",
+      "currency",
+      "id",
+      "paymentMethod",
+      "paymentReference",
+      "proofUrl",
+      "reviewNote",
+      "reviewedAt",
+      "reviewedByAdminId",
+      "status",
+      "submittedAt",
+      "submittedByUserId",
+      "subscriptionOrderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0122",
+    "api": "SUB-002",
+    "name": "Admin xác nhận chứng từ tổng hợp",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 839,
+    "responseShape": [
+      "order",
+      "payment",
+      "subscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0123",
+    "api": "BKR-022",
+    "name": "Hoàn tất cấp OWNER",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 204,
+    "result": "FAIL",
+    "elapsedMs": 53,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0124",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 322,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0125",
+    "api": "BKR-006",
+    "name": "Onboarding ban đầu",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0126",
+    "api": "BKR-007",
+    "name": "CUSTOMER gửi onboarding",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201,
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 112,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0127",
+    "api": "BKR-003",
+    "name": "Admin duyệt bakery ACTIVE",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 96,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0128",
+    "api": "SUB-010",
+    "name": "Tạo đơn thuê bao",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 70,
+    "responseShape": [
+      "bakeryId",
+      "billingPeriodMonths",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "expiresAt",
+      "featuresSnapshot",
+      "id",
+      "orderNumber",
+      "payments",
+      "period",
+      "planCodeSnapshot",
+      "planId",
+      "planNameSnapshot",
+      "requestedByUserId",
+      "status",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0129",
+    "api": "SUB-012",
+    "name": "Gửi chứng từ nội bộ tổng hợp, không chuyển tiền",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 82,
+    "responseShape": [
+      "amount",
+      "currency",
+      "id",
+      "paymentMethod",
+      "paymentReference",
+      "proofUrl",
+      "reviewNote",
+      "reviewedAt",
+      "reviewedByAdminId",
+      "status",
+      "submittedAt",
+      "submittedByUserId",
+      "subscriptionOrderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0130",
+    "api": "SUB-002",
+    "name": "Admin xác nhận chứng từ tổng hợp",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 118,
+    "responseShape": [
+      "order",
+      "payment",
+      "subscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0131",
+    "api": "BKR-022",
+    "name": "Hoàn tất cấp OWNER",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 204,
+    "result": "FAIL",
+    "elapsedMs": 49,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0132",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 317,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0133",
+    "api": "BKR-001",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 26,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0134",
+    "api": "BKR-002",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 50,
+    "responseShape": [
+      "bakery",
+      "members",
+      "subscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0135",
+    "api": "BKR-004",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 58,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0136",
+    "api": "BKR-008",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 34,
+    "responseShape": [
+      "coverUrl",
+      "description",
+      "id",
+      "logoUrl",
+      "name",
+      "operations",
+      "primaryAddress"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0137",
+    "api": "BKR-021",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0138",
+    "api": "BKR-006",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 27,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0139",
+    "api": "SUB-013",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 14,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0140",
+    "api": "SUB-014",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 17,
+    "responseShape": [
+      "sandboxEnabled"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0141",
+    "api": "SUB-015",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 18,
+    "responseShape": [
+      "billingPeriodMonths",
+      "code",
+      "currency",
+      "description",
+      "features",
+      "id",
+      "monthlyPrice",
+      "name",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0142",
+    "api": "SUB-004",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 77,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0143",
+    "api": "SUB-001",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 48,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0144",
+    "api": "SUB-008",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 49,
+    "responseShape": [
+      "bakeryId",
+      "currentSubscription",
+      "features",
+      "scheduledSubscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0145",
+    "api": "SUB-009",
+    "name": "Đọc dữ liệu fixture thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 55,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0146",
+    "api": "BKR-009",
+    "name": "Chủ tiệm khác sửa bakery bị từ chối",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 9,
+    "responseShape": "NoneType",
+    "error": "Access is denied"
+  },
+  {
+    "caseId": "TC-0147",
+    "api": "BKR-009",
+    "name": "Chủ tiệm cập nhật profile",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 31,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0148",
+    "api": "BKR-023",
+    "name": "Thay thế lịch/địa chỉ/phạm vi giao",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 50,
+    "responseShape": [
+      "addresses",
+      "businessHours",
+      "serviceAreas"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0149",
+    "api": "BKR-019",
+    "name": "Upload PNG thật vào MinIO audit",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1238,
+    "responseShape": [
+      "expiresAt",
+      "url"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0150",
+    "api": "BKR-020",
+    "name": "Upload PNG thật vào MinIO audit",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 39,
+    "responseShape": [
+      "expiresAt",
+      "url"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0151",
+    "api": "BKR-016",
+    "name": "Tạo danh mục",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 400,
+    "result": "FAIL",
+    "elapsedMs": 30,
+    "responseShape": "NoneType",
+    "error": "slug is required"
+  },
+  {
+    "caseId": "TC-0152",
+    "api": "BKR-016",
+    "name": "Tạo danh mục đủ slug",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 46,
+    "responseShape": [
+      "active",
+      "displayOrder",
+      "id",
+      "name",
+      "slug"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0153",
+    "api": "BKR-025",
+    "name": "Tạo sản phẩm DRAFT",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 56,
+    "responseShape": [
+      "basePrice",
+      "categoryId",
+      "customizable",
+      "defaultServingSize",
+      "description",
+      "id",
+      "minimumNoticeHours",
+      "name",
+      "slug",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0154",
+    "api": "BKR-011",
+    "name": "Tạo add-on",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 400,
+    "result": "FAIL",
+    "elapsedMs": 35,
+    "responseShape": "NoneType",
+    "error": "category is required"
+  },
+  {
+    "caseId": "TC-0155",
+    "api": "BKR-011",
+    "name": "Tạo add-on đủ category",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 49,
+    "responseShape": [
+      "active",
+      "category",
+      "description",
+      "id",
+      "name",
+      "price"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0156",
+    "api": "BKR-010",
+    "name": "Danh sách quản trị bakery",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 38,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0157",
+    "api": "BKR-015",
+    "name": "Danh sách quản trị bakery",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 26,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0158",
+    "api": "BKR-024",
+    "name": "Danh sách quản trị bakery",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 32,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0159",
+    "api": "BKR-018",
+    "name": "Sửa danh mục",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 30,
+    "responseShape": [
+      "active",
+      "displayOrder",
+      "id",
+      "name",
+      "slug"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0160",
+    "api": "BKR-013",
+    "name": "Sửa add-on",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 41,
+    "responseShape": [
+      "active",
+      "category",
+      "description",
+      "id",
+      "name",
+      "price"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0161",
+    "api": "BKR-014",
+    "name": "Upload ảnh add-on",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 74,
+    "responseShape": [
+      "expiresAt",
+      "url"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0162",
+    "api": "BKR-026",
+    "name": "Sửa product",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 29,
+    "responseShape": [
+      "basePrice",
+      "categoryId",
+      "customizable",
+      "defaultServingSize",
+      "description",
+      "id",
+      "minimumNoticeHours",
+      "name",
+      "slug",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0163",
+    "api": "BKR-031",
+    "name": "Thay thế options rỗng hợp lệ",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 72,
+    "responseShape": [
+      "groups"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0164",
+    "api": "BKR-029",
+    "name": "Upload ảnh primary sản phẩm",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 101,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0165",
+    "api": "BKR-032",
+    "name": "Publish sau entitlement và primary image",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 57,
+    "responseShape": [
+      "basePrice",
+      "categoryId",
+      "customizable",
+      "defaultServingSize",
+      "description",
+      "id",
+      "minimumNoticeHours",
+      "name",
+      "slug",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0166",
+    "api": "BKR-034",
+    "name": "Danh sách sản phẩm public",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 59,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0167",
+    "api": "BKR-035",
+    "name": "Chi tiết sản phẩm public",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 53,
+    "responseShape": [
+      "addOns",
+      "bakeryId",
+      "bakeryName",
+      "category",
+      "images",
+      "options",
+      "product"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0168",
+    "api": "SUB-006",
+    "name": "Sửa gói không ảnh hưởng snapshot đơn",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 32,
+    "responseShape": [
+      "billingPeriodMonths",
+      "code",
+      "currency",
+      "description",
+      "features",
+      "id",
+      "monthlyPrice",
+      "name",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0169",
+    "api": "MKT-002",
+    "name": "CUSTOMER tạo RFQ OPEN draft",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 400,
+    "result": "FAIL",
+    "elapsedMs": 2027,
+    "responseShape": "NoneType",
+    "error": "Invalid request"
+  },
+  {
+    "caseId": "TC-0170",
+    "api": "MKT-002",
+    "name": "CUSTOMER tạo RFQ OPEN_CUSTOM draft",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1252,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0171",
+    "api": "MKT-004",
+    "name": "Sửa draft",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 281,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0172",
+    "api": "MKT-003",
+    "name": "Khách khác không đọc request riêng",
+    "actor": "customerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      404,
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 178,
+    "responseShape": "NoneType",
+    "error": "Access denied"
+  },
+  {
+    "caseId": "TC-0173",
+    "api": "MKT-009",
+    "name": "Publish RFQ",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 89,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0174",
+    "api": "MKT-001",
+    "name": "Customer mine",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 151,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0175",
+    "api": "MKT-003",
+    "name": "Chủ tiệm đọc OPEN trong service area",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 4489,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0176",
+    "api": "MKT-006",
+    "name": "Upload cần Firebase chưa cấu hình",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      503
+    ],
+    "actualStatus": 409,
+    "result": "FAIL",
+    "elapsedMs": 213,
+    "responseShape": "NoneType",
+    "error": "Resource state conflict"
+  },
+  {
+    "caseId": "TC-0177",
+    "api": "MKT-008",
+    "name": "Owner gửi offer thật",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 2343,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0178",
+    "api": "MKT-012",
+    "name": "Chi tiết offer",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 57,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0179",
+    "api": "MKT-011",
+    "name": "Danh sách offer",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 54,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0180",
+    "api": "MKT-013",
+    "name": "Sửa giá offer pending",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 369,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0181",
+    "api": "CHT-002",
+    "name": "Tạo conversation theo request/offer",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201,
+      200
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 5316,
+    "responseShape": [
+      "bakeryId",
+      "cakeRequestId",
+      "closeReason",
+      "createdAt",
+      "currentUserLastReadAt",
+      "customerId",
+      "id",
+      "lastMessageAt",
+      "orderId",
+      "participants",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0182",
+    "api": "CHT-001",
+    "name": "Danh sách conversation",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 174,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0183",
+    "api": "CHT-003",
+    "name": "Chủ tiệm join/read conversation",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 1077,
+    "responseShape": [
+      "bakeryId",
+      "cakeRequestId",
+      "closeReason",
+      "createdAt",
+      "currentUserLastReadAt",
+      "customerId",
+      "id",
+      "lastMessageAt",
+      "orderId",
+      "participants",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0184",
+    "api": "CHT-003",
+    "name": "Khách khác bị che conversation",
+    "actor": "customerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      404
+    ],
+    "actualStatus": 404,
+    "result": "PASS",
+    "elapsedMs": 138,
+    "responseShape": "NoneType",
+    "error": "Conversation not found"
+  },
+  {
+    "caseId": "TC-0185",
+    "api": "CHT-006",
+    "name": "Gửi TEXT multipart",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 649,
+    "responseShape": [
+      "attachments",
+      "clientMessageId",
+      "content",
+      "createdAt",
+      "deleted",
+      "editedAt",
+      "id",
+      "messageType",
+      "senderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0186",
+    "api": "CHT-006",
+    "name": "Replay clientMessageId giống payload",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 64,
+    "responseShape": [
+      "attachments",
+      "clientMessageId",
+      "content",
+      "createdAt",
+      "deleted",
+      "editedAt",
+      "id",
+      "messageType",
+      "senderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0187",
+    "api": "CHT-006",
+    "name": "Replay clientMessageId khác payload",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 45,
+    "responseShape": "NoneType",
+    "error": "clientMessageId was already used with a different message payload"
+  },
+  {
+    "caseId": "TC-0188",
+    "api": "CHT-005",
+    "name": "Đọc message và đánh dấu delivered",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 403,
+    "result": "FAIL",
+    "elapsedMs": 249,
+    "responseShape": "NoneType",
+    "error": "Access is denied"
+  },
+  {
+    "caseId": "TC-0189",
+    "api": "CHT-008",
+    "name": "Mark read",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 384,
+    "responseShape": [
+      "conversationId",
+      "lastReadAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0190",
+    "api": "CHT-007",
+    "name": "Sender xóa mềm message",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 116,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0191",
+    "api": "CHT-004",
+    "name": "CUSTOMER không được đóng chat",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      404,
+      403
+    ],
+    "actualStatus": 200,
+    "result": "FAIL",
+    "elapsedMs": 96,
+    "responseShape": [
+      "bakeryId",
+      "cakeRequestId",
+      "closeReason",
+      "createdAt",
+      "currentUserLastReadAt",
+      "customerId",
+      "id",
+      "lastMessageAt",
+      "orderId",
+      "participants",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0192",
+    "api": "CHT-004",
+    "name": "OWNER đóng chat",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 170,
+    "responseShape": [
+      "bakeryId",
+      "cakeRequestId",
+      "closeReason",
+      "createdAt",
+      "currentUserLastReadAt",
+      "customerId",
+      "id",
+      "lastMessageAt",
+      "orderId",
+      "participants",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0193",
+    "api": "ORD-003",
+    "name": "Direct order với địa chỉ hợp lệ từ Identity",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 422,
+    "result": "FAIL",
+    "elapsedMs": 9759,
+    "responseShape": "NoneType",
+    "error": "Delivery address is missing or incomplete"
+  },
+  {
+    "caseId": "TC-0194",
+    "api": "MKT-014",
+    "name": "Accept offer tạo order thật xuyên 4 service",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 3937,
+    "responseShape": [
+      "cakeRequestId",
+      "offerId",
+      "offerStatus",
+      "orderId",
+      "orderNumber",
+      "requestStatus"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0195",
+    "api": "MKT-014",
+    "name": "Replay acceptance giống key",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 26,
+    "responseShape": [
+      "cakeRequestId",
+      "offerId",
+      "offerStatus",
+      "orderId",
+      "orderNumber",
+      "requestStatus"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0196",
+    "api": "ORD-002",
+    "name": "Customer đọc danh sách đơn",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 532,
+    "responseShape": [
+      "meta",
+      "result"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0197",
+    "api": "ORD-004",
+    "name": "Đọc order snapshots",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 146,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0198",
+    "api": "ORD-004",
+    "name": "Khách khác không đọc order",
+    "actor": "customerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      404,
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 30,
+    "responseShape": "NoneType",
+    "error": "You are not allowed to access this order"
+  },
+  {
+    "caseId": "TC-0199",
+    "api": "ORD-007",
+    "name": "Review trước COMPLETED bị chặn",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409,
+      422
+    ],
+    "actualStatus": 422,
+    "result": "PASS",
+    "elapsedMs": 73,
+    "responseShape": "NoneType",
+    "error": "Only completed orders can be reviewed"
+  },
+  {
+    "caseId": "TC-0200",
+    "api": "ORD-008",
+    "name": "Customer không tự hoàn tất đơn",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 57,
+    "responseShape": "NoneType",
+    "error": "You are not allowed to access this order"
+  },
+  {
+    "caseId": "TC-0201",
+    "api": "ORD-008",
+    "name": "Owner chuyển trạng thái CONFIRMED",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 949,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0202",
+    "api": "ORD-008",
+    "name": "Owner chuyển trạng thái BAKING",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 66,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0203",
+    "api": "ORD-008",
+    "name": "Owner chuyển trạng thái READY",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 65,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0204",
+    "api": "ORD-008",
+    "name": "Owner chuyển trạng thái DELIVERING",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 76,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0205",
+    "api": "ORD-008",
+    "name": "Owner chuyển trạng thái COMPLETED",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 61,
+    "responseShape": [
+      "acceptedAt",
+      "bakeryId",
+      "bakeryName",
+      "cakeRequestId",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "customerId",
+      "customerName",
+      "customerNote",
+      "customerPhone",
+      "deliveryAddress",
+      "deliveryFee",
+      "id",
+      "items",
+      "neededAt",
+      "offerId",
+      "orderNumber",
+      "orderSource",
+      "review",
+      "status",
+      "statusHistory",
+      "subtotal",
+      "totalAmount",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0206",
+    "api": "ORD-007",
+    "name": "Tạo review khi COMPLETED",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 112,
+    "responseShape": [
+      "comment",
+      "createdAt",
+      "customerId",
+      "orderId",
+      "rating",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0207",
+    "api": "ORD-007",
+    "name": "Review trùng order",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 24,
+    "responseShape": "NoneType",
+    "error": "Order already has a review"
+  },
+  {
+    "caseId": "TC-0208",
+    "api": "ORD-006",
+    "name": "Cập nhật review",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 64,
+    "responseShape": [
+      "comment",
+      "createdAt",
+      "customerId",
+      "orderId",
+      "rating",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0209",
+    "api": "ORD-001",
+    "name": "Admin ẩn review",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 51,
+    "responseShape": [
+      "comment",
+      "createdAt",
+      "customerId",
+      "orderId",
+      "rating",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0210",
+    "api": "ORD-005",
+    "name": "Customer xóa review mềm",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 35,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0211",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 530,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0212",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 362,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0213",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 362,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0214",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 383,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0215",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 362,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0216",
+    "api": "SUB-014",
+    "name": "Payment options public theo matcher thực tế",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 15,
+    "responseShape": [
+      "sandboxEnabled"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0217",
+    "api": "BKR-022",
+    "name": "Complete idempotent trả 204",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 115,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0218",
+    "api": "BKR-022",
+    "name": "Complete idempotent trả 204",
+    "actor": "ownerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 59,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0219",
+    "api": "IDN-004",
+    "name": "JWT me",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 75,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0220",
+    "api": "IDN-005",
+    "name": "Refresh rotation cookie",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 364,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0221",
+    "api": "IDN-005",
+    "name": "Replay refresh cũ bị từ chối, revoke family",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      401
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 108,
+    "responseShape": "NoneType",
+    "error": "Refresh token is missing, expired, revoked, or invalid"
+  },
+  {
+    "caseId": "TC-0222",
+    "api": "IDN-005",
+    "name": "Token con sau replay cũng bị thu hồi",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      401
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 32,
+    "responseShape": "NoneType",
+    "error": "Refresh token is missing, expired, revoked, or invalid"
+  },
+  {
+    "caseId": "TC-0223",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerB",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 385,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0224",
+    "api": "IDN-003",
+    "name": "Logout xóa refresh cookie",
+    "actor": "customerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 200,
+    "result": "FAIL",
+    "elapsedMs": 20,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0225",
+    "api": "IDN-004",
+    "name": "Access JWT còn hiệu lực sau logout",
+    "actor": "customerB",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 38,
+    "responseShape": [
+      "avatarUrl",
+      "avatarUrlExpiresAt",
+      "createdAt",
+      "dateOfBirth",
+      "displayName",
+      "email",
+      "emailVerified",
+      "id",
+      "phoneNumber",
+      "preferredLanguage",
+      "roles",
+      "status",
+      "updatedAt"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0226",
+    "api": "IDN-002",
+    "name": "Sai mật khẩu trả 401",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      401
+    ],
+    "actualStatus": 401,
+    "result": "PASS",
+    "elapsedMs": 393,
+    "responseShape": "NoneType",
+    "error": "Invalid email or password"
+  },
+  {
+    "caseId": "TC-0227",
+    "api": "IDN-006",
+    "name": "Email trùng trả 409",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 23,
+    "responseShape": "NoneType",
+    "error": "Email is already registered"
+  },
+  {
+    "caseId": "TC-0228",
+    "api": "BKR-001",
+    "name": "Customer không vào admin",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 10,
+    "responseShape": "NoneType",
+    "error": "Access is denied"
+  },
+  {
+    "caseId": "TC-0229",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> bakery-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 352,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0230",
+    "api": "BKR-036",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 23,
+    "responseShape": [
+      "id",
+      "name",
+      "primaryAddress",
+      "serviceAreas",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0231",
+    "api": "BKR-036",
+    "name": "User token không thay service token",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      401,
+      403
+    ],
+    "actualStatus": 403,
+    "result": "PASS",
+    "elapsedMs": 7,
+    "responseShape": "NoneType",
+    "error": "Access is denied"
+  },
+  {
+    "caseId": "TC-0232",
+    "api": "IDN-007",
+    "name": "Cấp service token: chat-service -> bakery-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 361,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0233",
+    "api": "BKR-037",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 14,
+    "responseShape": [
+      "active",
+      "authorized",
+      "bakeryId",
+      "memberRole",
+      "userId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0234",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> bakery-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 347,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0235",
+    "api": "BKR-042",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 11,
+    "responseShape": "list",
+    "error": null
+  },
+  {
+    "caseId": "TC-0236",
+    "api": "IDN-007",
+    "name": "Cấp service token: subscription-service -> bakery-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 329,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0237",
+    "api": "BKR-038",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 11,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0238",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> bakery-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 327,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0239",
+    "api": "BKR-041",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 127,
+    "responseShape": [
+      "bakeryId",
+      "bakeryName",
+      "deliveryFee",
+      "expiresAt",
+      "items",
+      "minimumNoticeHours",
+      "productDescription",
+      "productId",
+      "productName",
+      "quantity",
+      "quoteId",
+      "subtotal",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0240",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> identity-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 327,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0241",
+    "api": "IDN-008",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 404,
+    "result": "FAIL",
+    "elapsedMs": 22,
+    "responseShape": "NoneType",
+    "error": "User not found not found"
+  },
+  {
+    "caseId": "TC-0242",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> identity-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 319,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0243",
+    "api": "IDN-010",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 12,
+    "responseShape": [
+      "addressLine",
+      "city",
+      "district",
+      "latitude",
+      "longitude",
+      "recipientName",
+      "recipientPhone",
+      "ward"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0244",
+    "api": "IDN-007",
+    "name": "Cấp service token: bakery-service -> identity-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 308,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0245",
+    "api": "IDN-009",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 404,
+    "result": "FAIL",
+    "elapsedMs": 23,
+    "responseShape": "NoneType",
+    "error": "User not found not found"
+  },
+  {
+    "caseId": "TC-0246",
+    "api": "IDN-007",
+    "name": "Cấp service token: bakery-service -> subscription-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 309,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0247",
+    "api": "SUB-016",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 16,
+    "responseShape": [
+      "active",
+      "bakeryId",
+      "features",
+      "periodEnd",
+      "planCode"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0248",
+    "api": "SUB-016",
+    "name": "Service token thiếu X-Correlation-Id",
+    "kind": "SECURITY",
+    "actor": "service",
+    "actualStatus": 403,
+    "expectedStatus": [
+      403
+    ],
+    "result": "PASS"
+  },
+  {
+    "caseId": "TC-0249",
+    "api": "IDN-007",
+    "name": "Cấp service token: chat-service -> marketplace-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 342,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0250",
+    "api": "MKT-016",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200,
+      400,
+      422
+    ],
+    "actualStatus": 400,
+    "result": "PASS",
+    "elapsedMs": 34,
+    "responseShape": "NoneType",
+    "error": "Invalid request"
+  },
+  {
+    "caseId": "TC-0251",
+    "api": "IDN-007",
+    "name": "Cấp service token: order-service -> marketplace-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 347,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0252",
+    "api": "MKT-018",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 27,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "configuration",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "deliveryFee",
+      "description",
+      "items",
+      "neededAt",
+      "offerId",
+      "title",
+      "totalPrice"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0253",
+    "api": "IDN-007",
+    "name": "Cấp service token: marketplace-service -> order-service",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 352,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0254",
+    "api": "ORD-009",
+    "name": "Service contract với JWT đúng scope",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200,
+      201
+    ],
+    "actualStatus": 409,
+    "result": "FAIL",
+    "elapsedMs": 52,
+    "responseShape": "NoneType",
+    "error": "Resource state conflict"
+  },
+  {
+    "caseId": "TC-0255",
+    "api": "CHT-004",
+    "name": "Customer sở hữu được đóng conversation theo source",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 51,
+    "responseShape": [
+      "bakeryId",
+      "cakeRequestId",
+      "closeReason",
+      "createdAt",
+      "currentUserLastReadAt",
+      "customerId",
+      "id",
+      "lastMessageAt",
+      "orderId",
+      "participants",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0256",
+    "api": "CHT-005",
+    "name": "Tái hiện lỗi trang đầu không before",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 403,
+    "result": "FAIL",
+    "elapsedMs": 21,
+    "responseShape": "NoneType",
+    "error": "Access is denied"
+  },
+  {
+    "caseId": "TC-0257",
+    "api": "CHT-005",
+    "name": "Cursor non-null phân lập lỗi SQL null",
+    "kind": "DIAGNOSTIC",
+    "actualStatus": 403,
+    "expectedStatus": [
+      200
+    ],
+    "result": "FAIL"
+  },
+  {
+    "caseId": "TC-0258",
+    "api": "MKT-002",
+    "name": "Draft phụ cho nhánh hủy/ảnh",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 32,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0259",
+    "api": "MKT-006",
+    "name": "Firebase không cấu hình trên draft hợp lệ",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      503
+    ],
+    "actualStatus": 503,
+    "result": "PASS",
+    "elapsedMs": 22,
+    "responseShape": "NoneType",
+    "error": "Required service unavailable"
+  },
+  {
+    "caseId": "TC-0260",
+    "api": "MKT-010",
+    "name": "Chọn design khi AI unavailable",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      503
+    ],
+    "actualStatus": 503,
+    "result": "PASS",
+    "elapsedMs": 4355,
+    "responseShape": "NoneType",
+    "error": "Required service unavailable"
+  },
+  {
+    "caseId": "TC-0261",
+    "api": "MKT-007",
+    "name": "Xóa ảnh không tồn tại",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      404
+    ],
+    "actualStatus": 404,
+    "result": "PASS",
+    "elapsedMs": 22,
+    "responseShape": "NoneType",
+    "error": "Resource not found"
+  },
+  {
+    "caseId": "TC-0262",
+    "api": "MKT-005",
+    "name": "Hủy draft hợp lệ",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 31,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0263",
+    "api": "MKT-004",
+    "name": "Không sửa request CANCELLED",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 13,
+    "responseShape": "NoneType",
+    "error": "Resource state conflict"
+  },
+  {
+    "caseId": "TC-0264",
+    "api": "MKT-014",
+    "name": "Không tái sử dụng acceptance key khác payload",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 200,
+    "result": "FAIL",
+    "elapsedMs": 50,
+    "responseShape": [
+      "cakeRequestId",
+      "offerId",
+      "offerStatus",
+      "orderId",
+      "orderNumber",
+      "requestStatus"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0265",
+    "api": "MKT-014",
+    "name": "4 replay song song, chỉ 1 order/offer",
+    "kind": "CONCURRENCY",
+    "actualStatuses": [
+      200,
+      200,
+      200,
+      200
+    ],
+    "orderCount": 1,
+    "result": "PASS"
+  },
+  {
+    "caseId": "TC-0266",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 1500,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0267",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 559,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0268",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 607,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0269",
+    "api": "IDN-007",
+    "name": "Service token cho nhánh bổ sung",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 608,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0270",
+    "api": "IDN-008",
+    "name": "Internal UUID đúng route template",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 90,
+    "responseShape": [
+      "displayName",
+      "email",
+      "id",
+      "phoneNumber",
+      "roles",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0271",
+    "api": "IDN-007",
+    "name": "Service token cho nhánh bổ sung",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 469,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0272",
+    "api": "IDN-009",
+    "name": "Internal UUID đúng route template",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 37,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0273",
+    "api": "IDN-003",
+    "name": "Logout controller thực trả 200",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 46,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0274",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 450,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0275",
+    "api": "IDN-007",
+    "name": "Service token cho nhánh bổ sung",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 447,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0276",
+    "api": "BKR-039",
+    "name": "Quote nội bộ đúng dạng Marketplace",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 1652,
+    "responseShape": [
+      "addOnTotal",
+      "customizable",
+      "items",
+      "minimumNoticeHours",
+      "options",
+      "productId",
+      "productName"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0277",
+    "api": "BKR-040",
+    "name": "Quote nội bộ đúng dạng Marketplace",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 131,
+    "responseShape": [
+      "addOnTotal",
+      "customizable",
+      "items",
+      "minimumNoticeHours",
+      "options",
+      "productId",
+      "productName"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0278",
+    "api": "IDN-007",
+    "name": "Service token cho nhánh bổ sung",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 483,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0279",
+    "api": "MKT-016",
+    "name": "Chat authorization đủ query",
+    "kind": "BUSINESS",
+    "actualStatus": 200,
+    "expectedStatus": [
+      200
+    ],
+    "result": "PASS"
+  },
+  {
+    "caseId": "TC-0280",
+    "api": "IDN-007",
+    "name": "Service token cho nhánh bổ sung",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 476,
+    "responseShape": [
+      "accessToken",
+      "expiresIn"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0281",
+    "api": "ORD-009",
+    "name": "Replay from-offer giữ note null đúng fingerprint",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 501,
+    "responseShape": [
+      "orderId",
+      "orderNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0282",
+    "api": "MKT-014",
+    "name": "Cùng key khác customerNote thực sự trả 409",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 156,
+    "responseShape": "NoneType",
+    "error": "Resource state conflict"
+  },
+  {
+    "caseId": "TC-0283",
+    "api": "BKR-005",
+    "name": "OWNER hiện hữu tạo bakery DRAFT thứ hai",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 786,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0284",
+    "api": "BKR-023",
+    "name": "Chuẩn bị legacy bakery để submit",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 131,
+    "responseShape": [
+      "addresses",
+      "businessHours",
+      "serviceAreas"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0285",
+    "api": "BKR-033",
+    "name": "Submit DRAFT legacy hợp lệ",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 93,
+    "responseShape": [
+      "description",
+      "email",
+      "id",
+      "name",
+      "operations",
+      "phoneNumber",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0286",
+    "api": "SUB-010",
+    "name": "Tạo đơn gia hạn sau kỳ đang active",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1202,
+    "responseShape": [
+      "bakeryId",
+      "billingPeriodMonths",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "expiresAt",
+      "featuresSnapshot",
+      "id",
+      "orderNumber",
+      "payments",
+      "period",
+      "planCodeSnapshot",
+      "planId",
+      "planNameSnapshot",
+      "requestedByUserId",
+      "status",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0287",
+    "api": "SUB-011",
+    "name": "Chi tiết đơn thuê bao mới",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 248,
+    "responseShape": [
+      "bakeryId",
+      "billingPeriodMonths",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "expiresAt",
+      "featuresSnapshot",
+      "id",
+      "orderNumber",
+      "payments",
+      "period",
+      "planCodeSnapshot",
+      "planId",
+      "planNameSnapshot",
+      "requestedByUserId",
+      "status",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0288",
+    "api": "SUB-012",
+    "name": "Nộp payment để kiểm nhánh reject",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 221,
+    "responseShape": [
+      "amount",
+      "currency",
+      "id",
+      "paymentMethod",
+      "paymentReference",
+      "proofUrl",
+      "reviewNote",
+      "reviewedAt",
+      "reviewedByAdminId",
+      "status",
+      "submittedAt",
+      "submittedByUserId",
+      "subscriptionOrderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0289",
+    "api": "SUB-003",
+    "name": "Admin reject có lý do",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 165,
+    "responseShape": [
+      "order",
+      "payment",
+      "subscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0290",
+    "api": "SUB-002",
+    "name": "Không approve payment đã rejected",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 245,
+    "responseShape": "NoneType",
+    "error": "Payment is not awaiting review"
+  },
+  {
+    "caseId": "TC-0291",
+    "api": "SUB-012",
+    "name": "Nộp lại sau reject",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 141,
+    "responseShape": [
+      "amount",
+      "currency",
+      "id",
+      "paymentMethod",
+      "paymentReference",
+      "proofUrl",
+      "reviewNote",
+      "reviewedAt",
+      "reviewedByAdminId",
+      "status",
+      "submittedAt",
+      "submittedByUserId",
+      "subscriptionOrderId"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0292",
+    "api": "SUB-002",
+    "name": "Approve gia hạn tạo kỳ SCHEDULED",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 626,
+    "responseShape": [
+      "order",
+      "payment",
+      "subscription"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0293",
+    "api": "MKT-002",
+    "name": "Draft cho withdrawal",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 123,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0294",
+    "api": "MKT-009",
+    "name": "Publish request withdrawal",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 109,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0295",
+    "api": "MKT-008",
+    "name": "Offer cho nhánh withdraw",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 1565,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0296",
+    "api": "MKT-015",
+    "name": "OWNER rút offer PENDING",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 116,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0297",
+    "api": "MKT-008",
+    "name": "Unique vẫn chặn tạo lại sau WITHDRAWN",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 66,
+    "responseShape": "NoneType",
+    "error": "Resource state conflict"
+  },
+  {
+    "caseId": "TC-0298",
+    "api": "BKR-028",
+    "name": "Ẩn sản phẩm đã PUBLISHED",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 41,
+    "responseShape": [
+      "basePrice",
+      "categoryId",
+      "customizable",
+      "defaultServingSize",
+      "description",
+      "id",
+      "minimumNoticeHours",
+      "name",
+      "slug",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0299",
+    "api": "BKR-027",
+    "name": "Archive sản phẩm HIDDEN",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 27,
+    "responseShape": [
+      "basePrice",
+      "categoryId",
+      "customizable",
+      "defaultServingSize",
+      "description",
+      "id",
+      "minimumNoticeHours",
+      "name",
+      "slug",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0300",
+    "api": "BKR-032",
+    "name": "Không publish lại ARCHIVED",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      409
+    ],
+    "actualStatus": 409,
+    "result": "PASS",
+    "elapsedMs": 31,
+    "responseShape": "NoneType",
+    "error": "Only draft or hidden products can be published"
+  },
+  {
+    "caseId": "TC-0301",
+    "api": "BKR-030",
+    "name": "Xóa ảnh trên sản phẩm archive",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 373,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0302",
+    "api": "BKR-012",
+    "name": "Disable add-on",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 56,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0303",
+    "api": "BKR-016",
+    "name": "Danh mục rỗng để xóa",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 55,
+    "responseShape": [
+      "active",
+      "displayOrder",
+      "id",
+      "name",
+      "slug"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0304",
+    "api": "BKR-017",
+    "name": "Xóa danh mục không có sản phẩm",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      204
+    ],
+    "actualStatus": 204,
+    "result": "PASS",
+    "elapsedMs": 64,
+    "responseShape": "NoneType",
+    "error": null
+  },
+  {
+    "caseId": "TC-0305",
+    "api": "SUB-007",
+    "name": "Archive plan, giữ nguyên subscription snapshot",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 38,
+    "responseShape": [
+      "billingPeriodMonths",
+      "code",
+      "currency",
+      "description",
+      "features",
+      "id",
+      "monthlyPrice",
+      "name",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0306",
+    "api": "IDN-002",
+    "name": "Đăng nhập customerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 823,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0307",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 527,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0308",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 487,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0309",
+    "api": "MKT-002",
+    "name": "Draft riêng cho recovery",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 284,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0310",
+    "api": "MKT-009",
+    "name": "Publish request recovery",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 79,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0311",
+    "api": "MKT-008",
+    "name": "Offer riêng cho recovery",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 2418,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0312",
+    "api": "MKT-014",
+    "name": "Order tạm ngừng: acceptance trả503 và giữ retry",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      503
+    ],
+    "actualStatus": 503,
+    "result": "PASS",
+    "elapsedMs": 4555,
+    "responseShape": "NoneType",
+    "error": "Required service unavailable"
+  },
+  {
+    "caseId": "TC-0313",
+    "api": "MKT-014",
+    "name": "Workflow durable RETRYING sau remote unavailable",
+    "kind": "SCHEDULER_OR_RECOVERY",
+    "result": "PASS",
+    "workflowStatus": "RETRYING"
+  },
+  {
+    "caseId": "TC-0314",
+    "api": "MKT-014",
+    "name": "Scheduler tự phục hồi SUCCEEDED, chỉ1 order",
+    "kind": "SCHEDULER_OR_RECOVERY",
+    "result": "PASS",
+    "workflowStatus": "SUCCEEDED",
+    "orderCount": 1
+  },
+  {
+    "caseId": "TC-0315",
+    "api": "MKT-002",
+    "name": "Draft riêng cho expiry",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 75,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0316",
+    "api": "MKT-009",
+    "name": "Publish expiry fixture",
+    "actor": "customerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 60,
+    "responseShape": [
+      "baseProductId",
+      "budgetMax",
+      "budgetMin",
+      "createdAt",
+      "customerId",
+      "deliveryCity",
+      "deliveryDistrict",
+      "description",
+      "id",
+      "images",
+      "neededAt",
+      "occasion",
+      "offerDeadline",
+      "offers",
+      "optionSelections",
+      "preference",
+      "requestType",
+      "selectedDesign",
+      "selectedDesignId",
+      "servingSize",
+      "status",
+      "statusHistory",
+      "targetBakeryId",
+      "title",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0317",
+    "api": "MKT-008",
+    "name": "Offer chờ hết hạn",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 147,
+    "responseShape": [
+      "addOnTotal",
+      "bakeryId",
+      "cakePrice",
+      "cakeRequestId",
+      "createdAt",
+      "deliveryFee",
+      "estimatedCompletionAt",
+      "expiresAt",
+      "id",
+      "items",
+      "message",
+      "status",
+      "statusHistory",
+      "totalPrice",
+      "updatedAt",
+      "version"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0318",
+    "api": "MKT-001",
+    "name": "Scheduler RFQ CLOSED và offer EXPIRED khi qua hạn",
+    "kind": "SCHEDULER_OR_RECOVERY",
+    "result": "PASS",
+    "states": "CLOSED:EXPIRED"
+  },
+  {
+    "caseId": "TC-0319",
+    "api": "IDN-002",
+    "name": "Đăng nhập ownerA",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 420,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0320",
+    "api": "IDN-002",
+    "name": "Đăng nhập admin",
+    "actor": "anonymous",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      200
+    ],
+    "actualStatus": 200,
+    "result": "PASS",
+    "elapsedMs": 362,
+    "responseShape": [
+      "accessToken",
+      "expiresIn",
+      "tokenType"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0321",
+    "api": "SUB-005",
+    "name": "Plan phụ cho expiry order",
+    "actor": "admin",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 83,
+    "responseShape": [
+      "billingPeriodMonths",
+      "code",
+      "currency",
+      "description",
+      "features",
+      "id",
+      "monthlyPrice",
+      "name",
+      "status"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0322",
+    "api": "SUB-010",
+    "name": "PENDING_PAYMENT riêng cho expiry",
+    "actor": "ownerA",
+    "kind": "BUSINESS",
+    "expectedStatus": [
+      201
+    ],
+    "actualStatus": 201,
+    "result": "PASS",
+    "elapsedMs": 516,
+    "responseShape": [
+      "bakeryId",
+      "billingPeriodMonths",
+      "completedAt",
+      "createdAt",
+      "currency",
+      "expiresAt",
+      "featuresSnapshot",
+      "id",
+      "orderNumber",
+      "payments",
+      "period",
+      "planCodeSnapshot",
+      "planId",
+      "planNameSnapshot",
+      "requestedByUserId",
+      "status",
+      "totalAmount"
+    ],
+    "error": null
+  },
+  {
+    "caseId": "TC-0323",
+    "api": "SUB-008",
+    "name": "Lifecycle job expire order/old period và activate scheduled",
+    "kind": "SCHEDULER_OR_RECOVERY",
+    "result": "PASS",
+    "orderStatus": "EXPIRED",
+    "activeAndExpiredCounts": "1:1"
+  }
+]

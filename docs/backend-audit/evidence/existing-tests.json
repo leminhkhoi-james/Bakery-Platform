@@ -1,0 +1,451 @@
+{
+  "exitCode": 1,
+  "seconds": 309.76,
+  "command": "mvnw.cmd -B -ntp -pl identity-service,bakery-service,marketplace-service,subscription-service,order-service,chat-service,api-gateway -am test",
+  "cwd": "TEMP source copy",
+  "suites": [
+    {
+      "module": "api-gateway",
+      "suite": "com.se193262.apigateway.ApiGatewayApplicationTests",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.BakeryServiceApplicationTests",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.bakery.BakeryCrudIntegrationTests",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.bakery.BakeryOnboardingActivationTest",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.bakery.BakeryStatusTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.catalog.CatalogQuoteServiceTest",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.catalog.CatalogServiceImplTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.catalog.InternalCatalogRoutingTest",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.product.BakeryCatalogIntegrationTests",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.feature.product.ProductStatusTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.infrastructure.client.IdentityUserClientTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.infrastructure.storage.BakeryImageStorageTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "bakery-service",
+      "suite": "com.se193262.bakeryservice.security.SecurityConfigTest",
+      "tests": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "chat-service",
+      "suite": "com.se193262.chatservice.ChatServiceApplicationTests",
+      "tests": 4,
+      "errors": 1,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": [
+        {
+          "type": "jakarta.servlet.ServletException",
+          "message": "Request processing failed: org.springframework.dao.InvalidDataAccessResourceUsageException: JDBC exception executing SQL [ERROR: could not determine data type of parameter $2] [select cm1_0.id,cm1_0.client_message_id,cm1_0.content,cm1_0.con"
+        }
+      ]
+    },
+    {
+      "module": "chat-service",
+      "suite": "com.se193262.chatservice.feature.conversation.ConversationOwnerAuthorizationTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "chat-service",
+      "suite": "com.se193262.chatservice.feature.message.AttachmentValidatorTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "chat-service",
+      "suite": "com.se193262.chatservice.infrastructure.client.ServiceTokenProviderTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.config.BakeryJwtAuthenticationConverterTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.config.JwtConfigTest",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.AuthenticationServiceImplTest",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.JwtTokenServiceTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.ServiceTokenServiceTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.feature.authentication.TokenSessionServiceTest",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.IdentityServiceApplicationTests",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "identity-service",
+      "suite": "com.se193262.identityservice.MigrationSyncTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.feature.cakerequest.CakeRequestRulesTest",
+      "tests": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.feature.cakerequest.MarketplaceChatAuthorizationServiceTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.feature.cakerequest.MarketplaceOwnerAuthorizationTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.feature.offer.AcceptanceTransactionsTest",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.infrastructure.client.SubscriptionClientTest",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.MarketplaceServiceApplicationTests",
+      "tests": 17,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "marketplace-service",
+      "suite": "com.se193262.marketplaceservice.MigrationSyncTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.feature.order.CustomerOrderTransitionTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.feature.order.OrderCreationServiceImplTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.feature.order.OrderManagementAuthorizationTest",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.feature.review.OrderReviewLifecycleTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.infrastructure.client.RemoteClientExecutorTest",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "order-service",
+      "suite": "com.se193262.orderservice.OrderServiceApplicationTests",
+      "tests": 3,
+      "errors": 1,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": [
+        {
+          "type": "org.springframework.jdbc.BadSqlGrammarException",
+          "message": "PreparedStatementCallback; bad SQL grammar [INSERT INTO customer_orders (\n    id, order_number, customer_id, bakery_id, order_source,\n    customer_name_snapshot, customer_phone_snapshot, bakery_name_snapshot,\n    subtotal, delivery_fee, tot"
+        }
+      ]
+    },
+    {
+      "module": "platform-support",
+      "suite": "com.se193262.platform.client.ServiceHttpClientTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.feature.payment.PaymentReviewTest",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.infrastructure.scheduler.SubscriptionLifecycleJobTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.infrastructure.storage.PaymentProofStorageTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.security.SecurityConfigTest",
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.SubscriptionDataIntegrationTests",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    },
+    {
+      "module": "subscription-service",
+      "suite": "com.se193262.subscriptionservice.SubscriptionServiceApplicationTests",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "failureTypes": []
+    }
+  ],
+  "totals": {
+    "tests": 148,
+    "errors": 2,
+    "failures": 0,
+    "skipped": 0
+  },
+  "resumedArguments": [
+    "mvnw.cmd",
+    "-B",
+    "-ntp",
+    "-pl",
+    "identity-service,bakery-service,marketplace-service,subscription-service,order-service,chat-service,api-gateway",
+    "-am",
+    "test",
+    "-fae",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=!AuthenticationServiceImplTest,!BakeryJwtAuthenticationConverterTest,!IdentityServiceApplicationTests,!JwtConfigTest,!JwtTokenServiceTest,!ServiceHttpClientTest,!ServiceTokenServiceTest,!TokenSessionServiceTest"
+  ],
+  "successfulSuitesExcludedFromRerun": [
+    "AuthenticationServiceImplTest",
+    "BakeryJwtAuthenticationConverterTest",
+    "IdentityServiceApplicationTests",
+    "JwtConfigTest",
+    "JwtTokenServiceTest",
+    "ServiceHttpClientTest",
+    "ServiceTokenServiceTest",
+    "TokenSessionServiceTest"
+  ]
+}

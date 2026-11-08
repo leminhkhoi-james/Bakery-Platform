@@ -26,5 +26,28 @@
 .sc-rfq-state { padding: 1.5rem 1rem; color: #64748b; font-size: .85rem; }
 .sc-rfq-error { display: flex; align-items: center; gap: .65rem; padding: .9rem; border: 1px solid #fbcfe8; border-radius: .8rem; background: #fdf2f4; color: #842b39; font-size: .85rem; }
 .sc-rfq-error p { flex: 1; }
+
+/* 2-Column Streamlined Quote Workspace */
+.sc-quote-workspace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .sc-quote-workspace-layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 1.5rem;
+  }
+}
+.sc-quote-side-request {
+  min-width: 0;
+  position: sticky;
+  top: 6rem;
+}
+.sc-quote-side-form {
+  min-width: 0;
+}
+
 @media (max-width: 1199px) { .sc-owner-rfq-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sc-owner-rfq .sc-owner-rfq-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 639px) { .sc-owner-rfq-cards { grid-template-columns: minmax(0, 1fr); } .sc-owner-rfq > .sc-panel { padding: .8rem; } .sc-owner-rfq-tabs { gap: .2rem; } .sc-owner-rfq-tabs button { padding-inline: .6rem; font-size: .8rem; } .sc-rfq-error { flex-wrap: wrap; } }
+@media (max-width: 639px) { .sc-owner-rfq-cards { grid-template-columns: minmax(0, 1fr); } .sc-owner-rfq > .sc-panel { padding: .8rem; } .sc-owner-rfq-tabs { gap: .2rem; } .sc-owner-rfq-tabs button { padding-inline: .6rem; font-size: .8rem; } .sc-rfq-error { flex-wrap: wrap; } .sc-quote-side-request { position: static; } }

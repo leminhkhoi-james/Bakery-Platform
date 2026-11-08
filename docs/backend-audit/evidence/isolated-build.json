@@ -1,0 +1,18 @@
+[
+  {
+    "name": "business-services",
+    "exitCode": 0,
+    "seconds": 65.47,
+    "workingDirectory": "C:\\Users\\phuck\\AppData\\Local\\Temp\\bakery-backend-audit-20261107\\source\\backend",
+    "command": "mvnw.cmd -B -ntp -pl identity-service,bakery-service,marketplace-service,subscription-service,order-service,chat-service,api-gateway -am -DskipTests package",
+    "evidence": "build-business-services.txt"
+  },
+  {
+    "name": "cake-ai",
+    "exitCode": 1,
+    "seconds": 10.88,
+    "workingDirectory": "C:\\Users\\phuck\\AppData\\Local\\Temp\\bakery-backend-audit-20261107\\source\\backend",
+    "command": "mvnw.cmd -B -ntp -pl cake-ai-service -am -DskipTests package",
+    "evidence": "build-cake-ai.txt"
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "at": "2026-11-07T16:55:43.846164+00:00",
+  "services": {
+    "identity": {
+      "origin": "http://127.0.0.1:18101",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 10,
+      "tokenFields": [
+        "accessToken",
+        "tokenType",
+        "expiresIn"
+      ]
+    },
+    "bakery": {
+      "origin": "http://127.0.0.1:18102",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 34,
+      "hasOnboarding": true
+    },
+    "subscription": {
+      "origin": "http://127.0.0.1:18104",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 14,
+      "hasPaymentOptions": true
+    }
+  },
+  "gateway": {
+    "status": "UNAVAILABLE",
+    "errorType": "URLError"
+  },
+  "sourceVsExternalBuild": {
+    "identity-service": {
+      "checked": 81,
+      "different": []
+    },
+    "bakery-service": {
+      "checked": 122,
+      "different": []
+    },
+    "subscription-service": {
+      "checked": 63,
+      "different": []
+    }
+  }
+}

@@ -1,0 +1,142 @@
+Resolving dependencies...
+Downloading packages...
+  cupertino_icons 1.0.9 (2.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.4 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleDebug'...                          
+
+H:\MSS\Bakery-Platform\mobile\android>if "Windows_NT" == "Windows_NT" setlocal
+
+H:\MSS\Bakery-Platform\mobile\android>set DEFAULT_JVM_OPTS= 
+
+H:\MSS\Bakery-Platform\mobile\android>set DIRNAME=H:\MSS\Bakery-Platform\mobile\android\ 
+
+H:\MSS\Bakery-Platform\mobile\android>if "H:\MSS\Bakery-Platform\mobile\android\" == "" set DIRNAME=. 
+
+H:\MSS\Bakery-Platform\mobile\android>set APP_BASE_NAME=gradlew 
+
+H:\MSS\Bakery-Platform\mobile\android>set APP_HOME=H:\MSS\Bakery-Platform\mobile\android\ 
+
+H:\MSS\Bakery-Platform\mobile\android>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+H:\MSS\Bakery-Platform\mobile\android>set JAVA_HOME=C:\Program Files\Java\jdk-21 
+
+H:\MSS\Bakery-Platform\mobile\android>set JAVA_EXE=C:\Program Files\Java\jdk-21/bin/java.exe 
+
+H:\MSS\Bakery-Platform\mobile\android>if exist "C:\Program Files\Java\jdk-21/bin/java.exe" goto init 
+
+H:\MSS\Bakery-Platform\mobile\android>if not "Windows_NT" == "Windows_NT" goto win9xME_args 
+
+H:\MSS\Bakery-Platform\mobile\android>if "@eval[2+2]" == "4" goto 4NT_args 
+
+H:\MSS\Bakery-Platform\mobile\android>set CMD_LINE_ARGS= 
+
+H:\MSS\Bakery-Platform\mobile\android>set _SKIP=2 
+
+H:\MSS\Bakery-Platform\mobile\android>if "x-q" == "x" goto execute 
+
+H:\MSS\Bakery-Platform\mobile\android>set CMD_LINE_ARGS=-q -Ptarget-platform=android-x64 -Ptarget=integration_test/mobile_demo_test.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuMQ==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NjY1NTQ4MmVjMA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NWQ1MzE3ODg2OQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pflutter.androidSdkRoot=D:\HomeMind\audit-tools\android-sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=D:\HomeMind\audit-tools\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug 
+
+H:\MSS\Bakery-Platform\mobile\android>goto execute 
+
+H:\MSS\Bakery-Platform\mobile\android>set CLASSPATH=H:\MSS\Bakery-Platform\mobile\android\\gradle\wrapper\gradle-wrapper.jar 
+
+H:\MSS\Bakery-Platform\mobile\android>"C:\Program Files\Java\jdk-21/bin/java.exe"    "-Dorg.gradle.appname=gradlew" -classpath "H:\MSS\Bakery-Platform\mobile\android\\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain -q -Ptarget-platform=android-x64 -Ptarget=integration_test/mobile_demo_test.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuMQ==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NjY1NTQ4MmVjMA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NWQ1MzE3ODg2OQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pflutter.androidSdkRoot=D:\HomeMind\audit-tools\android-sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=D:\HomeMind\audit-tools\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug 
+
+H:\MSS\Bakery-Platform\mobile\android>if "0" == "0" goto mainEnd 
+
+H:\MSS\Bakery-Platform\mobile\android>if "Windows_NT" == "Windows_NT" endlocal
+Running Gradle task 'assembleDebug'...                             13.5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,114ms
+I/e.bakery_mobile( 5961): Compiler allocated 5042KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer( 5961): Skipped 43 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl( 5961): Register WindowLayoutInfoListener on Context=com.example.bakery_mobile.MainActivity@2f3d719, of which baseContext=android.app.ContextImpl@ffcdfea
+D/FlutterJNI( 5961): Sending viewport metrics to the engine.
+flutter.bat : VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:53665/KCSAQvfE0VU=/
+At line:4 char:1
++ & 'D:\HomeMind\audit-tools\flutter\bin\flutter.bat' drive --driver=te ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (VMServiceFlutte...5/KCSAQvfE0VU=/:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+VMServiceFlutterDriver: Isolate found with number: 5153005048152511
+VMServiceFlutterDriver: Isolate 5153005048152511 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 5961): 00:00 +0: 35 route và hành trình thật trên Android, toàn bộ dữ liệu local
+VMServiceFlutterDriver: Connected to Flutter application.
+I/Choreographer( 5961): Skipped 33 frames!  The application may be doing too much work on its main thread.
+D/ProfileInstaller( 5961): Installing profile for com.example.bakery_mobile
+D/InsetsController( 5961): hide(ime(), fromIme=false)
+I/ImeTracker( 5961): com.example.bakery_mobile:8deb66d8: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/FlutterJNI( 5961): Sending viewport metrics to the engine.
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa4df698) locale list changing from [] to [en-US]
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa5009d8) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa50ac58) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): Background concurrent mark compact GC freed 421KB AllocSpace bytes, 27(1972KB) LOS objects, 49% free, 2371KB/4743KB, paused 9.634ms,7.261ms total 66.900ms
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa5199d8) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): Background concurrent mark compact GC freed 272KB AllocSpace bytes, 12(1148KB) LOS objects, 49% free, 4203KB/8407KB, paused 982us,6.877ms total 21.846ms
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa51a018) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa4b24b8) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa51bc38) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): NativeAlloc concurrent mark compact GC freed 506KB AllocSpace bytes, 33(3100KB) LOS objects, 49% free, 2431KB/4863KB, paused 5.370ms,3.722ms total 42.244ms
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa516af8) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa521098) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): Background concurrent mark compact GC freed 433KB AllocSpace bytes, 31(2652KB) LOS objects, 49% free, 2495KB/4991KB, paused 5.244ms,3.301ms total 39.790ms
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa4da878) locale list changing from [] to [en-US]
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa4d18b8) locale list changing from [] to [en-US]
+I/ImeTracker( 5961): com.example.bakery_mobile:5c53c3d2: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+D/InsetsController( 5961): Setting requestedVisibleTypes to -1 (was -9)
+I/ImeTracker( 5961): com.example.bakery_mobile:6df44dad: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+I/ImeTracker( 5961): com.example.bakery_mobile:6df44dad: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 5961): The input method toggled cursor monitoring on
+I/AssistStructure( 5961): Flattened final assist data: 432 bytes, containing 1 windows, 3 views
+I/ImeTracker( 5961): com.example.bakery_mobile:5c3e5fa0: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+D/InsetsController( 5961): hide(ime(), fromIme=false)
+W/WindowOnBackDispatcher( 5961): sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@15207ef
+D/InsetsController( 5961): Setting requestedVisibleTypes to -9 (was -1)
+D/CompatChangeReporter( 5961): Compat change id reported: 395521150; UID 10224; state: ENABLED
+I/ImeTracker( 5961): com.example.bakery_mobile:5c53c3d2: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker( 5961): com.example.bakery_mobile:214f8a8c: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+D/InsetsController( 5961): Setting requestedVisibleTypes to -1 (was -9)
+I/ImeTracker( 5961): com.example.bakery_mobile:ce3b2e18: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+I/ImeTracker( 5961): com.example.bakery_mobile:ce3b2e18: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 5961): The input method toggled cursor monitoring on
+I/ImeTracker( 5961): com.example.bakery_mobile:8db269d: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+I/ImeTracker( 5961): com.example.bakery_mobile:8db269d: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/ImeTracker( 5961): com.example.bakery_mobile:91d8c6a5: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController( 5961): show(ime(), fromIme=false)
+I/ImeTracker( 5961): com.example.bakery_mobile:91d8c6a5: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/ImeTracker( 5961): com.example.bakery_mobile:350ea3bd: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+D/InsetsController( 5961): hide(ime(), fromIme=false)
+W/WindowOnBackDispatcher( 5961): sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@15207ef
+D/InsetsController( 5961): Setting requestedVisibleTypes to -9 (was -1)
+I/ImeTracker( 5961): com.example.bakery_mobile:214f8a8c: onCancelled at PHASE_CLIENT_ANIMATION_CANCEL
+W/InteractionJankMonitor( 5961): Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.example.bakery_mobile
+D/FlutterJNI( 5961): Sending viewport metrics to the engine.
+D/FlutterJNI( 5961): Sending viewport metrics to the engine.
+D/FlutterJNI( 5961): Sending viewport metrics to the engine.
+I/ImeTracker( 5961): system_server:e07f6fe2: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+W/FrameTracker( 5961): Missed App frame:UNKNOWN: 3, 57382, 49331154, CUJ=J<IME_INSETS_HIDE_ANIMATION::1@1@com.example.bakery_mobile>
+W/FrameTracker( 5961): Missed SF frame:UNKNOWN: 3, 57382, 49331154, CUJ=J<IME_INSETS_HIDE_ANIMATION::1@1@com.example.bakery_mobile>
+W/RemoteInputConnectionImpl( 5961): requestCursorUpdates on inactive InputConnection
+W/RemoteInputConnectionImpl( 5961): getSurroundingText on inactive InputConnection
+W/WindowOnBackDispatcher( 5961): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@4719649
+W/WindowOnBackDispatcher( 5961): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@4719649
+I/e.bakery_mobile( 5961): AssetManager2(0x75beaa4a7298) locale list changing from [] to [en-US]
+I/flutter ( 5961): 00:58 +1: (tearDownAll)
+I/Choreographer( 5961): Skipped 35 frames!  The application may be doing too much work on its main thread.
+I/flutter ( 5961): 00:59 +2: All tests passed!
+All tests passed.

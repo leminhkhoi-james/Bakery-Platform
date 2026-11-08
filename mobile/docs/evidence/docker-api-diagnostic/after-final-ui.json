@@ -1,0 +1,350 @@
+{
+  "results": [
+    {
+      "action": "Home renders actual Backend product after runtime recovery",
+      "result": "PASS"
+    },
+    {
+      "action": "Public product/bakery/plans routes use real services",
+      "result": "PASS"
+    },
+    {
+      "action": "Invalid registration input blocked before HTTP",
+      "result": "PASS"
+    },
+    {
+      "action": "Pre-send connection refusal keeps signup recoverable; two explicit taps, no automatic retry",
+      "result": "PASS"
+    },
+    {
+      "action": "Flutter registration 201 followed by real login/me; no automatic fake session",
+      "result": "PASS"
+    },
+    {
+      "result": "FAIL",
+      "errorType": "DriverError"
+    }
+  ],
+  "state": {
+    "events": [
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:24:46.223631Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:24:49.888415Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "status": 200,
+        "ids": [
+          "33e60a6f-7751-423d-a6f0-584df99a06d6"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:24:53.241180Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:24:53.322736Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:24:53.950575Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:1",
+        "path": "/api/v1/auth/register",
+        "status": 0,
+        "uncertain": false,
+        "kind": "connection",
+        "responseStatus": null,
+        "mode": "connection-refused",
+        "layer": "ANDROID_UI_FAILURE",
+        "at": "2026-11-07T16:25:02.047769Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:1",
+        "path": "/api/v1/auth/register",
+        "status": 0,
+        "uncertain": false,
+        "kind": "connection",
+        "responseStatus": null,
+        "mode": "connection-refused",
+        "layer": "ANDROID_UI_FAILURE",
+        "at": "2026-11-07T16:25:04.726907Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/register",
+        "status": 201,
+        "ids": [
+          "83dac641-ba1a-4dbd-9db4-035a70b77eb2"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:05.804209Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.629473Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "status": 200,
+        "ids": [
+          "33e60a6f-7751-423d-a6f0-584df99a06d6"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.632712Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.636317Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.639441Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.640354Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/login",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.642171Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/me",
+        "status": 200,
+        "ids": [
+          "83dac641-ba1a-4dbd-9db4-035a70b77eb2"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:09.783974Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/logout",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.639389Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.646323Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "status": 200,
+        "ids": [
+          "33e60a6f-7751-423d-a6f0-584df99a06d6"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.823988Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.826712Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.828146Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:12.829322Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/register",
+        "status": 409,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:16.253799Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:18.936924Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries/33e60a6f-7751-423d-a6f0-584df99a06d6",
+        "status": 200,
+        "ids": [
+          "33e60a6f-7751-423d-a6f0-584df99a06d6"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.133174Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products/361b1c6a-8305-4ddb-bea6-60004f29f986",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.134344Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.135280Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/bakeries",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.137553Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/login",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.234445Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/me",
+        "status": 200,
+        "ids": [
+          "83dac641-ba1a-4dbd-9db4-035a70b77eb2"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:25:19.281204Z"
+      }
+    ],
+    "userId": "83dac641-ba1a-4dbd-9db4-035a70b77eb2",
+    "roles": [
+      "CUSTOMER"
+    ],
+    "bakeryId": null,
+    "origins": {
+      "identity": "http://127.0.0.1:18101",
+      "bakery": "http://127.0.0.1:18102",
+      "subscription": "http://127.0.0.1:18104"
+    }
+  }
+}
