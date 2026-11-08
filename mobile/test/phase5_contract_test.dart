@@ -1,3 +1,5 @@
+import 'package:bakery_mobile/features/chat/data/pending_chat_journal.dart';
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -68,6 +70,14 @@ class MultipartRecorder extends FakeTransport {
       scope: scope,
     );
   }
+}
+
+LiveChatRepository chatRepo(ApiClient api) {
+  api.session.user ??= {
+    'id': other,
+    'roles': ['CUSTOMER'],
+  };
+  return LiveChatRepository(api, journal: MemoryPendingChatJournal());
 }
 
 void main() {
@@ -285,7 +295,7 @@ void main() {
       seed(s, expired: false);
       t.respond = (m, u, h) async =>
           ok({'id': other, 'clientMessageId': third});
-      await LiveChatRepository(ApiClient(s)).send(id, third, ' hello ');
+      await chatRepo(ApiClient(s)).send(id, third, ' hello ');
       expect(t.uploaded.single.field, 'metadata');
       expect(t.uploaded.single.mime, 'application/json');
       expect(jsonDecode(utf8.decode(t.uploaded.single.bytes)), {
@@ -299,16 +309,13 @@ void main() {
     transport.respond = (m, u, h) async =>
         ok({'id': other, 'clientMessageId': id});
     await expectLater(
-      LiveChatRepository(api).send(id, third, 'hello'),
+      chatRepo(api).send(id, third, 'hello'),
       throwsA(isA<ApiFailure>().having((e) => e.uncertain, 'uncertain', true)),
     );
   });
   test('chat read validates returned conversation identity', () async {
     transport.respond = (m, u, h) async => ok({'conversationId': other});
-    await expectLater(
-      LiveChatRepository(api).read(id, third),
-      throwsFormatException,
-    );
+    await expectLater(chatRepo(api).read(id, third), throwsFormatException);
   });
   test('new forms reject past or malformed delivery instants', () {
     expect(() => futureInstant('yesterday'), throwsA(isA<ApiFailure>()));
@@ -330,7 +337,7 @@ void main() {
     () async {
       transport.respond = (m, u, h) async =>
           WireResponse(503, {'statusCode': 503, 'data': null}, []);
-      final repo = LiveChatRepository(api);
+      final repo = chatRepo(api);
       await expectLater(
         repo.send(id, other, 'same'),
         throwsA(isA<ApiFailure>()),
@@ -346,7 +353,7 @@ void main() {
   test('chat masked 403 preserves command until reconciliation', () async {
     transport.respond = (m, u, h) async =>
         WireResponse(403, {'statusCode': 403, 'data': null}, []);
-    final repo = LiveChatRepository(api);
+    final repo = chatRepo(api);
     await expectLater(
       repo.send(id, other, 'same'),
       throwsA(isA<ApiFailure>().having((e) => e.uncertain, 'uncertain', true)),
@@ -370,8 +377,7 @@ void main() {
           Uint8List.fromList(utf8.encode('%PDF-1.4')),
         ),
       );
-      await LiveChatRepository(ApiClient(s))
-          .send(id, third, '', attachments: files);
+      await chatRepo(ApiClient(s)).send(id, third, '', attachments: files);
       expect(t.uploaded.length, 6);
       expect(
         jsonDecode(utf8.decode(t.uploaded.first.bytes))['messageType'],
@@ -382,7 +388,7 @@ void main() {
   test(
     'six attachments and blank text are rejected before network send',
     () async {
-      final repo = LiveChatRepository(api);
+      final repo = chatRepo(api);
       await expectLater(repo.send(id, other, ''), throwsA(isA<ApiFailure>()));
       final f = UploadPart(
         'files',
@@ -410,7 +416,7 @@ void main() {
               {'id': third, 'cakeRequestId': id, 'bakeryId': other},
             ],
     });
-    final result = await LiveChatRepository(api).existingForRequest(id, other);
+    final result = await chatRepo(api).existingForRequest(id, other);
     expect(result!['id'], third);
     expect(transport.calls.length, 2);
     expect(transport.calls.every((c) => c['method'] == 'GET'), isTrue);

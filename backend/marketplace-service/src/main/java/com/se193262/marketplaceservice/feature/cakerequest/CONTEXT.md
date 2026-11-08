@@ -8,6 +8,13 @@ Customer cake requests, preferences, reference images and selected designs.
 
 Request lifecycle, authorized pagination, JSONB preferences, option snapshots, Firebase image compensation, selected-design validation and the scoped internal chat-authorization contract are implemented. Chat authorization checks request ownership, request status and target/unexpired-pending/accepted bakery eligibility. All aggregate mutations touch the request optimistic version. Image uploads happen outside the metadata transaction.
 
+Local runtime keeps Firebase disabled by default. The launcher's explicit
+`--firebase-sandbox` option maps the existing root Firebase references and mounts
+the existing credential read-only; it does not overwrite `.env` or generate keys.
+Local automatic orphan cleanup is disabled so a shared sandbox bucket is not
+reconciled against an unrelated local database. Production cleanup remains enabled
+by default. Upload/delete contracts and compensation rules are unchanged.
+
 ## Boundary
 
 Product customization reads Bakery's `/internal/v1/catalog/customization-quotes`;

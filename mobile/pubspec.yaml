@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   crypto: 3.0.7
+  cryptography: 2.9.0
+  path_provider: 2.1.6
   flutter_secure_storage: 10.3.4
   file_picker: 10.3.10
   flutter:

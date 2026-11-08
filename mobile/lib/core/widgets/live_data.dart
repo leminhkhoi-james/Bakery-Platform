@@ -182,10 +182,12 @@ class LiveMedia extends StatelessWidget {
     super.key,
     required this.label,
     this.height = 200,
+    this.fit = BoxFit.cover,
   });
   final String? url;
   final String label;
   final double height;
+  final BoxFit fit;
   @override
   Widget build(BuildContext context) {
     final uri = Uri.tryParse(url ?? '');
@@ -214,7 +216,7 @@ class LiveMedia extends StatelessWidget {
               url!,
               height: height,
               width: double.infinity,
-              fit: BoxFit.cover,
+              fit: fit,
               semanticLabel: label,
               errorBuilder: (_, _, _) => missing(),
               loadingBuilder: (_, child, progress) => progress == null

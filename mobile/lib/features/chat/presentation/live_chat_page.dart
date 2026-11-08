@@ -75,17 +75,6 @@ class _LiveChatThreadState extends State<LiveChatThread>
       text.clear();
       uncertain = false;
       loading = false;
-      final pending = LiveScope.of(context).chat.pending[widget.id];
-      if (pending != null) {
-        logicalId = pending.id;
-        frozenText = pending.content;
-        frozenFile = pending.attachment;
-        text.text = pending.content;
-        attachment = pending.attachment;
-        extraFiles.addAll(pending.attachments.skip(1));
-        frozenExtraFiles.addAll(extraFiles);
-        uncertain = true;
-      }
       load();
     }
   }
@@ -114,6 +103,25 @@ class _LiveChatThreadState extends State<LiveChatThread>
     loading = true;
     final repo = LiveScope.of(context).chat;
     try {
+      await repo.restorePending();
+      if (!valid(current)) return;
+      final recovered = repo.pending[widget.id];
+      if (recovered != null && !sending) {
+        setState(() {
+          logicalId = recovered.id;
+          frozenText = recovered.content;
+          frozenFile = recovered.attachment;
+          text.text = recovered.content;
+          attachment = recovered.attachment;
+          extraFiles
+            ..clear()
+            ..addAll(recovered.attachments.skip(1));
+          frozenExtraFiles
+            ..clear()
+            ..addAll(extraFiles);
+          uncertain = true;
+        });
+      }
       final detail = await repo.detail(widget.id);
       if (!valid(current)) return;
       setState(() => conversation = detail);
@@ -122,18 +130,20 @@ class _LiveChatThreadState extends State<LiveChatThread>
         before: older ? cursor : null,
       );
       if (!valid(current)) return;
+      Json? confirmed;
+      String? recoveryError;
+      try {
+        confirmed = await repo.reconcile(widget.id, page);
+      } on Object catch (e) {
+        recoveryError = safeError(e);
+      }
+      if (!valid(current)) return;
       setState(() {
         for (final message in page.items) {
           messages[apiId(message['id'])] = message;
         }
-        final pending = repo.pending[widget.id];
-        if (pending != null &&
-            page.items.any(
-              (m) =>
-                  m['clientMessageId'] == pending.id &&
-                  m['senderId'] == LiveScope.of(context).session.user?['id'],
-            )) {
-          repo.pending.remove(widget.id);
+        if (confirmed != null) {
+          messages[apiId(confirmed['id'])] = confirmed;
           logicalId = null;
           frozenText = null;
           frozenFile = null;
@@ -144,6 +154,7 @@ class _LiveChatThreadState extends State<LiveChatThread>
           uncertain = false;
           sendError = null;
         }
+        if (recoveryError != null) sendError = recoveryError;
         if (older || cursor == null) {
           cursor = page.nextCursor;
           more = page.hasMore;
@@ -213,7 +224,9 @@ class _LiveChatThreadState extends State<LiveChatThread>
     } on Object catch (e) {
       if (valid(current)) {
         setState(() {
-          uncertain = e is ApiFailure && e.uncertain;
+          uncertain =
+              LiveScope.of(context).chat.pending.containsKey(widget.id) ||
+              e is ApiFailure && e.uncertain;
           sendError = safeError(e);
           if (!uncertain) {
             logicalId = null;
@@ -354,7 +367,7 @@ class _LiveChatThreadState extends State<LiveChatThread>
         if (sendError != null) SCNotice(sendError!, warning: true),
         if (uncertain)
           const SCNotice(
-            'Chưa rõ kết quả gửi. Nội dung và mã tin nhắn được giữ nguyên. Làm mới lịch sử trước; gửi lại sẽ dùng đúng cùng clientMessageId, không tạo yêu cầu logic mới.',
+            'Tin đang chờ được lưu an toàn trên máy. Làm mới lịch sử để đối chiếu; gửi lại giữ nguyên nội dung, tệp và mã tin nhắn. Đăng xuất sẽ xóa bản đang chờ trên thiết bị.',
             warning: true,
           ),
         if (conversation?['status'] == 'OPEN') ...[

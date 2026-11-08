@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../api/api_client.dart';
@@ -12,6 +14,7 @@ import '../../features/subscription/data/live_subscription_repository.dart';
 import '../../features/marketplace/data/live_marketplace_repository.dart';
 import '../../features/orders/data/live_order_repository.dart';
 import '../../features/chat/data/live_chat_repository.dart';
+import '../../features/chat/data/pending_chat_journal.dart';
 import '../../features/cart/data/live_cart.dart';
 import '../../features/reviews/data/live_review_repository.dart';
 import '../../features/ai/data/live_ai_repository.dart';
@@ -21,6 +24,7 @@ class LiveWorkspace extends ChangeNotifier {
     ApiEnvironment? environment,
     ApiTransport? transport,
     SessionStore? store,
+    PendingChatJournal? chatJournal,
   }) {
     session = LiveSession(
       environment ?? ApiEnvironment.configured(),
@@ -35,7 +39,10 @@ class LiveWorkspace extends ChangeNotifier {
     orders = LiveOrderRepository(api);
     reviews = LiveReviewRepository(api);
     ai = LiveAiRepository(api);
-    chat = LiveChatRepository(api);
+    chat = LiveChatRepository(api, journal: chatJournal);
+    if (session.environment.chat != null) {
+      session.beforeLogout = chat.discardAccountPending;
+    }
     cart.addListener(notifyListeners);
     _generation = session.generation;
     session.addListener(_sessionChanged);
@@ -52,6 +59,9 @@ class LiveWorkspace extends ChangeNotifier {
   late final LiveChatRepository chat;
   final LiveCart cart = LiveCart();
   late int _generation;
+  String? _chatAccount;
+  bool _disposed = false;
+  String? chatRecoveryNotice;
   Json? bakery;
   int bakeryRevision = 0;
   final Map<String, Json> knownOptions = {};
@@ -63,11 +73,38 @@ class LiveWorkspace extends ChangeNotifier {
       bakery = null;
       cart.clear();
       chat.clearPending();
+      _chatAccount = null;
       verifiedBakeries.clear();
       knownImages.clear();
       knownOptions.clear();
       bakeryRevision++;
       api.invalidate();
+    }
+    final account = session.user?['id'] as String?;
+    if (session.environment.chat != null &&
+        !session.restoring &&
+        account != null &&
+        account != _chatAccount) {
+      _chatAccount = account;
+      final expected = session.generation;
+      unawaited(
+        chat.restorePending().then(
+          (_) {
+            if (!_disposed && expected == session.generation) {
+              chatRecoveryNotice = null;
+              notifyListeners();
+            }
+          },
+          onError: (Object _) {
+            if (!_disposed && expected == session.generation) {
+              _chatAccount = null;
+              chatRecoveryNotice =
+                  'Chưa đọc được tin đang chờ. Mở trò chuyện để thử khôi phục.';
+              notifyListeners();
+            }
+          },
+        ),
+      );
     }
     notifyListeners();
   }
@@ -99,6 +136,7 @@ class LiveWorkspace extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     session.removeListener(_sessionChanged);
     cart.removeListener(notifyListeners);
     cart.dispose();

@@ -1,0 +1,8 @@
+{
+  "sourceFingerprint": "49a336909918d0338e908ad588e49a0b0aa54735abd47552b9af5f123c52e0ca",
+  "sha256": "ff0d3106697e8d2cb8e03ce99565ca031b5bdcbfdeea23b76cfced6022c5b1d5",
+  "entrypoint": "test_driver/full_app.dart",
+  "memorySession": true,
+  "cakeAiOrigin": "http://127.0.0.1:18105",
+  "mode": "local-fallback"
+}

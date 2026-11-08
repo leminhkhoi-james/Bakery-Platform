@@ -1,0 +1,25 @@
+{
+  "mainEntrypoint": "lib/main.dart",
+  "commandExitCode": 0,
+  "initialScreenshot": "screenshots/readme-main-initial.png",
+  "coldRestartScreenshot": "screenshots/readme-main-cold-restart.png",
+  "settingsAfter": {
+    "font_scale": "1.0",
+    "accelerometer_rotation": "1",
+    "user_rotation": "0"
+  },
+  "noDataCleared": true,
+  "startupFlags": [
+    "CakeAiUrl",
+    "CakeAiMode local-fallback",
+    "ReuseRunningServices",
+    "EvidenceDirectory",
+    "NoResident"
+  ],
+  "publicPortCount": 9,
+  "result": "PASS_WITH_PROVENANCE_LIMITATIONS",
+  "coldRestartInitialCapture": "native splash at first capture, not accepted as readiness",
+  "coldRestartReadyScreenshot": "screenshots/readme-main-cold-ready.png",
+  "homeVisuallyConfirmed": true,
+  "startupPerformanceMeasured": false
+}

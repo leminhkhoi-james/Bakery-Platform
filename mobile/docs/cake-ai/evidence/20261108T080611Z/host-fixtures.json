@@ -1,0 +1,24 @@
+{
+  "requestId": "b995da76-d13d-4d07-a249-344b96179887",
+  "foreignRequestId": "2ee2e377-6ce2-4c45-8e2c-8fd05cf9e9da",
+  "jobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+  "initialState": "QUEUED",
+  "terminalState": "SUCCEEDED",
+  "designIds": [
+    "65e746f4-52b6-44ed-a9f5-fe08d433228e"
+  ],
+  "selectedDesignConfirmed": true,
+  "revised": {
+    "revision": 2,
+    "designCount": 3,
+    "status": "SUCCEEDED"
+  },
+  "cancelJobId": "a64f45c4-0a8d-4559-8cf6-d7d3b86ded68",
+  "failedJobId": "eac2fab3-fe2c-41d5-bd08-32f2dd9c4fd7",
+  "failedResult": {
+    "status": "FAILED",
+    "errorCode": "INPUT_REJECTED",
+    "designCount": 0
+  },
+  "foreignRfqAcceptedJobId": "166a09a9-ab28-47ac-948f-dc2213861a42"
+}

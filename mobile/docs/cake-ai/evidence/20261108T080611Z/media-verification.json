@@ -1,0 +1,22 @@
+{
+  "designId": "65e746f4-52b6-44ed-a9f5-fe08d433228e",
+  "source": "REAL_BACKEND_LOCAL_JAVA2D_FALLBACK",
+  "media": [
+    {
+      "field": "imageUrl",
+      "http": 200,
+      "contentType": "image/jpeg",
+      "size": 20881,
+      "sha256": "20d6fe89b8fedbc921626337a0f7c9a988e36b32c262e6996e10b993409c35e9",
+      "magic": "89504e470d0a1a0a"
+    },
+    {
+      "field": "thumbnailUrl",
+      "http": 200,
+      "contentType": "image/jpeg",
+      "size": 7105,
+      "sha256": "72aa5c594e7a401d92c869c1ac7ce3d5f201aba9a3ae805720e6362de9c2a6e3",
+      "magic": "ffd8ffe000104a46"
+    }
+  ]
+}

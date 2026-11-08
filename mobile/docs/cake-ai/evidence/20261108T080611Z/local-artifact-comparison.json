@@ -1,0 +1,8 @@
+{
+  "installedSha256": "bceb3aa17e2782c780a2bb0c8d206d97a75964305e3fdd2961b43513ecc27d6b",
+  "installedHasAccepted": false,
+  "currentPackagedHasAccepted": true,
+  "installedSignatures": "Compiled from \"ApiResponse.java\"\r\npublic final class com.se193262.platform.dto.ApiResponse<T> extends java.lang.Record {\r\n  public static <T> com.se193262.platform.dto.ApiResponse<T> success(T);\r\n  public static <T> com.se193262.platform.dto.ApiResponse<T> created(T);\r\n  public static <T> com.se193262.platform.dto.ApiResponse<T> error(int, java.lang.String);\r\n  public int statusCode();\r\n  public java.lang.String message();\r\n  public T data();\r\n  public java.time.Instant timestamp();\r\n  public final java.lang.String toString();\r\n  public final int hashCode();\r\n  public final boolean equals(java.lang.Object);\r\n  public com.se193262.platform.dto.ApiResponse(int, java.lang.String, T, java.time.Instant);\r\n}\r\n",
+  "reactorDoesNotUseInstalledJarForSelectedModule": true,
+  "mvnInstallPerformed": false
+}

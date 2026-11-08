@@ -4,14 +4,22 @@ param(
     [string]$DeviceId = '',
     [string]$AvdId = '',
     [string]$EvidenceDirectory = '',
+    [string]$CakeAiUrl = '',
+    [string]$ChatStorageUrl = 'http://localhost:19006',
+    [ValidateSet('unknown','local-fallback','provider-configured')]
+    [string]$CakeAiMode = 'unknown',
     [switch]$PrepareOnly,
     [switch]$NoResident,
+    [switch]$ReuseRunningServices,
     [switch]$LegacyPhases14
 )
 $ErrorActionPreference = 'Stop'
 $mobileDirectory = Split-Path $PSScriptRoot -Parent
 Set-Location -LiteralPath $mobileDirectory
 $phase5Runtime = -not $LegacyPhases14 -and -not $RuntimeDirectory
+if ($ReuseRunningServices -and (-not $phase5Runtime -or -not $CakeAiUrl -or -not $EvidenceDirectory)) {
+    throw 'Explicit running-stack reuse requires CakeAiUrl and isolated EvidenceDirectory in the six-service mode.'
+}
 $runtimeTool = if ($phase5Runtime) { 'phase5_stack.py' } else { 'start_local_runtime.py' }
 $runtimeArguments = @('-B', (Join-Path $PSScriptRoot $runtimeTool))
 if ($phase5Runtime) { $runtimeArguments += '--start' }
@@ -21,12 +29,23 @@ if ($EvidenceDirectory) {
     if (-not $resolvedEvidence.StartsWith($mobileDirectory + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) { throw 'Evidence directory must stay inside mobile.' }
     $runtimeArguments += @('--output', $resolvedEvidence, '--reuse-only')
 }
+if ($ReuseRunningServices) {
+    $runtimeArguments = @('-B', (Join-Path $PSScriptRoot 'cake_ai_readiness.py'), '--output', $resolvedEvidence)
+}
 if ($RuntimeDirectory) { $runtimeArguments += @('--runtime', $RuntimeDirectory) }
 & python @runtimeArguments
 if ($LASTEXITCODE -ne 0) { throw 'Backend readiness failed. Flutter was not started.' }
 $runtimeReport = if ($phase5Runtime) { 'docs/evidence/phases-5a-5b-5c/runtime-start.json' } else { 'docs/evidence/docker-api-diagnostic/runtime-start.json' }
 if ($EvidenceDirectory) { $runtimeReport = Join-Path $resolvedEvidence 'runtime-start.json' }
 $runtimeState = Get-Content -LiteralPath $runtimeReport -Raw | ConvertFrom-Json
+if ($CakeAiUrl) {
+    $cakeOrigin = [uri]$CakeAiUrl
+    if ($cakeOrigin.UserInfo -or $cakeOrigin.Query -or $cakeOrigin.Fragment -or $cakeOrigin.AbsolutePath -ne '/' -or $cakeOrigin.Host -notin @('127.0.0.1','localhost','10.0.2.2') -or $cakeOrigin.Scheme -ne 'http') {
+        throw 'Local Cake AI URL must be a public loopback HTTP origin without credentials or path.'
+    }
+    $cakeHealth = Invoke-RestMethod -Uri ($CakeAiUrl.TrimEnd('/') + '/actuator/health/readiness') -TimeoutSec 5
+    if ($cakeHealth.status -ne 'UP') { throw 'Cake AI is not application-ready.' }
+}
 $adbExecutable = (Get-Command adb -ErrorAction Stop).Source
 $androidSdk = Split-Path (Split-Path $adbExecutable -Parent) -Parent
 $emulatorExecutable = Join-Path $androidSdk 'emulator/emulator.exe'
@@ -76,12 +95,25 @@ for ($attempt = 0; $attempt -lt 15; $attempt++) {
 }
 if (-not $packageManagerReady) { throw 'Android PackageManager is not ready. No Flutter install was attempted.' }
 $ports = if ($phase5Runtime) { @($runtimeState.services.PSObject.Properties | Where-Object { $_.Value.origin } | ForEach-Object { ([uri]$_.Value.origin).Port } | Sort-Object -Unique) } else { @($runtimeState.services.PSObject.Properties | ForEach-Object { [int]$_.Value.port } | Sort-Object -Unique) }
+if ($CakeAiUrl) { $ports = @($ports + $cakeOrigin.Port | Sort-Object -Unique) }
+if ($phase5Runtime -and $ChatStorageUrl) {
+    $storageOrigin = [uri]$ChatStorageUrl
+    if ($storageOrigin.UserInfo -or $storageOrigin.Query -or $storageOrigin.Fragment -or $storageOrigin.AbsolutePath -ne '/') {
+        throw 'Chat storage URL must be an origin without credentials, path or signed query.'
+    }
+    if ($storageOrigin.Scheme -eq 'http' -and $storageOrigin.Host -in @('localhost','127.0.0.1')) {
+        $ports = @($ports + $storageOrigin.Port | Sort-Object -Unique)
+    } elseif ($storageOrigin.Scheme -ne 'https') {
+        throw 'Use loopback HTTP with adb reverse or a public HTTPS Chat storage origin.'
+    }
+}
 foreach ($port in $ports) {
     & $adbExecutable -s $DeviceId reverse "tcp:$port" "tcp:$port"
     if ($LASTEXITCODE -ne 0) { throw "ADB reverse failed for port $port." }
 }
 & $adbExecutable -s $DeviceId reverse --list
 $flutterArguments = @('run', '-d', $DeviceId, '--debug')
+if ($CakeAiUrl) { $flutterArguments += @("--dart-define=CAKE_AI_URL=$($CakeAiUrl.TrimEnd('/'))", "--dart-define=CAKE_AI_MODE=$CakeAiMode") }
 if ($phase5Runtime) {
     foreach ($domain in @('identity','bakery','subscription','marketplace','order','chat')) {
         $origin = $runtimeState.services.PSObject.Properties["$domain-service"].Value.origin

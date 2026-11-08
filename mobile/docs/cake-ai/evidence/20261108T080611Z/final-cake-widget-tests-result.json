@@ -1,0 +1,11 @@
+{
+  "command": [
+    "D:/HomeMind/audit-tools/flutter/bin/flutter.bat",
+    "test",
+    "test/cake_ai_runtime_widget_test.dart",
+    "test/full_integration_widget_test.dart",
+    "test/phase5_widget_test.dart",
+    "--reporter=expanded"
+  ],
+  "exitCode": 0
+}

@@ -1,3 +1,4 @@
+import 'package:bakery_mobile/features/chat/data/pending_chat_journal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bakery_mobile/main.dart';
@@ -23,6 +24,7 @@ void main() {
       final transport = FakeTransport();
       transport.respond = (m, u, h) async => ok(null);
       final w = LiveWorkspace(
+        chatJournal: MemoryPendingChatJournal(),
         environment: environment(),
         transport: transport,
         store: MemorySessionStore(),
@@ -70,6 +72,7 @@ void main() {
         'result': [],
       });
       final w = LiveWorkspace(
+        chatJournal: MemoryPendingChatJournal(),
         environment: environment(),
         transport: transport,
         store: MemorySessionStore(),
@@ -90,6 +93,7 @@ void main() {
       failing.respond = (m, u, h) async =>
           throw const ApiFailure(0, 'Offline test boundary');
       final other = LiveWorkspace(
+        chatJournal: MemoryPendingChatJournal(),
         environment: environment(),
         transport: failing,
         store: MemorySessionStore(),
@@ -118,6 +122,7 @@ void main() {
     final transport = FakeTransport();
     transport.respond = (m, u, h) async => ok(null);
     final w = LiveWorkspace(
+      chatJournal: MemoryPendingChatJournal(),
       environment: environment(),
       transport: transport,
       store: MemorySessionStore(),
@@ -149,6 +154,7 @@ void main() {
       final transport = FakeTransport(), store = MemorySessionStore();
       transport.respond = (m, u, h) async => ok(null);
       final w = LiveWorkspace(
+        chatJournal: MemoryPendingChatJournal(),
         environment: environment(),
         transport: transport,
         store: store,

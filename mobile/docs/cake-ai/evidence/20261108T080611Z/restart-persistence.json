@@ -1,0 +1,13 @@
+{
+  "beforeImage": {
+    "http": 200,
+    "bytes": 20881
+  },
+  "afterImage": {
+    "http": 404
+  },
+  "jobDetailHttpAfterRestart": 200,
+  "jobStatusAfterRestart": "SUCCEEDED",
+  "designMetadataCount": 3,
+  "conclusion": "DB persists; fallback image bytes are lost on application restart"
+}

@@ -1,0 +1,32 @@
+{
+  "job": {
+    "id": "eac2fab3-fe2c-41d5-bd08-32f2dd9c4fd7",
+    "customerId": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+    "cakeRequestId": "b995da76-d13d-4d07-a249-344b96179887",
+    "status": "FAILED",
+    "modelName": "gemini-2.0-flash",
+    "generationParameters": {
+      "aspectRatio": "1:1",
+      "numberOfDesigns": 1
+    },
+    "errorMessage": "INPUT_REJECTED",
+    "startedAt": "2026-11-08T08:16:34.667610Z",
+    "completedAt": "2026-11-08T08:16:34.690370Z",
+    "createdAt": "2026-11-08T08:16:30.493917Z",
+    "updatedAt": "2026-11-08T08:16:34.690370Z"
+  },
+  "currentRevision": 1,
+  "promptRevisions": [
+    {
+      "id": "adb84177-9735-4762-b348-c7bb18fc2095",
+      "generationJobId": "eac2fab3-fe2c-41d5-bd08-32f2dd9c4fd7",
+      "revisionNumber": 1,
+      "prompt": "violent weapon cake",
+      "negativePrompt": "",
+      "createdBy": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+      "createdAt": "2026-11-08T08:16:30.493917Z"
+    }
+  ],
+  "sourceImages": [],
+  "generatedDesigns": []
+}

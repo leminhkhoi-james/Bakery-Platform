@@ -1,0 +1,25 @@
+{
+  "customer": {
+    "http": 200,
+    "id": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+    "roles": [
+      "CUSTOMER"
+    ]
+  },
+  "owner": {
+    "http": 200,
+    "id": "39f5aeef-6139-4862-867b-998455fb8649",
+    "roles": [
+      "BAKERY_OWNER",
+      "CUSTOMER"
+    ]
+  },
+  "admin": {
+    "http": 200,
+    "id": "cbff7b92-1f10-4575-8f0a-7453acc6505e",
+    "roles": [
+      "ADMIN",
+      "CUSTOMER"
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "job": {
+    "id": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+    "customerId": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+    "cakeRequestId": "b995da76-d13d-4d07-a249-344b96179887",
+    "status": "SUCCEEDED",
+    "modelName": "gemini-2.0-flash",
+    "generationParameters": {
+      "aspectRatio": "1:1",
+      "numberOfDesigns": 2
+    },
+    "errorMessage": null,
+    "startedAt": "2026-11-08T08:16:29.654125Z",
+    "completedAt": "2026-11-08T08:16:29.908196Z",
+    "createdAt": "2026-11-08T08:16:19.558815Z",
+    "updatedAt": "2026-11-08T08:16:29.908196Z"
+  },
+  "currentRevision": 2,
+  "promptRevisions": [
+    {
+      "id": "33547f2a-be87-4cb9-b19d-63530a5ddc62",
+      "generationJobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "revisionNumber": 1,
+      "prompt": "A strawberry pink cake for a local integration check",
+      "negativePrompt": "",
+      "createdBy": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+      "createdAt": "2026-11-08T08:16:19.558815Z"
+    },
+    {
+      "id": "ff086a0b-1e2b-4352-942b-66d0d749e9d3",
+      "generationJobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "revisionNumber": 2,
+      "prompt": "A matcha green cake revised locally",
+      "negativePrompt": "",
+      "createdBy": "312d313a-aae9-4a0b-9726-b4038ea0fdc8",
+      "createdAt": "2026-11-08T08:16:27.218229Z"
+    }
+  ],
+  "sourceImages": [
+    {
+      "id": "4a69e1bc-817b-48ab-9b62-b3f7657afece",
+      "url": "http://127.0.0.1:18105/storage/cake-ai/sources/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/4a69e1bc-817b-48ab-9b62-b3f7657afece",
+      "expiresAt": "2026-11-08T08:31:30.361297659Z",
+      "mediaType": "image/jpeg",
+      "sizeBytes": 42397,
+      "displayOrder": 0
+    }
+  ],
+  "generatedDesigns": [
+    {
+      "id": "65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "generationJobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "promptRevisionId": "33547f2a-be87-4cb9-b19d-63530a5ddc62",
+      "moderationStatus": "APPROVED",
+      "moderationReason": "AUTOMATED_REVIEW",
+      "imageUrl": "http://127.0.0.1:18105/storage/cake-ai/designs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/b84c7256-6cf3-4225-aab8-2b22d1d7f217/65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "thumbnailUrl": "http://127.0.0.1:18105/storage/cake-ai/thumbnails/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/b84c7256-6cf3-4225-aab8-2b22d1d7f217/65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "expiresAt": "2026-11-08T08:31:30.362664314Z",
+      "mediaType": "image/png",
+      "sizeBytes": 20881,
+      "width": 1024,
+      "height": 1024,
+      "createdAt": "2026-11-08T08:16:25.177202Z"
+    },
+    {
+      "id": "7b2e0de5-2ac5-463b-a045-e97731ec722c",
+      "generationJobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "promptRevisionId": "ff086a0b-1e2b-4352-942b-66d0d749e9d3",
+      "moderationStatus": "APPROVED",
+      "moderationReason": "AUTOMATED_REVIEW",
+      "imageUrl": "http://127.0.0.1:18105/storage/cake-ai/designs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/d55ed8f5-0f07-41e4-a2f9-717141eee1f2/7b2e0de5-2ac5-463b-a045-e97731ec722c",
+      "thumbnailUrl": "http://127.0.0.1:18105/storage/cake-ai/thumbnails/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/d55ed8f5-0f07-41e4-a2f9-717141eee1f2/7b2e0de5-2ac5-463b-a045-e97731ec722c",
+      "expiresAt": "2026-11-08T08:31:30.362674840Z",
+      "mediaType": "image/png",
+      "sizeBytes": 20335,
+      "width": 1024,
+      "height": 1024,
+      "createdAt": "2026-11-08T08:16:29.908196Z"
+    },
+    {
+      "id": "c6ab467f-f751-4894-8cdb-516ce948d8d5",
+      "generationJobId": "1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "promptRevisionId": "ff086a0b-1e2b-4352-942b-66d0d749e9d3",
+      "moderationStatus": "APPROVED",
+      "moderationReason": "AUTOMATED_REVIEW",
+      "imageUrl": "http://127.0.0.1:18105/storage/cake-ai/designs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/d55ed8f5-0f07-41e4-a2f9-717141eee1f2/c6ab467f-f751-4894-8cdb-516ce948d8d5",
+      "thumbnailUrl": "http://127.0.0.1:18105/storage/cake-ai/thumbnails/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/d55ed8f5-0f07-41e4-a2f9-717141eee1f2/c6ab467f-f751-4894-8cdb-516ce948d8d5",
+      "expiresAt": "2026-11-08T08:31:30.362681168Z",
+      "mediaType": "image/png",
+      "sizeBytes": 20335,
+      "width": 1024,
+      "height": 1024,
+      "createdAt": "2026-11-08T08:16:29.908196Z"
+    }
+  ]
+}

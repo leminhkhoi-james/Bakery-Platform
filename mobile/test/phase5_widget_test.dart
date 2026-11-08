@@ -1,3 +1,5 @@
+import 'package:bakery_mobile/features/chat/data/pending_chat_journal.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ import 'phase5_contract_test.dart'
 
 LiveWorkspace workspace(FakeTransport t) {
   final w = LiveWorkspace(
+    chatJournal: MemoryPendingChatJournal(),
     environment: phase5Environment(),
     transport: t,
     store: MemorySessionStore(),

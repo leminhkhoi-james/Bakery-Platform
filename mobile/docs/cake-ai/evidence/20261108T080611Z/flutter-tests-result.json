@@ -1,0 +1,9 @@
+{
+  "command": [
+    "D:/HomeMind/audit-tools/flutter/bin/flutter.bat",
+    "test",
+    "--reporter=expanded"
+  ],
+  "exitCode": 0,
+  "seconds": 104.16
+}

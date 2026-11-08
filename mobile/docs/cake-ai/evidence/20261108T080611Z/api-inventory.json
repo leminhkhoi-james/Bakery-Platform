@@ -1,0 +1,208 @@
+{
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 19,
+          "source": "@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)"
+        },
+        {
+          "line": 40,
+          "source": "@PostMapping(\"/{id}/prompt-revisions\")"
+        },
+        {
+          "line": 46,
+          "source": "@PostMapping(\"/{id}/cancel\")"
+        }
+      ],
+      "role": "Customer",
+      "mobileAdapter": "create",
+      "contract": "multipart metadata + optional sourceImages; Idempotency-Key; 202",
+      "sourceSha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+      "sourceLine": 19
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/generation-jobs",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 27,
+          "source": "@GetMapping"
+        },
+        {
+          "line": 34,
+          "source": "@GetMapping(\"/{id}\")"
+        }
+      ],
+      "role": "Customer",
+      "mobileAdapter": "list",
+      "contract": "zero-based page; size 1..100; status/cakeRequestId filters",
+      "sourceSha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+      "sourceLine": 27
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/{id}",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 27,
+          "source": "@GetMapping"
+        },
+        {
+          "line": 34,
+          "source": "@GetMapping(\"/{id}\")"
+        }
+      ],
+      "role": "Customer own / Admin",
+      "mobileAdapter": "detail",
+      "contract": "nested job/revisions/sources/designs",
+      "sourceSha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+      "sourceLine": 34
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/{id}/prompt-revisions",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 19,
+          "source": "@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)"
+        },
+        {
+          "line": 40,
+          "source": "@PostMapping(\"/{id}/prompt-revisions\")"
+        },
+        {
+          "line": 46,
+          "source": "@PostMapping(\"/{id}/cancel\")"
+        }
+      ],
+      "role": "Customer own",
+      "mobileAdapter": "revise",
+      "contract": "SUCCEEDED/FAILED; JSON; Idempotency-Key; 202",
+      "sourceSha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+      "sourceLine": 40
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/{id}/cancel",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 19,
+          "source": "@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)"
+        },
+        {
+          "line": 40,
+          "source": "@PostMapping(\"/{id}/prompt-revisions\")"
+        },
+        {
+          "line": 46,
+          "source": "@PostMapping(\"/{id}/cancel\")"
+        }
+      ],
+      "role": "Customer own",
+      "mobileAdapter": "cancel",
+      "contract": "QUEUED/PROCESSING only",
+      "sourceSha256": "762b423c7d0cf230f500a1358b2b937022c45913fdefd289e6e7904d89a30d41",
+      "sourceLine": 46
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/generated-designs/{id}",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java",
+      "mappingDeclarations": [
+        {
+          "line": 19,
+          "source": "@GetMapping(\"/generated-designs/{id}\")"
+        }
+      ],
+      "role": "Customer own / Admin",
+      "mobileAdapter": "design",
+      "contract": "approved image/thumbnail URLs only",
+      "sourceSha256": "a0808443c6068e0d380f545dd443e300cdbe40e040566f06d4af93beadbe2154",
+      "sourceLine": 19
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/generated-designs/{id}/moderation",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java",
+      "mappingDeclarations": [
+        {
+          "line": 25,
+          "source": "@PatchMapping(\"/admin/generated-designs/{id}/moderation\")"
+        }
+      ],
+      "role": "Admin",
+      "mobileAdapter": "moderate",
+      "contract": "PENDING only; APPROVED/REJECTED",
+      "sourceSha256": "a0808443c6068e0d380f545dd443e300cdbe40e040566f06d4af93beadbe2154",
+      "sourceLine": 25
+    },
+    {
+      "method": "GET",
+      "path": "/internal/v1/generated-designs/{id}/validation",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 18,
+          "source": "@GetMapping(\"/generated-designs/{id}/validation\")"
+        },
+        {
+          "line": 26,
+          "source": "@GetMapping(\"/cake-requests/{id}/generation-context\")"
+        }
+      ],
+      "role": "service scope cake-ai:design:validate",
+      "mobileAdapter": null,
+      "contract": "ownerMatches/requestMatches/moderation/jobStatus",
+      "sourceSha256": "8d00825a5b95fae65d3ad6075f97b295d0db98841097a1a7cc155ce753d2208c",
+      "sourceLine": 18
+    },
+    {
+      "method": "GET",
+      "path": "/internal/v1/cake-requests/{id}/generation-context",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignValidationController.java",
+      "mappingDeclarations": [
+        {
+          "line": 18,
+          "source": "@GetMapping(\"/generated-designs/{id}/validation\")"
+        },
+        {
+          "line": 26,
+          "source": "@GetMapping(\"/cake-requests/{id}/generation-context\")"
+        }
+      ],
+      "role": "service scope cake-ai:design:validate",
+      "mobileAdapter": null,
+      "contract": "hasJobs",
+      "sourceSha256": "8d00825a5b95fae65d3ad6075f97b295d0db98841097a1a7cc155ce753d2208c",
+      "sourceLine": 26
+    },
+    {
+      "method": "GET",
+      "path": "/storage/**",
+      "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/PublicStorageController.java",
+      "mappingDeclarations": [
+        {
+          "line": 21,
+          "source": "@GetMapping(\"/storage/**\")"
+        }
+      ],
+      "role": "public",
+      "mobileAdapter": null,
+      "contract": "fallback byte route; not a signed URL",
+      "sourceSha256": "a474b266915de6ae4a9b8d1088093191dabd84395351d7744f352b1dfc10b256",
+      "sourceLine": 21
+    }
+  ],
+  "publicUserOperations": 7,
+  "internalServiceOperations": 2,
+  "storageRoutes": 1,
+  "mobileDoesNotCallInternal": true
+}

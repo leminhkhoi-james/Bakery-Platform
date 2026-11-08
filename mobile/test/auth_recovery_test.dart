@@ -1,3 +1,4 @@
+import 'package:bakery_mobile/features/chat/data/pending_chat_journal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bakery_mobile/app/theme/app_theme.dart';
@@ -40,6 +41,7 @@ void main() {
         }, []);
       };
       final w = LiveWorkspace(
+        chatJournal: MemoryPendingChatJournal(),
         environment: environment(),
         transport: transport,
         store: MemorySessionStore(),
@@ -93,6 +95,7 @@ void main() {
           kind: ApiFailureKind.connection,
         );
         final w = LiveWorkspace(
+          chatJournal: MemoryPendingChatJournal(),
           environment: environment(),
           transport: transport,
           store: MemorySessionStore(),

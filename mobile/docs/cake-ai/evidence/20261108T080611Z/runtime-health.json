@@ -1,0 +1,24 @@
+{
+  "/actuator/health": {
+    "http": 200,
+    "body": {
+      "groups": [
+        "liveness",
+        "readiness"
+      ],
+      "status": "UP"
+    }
+  },
+  "/actuator/health/readiness": {
+    "http": 200,
+    "body": {
+      "status": "UP"
+    }
+  },
+  "/actuator/health/liveness": {
+    "http": 200,
+    "body": {
+      "status": "UP"
+    }
+  }
+}
