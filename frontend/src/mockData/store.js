@@ -36,9 +36,9 @@ export function migrateDemoState(state) {
     if (!state.payments.some((p) => p.id === seedPayment.id)) {
       const seedOrder = seed.subscriptionOrders.find((o) => o.id === seedPayment.subscriptionOrderId)
       if (seedOrder && !state.subscriptionOrders.some((o) => o.id === seedOrder.id)) {
-        state.subscriptionOrders.unshift(seedOrder)
+        state.subscriptionOrders.push(seedOrder)
       }
-      state.payments.unshift(seedPayment)
+      state.payments.push(seedPayment)
       changed = true
     }
   }
@@ -190,12 +190,19 @@ export function mergeDemoStates(local, remote) {
   }
 }
 
-export function createDemoStore(storage) {
+export function createDemoStore(storage, { readOnly = false } = {}) {
   let state
   try { const saved = JSON.parse(storage?.getItem(DEMO_STORAGE_KEY) || 'null'); if (validSave(saved)) state = saved } catch { /* A corrupt demo save is discarded; auth storage is never read. */ }
   state ||= createSeed()
-  migrateDemoState(state)
+  if (!readOnly) migrateDemoState(state)
   const listeners = new Set()
+  const seedPlans = createSeed().plans
+  for (const sp of readOnly ? [] : seedPlans) {
+    const existing = state.plans.find((p) => p.id === sp.id || p.code === sp.code)
+    if (existing) {
+      existing.name = sp.name; existing.description = sp.description; existing.monthlyPrice = sp.monthlyPrice; existing.currency = sp.currency; existing.features = { ...sp.features }
+    } else state.plans.push(sp)
+  }
   const notify = () => { for (const fn of listeners) fn() }
   const broadcastSync = (snapshot) => {
     if (typeof window !== 'undefined' && typeof window.fetch === 'function' && window.location?.origin) {
@@ -236,13 +243,14 @@ export function createDemoStore(storage) {
     }
   }
   const save = () => {
+    if (readOnly) return
     try { storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)) } catch { /* Quota/private mode: demo remains in memory. */ }
     notify()
     broadcastSync(state)
   }
   save()
-  void pullSync()
-  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  if (!readOnly) void pullSync()
+  if (!readOnly && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
     const handleSync = () => {
       if (typeof document === 'undefined' || !document.hidden) {
         void pullSync()

@@ -1,7 +1,6 @@
 import { vendorMoney, vendorAddress } from '../../services/vendorPresentation.js'
 import { bakeryReviewText } from '../../services/bakeryReviewModels.js'
 import { displayReference } from '../../services/displayReference.js'
-import RefreshButton from '../common/RefreshButton.jsx'
 import EntityActionButtons from '../common/EntityActionButtons.jsx'
 import { uiLabel, cleanPresentationLabel, publicCopy } from '../../services/uiLabels.js'
 import React, { useRef, useState } from 'react'
@@ -40,7 +39,7 @@ export function CreateBakery({ onCreated, footerExternal = false, onBusy }) {
 export default function BakeryManager({ bakeryId, initialProfile }) {
   const { user, roles } = useAuth()
   const membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
-  const profile = useCatalogResource(loadVendorProfile, { bakeryId })
+  const profile = useCatalogResource(loadVendorProfile, { bakeryId, includeOnboarding: roles.includes('CUSTOMER') })
   const [confirmedProfile, setProfile] = useState(initialProfile?.id === bakeryId ? initialProfile : null), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [revision, setRevision] = useState(0), [tab, setTab] = useState('info'), [editor, setEditor] = useState(null), [deleting, setDeleting] = useState(null), [operationsConfirmed, setOperationsConfirmed] = useState(false), [profileDirty, setProfileDirty] = useState(false)
   const inFlight = useRef(false)
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
@@ -64,7 +63,7 @@ export default function BakeryManager({ bakeryId, initialProfile }) {
     {profile.status === 'loading' ? <p role="status">Đang tải hồ sơ…</p> : profile.error && <ApiErrorMessage error={profile.error} retry={profile.reload} />}
     {membership.error && <ApiErrorMessage error={membership.error} retry={membership.reload} />}
     {current?.status === 'DRAFT' && current.reviewDecision?.status === 'RETURNED' && <p className="sc-note">Hồ sơ đã được trả lại: {publicCopy(bakeryReviewText(current.reviewDecision.reason), 'Chưa có lý do được ghi nhận.')}</p>}
-    <RefreshButton disabled={busy} onClick={profile.reload}>Tải lại hồ sơ</RefreshButton></section>
+  </section>
     <nav className="sc-tabs" aria-label="Hồ sơ tiệm bánh">{[['info','Thông tin tiệm'],['delivery','Địa chỉ & giao hàng'],['hours','Giờ mở cửa'],['images','Hình ảnh']].map(([key,label]) => <button key={key} aria-pressed={tab === key} disabled={busy} onClick={() => setTab(key)}>{label}</button>)}</nav>
     {tab === 'info' && <section className={panelClass}><h3>Thông tin tiệm</h3><dl className="sc-vendor-summary-grid">{[['name','Tên tiệm'],['phoneNumber','Số điện thoại'],['email','Email'],['description','Mô tả tiệm']].map(([key,label]) => <div key={key}><dt>{label}</dt><dd>{publicCopy(current?.[key], 'Chưa cập nhật')}</dd></div>)}</dl></section>}
     {(tab === 'delivery' || tab === 'hours') && (operations ? <>{(tab === 'delivery' ? ['addresses','serviceAreas'] : ['businessHours']).map(kind => <section key={kind} className={panelClass}><div className="sc-toolbar-actions"><h3>{{ addresses: 'Địa chỉ tiệm', serviceAreas: 'Khu vực giao hàng', businessHours: 'Giờ mở cửa' }[kind]}</h3>{canEdit && <button disabled={busy} className={buttonClass} onClick={() => { setOperationsConfirmed(false); setEditor(kind) }}><Icon name="edit" />Chỉnh sửa</button>}</div>{kind === 'businessHours' ? <div className="sc-owner-hours">{['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'].map((day,i) => { const row = operations.businessHours.find(item => Number(item.dayOfWeek) === i+1); return <div key={day}><strong>{day}</strong><span>{!row ? 'Chưa thiết lập' : row.closed ? 'Nghỉ' : row.opensAt && row.closesAt ? row.opensAt.slice(0,5) + ' – ' + row.closesAt.slice(0,5) : 'Chưa cập nhật giờ'}</span></div> })}</div> : operations[kind].length ? <ul className="space-y-3">{operations[kind].map((row,index) => <li key={row.id || index} className="sc-owner-operation-row"><div>{kind === 'addresses' ? <><strong>{vendorAddress(row)}</strong>{row.isPrimary && <span>Địa chỉ chính</span>}</> : <><strong>{[row.district,row.city].filter(Boolean).join(', ')}</strong><p>Phí giao: {vendorMoney(row.deliveryFee)} · Đơn tối thiểu: {vendorMoney(row.minimumOrder)}</p><span>{row.active ? 'Đang phục vụ' : 'Ngừng phục vụ'}</span></>}</div>{canEdit && <button className="sc-icon-button" disabled={busy} aria-label="Xóa dòng" onClick={() => setDeleting({ kind, index })}><Icon name="delete" /></button>}</li>)}</ul> : <p>Chưa cập nhật</p>}</section>)}</> : <p>Chưa tải được cấu hình vận hành. Vui lòng tải lại hồ sơ trước khi chỉnh sửa.</p>)}

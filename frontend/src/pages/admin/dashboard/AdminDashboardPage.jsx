@@ -6,41 +6,111 @@ import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadAdminDashboard } from '../../../services/adminDashboardService.js'
 import { buildAdminDashboard, dashboardMoney, dashboardNumber, dashboardOrderName, dashboardDateTime, DASHBOARD_PENDING_ORDER_STATUS } from '../../../services/adminDashboardModels.js'
+import { getDemoStore, demoRuntime } from '../../../mockData/runtime.js'
+import { dashboardSupplement } from '../../../mockData/admin/dashboardSnapshot.js'
 import { orderStatusLabel } from '../../../services/orderModels.js'
 import { StatusDistribution } from './DashboardCharts.jsx'
 import AdminWorkQueue from './AdminWorkQueue.jsx'
 import './admin-dashboard.css'
 
-const metrics = [
-  ['bakeries', 'Tổng tiệm bánh', 'storefront', 'admin-vendors', 'scale'],
-  ['pendingBakeries', 'Tiệm chờ duyệt', 'pending_actions', 'admin-vendors?status=PENDING_APPROVAL', 'urgent'],
-  ['users', 'Tổng người dùng', 'group', 'admin-users', 'scale'],
-  ['products', 'Sản phẩm', 'cake', null, 'scale'],
-  ['orders', 'Tổng đơn hàng', 'shopping_bag', 'admin-orders', 'orders'],
-  ['revenue', 'Doanh thu gói dịch vụ', 'account_balance_wallet', 'admin-payments', 'revenue'],
-  ['requests', 'Yêu cầu báo giá', 'request_quote', null, 'orders'],
-  ['offers', 'Báo giá', 'price_check', null, 'orders'],
-  ['pendingPayments', 'Gói dịch vụ chờ duyệt', 'receipt_long', 'admin-payments', 'urgent'],
-  ['pendingOrders', 'Đơn hàng chờ xử lý', 'assignment_late', 'admin-orders?status=' + DASHBOARD_PENDING_ORDER_STATUS, 'urgent'],
-]
-
 export default function AdminDashboardPage({ onNavigate }) {
   const { user } = useAuth()
   const resource = useCatalogResource(loadAdminDashboard, { user: { id: user?.id, roles: user?.roles || [] } })
-  const dashboard = buildAdminDashboard(resource.data)
+  const demoStore = getDemoStore()
+  const runtime = demoRuntime || (demoStore ? { store: demoStore } : null)
+  const supplement = dashboardSupplement(runtime, user, resource.data || {})
+  const combinedData = { ...resource.data, ...supplement }
+  const dashboard = buildAdminDashboard(combinedData)
   const loading = resource.status === 'loading'
   const failing = resource.status === 'error' || Object.values(resource.data || {}).some((item) => item.state === 'error')
   const go = (route) => () => onNavigate(route)
   const orderRoute = (row) => 'admin-orders?orderId=' + encodeURIComponent(row.id)
   const workGroups = [
     { key: 'bakeries', title: 'Tiệm chờ duyệt', icon: 'storefront', route: 'admin-vendors?status=PENDING_APPROVAL', items: dashboard.pendingBakeries?.map((row) => ({ key: row.id, name: row.name || 'Tiệm bánh', route: 'admin-vendors?bakeryId=' + row.id })) },
-    { key: 'payments', title: 'Chứng từ chờ duyệt', icon: 'receipt_long', route: 'admin-payments', items: dashboard.pendingPayments?.map((row) => ({ key: row.id, name: dashboard.bakeries?.find((bakery) => bakery.id === row.bakeryId)?.name || 'Chứng từ mua gói', detail: row.amount == null ? undefined : dashboardMoney(row.amount, row.currency || 'VND'), route: 'admin-payments?paymentId=' + row.id })) },
+    { key: 'payments', title: 'Gói dịch vụ chờ duyệt', icon: 'receipt_long', route: 'admin-payments', items: dashboard.pendingPayments?.map((row) => ({ key: row.id, name: dashboard.bakeries?.find((bakery) => bakery.id === row.bakeryId)?.name || 'Chứng từ mua gói', detail: row.amount == null ? undefined : dashboardMoney(row.amount, row.currency || 'VND'), route: 'admin-payments?paymentId=' + row.id })) },
     { key: 'moderation', title: 'Kiểm duyệt nội dung', icon: 'fact_check', route: 'admin-moderation', items: dashboard.moderation?.map((row) => ({ key: row.kind + row.id, name: row.label, route: 'admin-moderation?kind=' + row.kind + '&id=' + row.id })) },
   ]
 
   const pendingPaymentsCount = dashboard.counts?.pendingPayments || 0
   const pendingBakeriesCount = dashboard.counts?.pendingBakeries || 0
   const hasUrgentWork = pendingPaymentsCount > 0 || pendingBakeriesCount > 0
+
+  const cards = [
+    {
+      id: 'revenue',
+      title: 'Doanh thu gói dịch vụ',
+      icon: 'account_balance_wallet',
+      route: 'admin-revenue',
+      variant: 'revenue',
+      isMissing: dashboard.revenue == null,
+      renderedValue: dashboard.revenue == null
+        ? '—'
+        : Object.keys(dashboard.revenue).length
+          ? Object.entries(dashboard.revenue).map(([code, amount]) => (
+              <span key={code}>{dashboardMoney(amount, code)}</span>
+            ))
+          : dashboardMoney(0),
+      hasUrgentDot: false,
+      subContent: <span className="sc-kpi-sub-text">Doanh thu thực nhận</span>,
+    },
+    {
+      id: 'bakeries',
+      title: 'Tiệm bánh',
+      icon: 'storefront',
+      route: 'admin-vendors',
+      variant: 'scale',
+      isMissing: dashboard.counts?.bakeries == null,
+      renderedValue: dashboardNumber(dashboard.counts?.bakeries),
+      hasUrgentDot: (dashboard.counts?.pendingBakeries || 0) > 0,
+      subContent: dashboard.counts?.pendingBakeries != null ? (
+        <button
+          type="button"
+          className={`sc-kpi-sub-text sc-kpi-sub-text--clickable ${(dashboard.counts.pendingBakeries || 0) > 0 ? 'sc-kpi-sub-text--highlight' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onNavigate('admin-vendors?status=PENDING_APPROVAL') }}
+          aria-label={`${dashboard.counts.pendingBakeries} Tiệm chờ duyệt`}
+          title="Xem danh sách tiệm chờ duyệt"
+        >
+          <span>{dashboard.counts.pendingBakeries} Tiệm chờ duyệt</span>
+        </button>
+      ) : (
+        <span className="sc-kpi-sub-text">Tiệm chờ duyệt: —</span>
+      ),
+    },
+    {
+      id: 'orders',
+      title: 'Đơn hàng',
+      icon: 'shopping_bag',
+      route: 'admin-orders',
+      variant: 'orders',
+      isMissing: dashboard.counts?.orders == null,
+      renderedValue: dashboardNumber(dashboard.counts?.orders),
+      hasUrgentDot: (dashboard.counts?.pendingOrders || 0) > 0,
+      subContent: dashboard.counts?.pendingOrders != null ? (
+        <button
+          type="button"
+          className={`sc-kpi-sub-text sc-kpi-sub-text--clickable ${(dashboard.counts.pendingOrders || 0) > 0 ? 'sc-kpi-sub-text--highlight' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onNavigate('admin-orders?status=' + DASHBOARD_PENDING_ORDER_STATUS) }}
+          aria-label={`${dashboard.counts.pendingOrders} Đơn chờ xử lý`}
+          title="Xem danh sách đơn chờ xử lý"
+        >
+          <span>{dashboard.counts.pendingOrders} Đơn chờ xử lý</span>
+        </button>
+      ) : (
+        <span className="sc-kpi-sub-text">Đơn chờ xử lý: —</span>
+      ),
+    },
+    {
+      id: 'users',
+      title: 'Người dùng',
+      icon: 'group',
+      route: 'admin-users',
+      variant: 'scale',
+      isMissing: dashboard.counts?.users == null,
+      renderedValue: dashboardNumber(dashboard.counts?.users),
+      hasUrgentDot: false,
+      subContent: <span className="sc-kpi-sub-text">Tài khoản thành viên</span>,
+    },
+  ]
 
   return (
     <AdminFrame
@@ -106,45 +176,39 @@ export default function AdminDashboardPage({ onNavigate }) {
         )}
 
         <section className="sc-dashboard-kpis" aria-label="Chỉ số tổng quan">
-          {metrics.map(([key, label, icon, route, variant]) => (
-            <article key={key} className={'sc-panel sc-dashboard-kpi sc-kpi--' + (variant || 'default')}>
-              <div>
+          {cards.map((card) => (
+            <article
+              key={card.id}
+              className="sc-panel sc-dashboard-kpi sc-dashboard-kpi--clickable"
+              onClick={card.route ? go(card.route) : undefined}
+            >
+              {/* Ở trên: icon + tiêu đề */}
+              <div className="sc-kpi-header">
                 <span className="sc-kpi-icon-wrap">
-                  <Icon name={icon} />
+                  <Icon name={card.icon} />
                 </span>
-                <span>{label}</span>
-                {variant === 'urgent' && (dashboard.counts?.[key] > 0) && (
-                  <span className="sc-kpi-priority-dot" title="Cần xử lý" />
-                )}
+                <span className="sc-kpi-title" title={card.title}>{card.title}</span>
               </div>
-              <div className="sc-dashboard-kpi-footer">
+
+              {/* Ở giữa: số liệu lớn */}
+              <div className="sc-kpi-body">
                 <strong
                   className="sc-metric-value"
                   aria-label={
                     loading
                       ? 'Đang tải số liệu'
-                      : (key === 'revenue' ? dashboard.revenue == null : dashboard.counts?.[key] == null)
+                      : card.isMissing
                         ? 'Chưa có số liệu'
                         : undefined
                   }
                 >
-                  {loading
-                    ? '…'
-                    : key === 'revenue'
-                      ? dashboard.revenue == null
-                        ? '—'
-                        : Object.keys(dashboard.revenue).length
-                          ? Object.entries(dashboard.revenue).map(([code, amount]) => (
-                              <span key={code}>{dashboardMoney(amount, code)}</span>
-                            ))
-                          : dashboardMoney(0)
-                      : dashboardNumber(dashboard.counts?.[key])}
+                  {loading ? '…' : card.renderedValue}
                 </strong>
-                {route && (
-                  <button onClick={go(route)} aria-label={'Xem ' + label.toLocaleLowerCase('vi')}>
-                    <Icon name="arrow_forward" />
-                  </button>
-                )}
+              </div>
+
+              {/* Bên dưới: mô tả nhỏ */}
+              <div className="sc-dashboard-kpi-footer">
+                {loading ? <span className="sc-kpi-sub-text">Đang tải…</span> : card.subContent}
               </div>
             </article>
           ))}
@@ -199,12 +263,14 @@ export default function AdminDashboardPage({ onNavigate }) {
               {dashboard.recentOrders.length ? (
                 <DataTable label="Đơn hàng gần đây" className="sc-admin-fixed-table sc-admin-recent-table">
                   <colgroup>
-                    {[20, 20, 20, 20, 20].map((width, index) => (
+                    <col style={{ width: '60px' }} />
+                    {[24, 20, 20, 20, 16].map((width, index) => (
                       <col key={index} style={{ width: width + '%' }} />
                     ))}
                   </colgroup>
                   <thead>
                     <tr>
+                      <th style={{ width: '60px', textAlign: 'center' }}>STT</th>
                       <th>Đơn hàng</th>
                       <th>Trạng thái</th>
                       <th className="sc-money">Giá trị</th>
@@ -215,8 +281,11 @@ export default function AdminDashboardPage({ onNavigate }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {dashboard.recentOrders.map((row) => (
+                    {dashboard.recentOrders.map((row, index) => (
                       <tr key={row.id}>
+                        <td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>
+                          {index + 1}
+                        </td>
                         <td>
                           <strong>{dashboardOrderName(row)}</strong>
                           <small>{cleanPresentationLabel(row.customerName || row.bakeryName, 'Đơn bánh')}</small>

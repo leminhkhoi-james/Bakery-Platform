@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import AdminSidebar from '../../layouts/admin/AdminSidebar.jsx'
-import { demoRuntime, getDemoStore } from '../../mockData/runtime.js'
+import { useCatalogResource } from '../../hooks/useCatalogResource.js'
+import { loadAdminPending } from '../../services/adminSummaryService.js'
 import { useAuth } from '../../context/useAuth.js'
 import { PortalHeader } from '../common/WorkspaceUI.jsx'
 import BackgroundOrnaments from '../common/BackgroundOrnaments.jsx'
@@ -25,46 +26,20 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
   const { user } = useAuth()
   const heading = ADMIN_PAGE_HEADERS[activeTab] || { title }
   const [newPaymentNotice, setNewPaymentNotice] = useState(null)
+  const pending = useCatalogResource(loadAdminPending)
+  const lastPayment = useRef(undefined)
   useEffect(() => {
-    const store = (typeof getDemoStore === 'function' ? getDemoStore() : null) || demoRuntime?.store
-    let lastSeenId = store?.state?.payments?.find((p) => p.status === 'SUBMITTED')?.id || null
-
-    const checkStore = () => {
-      const latest = store?.state?.payments?.find((p) => p.status === 'SUBMITTED')
-      if (latest && latest.id !== lastSeenId) {
-        lastSeenId = latest.id
-        const bakery = store?.state?.bakeries?.find((b) => b.id === latest.bakeryId)
-        setNewPaymentNotice({
-          id: latest.id,
-          name: latest.submittedByName || bakery?.name || 'Tiệm bánh đối tác',
-        })
-      }
+    if (!pending.data) return
+    const latest = pending.data.latestPayment
+    if (lastPayment.current !== undefined && latest && latest.id !== lastPayment.current) {
+      setNewPaymentNotice({ id: latest.id, name: latest.submittedByName || 'Tiệm bánh đối tác' })
     }
-
-    const unsub = store?.subscribe?.(checkStore)
-
-    const handleCustom = () => {
-      const latest = store?.state?.payments?.find((p) => p.status === 'SUBMITTED')
-      if (latest) {
-        lastSeenId = latest.id
-        const bakery = store?.state?.bakeries?.find((b) => b.id === latest.bakeryId)
-        setNewPaymentNotice({
-          id: latest.id,
-          name: latest.submittedByName || bakery?.name || 'Tiệm bánh đối tác',
-        })
-      }
-    }
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('sweetcake_refresh_payments', handleCustom)
-    }
-    return () => {
-      unsub?.()
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('sweetcake_refresh_payments', handleCustom)
-      }
-    }
-  }, [])
+    lastPayment.current = latest?.id || null
+  }, [pending.data])
+  useEffect(() => {
+    const timer = setInterval(pending.reload, 30000)
+    return () => clearInterval(timer)
+  }, [pending.reload])
   useEffect(() => {
     if (!mobile) return
     const releaseScroll = lockPageScroll(document)

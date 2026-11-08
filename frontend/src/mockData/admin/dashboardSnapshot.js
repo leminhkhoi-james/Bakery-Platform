@@ -6,7 +6,7 @@ export function dashboardSupplement(runtime, user, collections) {
   runtime.store.requireUser(user, 'ADMIN')
   const state = runtime.store.state
   return {
-    ...Object.fromEntries(['products', 'requests', 'offers', 'designs'].map((key) => [key, { state: 'ready', source: 'demo', rows: structuredClone(state[key] || []) }])),
+    ...Object.fromEntries(['products', 'requests', 'offers', 'designs', 'plans'].map((key) => [key, { state: 'ready', source: 'demo', rows: structuredClone(state[key] || []) }])),
     reviews: { state: 'ready', source: 'demo', rows: state.orders.filter((order) => order.review).map((order) => structuredClone({ ...order.review, id: order.id, orderId: order.id })) },
   }
 }

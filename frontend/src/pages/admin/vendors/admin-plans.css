@@ -23,8 +23,10 @@
 .sc-admin-plan-benefits dt { min-width: 0; color: var(--sc-color-muted); overflow-wrap: anywhere; }
 .sc-admin-plan-benefits dd { max-width: 60%; text-align: right; font-weight: 600; overflow-wrap: anywhere; }
 .sc-admin-plan-muted { font-size: .8rem; color: var(--sc-color-muted); }
-.sc-admin-plan-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; border-top: 1px solid var(--sc-color-border); padding-top: .85rem; }
-.sc-admin-plan-actions .sc-button { width: auto; min-height: 2.35rem; padding: .45rem .65rem; font-size: .78rem; gap: .35rem; }
+.sc-admin-plan-actions { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: .4rem; border-top: 1px solid var(--sc-color-border); padding-top: .85rem; }
+.sc-admin-plan-actions .sc-button { width: auto; min-height: 2.2rem; max-width: 100%; padding: .35rem .55rem; font-size: .75rem; gap: .3rem; white-space: normal; color: var(--sc-color-primary); }
+.sc-admin-plan-actions .sc-icon { flex-shrink: 0; font-size: 1rem; }
+.sc-admin-plan-actions .sc-plan-archive-action { background: #fff7f8; }
 .sc-plan-menu { position: relative; }
 .sc-plan-menu-items { position: absolute; z-index: 20; top: calc(100% + .4rem); right: 0; width: 14rem; max-width: calc(100vw - 3rem); padding: .35rem; border: 1px solid var(--sc-color-border); border-radius: .75rem; background: #ffffff; box-shadow: var(--sc-shadow-card); }
 .sc-plan-menu-items button { display: flex; align-items: center; gap: .5rem; width: 100%; min-height: 2.6rem; padding: .5rem .6rem; border-radius: .5rem; font-size: .8rem; text-align: left; }

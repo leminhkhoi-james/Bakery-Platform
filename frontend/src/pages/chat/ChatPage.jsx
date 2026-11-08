@@ -19,6 +19,7 @@ export function CustomerChatPage({ routeSearch, onNavigate }) {
 }
 
 export function VendorChatPage({ routeSearch = '', onNavigate }) {
-  const { bakeryId, selectBakery, user, available } = useVendorBakery(routeSearch)
-  return <VendorFrame title="Tin nhắn" activeTab="chat" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-owner-chat-page"><BakerySelector bakeryId={bakeryId} available={available} showError={!bakeryId} onSelect={(id) => { selectBakery(id); onNavigate('vendor-chat?bakeryId=' + id, null, { replace: true }) }} />{bakeryId ? <OwnerInbox key={user.id + ':' + bakeryId} bakeryId={bakeryId} userId={user.id} routeSearch={routeSearch} onNavigate={onNavigate} /> : <p role="status">Chọn cửa hàng bạn có quyền quản lý để xem tin nhắn.</p>}</div></VendorFrame>
+  const owner = useVendorBakery(routeSearch)
+  const { bakeryId, selectBakery, user, available } = owner
+  return <VendorFrame owner={owner} title="Tin nhắn" activeTab="chat" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-owner-chat-page"><BakerySelector bakeryId={bakeryId} available={available} showError={!bakeryId} onSelect={(id) => { selectBakery(id); onNavigate('vendor-chat?bakeryId=' + id, null, { replace: true }) }} />{bakeryId ? <OwnerInbox key={user.id + ':' + bakeryId} bakeryId={bakeryId} userId={user.id} routeSearch={routeSearch} onNavigate={onNavigate} /> : <p role="status">Chọn cửa hàng bạn có quyền quản lý để xem tin nhắn.</p>}</div></VendorFrame>
 }

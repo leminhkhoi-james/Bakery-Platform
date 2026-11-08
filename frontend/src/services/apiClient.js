@@ -21,12 +21,7 @@ export const getAuthToken = () => {
 
 export const setAuthToken = (token) => {
   accessToken = token || ''
-  // Remove credentials cached by the previous demo client. Never persist new JWTs.
-  try {
-    localStorage.removeItem('sweetcake_access_token')
-  } catch {
-    // Ignore localStorage errors
-  }
+  // Legacy browser data is preserved but never trusted as an authenticated token.
 }
 
 export const onSessionExpired = (listener) => {
@@ -82,9 +77,8 @@ export class ApiError extends Error {
  * Execute HTTP request
  * @param {string} endpoint - API endpoint (e.g. '/auth/login', '/products')
  * @param {RequestInit} [options] - fetch options
- * @param {Function} [mockFallback] - optional fallback function if network fails or backend is unreachable
  */
-export async function request(endpoint, options = {}, mockFallback = null) {
+export async function request(endpoint, options = {}) {
   const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`
 
   const { auth = true, retryAuth = true, ...fetchOptions } = options
@@ -116,10 +110,14 @@ export async function request(endpoint, options = {}, mockFallback = null) {
       // Another request may have rotated the token while this one was in flight.
       if (version !== sessionVersion) throw new ApiError('Phiên đăng nhập đã kết thúc.', 401)
       if (!getAuthToken() || getAuthToken() === token) await refreshAccessToken()
-      return request(endpoint, { ...options, retryAuth: false }, mockFallback)
+      return request(endpoint, { ...options, retryAuth: false })
     }
     if (response.status === 401 && auth && !isSessionEndpoint && version === sessionVersion) {
       clearAuthSession()
+    }
+
+    if (response.ok && !['GET', 'HEAD'].includes(fetchOptions.method || 'GET') && !isSessionEndpoint && typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('sweetcake:api-mutated'))
     }
 
     // Handle 204 No Content
@@ -128,12 +126,17 @@ export async function request(endpoint, options = {}, mockFallback = null) {
     }
 
     const contentType = response.headers.get('content-type')
-    const isJson = contentType && contentType.includes('application/json')
-    const data = isJson ? await response.json() : await response.text()
+    const isJson = contentType && /(?:application\/json|\+json)(?:;|$)/i.test(contentType)
+    let data
+    try {
+      data = isJson ? await response.json() : await response.text()
+    } catch {
+      throw new ApiError('Phản hồi từ hệ thống không hợp lệ. Vui lòng thử lại.', response.ok ? 502 : response.status)
+    }
 
     if (!response.ok) {
       const errorMessage =
-        (typeof data === 'object' && (data.message || data.error)) ||
+        (data && typeof data === 'object' && (data.message || data.error || data.detail || data.title)) ||
         `Request failed with status ${response.status}`
       throw new ApiError(errorMessage, response.status, data)
     }
@@ -145,11 +148,6 @@ export async function request(endpoint, options = {}, mockFallback = null) {
 
     return data
   } catch (error) {
-    // If backend is down or network unreachable, and fallback is provided, use fallback
-    if (mockFallback && (error.name === 'TypeError' || error.status >= 500)) {
-      console.warn(`[API] Fallback to mock for ${endpoint} due to:`, error.message)
-      return mockFallback()
-    }
     if (error.name === 'TypeError' || error.name === 'TimeoutError') {
       throw new ApiError('Không thể kết nối backend. Vui lòng thử lại.', 0)
     }
@@ -158,38 +156,35 @@ export async function request(endpoint, options = {}, mockFallback = null) {
 }
 
 export const api = {
-  get: (endpoint, options = {}, fallback = null) =>
-    request(endpoint, { method: 'GET', ...options }, fallback),
-  post: (endpoint, body, options = {}, fallback = null) =>
+  get: (endpoint, options = {}) =>
+    request(endpoint, { method: 'GET', ...options }),
+  post: (endpoint, body, options = {}) =>
     request(
       endpoint,
       {
         method: 'POST',
         body: body instanceof FormData ? body : JSON.stringify(body),
         ...options,
-      },
-      fallback
+      }
     ),
-  put: (endpoint, body, options = {}, fallback = null) =>
+  put: (endpoint, body, options = {}) =>
     request(
       endpoint,
       {
         method: 'PUT',
         body: body instanceof FormData ? body : JSON.stringify(body),
         ...options,
-      },
-      fallback
+      }
     ),
-  patch: (endpoint, body, options = {}, fallback = null) =>
+  patch: (endpoint, body, options = {}) =>
     request(
       endpoint,
       {
         method: 'PATCH',
         body: body instanceof FormData ? body : JSON.stringify(body),
         ...options,
-      },
-      fallback
+      }
     ),
-  delete: (endpoint, options = {}, fallback = null) =>
-    request(endpoint, { method: 'DELETE', ...options }, fallback),
+  delete: (endpoint, options = {}) =>
+    request(endpoint, { method: 'DELETE', ...options }),
 }

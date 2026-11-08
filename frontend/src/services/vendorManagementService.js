@@ -1,6 +1,14 @@
-import { api, ApiError } from './apiClient.js'
+import { api as sharedApi, ApiError } from './apiClient.js'
 import { catalogQuery } from './catalogModels.js'
 import { bakeryPayload, productPayload, requireId, requireText, mapPage, mapManagedProduct, validateImage, productActions, operationsPayload } from './managementModels.js'
+import { onboardingService } from './onboardingService.js'
+
+// These management calls must never resolve through the display transport.
+const api = Object.fromEntries(['get', 'post', 'put', 'patch', 'delete'].map(method => [method, (...args) => {
+  const optionIndex = ['get', 'delete'].includes(method) ? 1 : 2
+  args[optionIndex] = { ...args[optionIndex], allowMockFallback: false }
+  return sharedApi[method](...args)
+}]))
 
 const bakeryPath = (id) => '/bakeries/' + requireId(id, 'Cửa hàng')
 const productPath = (bakeryId, id) => bakeryPath(bakeryId) + '/products/' + requireId(id, 'Sản phẩm')
@@ -12,7 +20,7 @@ export const vendorManagementService = {
     return mapPage(await api.get(bakeryPath(bakeryId) + '/products' + catalogQuery(params, ['query', 'categoryId', 'status', 'page', 'size', 'sort']), options), mapManagedProduct)
   },
   async getMembership(bakeryId, userId, options = {}) {
-    const members = list(await api.get(bakeryPath(bakeryId) + '/members', options))
+    const members = list(await sharedApi.get(bakeryPath(bakeryId) + '/members', options))
     return members.find((member) => member.userId === userId && member.status === 'ACTIVE') || null
   },
   async getCategories(bakeryId, options = {}) { return list(await api.get(bakeryPath(bakeryId) + '/categories', options)) },
@@ -25,6 +33,15 @@ export const vendorManagementService = {
     return data
   },
   async getPublicProfile(bakeryId, options = {}) { return api.get(bakeryPath(bakeryId), { ...options, auth: false, retryAuth: false }) },
+  async getManagedProfile(bakeryId, includeOnboarding, options = {}) {
+    try { return await vendorManagementService.getPublicProfile(bakeryId, options) }
+    catch (error) {
+      if (error.status !== 404 || !includeOnboarding) throw error
+      const profile = await onboardingService.get(null, options)
+      if (profile?.id?.toLowerCase() !== bakeryId.toLowerCase()) throw error
+      return profile
+    }
+  },
   async createBakery(input) { return bakeryDto(await api.post('/bakeries', bakeryPayload(input, true))) },
   async updateBakery(bakeryId, input) {
     const bakery = bakeryDto(await api.patch(bakeryPath(bakeryId), bakeryPayload(input)))
@@ -73,6 +90,6 @@ export const vendorManagementService = {
   },
 }
 export const loadManagedProducts = ({ bakeryId, ...params }, options) => vendorManagementService.getProducts(bakeryId, params, options)
-export const loadVendorMembership = ({ bakeryId, userId }, options) => vendorManagementService.getMembership(bakeryId, userId, options)
+export const loadVendorMembership = ({ bakeryId, userId }, options) => vendorManagementService.getMembership(bakeryId, userId, { ...options, allowMockFallback: false })
 export const loadManagedCategories = ({ bakeryId }, options) => vendorManagementService.getCategories(bakeryId, options)
-export const loadVendorProfile = ({ bakeryId }, options) => vendorManagementService.getPublicProfile(bakeryId, options)
+export const loadVendorProfile = ({ bakeryId, includeOnboarding = false }, options) => vendorManagementService.getManagedProfile(bakeryId, includeOnboarding, options)

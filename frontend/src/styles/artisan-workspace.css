@@ -99,3 +99,7 @@
   .sc-tabs button { flex: 1 1 auto; }
   .sc-offer-filters { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Restored address form controls. */
+.sc-address-details .sc-button { width: fit-content; max-width: 100%; height: 40px; min-height: 40px; max-height: 40px; flex: 0 0 auto; align-self: center; padding: 8px 12px; gap: 6px; font-size: 14px; line-height: 20px; }
+.sc-address-form-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; align-self: start; justify-content: flex-end; gap: 10px; }

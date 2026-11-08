@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
-import RefreshButton from '../../../components/common/RefreshButton.jsx'
 import { EmptyPanel, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { useAuth } from '../../../context/useAuth.js'
 import { adminManagementService, loadAdminPlans } from '../../../services/adminManagementService.js'
 import { ApiState, ApiErrorMessage, panelClass } from '../../../components/management/ApiState.jsx'
-import { PLAN_ACTIONS, planActions, planFeedbackError } from '../../../services/planPresentation.js'
+import { PLAN_ACTIONS, planActions, planFeedbackError, sortPlansByTier } from '../../../services/planPresentation.js'
 import { AdminPlanForm } from './AdminPlanForm.jsx'
 import AdminPlanCard from './AdminPlanCard.jsx'
 import AdminPlanActionDialog from './AdminPlanActionDialog.jsx'
@@ -27,6 +26,7 @@ export default function AdminPlansPage({ onNavigate }) {
       : [...(resource.data || []), confirmed.plan]
   }
   const currentPlan = confirmation && plans?.find((plan) => plan.id === confirmation.plan.id)
+  const sortedPlans = plans ? sortPlansByTier(plans) : null
   const unavailable = resource.status !== 'ready' || Boolean(resource.refreshing)
   const stale = !!confirmation && !unavailable && (!currentPlan || currentPlan.status !== confirmation.plan.status || !planActions(currentPlan.status).includes(confirmation.action))
   async function mutate(action, message = 'Đã lưu gói dịch vụ.') {
@@ -46,8 +46,8 @@ export default function AdminPlansPage({ onNavigate }) {
   }
   return <AdminFrame activeTab="admin-plans" onNavigate={onNavigate}>
     <section className={panelClass + ' sc-admin-plans'}>
-      <div className="sc-admin-plans-toolbar"><p>{plans ? plans.length + ' gói dịch vụ' : 'Danh mục gói dịch vụ'}</p><div><RefreshButton disabled={locked} onClick={resource.reload}>Tải lại</RefreshButton><button type="button" disabled={busy || !canManage} className="sc-button" onClick={() => { setError(null); setNotice(''); setAdding(true); setSelected(null) }}><Icon name="add" />Tạo gói mới</button></div></div>
-      <ApiState resource={resource}>{plans && (plans.length ? <div className="sc-admin-plans-grid">{plans.map((plan) => <AdminPlanCard key={plan.id} plan={plan} disabled={locked || !canManage} onEdit={() => { if (!locked && canManage) { setError(null); setNotice(''); setSelected(plan); setAdding(false) } }} onAction={(action) => chooseAction(plan, action)} />)}</div> : <EmptyPanel title="Chưa có gói dịch vụ." description="Tạo gói mới để cấu hình quyền lợi cho tiệm bánh." icon="layers" />)}</ApiState>
+      <div className="sc-admin-plans-toolbar"><p>{plans ? plans.length + ' gói dịch vụ' : 'Danh mục gói dịch vụ'}</p><div><button type="button" disabled={busy || !canManage} className="sc-button" onClick={() => { setError(null); setNotice(''); setAdding(true); setSelected(null) }}><Icon name="add" />Tạo gói mới</button></div></div>
+      <ApiState resource={resource}>{sortedPlans && (sortedPlans.length ? <div className="sc-admin-plans-grid">{sortedPlans.map((plan) => <AdminPlanCard key={plan.id} plan={plan} disabled={locked || !canManage} onEdit={() => { if (!locked && canManage) { setError(null); setNotice(''); setSelected(plan); setAdding(false) } }} onAction={(action) => chooseAction(plan, action)} />)}</div> : <EmptyPanel title="Chưa có gói dịch vụ." description="Tạo gói mới để cấu hình quyền lợi cho tiệm bánh." icon="layers" />)}</ApiState>
       {error && !adding && !selected && !confirmation && <ApiErrorMessage error={planFeedbackError(error)} />}
       {notice && <p role="status" className="sc-feedback">{notice}</p>}
     </section>

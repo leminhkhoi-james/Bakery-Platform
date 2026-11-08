@@ -1,4 +1,5 @@
 import { api, ApiError, clearAuthSession, onSessionExpired, refreshAccessToken, setAuthToken } from './apiClient.js'
+import { displayRuntime } from '../mockData/displayRuntime.js'
 
 let snapshot = { user: null, status: 'loading', error: null }
 let restorePromise = null
@@ -21,14 +22,6 @@ function logoutPending(value) {
   } catch { return false }
 }
 
-function removeDemoSession() {
-  try {
-    for (const key of ['sweetcake_access_token', 'sweetcake_current_user', 'sweetcake_user_profile']) {
-      localStorage.removeItem(key)
-    }
-  } catch { /* Storage can be disabled by the browser. */ }
-}
-
 async function profile() {
   const user = await api.get('/auth/me', { retryAuth: false })
   if (!user?.id || !Array.isArray(user.roles)) {
@@ -49,13 +42,25 @@ export const authService = {
     return () => listeners.delete(listener)
   },
   getSnapshot: () => snapshot,
+  previewDemo(role) {
+    const user = displayRuntime?.previewUser(role)
+    if (!user) throw new ApiError('Chưa bật chế độ DEMO.', 400)
+    ++operation
+    clearAuthSession()
+    publish({ user, status: 'preview', error: null, source: 'demo' })
+    return user
+  },
+  async exitDemoPreview() {
+    ++operation
+    clearAuthSession()
+    return authService.restoreSession()
+  },
 
   restoreSession() {
     if (restorePromise) return restorePromise
-    if (snapshot.status === 'authenticated') return Promise.resolve(snapshot.user)
+    if (['authenticated', 'preview'].includes(snapshot.status)) return Promise.resolve(snapshot.user)
     const current = ++operation
     publish({ user: null, status: 'loading', error: null })
-    removeDemoSession()
     restorePromise = (async () => {
       try {
         if (logoutPending()) {
@@ -88,7 +93,6 @@ export const authService = {
     await restorePromise
     const current = ++operation
     clearAuthSession()
-    removeDemoSession()
     try {
       const token = await api.post('/auth/login', { email, password }, { auth: false, retryAuth: false })
       if (!token?.accessToken || token.tokenType !== 'Bearer') {
@@ -118,7 +122,15 @@ export const authService = {
 
   getCurrentUser: () => api.get('/auth/me'),
 
+  async reloadProfile() {
+    const current = operation
+    const user = await profile()
+    if (current === operation) publish({ user, status: 'authenticated', error: null })
+    return user
+  },
+
   async logout() {
+    if (snapshot.source === 'demo') { ++operation; clearAuthSession(); anonymous(); return }
     ++operation
     logoutPending(true)
     anonymous()
@@ -132,7 +144,6 @@ export const authService = {
       else failure = error
     } finally {
       clearAuthSession()
-      removeDemoSession()
       anonymous(failure)
     }
     if (failure) throw failure

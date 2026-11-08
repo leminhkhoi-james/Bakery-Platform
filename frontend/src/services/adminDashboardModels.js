@@ -22,8 +22,12 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
   const rows = (key) => data[key]?.state === 'ready' ? unique(data[key].rows) : null
   const bakeries = rows('bakeries'), orders = rows('orders'), users = rows('users'), payments = rows('payments')
   const products = rows('products'), requests = rows('requests'), offers = rows('offers'), designs = rows('designs')
+  const plans = rows('plans')
   const pendingBakeries = bakeries?.filter((row) => row.status === 'PENDING_APPROVAL')
   const pendingPayments = payments && [...new Map(payments.filter((row) => row.status === 'SUBMITTED' && row.subscriptionOrderId).map((row) => [row.subscriptionOrderId, row])).values()]
+  const activeProducts = products?.filter((row) => ['PUBLISHED', 'ACTIVE', 'AVAILABLE'].includes(row.status) || (row.status == null && row.isOpenForSale !== false))
+  const openRequests = requests?.filter((row) => ['OPEN', 'SUBMITTED', 'PENDING'].includes(row.status))
+  const acceptedOffers = offers?.filter((row) => row.status === 'ACCEPTED')
   const approvedPayments = payments && [...new Map(payments.filter((row) => row.status === 'APPROVED' && row.subscriptionOrderId && row.amount != null && Number.isFinite(Number(row.amount)) && Number(row.amount) >= 0 && /^[A-Z]{3}$/.test(row.currency || '')).map((row) => [row.subscriptionOrderId, row])).values()]
   const invalidPayments = payments?.some((row) => row.status === 'APPROVED' && (!row.subscriptionOrderId || row.amount == null || String(row.amount).trim() === '' || !Number.isFinite(Number(row.amount)) || Number(row.amount) < 0 || !/^[A-Z]{3}$/.test(row.currency || '')))
   const conflictingPayments = payments?.some((row) => row.status === 'APPROVED' && approvedPayments?.some((approved) => approved.subscriptionOrderId === row.subscriptionOrderId && (Number(approved.amount) !== Number(row.amount) || approved.currency !== row.currency)))
@@ -57,6 +61,11 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
   add('user', users, (row) => row.createdAt, (row) => 'Thành viên mới · ' + (row.name || row.displayName || 'Thành viên'), () => 'admin-users', 'person_add')
   return { bakeries, orders, users, payments, currency, currencies, revenue, undatedRevenue, series,
     counts: { bakeries: bakeries?.length ?? null, pendingBakeries: pendingBakeries?.length ?? null, users: users?.length ?? null, products: products?.length ?? null, orders: orders?.length ?? null, requests: requests?.length ?? null, offers: offers?.length ?? null, pendingPayments: pendingPayments?.length ?? null, pendingOrders: orders?.filter((order) => order.status === DASHBOARD_PENDING_ORDER_STATUS).length ?? null },
+    plans, activeProducts, openRequests, acceptedOffers,
+    plansCount: plans?.length ?? null,
+    activeProductsCount: activeProducts?.length ?? null,
+    openRequestsCount: openRequests?.length ?? null,
+    acceptedOffersCount: acceptedOffers?.length ?? null,
     pendingBakeries, pendingPayments, moderation,
     distributions: { orders: distribution(orders, orderStatusLabel), bakeries: distribution(bakeries, uiLabel), users: distribution(users, uiLabel) },
     recentOrders: [...(orders || [])].sort((a, b) => ((instant(b.createdAt) ?? -Infinity) - (instant(a.createdAt) ?? -Infinity)) || String(a.id).localeCompare(String(b.id))).slice(0, 5),

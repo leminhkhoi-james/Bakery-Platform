@@ -25,10 +25,11 @@ export function mapConversation(dto, detail = false) {
   return result
 }
 export function assertChatAccess(conversation, viewer) {
-  if (!viewer?.userId) throw new ApiError('Cần phiên đăng nhập để xem hội thoại.', 401)
+  const viewerId = viewer?.userId || viewer?.id
+  if (!viewerId) throw new ApiError('Cần phiên đăng nhập để xem hội thoại.', 401)
   if (viewer.bakeryId && conversation.bakeryId !== viewer.bakeryId) throw new ApiError('Hội thoại không thuộc cửa hàng đã chọn.', 403)
-  if (conversation.customerId !== viewer.userId && !viewer.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) throw new ApiError('Hội thoại không thuộc tài khoản hiện tại.', 403)
-  if (conversation.participants && !conversation.participants.some((participant) => participant.userId === viewer.userId)) throw new ApiError('Backend chưa xác nhận bạn là participant của hội thoại.', 403)
+  if (conversation.customerId !== viewerId && !viewer.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) throw new ApiError('Hội thoại không thuộc tài khoản hiện tại.', 403)
+  if (conversation.participants && !conversation.participants.some((participant) => (participant.userId || participant.id) === viewerId)) throw new ApiError('Backend chưa xác nhận bạn là participant của hội thoại.', 403)
   return conversation
 }
 export function mapConversationPage(dto, viewer) {

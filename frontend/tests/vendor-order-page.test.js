@@ -78,10 +78,10 @@ test('An empty real bakery order list stays empty without an unscoped probe or f
   assert.equal(calls.length, 1, 'No probe may remove the mandatory bakeryId')
 })
 
-test('List has six columns; filters reset pagination and details retain selected order', () => {
+test('List has columns; filters reset pagination and details retain selected order', () => {
   globalThis.__vendorResource = { status: 'ready', data: { result: [{ id: 'order-a', customerName: 'Khách kiểm thử', status: 'PENDING' }], meta: { page: 1, pages: 3, total: 21 } }, reload() {} }
   const render = harness(() => List({ bakeryId: 'shop-a' }))
-  assert.deepEqual(nodes(render()).filter((node) => node.type === 'th').map(text), ['Mã đơn', 'Khách hàng', 'Trạng thái', 'Tổng tiền', 'Hẹn giao', 'Thao tác'])
+  assert.deepEqual(nodes(render()).filter((node) => node.type === 'th').map(text), ['STT', 'Mã đơn', 'Khách hàng', 'Trạng thái', 'Tổng tiền', 'Hẹn giao', 'Thao tác'])
   assert.equal(nodes(render()).filter((node) => node.type === 'input' && node.props.type === 'date').length, 2)
   nodes(render()).find((node) => typeof node.props.onPage === 'function').props.onPage(3)
   render(); assert.equal(globalThis.__vendorQuery.page, 3)

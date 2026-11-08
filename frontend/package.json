@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:demo": "vite --mode demo",
     "build": "vite build",
     "test": "node --test",
     "test:ui:fixture": "node scripts/ui-preview-smoke.mjs",

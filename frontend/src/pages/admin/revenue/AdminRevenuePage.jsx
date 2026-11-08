@@ -1,16 +1,15 @@
 import React, { useMemo, useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { DataTable, Icon } from '../../../components/common/WorkspaceUI.jsx'
-import RefreshButton from '../../../components/common/RefreshButton.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
-import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
-import { loadPaymentDirectory } from '../../../services/adminPaymentPresentation.js'
-import { adminManagementService } from '../../../services/adminManagementService.js'
+import { ApiErrorMessage } from '../../../components/management/ApiState.jsx'
+import { loadApprovedRevenue, loadAdminPending } from '../../../services/adminSummaryService.js'
+import { loadAdminPlans } from '../../../services/adminManagementService.js'
 import { paymentDateRange } from '../../../services/adminFilterModels.js'
 import { dashboardMoney, dashboardNumber, dashboardDateTime } from '../../../services/adminDashboardModels.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
-import { demoRuntime, getDemoStore } from '../../../mockData/runtime.js'
+import { planName, planCodeLabel, sortPlansByTier } from '../../../services/planPresentation.js'
 import './admin-revenue.css'
 
 function getPresetDates(preset) {
@@ -35,7 +34,6 @@ function getPresetDates(preset) {
 }
 
 export default function AdminRevenuePage({ onNavigate }) {
-  const { user } = useAuth()
   const [activePreset, setActivePreset] = useState('all')
   const [draftDates, setDraftDates] = useState({ from: '', to: '' })
   const [appliedDates, setAppliedDates] = useState({ from: '', to: '' })
@@ -57,23 +55,21 @@ export default function AdminRevenuePage({ onNavigate }) {
   }, [appliedDates])
 
   // 2. Query Approved payments matching backend contract: /api/v1/admin/bakery-payments?status=APPROVED
-  const paymentsResource = useCatalogResource(loadPaymentDirectory, {
+  const paymentsResource = useCatalogResource(loadApprovedRevenue, {
     status: 'APPROVED',
-    page,
-    size: 20,
     sort: 'submittedAt,desc',
     ...dateParams,
   })
 
   // 3. Load plans to ensure all tiers (Khởi đầu, Nghệ nhân, Chuyên nghiệp) are represented
-  const plansResource = useCatalogResource(adminManagementService.getPlans)
+  const plansResource = useCatalogResource(loadAdminPlans)
 
   const loading = paymentsResource.status === 'loading'
   const refreshing = paymentsResource.refreshing
 
   // Count pending payments to display clean separation link
-  const store = (typeof getDemoStore === 'function' ? getDemoStore() : null) || demoRuntime?.store
-  const pendingCount = store?.state?.payments?.filter((p) => p.status === 'SUBMITTED')?.length || 0
+  const pending = useCatalogResource(loadAdminPending)
+  const pendingCount = pending.data?.payments ?? null
 
   // Handle Preset Clicks
   const handlePresetSelect = (presetKey) => {
@@ -115,15 +111,15 @@ export default function AdminRevenuePage({ onNavigate }) {
   }
 
   // Calculations for KPI in selected period
-  const rawPayments = paymentsResource.data?.result || []
-  const totalApprovedTransactions = paymentsResource.data?.meta?.total ?? rawPayments.length
+  const rawPayments = useMemo(() => paymentsResource.data || [], [paymentsResource.data])
+  const totalApprovedTransactions = paymentsResource.status === 'ready' ? rawPayments.length : null
 
   const filteredPayments = useMemo(() => {
     if (!search.trim()) return rawPayments
     const q = search.toLowerCase().trim()
     return rawPayments.filter((p) => {
       const bName = p.context?.profile?.bakery?.name || p.submittedByName || ''
-      const pName = p.context?.order?.planNameSnapshot || ''
+      const pName = planName({ name: p.context?.order?.planNameSnapshot, code: p.context?.order?.planCodeSnapshot })
       const ref = p.paymentReference || p.id || ''
       return (
         bName.toLowerCase().includes(q) ||
@@ -135,8 +131,9 @@ export default function AdminRevenuePage({ onNavigate }) {
 
   // Total period revenue
   const periodTotalRevenue = useMemo(() => {
+    if (paymentsResource.status !== 'ready') return null
     return rawPayments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
-  }, [rawPayments])
+  }, [rawPayments, paymentsResource.status])
 
   // Revenue breakdown by plan tier
   const planTiers = useMemo(() => {
@@ -148,7 +145,7 @@ export default function AdminRevenuePage({ onNavigate }) {
       breakdown[plan.id] = {
         id: plan.id,
         code: plan.code,
-        name: plan.name,
+        name: planName(plan),
         monthlyPrice: plan.monthlyPrice,
         revenue: 0,
         count: 0,
@@ -158,21 +155,16 @@ export default function AdminRevenuePage({ onNavigate }) {
     // Accumulate from approved payments
     for (const p of rawPayments) {
       const planId = p.context?.order?.planId
-      const planName = p.context?.order?.planNameSnapshot || 'Gói dịch vụ'
+      const pName = planName({ name: p.context?.order?.planNameSnapshot, code: p.context?.order?.planCodeSnapshot })
       if (planId && breakdown[planId]) {
         breakdown[planId].revenue += Number(p.amount) || 0
         breakdown[planId].count += 1
-      } else {
-        // Fallback matching by name
-        const match = Object.values(breakdown).find((b) => b.name === planName)
-        if (match) {
-          match.revenue += Number(p.amount) || 0
-          match.count += 1
-        }
+      } else if (planId) {
+        breakdown[planId] = { id: planId, code: p.context?.order?.planCodeSnapshot || 'CUSTOM', name: pName, revenue: Number(p.amount), count: 1 }
       }
     }
 
-    return Object.values(breakdown)
+    return sortPlansByTier(Object.values(breakdown))
   }, [plansResource.data, rawPayments])
 
   // Top performing plan
@@ -185,17 +177,6 @@ export default function AdminRevenuePage({ onNavigate }) {
     <AdminFrame
       activeTab="admin-revenue"
       onNavigate={onNavigate}
-      headerAction={
-        <RefreshButton
-          disabled={loading || refreshing}
-          onClick={() => {
-            paymentsResource.reload()
-            plansResource.reload()
-          }}
-        >
-          {loading || refreshing ? 'Đang cập nhật…' : 'Làm mới'}
-        </RefreshButton>
-      }
     >
       <div className="sc-admin-revenue">
         {/* Top Info Bar: Completely separates Approval queue from Financial Revenue */}
@@ -265,7 +246,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                 type="text"
                 placeholder="Tìm tiệm bánh, gói dịch vụ, mã GD..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => { setSearch(e.target.value); setPage(1) }}
                 aria-label="Tìm kiếm trong danh sách giao dịch"
               />
               {search && (
@@ -351,7 +332,7 @@ export default function AdminRevenuePage({ onNavigate }) {
             <div className="sc-revenue-status-chip">
               <span className="sc-revenue-status-dot" aria-hidden="true" />
               <span>
-                Đã đối soát: <strong>{totalApprovedTransactions}</strong> giao dịch
+                Đã đối soát: <strong>{dashboardNumber(totalApprovedTransactions)}</strong> giao dịch
                 {search && filteredPayments.length !== totalApprovedTransactions && (
                   <span className="sc-revenue-status-match">
                     {' '}(khớp <strong>{filteredPayments.length}</strong>)
@@ -418,7 +399,9 @@ export default function AdminRevenuePage({ onNavigate }) {
         </section>
 
         {/* Revenue Breakdown by Plan Tier */}
-        {planTiers.length > 0 && (
+        {paymentsResource.error && <ApiErrorMessage error={paymentsResource.error} retry={paymentsResource.reload} />}
+        {plansResource.error && <ApiErrorMessage error={plansResource.error} retry={plansResource.reload} />}
+        {!paymentsResource.error && planTiers.length > 0 && (
           <section className="sc-revenue-breakdown-panel">
             <div className="sc-revenue-breakdown-heading">
               <h3>
@@ -440,7 +423,6 @@ export default function AdminRevenuePage({ onNavigate }) {
                   <div key={tier.id} className="sc-revenue-plan-card">
                     <div className="sc-revenue-plan-header">
                       <span className="sc-revenue-plan-name">{tier.name}</span>
-                      <span className="sc-revenue-plan-code-badge">{tier.code}</span>
                     </div>
 
                     <div className="sc-revenue-plan-amount">
@@ -487,16 +469,18 @@ export default function AdminRevenuePage({ onNavigate }) {
             )}
           </div>
 
-          {filteredPayments.length > 0 ? (
+          {paymentsResource.error ? <p>Chưa thể tải giao dịch. Hãy thử tải lại.</p> : filteredPayments.length > 0 ? (
             <>
               <DataTable label="Giao dịch doanh thu" className="sc-admin-fixed-table">
                 <colgroup>
-                  {[22, 18, 16, 18, 16, 10].map((width, index) => (
+                  <col style={{ width: '60px' }} />
+                  {[20, 18, 16, 18, 16, 12].map((width, index) => (
                     <col key={index} style={{ width: width + '%' }} />
                   ))}
                 </colgroup>
                 <thead>
                   <tr>
+                    <th style={{ width: '60px', textAlign: 'center' }}>STT</th>
                     <th>Tiệm bánh / Người nộp</th>
                     <th>Gói dịch vụ</th>
                     <th className="sc-money">Số tiền</th>
@@ -506,21 +490,25 @@ export default function AdminRevenuePage({ onNavigate }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPayments.map((payment) => {
+                  {filteredPayments.slice((page - 1) * 20, page * 20).map((payment, index) => {
+                    const stt = (page - 1) * 20 + index + 1
                     const bakeryName =
                       payment.context?.profile?.bakery?.name ||
                       payment.submittedByName ||
                       'Tiệm bánh đối tác'
-                    const planName =
-                      payment.context?.order?.planNameSnapshot || 'Gói dịch vụ'
+                    const planDisplayName =
+                      planName({ name: payment.context?.order?.planNameSnapshot, code: payment.context?.order?.planCodeSnapshot })
                     return (
                       <tr key={payment.id}>
+                        <td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>
+                          {stt}
+                        </td>
                         <td>
                           <strong>{cleanPresentationLabel(bakeryName)}</strong>
                           <small>{payment.submittedByName || 'Chủ tiệm bánh'}</small>
                         </td>
                         <td>
-                          <span className="font-semibold text-primary">{planName}</span>
+                          <span className="font-semibold text-primary">{planDisplayName}</span>
                           <small className="block text-xs text-muted">
                             Kỳ: {payment.context?.order?.billingPeriodMonths || 1} tháng
                           </small>
@@ -551,9 +539,9 @@ export default function AdminRevenuePage({ onNavigate }) {
                   })}
                 </tbody>
               </DataTable>
-              {paymentsResource.data?.meta && (
+              {filteredPayments.length > 20 && (
                 <CatalogPagination
-                  meta={paymentsResource.data.meta}
+                  meta={{ page, pageSize: 20, total: filteredPayments.length, pages: Math.ceil(filteredPayments.length / 20) }}
                   onPage={setPage}
                 />
               )}
@@ -601,7 +589,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                   <div className="sc-revenue-modal-cell">
                     <small>Gói dịch vụ</small>
                     <strong>
-                      {detailModal.context?.order?.planNameSnapshot || 'Gói dịch vụ'}
+                      {planName({ name: detailModal.context?.order?.planNameSnapshot, code: detailModal.context?.order?.planCodeSnapshot })}
                     </strong>
                   </div>
                   <div className="sc-revenue-modal-cell">

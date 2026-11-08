@@ -162,7 +162,7 @@ export const AuthPage = ({ onNavigate, onLoginSuccess }) => {
                         <button
                           type="button"
                           className="font-label-sm text-label-sm text-secondary hover:underline font-semibold cursor-pointer bg-transparent border-none p-0"
-                          onClick={() => alert('Vui lòng liên hệ quản trị viên hoặc sử dụng số điện thoại để khôi phục mật khẩu!')}
+                          onClick={() => setErrorMessage('Chức năng khôi phục mật khẩu chưa được hỗ trợ. Vui lòng liên hệ quản trị viên.')}
                         >
                           Quên mật khẩu?
                         </button>

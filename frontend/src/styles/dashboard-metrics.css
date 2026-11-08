@@ -1,0 +1,142 @@
+/* Shared Admin/Vendor KPI appearance. Layout remains local to each dashboard. */
+:is(.sc-dashboard, .sc-vendor-dashboard) .sc-dashboard-kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  position: relative;
+  color: var(--color-on-background, #0f172a);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 0;
+  cursor: pointer;
+}
+
+:is(.sc-dashboard, .sc-vendor-dashboard) .sc-dashboard-kpi:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+}
+
+.sc-dashboard-kpi:focus-within {
+  outline: 2px solid var(--color-primary, #6b212e);
+  outline-offset: 2px;
+}
+
+/* Hàng 1 (Ở trên): icon + tiêu đề */
+.sc-kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.sc-kpi-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.sc-dashboard-kpi:hover .sc-kpi-icon-wrap {
+  color: var(--color-primary, #6b212e);
+  background: #fdf2f4;
+}
+
+.sc-kpi-icon-wrap .sc-icon {
+  font-size: 1.1rem;
+}
+
+.sc-kpi-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+/* Hàng 2 (Ở giữa): số liệu lớn */
+.sc-kpi-body {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  margin: 0.1rem 0;
+}
+
+.sc-dashboard-kpi .sc-metric-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  min-width: 0;
+  gap: 0.2rem;
+  color: var(--color-on-background, #0f172a);
+  font-size: clamp(1.4rem, 1.8vw, 1.75rem);
+  font-weight: 750;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.sc-dashboard-kpi .sc-metric-value > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+
+.sc-kpi-sub-text {
+  font-size: 0.76rem;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+button.sc-kpi-sub-text {
+  font-family: inherit;
+  font-size: 0.76rem;
+  line-height: inherit;
+}
+
+.sc-kpi-sub-text--clickable {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.sc-kpi-sub-text--clickable:hover {
+  text-decoration: underline;
+  color: #475569;
+}
+
+.sc-kpi-sub-text--highlight {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.sc-kpi-sub-text--highlight:hover {
+  color: #b45309;
+}
+

@@ -176,7 +176,20 @@ export function routeDemo(store, path, method, body, query, user) {
         else if (kind === 'subscription' && get) { const current = s.subscriptions.find((p) => p.bakeryId === bakery.id && p.status === 'ACTIVE') || null; result = { bakeryId: bakery.id, currentSubscription: current, scheduledSubscription: null, features: clone(current?.featuresSnapshot || {}) } }
         else if (kind === 'subscription-orders') {
           if (get) result = page(s.subscriptionOrders.filter((o) => o.bakeryId === bakery.id).map(subOrderDto))
-          else if (method === 'POST') { requireUser(user, 'BAKERY_OWNER'); if (s.subscriptionOrders.some(order => order.bakeryId === bakery.id && (order.status === 'PAYMENT_REVIEW' || order.status === 'PENDING_PAYMENT' && Date.parse(order.expiresAt) > Date.now()))) throw new DemoError('Tiệm có đơn mua gói đang chờ xử lý. Vui lòng kiểm tra lịch sử mua gói.', 409); const plan = find('plans', body.planId); if (plan.status !== 'ACTIVE') throw new DemoError('Gói đã ngừng cung cấp hoặc được lưu trữ.', 422); result = create('subscriptionOrders', { bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId, planNameSnapshot: plan.name, planCodeSnapshot: plan.code, featuresSnapshot: clone(plan.features), billingPeriodMonths: plan.billingPeriodMonths, totalAmount: Math.round(Number(plan.monthlyPrice) * plan.billingPeriodMonths * 100) / 100, currency: plan.currency, status: 'PENDING_PAYMENT', expiresAt: future(3), payments: [] }) }
+          else if (method === 'POST') {
+            requireUser(user, 'BAKERY_OWNER');
+            if (s.subscriptionOrders.some(order => order.bakeryId === bakery.id && (order.status === 'PAYMENT_REVIEW' || order.status === 'PENDING_PAYMENT' && Date.parse(order.expiresAt) > Date.now()))) throw new DemoError('Tiệm có đơn mua gói đang chờ xử lý. Vui lòng kiểm tra lịch sử mua gói.', 409);
+            const plan = find('plans', body.planId);
+            if (plan.status !== 'ACTIVE') throw new DemoError('Gói đã ngừng cung cấp hoặc được lưu trữ.', 422);
+            result = create('subscriptionOrders', {
+              bakeryId: bakery.id, planId: plan.id, orderNumber: 'DEMO-SUB-' + s.nextId,
+              planNameSnapshot: plan.name, planCodeSnapshot: plan.code,
+              featuresSnapshot: clone(plan.features), billingPeriodMonths: plan.billingPeriodMonths,
+              totalAmount: Math.round(Number(plan.monthlyPrice) * plan.billingPeriodMonths * 100) / 100,
+              currency: plan.currency, status: 'PENDING_PAYMENT',
+              expiresAt: future(3), payments: []
+            });
+          }
         } else if (kind === 'products') {
           if (!parts[3]) { if (get) result = page(s.products.filter((p) => p.bakeryId === bakery.id)); else if (method === 'POST') result = create('products', { ...body, bakeryId: bakery.id, status: 'DRAFT', images: [], options: { groups: [] } }) }
           else {

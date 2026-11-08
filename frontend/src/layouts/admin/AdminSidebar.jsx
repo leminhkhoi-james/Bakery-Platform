@@ -1,5 +1,6 @@
-import { demoRuntime, getDemoStore } from '../../mockData/runtime.js'
-import React, { useEffect, useState } from 'react'
+import { useCatalogResource } from '../../hooks/useCatalogResource.js'
+import { loadAdminPending } from '../../services/adminSummaryService.js'
+import React from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 
 /**
@@ -13,15 +14,9 @@ export default function AdminSidebar({
   onCloseMobile,
   pendingVendorsCount = 0,
 }) {
-  const store = (typeof getDemoStore === 'function' ? getDemoStore() : null) || demoRuntime?.store
-  const [, setTick] = useState(0)
-  useEffect(() => {
-    if (!store?.subscribe) return
-    return store.subscribe(() => setTick((v) => v + 1))
-  }, [store])
-
-  const pendingPaymentsCount = store?.state?.payments?.filter((p) => p.status === 'SUBMITTED')?.length || 0
-  const pendingVendors = pendingVendorsCount || store?.state?.bakeries?.filter((b) => b.status === 'PENDING_APPROVAL')?.length || 0
+  const pending = useCatalogResource(loadAdminPending)
+  const pendingPaymentsCount = pending.data?.payments ?? null
+  const pendingVendors = pendingVendorsCount || pending.data?.bakeries || 0
   const handleNav = (route) => {
     if (onNavigate) {
       onNavigate(route)
@@ -33,22 +28,29 @@ export default function AdminSidebar({
 
   const normalizeTab = (t) => {
     if (!t) return 'admin-dashboard'
-    if (['admin-dashboard', 'dashboard', 'tong-quan', 'master-admin'].includes(t)) {
+    const cleanTab = String(t).split('?')[0].replace(/^\//, '')
+    if (['admin-dashboard', 'dashboard', 'tong-quan', 'master-admin'].includes(cleanTab)) {
       return 'admin-dashboard'
     }
-    if (['admin-revenue', 'revenue', 'doanh-thu'].includes(t)) {
+    if (['admin-revenue', 'revenue', 'doanh-thu'].includes(cleanTab)) {
       return 'admin-revenue'
     }
-    if (['admin-vendors', 'vendors', 'tiem-banh', 'duyet-xuong'].includes(t)) {
+    if (['admin-vendors', 'vendors', 'tiem-banh', 'duyet-xuong'].includes(cleanTab)) {
       return 'admin-vendors'
     }
-    if (['admin-orders', 'orders', 'escrow', 'escrow-vault'].includes(t)) {
+    if (['admin-orders', 'orders', 'escrow', 'escrow-vault'].includes(cleanTab)) {
       return 'admin-orders'
     }
-    if (['admin-users', 'users', 'nguoi-dung'].includes(t)) {
+    if (['admin-plans', 'plans', 'goi-dich-vu'].includes(cleanTab)) {
+      return 'admin-plans'
+    }
+    if (['admin-payments', 'payments', 'duyet-goi'].includes(cleanTab)) {
+      return 'admin-payments'
+    }
+    if (['admin-users', 'users', 'nguoi-dung'].includes(cleanTab)) {
       return 'admin-users'
     }
-    return t
+    return cleanTab
   }
 
   const currentTab = normalizeTab(activeTab)
@@ -72,6 +74,12 @@ export default function AdminSidebar({
       label: 'Tiệm bánh',
       icon: 'storefront',
       badge: pendingVendors > 0 ? `${pendingVendors}` : null,
+    },
+    {
+      id: 'admin-orders',
+      route: 'admin-orders',
+      label: 'Đơn hàng',
+      icon: 'shopping_bag',
     },
     { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium' },
     {
@@ -114,7 +122,7 @@ export default function AdminSidebar({
 
         {/* Navigation Links */}
         <nav className="space-y-1">
-          {navItems.filter((item) => item.id !== 'admin-users' || demoRuntime).map((item) => {
+          {navItems.map((item) => {
             const isActive = currentTab === item.id
 
             return (
