@@ -1989,3 +1989,23 @@ Other services remain separately configured. See [Docker instructions](DOCKER.md
 
 Embedded image/offer/history collections are capped at 100 entries; histories show the latest changes.
 Use the paginated offer endpoints for the full offer list. Option/add-on selection arrays are limited to 100.
+
+## Bổ sung làm rõ Subscription payment — 2026-11-08
+
+Giữ nguyên contract thanh toán thủ công ban đầu: bakery gửi mã giao dịch hoặc
+chứng từ, payment `SUBMITTED`, order `PAYMENT_REVIEW`; ADMIN kiểm tra và approve
+mới chuyển payment sang `APPROVED`, hoàn tất order và tạo kỳ subscription.
+Không yêu cầu VNPAY Sandbox hay mã test đặc biệt. QR/thông tin tài khoản nhận
+tiền là hướng dẫn chuyển khoản; spec chưa định nghĩa API tạo QR hoặc xác minh
+giao dịch qua cổng thanh toán.
+
+Ghi chú này thay thế phần sandbox local đã bổ sung trước đó. Backend đã bỏ cơ
+chế kiểm tra mã sandbox và trả `422` cho `paymentMethod: "SANDBOX"`. Endpoint
+`GET /subscription-plans/payment-options` được giữ để tương thích client cũ,
+luôn trả `{ "sandboxEnabled": false }`.
+
+Khi demo local, có thể gửi mã tham chiếu mẫu riêng cho từng đơn hoặc chứng từ
+mẫu rồi ADMIN duyệt thủ công. Mã tham chiếu là dữ liệu chứng từ để duyệt,
+không phải mã bí mật xác thực hoặc xác nhận giao dịch ngân hàng. Demo không
+cần chuyển tiền thật. Điều kiện tự cấp `BAKERY_OWNER` vẫn là hồ sơ bakery đã
+được duyệt và subscription có hiệu lực.

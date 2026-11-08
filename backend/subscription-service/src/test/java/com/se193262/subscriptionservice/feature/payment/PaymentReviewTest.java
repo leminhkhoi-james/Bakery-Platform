@@ -1,6 +1,7 @@
 package com.se193262.subscriptionservice.feature.payment;
 
 import com.se193262.subscriptionservice.exception.AppException;
+import com.se193262.subscriptionservice.feature.payment.dto.BakeryPaymentDto;
 import com.se193262.subscriptionservice.feature.payment.entity.BakeryPayment;
 import com.se193262.subscriptionservice.feature.payment.entity.PaymentStatus;
 import com.se193262.subscriptionservice.feature.payment.repository.BakeryPaymentRepository;
@@ -15,6 +16,7 @@ import com.se193262.subscriptionservice.feature.subscriptionorder.repository.Sub
 import com.se193262.subscriptionservice.infrastructure.client.BakeryAccessClient;
 import com.se193262.subscriptionservice.infrastructure.storage.PaymentProofStorage;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +40,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentReviewTest {
@@ -48,6 +52,53 @@ class PaymentReviewTest {
     @Mock PaymentProofStorage proofStorage;
     @Mock TransactionTemplate transactions;
     @InjectMocks BakeryPaymentServiceImpl service;
+
+    @Test
+    @DisplayName("A manual reference submits for review without a sandbox code or proof")
+    void submit_manualReference_waitsForAdminReview() {
+        when(transactions.execute(any())).thenAnswer(invocation ->
+                invocation.<TransactionCallback<?>>getArgument(0).doInTransaction(new SimpleTransactionStatus()));
+        SubscriptionPlan plan = new SubscriptionPlan("BASIC", "Basic", BigDecimal.TEN);
+        UUID userId = UUID.randomUUID();
+        SubscriptionOrder order = new SubscriptionOrder("SUB-MANUAL", UUID.randomUUID(), plan,
+                userId, Instant.now().plusSeconds(3600));
+        UUID orderId = UUID.randomUUID();
+        ReflectionTestUtils.setField(order, "id", orderId);
+        when(orders.findById(orderId)).thenReturn(Optional.of(order));
+        when(payments.saveAndFlush(any(BakeryPayment.class))).thenAnswer(invocation -> {
+            BakeryPayment payment = invocation.getArgument(0);
+            ReflectionTestUtils.setField(payment, "id", UUID.randomUUID());
+            return payment;
+        });
+        BakeryPaymentDto request = new BakeryPaymentDto(null, null, null, "BANK_TRANSFER",
+                "DEMO-" + orderId, order.getTotalAmount(), "VND", null, null, null, null, null);
+
+        var result = service.submit(orderId, userId, UUID.randomUUID().toString(), request, null);
+
+        assertThat(result.paymentReference()).isEqualTo(request.paymentReference());
+        assertThat(result.status()).isEqualTo(PaymentStatus.SUBMITTED);
+        assertThat(order.getStatus()).isEqualTo(SubscriptionOrderStatus.PAYMENT_REVIEW);
+        assertThat(service.isSandboxEnabled()).isFalse();
+        verify(bakeryClient).requireMember(order.getBakeryId(), userId, true);
+        verifyNoInteractions(subscriptions);
+        verify(proofStorage, never()).upload(any(), any());
+    }
+
+    @Test
+    @DisplayName("Missing evidence and the retired sandbox method cannot submit a payment")
+    void submit_missingEvidenceOrSandbox_rejectsBeforePersistence() {
+        for (String method : List.of("BANK_TRANSFER", "SANDBOX", "sandbox")) {
+            BakeryPaymentDto request = new BakeryPaymentDto(null, null, null, method,
+                    method.equals("BANK_TRANSFER") ? null : "BAKERY-TEST",
+                    BigDecimal.TEN, "VND", null, null, null, null, null);
+            assertThatThrownBy(() -> service.submit(UUID.randomUUID(), UUID.randomUUID(),
+                    UUID.randomUUID().toString(), request, null))
+                    .isInstanceOf(AppException.class)
+                    .hasMessageContaining(method.equals("BANK_TRANSFER")
+                            ? "Payment reference or proof is required" : "Sandbox payments are not supported");
+        }
+        verifyNoInteractions(payments, orders, subscriptions, bakeryClient, proofStorage, transactions);
+    }
 
     @Test
     void approvalCreatesOnePeriodFromOrderSnapshotAndRetryReturnsSamePeriod() {

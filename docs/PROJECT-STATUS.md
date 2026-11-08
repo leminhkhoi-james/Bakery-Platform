@@ -455,3 +455,14 @@ Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trư
   luồng HTTP với Identity/Bakery JWT thật vẫn cần kiểm thử khi Identity chạy.
 - Bakery runtime V1 khác bản canonical ở phần thụt lề. Flyway đã áp dụng bản
   runtime, nên không sửa trực tiếp V1 sau khi chạy nếu chưa xử lý checksum.
+
+## Subscription trở về duyệt chứng từ thủ công — 2026-11-08
+
+- Bỏ cơ chế mã sandbox local và cấu hình mã test. Gửi mã tham chiếu hoặc chứng
+  từ vẫn tạo payment SUBMITTED/order PAYMENT_REVIEW; ADMIN duyệt mới kích hoạt
+  gói. Payment-options giữ tương thích client và luôn báo sandboxEnabled=false.
+- Giữ nguyên nội dung API spec hiện có, chỉ thêm ghi chú đính chính ở cuối.
+  Không sửa frontend hoặc service khác; không khởi động stack ứng dụng.
+- Maven offline test Subscription + platform-support thành công: 21 test pass,
+  không skip, gồm PostgreSQL Testcontainers, gửi tham chiếu thủ công, chặn
+  phương thức sandbox cũ, duyệt và idempotency.
