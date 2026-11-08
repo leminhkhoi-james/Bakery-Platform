@@ -46,3 +46,17 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local-only testing directories
+/test/
+/integration_test/
+/test_driver/
+
+# Flutter generated files
+/.dart_tool/
+/build/
+/.flutter-plugins-dependencies
+
+# IDE files
+/.idea/
+*.iml
