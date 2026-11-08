@@ -1,8 +1,9 @@
 # Bakery payment feature
 
-The optional local sandbox validates a reusable test code server-side and uses
-the same payment submission, idempotency and admin review flow. The test code is
-replaced with an order-specific reference before persistence. See ADR-005.
+Payment follows the original manual evidence and admin review flow. No sandbox
+code or gateway verification is required. The compatibility payment-options
+endpoint always returns sandboxEnabled=false; SANDBOX submissions are rejected.
+See the 2026-11-08 correction in ADR-005.
 Successful admin approval notifies Bakery after commit to check pending owner
 activation. Bakery retries activation if the notification fails.
 

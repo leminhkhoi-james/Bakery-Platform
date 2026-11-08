@@ -25,7 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
@@ -41,33 +40,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class BakeryPaymentServiceImpl implements BakeryPaymentService {
-    private static final String SANDBOX_METHOD = "SANDBOX";
     private final BakeryPaymentRepository paymentRepository;
     private final SubscriptionOrderRepository orderRepository;
     private final BakerySubscriptionRepository subscriptionRepository;
     private final BakeryAccessClient bakeryClient;
     private final PaymentProofStorage proofStorage;
     private final TransactionTemplate transactions;
-    private final String sandboxCode;
 
     public BakeryPaymentServiceImpl(BakeryPaymentRepository paymentRepository,
                                     SubscriptionOrderRepository orderRepository,
                                     BakerySubscriptionRepository subscriptionRepository,
                                     BakeryAccessClient bakeryClient, PaymentProofStorage proofStorage,
-                                    TransactionTemplate transactions,
-                                    @Value("${SUBSCRIPTION_PAYMENT_SANDBOX_CODE:}") String sandboxCode) {
+                                    TransactionTemplate transactions) {
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.bakeryClient = bakeryClient;
         this.proofStorage = proofStorage;
         this.transactions = transactions;
-        this.sandboxCode = sandboxCode;
     }
 
     @Override
     public boolean isSandboxEnabled() {
-        return !sandboxCode.isBlank();
+        return false;
     }
 
     @Override
@@ -84,14 +79,14 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
         catch (Exception exception) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Valid Idempotency-Key UUID is required");
         }
-        String requestedMethod = required(request.paymentMethod(), "paymentMethod");
-        boolean sandbox = SANDBOX_METHOD.equalsIgnoreCase(requestedMethod);
-        String method = sandbox ? SANDBOX_METHOD : requestedMethod;
+        String method = required(request.paymentMethod(), "paymentMethod");
+        if ("SANDBOX".equalsIgnoreCase(method)) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Sandbox payments are not supported; submit a payment reference or proof for admin review");
+        }
         boolean hasProof = proof != null && !proof.isEmpty();
-        String reference = sandbox
-                ? sandboxReference(request.paymentReference(), orderId, idempotencyKey, hasProof)
-                : request.paymentReference() == null || request.paymentReference().isBlank()
-                        ? null : request.paymentReference().trim();
+        String reference = request.paymentReference() == null || request.paymentReference().isBlank()
+                ? null : request.paymentReference().trim();
         if (reference == null && !hasProof) {
             throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Payment reference or proof is required");
         }
@@ -117,17 +112,6 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
             if (proofKey != null) proofStorage.deleteQuietly(proofKey);
             throw exception;
         }
-    }
-
-    private String sandboxReference(String code, UUID orderId, String idempotencyKey, boolean hasProof) {
-        if (!isSandboxEnabled()) {
-            throw new AppException(HttpStatus.FORBIDDEN, "Sandbox payments are disabled");
-        }
-        if (!sandboxCode.equals(code) || hasProof) {
-            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid sandbox payment code or proof");
-        }
-        // The reusable test code is not a unique transaction reference and must not be stored.
-        return SANDBOX_METHOD + "-" + orderId + "-" + idempotencyKey;
     }
 
     private BakeryPaymentDto persistSubmission(UUID orderId, UUID userId,

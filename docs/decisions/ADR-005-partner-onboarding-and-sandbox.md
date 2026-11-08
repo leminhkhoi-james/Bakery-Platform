@@ -22,3 +22,12 @@
 
 Trạng thái hồ sơ, thanh toán và kỳ dịch vụ đã lưu vẫn được dùng làm nguồn
 xác minh. Không thêm bảng hoặc transaction xuyên DB.
+
+## Đính chính theo yêu cầu người dùng — 2026-11-08
+
+Quyết định dùng mã sandbox ở trên được thay bằng luồng chứng từ và ADMIN duyệt
+theo contract ban đầu. Không tích hợp cổng thanh toán, không yêu cầu mã sandbox.
+Backend bỏ cấu hình mã test và từ chối phương thức SANDBOX. Endpoint báo khả
+năng payment giữ tương thích client và luôn trả sandboxEnabled=false.
+Demo dùng mã tham chiếu/chứng từ mẫu riêng cho từng đơn, sau đó ADMIN duyệt.
+Luồng tự cấp quyền chủ tiệm sau hai điều kiện phê duyệt vẫn được giữ.
