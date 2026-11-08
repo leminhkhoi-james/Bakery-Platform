@@ -26,11 +26,11 @@ clients:
     audience: identity-service
     scope: identity:user:read identity:address:read
   bakery:
-    base-url: ${BAKERY_SERVICE_URL:http://localhost:8083}
+    base-url: ${BAKERY_SERVICE_URL:http://localhost:8082}
     audience: bakery-service
     scope: bakery:profile:read bakery:membership:read
   marketplace:
-    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8082}
+    base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8083}
     audience: marketplace-service
     scope: marketplace:offer:read
   connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
@@ -44,13 +44,16 @@ platform:
     user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}
   remote:
     identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
-    bakery-url: ${BAKERY_SERVICE_URL:http://localhost:8083}
+    bakery-url: ${BAKERY_SERVICE_URL:http://localhost:8082}
     subscription-url: ${SUBSCRIPTION_SERVICE_URL:http://localhost:8084}
     cake-ai-url: ${CAKE_AI_SERVICE_URL:http://localhost:8085}
     order-url: ${ORDER_SERVICE_URL:http://localhost:8086}
-    marketplace-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8082}
+    marketplace-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8083}
     client-id: ${ORDER_SERVICE_CLIENT_ID:order-service}
     client-secret: ${ORDER_SERVICE_CLIENT_SECRET:}
     connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
     read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
+
+server:
+  port: ${SERVER_PORT:8086}
 

@@ -3,6 +3,9 @@ spring:
     import: optional:file:.env[.properties]
   application:
     name: identity-service
+
+server:
+  port: ${SERVER_PORT:8081}
   datasource:
     url: ${IDENTITY_DB_URL}
     username: ${IDENTITY_DB_USERNAME}

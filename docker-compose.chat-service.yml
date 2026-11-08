@@ -45,25 +45,25 @@ services:
       chat-storage:
         condition: service_healthy
     environment:
-      SERVER_PORT: 8080
+      SERVER_PORT: 8087
       CHAT_DB_URL: jdbc:postgresql://chat-db:5432/chat_db
       CHAT_DB_USERNAME: ${CHAT_DB_USERNAME:-postgres}
       CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD:-postgres}
-      IDENTITY_JWK_SET_URI: ${IDENTITY_JWK_SET_URI:-http://identity-service:8080/.well-known/jwks.json}
+      IDENTITY_JWK_SET_URI: ${IDENTITY_JWK_SET_URI:-http://identity-service:8081/.well-known/jwks.json}
       IDENTITY_JWT_ISSUER: ${IDENTITY_JWT_ISSUER:-bakery-platform-identity}
       IDENTITY_JWT_USER_AUDIENCE: ${IDENTITY_JWT_USER_AUDIENCE:-bakery-platform-api}
       CHAT_SERVICE_JWT_AUDIENCE: ${CHAT_SERVICE_JWT_AUDIENCE:-chat-service}
-      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://identity-service:8080}
+      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://identity-service:8081}
       CHAT_SERVICE_CLIENT_ID: chat-service
       CHAT_SERVICE_CLIENT_SECRET: ${CHAT_SERVICE_CLIENT_SECRET:-}
-      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://marketplace-service:8080}
+      MARKETPLACE_SERVICE_URL: ${MARKETPLACE_SERVICE_URL:-http://marketplace-service:8083}
       BAKERY_SERVICE_URL: ${BAKERY_SERVICE_URL:-http://bakery-service:8082}
       CHAT_STORAGE_ENDPOINT: ${CHAT_STORAGE_ENDPOINT:-http://host.docker.internal:9000}
       CHAT_STORAGE_ACCESS_KEY: ${CHAT_STORAGE_ACCESS_KEY:-minioadmin}
       CHAT_STORAGE_SECRET_KEY: ${CHAT_STORAGE_SECRET_KEY:-minioadmin}
       CHAT_STORAGE_BUCKET: ${CHAT_STORAGE_BUCKET:-chat-attachments}
     ports:
-      - "${CHAT_SERVICE_PORT:-8086}:8080"
+      - "${CHAT_SERVICE_PORT:-8087}:8087"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

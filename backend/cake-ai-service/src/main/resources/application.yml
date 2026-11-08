@@ -23,11 +23,11 @@ platform:
     user-audience: bakery-platform-api
   remote:
     identity-url: ${IDENTITY_SERVICE_BASE_URL:http://localhost:8081}
-    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8083}
+    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8082}
     subscription-url: ${SUBSCRIPTION_SERVICE_BASE_URL:http://localhost:8084}
     cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
     order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
-    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8082}
+    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8083}
     client-id: ${SERVICE_CLIENT_ID:cake-ai-service}
     client-secret: ${SERVICE_CLIENT_SECRET:}
     connect-timeout: 2s
@@ -56,4 +56,7 @@ cake-ai:
   firebase-bucket: ${CAKE_AI_FIREBASE_BUCKET:${FIREBASE_STORAGE_BUCKET:}}
   scheduler-enabled: ${CAKE_AI_SCHEDULER_ENABLED:true}
   poll-delay-ms: ${CAKE_AI_POLL_DELAY_MS:1000}
+
+server:
+  port: ${SERVER_PORT:8085}
 
