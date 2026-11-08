@@ -1,6 +1,16 @@
 import 'package:flutter/foundation.dart';
 
-enum ApiService { identity, bakery, subscription }
+import 'contracts.dart';
+
+enum ApiService {
+  identity,
+  bakery,
+  subscription,
+  marketplace,
+  order,
+  chat,
+  cakeAi,
+}
 
 /// Public origins only. Empty release defaults require explicit HTTPS endpoints.
 class ApiEnvironment {
@@ -8,8 +18,20 @@ class ApiEnvironment {
     required this.identity,
     required this.bakery,
     required this.subscription,
+    this.marketplace,
+    this.order,
+    this.chat,
+    this.cakeAi,
   }) {
-    for (final value in [identity, bakery, subscription]) {
+    for (final value in [
+      identity,
+      bakery,
+      subscription,
+      marketplace,
+      order,
+      chat,
+      cakeAi,
+    ].whereType<Uri>()) {
       if (value.userInfo.isNotEmpty ||
           value.hasQuery ||
           value.hasFragment ||
@@ -29,7 +51,16 @@ class ApiEnvironment {
     }
   }
   final Uri identity, bakery, subscription;
+  final Uri? marketplace, order, chat, cakeAi;
+  static Uri? optionalOrigin(String value) =>
+      value.isEmpty ? null : Uri.parse(value);
   static ApiEnvironment configured() => ApiEnvironment(
+    marketplace: optionalOrigin(
+      const String.fromEnvironment('MARKETPLACE_URL'),
+    ),
+    order: optionalOrigin(const String.fromEnvironment('ORDER_URL')),
+    chat: optionalOrigin(const String.fromEnvironment('CHAT_URL')),
+    cakeAi: optionalOrigin(const String.fromEnvironment('CAKE_AI_URL')),
     identity: Uri.parse(
       const String.fromEnvironment(
         'IDENTITY_URL',
@@ -53,7 +84,16 @@ class ApiEnvironment {
     ApiService.identity => identity,
     ApiService.bakery => bakery,
     ApiService.subscription => subscription,
+    ApiService.marketplace => marketplace ?? missingOrigin(),
+    ApiService.order => order ?? missingOrigin(),
+    ApiService.chat => chat ?? missingOrigin(),
+    ApiService.cakeAi => cakeAi ?? missingOrigin(),
   };
+  Uri missingOrigin() => throw const ApiFailure(
+    503,
+    'Dịch vụ chưa được cấu hình trong phiên chạy này. Kiểm tra hướng dẫn khởi chạy Mobile.',
+    kind: ApiFailureKind.configuration,
+  );
   Uri endpoint(ApiService service, String path, Map<String, Object?> query) {
     if (!path.startsWith('/api/v1/') ||
         path.contains('..') ||

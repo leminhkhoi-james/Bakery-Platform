@@ -161,11 +161,29 @@ class LiveProfilePage extends StatelessWidget {
           SCKeyValue('Điện thoại', '${user['phoneNumber'] ?? 'Chưa cung cấp'}'),
           SCKeyValue('Vai trò', (user['roles'] as List).join(', ')),
           SCKeyValue('Trạng thái', '${user['status']}'),
+          for (final destination in const [
+            ('/requests', 'Yêu cầu bánh của tôi'),
+            ('/offers', 'Báo giá nhận được'),
+            ('/cart', 'Giỏ bánh'),
+            ('/orders', 'Đơn bánh của tôi'),
+            ('/chat', 'Trò chuyện'),
+          ])
+            SCButton(
+              destination.$2,
+              outlined: true,
+              onPressed: () => liveOpen(context, destination.$1),
+            ),
           LiveCommand(
             'Làm mới quyền tài khoản',
             key: const ValueKey('refresh-session'),
             run: session.reloadRoles,
           ),
+          if (session.hasRole('CUSTOMER'))
+            SCButton(
+              'Thiết kế bánh AI',
+              outlined: true,
+              onPressed: () => liveOpen(context, '/ai-jobs'),
+            ),
           if (session.hasRole('CUSTOMER'))
             SCButton(
               'Hồ sơ đối tác của tôi',
@@ -177,7 +195,34 @@ class LiveProfilePage extends StatelessWidget {
               'Quản lý catalog',
               onPressed: () => liveOpen(context, '/vendor-menu'),
             ),
+          if (session.hasRole('BAKERY_OWNER'))
+            for (final destination in const [
+              ('/vendor-requests', 'Yêu cầu đang tìm tiệm'),
+              ('/vendor-offers', 'Báo giá đã gửi'),
+              ('/vendor-orders', 'Đơn bánh của tiệm'),
+              ('/vendor-chat', 'Trò chuyện của tiệm'),
+            ])
+              SCButton(
+                destination.$2,
+                outlined: true,
+                onPressed: () => liveOpen(context, destination.$1),
+              ),
           if (session.hasRole('ADMIN')) ...[
+            SCButton(
+              'Giám sát báo giá',
+              key: const ValueKey('admin-offers-nav'),
+              onPressed: () => liveOpen(context, '/admin-offers'),
+            ),
+            SCButton(
+              'Đơn bánh và đánh giá',
+              key: const ValueKey('admin-orders-nav'),
+              onPressed: () => liveOpen(context, '/admin-orders'),
+            ),
+            SCButton(
+              'Giám sát yêu cầu và thiết kế',
+              key: const ValueKey('admin-requests-nav'),
+              onPressed: () => liveOpen(context, '/admin-requests'),
+            ),
             SCButton(
               'Duyệt tiệm bánh',
               key: const ValueKey('admin-bakeries-nav'),

@@ -5,6 +5,8 @@ import '../live/live_workspace.dart';
 import 'live_data.dart';
 import 'live_scaffold.dart';
 import 'sweetcake_widgets.dart';
+import 'native_instant_field.dart';
+import '../api/phase5_contracts.dart';
 
 enum FieldKind {
   text,
@@ -16,6 +18,7 @@ enum FieldKind {
   boolean,
   choice,
   time,
+  instant,
 }
 
 class FormFieldSpec {
@@ -67,6 +70,13 @@ class FormFieldSpec {
         !RegExp(r'^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$').hasMatch(text)) {
       return 'Nhập giờ HH:mm.';
     }
+    if (kind == FieldKind.instant) {
+      try {
+        futureInstant(text);
+      } on Object {
+        return 'Chọn ngày giờ trong tương lai, kèm múi giờ.';
+      }
+    }
     return null;
   }
 
@@ -99,6 +109,15 @@ class NativeField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final key = ValueKey('$prefix-${spec.name}');
+    if (spec.kind == FieldKind.instant) {
+      return NativeInstantField(
+        fieldKey: key,
+        label: spec.label,
+        value: value,
+        onChanged: onChanged,
+        validator: spec.validate,
+      );
+    }
     if (spec.kind == FieldKind.boolean) {
       return SwitchListTile(
         key: key,

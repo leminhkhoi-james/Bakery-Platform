@@ -93,6 +93,29 @@ class LiveScaffold extends StatelessWidget {
               )
             : Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
         actions: [
+          PopupMenuButton<String>(
+            tooltip: 'Chức năng',
+            icon: const Icon(Icons.menu),
+            onSelected: (path) => liveOpen(context, path),
+            itemBuilder: (_) => [
+              for (final item in const [
+                ('/requests', 'Yêu cầu bánh'),
+                ('/offers', 'Báo giá nhận được'),
+                ('/cart', 'Giỏ bánh'),
+                ('/orders', 'Đơn bánh'),
+                ('/chat', 'Trò chuyện'),
+              ])
+                PopupMenuItem(value: item.$1, child: Text(item.$2)),
+              if (w.session.hasRole('BAKERY_OWNER'))
+                for (final item in const [
+                  ('/vendor-requests', 'Yêu cầu cho tiệm'),
+                  ('/vendor-offers', 'Báo giá của tiệm'),
+                  ('/vendor-orders', 'Đơn của tiệm'),
+                  ('/vendor-chat', 'Trò chuyện của tiệm'),
+                ])
+                  PopupMenuItem(value: item.$1, child: Text(item.$2)),
+            ],
+          ),
           IconButton(
             key: const ValueKey('account-nav'),
             tooltip: 'Tài khoản',

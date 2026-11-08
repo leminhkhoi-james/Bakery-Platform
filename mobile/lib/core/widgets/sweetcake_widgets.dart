@@ -225,8 +225,9 @@ const statusLabels = {
 };
 
 class SCStatusBadge extends StatelessWidget {
-  const SCStatusBadge(this.status, {super.key});
+  const SCStatusBadge(this.status, {super.key, this.label});
   final String status;
+  final String? label;
   @override
   Widget build(BuildContext context) {
     final (fg, bg) = switch (status) {
@@ -253,7 +254,7 @@ class SCStatusBadge extends StatelessWidget {
       _ => (AppColors.muted, AppColors.surfaceLow),
     };
     return Semantics(
-      label: 'Trạng thái: ${statusLabels[status] ?? status}',
+      label: 'Trạng thái: ${label ?? statusLabels[status] ?? status}',
       child: ExcludeSemantics(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -262,7 +263,7 @@ class SCStatusBadge extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            statusLabels[status] ?? status,
+            label ?? statusLabels[status] ?? status,
             style: AppTypography.style(12, weight: 600, color: fg),
           ),
         ),

@@ -9,6 +9,12 @@ import '../../features/auth/data/session_store.dart';
 import '../../features/catalog/data/live_bakery_repository.dart';
 import '../../features/catalog/data/live_catalog_repository.dart';
 import '../../features/subscription/data/live_subscription_repository.dart';
+import '../../features/marketplace/data/live_marketplace_repository.dart';
+import '../../features/orders/data/live_order_repository.dart';
+import '../../features/chat/data/live_chat_repository.dart';
+import '../../features/cart/data/live_cart.dart';
+import '../../features/reviews/data/live_review_repository.dart';
+import '../../features/ai/data/live_ai_repository.dart';
 
 class LiveWorkspace extends ChangeNotifier {
   LiveWorkspace({
@@ -25,6 +31,12 @@ class LiveWorkspace extends ChangeNotifier {
     catalog = LiveCatalogRepository(api);
     bakeries = LiveBakeryRepository(api);
     subscriptions = LiveSubscriptionRepository(api);
+    marketplace = LiveMarketplaceRepository(api);
+    orders = LiveOrderRepository(api);
+    reviews = LiveReviewRepository(api);
+    ai = LiveAiRepository(api);
+    chat = LiveChatRepository(api);
+    cart.addListener(notifyListeners);
     _generation = session.generation;
     session.addListener(_sessionChanged);
   }
@@ -33,6 +45,12 @@ class LiveWorkspace extends ChangeNotifier {
   late final LiveCatalogRepository catalog;
   late final LiveBakeryRepository bakeries;
   late final LiveSubscriptionRepository subscriptions;
+  late final LiveMarketplaceRepository marketplace;
+  late final LiveOrderRepository orders;
+  late final LiveReviewRepository reviews;
+  late final LiveAiRepository ai;
+  late final LiveChatRepository chat;
+  final LiveCart cart = LiveCart();
   late int _generation;
   Json? bakery;
   int bakeryRevision = 0;
@@ -43,6 +61,8 @@ class LiveWorkspace extends ChangeNotifier {
     if (_generation != session.generation) {
       _generation = session.generation;
       bakery = null;
+      cart.clear();
+      chat.clearPending();
       verifiedBakeries.clear();
       knownImages.clear();
       knownOptions.clear();
@@ -80,6 +100,8 @@ class LiveWorkspace extends ChangeNotifier {
   @override
   void dispose() {
     session.removeListener(_sessionChanged);
+    cart.removeListener(notifyListeners);
+    cart.dispose();
     session.transport.close();
     session.dispose();
     super.dispose();

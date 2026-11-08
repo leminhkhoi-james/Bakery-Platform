@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../cart/presentation/live_cart_page.dart';
+
 import '../../../core/api/contracts.dart';
 import '../../../core/live/live_workspace.dart';
 import '../../../core/widgets/live_data.dart';
@@ -325,9 +327,25 @@ class LiveProductPage extends StatelessWidget {
             subtitle: Text('${a['description'] ?? ''}'),
             trailing: Text(Money.parse(a['price']).display()),
           ),
-        const SCNotice(
-          'Đặt bánh, giỏ thanh toán và báo giá tùy chỉnh chưa được tích hợp trong phiên bản này.',
+        SCButton(
+          'Chọn bánh và tùy chọn',
+          key: const ValueKey('product-select'),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => LiveProductSelection(p)),
+          ),
         ),
+        if (p.product['customizable'] == true)
+          SCButton(
+            'Yêu cầu tùy chỉnh bánh này',
+            outlined: true,
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LiveProductSelection(p, customRequest: true),
+              ),
+            ),
+          ),
       ],
     );
   }

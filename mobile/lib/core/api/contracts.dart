@@ -111,7 +111,14 @@ class SubscriptionPlan {
   late final Json features;
 }
 
-enum ApiFailureKind { http, connection, timeout, invalidResponse, cancelled }
+enum ApiFailureKind {
+  http,
+  connection,
+  timeout,
+  invalidResponse,
+  cancelled,
+  configuration,
+}
 
 class ApiFailure implements Exception {
   const ApiFailure(
@@ -126,7 +133,9 @@ class ApiFailure implements Exception {
   final bool uncertain;
   final ApiFailureKind kind;
   final int? responseStatus;
-  bool get transient => status == 0 || status >= 500 || status == 429;
+  bool get transient =>
+      kind != ApiFailureKind.configuration &&
+      (status == 0 || status >= 500 || status == 429);
   @override
   String toString() => message;
   static String forStatus(int status) => switch (status) {

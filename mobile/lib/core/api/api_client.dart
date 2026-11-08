@@ -55,6 +55,7 @@ class ApiClient {
     List<UploadPart> files = const [],
     Map<String, String> fields = const {},
     bool multipart = false,
+    String? idempotencyKey,
   }) async {
     final generation = session.generation,
         snapshot = context,
@@ -68,7 +69,9 @@ class ApiClient {
     }
 
     fence();
-    final key = idempotent ? keyFor('$method $path', body, files) : null;
+    final key =
+        idempotencyKey ??
+        (idempotent ? keyFor('$method $path', body, files) : null);
     var refreshed = false, retried = false;
     while (true) {
       WireResponse r;

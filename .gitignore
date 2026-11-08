@@ -41,4 +41,6 @@ build/
 **/*.pem
 **/*.key
 
-docs/audit
+docs/audit/
+/mobile/docs/full-integration/
+/mobile/docs/evidence/

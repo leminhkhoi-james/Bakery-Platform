@@ -8,7 +8,11 @@ import '../api/transport.dart';
 import 'live_data.dart';
 import 'sweetcake_widgets.dart';
 
-Future<UploadPart?> pickLiveFile(String field, {bool proof = false}) async {
+Future<UploadPart?> pickLiveFile(
+  String field, {
+  bool proof = false,
+  int? limitBytes,
+}) async {
   final result = await FilePicker.platform.pickFiles(
     // Use the scoped document picker consistently, including Android 16.
     // Image-only GET_CONTENT can be redirected to the OS photo picker.
@@ -18,9 +22,9 @@ Future<UploadPart?> pickLiveFile(String field, {bool proof = false}) async {
   );
   if (result == null) return null;
   final picked = result.files.single,
-      limit = proof ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+      limit = limitBytes ?? (proof ? 10 * 1024 * 1024 : 5 * 1024 * 1024);
   if (picked.size > limit) {
-    throw ApiFailure(400, 'Tệp vượt giới hạn ${proof ? 10 : 5} MiB.');
+    throw ApiFailure(400, 'Tệp vượt giới hạn ${limit ~/ (1024 * 1024)} MiB.');
   }
   final data =
       picked.bytes ??
@@ -36,8 +40,10 @@ class LiveUpload extends StatefulWidget {
     required this.upload,
     this.after,
     this.field = 'file',
+    this.maximumMiB = 5,
   });
   final String label, field;
+  final int maximumMiB;
   final Future<void> Function(UploadPart) upload;
   final VoidCallback? after;
   @override
@@ -54,14 +60,17 @@ class _LiveUploadState extends State<LiveUpload> {
     children: [
       Text(widget.label, style: Theme.of(context).textTheme.titleMedium),
       const SizedBox(height: 8),
-      const Text('JPEG, PNG, WEBP · tối đa 5 MiB mỗi tệp'),
+      Text('JPEG, PNG, WEBP · tối đa ${widget.maximumMiB} MiB mỗi tệp'),
       OutlinedButton.icon(
         key: ValueKey('pick-${widget.field}-${widget.label}'),
         onPressed: busy
             ? null
             : () async {
                 try {
-                  final f = await pickLiveFile(widget.field);
+                  final f = await pickLiveFile(
+                    widget.field,
+                    limitBytes: widget.maximumMiB * 1024 * 1024,
+                  );
                   if (mounted && f != null) {
                     setState(() {
                       file = f;
