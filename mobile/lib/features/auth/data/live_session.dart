@@ -100,9 +100,26 @@ class LiveSession extends ChangeNotifier {
       },
     );
     if (r.status >= 400) {
-      throw ApiFailure(r.status, ApiFailure.forStatus(r.status));
+      throw ApiFailure(
+        r.status,
+        action == 'register' && r.status == 409
+            ? 'Email đã được sử dụng. Đăng nhập để kiểm tra tài khoản hoặc dùng email khác.'
+            : ApiFailure.forStatus(r.status),
+        uncertain: action == 'register' && r.status >= 500,
+        responseStatus: r.status,
+      );
     }
-    return r.data;
+    try {
+      return r.data;
+    } on FormatException {
+      throw ApiFailure(
+        502,
+        'Phản hồi dịch vụ không đúng định dạng. Kiểm tra tài khoản bằng đăng nhập.',
+        uncertain: action == 'register',
+        kind: ApiFailureKind.invalidResponse,
+        responseStatus: r.status,
+      );
+    }
   }
 
   Future<void> register(Json fields) async {

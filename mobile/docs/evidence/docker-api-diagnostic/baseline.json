@@ -1,0 +1,218 @@
+{
+  "at": "2026-11-07T16:00:49.118569+00:00",
+  "git": {
+    "head": "5ec7a890eb0f19838422042016098920d452d164",
+    "branch": "dev",
+    "status": "M mobile/README.md\n D mobile/docs.zip"
+  },
+  "protectedFiles": 3099,
+  "protectedDirectories": 608,
+  "containers": [
+    {
+      "name": "bakery-mobile-20261107-mobile-identity-1",
+      "state": "exited",
+      "exitCode": 137,
+      "finishedAt": "2026-11-07T13:41:38.847859834Z",
+      "oomKilled": false,
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18101"
+          }
+        ]
+      },
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/service-clients.yml",
+          "destination": "/run/config/service-clients.yml",
+          "sourceExists": true
+        },
+        {
+          "source": "H:/MSS/.secrets/bakery-platform/identity-private.pem",
+          "destination": "/run/secrets/identity-private.pem",
+          "sourceExists": true
+        },
+        {
+          "source": "H:/MSS/.secrets/bakery-platform/identity-public.pem",
+          "destination": "/run/secrets/identity-public.pem",
+          "sourceExists": true
+        },
+        {
+          "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/identity-service.jar",
+          "destination": "/app/application.jar",
+          "sourceExists": true
+        }
+      ]
+    },
+    {
+      "name": "bakery-mobile-20261107-mobile-bakery-1",
+      "state": "exited",
+      "exitCode": 137,
+      "finishedAt": "2026-11-07T13:41:38.883472402Z",
+      "oomKilled": false,
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18102"
+          }
+        ]
+      },
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/bakery-service.jar",
+          "destination": "/app/application.jar",
+          "sourceExists": true
+        }
+      ]
+    },
+    {
+      "name": "bakery-mobile-20261107-mobile-subscription-1",
+      "state": "exited",
+      "exitCode": 137,
+      "finishedAt": "2026-11-07T13:41:38.883705544Z",
+      "oomKilled": false,
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18104"
+          }
+        ]
+      },
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/subscription-service.jar",
+          "destination": "/app/application.jar",
+          "sourceExists": true
+        }
+      ]
+    },
+    {
+      "name": "bakery-mobile-20261107-bakery-db-1",
+      "state": "exited",
+      "exitCode": 0,
+      "finishedAt": "2026-11-07T13:41:37.864287738Z",
+      "oomKilled": false,
+      "ports": {},
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "/var/lib/docker/volumes/bakery-mobile-20261107_bakery-data/_data",
+          "destination": "/var/lib/postgresql/data",
+          "sourceExists": null
+        }
+      ]
+    },
+    {
+      "name": "bakery-mobile-20261107-subscription-db-1",
+      "state": "exited",
+      "exitCode": 0,
+      "finishedAt": "2026-11-07T13:41:37.796639311Z",
+      "oomKilled": false,
+      "ports": {},
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "/var/lib/docker/volumes/bakery-mobile-20261107_subscription-data/_data",
+          "destination": "/var/lib/postgresql/data",
+          "sourceExists": null
+        }
+      ]
+    },
+    {
+      "name": "bakery-mobile-20261107-mobile-storage-1",
+      "state": "exited",
+      "exitCode": 0,
+      "finishedAt": "2026-11-07T13:41:37.676719462Z",
+      "oomKilled": false,
+      "ports": {
+        "9000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "19022"
+          }
+        ]
+      },
+      "project": "bakery-mobile-20261107",
+      "mounts": [
+        {
+          "source": "/var/lib/docker/volumes/bakery-mobile-20261107_storage-data/_data",
+          "destination": "/data",
+          "sourceExists": null
+        }
+      ]
+    }
+  ],
+  "hostChecks": [
+    {
+      "port": 18101,
+      "path": "/v3/api-docs",
+      "errorType": "URLError",
+      "socketError": "ConnectionRefusedError"
+    },
+    {
+      "port": 18102,
+      "path": "/api/v1/products",
+      "errorType": "URLError",
+      "socketError": "ConnectionRefusedError"
+    },
+    {
+      "port": 18104,
+      "path": "/api/v1/subscription-plans",
+      "errorType": "URLError",
+      "socketError": "ConnectionRefusedError"
+    },
+    {
+      "port": 19022,
+      "path": "/minio/health/ready",
+      "errorType": "URLError",
+      "socketError": "ConnectionRefusedError"
+    }
+  ],
+  "adb": {
+    "command": [
+      "adb",
+      "devices",
+      "-l"
+    ],
+    "exitCode": 0,
+    "stdout": "List of devices attached\nemulator-5554          offline transport_id:6",
+    "stderr": ""
+  },
+  "reverse": {
+    "command": [
+      "adb",
+      "-s",
+      "emulator-5554",
+      "reverse",
+      "--list"
+    ],
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "error: device offline"
+  },
+  "flutter": {
+    "command": [
+      "flutter.bat",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "Flutter 3.47.1 \u2022 channel [user-branch] \u2022 https://github.com/flutter/flutter.git\nFramework \u2022 revision 6655482ec0 (3 months ago) \u2022 2026-08-19 10:07:23 -0700\nEngine \u2022 hash 11d79658c444477b06513d32b52c8c4ccb7276b0 (revision 5d53178869) (2 months ago) \u2022 2026-08-18 23:36:01.000Z\nTools \u2022 Dart 3.13.1 \u2022 DevTools 2.60.0",
+    "stderr": ""
+  },
+  "avds": {
+    "command": [
+      "emulator",
+      "-list-avds"
+    ],
+    "exitCode": 0,
+    "stdout": "homemind_local_run",
+    "stderr": ""
+  },
+  "actualUserFlutterCommand": "NOT_OBSERVED; no emulator or Flutter app currently running"
+}

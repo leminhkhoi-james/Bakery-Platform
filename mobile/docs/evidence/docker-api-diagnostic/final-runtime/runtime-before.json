@@ -1,0 +1,59 @@
+{
+  "at": "2026-11-07T17:12:22.972386+00:00",
+  "checkOnly": true,
+  "actions": [],
+  "services": {
+    "mobile-identity": {
+      "port": 18101,
+      "path": "/v3/api-docs",
+      "status": "READY_HTTP_200",
+      "httpStatus": 200
+    },
+    "mobile-bakery": {
+      "port": 18102,
+      "path": "/api/v1/products",
+      "status": "READY_HTTP_200",
+      "httpStatus": 200
+    },
+    "mobile-subscription": {
+      "port": 18104,
+      "path": "/api/v1/subscription-plans",
+      "status": "READY_HTTP_200",
+      "httpStatus": 200
+    },
+    "mobile-storage": {
+      "port": 19022,
+      "path": "/minio/health/ready",
+      "status": "READY_HTTP_200",
+      "httpStatus": 200
+    }
+  },
+  "source": {
+    "identity-service": {
+      "checked": 81,
+      "different": []
+    },
+    "bakery-service": {
+      "checked": 122,
+      "different": []
+    },
+    "subscription-service": {
+      "checked": 63,
+      "different": []
+    }
+  },
+  "project": "bakery-mobile-20261107",
+  "rawComposeVsContainerDifferentNames": {
+    "mobile-identity": [
+      "ORDER_CLIENT_SECRET_HASH",
+      "CHAT_SERVICE_CLIENT_SECRET_HASH",
+      "BAKERY_CLIENT_SECRET_HASH",
+      "SUBSCRIPTION_CLIENT_SECRET_HASH",
+      "MARKETPLACE_CLIENT_SECRET_HASH"
+    ],
+    "mobile-bakery": [],
+    "mobile-subscription": []
+  },
+  "identityDatabaseContainer": "bakery-local-identity-db-1",
+  "result": "PASS"
+}

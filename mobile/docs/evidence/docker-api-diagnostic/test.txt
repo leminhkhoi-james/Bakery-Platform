@@ -1,0 +1,56 @@
+00:00 +0: loading H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart
+00:00 +0: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: fresh session instances restore serialized cookies and persist each rotation
+00:00 +1: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: bakery invalidation cancels private work without cancelling Identity rotation
+00:00 +2: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: malformed successful mutation is uncertain and is never repeated automatically
+00:00 +3: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: invalid cookie cannot partially replace a valid rotation
+00:00 +4: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: logout sends both legitimate JWT and scoped cookie then clears local session
+00:00 +5: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: decimal money retains precision and rejects invalid values
+00:00 +6: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: page and public DTO reject fixture shapes and use server identifiers
+00:00 +7: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: refresh cookie enforces port, path boundary, expiry and Secure without stripping attributes
+00:00 +8: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: concurrent expired requests share exactly one rotation and cookies never reach Bakery
+00:00 +9: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: late refresh cannot restore access or secure storage after logout
+00:00 +10: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: transient refresh preserves recoverable session; invalid rotation clears it
+00:00 +11: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: anonymous GET has no credentials; bounded GET retry; no mutation retry or 403 refresh
+00:00 +12: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: idempotency keeps UUID across uncertain retry and changes with payload/context
+00:00 +13: H:/MSS/Bakery-Platform/mobile/test/api_foundation_test.dart: account/bakery fence rejects a late private response
+00:00 +14: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +15: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +16: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +17: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +18: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +19: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:00 +20: H:/MSS/Bakery-Platform/mobile/test/auth_recovery_test.dart: recovered login removes every credential form from navigation stack
+00:02 +21: H:/MSS/Bakery-Platform/mobile/test/connection_diagnostic_test.dart: refused connection before HTTP send is recoverable, not uncertain
+00:02 +22: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:02 +23: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:02 +24: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:02 +25: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:02 +26: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:02 +27: H:/MSS/Bakery-Platform/mobile/test/live_widgets_test.dart: live form is scrollable at 320px and text scale 1.0
+00:03 +28: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:03 +29: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:03 +30: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:04 +31: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:04 +32: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:04 +33: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:05 +34: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:06 +35: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:06 +36: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:06 +37: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:07 +38: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:08 +39: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:09 +40: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:09 +41: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:10 +42: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:11 +43: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:12 +44: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:12 +45: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:12 +46: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình đều có loading, empty, error và retry local
+00:17 +47: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình: rộng 320.0, không lỗi bố cục
+00:21 +48: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình: rộng 360.0, không lỗi bố cục
+00:25 +49: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình: rộng 390.0, không lỗi bố cục
+00:28 +50: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình: rộng 430.0, không lỗi bố cục
+00:32 +51: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình: rộng 768.0, không lỗi bố cục
+00:35 +52: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: 35 màn hình với chữ lớn 1.8 và landscape 768×430
+00:41 +53: H:/MSS/Bakery-Platform/mobile/test/screen_coverage_test.dart: Tình huống local và retry khôi phục nội dung, route chặn sai vai
+00:42 +54: All tests passed!

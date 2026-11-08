@@ -1,0 +1,54 @@
+{
+  "results": [
+    {
+      "action": "Home error reproduced with Docker services stopped",
+      "result": "PASS"
+    },
+    {
+      "action": "Connection-refused registration incorrectly enters uncertain locked state",
+      "result": "PASS"
+    }
+  ],
+  "state": {
+    "events": [
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 0,
+        "uncertain": false,
+        "mode": "real",
+        "layer": "ANDROID_UI_FAILURE",
+        "at": "2026-11-07T16:05:23.535566Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 0,
+        "uncertain": false,
+        "mode": "real",
+        "layer": "ANDROID_UI_FAILURE",
+        "at": "2026-11-07T16:05:25.567719Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/register",
+        "status": 0,
+        "uncertain": true,
+        "mode": "real",
+        "layer": "ANDROID_UI_FAILURE",
+        "at": "2026-11-07T16:05:33.828054Z"
+      }
+    ],
+    "userId": null,
+    "roles": [],
+    "bakeryId": null,
+    "origins": {
+      "identity": "http://127.0.0.1:18101",
+      "bakery": "http://127.0.0.1:18102",
+      "subscription": "http://127.0.0.1:18104"
+    }
+  }
+}

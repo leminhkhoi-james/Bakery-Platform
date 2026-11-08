@@ -7,16 +7,54 @@ import '../../../core/widgets/live_scaffold.dart';
 import '../../../core/widgets/sweetcake_widgets.dart';
 
 class LiveAuthPage extends StatelessWidget {
-  const LiveAuthPage({super.key, this.register = false});
+  const LiveAuthPage({
+    super.key,
+    this.register = false,
+    this.initialEmail = '',
+    this.registrationConfirmed = false,
+    this.reconcileRegistration = false,
+  });
   final bool register;
+  final String initialEmail;
+  final bool registrationConfirmed, reconcileRegistration;
   @override
   Widget build(BuildContext context) {
     final w = LiveScope.of(context);
     return LiveFormPage<Object?>(
       privateContext: false,
+      onSuccess: register
+          ? null
+          : (context, _) => Navigator.of(context).pushNamedAndRemoveUntil(
+              '/profile',
+              (route) => route.settings.name == '/',
+            ),
       title: register ? 'Tạo tài khoản' : 'Đăng nhập SweetCake',
       action: register ? 'Tạo tài khoản' : 'Đăng nhập',
-      initial: const {},
+      initial: {if (initialEmail.isNotEmpty) 'email': initialEmail},
+      recoveryBuilder: register
+          ? (context, values, failure) => Column(
+              children: [
+                const SizedBox(height: 16),
+                SCNotice(
+                  failure.uncertain
+                      ? 'Không gửi lại đăng ký chưa rõ kết quả. Đăng nhập để kiểm tra tài khoản; mật khẩu cần được nhập lại.'
+                      : 'Email đã tồn tại. Đăng nhập để kiểm tra tài khoản; mật khẩu cần được nhập lại.',
+                ),
+                SCButton(
+                  'Kiểm tra tài khoản bằng đăng nhập',
+                  key: const ValueKey('registration-reconcile'),
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => LiveAuthPage(
+                        initialEmail: '${values['email'] ?? ''}',
+                        reconcileRegistration: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : null,
       fields: [
         const FormFieldSpec(
           'email',
@@ -46,7 +84,7 @@ class LiveAuthPage extends StatelessWidget {
       save: (body) async {
         if (register) {
           await w.session.register(body);
-          return true;
+          return body['email'] as String;
         }
         await w.session.login(
           body['email'] as String,
@@ -59,16 +97,35 @@ class LiveAuthPage extends StatelessWidget {
           if (!register)
             TextButton(
               key: const ValueKey('register-nav'),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const LiveAuthPage(register: true),
-                ),
-              ),
+              onPressed: () async {
+                final registered = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const LiveAuthPage(register: true),
+                  ),
+                );
+                if (registered is String && context.mounted) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => LiveAuthPage(
+                        initialEmail: registered,
+                        registrationConfirmed: true,
+                      ),
+                    ),
+                  );
+                }
+              },
               child: const Text('Tạo tài khoản mới'),
             ),
-          const SCNotice(
-            'Chưa hỗ trợ đặt lại mật khẩu hoặc sửa địa chỉ tài khoản.',
-          ),
+          if (registrationConfirmed)
+            const SCNotice('Đã tạo tài khoản. Đăng nhập để tiếp tục.'),
+          if (reconcileRegistration)
+            const SCNotice(
+              'Đăng nhập để xác nhận tài khoản. Nếu chưa đăng nhập được, kiểm tra kết nối và thông tin trước khi đăng ký lại.',
+            ),
+          if (!register)
+            const SCNotice(
+              'Chưa hỗ trợ đặt lại mật khẩu hoặc sửa địa chỉ tài khoản.',
+            ),
         ],
       ),
     );

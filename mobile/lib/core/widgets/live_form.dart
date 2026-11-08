@@ -184,6 +184,8 @@ class LiveFormPage<T> extends StatefulWidget {
     this.extra,
     this.transform,
     this.privateContext = true,
+    this.recoveryBuilder,
+    this.onSuccess,
   });
   final String title, action;
   final List<FormFieldSpec> fields;
@@ -192,6 +194,8 @@ class LiveFormPage<T> extends StatefulWidget {
   final Widget? extra;
   final Json Function(Json)? transform;
   final bool privateContext;
+  final Widget Function(BuildContext, Json, ApiFailure)? recoveryBuilder;
+  final void Function(BuildContext, T)? onSuccess;
   @override
   State<LiveFormPage<T>> createState() => _LiveFormPageState<T>();
 }
@@ -203,6 +207,17 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
   bool uncertain = false;
   int? epoch;
   String? error;
+  ApiFailure? failure;
+  @override
+  void dispose() {
+    for (final field in widget.fields.where(
+      (f) => f.kind == FieldKind.password,
+    )) {
+      values.remove(field.name);
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final workspace = LiveScope.of(context);
@@ -281,6 +296,7 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
                           setState(() {
                             busy = true;
                             error = null;
+                            failure = null;
                           });
                           try {
                             final payload = <String, dynamic>{
@@ -298,15 +314,20 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
                               });
                               await WidgetsBinding.instance.endOfFrame;
                               if (context.mounted) {
-                                Navigator.pop(context, result);
+                                if (widget.onSuccess != null) {
+                                  widget.onSuccess!(context, result);
+                                } else {
+                                  Navigator.pop(context, result);
+                                }
                               }
                             }
                           } on Object catch (e) {
                             if (mounted) {
                               setState(() {
                                 uncertain = e is ApiFailure && e.uncertain;
+                                failure = e is ApiFailure ? e : null;
                                 error =
-                                    '${safeError(e)}${uncertain ? ' Quay lại danh sách và làm mới để đối chiếu trước khi mở yêu cầu khác.' : ''}';
+                                    '${safeError(e)}${uncertain && widget.recoveryBuilder == null ? ' Quay lại danh sách và làm mới để đối chiếu trước khi mở yêu cầu khác.' : ''}';
                               });
                             }
                           } finally {
@@ -314,6 +335,14 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
                           }
                         },
                 ),
+                if (failure != null &&
+                    (uncertain || failure!.status == 409) &&
+                    widget.recoveryBuilder != null)
+                  widget.recoveryBuilder!(
+                    context,
+                    Map.unmodifiable(values),
+                    failure!,
+                  ),
               ],
             ),
           ),

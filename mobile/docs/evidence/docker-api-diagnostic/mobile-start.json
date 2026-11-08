@@ -1,0 +1,22 @@
+﻿{
+    "deviceId":  "emulator-5554",
+    "androidSdk":  "D:\\HomeMind\\audit-tools\\android-sdk",
+    "bootCompleted":  "1",
+    "bootAnimation":  "stopped",
+    "ports":  [
+                  18101,
+                  18102,
+                  18104,
+                  19022
+              ],
+    "publicFlutterArguments":  [
+                                   "run",
+                                   "-d",
+                                   "emulator-5554",
+                                   "--debug",
+                                   "--dart-define=IDENTITY_URL=http://127.0.0.1:18101",
+                                   "--dart-define=BAKERY_URL=http://127.0.0.1:18102",
+                                   "--dart-define=SUBSCRIPTION_URL=http://127.0.0.1:18104"
+                               ],
+    "prepareOnly":  false
+}

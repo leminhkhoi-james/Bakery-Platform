@@ -1,0 +1,78 @@
+{
+  "results": [
+    {
+      "action": "Public plan detail renders after actual Subscription GET",
+      "result": "PASS"
+    }
+  ],
+  "state": {
+    "events": [
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18102",
+        "path": "/api/v1/products",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:44:29.398950Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:44:30.657095Z"
+      },
+      {
+        "method": "POST",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/refresh",
+        "status": 200,
+        "ids": [],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:44:31.070210Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18101",
+        "path": "/api/v1/auth/me",
+        "status": 200,
+        "ids": [
+          "39f5aeef-6139-4862-867b-998455fb8649"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:44:31.634421Z"
+      },
+      {
+        "method": "GET",
+        "origin": "http://127.0.0.1:18104",
+        "path": "/api/v1/subscription-plans/00000000-0000-0000-0000-000000000101",
+        "status": 200,
+        "ids": [
+          "00000000-0000-0000-0000-000000000101"
+        ],
+        "mode": "real",
+        "layer": "ANDROID_UI",
+        "at": "2026-11-07T16:44:32.099568Z"
+      }
+    ],
+    "userId": "39f5aeef-6139-4862-867b-998455fb8649",
+    "roles": [
+      "BAKERY_OWNER",
+      "CUSTOMER"
+    ],
+    "restoring": false,
+    "bakeryId": null,
+    "origins": {
+      "identity": "http://127.0.0.1:18101",
+      "bakery": "http://127.0.0.1:18102",
+      "subscription": "http://127.0.0.1:18104"
+    }
+  }
+}

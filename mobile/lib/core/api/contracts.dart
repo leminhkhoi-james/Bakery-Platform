@@ -111,11 +111,21 @@ class SubscriptionPlan {
   late final Json features;
 }
 
+enum ApiFailureKind { http, connection, timeout, invalidResponse, cancelled }
+
 class ApiFailure implements Exception {
-  const ApiFailure(this.status, this.message, {this.uncertain = false});
+  const ApiFailure(
+    this.status,
+    this.message, {
+    this.uncertain = false,
+    this.kind = ApiFailureKind.http,
+    this.responseStatus,
+  });
   final int status;
   final String message;
   final bool uncertain;
+  final ApiFailureKind kind;
+  final int? responseStatus;
   bool get transient => status == 0 || status >= 500 || status == 429;
   @override
   String toString() => message;

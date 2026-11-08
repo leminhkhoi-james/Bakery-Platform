@@ -120,17 +120,26 @@ class NativeTransport implements ApiTransport {
     int? scope,
   }) async {
     HttpClientRequest? request;
+    var mayHaveSent = false;
+    int? responseStatus;
     try {
       request = await _client.openUrl(method, uri).timeout(timeout);
       if (scope != null && _cancelled.contains(scope)) {
         request.abort();
-        throw const ApiFailure(0, 'Ngữ cảnh yêu cầu đã thay đổi.');
+        throw const ApiFailure(
+          0,
+          'Ngữ cảnh yêu cầu đã thay đổi.',
+          kind: ApiFailureKind.cancelled,
+        );
       }
       request.followRedirects =
           false; // Never forward auth to redirects/storage.
       if (scope != null) (_requests[scope] ??= {}).add(request);
       headers.forEach(request.headers.set);
       request.headers.set('Accept', 'application/json');
+      // openUrl failing cannot have sent this HTTP request. Once writing/closing
+      // starts, a mutation may have committed even if its response is lost.
+      mayHaveSent = true;
       if (multipart || files.isNotEmpty || fields.isNotEmpty) {
         final boundary = 'sweetcake-${commandId()}';
         request.headers.set(
@@ -163,6 +172,8 @@ class NativeTransport implements ApiTransport {
         request.write(jsonEncode(body));
       }
       final response = await request.close().timeout(timeout);
+      responseStatus = response.statusCode;
+      onResult?.call(method, uri.path, response.statusCode);
       final bytes = await response
           .fold<BytesBuilder>(BytesBuilder(), (a, b) => a..add(b))
           .timeout(timeout);
@@ -174,10 +185,13 @@ class NativeTransport implements ApiTransport {
         throw ApiFailure(
           response.statusCode >= 400 ? response.statusCode : 502,
           'Phản hồi dịch vụ không phải JSON hợp lệ.',
-          uncertain: method != 'GET',
+          uncertain:
+              method != 'GET' &&
+              (response.statusCode < 400 || response.statusCode >= 500),
+          kind: ApiFailureKind.invalidResponse,
+          responseStatus: response.statusCode,
         );
       }
-      onResult?.call(method, uri.path, response.statusCode);
       final ids = <String>[];
       final states = <String>[];
       void collect(Object? v) {
@@ -211,15 +225,39 @@ class NativeTransport implements ApiTransport {
       );
     } on ApiFailure {
       rethrow;
+    } on TimeoutException {
+      request?.abort();
+      onResult?.call(method, uri.path, 0);
+      throw ApiFailure(
+        0,
+        mayHaveSent && method != 'GET'
+            ? 'Dịch vụ phản hồi quá thời gian. Chưa xác định kết quả thao tác.'
+            : 'Kết nối quá thời gian. Kiểm tra Backend và kết nối emulator rồi thử lại.',
+        uncertain:
+            method != 'GET' &&
+            mayHaveSent &&
+            (responseStatus == null ||
+                responseStatus < 400 ||
+                responseStatus >= 500),
+        kind: ApiFailureKind.timeout,
+        responseStatus: responseStatus,
+      );
     } on Object {
       request?.abort();
       onResult?.call(method, uri.path, 0);
       throw ApiFailure(
         0,
-        method == 'GET'
-            ? 'Không kết nối được dịch vụ. Kiểm tra mạng và thử lại.'
+        method == 'GET' || !mayHaveSent
+            ? 'Không kết nối được dịch vụ. Kiểm tra Backend và kết nối emulator rồi thử lại.'
             : 'Chưa xác định kết quả. Làm mới dữ liệu trước khi thử lại.',
-        uncertain: method != 'GET',
+        uncertain:
+            method != 'GET' &&
+            mayHaveSent &&
+            (responseStatus == null ||
+                responseStatus < 400 ||
+                responseStatus >= 500),
+        kind: ApiFailureKind.connection,
+        responseStatus: responseStatus,
       );
     } finally {
       if (scope != null) _requests[scope]?.remove(request);

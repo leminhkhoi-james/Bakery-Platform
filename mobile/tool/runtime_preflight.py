@@ -1,9 +1,12 @@
 """Read-only local runtime check. Never prints environment or credentials."""
 from pathlib import Path
-import hashlib, json, os, subprocess, urllib.request, datetime
+import hashlib, json, os, subprocess, urllib.request, datetime, argparse
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'mobile/docs/evidence/api-integration-phases-1-4'
+parser=argparse.ArgumentParser()
+parser.add_argument('--output',type=Path,default=ROOT/'mobile/docs/evidence/api-integration-phases-1-4')
+OUT=parser.parse_args().output.resolve()
+if ROOT/'mobile' not in OUT.parents:raise SystemExit('Evidence must remain inside mobile/')
 OUT.mkdir(parents=True, exist_ok=True)
 ports = {'identity':18101, 'bakery':18102, 'subscription':18104}
 report = {'at':datetime.datetime.now(datetime.timezone.utc).isoformat(), 'services':{}, 'gateway':{}}
@@ -35,3 +38,4 @@ for name in ['identity-service','bakery-service','subscription-service']:
     report['sourceVsExternalBuild'][name]={'checked':count,'different':different}
 (OUT/'runtime-preflight.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(json.dumps(report,indent=2))
+raise SystemExit(any(v.get('status')!='RUNNING_AND_VERIFIED_OPENAPI' for v in report['services'].values()) or any(v['different'] for v in report['sourceVsExternalBuild'].values()))

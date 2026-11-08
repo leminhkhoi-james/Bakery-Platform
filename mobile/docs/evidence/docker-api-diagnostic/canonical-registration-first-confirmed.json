@@ -1,0 +1,12 @@
+{
+  "entrypoint": "lib/main.dart",
+  "driverExtensionUsed": false,
+  "credentialsPersisted": false,
+  "registerStatusDirectlyCaptured": false,
+  "hostReconciliationLoginStatus": 200,
+  "syntheticUserId": "ab12bcd4-ad51-4ea9-bfe8-d40760c34b6a",
+  "hostMeStatus": 200,
+  "roles": [
+    "CUSTOMER"
+  ]
+}
