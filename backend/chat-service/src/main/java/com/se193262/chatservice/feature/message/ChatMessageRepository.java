@@ -20,11 +20,27 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> 
     @Query("""
             select m from ChatMessage m
             where m.conversationId = :conversationId
-              and (:beforeTime is null or m.createdAt < :beforeTime
-                   or (m.createdAt = :beforeTime and m.id < :beforeId))
             order by m.createdAt desc, m.id desc
             """)
-    List<ChatMessage> findPageBefore(
+    List<ChatMessage> findFirstPage(
+            @Param("conversationId") UUID conversationId,
+            Pageable pageable);
+
+    /*
+     * UUID does not have a portable ordering operation in JPQL.  The former
+     * `m.id < :beforeId` predicate was accepted by some providers but fails
+     * when Hibernate translates the history cursor query.  This service owns
+     * PostgreSQL, whose UUID ordering is well-defined, so keep the tie-breaker
+     * in a small native query instead of relying on invalid JPQL.
+     */
+    @Query(value = """
+            select * from messages
+            where conversation_id = :conversationId
+              and (created_at < :beforeTime
+                   or (created_at = :beforeTime and id < cast(:beforeId as uuid)))
+            order by created_at desc, id desc
+            """, nativeQuery = true)
+    List<ChatMessage> findPageBeforeCursor(
             @Param("conversationId") UUID conversationId,
             @Param("beforeTime") Instant beforeTime,
             @Param("beforeId") UUID beforeId,

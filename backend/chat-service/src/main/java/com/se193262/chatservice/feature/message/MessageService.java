@@ -106,11 +106,11 @@ public class MessageService {
         ConversationParticipant participant =
                 conversationService.requireParticipant(conversation, userId, roles, null);
         Cursor cursor = before == null || before.isBlank() ? null : decodeCursor(before);
-        List<ChatMessage> fetched = messageRepository.findPageBefore(
-                conversationId,
-                cursor == null ? null : cursor.createdAt(),
-                cursor == null ? null : cursor.id(),
-                PageRequest.of(0, limit + 1));
+        PageRequest pageRequest = PageRequest.of(0, limit + 1);
+        List<ChatMessage> fetched = cursor == null
+                ? messageRepository.findFirstPage(conversationId, pageRequest)
+                : messageRepository.findPageBeforeCursor(
+                        conversationId, cursor.createdAt(), cursor.id(), pageRequest);
         boolean hasMore = fetched.size() > limit;
         List<ChatMessage> messages = hasMore ? fetched.subList(0, limit) : fetched;
         messages.stream()

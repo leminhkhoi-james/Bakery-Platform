@@ -49,6 +49,16 @@ Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trư
   chặn hoàn tất sớm và chặn truy cập tiệm của người khác. Đồng bộ API spec
   và ADR-005.
 
+## Identity admin và Chat history repair — 2026-11-08
+
+- Identity có `PATCH /api/v1/users/me` và các API admin protected gồm list/filter,
+  xem user, đổi trạng thái và thay thế roles. Block/xóa mềm revoke toàn bộ refresh
+  token; admin không thể tự đổi status hoặc roles của chính mình.
+- Chat history cursor đã bỏ phép so sánh UUID bằng JPQL không portable. Trang đầu
+  và trang cursor giờ dùng truy vấn riêng; cursor dùng UUID ordering của PostgreSQL.
+- Chưa chạy được Maven verification trong môi trường hiện tại vì wrapper không khởi
+  động được từ PowerShell và Java trên PATH là 8, trong khi project yêu cầu Java 21.
+
 ## Audit toàn hệ thống, Docker local và nền tảng mobile — 2026-11-06
 
 - Đã tạo báo cáo hiện trạng và báo cáo thực thi tiếng Việt trong `docs/audit/`:
