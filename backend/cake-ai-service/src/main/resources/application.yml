@@ -42,3 +42,18 @@ management:
       show-details: never
       probes:
         enabled: true
+
+cake-ai:
+  api-key: ${CAKE_AI_API_KEY:}
+  provider-url: ${CAKE_AI_PROVIDER_URL:https://generativelanguage.googleapis.com/v1beta}
+  image-model: ${CAKE_AI_IMAGE_MODEL:gemini-2.0-flash}
+  moderation-model: ${CAKE_AI_MODERATION_MODEL:gemini-2.0-flash}
+  connect-timeout: ${CAKE_AI_CONNECT_TIMEOUT:5s}
+  read-timeout: ${CAKE_AI_READ_TIMEOUT:120s}
+  workers: ${CAKE_AI_WORKERS:2}
+  lease-duration: ${CAKE_AI_LEASE_DURATION:30m}
+  firebase-project-id: ${CAKE_AI_FIREBASE_PROJECT_ID:${FIREBASE_PROJECT_ID:}}
+  firebase-bucket: ${CAKE_AI_FIREBASE_BUCKET:${FIREBASE_STORAGE_BUCKET:}}
+  scheduler-enabled: ${CAKE_AI_SCHEDULER_ENABLED:true}
+  poll-delay-ms: ${CAKE_AI_POLL_DELAY_MS:1000}
+

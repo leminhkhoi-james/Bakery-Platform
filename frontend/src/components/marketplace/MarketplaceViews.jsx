@@ -16,13 +16,13 @@ import { EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { useMarketplaceAction } from '../../hooks/useMarketplaceAction.js'
 import ThreeCakeCanvas from '../../pages/customer/ai-studio/ThreeCakeCanvas.jsx'
 
-export function ReferenceImage({ url, label = 'Ảnh tham khảo' }) {
+export function ReferenceImage({ url, label = 'Ảnh tham khảo', className }) {
   const [failed, setFailed] = useState(false)
   return url && !failed ? (
     <img
       src={url}
       alt={label}
-      className="max-h-80 w-full rounded-2xl object-cover border border-outline-variant/30 shadow-xs hover:scale-[1.01] transition-transform"
+      className={className || "max-h-80 w-full rounded-2xl object-cover border border-outline-variant/30 shadow-xs hover:scale-[1.01] transition-transform"}
       onError={() => setFailed(true)}
     />
   ) : (
@@ -98,7 +98,7 @@ const QUICK_BUDGET_RANGES = [
   { label: '1.2Tr – 2.5Tr', min: 1200000, max: 2500000 },
 ]
 
-export function RequestInfo({ request }) {
+export function RequestInfo({ request, compact = false }) {
   const cake3DConfig = request.preference?.extraOptions?.cake3DConfig
   const cake3DSnapshotUrl = request.preference?.extraOptions?.cake3DSnapshotUrl
   const [live3DMode, setLive3DMode] = useState(Boolean(cake3DConfig))
@@ -112,6 +112,162 @@ export function RequestInfo({ request }) {
       (!cake3DSnapshotUrl || img.url !== cake3DSnapshotUrl) &&
       (!selectedAiImageUrl || img.url !== selectedAiImageUrl)
   )
+
+  if (compact) {
+    return (
+      <section className="space-y-3.5 rounded-2xl border border-outline-variant/30 bg-surface p-4 sm:p-5 shadow-xs">
+        {/* Status & Occasion header */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/20 pb-3">
+          <div className="flex items-center gap-2">
+            <StatusBadge status={request.status} label={RFQ_STATUS_LABELS[request.status] || request.status} />
+            <span className="rounded-full bg-surface-container px-2.5 py-0.5 text-xs font-semibold text-on-surface-variant">
+              {REQUEST_TYPE_LABELS[request.requestType] || 'Yêu cầu làm bánh'}
+            </span>
+          </div>
+          {request.occasion && (
+            <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
+              {request.occasion}
+            </span>
+          )}
+        </div>
+
+        {/* Title */}
+        <h2 className="font-serif text-lg sm:text-xl font-bold text-primary leading-snug">
+          {request.title || 'Yêu cầu chưa có tiêu đề'}
+        </h2>
+
+        {/* Key Metrics: Budget & Location */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+              <Icon name="payments" className="text-sm" />
+              <span>Ngân sách</span>
+            </div>
+            <p className="mt-1 font-serif text-base font-bold text-primary">
+              {hasBudget ? `${moneyVnd(request.budgetMin)} — ${moneyVnd(request.budgetMax)}` : 'Thương lượng'}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-outline-variant/25 bg-surface-container-low p-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-outline">
+              <Icon name="location_on" className="text-sm text-secondary" />
+              <span>Giao tại</span>
+            </div>
+            <p className="mt-1 text-sm font-bold text-on-surface truncate">
+              {[request.deliveryDistrict, request.deliveryCity].filter(Boolean).join(', ') || 'Chưa có địa điểm'}
+            </p>
+            <p className="text-[11px] text-on-surface-variant mt-0.5">
+              Cần giao: <strong>{formatRfqDateTime(request.neededAt)}</strong>
+            </p>
+          </div>
+        </div>
+
+        {/* Cake Visual */}
+        {(cake3DSnapshotUrl || cake3DConfig) ? (
+          <div className="rounded-2xl border border-rose-200/90 bg-rose-50/40 p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-primary flex items-center gap-1.5">
+                <Icon name="view_in_ar" className="text-base" /> Mẫu bánh 3D
+              </span>
+              {cake3DConfig && (
+                <button
+                  type="button"
+                  onClick={() => setLive3DMode((v) => !v)}
+                  className="text-xs text-primary font-semibold hover:underline cursor-pointer"
+                >
+                  {live3DMode ? 'Xem ảnh chụp' : 'Xoay 3D 360°'}
+                </button>
+              )}
+            </div>
+            {live3DMode && cake3DConfig ? (
+              <div className="h-56 w-full rounded-xl overflow-hidden border border-rose-200">
+                <ThreeCakeCanvas
+                  compact
+                  config={cake3DConfig}
+                  spongeColor={cake3DConfig.spongeColor || '#f6e3ba'}
+                  fillingColor={cake3DConfig.fillingColor || '#e04f6b'}
+                  showCrossSection={show3DCutaway}
+                  autoRotate
+                />
+              </div>
+            ) : (
+              <img
+                src={cake3DSnapshotUrl || selectedAiImageUrl}
+                alt="Mẫu bánh 3D"
+                className="h-52 w-full rounded-xl object-contain bg-white/70 border border-stone-200"
+              />
+            )}
+          </div>
+        ) : selectedAiImageUrl ? (
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-primary flex items-center gap-1.5">
+                <Icon name="auto_awesome" className="text-base" /> Mẫu bánh AI khách chọn
+              </span>
+            </div>
+            <img
+              src={selectedAiImageUrl}
+              alt="Mẫu bánh AI"
+              className="h-52 w-full rounded-xl object-cover border border-outline-variant/30 shadow-xs"
+            />
+          </div>
+        ) : extraImages.length > 0 ? (
+          <div className="rounded-2xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-2">
+            <span className="text-xs font-bold text-outline">Ảnh khách đính kèm</span>
+            <img
+              src={extraImages[0].url}
+              alt="Ảnh đính kèm"
+              className="h-48 w-full rounded-xl object-cover border border-outline-variant/30"
+            />
+          </div>
+        ) : null}
+
+        {/* Specifications */}
+        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-1.5 text-xs">
+          <div className="font-bold text-primary flex items-center gap-1.5">
+            <Icon name="tune" className="text-sm" /> Yêu cầu quy cách
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-stone-700 pt-1">
+            {request.servingSize != null && (
+              <div><span className="text-outline">Khẩu phần:</span> <strong>{request.servingSize} người</strong></div>
+            )}
+            {request.preference?.flavor && (
+              <div><span className="text-outline">Hương vị:</span> <strong>{request.preference.flavor}</strong></div>
+            )}
+            {request.preference?.frosting && (
+              <div><span className="text-outline">Kem phủ:</span> <strong>{request.preference.frosting}</strong></div>
+            )}
+            {request.preference?.cakeSize && (
+              <div><span className="text-outline">Kích thước:</span> <strong>{request.preference.cakeSize}</strong></div>
+            )}
+            {request.preference?.colorPalette && (
+              <div><span className="text-outline">Tone màu:</span> <strong>{request.preference.colorPalette}</strong></div>
+            )}
+          </div>
+          {request.preference?.decorationNotes && (
+            <div className="pt-1 text-stone-700 border-t border-outline-variant/15 mt-1">
+              <span className="text-outline">Trang trí:</span> <strong>{request.preference.decorationNotes}</strong>
+            </div>
+          )}
+          {request.preference?.allergyNotes && (
+            <div className="text-rose-700">
+              <span className="font-bold">Lưu ý dị ứng:</span> {request.preference.allergyNotes}
+            </div>
+          )}
+        </div>
+
+        {/* Customer description */}
+        {request.description && (
+          <div className="rounded-xl bg-amber-50/70 border border-amber-200/60 p-3 text-xs text-amber-950">
+            <div className="font-bold mb-1 flex items-center gap-1 text-amber-800">
+              <Icon name="notes" className="text-sm" /> Lời nhắn của khách hàng
+            </div>
+            <p className="whitespace-pre-wrap leading-relaxed">{request.description}</p>
+          </div>
+        )}
+      </section>
+    )
+  }
 
   return (
     <section className="space-y-5 rounded-3xl border border-outline-variant/30 bg-surface p-6 shadow-sm">
@@ -1096,7 +1252,24 @@ export function OfferCards({ resource, onPage, onOpen }) {
 
 export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
   const [filters, setFilters] = useState({ scope, cakeRequestId, bakeryId, page: 1, size: 12, sort: 'createdAt,desc', status: '' })
+  const [simulating, setSimulating] = useState(false)
   const resource = useCatalogResource(loadOffers, filters)
+
+  const handleSimulate = async () => {
+    if (!cakeRequestId || simulating) return
+    setSimulating(true)
+    try {
+      await rfqService.simulateOffers(cakeRequestId)
+      resource.reload()
+    } catch {
+      // Ignored
+    } finally {
+      setSimulating(false)
+    }
+  }
+
+  const isEmpty = resource.status === 'ready' && resource.data?.result?.length === 0
+
   return (
     <section className="space-y-4">
       <div className="sc-toolbar sc-offer-filters">
@@ -1122,6 +1295,26 @@ export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
           </select>
         </label>
       </div>
+
+      {isEmpty && scope === 'received' && cakeRequestId && (
+        <div className="text-center p-6 bg-surface-container-low rounded-3xl border border-primary/20 space-y-3">
+          <span className="material-symbols-outlined text-4xl text-primary animate-pulse" aria-hidden="true">storefront</span>
+          <h3 className="font-serif text-lg font-bold text-primary">Các tiệm bánh đang xem xét yêu cầu của bạn</h3>
+          <p className="text-xs text-on-surface-variant max-w-md mx-auto leading-relaxed">
+            Thông thường các tiệm bánh đối tác sẽ gửi báo giá chi tiết trong vòng 1-2 giờ. Bạn cũng có thể kích hoạt báo giá đề xuất tức thì để so sánh ngay.
+          </p>
+          <button
+            type="button"
+            disabled={simulating}
+            onClick={handleSimulate}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-wine-dark text-white text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-sm" aria-hidden="true">auto_awesome</span>
+            <span>{simulating ? 'Đang tạo báo giá từ các tiệm…' : '⚡ Nhận báo giá tức thì từ các tiệm đối tác'}</span>
+          </button>
+        </div>
+      )}
+
       <OfferCards resource={resource} onPage={(page) => setFilters({ ...filters, page })} onOpen={onOpen} />
     </section>
   )

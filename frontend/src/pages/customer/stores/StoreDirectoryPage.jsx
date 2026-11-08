@@ -45,7 +45,7 @@ export const StoreDirectoryPage = ({
         quantity: 1,
         deliveryDate: customCake?.deliveryDate || 'Hôm nay, 20/09/2026',
         deliveryAddress:
-          customCake?.deliveryAddress || 'Giao xe lạnh tận nơi theo yêu cầu',
+          customCake?.deliveryAddress || 'Giao hàng tận nơi theo yêu cầu',
       })
     }
 
@@ -229,10 +229,18 @@ export const StoreDirectoryPage = ({
                           alt={cleanPresentationLabel(store.name, 'Tiệm bánh')}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-full text-[11px] font-bold text-wine shadow-xs flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onNavigate?.(`bakery-detail?id=${store.id}&view=reviews`)
+                          }}
+                          className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-full text-[11px] font-bold text-wine shadow-xs flex items-center gap-1 hover:bg-amber-50 hover:scale-105 transition-all cursor-pointer z-10"
+                          title="Bấm để xem đánh giá của tiệm bánh"
+                        >
                           <span className="text-amber-500 text-xs leading-none">★</span>
                           <span>{meta.rating || '4.9'}</span>
-                        </div>
+                        </button>
                       </div>
 
                       {/* Store Info */}
@@ -276,12 +284,14 @@ export const StoreDirectoryPage = ({
                     {/* Features Strip */}
                     <div className="mt-4 pt-3 border-t border-primary/8 flex flex-wrap items-center gap-2 text-[11px]">
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#fafafc] border border-primary/10 text-on-surface-variant font-medium">
-                        <span className="material-symbols-outlined text-xs text-secondary">local_shipping</span>
-                        <span>{meta.deliverySla ? meta.deliverySla.split('•')[0].trim() : 'Giao xe lạnh chuyên dụng'}</span>
+                        <span translate="no" className="material-symbols-outlined notranslate text-xs text-secondary shrink-0" aria-hidden="true">local_shipping</span>
+                        <span>{meta.deliverySla ? meta.deliverySla.split('•')[0].trim() : 'Giao hàng chuyên dụng'}</span>
                       </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#fafafc] border border-primary/10 text-on-surface-variant font-medium">
-                        <span className="material-symbols-outlined text-xs text-secondary">verified_user</span>
-                        <span>{meta.escrowBadge || 'Bảo chứng cọc SweetCake Escrow 100%'}</span>
+                        <svg className="w-3.5 h-3.5 text-secondary shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                        </svg>
+                        <span>{meta.escrowBadge || 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%'}</span>
                       </span>
                     </div>
                   </div>

@@ -4,7 +4,7 @@ import { requireId, requireText, text } from './managementModels.js'
 
 export const JOB_STATUSES = ['QUEUED', 'PROCESSING', 'SUCCEEDED', 'FAILED', 'CANCELLED']
 export const runningJob = (status) => ['QUEUED', 'PROCESSING'].includes(status)
-export const aiUrl = (value) => typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null
+export const aiUrl = (value) => typeof value === 'string' && (/^https?:\/\//i.test(value) || value.startsWith('data:image/')) ? value : null
 export function generationPayload(input, create = true) {
   const body = { prompt: requireText(input.prompt, 'Prompt', 4000), negativePrompt: input.negativePrompt || null }
   if (body.negativePrompt && (typeof body.negativePrompt !== 'string' || body.negativePrompt.length > 2000)) throw new ApiError('Negative prompt tối đa 2000 ký tự.', 422)

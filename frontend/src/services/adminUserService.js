@@ -1,54 +1,64 @@
 import { api, ApiError } from './apiClient.js'
-import { requireId, requireText } from './managementModels.js'
-import { isDemoId } from '../mockData/seed.js'
-import { localUserDirectory, localUserRestriction } from '../mockData/admin/userManagement.js'
+import { requireId } from './managementModels.js'
 
-export function userRestriction(person, actor, action = 'delete') {
-  if (person?.id === actor?.id) return 'Không thể thay đổi hoặc xóa tài khoản đang đăng nhập.'
-  if (person?.roles?.includes('ADMIN') || person?.protected === true) return 'Tài khoản quản trị hoặc tài khoản được bảo vệ không thể xử lý tại đây.'
-  const local = localUserRestriction(person)
-  return action === 'delete' ? local : local?.includes('đăng nhập') ? local : null
+// Contract: docs/API_SPEC.md §2 User Administration (Identity Service, ADMIN only).
+export const USER_STATUSES = ['ACTIVE', 'BLOCKED', 'DELETED']
+export const PLATFORM_ROLES = ['CUSTOMER', 'BAKERY_OWNER', 'ADMIN']
+const LIST_PARAMS = ['page', 'size', 'sort', 'email', 'status', 'role']
+
+export function userRestriction(person, actor) {
+  // The API rejects self block/delete with 409; explain it before sending a request.
+  if (person?.id && person.id === actor?.id) return 'Không thể thay đổi tài khoản đang đăng nhập.'
+  if (person?.status === 'DELETED') return 'Tài khoản đã bị xóa, không thể thao tác thêm.'
+  return null
 }
-export const userName = (person) => person?.displayName || person?.fullName || person?.name || ''
-export const userStatus = (status) => ({ ACTIVE: 'Đang hoạt động', SUSPENDED: 'Tạm ngưng', BLOCKED: 'Tạm ngưng', DELETED: 'Đã xóa' }[status] || 'Chưa rõ trạng thái')
-export async function loadUsers(params, options) {
-  const data = await api.get('/admin/users?' + new URLSearchParams(Object.entries(params).filter(([, value]) => value !== '' && value != null)), options)
+// `name` only exists on local demo records; the API contract uses `displayName`.
+export const userName = (person) => person?.displayName || person?.name || ''
+export const userStatus = (status) => ({ ACTIVE: 'Đang hoạt động', BLOCKED: 'Đã khóa', DELETED: 'Đã xóa' }[status] || 'Chưa rõ trạng thái')
+
+function userPath(id) { return '/admin/users/' + requireId(id) }
+function assertUser(result, expectedId) {
+  if (!result?.id || result.id !== expectedId || !Array.isArray(result.roles)) throw new ApiError('Chưa thể xác nhận dữ liệu người dùng.', 502)
+  return result
+}
+
+export async function loadUsers(params = {}, options) {
+  const query = new URLSearchParams(LIST_PARAMS.filter((key) => params[key] !== '' && params[key] != null).map((key) => [key, params[key]]))
+  const data = await api.get('/admin/users?' + query, options)
   if (!Array.isArray(data?.result) || data.result.some((row) => !row?.id || !Array.isArray(row.roles)) || !data.meta) throw new ApiError('Chưa tải được danh sách người dùng.', 502)
   return data
 }
-export function userFieldErrors(input) {
-  const errors = {}
-  if (!input.name?.trim()) errors.name = 'Vui lòng nhập họ tên.'
-  else if (input.name.trim().length > 100) errors.name = 'Họ tên không quá 100 ký tự.'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email?.trim() || '')) errors.email = 'Vui lòng nhập email hợp lệ.'
-  else if (input.email.trim().length > 254) errors.email = 'Email không quá 254 ký tự.'
-  return errors
+
+export async function getUser(id, options) {
+  return assertUser(await api.get(userPath(id), options), String(id).toLowerCase())
 }
-function localOnly(person) {
-  if (!localUserDirectory() || person && !isDemoId(person.id)) throw new ApiError('Chức năng chỉnh sửa hồ sơ hiện chưa khả dụng cho tài khoản này.', 403)
-}
-export async function saveUser(person, input, actor) {
-  localOnly(person)
-  if (person && userRestriction(person, actor, 'edit')) throw new ApiError(userRestriction(person, actor, 'edit'), 403)
-  if (Object.keys(userFieldErrors(input)).length) throw new ApiError('Vui lòng kiểm tra họ tên và email.', 422)
-  const body = { name: requireText(input.name, 'Họ tên', 100), email: requireText(input.email, 'Email', 254) }
-  const result = person ? await api.patch('/admin/users/' + requireId(person.id), body) : await api.post('/admin/users', body)
-  if (!result?.id || person && result.id !== person.id || !Array.isArray(result.roles)) throw new ApiError('Chưa thể xác nhận hồ sơ đã lưu.', 502)
-  return result
-}
-export async function deleteUser(person, actor) {
-  localOnly(person)
+
+export async function changeUserStatus(person, actor, status) {
   const reason = userRestriction(person, actor)
   if (reason) throw new ApiError(reason, 403)
-  await api.delete('/admin/users/' + requireId(person.id))
+  if (!USER_STATUSES.includes(status)) throw new ApiError('Trạng thái người dùng không hợp lệ.', 400)
+  if (status === person.status) throw new ApiError('Người dùng đã ở trạng thái này.', 409)
+  const result = assertUser(await api.patch(userPath(person.id) + '/status', { status }), person.id)
+  if (result.status !== status) throw new ApiError('Chưa thể xác nhận trạng thái người dùng.', 502)
+  return result
 }
-export async function changeUserStatus(person, actor) {
-  localOnly(person)
-  const reason = userRestriction(person, actor, 'status')
+
+// The contract has no hard delete: deleting means status DELETED and revokes refresh tokens.
+export const deleteUser = (person, actor) => changeUserStatus(person, actor, 'DELETED')
+
+export function roleErrors(roles) {
+  if (!Array.isArray(roles) || !roles.length) return 'Người dùng phải có ít nhất một vai trò.'
+  if (roles.some((role) => !PLATFORM_ROLES.includes(role))) return 'Vai trò không hợp lệ.'
+  return null
+}
+
+export async function updateUserRoles(person, roles, actor) {
+  const reason = userRestriction(person, actor)
   if (reason) throw new ApiError(reason, 403)
-  if (!['ACTIVE', 'BLOCKED', 'SUSPENDED'].includes(person.status)) throw new ApiError('Trạng thái hiện tại không hỗ trợ thao tác này.', 409)
-  const status = person.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE'
-  const result = await api.patch('/admin/users/' + requireId(person.id), { status })
-  if (result?.id !== person.id || result.status !== status) throw new ApiError('Chưa thể xác nhận trạng thái người dùng.', 502)
+  const unique = [...new Set(roles)]
+  const invalid = roleErrors(unique)
+  if (invalid) throw new ApiError(invalid, 422)
+  const result = assertUser(await api.put(userPath(person.id) + '/roles', { roles: unique }), person.id)
+  if (result.roles.length !== unique.length || unique.some((role) => !result.roles.includes(role))) throw new ApiError('Chưa thể xác nhận vai trò đã lưu.', 502)
   return result
 }

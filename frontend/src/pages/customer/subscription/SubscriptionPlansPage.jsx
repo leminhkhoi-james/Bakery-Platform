@@ -8,6 +8,7 @@ import { formatSubscriptionMoney } from '../../../services/subscriptionModels.js
 import { demoId, createSeed, stamp, future, DEMO_STORAGE_KEY } from '../../../mockData/seed.js'
 import { validSave } from '../../../mockData/store.js'
 import { getDemoStore, demoRuntime } from '../../../mockData/runtime.js'
+import './subscription-plans.css'
 
 const loadPlan = ({ id }, options) => subscriptionService.getPlan(id, options)
 
@@ -40,228 +41,149 @@ export default function SubscriptionPlansPage({ onNavigate }) {
   const startPlanPrice = (startPlan?.monthlyPrice || 49000).toLocaleString('vi-VN') + '₫'
 
   return (
-    <main className="sc-customer min-h-screen bg-transparent py-8 px-4 sm:px-6 lg:px-12">
-      <div className="mx-auto max-w-7xl space-y-12">
-        {/* HERO BANNER SECTION */}
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-fixed/60 via-surface to-secondary-fixed/40 border border-primary/15 p-6 sm:p-10 lg:p-12 shadow-sm text-center md:text-left">
-          <div className="relative z-10 max-w-3xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-secondary/15 text-secondary font-bold text-xs uppercase tracking-wider">
-              <span className="material-symbols-outlined text-sm">storefront</span>
-              Dành cho các nghệ nhân &amp; tiệm bánh kem toàn quốc
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-primary leading-tight">
-              Trở Thành Đối Tác Cùng SweetCake
-            </h1>
-            <p className="font-body-md text-base sm:text-lg text-primary/80 leading-relaxed">
-              Tiếp cận hàng nghìn khách hàng đặt bánh sinh nhật, tiệc cưới và bánh thiết kế 3D &amp; AI mỗi ngày. Mức phí siêu tiết kiệm chỉ từ <strong>{formattedMinPrice} / tháng</strong>, giữ trọn <strong>100% doanh thu</strong> không thu phí hoa hồng đơn hàng!
-            </p>
-            <div className="pt-2 flex flex-wrap items-center gap-3 justify-center md:justify-start">
-              <button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById('pricing-section')
-                  if (el) el.scrollIntoView({ behavior: 'smooth' })
-                  else if (plans.data?.[1]) setCheckoutPlan(plans.data[1])
-                }}
-                className="px-6 py-3.5 rounded-2xl bg-primary text-on-primary font-bold text-sm shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center gap-2"
-              >
-                <span className="material-symbols-outlined text-lg">rocket_launch</span>
-                <span>Đăng ký tiệm bánh ngay</span>
-              </button>
-              <a
-                href="#pricing-section"
-                className="px-5 py-3.5 rounded-2xl border border-primary/30 bg-surface/80 text-primary font-bold text-sm hover:bg-surface-container transition-all cursor-pointer"
-              >
-                Xem các gói dịch vụ
-              </a>
-            </div>
-          </div>
+    <main className="sc-customer sc-public-plans min-h-screen bg-transparent py-4 px-4 sm:px-6 lg:px-12">
+      <div className="mx-auto max-w-5xl space-y-4">
 
-          {/* Decorative Background Accents */}
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center opacity-30 pointer-events-none">
-            <span className="material-symbols-outlined text-[200px] text-primary/30 select-none">bakery_dining</span>
-          </div>
-        </section>
-
-        {/* 4 VALUE PROPOSITION PILLARS */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="rounded-2xl border border-outline-variant/30 bg-surface/80 p-5 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-xl">savings</span>
-            </div>
-            <h2 className="font-bold text-primary text-base mb-1">0% Phí hoa hồng</h2>
-            <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-              Tiệm nhận trọn vẹn 100% giá trị từng chiếc bánh làm ra. Nền tảng chỉ thu phí gói duy trì siêu rẻ.
+        {/* ── COMPACT HEADER: logo + tagline + CTA ── */}
+        <div className="scp-hero rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <p className="scp-kicker">🏪 Dành cho tiệm bánh &amp; home baker toàn quốc</p>
+            <h1 className="scp-title">Trở thành đối tác SweetCake</h1>
+            <p className="scp-sub">
+              Từ <strong>{formattedMinPrice}/tháng</strong> · 0% hoa hồng · Tiếp cận hàng nghìn đơn bánh 3D&nbsp;&amp;&nbsp;AI mỗi ngày
             </p>
           </div>
-
-          <div className="rounded-2xl border border-outline-variant/30 bg-surface/80 p-5 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-xl">view_in_ar</span>
-            </div>
-            <h2 className="font-bold text-primary text-base mb-1">Đơn Bánh 3D &amp; AI</h2>
-            <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-              Khách hàng dùng AI &amp; 3D tạo mẫu bánh độc bản, tiệm bánh xem ảnh và gửi báo giá trực tiếp theo khả năng.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-outline-variant/30 bg-surface/80 p-5 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-tertiary/15 text-tertiary flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-xl">verified</span>
-            </div>
-            <h2 className="font-bold text-primary text-base mb-1">Hồ Sơ Tiệm Uy Tín</h2>
-            <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-              Trang cửa hàng chuyên nghiệp với menu số, ảnh nghệ nhân, khu vực phục vụ và nhận xét xác thực từ khách.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-outline-variant/30 bg-surface/80 p-5 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-xl">campaign</span>
-            </div>
-            <h2 className="font-bold text-primary text-base mb-1">Tiếp Cận Toàn Thành Phố</h2>
-            <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-              Bánh của bạn xuất hiện trên trang khám phá, các bộ sưu tập sự kiện và sàn so sánh báo giá custom.
-            </p>
-          </div>
-        </section>
-
-        {/* PRICING & PLAN CARDS SECTION */}
-        <section id="pricing-section" className="space-y-6 pt-4">
-          <div className="sc-customer-heading text-center max-w-2xl mx-auto space-y-2">
-            <p className="sc-kicker text-secondary font-bold uppercase tracking-wider text-xs">Mức phí hợp lý &amp; minh bạch</p>
-            <div className="flex items-center justify-center gap-3">
-              <h1 className="mb-3 font-serif text-3xl sm:text-4xl font-semibold text-primary">Gói dịch vụ cho tiệm bánh</h1>
-              <RefreshButton disabled={plans.refreshing} onClick={plans.reload} className="text-secondary text-xs font-semibold underline hover:text-secondary-hover cursor-pointer mb-3">
-                Làm mới giá
-              </RefreshButton>
-            </div>
-            <p className="text-sm text-on-surface-variant">
-              Giá và tính năng được cập nhật từ hệ thống. Chi phí siêu tiết kiệm chỉ bằng 1 ly trà sữa mỗi tháng để mở rộng kinh doanh bánh trực tuyến.
-            </p>
-          </div>
-
-          {/* Plan Cards Container */}
-          <ResourceState resource={plans}>
-            <div className="mt-8">
-              <PlanCards
-                plans={plans.data}
-                canSelect={true}
-                onSelect={(plan) => {
-                  setSelected(plan.id)
-                  setCheckoutPlan(plan)
-                }}
-              />
-            </div>
-
-            {/* Quick Detail Selector Buttons */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              {plans.data?.map((plan) => (
-                <button
-                  key={plan.id}
-                  className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all cursor-pointer ${
-                    selected === plan.id
-                      ? 'border-primary bg-primary text-on-primary shadow-xs'
-                      : 'border-outline-variant/40 bg-surface text-primary hover:bg-surface-container'
-                  }`}
-                  onClick={() => setSelected(plan.id)}
-                >
-                  Chi tiết {plan.name || plan.code || displayReference(plan.id, 'PLAN')}
-                </button>
-              ))}
-            </div>
-          </ResourceState>
-
-          {/* Selected Plan Detail View */}
-          {selected && <PlanDetail key={selected} id={selected} />}
-
-          {/* Action Center Bar */}
-          <div className="mt-8 p-6 rounded-3xl bg-surface/90 border border-primary/20 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h2 className="font-bold text-primary text-lg">Đã có tài khoản tiệm bánh hoặc muốn quản lý gói?</h2>
-              <p className="text-xs sm:text-sm text-on-surface-variant">
-                Truy cập cổng đối tác để xem gói hiện tại, gia hạn hoặc nâng cấp chu kỳ dịch vụ.
-              </p>
-            </div>
+          <div className="flex gap-2 shrink-0">
+            <a href="#pricing-section" className="scp-btn-outline">Xem gói</a>
             <button
               type="button"
-              className="rounded-2xl bg-primary px-6 py-3 text-on-primary font-bold text-sm shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shrink-0"
-              onClick={() => onNavigate && onNavigate('vendor-subscription')}
+              className="scp-btn-primary"
+              onClick={() => {
+                const el = document.getElementById('pricing-section')
+                if (el) el.scrollIntoView({ behavior: 'smooth' })
+              }}
             >
-              Quản lý gói của cửa hàng
+              <span className="material-symbols-outlined text-base">rocket_launch</span>
+              Đăng ký ngay
             </button>
           </div>
-        </section>
+        </div>
 
-        {/* 3 STEPS TO JOIN */}
-        <section className="space-y-6 pt-6">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary text-center">
-            Quy Trình Gia Nhập 3 Bước Đơn Giản
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-6 space-y-3 relative">
-              <span className="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-sm flex items-center justify-center">1</span>
-              <h3 className="font-bold text-primary text-base">Đăng ký thông tin tiệm</h3>
-              <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                Tạo tài khoản và cung cấp tên tiệm, địa chỉ bếp/xưởng, số điện thoại liên hệ và ảnh minh họa cửa hàng.
-              </p>
-            </div>
+        {/* ── VALUE CHIPS ── */}
+        <div className="scp-chips">
+          {[
+            { icon: 'savings', label: '0% phí hoa hồng' },
+            { icon: 'view_in_ar', label: 'Nhận đơn bánh 3D & AI' },
+            { icon: 'verified', label: 'Hồ sơ tiệm uy tín' },
+            { icon: 'campaign', label: 'Hiển thị toàn thành phố' },
+          ].map(({ icon, label }) => (
+            <span key={icon} className="scp-chip">
+              <span className="material-symbols-outlined text-sm">{icon}</span>
+              {label}
+            </span>
+          ))}
+        </div>
 
-            <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-6 space-y-3 relative">
-              <span className="w-8 h-8 rounded-full bg-secondary text-on-secondary font-bold text-sm flex items-center justify-center">2</span>
-              <h3 className="font-bold text-primary text-base">Chọn gói &amp; Kích hoạt</h3>
-              <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                Lựa chọn gói dịch vụ tiết kiệm (từ {formattedMinPrice}/tháng) phù hợp với quy mô tiệm bánh và xác nhận thanh toán.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-6 space-y-3 relative">
-              <span className="w-8 h-8 rounded-full bg-tertiary text-on-tertiary font-bold text-sm flex items-center justify-center">3</span>
-              <h3 className="font-bold text-primary text-base">Đăng bánh &amp; Nhận đơn</h3>
-              <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                Đăng các mẫu bánh có sẵn lên danh mục, và bắt đầu nhận thông báo báo giá bánh 3D/AI từ khách hàng!
-              </p>
-            </div>
+        {/* ── PLAN CARDS ── */}
+        <section id="pricing-section" className="space-y-3">
+          <div className="flex items-center justify-center gap-2">
+            <h2 className="scp-section-title">Gói dịch vụ cho tiệm bánh</h2>
+            <RefreshButton disabled={plans.refreshing} onClick={plans.reload} className="scp-refresh-btn">
+              Làm mới
+            </RefreshButton>
           </div>
+
+          <ResourceState resource={plans}>
+            <PlanCards
+              plans={plans.data}
+              canSelect={true}
+              onSelect={(plan) => {
+                setSelected(plan.id)
+                setCheckoutPlan(plan)
+              }}
+            />
+
+            {/* Detail toggle buttons */}
+            {plans.data?.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center pt-1">
+                {plans.data.map((plan) => (
+                  <button
+                    key={plan.id}
+                    className={`scp-detail-btn ${selected === plan.id ? 'active' : ''}`}
+                    onClick={() => setSelected(selected === plan.id ? null : plan.id)}
+                  >
+                    {selected === plan.id
+                      ? <><span className="material-symbols-outlined text-sm">expand_less</span> Ẩn chi tiết</>
+                      : <><span className="material-symbols-outlined text-sm">info</span> Chi tiết {plan.name || plan.code}</>
+                    }
+                  </button>
+                ))}
+              </div>
+            )}
+          </ResourceState>
+
+          {selected && <PlanDetail key={selected} id={selected} />}
         </section>
 
-        {/* FREQUENTLY ASKED QUESTIONS (FAQ) */}
-        <section className="space-y-4 pt-4 pb-8 max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary text-center mb-6">
-            Câu Hỏi Thường Gặp Của Tiệm Bánh
-          </h2>
-          <div className="space-y-3">
-            <details className="group rounded-2xl border border-outline-variant/30 bg-surface p-4 transition-all">
-              <summary className="font-bold text-primary text-sm sm:text-base cursor-pointer flex items-center justify-between">
-                <span>Tiệm làm bánh handmade tại nhà (Home Baker) có tham gia được không?</span>
-                <span className="material-symbols-outlined text-outline group-open:rotate-180 transition-transform">expand_more</span>
-              </summary>
-              <p className="mt-3 text-xs sm:text-sm text-on-surface-variant leading-relaxed pl-1 border-t border-outline-variant/20 pt-2">
-                Hoàn toàn được! {startPlan?.name || 'Gói Khởi Đầu'} ({startPlanPrice}/tháng) được thiết kế riêng cho các thợ làm bánh tại nhà. Bạn có thể bán bánh theo đơn đặt trước (pre-order) và thiết lập khu vực giao hàng linh hoạt.
-              </p>
-            </details>
-
-            <details className="group rounded-2xl border border-outline-variant/30 bg-surface p-4 transition-all">
-              <summary className="font-bold text-primary text-sm sm:text-base cursor-pointer flex items-center justify-between">
-                <span>Khách hàng đặt bánh custom theo mẫu AI và 3D như thế nào?</span>
-                <span className="material-symbols-outlined text-outline group-open:rotate-180 transition-transform">expand_more</span>
-              </summary>
-              <p className="mt-3 text-xs sm:text-sm text-on-surface-variant leading-relaxed pl-1 border-t border-outline-variant/20 pt-2">
-                Khách hàng mô tả ý tưởng hoặc dùng công cụ 3D Studio để thiết kế chiếc bánh mong muốn. Sau đó hệ thống sẽ đăng yêu cầu lên sàn. Các tiệm bánh đối tác sẽ nhận được thông báo kèm hình ảnh 3D, số tầng, cốt bánh, ngân sách dự kiến để gửi báo giá.
-              </p>
-            </details>
-
-            <details className="group rounded-2xl border border-outline-variant/30 bg-surface p-4 transition-all">
-              <summary className="font-bold text-primary text-sm sm:text-base cursor-pointer flex items-center justify-between">
-                <span>Tôi có thể nâng cấp hoặc hủy gói dịch vụ không?</span>
-                <span className="material-symbols-outlined text-outline group-open:rotate-180 transition-transform">expand_more</span>
-              </summary>
-              <p className="mt-3 text-xs sm:text-sm text-on-surface-variant leading-relaxed pl-1 border-t border-outline-variant/20 pt-2">
-                Bạn có thể nâng cấp lên gói cao hơn bất kỳ lúc nào để nhận thêm lượt báo giá và số lượng sản phẩm đăng bán. Khi hết chu kỳ tháng, bạn có thể gia hạn hoặc dừng mà không có phí phạt.
-              </p>
-            </details>
+        {/* ── ALREADY HAVE ACCOUNT ── */}
+        <div className="scp-action-bar">
+          <div>
+            <p className="font-bold text-sm" style={{ color: '#5a1a2a' }}>Đã có tài khoản tiệm bánh?</p>
+            <p className="text-xs" style={{ color: '#7a4555' }}>Xem gói hiện tại, gia hạn hoặc nâng cấp chu kỳ dịch vụ.</p>
           </div>
-        </section>
+          <button
+            type="button"
+            className="scp-btn-primary shrink-0"
+            onClick={() => onNavigate && onNavigate('vendor-subscription')}
+          >
+            Quản lý gói
+          </button>
+        </div>
+
+        {/* ── 3 STEPS (compact inline) ── */}
+        <div className="scp-steps">
+          {[
+            { n: '1', color: '#8b2240', label: 'Đăng ký tiệm', desc: 'Tạo tài khoản, điền tên tiệm, địa chỉ, ảnh cửa hàng.' },
+            { n: '2', color: '#c0485e', label: 'Chọn gói & kích hoạt', desc: `Từ ${formattedMinPrice}/tháng, thanh toán nhanh chóng.` },
+            { n: '3', color: '#5a1a2a', label: 'Đăng bánh & nhận đơn', desc: 'Nhận thông báo báo giá 3D/AI từ khách ngay lập tức.' },
+          ].map(({ n, color, label, desc }) => (
+            <div key={n} className="scp-step">
+              <span className="scp-step-num" style={{ background: color }}>{n}</span>
+              <div>
+                <p className="font-bold text-sm" style={{ color: '#5a1a2a' }}>{label}</p>
+                <p className="text-xs mt-0.5" style={{ color: '#7a4555' }}>{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── FAQ (compact) ── */}
+        <div className="scp-faq-wrap">
+          <p className="scp-section-title text-center mb-3">Câu hỏi thường gặp</p>
+          {[
+            {
+              q: 'Home Baker tại nhà có tham gia được không?',
+              a: `Có! ${startPlan?.name || 'Gói cơ bản'} (${startPlanPrice}/tháng) dành riêng cho home baker – bán pre-order, giao hàng linh hoạt.`
+            },
+            {
+              q: 'Khách đặt bánh 3D & AI như thế nào?',
+              a: 'Khách thiết kế bánh qua AI/3D Studio, hệ thống gửi yêu cầu kèm ảnh đến tiệm để báo giá trực tiếp.'
+            },
+            {
+              q: 'Có thể nâng cấp hoặc hủy gói không?',
+              a: 'Nâng cấp bất kỳ lúc nào, hủy cuối chu kỳ, không phí phạt.'
+            },
+          ].map(({ q, a }) => (
+            <details key={q} className="scp-faq group">
+              <summary className="scp-faq-q">
+                <span>{q}</span>
+                <span className="material-symbols-outlined text-sm group-open:rotate-180 transition-transform" style={{ color: '#8b2240' }}>expand_more</span>
+              </summary>
+              <p className="scp-faq-a">{a}</p>
+            </details>
+          ))}
+        </div>
+
         {checkoutPlan && (
           <PartnerCheckoutModal
             plan={checkoutPlan}
@@ -284,7 +206,7 @@ function recordDemoPartnerPayment({ plan, bakeryName, phone, district, city, pay
       if (typeof window !== 'undefined') {
         try {
           window.dispatchEvent(new StorageEvent('storage', { key: DEMO_STORAGE_KEY, newValue: JSON.stringify(store.state) }))
-        } catch {}
+        } catch { }
         window.dispatchEvent(new CustomEvent('sweetcake_refresh_payments'))
         window.dispatchEvent(new CustomEvent('sweetcake_demo_sync'))
       }
@@ -297,7 +219,7 @@ function recordDemoPartnerPayment({ plan, bakeryName, phone, district, city, pay
       try {
         const parsed = JSON.parse(raw)
         if (validSave(parsed)) s = parsed
-      } catch {}
+      } catch { }
     }
     if (!s) {
       s = createSeed()
@@ -387,7 +309,7 @@ function recordDemoPartnerPayment({ plan, bakeryName, phone, district, city, pay
     if (typeof window !== 'undefined') {
       try {
         window.dispatchEvent(new StorageEvent('storage', { key: DEMO_STORAGE_KEY, newValue: JSON.stringify(s) }))
-      } catch {}
+      } catch { }
       window.dispatchEvent(new CustomEvent('sweetcake_refresh_payments'))
       window.dispatchEvent(new CustomEvent('sweetcake_demo_sync'))
       try {
@@ -395,8 +317,8 @@ function recordDemoPartnerPayment({ plan, bakeryName, phone, district, city, pay
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(s),
-        }).catch(() => {})
-      } catch {}
+        }).catch(() => { })
+      } catch { }
     }
   } catch (err) {
     console.warn('Demo storage update failed:', err)
@@ -415,7 +337,7 @@ function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
   const [copied, setCopied] = useState(false)
 
   const copyText = (text) => {
-    try { navigator.clipboard?.writeText(text) } catch (e) {}
+    try { navigator.clipboard?.writeText(text) } catch (e) { }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -437,8 +359,8 @@ function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl bg-surface p-6 sm:p-8 shadow-2xl border-2 border-primary/20 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-28 sm:pt-32 pb-8 overflow-y-auto bg-black/60 backdrop-blur-xs animate-fade-in">
+      <div className="relative w-full max-w-xl max-h-[calc(100vh-9.5rem)] overflow-y-auto rounded-3xl bg-surface p-6 sm:p-8 shadow-2xl border-2 border-primary/20 space-y-6">
         <div className="flex items-start justify-between border-b border-outline-variant/30 pb-4">
           <div className="space-y-1">
             <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary">

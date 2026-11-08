@@ -205,7 +205,7 @@ export const HowItWorksSection = ({ onNavigate }) => {
                   {/* Item 3 */}
                   <li className="bg-surface-bright/95 backdrop-blur-xs border-2 border-wine rounded-2xl p-4 sm:p-5 shadow-[4px_4px_0_#9f1e31] transition-all duration-300 hover:translate-x-1.5 hover:shadow-[6px_6px_0_#9f1e31] flex items-start gap-4">
                     <div className="w-11 h-11 shrink-0 rounded-xl bg-[#d7e9e7] border-2 border-wine flex items-center justify-center text-wine shadow-xs mt-0.5">
-                      <span className="material-symbols-outlined text-2xl">verified_user</span>
+                      <span translate="no" className="material-symbols-outlined notranslate text-2xl">verified_user</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">

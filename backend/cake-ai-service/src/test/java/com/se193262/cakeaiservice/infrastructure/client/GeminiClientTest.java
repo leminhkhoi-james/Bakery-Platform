@@ -48,7 +48,7 @@ class GeminiClientTest {
         server.start();
         client = new GeminiClient(new CakeAiProperties("fake-key", "http://127.0.0.1:" + server.getAddress().getPort(),
                 "image-model", "moderation-model", Duration.ofSeconds(1), Duration.ofSeconds(2), 2,
-                Duration.ofMinutes(30), "", ""), json, new ImageValidator());
+                Duration.ofMinutes(30), "", "", "http://localhost:8085"), json, new ImageValidator());
     }
     @AfterEach void stop() { server.stop(0); }
 
@@ -103,7 +103,7 @@ class GeminiClientTest {
         response = output(Map.of("type", "text", "text", "late"));
         var fastClient = new GeminiClient(new CakeAiProperties("fake-key", "http://127.0.0.1:" + server.getAddress().getPort(),
                 "image-model", "moderation-model", Duration.ofSeconds(1), Duration.ofMillis(100), 2,
-                Duration.ofMinutes(30), "", ""), json, new ImageValidator());
+                Duration.ofMinutes(30), "", "", "http://localhost:8085"), json, new ImageValidator());
         var error = assertThrows(ProviderException.class,
                 () -> fastClient.generate("model", "cake", "1:1", List.of()));
         assertEquals("PROVIDER_RESULT_UNKNOWN", error.code());

@@ -1,0 +1,46 @@
+services:
+  cake-ai-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cake_ai_db
+      POSTGRES_USER: ${CAKE_AI_DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+    ports:
+      - "${CAKE_AI_DB_PORT:-5438}:5432"
+    volumes:
+      - cake-ai-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  cake-ai-service:
+    build:
+      context: .
+      dockerfile: backend/cake-ai-service/Dockerfile
+    depends_on:
+      cake-ai-db:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8085
+      CAKE_AI_DB_URL: jdbc:postgresql://cake-ai-db:5432/cake_ai_db
+      CAKE_AI_DB_USERNAME: ${CAKE_AI_DB_USERNAME:-postgres}
+      CAKE_AI_DB_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+      CAKE_AI_API_KEY: ${GEMINI_API_KEY:-}
+      CAKE_AI_IMAGE_MODEL: ${GEMINI_IMAGE_MODEL:-gemini-nano-banana-2.1}
+      CAKE_AI_MODERATION_MODEL: ${GEMINI_MODERATION_MODEL:-gemini-3.8-flash}
+      CAKE_AI_FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-}
+      CAKE_AI_FIREBASE_BUCKET: ${FIREBASE_STORAGE_BUCKET:-}
+      IDENTITY_JWK_SET_URI: ${IDENTITY_JWKS_URI:-http://host.docker.internal:8081/.well-known/jwks.json}
+      IDENTITY_JWT_ISSUER: ${IDENTITY_JWT_ISSUER:-bakery-platform-identity}
+      IDENTITY_SERVICE_BASE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:8081}
+      MARKETPLACE_SERVICE_BASE_URL: ${MARKETPLACE_SERVICE_URL:-http://host.docker.internal:8083}
+    ports:
+      - "${CAKE_AI_SERVICE_PORT:-8085}:8085"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  cake-ai-db-data:
+

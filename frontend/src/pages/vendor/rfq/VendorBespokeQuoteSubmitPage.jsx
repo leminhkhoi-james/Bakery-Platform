@@ -23,30 +23,135 @@ function NewOffer({ id, bakery, onNavigate }) {
   const bakeryId = bakery.id
   const resource = useCatalogResource(loadRfq, { id }), existing = useCatalogResource(loadExistingVendorOffer, { bakeryId, cakeRequestId: id }), action = useMarketplaceAction(resource.reload)
   const ready = existing.status === 'ready' && !existing.error && !existing.refreshing
-  return <><VendorRfqState resource={resource}>{resource.data && <><RequestInfo request={resource.data} /><VendorRfqState resource={existing}>{ready && (existing.data ? <section className={panelClass}><p>Tiệm đã gửi báo giá cho yêu cầu này.</p><button className="sc-button" onClick={() => onNavigate('vendor-quote-submit?offerId=' + existing.data.id + '&bakeryId=' + bakeryId)}>Xem báo giá đã gửi</button></section> : <><p>{requestAcceptsOffers(resource.data) && requestMatchesBakery(resource.data, bakery) ? 'Kiểm tra giá và thời gian hoàn thành trước khi gửi báo giá.' : 'Yêu cầu hiện không nhận báo giá từ cửa hàng này.'}</p><OfferForm key={bakeryId} bakeryId={bakeryId} disabled={!requestAcceptsOffers(resource.data) || !requestMatchesBakery(resource.data, bakery)} busy={action.busy} onSave={(input) => action.run(async () => {
-    const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
-    if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
-    const offer = await rfqService.submitOffer(id, input)
-    if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
-    onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
-  })} /></>)}</VendorRfqState></>}</VendorRfqState>{action.error && <ApiErrorMessage error={action.error} retry={existing.reload} />}</>
+  return (
+    <>
+      <VendorRfqState resource={resource}>
+        {resource.data && (
+          <div className="sc-quote-workspace-layout">
+            <div className="sc-quote-side-request">
+              <RequestInfo request={resource.data} compact />
+            </div>
+            <div className="sc-quote-side-form space-y-4">
+              <VendorRfqState resource={existing}>
+                {ready && (existing.data ? (
+                  <section className={panelClass}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="material-symbols-outlined text-green-600">check_circle</span>
+                      <h3 className="font-bold text-base text-primary">Tiệm đã gửi báo giá cho yêu cầu này</h3>
+                    </div>
+                    <p className="text-sm text-stone-600 mb-4">Bạn có thể xem chi tiết hoặc chỉnh sửa mức giá đã báo cho khách hàng.</p>
+                    <button className="sc-button" onClick={() => onNavigate('vendor-quote-submit?offerId=' + existing.data.id + '&bakeryId=' + bakeryId)}>
+                      Xem báo giá đã gửi
+                    </button>
+                  </section>
+                ) : (
+                  <OfferForm
+                    key={bakeryId}
+                    bakeryId={bakeryId}
+                    disabled={!requestAcceptsOffers(resource.data) || !requestMatchesBakery(resource.data, bakery)}
+                    busy={action.busy}
+                    onSave={(input) => action.run(async () => {
+                      const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
+                      if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
+                      const offer = await rfqService.submitOffer(id, input)
+                      if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
+                      onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
+                    })}
+                  />
+                ))}
+              </VendorRfqState>
+            </div>
+          </div>
+        )}
+      </VendorRfqState>
+      {action.error && <ApiErrorMessage error={action.error} retry={existing.reload} />}
+    </>
+  )
 }
 
 function RelatedOfferRequest({ id }) {
   const resource = useCatalogResource(loadRfq, { id })
-  return <VendorRfqState resource={resource}>{resource.data && <RequestInfo request={resource.data} />}</VendorRfqState>
+  return <VendorRfqState resource={resource}>{resource.data && <RequestInfo request={resource.data} compact />}</VendorRfqState>
 }
 export function ManageOffer({ id, bakeryId, user, roles }) {
   const resource = useCatalogResource(loadOffer, { id }), membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
   const action = useMarketplaceAction(resource.reload), [reason, setReason] = useState(''), [editing, setEditing] = useState(false), [withdrawing, setWithdrawing] = useState(false)
   const canEdit = membership.status === 'ready' && !membership.error && memberCanEdit(membership.data, roles)
   const allowed = Boolean(resource.data && canEdit && pendingOffer(resource.data))
-  return <><MarketplaceState resource={resource}>{resource.data && (resource.data.bakeryId === bakeryId ? <>
-    {resource.data.cakeRequestId && <RelatedOfferRequest id={resource.data.cakeRequestId} />}<OfferInfo offer={resource.data} owner />
-    {membership.status === 'loading' ? <p role="status">Đang xác minh quyền thao tác…</p> : membership.error ? <ApiErrorMessage error={membership.error} retry={membership.reload} /> : allowed ? <div className="sc-actions"><button className="sc-button" disabled={action.busy} onClick={() => setEditing(true)}><Icon name="edit" />Sửa báo giá</button><button className="sc-button sc-action-button--secondary" disabled={action.busy} onClick={() => setWithdrawing(true)}><Icon name="undo" />Rút báo giá</button></div> : <p role="status">{!canEdit ? 'Bạn không có quyền chỉnh sửa báo giá của tiệm.' : resource.data.status === 'PENDING' ? 'Báo giá đã hết thời hạn phản hồi.' : 'Báo giá ' + ({ ACCEPTED: 'đã được khách chấp nhận', REJECTED: 'đã bị từ chối', WITHDRAWN: 'đã được rút', EXPIRED: 'đã hết hạn' }[resource.data.status] || 'không còn ở trạng thái chờ') + ', không thể sửa hoặc rút.'}</p>}
-    {editing && allowed && <DetailDrawer className="sc-vendor-drawer" title="Sửa báo giá" footer={<><button type="button" data-modal-close disabled={action.busy} className="sc-button sc-action-button--secondary">Hủy</button><button type="submit" form="vendor-offer-form" disabled={action.busy} className="sc-button">{action.busy ? 'Đang lưu…' : 'Lưu báo giá'}</button></>} busy={action.busy} onClose={() => setEditing(false)}><ModalFormState value={reason} busy={action.busy} /><OfferForm footerExternal key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={async (input) => { await action.run(async () => { await rfqService.updateOffer(id, input); setEditing(false) }) }} />{action.error && <ApiErrorMessage error={action.error} />}</DetailDrawer>}
-    {withdrawing && allowed && <VendorConfirm title="Rút báo giá" label="Xác nhận rút báo giá" danger guardChanges busy={action.busy} onClose={() => { setWithdrawing(false); setReason('') }} error={action.error && <ApiErrorMessage error={action.error} />} onConfirm={async () => { await action.run(async () => { await rfqService.withdrawOffer(id, reason); setWithdrawing(false); setReason('') }) }}><p>Khách hàng sẽ không thể chọn báo giá này sau khi rút.</p><label>Lý do rút báo giá (tùy chọn)<textarea className={inputClass} maxLength={2000} rows={3} value={reason} onChange={event => setReason(event.target.value)} /></label></VendorConfirm>}
-  </> : <p role="alert">Báo giá không thuộc cửa hàng đang chọn.</p>)}</MarketplaceState>{action.error && !editing && !withdrawing && <ApiErrorMessage error={action.error} retry={resource.reload} />}</>
+  return (
+    <>
+      <MarketplaceState resource={resource}>
+        {resource.data && (resource.data.bakeryId === bakeryId ? (
+          <div className="sc-quote-workspace-layout">
+            <div className="sc-quote-side-request">
+              {resource.data.cakeRequestId && <RelatedOfferRequest id={resource.data.cakeRequestId} />}
+            </div>
+            <div className="sc-quote-side-form space-y-4">
+              <OfferInfo offer={resource.data} owner />
+              {membership.status === 'loading' ? (
+                <p role="status">Đang xác minh quyền thao tác…</p>
+              ) : membership.error ? (
+                <ApiErrorMessage error={membership.error} retry={membership.reload} />
+              ) : allowed ? (
+                <div className="sc-actions">
+                  <button className="sc-button" disabled={action.busy} onClick={() => setEditing(true)}>
+                    <Icon name="edit" />Sửa báo giá
+                  </button>
+                  <button className="sc-button sc-action-button--secondary" disabled={action.busy} onClick={() => setWithdrawing(true)}>
+                    <Icon name="undo" />Rút báo giá
+                  </button>
+                </div>
+              ) : (
+                <p role="status" className="text-sm text-stone-600">
+                  {!canEdit
+                    ? 'Bạn không có quyền chỉnh sửa báo giá của tiệm.'
+                    : resource.data.status === 'PENDING'
+                      ? 'Báo giá đã hết thời hạn phản hồi.'
+                      : 'Báo giá ' + ({ ACCEPTED: 'đã được khách chấp nhận', REJECTED: 'đã bị từ chối', WITHDRAWN: 'đã được rút', EXPIRED: 'đã hết hạn' }[resource.data.status] || 'không còn ở trạng thái chờ') + ', không thể sửa hoặc rút.'}
+                </p>
+              )}
+            </div>
+            {editing && allowed && (
+              <DetailDrawer
+                className="sc-vendor-drawer"
+                title="Sửa báo giá"
+                footer={
+                  <>
+                    <button type="button" data-modal-close disabled={action.busy} className="sc-button sc-action-button--secondary">Hủy</button>
+                    <button type="submit" form="vendor-offer-form" disabled={action.busy} className="sc-button">{action.busy ? 'Đang lưu…' : 'Lưu báo giá'}</button>
+                  </>
+                }
+                busy={action.busy}
+                onClose={() => setEditing(false)}
+              >
+                <ModalFormState value={reason} busy={action.busy} />
+                <OfferForm footerExternal key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={async (input) => { await action.run(async () => { await rfqService.updateOffer(id, input); setEditing(false) }) }} />
+                {action.error && <ApiErrorMessage error={action.error} />}
+              </DetailDrawer>
+            )}
+            {withdrawing && allowed && (
+              <VendorConfirm
+                title="Rút báo giá"
+                label="Xác nhận rút báo giá"
+                danger
+                guardChanges
+                busy={action.busy}
+                onClose={() => { setWithdrawing(false); setReason('') }}
+                error={action.error && <ApiErrorMessage error={action.error} />}
+                onConfirm={async () => { await action.run(async () => { await rfqService.withdrawOffer(id, reason); setWithdrawing(false); setReason('') }) }}
+              >
+                <p>Khách hàng sẽ không thể chọn báo giá này sau khi rút.</p>
+                <label>Lý do rút báo giá (tùy chọn)<textarea className={inputClass} maxLength={2000} rows={3} value={reason} onChange={event => setReason(event.target.value)} /></label>
+              </VendorConfirm>
+            )}
+          </div>
+        ) : (
+          <p role="alert">Báo giá không thuộc cửa hàng đang chọn.</p>
+        ))}
+      </MarketplaceState>
+      {action.error && !editing && !withdrawing && <ApiErrorMessage error={action.error} retry={resource.reload} />}
+    </>
+  )
 }
 function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
   const access = useCatalogResource(query.get('offerId') ? loadDashboardAccess : loadVendorRfqAccess, { bakeryId, userId: user.id })

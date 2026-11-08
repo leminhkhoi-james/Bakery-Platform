@@ -27,7 +27,7 @@ export const DEFAULT_TRACKING_CHAT_MESSAGES = [
     sender: 'chef',
     name: 'Bếp Trưởng (Sweet Bakery Studio)',
     time: '11:18',
-    text: 'Yên tâm chị Hân nhé, tượng Pikachu 3D đã hoàn thiện sắc nét, chữ socola viết tay đã xong và xe lạnh 4.8°C đã sẵn sàng nhận bánh.',
+    text: 'Yên tâm chị Hân nhé, tượng Pikachu 3D đã hoàn thiện sắc nét, chữ socola viết tay đã xong và shipper đã sẵn sàng nhận bánh.',
   },
 ];
 

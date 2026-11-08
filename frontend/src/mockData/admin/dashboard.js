@@ -66,7 +66,7 @@ export const INITIAL_ESCROW_AUDIT_ORDERS = [
       vendor: 'The Sweet Art Boutique',
       cakeType: 'AI Gen Custom Sculpture',
       amount: 3850000,
-      status: 'Đang giao xe lạnh 5°C',
+      status: 'Đang giao hàng',
       statusCode: 'delivering',
     },
     {

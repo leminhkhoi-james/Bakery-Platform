@@ -25,14 +25,35 @@ function Metric({ title, icon, resource, onClick, link }) {
     <button className="sc-vendor-text-link" onClick={onClick}>{link}<Icon name="arrow_forward" /></button></div></section>
 }
 
-export function DashboardOverview({ bakeryId, products, orders, onNavigate }) {
+export function DashboardOverview({ bakeryId, products, orders, completedOrders, onNavigate }) {
   const navigate = (page) => onNavigate(page + '?bakeryId=' + encodeURIComponent(bakeryId))
+  const completedList = (completedOrders?.data?.result ?? orders?.data?.result)?.filter((o) => o.status === 'COMPLETED') || []
+  const completedRevenue = completedList.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
+
   return <>
     <DashboardError resources={[products, orders]} />
     <div className="sc-vendor-kpis">
       <Metric title="Sản phẩm" icon="cake" resource={products} onClick={() => navigate('vendor-menu')} link="Quản lý sản phẩm" />
       <Metric title="Tổng đơn hàng" icon="shopping_bag" resource={orders} onClick={() => navigate('vendor-orders')} link="Quản lý đơn hàng" />
-      <section className="sc-panel sc-vendor-kpi"><span className="sc-vendor-kpi-icon"><Icon name="account_balance_wallet" /></span><div><h2>Doanh thu</h2><strong className="sc-vendor-kpi-value">—</strong><p className="sc-vendor-kpi-caption">Chưa có số liệu đã đối soát</p><button className="sc-vendor-text-link" onClick={() => navigate('vendor-revenue')}>Xem doanh thu<Icon name="arrow_forward" /></button></div></section>
+      <section className="sc-panel sc-vendor-kpi">
+        <span className="sc-vendor-kpi-icon"><Icon name="account_balance_wallet" /></span>
+        <div>
+          <h2>Doanh thu</h2>
+          {completedRevenue > 0 ? (
+            <>
+              <strong className="sc-vendor-kpi-value">{formatOrderMoney(completedRevenue, 'VND')}</strong>
+              <p className="sc-vendor-kpi-caption">Ước tính từ đơn hoàn tất</p>
+              <button className="sc-vendor-text-link" onClick={() => navigate('vendor-revenue')}>Xem doanh thu<Icon name="arrow_forward" /></button>
+            </>
+          ) : (
+            <>
+              <strong className="sc-vendor-kpi-value">—</strong>
+              <p className="sc-vendor-kpi-caption">Chưa có số liệu đã đối soát</p>
+              <button className="sc-vendor-text-link" onClick={() => navigate('vendor-revenue')}>Xem doanh thu<Icon name="arrow_forward" /></button>
+            </>
+          )}
+        </div>
+      </section>
     </div>
     <section className="sc-panel sc-vendor-recent"><SectionHeading title="Đơn hàng gần đây" icon="receipt_long" action={<RefreshButton disabled={orders.status === 'loading' || orders.refreshing} onClick={orders.reload}>Tải lại</RefreshButton>} />
       {orders.status === 'loading' || orders.refreshing ? <p role="status" className="sc-vendor-table-state">Đang tải đơn hàng…</p> : orders.error ? <p className="sc-vendor-table-state">{orders.error.status === 403 ? 'Chưa có quyền xem đơn hàng của cửa hàng này.' : 'Chưa tải được danh sách đơn hàng.'}</p> : orders.data?.result.length ? <DataTable label="Đơn hàng gần đây" className="sc-vendor-orders-table"><colgroup>{Array.from({ length: 5 }, (_, i) => <col key={i} />)}</colgroup><thead><tr><th scope="col">Đơn hàng</th><th scope="col">Trạng thái</th><th scope="col">Tổng tiền</th><th scope="col">Ngày tạo</th><th scope="col">Chi tiết</th></tr></thead><tbody>{orders.data.result.map((order) => <tr key={order.id}><td>{displayReference(order.id, 'ORD', order.orderNumber)}</td><td><StatusBadge status={order.status} label={orderStatusLabel(order.status)} /></td><td className="tabular-nums">{formatOrderMoney(order.totalAmount, order.currency)}</td><td>{formatOrderDate(order.createdAt)}</td><td><button className="sc-button sc-button--secondary" onClick={() => onNavigate('vendor-orders?bakeryId=' + encodeURIComponent(bakeryId) + '&orderId=' + encodeURIComponent(order.id))}>Xem đơn</button></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Chưa có đơn hàng" description="Đơn mới của cửa hàng sẽ xuất hiện tại đây." icon="shopping_bag" />}
@@ -43,7 +64,8 @@ export function DashboardOverview({ bakeryId, products, orders, onNavigate }) {
 function DashboardData({ bakeryId, onNavigate }) {
   const products = useCatalogResource(loadManagedProducts, { bakeryId, page: 1, size: 1 })
   const orders = useCatalogResource(loadOrders, { scope: 'bakery', bakeryId, page: 1, size: 5, sort: 'createdAt,desc' })
-  return <DashboardOverview bakeryId={bakeryId} products={products} orders={orders} onNavigate={onNavigate} />
+  const completedOrders = useCatalogResource(loadOrders, { scope: 'bakery', bakeryId, status: 'COMPLETED', page: 1, size: 50 })
+  return <DashboardOverview bakeryId={bakeryId} products={products} orders={orders} completedOrders={completedOrders} onNavigate={onNavigate} />
 }
 
 function VerifiedDashboard({ bakeryId, userId, onNavigate }) {

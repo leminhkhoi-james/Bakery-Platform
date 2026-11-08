@@ -75,5 +75,9 @@ security.service-clients:
       secret-hash: ${SUBSCRIPTION_CLIENT_SECRET_HASH:}
       grants:
         bakery-service: "bakery:profile:read bakery:membership:read bakery:onboarding:activate"
+    cake-ai-service:
+      secret-hash: ${CAKE_AI_CLIENT_SECRET_HASH:}
+      grants:
+        marketplace-service: "marketplace:request:read"
 
 management.endpoint.health.group.readiness.include: readinessState,db

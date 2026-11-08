@@ -12,6 +12,7 @@ export const rfqService = {
   async createRfq(input) { return mapRequest(await api.post('/cake-requests', rfqPayload(input)), true) },
   async updateRfq(id, input) { return mapRequest(await api.patch(requestPath(id), rfqPayload(input)), true) },
   async publishRfq(id) { return mapRequest(await api.post(requestPath(id) + '/publish'), true) },
+  async simulateOffers(id) { return api.post(requestPath(id) + '/simulate-offers') },
   async cancelRfq(id, reason = '') { if (typeof reason !== 'string' || reason.length > 2000) throw new ApiError('Lý do tối đa 2000 ký tự.', 400); return mapRequest(await api.post(requestPath(id) + '/cancel', { reason }), true) },
   async selectDesign(id, generatedDesignId) { return mapRequest(await api.put(requestPath(id) + '/selected-design', { generatedDesignId: requireId(generatedDesignId) }), true) },
   async uploadImages(id, files) { await validateReferenceImages(files, 10); const form = new FormData(); files.forEach((file) => form.append('files', file)); const data = await api.post(requestPath(id) + '/images', form); if (!Array.isArray(data)) throw new ApiError('Image response không hợp lệ.', 502); return data },

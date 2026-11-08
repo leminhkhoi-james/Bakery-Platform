@@ -17,8 +17,8 @@ export const STORES = [
     reviewsCount: 320,
     ordersCount: 1850,
     specialty: 'Entremet cao cấp, 100% bơ Elle & Vire và socola Valrhona Pháp',
-    deliverySla: 'Giao xe lạnh 4°C - 6°C chuyên dụng • Nhận đơn trước 4H',
-    escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
+    deliverySla: 'Giao hàng bảo đảm dáng bánh • Nhận đơn trước 4H',
+    escrowBadge: 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%',
     image:
       'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=400&auto=format&fit=crop',
     perk: 'Bảo hiểm dáng bánh 100%',
@@ -38,8 +38,8 @@ export const STORES = [
     reviewsCount: 420,
     ordersCount: 2100,
     specialty: 'Tạo hình bám sát mẫu AI >95%, Cốt Chiffon Nhật Bản mềm ẩm ít ngọt 35%',
-    deliverySla: 'Giao hỏa tốc 2H - 3H • Xe máy thùng chống sốc & xe lạnh',
-    escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
+    deliverySla: 'Giao hỏa tốc 2H - 3H • Thùng chống sốc bảo vệ bánh',
+    escrowBadge: 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%',
     image:
       'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=400&auto=format&fit=crop',
     perk: 'Nhận đơn gấp 2H',
@@ -59,8 +59,8 @@ export const STORES = [
     reviewsCount: 310,
     ordersCount: 1450,
     specialty: 'Bánh kem nhiều tầng lộng lẫy, phối Macaron thủ công Pháp',
-    deliverySla: 'Xe lạnh chuyên dụng riêng • Nhân viên hỗ trợ setup bàn tiệc tận nơi',
-    escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
+    deliverySla: 'Giao hàng bảo đảm dáng • Nhân viên hỗ trợ setup bàn tiệc tận nơi',
+    escrowBadge: 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%',
     image:
       'https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=400&auto=format&fit=crop',
     perk: 'Bảo hành bàn tiệc & Thử vị tận nơi',
@@ -80,8 +80,8 @@ export const STORES = [
     reviewsCount: 280,
     ordersCount: 1280,
     specialty: 'Kem tươi whipping Anchor béo thanh, dâu tây Đà Lạt chuẩn VietGAP',
-    deliverySla: 'Giao hàng xe lạnh 4°C • Kèm thiệp thư pháp viết tay',
-    escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
+    deliverySla: 'Giao hàng cẩn thận đúng giờ • Kèm thiệp thư pháp viết tay',
+    escrowBadge: 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%',
     image:
       'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=400&auto=format&fit=crop',
     perk: 'Trái cây hữu cơ tươi mới trong ngày',
@@ -102,7 +102,7 @@ export const STORES = [
     ordersCount: 890,
     specialty: 'Bột hạnh nhân hữu cơ, đường ăn kiêng Isomalt, không chất bảo quản',
     deliverySla: 'Giao chuẩn từng phút • Tặng kèm dao nĩa gỗ tự hủy cao cấp',
-    escrowBadge: 'Bảo chứng cọc SweetCake Escrow 100%',
+    escrowBadge: 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%',
     image:
       'https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=400&auto=format&fit=crop',
     perk: 'Bánh ăn kiêng ít ngọt chuẩn 100%',
@@ -129,7 +129,7 @@ export const PARTNER_BAKERIES = [
     orderIcon: 'order_approve',
     highlightLabel: 'Bếp trưởng nghệ nhân:',
     highlightValue: 'Chef Jean-Luc Laurent & Chef Mai Anh',
-    perk: 'Xe lạnh 4°C - 6°C',
+    perk: 'Bảo hiểm dáng bánh',
     perkIcon: 'ac_unit',
     image:
       'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=400&auto=format&fit=crop',
@@ -165,8 +165,8 @@ export const PARTNER_BAKERIES = [
     description:
       'Chuyên thiết kế bánh tiệc cưới nhiều tầng lộng lẫy, phối hoa tươi ngoại nhập, macaron thủ công và dát vàng lá ăn được cao cấp.',
     rating: '5.0 (310+ đánh giá 5★)',
-    orderStat: 'Xe Lạnh Chuẩn 4°C',
-    orderIcon: 'directions_car',
+    orderStat: 'Giao Bảo Đảm Dáng',
+    orderIcon: 'verified',
     highlightLabel: 'Dịch vụ đặc biệt:',
     highlightValue: 'Thử vị bánh tận nơi & Thiết kế demo theo chủ đề tiệc',
     perk: 'Bảo hành bàn tiệc',

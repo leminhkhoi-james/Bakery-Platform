@@ -2,38 +2,37 @@ import assert from 'node:assert/strict'
 import { before, after, test } from 'node:test'
 import { createServer } from 'vite'
 import { randomUUID } from 'node:crypto'
-let vite, Users, UserForm, UserDecision, PaymentReview, service
+let vite, Users, RoleForm, UserDecision, PaymentReview, service
 const nativeFetch = globalThis.fetch, actorId = randomUUID(), id = 'de000000-0000-4000-8000-000000060001', orderId = randomUUID(), bakeryId = randomUUID()
-const person = { id, name: 'Nguyễn Minh', email: 'minh@example.test', roles: ['CUSTOMER'], status: 'ACTIVE' }
+const person = { id, displayName: 'Nguyễn Minh', email: 'minh@example.test', roles: ['CUSTOMER'], status: 'ACTIVE' }
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'admin-review-events', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth(){return globalThis.__adminAuth}'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load){return globalThis.__adminResources[load.name]||{status:"loading",data:null,reload(){}}}'
-    if (path.endsWith('/src/mockData/admin/userManagement.js')) return 'export const localUserDirectory=()=>globalThis.__adminLocal; export const localUserRestriction=()=>null'
   }, transform(code, id) {
     if (['AdminUsersPage.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState=(value)=>globalThis.__adminState(value),useRef=(value)=>globalThis.__adminState(()=>({current:value}))[0]")
   } }] })
   const module = await vite.ssrLoadModule('/src/pages/admin/users/AdminUsersPage.jsx')
-  Users = module.UserDirectory; UserForm = module.UserForm; UserDecision = module.UserDecision
+  Users = module.UserDirectory; RoleForm = module.RoleForm; UserDecision = module.UserDecision
   PaymentReview = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPaymentsPage.jsx')).PaymentReview
   service = await vite.ssrLoadModule('/src/services/adminUserService.js')
   ;(await vite.ssrLoadModule('/src/services/apiClient.js')).setAuthToken('fixture')
 })
-after(async () => { globalThis.fetch = nativeFetch; await vite?.close(); for (const key of ['__adminAuth', '__adminResources', '__adminLocal', '__adminState']) delete globalThis[key] })
+after(async () => { globalThis.fetch = nativeFetch; await vite?.close(); for (const key of ['__adminAuth', '__adminResources', '__adminState']) delete globalThis[key] })
 const ready = (data, reload = () => {}) => ({ status: 'ready', data, reload })
 const nodes = (tree) => Array.isArray(tree) ? tree.flatMap(nodes) : tree?.props ? [tree, ...nodes(tree.props.children), ...nodes(tree.props.footer)] : []
 const text = (tree) => Array.isArray(tree) ? tree.map(text).join('') : tree?.props ? text(tree.props.children) + text(tree.props.footer || '') : String(tree ?? '')
 const button = (tree, label) => nodes(tree).find((node) => node.type === 'button' && text(node.props.children).endsWith(label))
 function harness(Component, props = {}, resources = {}, roles = ['ADMIN']) {
   let cursor = 0; const state = []
-  globalThis.__adminAuth = { user: { id: actorId }, roles }; globalThis.__adminResources = resources; globalThis.__adminLocal = true
+  globalThis.__adminAuth = { user: { id: actorId }, roles }; globalThis.__adminResources = resources
   globalThis.__adminState = (initial) => { const i = cursor++; if (!(i in state)) state[i] = typeof initial === 'function' ? initial() : initial; return [state[i], (value) => { state[i] = typeof value === 'function' ? value(state[i]) : value }] }
   return () => { cursor = 0; return Component(props) }
 }
-test('User delete opens a dialog; cancellation sends nothing; explicit confirmation alone deletes and refreshes', async () => {
+test('User delete opens a dialog; cancellation sends nothing; confirmation sends status DELETED and refreshes', async () => {
   const calls = []; let reloads = 0
-  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: null }) }
+  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...person, status: 'DELETED' } }) }
   const render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }, () => reloads++) })
   button(render(), 'Xóa').props.onClick()
   let dialog = nodes(render()).find((node) => node.type === UserDecision)
@@ -41,7 +40,9 @@ test('User delete opens a dialog; cancellation sends nothing; explicit confirmat
   dialog.props.onClose(); assert.equal(calls.length, 0); assert.ok(!nodes(render()).some((node) => node.type === UserDecision))
   button(render(), 'Xóa').props.onClick(); dialog = nodes(render()).find((node) => node.type === UserDecision)
   await dialog.props.onConfirm()
-  assert.equal(calls.length, 1); assert.equal(calls[0].options.method, 'DELETE'); assert.equal(reloads, 1)
+  assert.equal(calls.length, 1); assert.equal(calls[0].options.method, 'PATCH')
+  assert.ok(String(calls[0].url).endsWith('/admin/users/' + id + '/status'))
+  assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'DELETED' }); assert.equal(reloads, 1)
   assert.ok(!nodes(render()).some((node) => node.type === UserDecision))
 })
 test('Failed delete keeps the selected person and dialog; double confirm is suppressed', async () => {
@@ -54,74 +55,58 @@ test('Failed delete keeps the selected person and dialog; double confirm is supp
   const retained = nodes(render()).find((node) => node.type === UserDecision)
   assert.equal(retained.props.person.id, id); assert.equal(retained.props.error.status, 500)
 })
-test('User create/edit stays in modal; field validation and cancel do not write', async () => {
-  let saved = 0
-  const render = harness(UserForm, { person, onSave() { saved++ }, onClose() {} })
-  nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); assert.equal(saved, 0)
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
-  nodes(render()).find((node) => node.type === 'input').props.onChange({ target: { value: 'Nguyễn Minh đã sửa' } })
-  nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); assert.equal(saved, 1)
-  const inputs = nodes(render()).filter((node) => node.type === 'input')
-  inputs[0].props.onChange({ target: { value: '' } })
-  nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
-  assert.equal(saved, 1); assert.ok(text(render()).includes('Vui lòng nhập họ tên.'))
-  assert.ok(!nodes(render()).some((node) => node.type === 'select'))
+test('Role form only saves a changed, non-empty role set and cancel does not write', () => {
+  const saved = []
+  const render = harness(RoleForm, { person, onSave(roles) { saved.push(roles) }, onClose() {} })
+  const form = () => nodes(render()).find((node) => node.type === 'form')
+  const box = (role) => nodes(render()).find((node) => node.type === 'input' && node.props.value === role)
+  form().props.onSubmit({ preventDefault() {} }); assert.equal(saved.length, 0)
+  assert.equal(button(render(), 'Lưu vai trò').props.disabled, true)
+  box('BAKERY_OWNER').props.onChange()
+  assert.equal(button(render(), 'Lưu vai trò').props.disabled, false)
+  form().props.onSubmit({ preventDefault() {} }); assert.deepEqual(saved, [['CUSTOMER', 'BAKERY_OWNER']])
+  box('CUSTOMER').props.onChange(); box('BAKERY_OWNER').props.onChange()
+  assert.equal(button(render(), 'Lưu vai trò').props.disabled, true)
+  assert.match(text(render()), /ít nhất một vai trò/)
+  form().props.onSubmit({ preventDefault() {} }); assert.equal(saved.length, 1)
   assert.ok(button(render(), 'Hủy').props['data-modal-close'] !== undefined)
 })
 
-test('User edit only enables valid semantic changes and reverts to disabled after restoring the original value', () => {
-  const render = harness(UserForm, { person, onSave() {}, onClose() {} })
-  const name = () => nodes(render()).find((n) => n.type === 'input' && n.props.name === 'name')
-  name().props.onChange({ target: { value: '  ' + person.name + '  ' } })
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
-  name().props.onChange({ target: { value: 'Tên mới' } })
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, false)
-  const email = () => nodes(render()).find((n) => n.type === 'input' && n.props.name === 'email')
-  email().props.onChange({ target: { value: 'email-khong-hop-le' } })
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
-  assert.match(text(render()), /Vui lòng nhập email hợp lệ/)
-  email().props.onChange({ target: { value: person.email } }); name().props.onChange({ target: { value: person.name } })
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
-})
-
 test('User confirmation labels identify the operation and protected decisions explain disabled state', () => {
-  for (const [action, status, label] of [['status', 'ACTIVE', 'Tạm ngưng'], ['status', 'SUSPENDED', 'Kích hoạt lại'], ['delete', 'ACTIVE', 'Xác nhận xóa']]) {
+  for (const [action, status, label] of [['status', 'ACTIVE', 'Khóa tài khoản'], ['status', 'BLOCKED', 'Mở khóa'], ['delete', 'ACTIVE', 'Xác nhận xóa']]) {
     const tree = UserDecision({ person: { ...person, status }, action, busy: false, disabledReason: 'Hồ sơ được bảo vệ.' })
     const buttons = nodes(tree.props.footer).filter((n) => n.type === 'button')
     assert.equal(text(buttons[0]), 'Hủy'); assert.ok(text(buttons[1]).endsWith(label))
     assert.equal(buttons[1].props.disabled, true); assert.match(text(tree), /Hồ sơ được bảo vệ/)
-    if (action === 'delete') assert.match(text(tree), /không xóa tài khoản đăng nhập/)
+    if (action === 'delete') assert.match(text(tree), /thu hồi/)
   }
 })
 
-test('Duplicate email feedback is attached to the submitted field and clears when a different valid email is entered', () => {
-  const props = { person, onSave() {} }, render = harness(UserForm, props)
-  const email = () => nodes(render()).find((n) => n.type === 'input' && n.props.name === 'email')
-  email().props.onChange({ target: { value: 'duplicate@example.test' } })
-  nodes(render()).find((n) => n.type === 'form').props.onSubmit({ preventDefault() {} })
-  props.error = { status: 409, message: 'Email đã được sử dụng.' }
-  assert.equal(email().props['aria-invalid'], true)
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
-  assert.match(text(render()), /Vui lòng chọn email khác/)
-  email().props.onChange({ target: { value: 'changed@example.test' } })
-  assert.equal(email().props['aria-invalid'], false)
-  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, false)
-})
-test('User service blocks live CRUD, self operations and protected administrator before any request', async () => {
-  harness(Users); let calls = 0; globalThis.fetch = async () => { calls++; throw Error('Unexpected request') }
-  await assert.rejects(service.deleteUser({ ...person, id: actorId }, { id: actorId }), { status: 403 })
-  await assert.rejects(service.deleteUser({ ...person, roles: ['ADMIN'] }, { id: actorId }), { status: 403 })
-  globalThis.__adminLocal = false
-  for (const action of [() => service.saveUser(person, person, { id: actorId }), () => service.deleteUser(person, { id: actorId }), () => service.changeUserStatus(person, { id: actorId })]) await assert.rejects(action, { status: 403 })
+test('User service rejects self operations and invalid contract values before any request', async () => {
+  let calls = 0; globalThis.fetch = async () => { calls++; throw Error('Unexpected request') }
+  const self = { ...person, id: actorId }
+  await assert.rejects(service.deleteUser(self, { id: actorId }), { status: 403 })
+  await assert.rejects(service.changeUserStatus(self, { id: actorId }, 'BLOCKED'), { status: 403 })
+  await assert.rejects(service.updateUserRoles(self, ['CUSTOMER'], { id: actorId }), { status: 403 })
+  await assert.rejects(service.changeUserStatus(person, { id: actorId }, 'SUSPENDED'), { status: 400 })
+  await assert.rejects(service.changeUserStatus(person, { id: actorId }, 'ACTIVE'), { status: 409 })
+  await assert.rejects(service.updateUserRoles(person, [], { id: actorId }), { status: 422 })
+  await assert.rejects(service.updateUserRoles(person, ['BAKERY_STAFF'], { id: actorId }), { status: 422 })
   assert.equal(calls, 0)
 })
-test('User save only sends name/email; state changes require a matching response', async () => {
-  harness(Users); const calls = []
-  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: person }) }
-  await service.saveUser(person, { ...person, roles: ['ADMIN'] }, { id: actorId })
-  assert.deepEqual(JSON.parse(calls[0].options.body), { name: person.name, email: person.email })
-  await assert.rejects(service.changeUserStatus(person, { id: actorId }), { status: 502 })
-  assert.deepEqual(JSON.parse(calls[1].options.body), { status: 'SUSPENDED' })
+test('User service follows the admin user contract and verifies responses', async () => {
+  const calls = []; let reply = person
+  globalThis.fetch = async (url, options) => { calls.push({ url: String(url), options }); return Response.json({ data: reply }) }
+  reply = { result: [person], meta: { page: 1, pageSize: 12, pages: 1, total: 1 } }
+  await service.loadUsers({ page: 1, size: 12, email: 'minh', status: '', role: 'CUSTOMER', name: 'ignored' })
+  assert.ok(calls[0].url.endsWith('/admin/users?page=1&size=12&email=minh&role=CUSTOMER'))
+  reply = { ...person, roles: ['CUSTOMER', 'BAKERY_OWNER'] }
+  await service.updateUserRoles(person, ['CUSTOMER', 'BAKERY_OWNER', 'CUSTOMER'], { id: actorId })
+  assert.equal(calls[1].options.method, 'PUT'); assert.ok(calls[1].url.endsWith('/admin/users/' + id + '/roles'))
+  assert.deepEqual(JSON.parse(calls[1].options.body), { roles: ['CUSTOMER', 'BAKERY_OWNER'] })
+  reply = person
+  await assert.rejects(service.changeUserStatus(person, { id: actorId }, 'BLOCKED'), { status: 502 })
+  assert.equal(calls[2].options.method, 'PATCH'); assert.deepEqual(JSON.parse(calls[2].options.body), { status: 'BLOCKED' })
 })
 test('Payment review only writes after confirmation and requires a reason only for rejection', async () => {
   let calls = 0, completed = 0
@@ -183,7 +168,7 @@ test('Payment directory enriches from existing order/bakery routes and preserves
 })
 test('Customer cannot open user mutations or payment review decisions', () => {
   let render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }) }, ['CUSTOMER'])
-  for (const label of ['Thêm người dùng', 'Sửa', 'Xóa', 'Tạm ngưng']) assert.equal(button(render(), label).props.disabled, true)
+  for (const label of ['Phân quyền', 'Xóa', 'Khóa']) assert.equal(button(render(), label).props.disabled, true)
   render = harness(PaymentReview, { payment: { id, subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 199000, currency: 'VND' } }, { loadPaymentContext: ready({ order: { id: orderId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' } }) }, ['CUSTOMER'])
   assert.ok(!button(render(), 'Phê duyệt thanh toán')); assert.ok(!button(render(), 'Từ chối'))
 })

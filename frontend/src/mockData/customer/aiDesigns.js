@@ -128,7 +128,7 @@ export const AI_SHOWCASE_DATA = {
       id: 'quote-1',
       bakery: 'Sweet Bakery Studio',
       rating: '⭐ 4.9 (420 đánh giá)',
-      sla: 'Giao xe lạnh 14:00 ngày mai',
+      sla: 'Giao hàng 14:00 ngày mai',
       price: '950.000đ',
     },
     {

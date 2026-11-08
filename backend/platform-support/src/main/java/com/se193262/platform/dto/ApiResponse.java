@@ -11,6 +11,10 @@ public record ApiResponse<T>(int statusCode, String message, T data, Instant tim
         return new ApiResponse<>(201, "Created", data, Instant.now());
     }
 
+    public static <T> ApiResponse<T> accepted(T data) {
+        return new ApiResponse<>(202, "Accepted", data, Instant.now());
+    }
+
     public static <T> ApiResponse<T> error(int status, String message) {
         return new ApiResponse<>(status, message, null, Instant.now());
     }

@@ -12,7 +12,7 @@ export const DEFAULT_PAST_ORDERS = [
         price: 1450000,
         image:
           'https://lh3.googleusercontent.com/aida-public/AB6AXuDjCpa6eA0SnJzXQJ_yQz4CKaR3-V2NjGxumVC8a5r1nUqv5hvAGZHAysbnapA8dW0r7ezydnlykmFCthrlW1G4IgJH8PCyqEggJNsXA9Vlp6qtMoLmlMmfKZE2vE-4eIPb_5lizLoze3vqqfNv-OuzFaXFjWJG-D3lFXa327Y_hAPBcscXEo4CB4LP_fe51tkcGNsNG2Z39SUxWb_DAk838Mi2D41PMoCWdlCdM21CV2dy1DlS1QZn',
-        deliveryNote: 'Đã giao xe lạnh đạt chuẩn 4.8°C tận nơi',
+        deliveryNote: 'Đã giao hàng an toàn, bảo đảm form dáng tận nơi',
       },
       {
         id: '#LC-69012',
@@ -60,7 +60,7 @@ export const ORDER_GALLERY_PHOTOS = [
       title: 'Đóng hộp mica trong suốt & cố định đế chống sốc',
       time: '11:28 - Bàn đóng gói',
       stage: 'Khoá nẹp 4 điểm',
-      desc: 'Hộp bánh mica cao cấp viền nơ lụa satin kèm đế cố định silicon chống xô dịch khi lên xe thùng lạnh.',
+      desc: 'Hộp bánh mica cao cấp viền nơ lụa satin kèm đế cố định silicon chống xô dịch khi vận chuyển giao hàng.',
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7j02OGpWrF1Z0Qd5SVgU8ZL3t8V2OXg18rejpV166OL_m7W_fXDhfxjocVh6FsUIAqHVfuoud9UKfWPC0QHl2R1BPo2i7heRoCgpApIhXpXbVUhJDHKfF9uxV3tj27I3Htc83oBdmOQ81AeJWzUzY1QHmmNAIL2G3NhhD5JB7tlD0Me7n1j3b4ZTKxZHAUP2FM4IzxPzbwe9I_-68NuseiNm7sXlnJ-8RG8F6c0N6YHqZGgi5LsRX',
     },
     {

@@ -37,7 +37,13 @@ export function useVendorBakery(routeSearch = '') {
   const loadAvailable = useCallback(async (params, options) => {
     const data = await loadManagedBakeries(params, options)
     options?.signal?.throwIfAborted()
-    if (data.length) setSelection((current) => current.key === key && current.id ? current : { key, search: routeSearch, id: data[0].id })
+    if (data.length) {
+      setSelection((current) => {
+        const targetId = (current.key === key && current.id && data.some((b) => b.id === current.id)) ? current.id : data[0].id
+        try { sessionStorage.setItem(key, targetId) } catch {}
+        return { key, search: routeSearch, id: targetId }
+      })
+    }
     return data
   }, [key, routeSearch])
   const available = useCatalogResource(loadAvailable, { userId: user.id })

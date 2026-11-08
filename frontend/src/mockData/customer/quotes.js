@@ -13,7 +13,7 @@ export const STAGE_LOGS = {
   QUOTED: {
     icon: 'request_quote',
     title: 'Nhật ký sàn: 3 xưởng bánh đối tác đã hoàn tất gửi phương án & báo giá',
-    desc: 'Báo giá đã bao gồm nguyên liệu tươi chuẩn Pháp, thời gian hoàn thiện, hình ảnh phác thảo và cam kết bảo hộ Escrow 100%.',
+    desc: 'Báo giá đã bao gồm nguyên liệu tươi chuẩn Pháp, thời gian hoàn thiện, hình ảnh phác thảo và cam kết thỏa thuận minh bạch 100%.',
     badge: 'Đang mở chọn tiệm: Còn 04:27:35',
     badgeIcon: 'nest_clock_farsight_analog',
   },
@@ -27,15 +27,15 @@ export const STAGE_LOGS = {
   VENDOR_CONFIRMED: {
     icon: 'check_circle',
     title: 'Nhật ký xưởng: Tiệm bánh đã xác nhận thực hiện theo yêu cầu',
-    desc: 'Bếp Trưởng cam kết chuẩn mẫu 3D trên 95% và bàn giao đúng giờ hẹn. Đơn hàng đã sẵn sàng chuyển sang bước ký quỹ Escrow.',
-    badge: 'Sẵn sàng thanh toán Escrow',
-    badgeIcon: 'lock_open',
+    desc: 'Bếp Trưởng cam kết chuẩn mẫu 3D trên 95% và bàn giao đúng giờ hẹn. Đơn hàng sẵn sàng chuẩn bị làm bánh.',
+    badge: 'Đã xác nhận đơn hàng',
+    badgeIcon: 'check_circle',
   },
   PAID: {
-    icon: 'lock',
-    title: 'Nhật ký Escrow: Ký quỹ an toàn 100% đã được khóa bảo chứng',
-    desc: 'Khoản thanh toán được bảo hộ tại SweetCake Escrow Vault. Xưởng bánh bắt đầu tuyển chọn nguyên liệu tươi hữu cơ.',
-    badge: 'Bảo hộ Escrow 100% kích hoạt',
+    icon: 'verified',
+    title: 'Nhật ký cam kết: Thỏa thuận đặt cọc minh bạch 100% đã được xác nhận',
+    desc: 'Khoản thỏa thuận cọc được ghi nhận trên hệ thống SweetCake. Xưởng bánh bắt đầu tuyển chọn nguyên liệu tươi hữu cơ.',
+    badge: 'Thỏa thuận minh bạch kích hoạt',
     badgeIcon: 'verified_user',
   },
   BAKING: {
@@ -47,8 +47,8 @@ export const STAGE_LOGS = {
   },
   DELIVERING: {
     icon: 'local_shipping',
-    title: 'Nhật ký vận chuyển: Đã bàn giao cho tài xế xe lạnh chuyên dụng',
-    desc: 'Xe Van bảo quản nhiệt độ chuẩn 4.8°C và cảm biến chống sốc thủy lực 0.02G đang di chuyển đến điểm hẹn.',
+    title: 'Nhật ký vận chuyển: Đã bàn giao cho tài xế giao hàng chuyên dụng',
+    desc: 'Tài xế giao hàng cẩn thận, có thùng chống sốc bảo vệ bánh đang di chuyển đến điểm hẹn.',
     badge: 'Dự kiến đến nơi: 25 phút nữa',
     badgeIcon: 'near_me',
   },
@@ -81,7 +81,7 @@ export const BIDS_DATA = [
     durationText: '2 ngày hoàn thiện',
     deliveryTime: '15:30',
     deliveryNote: 'Trước giờ tiệc 2 tiếng',
-    deliveryType: 'Xe thùng lạnh 4°C - 6°C chuyên dụng',
+    deliveryType: 'Giao hàng thùng chống sốc bảo vệ bánh',
     deliveryDesc: 'Bảo hiểm 100% dáng bánh kem, chống nghiêng xê dịch',
     packageTitle: 'Gói dịch vụ bao gồm:',
     packageItems: [

@@ -162,7 +162,7 @@ export const VENDOR_NAV_ITEMS = [
 export const VENDOR_HEADER_NOTIFICATIONS = {
   unreadCount: 3,
   summary:
-    'Có 3 thông báo mới: 1 yêu cầu RFQ mới, 1 đơn hàng đã mở cọc Escrow, và 1 đánh giá 5 sao!',
+    'Có 3 thông báo mới: 1 yêu cầu RFQ mới, 1 đơn hàng đã đặt cọc thành công, và 1 đánh giá 5 sao!',
   items: [
     {
       id: 1,
@@ -172,8 +172,8 @@ export const VENDOR_HEADER_NOTIFICATIONS = {
     },
     {
       id: 2,
-      title: 'Đơn hàng đã ký quỹ Escrow',
-      text: 'Đơn hàng #ORD-9982 đã khóa cọc 100%',
+      title: 'Đơn hàng đã đặt cọc thành công',
+      text: 'Đơn hàng #ORD-9982 đã xác nhận cọc minh bạch',
       time: '12 phút trước',
     },
     {

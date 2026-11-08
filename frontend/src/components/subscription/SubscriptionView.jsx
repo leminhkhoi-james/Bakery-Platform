@@ -20,13 +20,107 @@ export function FeatureList({ features = {} }) {
   return Object.keys(features).length ? <ul className="space-y-2 text-sm sc-plan-benefits">{planFeatureRows(features).map((row) => <li key={row.code}><Icon name="check_circle" />{row.label}: <strong>{row.value}</strong></li>)}</ul> : <p className="text-sm text-on-surface-variant">Chưa có thông tin quyền lợi.</p>
 }
 
-export function PlanCards({ plans, onSelect, canSelect = false, busy = false }) {
+export function formatPeriodDate(dateStr) {
+  if (!dateStr || !Number.isFinite(Date.parse(dateStr))) return 'Chưa có thông tin'
+  const d = new Date(dateStr)
+  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const year = d.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
+export function findMatchingPlan(plans, period) {
+  if (!plans?.length || !period) return null
+  const planId = period.planId || period.id
+  const planCode = period.planCode || period.code
+  if (planId) {
+    const byId = plans.find((p) => p.id === planId)
+    if (byId) return byId
+  }
+  if (planCode) {
+    const byCode = plans.find((p) => p.code && p.code.toLowerCase() === String(planCode).toLowerCase())
+    if (byCode) return byCode
+  }
+  const clean = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '_')
+  const periodCode = clean(planCode)
+  const codeAliases = {
+    demo_0: ['basic', 'co_ban', 'khoi_dau'],
+    demo_1: ['pro', 'chuyen_nghiep', 'nghe_nhan'],
+    demo_2: ['premium', 'cao_cap'],
+    basic: ['demo_0', 'co_ban', 'khoi_dau'],
+    pro: ['demo_1', 'chuyen_nghiep', 'nghe_nhan'],
+    premium: ['demo_2', 'cao_cap'],
+  }
+  const byAlias = plans.find((p) => {
+    const pCode = clean(p.code)
+    if (codeAliases[periodCode]?.includes(pCode) || codeAliases[pCode]?.includes(periodCode)) return true
+    return false
+  })
+  if (byAlias) return byAlias
+  if (plans.length === 3) {
+    if (/2|premium|cao_cap/i.test(periodCode)) return plans[2]
+    if (/1|pro|chuyen_nghiep/i.test(periodCode)) return plans[1]
+    if (/0|basic|co_ban/i.test(periodCode)) return plans[0]
+  }
+  return null
+}
+
+export function PlanCards({ plans, onSelect, canSelect = false, busy = false, currentPlanId = null, currentPlanCode = null, currentPlan = null, scheduledPlanId = null }) {
   if (!plans?.length) return <p className="rounded-2xl border border-outline-variant/30 p-6">Chưa có gói dịch vụ được mở bán.</p>
-  return <div className="sc-owner-plan-grid">{plans.map((plan) => <article key={plan.id} className={'sc-panel sc-owner-plan-card' + (String(plan.code).toUpperCase() === 'PRO' ? ' is-featured' : '')}>
-    <div><h3 className="text-xl font-bold text-primary">{cleanPresentationLabel(plan.name, 'Chưa có tên gói')}</h3></div>
-    <p className="font-serif text-3xl font-semibold text-primary">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
-    <p>{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p><p className="text-sm">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
-    <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p><FeatureList features={plan.features} />
-    {onSelect && <button disabled={!canSelect || busy || !canOrderPlan(plan)} onClick={() => onSelect(plan)} className="mt-auto rounded-xl bg-primary px-4 py-3 text-on-primary disabled:opacity-40">Chọn gói</button>}
-  </article>)}</div>
+  const activeCurrentPlan = currentPlan || findMatchingPlan(plans, { planId: currentPlanId, planCode: currentPlanCode })
+  // Featured: prefer plan whose code contains PRO/PROFESSIONAL, else middle card in a 3-plan list
+  const featuredId = (() => {
+    const proMatch = plans.find((p) => /PRO/i.test(String(p.code)))
+    if (proMatch) return proMatch.id
+    if (plans.length === 3) return plans[1].id
+    return null
+  })()
+  return <div className="sc-owner-plan-grid">{plans.map((plan) => {
+    const isCurrent = Boolean(activeCurrentPlan && (plan.id === activeCurrentPlan.id || plan.code === activeCurrentPlan.code))
+    const isScheduled = Boolean(scheduledPlanId && plan.id === scheduledPlanId)
+    const isUpgrade = Boolean(activeCurrentPlan && !isCurrent && Number(plan.monthlyPrice) > Number(activeCurrentPlan.monthlyPrice || 0))
+
+    let buttonLabel = 'Chọn gói'
+    if (isCurrent) buttonLabel = 'Gia hạn kỳ tiếp theo'
+    else if (isScheduled) buttonLabel = 'Đã lên lịch kỳ này'
+    else if (isUpgrade) buttonLabel = 'Nâng cấp lên gói này'
+    else if (activeCurrentPlan) buttonLabel = 'Đổi sang gói này (Kỳ tới)'
+
+    return (
+      <article key={plan.id} className={'sc-panel sc-owner-plan-card' + (isCurrent ? ' is-current-plan' : plan.id === featuredId ? ' is-featured' : '')}>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-xl font-bold text-primary">{cleanPresentationLabel(plan.name, 'Chưa có tên gói')}</h3>
+          {isCurrent && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-primary text-white shadow-xs">
+              <Icon name="check_circle" className="text-sm" /> Gói đang sử dụng
+            </span>
+          )}
+          {!isCurrent && isUpgrade && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300">
+              ⭐ Nâng cấp
+            </span>
+          )}
+          {!isCurrent && isScheduled && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-300">
+              🕒 Đã lên lịch
+            </span>
+          )}
+        </div>
+        <p className="font-serif text-3xl font-semibold text-primary">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
+        <p className="text-sm text-on-surface-variant leading-relaxed">{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p>
+        <p className="text-sm font-medium">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
+        <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p>
+        <FeatureList features={plan.features} />
+        {onSelect && (
+          <button
+            disabled={!canSelect || busy || !canOrderPlan(plan)}
+            onClick={() => onSelect(plan)}
+            className={'mt-auto rounded-xl px-4 py-3 font-semibold transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ' + (isCurrent ? 'bg-primary text-on-primary hover:bg-primary-hover shadow-xs' : isUpgrade ? 'bg-amber-700 text-white hover:bg-amber-800 shadow-xs' : 'bg-primary text-on-primary hover:bg-primary-hover')}
+          >
+            {buttonLabel}
+          </button>
+        )}
+      </article>
+    )
+  })}</div>
 }

@@ -4,7 +4,7 @@ import PortalAccountMenu from './PortalAccountMenu.jsx'
 import { uiLabel, cleanPresentationLabel } from '../../services/uiLabels.js'
 
 export function Icon({ name, className = '' }) {
-  return <span aria-hidden="true" className={'material-symbols-outlined sc-icon ' + className}>{name}</span>
+  return <span aria-hidden="true" translate="no" className={'material-symbols-outlined notranslate sc-icon ' + className}>{name}</span>
 }
 
 export function SectionHeading({ title, description, action, icon }) {

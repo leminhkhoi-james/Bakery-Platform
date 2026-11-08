@@ -28,7 +28,7 @@ export default function PolicyModal({
       title: 'Điều Khoản Dịch Vụ',
       shortTitle: 'Điều khoản',
       icon: 'gavel',
-      subtitle: 'Quy định sử dụng tài khoản, đặt bánh & thanh toán Escrow',
+      subtitle: 'Quy định sử dụng tài khoản, đặt bánh & đối soát đơn hàng minh bạch',
     },
     {
       id: 'privacy',
@@ -128,7 +128,7 @@ export default function PolicyModal({
                   <strong className="block text-sm font-bold mb-1">
                     Tóm Tắt Điều Khoản Dịch Vụ
                   </strong>
-                  Bằng việc đăng ký tài khoản hoặc sử dụng nền tảng SweetCake, bạn đồng ý với các quy định về đặt hàng, thanh toán tạm giữ Escrow, bảo mật thiết kế AI và cơ chế bồi hoàn 100% tiền nếu bánh giao không đạt cam kết.
+                  Bằng việc đăng ký tài khoản hoặc sử dụng nền tảng SweetCake, bạn đồng ý với các quy định về đặt hàng, thỏa thuận đặt cọc minh bạch, bảo mật thiết kế AI và cơ chế hỗ trợ đối soát bảo vệ quyền lợi 100% nếu bánh giao không đạt cam kết.
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ export default function PolicyModal({
                   • Khách hàng cần từ 15 tuổi trở lên hoặc có sự giám sát của người giám hộ pháp lý khi thực hiện giao dịch thanh toán trực tuyến.
                 </p>
                 <p className="text-on-surface-variant font-medium text-xs sm:text-sm">
-                  • Thông tin tài khoản đăng ký (Số điện thoại, địa chỉ nhận bánh, tên người nhận) phải chính xác để đảm bảo đối soát giao hàng xe lạnh đúng khung giờ.
+                  • Thông tin tài khoản đăng ký (Số điện thoại, địa chỉ nhận bánh, tên người nhận) phải chính xác để đảm bảo đối soát giao hàng đúng khung giờ.
                 </p>
                 <p className="text-on-surface-variant font-medium text-xs sm:text-sm">
                   • Khách hàng bảo mật mật khẩu cá nhân và chịu trách nhiệm cho các đơn đặt hàng được gửi từ tài khoản của mình.
@@ -167,14 +167,14 @@ export default function PolicyModal({
               <section className="space-y-3">
                 <h3 className="font-headline-sm text-lg font-bold text-primary flex items-center gap-2">
                   <span className="w-6 h-6 rounded-lg bg-primary text-on-primary text-xs flex items-center justify-center font-bold">3</span>
-                  Cơ Chế Thanh Toán Tạm Giữ Bằng Tài Khoản Escrow
+                  Thỏa Thuận Đặt Cọc Minh Bạch &amp; Đối Soát Đơn Hàng
                 </h3>
                 <div className="p-4 rounded-xl bg-surface-container border border-outline-variant/30 space-y-2">
                   <p className="font-bold text-primary text-xs sm:text-sm">
-                    🔒 Bảo Vệ Tiền Nạp 100% Với Ví Escrow SweetCake:
+                    🔒 Cam Kết Minh Bạch &amp; Hỗ Trợ Đối Soát 100%:
                   </p>
                   <p className="text-xs text-on-surface-variant font-medium">
-                    Khi bạn chuyển khoản thanh toán, số tiền được tạm giữ tại tài khoản đảm bảo Escrow trung lập của SweetCake. Tiệm bánh **CHƯA ĐƯỢC NHẬN TIỀN** cho đến khi bạn nhận bánh, kiểm tra đúng hình dáng, hương vị và xác nhận "Hoàn thành đơn hàng".
+                    Toàn bộ thỏa thuận giá cả, tiền cọc và thời gian giao nhận được lưu lại thành hợp đồng điện tử trên hệ thống. SweetCake đóng vai trò trung gian đối soát độc lập, bảo vệ quyền lợi đôi bên và hỗ trợ xử lý khiếu nại trong suốt quá trình thực hiện đơn.
                   </p>
                 </div>
               </section>
@@ -185,8 +185,8 @@ export default function PolicyModal({
                   Chính Sách Hủy Đơn &amp; Bồi Thường
                 </h3>
                 <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-on-surface-variant font-medium">
-                  <li><strong>Hủy trước khi tiệm làm bánh:</strong> Hoàn lại 100% tiền tạm giữ trong 15 phút.</li>
-                  <li><strong>Bánh hỏng trong quá trình vận chuyển / Không đúng hình mẫu &gt; 30%:</strong> SweetCake hoàn 100% tiền Escrow + hỗ trợ voucher 200.000đ cho đơn kế tiếp.</li>
+                  <li><strong>Hủy trước khi tiệm làm bánh:</strong> Hỗ trợ hoàn cọc theo thỏa thuận giữa hai bên trong vòng 1-2 giờ.</li>
+                  <li><strong>Bánh hỏng trong quá trình vận chuyển / Không đúng hình mẫu &gt; 30%:</strong> SweetCake hỗ trợ giải quyết đối soát bồi hoàn 100% + tặng voucher 200.000đ cho đơn kế tiếp.</li>
                   <li><strong>Tiệm bánh tự ý hủy sau khi xác nhận nhận làm:</strong> Tiệm bị trừ 200 điểm uy tín và bồi thường 15% giá trị đơn hàng cho khách.</li>
                 </ul>
               </section>
@@ -197,7 +197,7 @@ export default function PolicyModal({
           {activeTab === 'privacy' && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-3">
-                <span className="material-symbols-outlined text-emerald-700 text-2xl shrink-0 mt-0.5">
+                <span translate="no" className="material-symbols-outlined notranslate text-emerald-700 text-2xl shrink-0 mt-0.5">
                   verified_user
                 </span>
                 <div className="text-xs text-emerald-950 font-medium">
@@ -220,7 +220,7 @@ export default function PolicyModal({
                   </div>
                   <div className="p-3.5 rounded-xl bg-surface-container border border-outline-variant/30">
                     <strong className="block text-primary font-bold mb-1">Thông tin giao nhận:</strong>
-                    Địa chỉ và thời gian nhận bánh để điều phối shipper xe lạnh định vị GPS real-time.
+                    Địa chỉ và thời gian nhận bánh để điều phối shipper giao hàng định vị GPS real-time.
                   </div>
                 </div>
               </section>
@@ -293,8 +293,8 @@ export default function PolicyModal({
                     Hệ thống kiểm tra đối chiếu bản vẽ thiết kế 3D AI ban đầu với ảnh tiệm nộp trước khi giao.
                   </div>
                   <div className="p-3 rounded-xl bg-surface-container border border-outline-variant/30">
-                    <strong className="text-primary font-bold block mb-1">Bước 3: Xử lý tiền bồi hoàn Escrow</strong>
-                    Nếu sai sót do tiệm bánh, số tiền Escrow lập tức hoàn trả 100% về ví khách hàng trong vòng 30 phút.
+                    <strong className="text-primary font-bold block mb-1">Bước 3: Hỗ trợ đối soát & bồi hoàn</strong>
+                    Nếu sai sót do tiệm bánh, SweetCake yêu cầu tiệm thực hiện hoàn tiền thỏa thuận 100% cho khách hàng trong vòng 24 giờ.
                   </div>
                 </div>
               </section>
