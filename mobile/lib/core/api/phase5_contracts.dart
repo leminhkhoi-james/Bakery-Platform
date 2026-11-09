@@ -109,8 +109,3 @@ List<String> orderActions(
       ? next
       : [];
 }
-
-/// Customer Identity currently has no public address discovery or management API.
-/// Never accept typed UUIDs as a substitute for an authorized address selection.
-const addressContractBlocker =
-    'Chưa thể đặt bánh vì tính năng chọn địa chỉ giao hàng chưa sẵn sàng. Giỏ và yêu cầu vẫn được giữ; chưa có đơn hoặc giao dịch thanh toán nào được tạo.';

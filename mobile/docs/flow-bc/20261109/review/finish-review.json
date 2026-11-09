@@ -1,0 +1,28 @@
+{
+  "initialDisposition": "fix",
+  "initialSections": [
+    "persistence",
+    "fidelity",
+    "ceiling",
+    "material_fixes",
+    "keep"
+  ],
+  "reviewer": "impeccable_address_finish_reviewer (fresh fork none; read only)",
+  "scope": "Address surface only; native screenshots, no detector",
+  "round1": {
+    "cancelTruth": "resolved",
+    "tabletTopAlignment": "unresolved",
+    "actionSpacing": "resolved",
+    "navigationContext": "resolved"
+  },
+  "round2": {
+    "cancelTruth": "resolved",
+    "tabletTopAlignment": "resolved",
+    "actionSpacing": "resolved",
+    "navigationContext": "resolved",
+    "disposition": "ship",
+    "remaining": "Clear for scored fixes; no regressions observed",
+    "scope": "Verdict covers listed fixes only, not whole surface"
+  },
+  "designSystemModified": false
+}

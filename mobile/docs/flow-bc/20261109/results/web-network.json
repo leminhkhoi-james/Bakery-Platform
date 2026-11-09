@@ -1,0 +1,482 @@
+[
+  {
+    "at": "2026-11-09T02:17:24.764Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "status": 401,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:17:26.951Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "POST",
+    "path": "/api/v1/auth/login",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:17:26.988Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:17:28.296Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:17:28.317Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:17:29.352Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "method": "GET",
+    "path": "/api/v1/orders",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "41e2efc9-50ed-41cc-b4d3-67764b248638"
+      },
+      {
+        "field": "customerId",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "0091385a-690b-4460-9a13-2ee9948ad941"
+      },
+      {
+        "field": "customerId",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "f0b2c930-0fb3-4b7a-bec9-294c8af3e610"
+      },
+      {
+        "field": "customerId",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PENDING"
+      },
+      {
+        "field": "status",
+        "value": "COMPLETED"
+      },
+      {
+        "field": "status",
+        "value": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:23:54.259Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-FLOW-B-BLOCKER",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:23:54.283Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-FLOW-B-BLOCKER",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:23:54.383Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-FLOW-B-BLOCKER",
+    "method": "GET",
+    "path": "/api/v1/products/f2dbe6f3-d8ba-42d4-95be-78372358b521",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "4b684e41-f224-4511-b019-12d0f8abedab"
+      },
+      {
+        "field": "id",
+        "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+      },
+      {
+        "field": "id",
+        "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+      },
+      {
+        "field": "id",
+        "value": "9284614b-b508-467f-a865-7a439c955d52"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PUBLISHED"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:09.325Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:42:09.384Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:09.645Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/products",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "4b684e41-f224-4511-b019-12d0f8abedab"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PUBLISHED"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:09.645Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/products",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "4b684e41-f224-4511-b019-12d0f8abedab"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PUBLISHED"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:09.646Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/bakeries",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "9dcd8192-5b21-4a84-9f4f-71d6833facf1"
+      },
+      {
+        "field": "id",
+        "value": "9dcd8192-5b21-4a84-9f4f-71d6833facf1"
+      },
+      {
+        "field": "id",
+        "value": "15cc02af-5ff3-42a0-9c81-be6631ae6077"
+      }
+    ],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:42:46.252Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [],
+    "states": []
+  },
+  {
+    "at": "2026-11-09T02:42:46.272Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:47.149Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/offers/efb9496d-c0c3-4be8-b468-5eee2ecce545",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "efb9496d-c0c3-4be8-b468-5eee2ecce545"
+      },
+      {
+        "field": "cakeRequestId",
+        "value": "2f882bcf-d07a-46ee-a9f9-df9a25cc3c96"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "c0961def-b6fc-405b-8030-4b0e659c68bc"
+      },
+      {
+        "field": "addOnId",
+        "value": "9284614b-b508-467f-a865-7a439c955d52"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PENDING"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:47.186Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/cake-requests/2f882bcf-d07a-46ee-a9f9-df9a25cc3c96",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "2f882bcf-d07a-46ee-a9f9-df9a25cc3c96"
+      },
+      {
+        "field": "customerId",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      },
+      {
+        "field": "id",
+        "value": "efb9496d-c0c3-4be8-b468-5eee2ecce545"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "OPEN"
+      },
+      {
+        "field": "status",
+        "value": "PENDING"
+      }
+    ]
+  },
+  {
+    "at": "2026-11-09T02:42:47.256Z",
+    "platform": "web",
+    "actor": "customerA",
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "method": "GET",
+    "path": "/api/v1/bakeries/ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+    "status": 200,
+    "urlOrigin": "http://127.0.0.1:5173",
+    "ids": [
+      {
+        "field": "id",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "9dcd8192-5b21-4a84-9f4f-71d6833facf1"
+      },
+      {
+        "field": "id",
+        "value": "9dcd8192-5b21-4a84-9f4f-71d6833facf1"
+      },
+      {
+        "field": "id",
+        "value": "15cc02af-5ff3-42a0-9c81-be6631ae6077"
+      }
+    ],
+    "states": []
+  }
+]

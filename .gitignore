@@ -44,3 +44,6 @@ build/
 docs/audit/
 /mobile/docs/full-integration/
 /mobile/docs/evidence/
+
+# Local-only Web/Android acceptance scripts, reports, screenshots and recordings
+/docs/mobile/

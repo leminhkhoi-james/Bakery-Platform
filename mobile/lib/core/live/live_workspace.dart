@@ -18,6 +18,8 @@ import '../../features/chat/data/pending_chat_journal.dart';
 import '../../features/cart/data/live_cart.dart';
 import '../../features/reviews/data/live_review_repository.dart';
 import '../../features/ai/data/live_ai_repository.dart';
+import '../../features/addresses/data/live_address_repository.dart';
+import '../../features/orders/data/pending_order_command.dart';
 
 class LiveWorkspace extends ChangeNotifier {
   LiveWorkspace({
@@ -37,6 +39,7 @@ class LiveWorkspace extends ChangeNotifier {
     subscriptions = LiveSubscriptionRepository(api);
     marketplace = LiveMarketplaceRepository(api);
     orders = LiveOrderRepository(api);
+    addresses = LiveAddressRepository(api);
     reviews = LiveReviewRepository(api);
     ai = LiveAiRepository(api);
     chat = LiveChatRepository(api, journal: chatJournal);
@@ -54,6 +57,9 @@ class LiveWorkspace extends ChangeNotifier {
   late final LiveSubscriptionRepository subscriptions;
   late final LiveMarketplaceRepository marketplace;
   late final LiveOrderRepository orders;
+  late final LiveAddressRepository addresses;
+  PendingOrderCommand? pendingDirectOrder;
+  final Map<String, PendingOrderCommand> pendingOfferAcceptances = {};
   late final LiveReviewRepository reviews;
   late final LiveAiRepository ai;
   late final LiveChatRepository chat;
@@ -72,6 +78,8 @@ class LiveWorkspace extends ChangeNotifier {
       _generation = session.generation;
       bakery = null;
       cart.clear();
+      pendingDirectOrder = null;
+      pendingOfferAcceptances.clear();
       chat.clearPending();
       _chatAccount = null;
       verifiedBakeries.clear();

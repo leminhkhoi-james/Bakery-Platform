@@ -1,0 +1,645 @@
+{
+  "WEB-ADDRESS-REVALIDATION": {
+    "caseId": "WEB-ADDRESS-REVALIDATION",
+    "url": "/",
+    "title": "Bakery Platform - SweetCake",
+    "text": "check_circle\nĐăng nhập thành công! Chào mừng quý khách trở lại.\n\nĐang tải màn hình…",
+    "controls": []
+  },
+  "WEB-FLOW-B-BLOCKER": {
+    "caseId": "WEB-FLOW-B-BLOCKER",
+    "url": "/product-detail?id=f2dbe6f3-d8ba-42d4-95be-78372358b521",
+    "title": "Bakery Platform - SweetCake",
+    "text": "Trang chủ\nKhám phá mẫu bánh\nexpand_more\ncake\nCÁC LOẠI BÁNH TIỆC\nBánh Kem Sinh Nhật\nchevron_right\nBánh Cưới Nghệ Thuật\nchevron_right\nMousse & Tiramisu\nchevron_right\nCheesecake & Tart\nchevron_right\nBánh Tạo Hình 3D\nchevron_right\nauto_awesome\nGỢI Ý CÙNG TIỆC NGỌT\nKèm bánh\n\nHộp 6 Macarons Pháp\n\n210.000₫\n\nĐồ uống\n\nTrà Bá Tước Hoa Hồng\n\n140.000₫\n\nKhai vị mặn\n\nCroissant Bơ Tỏi Đen\n\n65.000₫\n\nKhám phá hơn 100+ mẫu bánh thủ công\nXem tất cả thực đơn\narrow_forward\nauto_awesome\nThiết kế bánh\nTiệm bánh đối tác\nSàn so sánh giá\nstorefront\nTrở thành đối tác\nsearch\nshopping_bag\nnotifications\n2\nQ\narrow_back\nQuay lại danh sách bánh\nTIỆM: QA FLOW BC BAKERY\nQA Live Address Cake\n180.000₫\nGiá theo cấu hình đã chọn\n\nSynthetic local order lifecycle verification\n\ngroup\n6 người\nschedule\nĐặt trước 1 giờ\npalette\nCó thể tùy biến\nQA Flavor *\nChọn 1–1\nQA Vanilla · 20.000₫\nPhụ kiện từ tiệm\nQA Candle · 19.000₫\n\nVui lòng chọn đủ tùy chọn bắt buộc.\n\n-\n1\n+\nThêm vào giỏ hàng\nbolt\nĐặt nhanh\nYêu cầu báo giá riêng\narrow_outward\nThiết kế bánh theo ý tưởng\narrow_forward\n\nNền tảng thương mại điện tử kết nối các tiệm bánh nghệ nhân, mang đến những kiệt tác ngọt ngào cho mọi khoảnh khắc đáng nhớ.\n\n🍓 Sugary Sparks x SweetCake\nThực đơn nổi bật\narrow_forward\n✦\nBánh kem sinh nhật\n✦\nBánh cưới nghệ thuật\n✦\nMousse & Tiramisu\n✦\nCupcakes & Macarons (Kèm bánh)\n✦\nBánh nướng Viennoiserie (Khai vị mặn)\n✦\nĐồ uống & Trà hoa thượng hạng\nTiệm bánh đối tác\n✦\nLa Crème Pâtisserie (Q.1)\n✦\nSweet Bakery Studio (Cầu Giấy)\n✦\nMoon Cake Haute Atelier (Thảo Điền)\n✦\nMaison de Gâteaux (Q.3)\n✦\nArtisan Sweet Atelier (Hoàn Kiếm)\nHệ thống & Trụ sở\n\nTP. Hồ Chí Minh: 31 Tô Vĩnh Diện, P. Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh\n\nTP. Hồ Chí Minh: 12 Lê Lợi, P. Bến Nghé, Q.1\n\n© 2026 SweetCake x Sugary Sparks Platform. All rights reserved.\n\nĐiều khoản dịch vụ\nChính sách bảo mật\nQuy chế sàn thương mại điện tử",
+    "controls": [
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Trang chủ",
+        "href": "/"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Khám phá mẫu bánh\nexpand_more",
+        "href": "/explore"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Kem Sinh Nhật\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Cưới Nghệ Thuật\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Mousse & Tiramisu\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Cheesecake & Tart\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Tạo Hình 3D\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Kèm bánh\n\nHộp 6 Macarons Pháp\n\n210.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Đồ uống\n\nTrà Bá Tước Hoa Hồng\n\n140.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Khai vị mặn\n\nCroissant Bơ Tỏi Đen\n\n65.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Xem tất cả thực đơn\narrow_forward",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "auto_awesome\nThiết kế bánh",
+        "href": "/ai-studio"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Tiệm bánh đối tác",
+        "href": "/stores"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Sàn so sánh giá",
+        "href": "/bidding"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "storefront\nTrở thành đối tác",
+        "href": "/subscription-plans"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "id": "",
+        "name": "",
+        "aria": "Tìm theo tên bánh",
+        "text": "Tìm theo tên bánh...",
+        "disabled": false,
+        "required": false,
+        "valueLength": 0,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": "Xem giỏ hàng bánh kem",
+        "text": "shopping_bag",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": "Thông báo đơn hàng và báo giá",
+        "text": "notifications\n2",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": "Tài khoản khách hàng",
+        "text": "Q",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "arrow_back\nQuay lại danh sách bánh",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "TIỆM: QA FLOW BC BAKERY",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "QA Vanilla · 20.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "INPUT",
+        "type": "checkbox",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "QA Candle · 19.000₫",
+        "disabled": false,
+        "required": false,
+        "valueLength": 2,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "-",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "+",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Thêm vào giỏ hàng",
+        "disabled": true,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "bolt\nĐặt nhanh",
+        "disabled": true,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Yêu cầu báo giá riêng\narrow_outward",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Thiết kế bánh theo ý tưởng\narrow_forward",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Điều khoản dịch vụ",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Chính sách bảo mật",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Quy chế sàn thương mại điện tử",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      }
+    ]
+  },
+  "WEB-NATIVE-OFFER-COMPATIBILITY": {
+    "caseId": "WEB-NATIVE-OFFER-COMPATIBILITY",
+    "url": "/baker-quote?id=efb9496d-c0c3-4be8-b468-5eee2ecce545",
+    "title": "Bakery Platform - SweetCake",
+    "text": "Trang chủ\nKhám phá mẫu bánh\nexpand_more\ncake\nCÁC LOẠI BÁNH TIỆC\nBánh Kem Sinh Nhật\nchevron_right\nBánh Cưới Nghệ Thuật\nchevron_right\nMousse & Tiramisu\nchevron_right\nCheesecake & Tart\nchevron_right\nBánh Tạo Hình 3D\nchevron_right\nauto_awesome\nGỢI Ý CÙNG TIỆC NGỌT\nKèm bánh\n\nHộp 6 Macarons Pháp\n\n210.000₫\n\nĐồ uống\n\nTrà Bá Tước Hoa Hồng\n\n140.000₫\n\nKhai vị mặn\n\nCroissant Bơ Tỏi Đen\n\n65.000₫\n\nKhám phá hơn 100+ mẫu bánh thủ công\nXem tất cả thực đơn\narrow_forward\nauto_awesome\nThiết kế bánh\nTiệm bánh đối tác\nSàn so sánh giá\nstorefront\nTrở thành đối tác\nsearch\nshopping_bag\nnotifications\n2\nQ\n\nSWEETCAKE BIDDING\n\nChi tiết báo giá từ tiệm\narrow_back\nQuay lại danh sách so sánh báo giá\nvisibility\nXem yêu cầu đặt bánh gốc\nChờ khách hàng phản hồi\nThông tin tham chiếu\nverified\nBáo giá chính thức\nstorefront\nQA Flow BC Bakery\nĐối tác uy tín\n\nlocation_on\nQA TEST KITCHEN, QA Ward, QA District, QA City\n\nformat_quote\nLỜI NHẮN TỪ TIỆM BÁNH\n\n\"QA ANDROID Offer Flow C\"\n\ncake\nGIÁ BÁNH\n\n350.000 VND\n\nChi phí tạo hình & cốt bánh\n\nlocal_shipping\nGIAO HÀNG\n\n15.000 VND\n\nGiao chuyên dụng tận nơi\n\nextension\nPHỤ KIỆN\n\n19.000 VND\n\n1 món đi kèm\n\nTỔNG CHI PHÍ BÁO GIÁ\n\nTổng giá đã báo\n\n384.000 VND\nevent_available\n\nHoàn thành dự kiến\n\n09:40 · 12/11/2026\n\ntimer\n\nHiệu lực báo giá đến\n\n09:40 · 11/11/2026\n\nadd_circle\nPhụ kiện từ tiệm bánh\n\nQA Candle\n\nSynthetic accessory\n\n19.000 VND× 1\nhistory\nLịch sử trạng thái (1)\nexpand_more\nMã tham chiếu\ncake\nMẫu bánh & Yêu cầu đặt bánh gốc\nĐang mở\nQA ANDROID Flow C\n\nSynthetic cross-role RFQ offer acceptance with real owned address\n\nlocation_on\nKhu vực nhận:\nQA District, QA City\n\ncalendar_today\nCần bánh lúc:\n09:36 · 13/11/2026\n\nchat\nTrao đổi trực tiếp với tiệm bánh\n\nBạn có thể nhắn tin với tiệm để thống nhất chi tiết kem phủ, hương vị, kích thước hoặc phương thức giao nhận trước khi xác nhận đặt đơn cuối cùng.\n\nMở hội thoại với tiệm\n\nTrao đổi trực tiếp với tiệm về yêu cầu và báo giá này.\n\nBƯỚC XÁC NHẬN CUỐI CÙNG\n\nChấp nhận báo giá & Tạo đơn\n\nKiểm tra lại giá đề xuất, thời gian hoàn thành, chọn địa chỉ nhận bánh và xác nhận cuối cùng để tạo đơn hàng chính thức (các báo giá khác của yêu cầu này sẽ tự động đóng).\n\nGiá bánh tiệm đề xuất:\n350.000 VND\nPhí giao hàng:\n15.000 VND\nPhụ kiện đi kèm:\n19.000 VND\nDự kiến hoàn thành:\n09:40 · 12/11/2026\nTổng giá trị thống nhất:\n384.000 VND\n\nHiện chưa thể chọn địa chỉ và xác nhận đơn hàng. Vui lòng kiểm tra địa chỉ nhận bánh hoặc thử lại sau.\n\nChưa thể hoàn tất đặt hàng lúc này. Vui lòng liên hệ tiệm để được hỗ trợ.\n\nĐịa chỉ giao hàng\n\nHiện chưa thể chọn địa chỉ và xác nhận đơn hàng. Vui lòng kiểm tra địa chỉ nhận bánh hoặc thử lại sau.\n\nChưa thể chấp nhận báo giá\n\nNền tảng thương mại điện tử kết nối các tiệm bánh nghệ nhân, mang đến những kiệt tác ngọt ngào cho mọi khoảnh khắc đáng nhớ.\n\n🍓 Sugary Sparks x SweetCake\nThực đơn nổi bật\narrow_forward\n✦\nBánh kem sinh nhật\n✦\nBánh cưới nghệ thuật\n✦\nMousse & Tiramisu\n✦\nCupcakes & Macarons (Kèm bánh)\n✦\nBánh nướng Viennoiserie (Khai vị mặn)\n✦\nĐồ uống & Trà hoa thượng hạng\nTiệm bánh đối tác\n✦\nLa Crème Pâtisserie (Q.1)\n✦\nSweet Bakery Studio (Cầu Giấy)\n✦\nMoon Cake Haute Atelier (Thảo Điền)\n✦\nMaison de Gâteaux (Q.3)\n✦\nArtisan Sweet Atelier (Hoàn Kiếm)\nHệ thống & Trụ sở\n\nTP. Hồ Chí Minh: 31 Tô Vĩnh Diện, P. Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh\n\nTP. Hồ Chí Minh: 12 Lê Lợi, P. Bến Nghé, Q.1\n\n© 2026 SweetCake x Sugary Sparks Platform. All rights reserved.\n\nĐiều khoản dịch vụ\nChính sách bảo mật\nQuy chế sàn thương mại điện tử",
+    "controls": [
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Trang chủ",
+        "href": "/"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Khám phá mẫu bánh\nexpand_more",
+        "href": "/explore"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Kem Sinh Nhật\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Cưới Nghệ Thuật\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Mousse & Tiramisu\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Cheesecake & Tart\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Bánh Tạo Hình 3D\nchevron_right",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Kèm bánh\n\nHộp 6 Macarons Pháp\n\n210.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Đồ uống\n\nTrà Bá Tước Hoa Hồng\n\n140.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Khai vị mặn\n\nCroissant Bơ Tỏi Đen\n\n65.000₫",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Xem tất cả thực đơn\narrow_forward",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "auto_awesome\nThiết kế bánh",
+        "href": "/ai-studio"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Tiệm bánh đối tác",
+        "href": "/stores"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Sàn so sánh giá",
+        "href": "/bidding"
+      },
+      {
+        "tag": "A",
+        "type": "",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "storefront\nTrở thành đối tác",
+        "href": "/subscription-plans"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "id": "",
+        "name": "",
+        "aria": "Tìm theo tên bánh",
+        "text": "Tìm theo tên bánh...",
+        "disabled": false,
+        "required": false,
+        "valueLength": 0,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": "Xem giỏ hàng bánh kem",
+        "text": "shopping_bag",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": "Thông báo đơn hàng và báo giá",
+        "text": "notifications\n2",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": "Tài khoản khách hàng",
+        "text": "Q",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "arrow_back\nQuay lại danh sách so sánh báo giá",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "visibility\nXem yêu cầu đặt bánh gốc",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Mở hội thoại với tiệm",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Chưa thể chấp nhận báo giá",
+        "disabled": true,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Điều khoản dịch vụ",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Chính sách bảo mật",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "id": "",
+        "name": "",
+        "aria": null,
+        "text": "Quy chế sàn thương mại điện tử",
+        "disabled": false,
+        "valid": true,
+        "validationMessage": ""
+      }
+    ]
+  }
+}

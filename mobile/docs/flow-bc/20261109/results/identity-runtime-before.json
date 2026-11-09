@@ -1,0 +1,16 @@
+{
+  "container": "/bakery-mobile-20261107-mobile-identity-1",
+  "image": "sha256:45faa1d4df00686a1a91b21ca793b7bba16394813939f6a2d1ceb8e030b4da33",
+  "jarSha256": "5b39f85f696f2484266c8eb32ae5f1d55b531adfd7c73a6367caa2f6f293cd3f",
+  "addressClasses": [
+    "BOOT-INF/classes/com/se193262/identityservice/feature/address/dto/package-info.class",
+    "BOOT-INF/classes/com/se193262/identityservice/feature/address/package-info.class"
+  ],
+  "controllerClasses": [
+    "BOOT-INF/classes/com/se193262/identityservice/config/JwkSetController.class",
+    "BOOT-INF/classes/com/se193262/identityservice/feature/authentication/AuthenticationController.class",
+    "BOOT-INF/classes/com/se193262/identityservice/feature/authentication/ServiceTokenController.class",
+    "BOOT-INF/classes/com/se193262/identityservice/feature/user/UserContextController.class"
+  ],
+  "state": "exited"
+}

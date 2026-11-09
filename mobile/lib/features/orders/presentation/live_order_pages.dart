@@ -32,6 +32,14 @@ List<Widget> orderSnapshotWidgets(Object? value) {
   for (final key in ['optionSelections', 'options']) {
     if (value[key] is List) {
       for (final option in objects(value[key])) {
+        if (option['groupName'] is String && option['values'] is List) {
+          result.add(
+            SCKeyValue(
+              '${option['groupName']}',
+              objects(option['values']).map((v) => '${v['name']}').join(', '),
+            ),
+          );
+        }
         if (option['groupNameSnapshot'] != null &&
             option['valueNameSnapshot'] != null) {
           result.add(

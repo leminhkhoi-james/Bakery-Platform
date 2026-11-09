@@ -1,0 +1,722 @@
+[
+  {
+    "at": "2026-11-09T02:12:59.200920+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "startup",
+    "step": "after-system-wait-021258569398",
+    "file": "screenshots/android/guest/startup/after-system-wait-021258569398.png",
+    "sha256": "e14f1732184ae2ba4ee8be9e596f73624e8bbcfb46714392b508e3bb0cc18c04",
+    "bytes": 273567
+  },
+  {
+    "at": "2026-11-09T02:13:50.362137+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "startup",
+    "step": "profile-navigation-state-021349900039",
+    "file": "screenshots/android/guest/startup/profile-navigation-state-021349900039.png",
+    "sha256": "00c7b6382715594e85edd7ceb4131467ced464d86b2b64cf8d09ea97e7aa6f7d",
+    "bytes": 65222
+  },
+  {
+    "at": "2026-11-09T02:16:01.620124+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "account",
+    "step": "logged-in-021601265149",
+    "file": "screenshots/android/customerA/account/logged-in-021601265149.png",
+    "sha256": "21ea4ff362e77eeefc89fef41bb35ec1a076b6f5d0d446cb412f410f4528e6eb",
+    "bytes": 134390
+  },
+  {
+    "at": "2026-11-09T02:17:13.408510+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "list-before-create-021712999680",
+    "file": "screenshots/android/customerA/address/list-before-create-021712999680.png",
+    "sha256": "464eb75a0ea553c5b0f3cfcebfd15ca3e0cf95f7fb586251d86cfc1087677069",
+    "bytes": 105717
+  },
+  {
+    "at": "2026-11-09T02:17:36.556242+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "real-create-form-021736061054",
+    "file": "screenshots/android/customerA/address/real-create-form-021736061054.png",
+    "sha256": "707e540831f5bd1b35830e20b0571d54457078b23f8d7102a68fc6e08c7b7ac3",
+    "bytes": 125926
+  },
+  {
+    "at": "2026-11-09T02:17:37.987396+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "created-persisted-021737634775",
+    "file": "screenshots/android/customerA/address/created-persisted-021737634775.png",
+    "sha256": "563b1693bc740d2c4938c950e3c5415d34b43e828304d62589542a527e97acd2",
+    "bytes": 161959
+  },
+  {
+    "at": "2026-11-09T02:17:55.995027+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "real-product-021755469336",
+    "file": "screenshots/android/customerA/flow-b/real-product-021755469336.png",
+    "sha256": "9c6b8765a5471d16647aedcb1495afcf8d015f8c78b0b445abcb45388dc460c7",
+    "bytes": 448363
+  },
+  {
+    "at": "2026-11-09T02:21:19.564765+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "edited-same-server-id-022119002796",
+    "file": "screenshots/android/customerA/address/edited-same-server-id-022119002796.png",
+    "sha256": "ec49b44f8d632e48a908ba2c7995ab9d28d782ec4a1c606dab216d88d956bc33",
+    "bytes": 164391
+  },
+  {
+    "at": "2026-11-09T02:21:23.144907+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "default-switched-022122539924",
+    "file": "screenshots/android/customerA/address/default-switched-022122539924.png",
+    "sha256": "4d7d404f8793723378e4b7d6f8929040489406a91591f33ac0fa8d72eea27d65",
+    "bytes": 172233
+  },
+  {
+    "at": "2026-11-09T02:21:25.764806+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "address",
+    "step": "deleted-spare-address-022125274388",
+    "file": "screenshots/android/customerA/address/deleted-spare-address-022125274388.png",
+    "sha256": "f35fdb898ab832f338c2fb254e55e52b4d0a7cabf13356b3b4aa0e37e24b8c1c",
+    "bytes": 125093
+  },
+  {
+    "at": "2026-11-09T02:23:30.291406+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "configured-real-options-add-on-022329788703",
+    "file": "screenshots/android/customerA/flow-b/configured-real-options-add-on-022329788703.png",
+    "sha256": "3c93253cd673a2861b26881881800ad90bdbf55c5ba0de58618cb6ff8d11f7f8",
+    "bytes": 142396
+  },
+  {
+    "at": "2026-11-09T02:23:31.799878+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "actual-cart-with-add-on-022331223514",
+    "file": "screenshots/android/customerA/flow-b/actual-cart-with-add-on-022331223514.png",
+    "sha256": "4d3b667f3479883084fad5005f984f277734491160cde37eefc6501f8e414229",
+    "bytes": 142054
+  },
+  {
+    "at": "2026-11-09T02:23:39.799953+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "persisted-address-selection-022339415647",
+    "file": "screenshots/android/customerA/flow-b/persisted-address-selection-022339415647.png",
+    "sha256": "c58c37e87178e66ac7e53d23f555f2cd407b786c460deee7645c4ffcafd7cc75",
+    "bytes": 124674
+  },
+  {
+    "at": "2026-11-09T02:23:41.521946+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "checkout-selected-owned-address-022340972453",
+    "file": "screenshots/android/customerA/flow-b/checkout-selected-owned-address-022340972453.png",
+    "sha256": "cf27cddb66b57cda4f1e581fb0be4f77551a7da548a75a473a9ed4d8edb6d978",
+    "bytes": 213398
+  },
+  {
+    "at": "2026-11-09T02:25:06.139979+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "checkout-before-submit-ime-closed-022505683073",
+    "file": "screenshots/android/customerA/flow-b/checkout-before-submit-ime-closed-022505683073.png",
+    "sha256": "fc790d10091e160c0def7a76233aae33c963eae67894cede4dd78786ea910475",
+    "bytes": 197280
+  },
+  {
+    "at": "2026-11-09T02:25:12.431180+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "actual-created-order-022511824968",
+    "file": "screenshots/android/customerA/flow-b/actual-created-order-022511824968.png",
+    "sha256": "81bdf055e51718d470a14ddd846c146ae8e04b86d3ed8358d865e091f6eb4d33",
+    "bytes": 50976
+  },
+  {
+    "at": "2026-11-09T02:26:31.638269+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "saved-delivery-snapshot-022630861356",
+    "file": "screenshots/android/customerA/flow-b/saved-delivery-snapshot-022630861356.png",
+    "sha256": "480856286be071a43014c69d394ebc69ad6d5b5794b2257e9247d67a98787352",
+    "bytes": 179215
+  },
+  {
+    "at": "2026-11-09T02:26:49.800373+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "G-ACCOUNT-SWITCH",
+    "step": "guest-profile-accessibility-fallback-022649440064",
+    "file": "screenshots/android/guest/G-ACCOUNT-SWITCH/guest-profile-accessibility-fallback-022649440064.png",
+    "sha256": "446e45e3bba5d33cff2aab7f775af9376adff7447f57df0cff2b50c2d3524a24",
+    "bytes": 134896
+  },
+  {
+    "at": "2026-11-09T02:26:53.382090+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "G-ACCOUNT-SWITCH",
+    "step": "bounded-navigation-retry-profile-022652990437",
+    "file": "screenshots/android/guest/G-ACCOUNT-SWITCH/bounded-navigation-retry-profile-022652990437.png",
+    "sha256": "446e45e3bba5d33cff2aab7f775af9376adff7447f57df0cff2b50c2d3524a24",
+    "bytes": 134896
+  },
+  {
+    "at": "2026-11-09T02:28:14.874370+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "account",
+    "step": "logout-control-before-tap-022814456423",
+    "file": "screenshots/android/customerA/account/logout-control-before-tap-022814456423.png",
+    "sha256": "0e4b34dc8720ba011cd1e97cb81832ff382ad43677611d3e44b2f89b832b73e4",
+    "bytes": 130076
+  },
+  {
+    "at": "2026-11-09T02:29:20.072339+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-022919739509",
+    "file": "screenshots/android/guest/account/observed-guest-profile-022919739509.png",
+    "sha256": "51084c94e8cca6aae86fa29db4e8ba93c57a80e029ff19f5e4bb836ec96f7f90",
+    "bytes": 78276
+  },
+  {
+    "at": "2026-11-09T02:29:31.602401+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "account",
+    "step": "logged-in-022931122393",
+    "file": "screenshots/android/owner/account/logged-in-022931122393.png",
+    "sha256": "4e6f97da31a140801b7254c192d2e1b02c64fb0a25302cfec4be1a0d082b53f3",
+    "bytes": 133265
+  },
+  {
+    "at": "2026-11-09T02:32:04.675298+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "same-order-in-owner-queue-023204095167",
+    "file": "screenshots/android/owner/flow-b/same-order-in-owner-queue-023204095167.png",
+    "sha256": "e086bc081d879cc954e343b7b566644b4e51bb3ffe12ab949302c945e26790f8",
+    "bytes": 200183
+  },
+  {
+    "at": "2026-11-09T02:32:13.377053+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "transition-confirmed-023212973330",
+    "file": "screenshots/android/owner/flow-b/transition-confirmed-023212973330.png",
+    "sha256": "414af585b459be49c199cc76795a15be19c51021986f10db12dfb411b090a72b",
+    "bytes": 184707
+  },
+  {
+    "at": "2026-11-09T02:32:21.148537+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "transition-baking-023220737533",
+    "file": "screenshots/android/owner/flow-b/transition-baking-023220737533.png",
+    "sha256": "666bf1be399fd4ed57c36c5d76faf06c3f1c5a11ed96f5986699491b28833daa",
+    "bytes": 185570
+  },
+  {
+    "at": "2026-11-09T02:32:29.971693+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "transition-ready-023229614181",
+    "file": "screenshots/android/owner/flow-b/transition-ready-023229614181.png",
+    "sha256": "0e7b97d91e0786b122f64257ad2bd1e1242845c52fc18fac06f8fc96725a1a19",
+    "bytes": 186055
+  },
+  {
+    "at": "2026-11-09T02:32:38.650196+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "transition-delivering-023238289082",
+    "file": "screenshots/android/owner/flow-b/transition-delivering-023238289082.png",
+    "sha256": "aaf692a59aabd8d0efe097b5bf6109c240d64e8e8ed576797b0d618c851bec64",
+    "bytes": 184620
+  },
+  {
+    "at": "2026-11-09T02:32:47.175546+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "transition-completed-023246699618",
+    "file": "screenshots/android/owner/flow-b/transition-completed-023246699618.png",
+    "sha256": "0df8302509335845f5db328e4f81945f1a5572ce296295ca21f33e3a29d816e6",
+    "bytes": 184133
+  },
+  {
+    "at": "2026-11-09T02:32:58.080160+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-b",
+    "step": "completed-order-same-resource-023257625379",
+    "file": "screenshots/android/owner/flow-b/completed-order-same-resource-023257625379.png",
+    "sha256": "bbd9f1a2fc36bb2960c24e6d53c0180c1580c485a1748b26491fd4e04aec841f",
+    "bytes": 175428
+  },
+  {
+    "at": "2026-11-09T02:33:40.254264+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-023339875221",
+    "file": "screenshots/android/guest/account/observed-guest-profile-023339875221.png",
+    "sha256": "c88a039544f6675b7791733f8dcc84030c5dafc8e6f7655faa60f83cd701b3b1",
+    "bytes": 78434
+  },
+  {
+    "at": "2026-11-09T02:33:51.285260+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "account",
+    "step": "logged-in-023350889111",
+    "file": "screenshots/android/customerA/account/logged-in-023350889111.png",
+    "sha256": "a321bbc483114a948f6797196ec335ee6e55fa75cf706d2ad27bcd0404d6e7b4",
+    "bytes": 134403
+  },
+  {
+    "at": "2026-11-09T02:34:35.429258+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "customer-tracks-completed-order-023434976190",
+    "file": "screenshots/android/customerA/flow-b/customer-tracks-completed-order-023434976190.png",
+    "sha256": "e3437ec0e06d7f0a2244e098295ecc6e3f0a1ec863e52fb4231ddadc9d34b633",
+    "bytes": 195148
+  },
+  {
+    "at": "2026-11-09T02:34:41.901009+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "review-form-023441486302",
+    "file": "screenshots/android/customerA/flow-b/review-form-023441486302.png",
+    "sha256": "851d8bf9324ac9446e491a915e424961f93d7727da2059c3b1516c6935f938d6",
+    "bytes": 61840
+  },
+  {
+    "at": "2026-11-09T02:35:54.381980+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-b",
+    "step": "persisted-published-review-023553861083",
+    "file": "screenshots/android/customerA/flow-b/persisted-published-review-023553861083.png",
+    "sha256": "87492ff29c871ee9cf508683f0e7a201da1975665c82239d43fe3401b6c98cca",
+    "bytes": 183055
+  },
+  {
+    "at": "2026-11-09T02:36:47.627085+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "rfq-real-form-023647029948",
+    "file": "screenshots/android/customerA/flow-c/rfq-real-form-023647029948.png",
+    "sha256": "90ff80a5e9d3b39f12175b4a9e962371ca286576bd0a4e1f314329690435241d",
+    "bytes": 139204
+  },
+  {
+    "at": "2026-11-09T02:36:54.728251+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "draft-persisted-023654171166",
+    "file": "screenshots/android/customerA/flow-c/draft-persisted-023654171166.png",
+    "sha256": "4ca9d98e953184e7f5390317b42900395be866319ae546a8140c2a2775135f86",
+    "bytes": 169581
+  },
+  {
+    "at": "2026-11-09T02:36:57.540128+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "published-real-rfq-023657101711",
+    "file": "screenshots/android/customerA/flow-c/published-real-rfq-023657101711.png",
+    "sha256": "7d26a0b58553889015bed8768d9a3319cc537fa2b51e5956680e839e4527fdef",
+    "bytes": 174589
+  },
+  {
+    "at": "2026-11-09T02:40:05.628125+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-024005106110",
+    "file": "screenshots/android/guest/account/observed-guest-profile-024005106110.png",
+    "sha256": "3436a1f58739b4af0d00add9a3a3eaa546be6b73660f64b5659bae12ded5888f",
+    "bytes": 78573
+  },
+  {
+    "at": "2026-11-09T02:40:17.005984+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "account",
+    "step": "logged-in-024016315195",
+    "file": "screenshots/android/owner/account/logged-in-024016315195.png",
+    "sha256": "c35033664bda51b8d2f6e9f38bea734f107586e818aae9976ca1facf9576484b",
+    "bytes": 133592
+  },
+  {
+    "at": "2026-11-09T02:40:26.995290+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "same-rfq-eligible-owner-024026438039",
+    "file": "screenshots/android/owner/flow-c/same-rfq-eligible-owner-024026438039.png",
+    "sha256": "b841ec558831e7e88df8deee5285ab230e29cf3955ba69206ea16615e8f1a855",
+    "bytes": 176941
+  },
+  {
+    "at": "2026-11-09T02:40:50.413290+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "offer-real-form-024049800064",
+    "file": "screenshots/android/owner/flow-c/offer-real-form-024049800064.png",
+    "sha256": "b97a38c8f1797ce967576637fb01b03869af811e2aa172f17cc40986275f3678",
+    "bytes": 136751
+  },
+  {
+    "at": "2026-11-09T02:40:53.224070+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "offer-persisted-024052597176",
+    "file": "screenshots/android/owner/flow-c/offer-persisted-024052597176.png",
+    "sha256": "37ec37b1e37114158464cc371b7c79a48017066dde2bcebb75c61e197704705f",
+    "bytes": 144735
+  },
+  {
+    "at": "2026-11-09T02:43:07.762003+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-024307300696",
+    "file": "screenshots/android/guest/account/observed-guest-profile-024307300696.png",
+    "sha256": "549627540e9699f9efb334f37d997e13c328995cb0b69b3dbbc139486855cc12",
+    "bytes": 78818
+  },
+  {
+    "at": "2026-11-09T02:43:17.986412+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "account",
+    "step": "logged-in-024317591979",
+    "file": "screenshots/android/customerA/account/logged-in-024317591979.png",
+    "sha256": "8909ceef06da125bb7c7e5e835963465289809ce2058f4e4178c41d6468d1e6e",
+    "bytes": 134760
+  },
+  {
+    "at": "2026-11-09T02:43:22.305197+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "real-offer-before-accept-024321710736",
+    "file": "screenshots/android/customerA/flow-c/real-offer-before-accept-024321710736.png",
+    "sha256": "35be33a7c9da39a56488cd33f1cffc8b2a35dab92d5457e11d1c13be26e71369",
+    "bytes": 160237
+  },
+  {
+    "at": "2026-11-09T02:43:29.699306+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "owned-address-selected-024329275737",
+    "file": "screenshots/android/customerA/flow-c/owned-address-selected-024329275737.png",
+    "sha256": "c4c60e40bdfc7e0161f9ca0c33c926a05187e930c0cff3d731dbe04de1f8f728",
+    "bytes": 161975
+  },
+  {
+    "at": "2026-11-09T02:44:21.635989+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "real-order-created-024421232117",
+    "file": "screenshots/android/customerA/flow-c/real-order-created-024421232117.png",
+    "sha256": "0674722d0860e73ba35455775486c4f0841dae62dbcdaedf147b9c39f8bda4f4",
+    "bytes": 174911
+  },
+  {
+    "at": "2026-11-09T02:45:31.142757+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-024530605186",
+    "file": "screenshots/android/guest/account/observed-guest-profile-024530605186.png",
+    "sha256": "7747a21c16c6803a265d0b34ccf61d23b79973eee89fe4e1930ee3858b7aa84a",
+    "bytes": 78665
+  },
+  {
+    "at": "2026-11-09T02:45:41.552180+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "account",
+    "step": "logged-in-024541040827",
+    "file": "screenshots/android/owner/account/logged-in-024541040827.png",
+    "sha256": "b72ebdb3002d067f46cfc3e7698269b40a0cb49adaf6400944335e17b552de7d",
+    "bytes": 133635
+  },
+  {
+    "at": "2026-11-09T02:51:26.044315+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "same-order-in-owner-queue-025125106092",
+    "file": "screenshots/android/owner/flow-c/same-order-in-owner-queue-025125106092.png",
+    "sha256": "7be15f21e737473a099baeb648bafa2ecd1e64e30a34c806b4ce740212ac0535",
+    "bytes": 200420
+  },
+  {
+    "at": "2026-11-09T02:51:43.166333+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "transition-confirmed-025142297482",
+    "file": "screenshots/android/owner/flow-c/transition-confirmed-025142297482.png",
+    "sha256": "fc20db92190c58b4234a4700b0c27030936c25a61f90a6812ca1906f8fbe1ef1",
+    "bytes": 188431
+  },
+  {
+    "at": "2026-11-09T02:51:58.313409+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "transition-baking-025157341904",
+    "file": "screenshots/android/owner/flow-c/transition-baking-025157341904.png",
+    "sha256": "f4885355815cb5f143cee8e05d0430eb80fccb1ec321abea78f6b4fdc84c13fb",
+    "bytes": 189583
+  },
+  {
+    "at": "2026-11-09T02:52:15.689104+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "transition-ready-025214671210",
+    "file": "screenshots/android/owner/flow-c/transition-ready-025214671210.png",
+    "sha256": "5751e557949cffe2cb4f387ab34dd1b4be5b04082db1a490a93bab24f5a94ab8",
+    "bytes": 190527
+  },
+  {
+    "at": "2026-11-09T02:52:32.882300+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "transition-delivering-025231929329",
+    "file": "screenshots/android/owner/flow-c/transition-delivering-025231929329.png",
+    "sha256": "80ffda3b0e67427288413883898660ce2090d7daf2d9e5a833f119abf6d1f83d",
+    "bytes": 188867
+  },
+  {
+    "at": "2026-11-09T02:52:48.958419+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "transition-completed-025247875852",
+    "file": "screenshots/android/owner/flow-c/transition-completed-025247875852.png",
+    "sha256": "e7ae6f30b3f724b59b69e9319cf98d520280def6b8eae05d217ddb552dc4e45a",
+    "bytes": 188304
+  },
+  {
+    "at": "2026-11-09T02:53:01.863787+00:00",
+    "platform": "android",
+    "role": "owner",
+    "scenario": "flow-c",
+    "step": "completed-order-same-resource-025300612896",
+    "file": "screenshots/android/owner/flow-c/completed-order-same-resource-025300612896.png",
+    "sha256": "6c6fef4fe7417c55d6a1a29ddfd67660734acc1e6ac46fffa0420e7e748be263",
+    "bytes": 58731
+  },
+  {
+    "at": "2026-11-09T02:54:19.148593+00:00",
+    "platform": "android",
+    "role": "guest",
+    "scenario": "account",
+    "step": "observed-guest-profile-025418311218",
+    "file": "screenshots/android/guest/account/observed-guest-profile-025418311218.png",
+    "sha256": "b8023810e8d3aa995bf949083e83e4d3a89fa59ce8debec0a78c53796457f5dc",
+    "bytes": 78792
+  },
+  {
+    "at": "2026-11-09T02:54:34.440223+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "account",
+    "step": "logged-in-025433555433",
+    "file": "screenshots/android/customerA/account/logged-in-025433555433.png",
+    "sha256": "7651c661378ee5e9667e9af91f306413709fd05de70321d83820ebb7b3643cbb",
+    "bytes": 134686
+  },
+  {
+    "at": "2026-11-09T02:54:40.102073+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "customer-tracks-same-completed-order-025439218723",
+    "file": "screenshots/android/customerA/flow-c/customer-tracks-same-completed-order-025439218723.png",
+    "sha256": "55e9c3900091c9d52f9f493633f7fb96fcaa4205da15a8eeb34af15e120741e2",
+    "bytes": 196032
+  },
+  {
+    "at": "2026-11-09T02:54:42.369037+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "flow-c",
+    "step": "customer-completed-order-025440971434",
+    "file": "screenshots/android/customerA/flow-c/customer-completed-order-025440971434.png",
+    "sha256": "55e9c3900091c9d52f9f493633f7fb96fcaa4205da15a8eeb34af15e120741e2",
+    "bytes": 196032
+  },
+  {
+    "at": "2026-11-09T02:56:18.428226+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "configured-real-options-add-on-025617571195",
+    "file": "screenshots/android/customerA/ack-loss/configured-real-options-add-on-025617571195.png",
+    "sha256": "ce25ff0c2f79802edc59514b798cec894362f9a6af099a92651baf37d030f821",
+    "bytes": 140556
+  },
+  {
+    "at": "2026-11-09T02:56:21.855145+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "actual-cart-with-add-on-025620968113",
+    "file": "screenshots/android/customerA/ack-loss/actual-cart-with-add-on-025620968113.png",
+    "sha256": "2b7f37d4cfb8debe8d016cb134718a0779d661c48abfb4e4e1e51180d1c4af4a",
+    "bytes": 142686
+  },
+  {
+    "at": "2026-11-09T02:56:34.748120+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "persisted-address-selection-025633732836",
+    "file": "screenshots/android/customerA/ack-loss/persisted-address-selection-025633732836.png",
+    "sha256": "afebb8c7e57cbb6bb845fb1a42d4983a935ed97d683b117ab28b440ee2bd6d06",
+    "bytes": 124873
+  },
+  {
+    "at": "2026-11-09T02:56:40.942144+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "checkout-selected-owned-address-025639549532",
+    "file": "screenshots/android/customerA/ack-loss/checkout-selected-owned-address-025639549532.png",
+    "sha256": "0a9b8f51d23f0050a1302db5985b067caf38ee50853fd6729b09d4e30666c0c9",
+    "bytes": 193712
+  },
+  {
+    "at": "2026-11-09T03:02:18.242643+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "verified-synthetic-fault-prerequisites-030217052304",
+    "file": "screenshots/android/customerA/ack-loss/verified-synthetic-fault-prerequisites-030217052304.png",
+    "sha256": "d5264f213c489360ffe62e680ca25d2762206dc3f7b7fbde9820d343eb03c1ed",
+    "bytes": 192765
+  },
+  {
+    "at": "2026-11-09T03:02:25.596115+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "real-commit-response-lost-030224392485",
+    "file": "screenshots/android/customerA/ack-loss/real-commit-response-lost-030224392485.png",
+    "sha256": "9db2fe3876c620cdf8ba18cd17adc855e6fcb95739c6ac2d13b0882e8744757d",
+    "bytes": 190068
+  },
+  {
+    "at": "2026-11-09T03:02:29.473850+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "cart-frozen-across-navigation-030228274405",
+    "file": "screenshots/android/customerA/ack-loss/cart-frozen-across-navigation-030228274405.png",
+    "sha256": "6680bd0013b446c0ff56bf9fb34bf3d8077c29a0e8f9a6eb1d8eac6d2ff90981",
+    "bytes": 97836
+  },
+  {
+    "at": "2026-11-09T03:02:31.454793+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "same-command-restored-after-navigation-030230555330",
+    "file": "screenshots/android/customerA/ack-loss/same-command-restored-after-navigation-030230555330.png",
+    "sha256": "80d181b24e158c3333f47aa08dbce2f079c6be8300321e1fb4bc05cf56a30d95",
+    "bytes": 195838
+  },
+  {
+    "at": "2026-11-09T03:02:35.616520+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "one-real-order-recovered-030234454997",
+    "file": "screenshots/android/customerA/ack-loss/one-real-order-recovered-030234454997.png",
+    "sha256": "da6df8f5c6200128acd65f74946e7718577ddbee3250f5cf7fddbd1e957d65a9",
+    "bytes": 173651
+  },
+  {
+    "at": "2026-11-09T03:02:50.366678+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "ack-loss",
+    "step": "test-order-cancelled-through-supported-ui-030249426089",
+    "file": "screenshots/android/customerA/ack-loss/test-order-cancelled-through-supported-ui-030249426089.png",
+    "sha256": "890139b5083af5578fc1e92b4ab451db730491863e04644fed094affcd9631e7",
+    "bytes": 177489
+  },
+  {
+    "at": "2026-11-09T03:04:12.726473+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "review",
+    "step": "phone-address-list-030411783774",
+    "file": "screenshots/android/customerA/review/phone-address-list-030411783774.png",
+    "sha256": "70c4832f9ca1b6de72778bc8a4149a2fdb51e3030ee141d53f79c14a6f8f0595",
+    "bytes": 113232
+  },
+  {
+    "at": "2026-11-09T03:04:15.987438+00:00",
+    "platform": "android",
+    "role": "customerA",
+    "scenario": "review",
+    "step": "cancel-delete-address-result-030414750457",
+    "file": "screenshots/android/customerA/review/cancel-delete-address-result-030414750457.png",
+    "sha256": "d254e1d54bd09a5e2d274d3c16042b583c0b81964abb027ef214604ad06fed43",
+    "bytes": 125087
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "file": "H:\\MSS\\Bakery-Platform\\mobile\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+    "sha256": "cb5a3c12ffa8f863aaee972d5d35f3d74c8f7739133be5437c93cb6ecaac3651",
+    "entrypoint": "lib/main.dart",
+    "dartDefines": {
+      "IDENTITY_URL": "http://127.0.0.1:18401",
+      "BAKERY_URL": "http://127.0.0.1:18402",
+      "MARKETPLACE_URL": "http://127.0.0.1:18403",
+      "SUBSCRIPTION_URL": "http://127.0.0.1:18404",
+      "ORDER_URL": "http://127.0.0.1:18406"
+    },
+    "serial": "emulator-5556",
+    "avd": "bakery_qa_20261108_141407",
+    "renderer": "software; Impeller disabled"
+  },
+  {
+    "file": "H:\\MSS\\Bakery-Platform\\mobile\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+    "sha256": "67990dd89d2e018173b44ad5e6c45d6636423228c972f4e18a22622efc164f21",
+    "entrypoint": "lib/main.dart",
+    "dartDefines": {
+      "IDENTITY_URL": "http://127.0.0.1:18401",
+      "BAKERY_URL": "http://127.0.0.1:18402",
+      "MARKETPLACE_URL": "http://127.0.0.1:18403",
+      "SUBSCRIPTION_URL": "http://127.0.0.1:18404",
+      "ORDER_URL": "http://127.0.0.1:18406"
+    },
+    "serial": "emulator-5556",
+    "avd": "bakery_qa_20261108_141407",
+    "renderer": "software; Impeller disabled",
+    "installedAt": "2026-11-09T02:49:08.097170+00:00"
+  },
+  {
+    "file": "H:\\MSS\\Bakery-Platform\\mobile\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+    "sha256": "cbd214f026330ea458467601aca00c8c6fdb541846322c896aaa0027e6858a0d",
+    "entrypoint": "lib/main.dart",
+    "dartDefines": {
+      "IDENTITY_URL": "http://127.0.0.1:18401",
+      "BAKERY_URL": "http://127.0.0.1:18402",
+      "MARKETPLACE_URL": "http://127.0.0.1:18403",
+      "SUBSCRIPTION_URL": "http://127.0.0.1:18404",
+      "ORDER_URL": "http://127.0.0.1:18406"
+    },
+    "serial": "emulator-5556",
+    "avd": "bakery_qa_20261108_141407",
+    "renderer": "software; Impeller disabled",
+    "installedAt": "2026-11-09T03:21:47.927738+00:00",
+    "scope": "Final address finish fixes; no checkout/acceptance business changes"
+  },
+  {
+    "file": "H:\\MSS\\Bakery-Platform\\mobile\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+    "sha256": "cbd214f026330ea458467601aca00c8c6fdb541846322c896aaa0027e6858a0d",
+    "entrypoint": "lib/main.dart",
+    "dartDefines": {
+      "IDENTITY_URL": "http://127.0.0.1:18401",
+      "BAKERY_URL": "http://127.0.0.1:18402",
+      "MARKETPLACE_URL": "http://127.0.0.1:18403",
+      "SUBSCRIPTION_URL": "http://127.0.0.1:18404",
+      "ORDER_URL": "http://127.0.0.1:18406"
+    },
+    "serial": "emulator-5556",
+    "avd": "bakery_qa_20261108_141407",
+    "renderer": "software; Impeller disabled",
+    "installedAt": "2026-11-09T03:27:56.412387+00:00",
+    "scope": "Final address finish fixes; no checkout/acceptance business changes"
+  }
+]

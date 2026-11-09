@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers(disabledWithoutDocker = true)
+@org.springframework.test.context.ActiveProfiles("test")
 @Import(OrderServiceApplicationTests.TestJwtConfiguration.class)
 class OrderServiceApplicationTests {
 
@@ -174,7 +175,7 @@ class OrderServiceApplicationTests {
                     ?, ?, ?, 'VND', 'PENDING', ?, ?, ?, 0)
                 """, orderId, "ORD-" + orderId.toString().replace("-", "").substring(0, 20), customerId,
                 bakeryId, new BigDecimal("100.00"), BigDecimal.ZERO, new BigDecimal("100.00"),
-                now.plusSeconds(7200), now, now);
+                java.sql.Timestamp.from(now.plusSeconds(7200)), java.sql.Timestamp.from(now), java.sql.Timestamp.from(now));
         jdbcTemplate.update("""
                 INSERT INTO delivery_address_snapshots (
                     order_id, recipient_name, recipient_phone, address_line, district, city)
@@ -183,7 +184,7 @@ class OrderServiceApplicationTests {
         jdbcTemplate.update("""
                 INSERT INTO order_status_history (order_id, from_status, to_status, changed_by, note, changed_at)
                 VALUES (?, NULL, 'PENDING', ?, 'Order created', ?)
-                """, orderId, customerId, now);
+                """, orderId, customerId, java.sql.Timestamp.from(now));
     }
 
     @TestConfiguration(proxyBeanMethods = false)

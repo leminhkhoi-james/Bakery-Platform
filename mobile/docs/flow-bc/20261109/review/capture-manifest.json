@@ -1,0 +1,37 @@
+{
+  "settingsBefore": {
+    "size": "Physical size: 1080x2400",
+    "density": "Physical density: 420",
+    "fontScale": "1.0",
+    "night": "Night mode: no"
+  },
+  "tabletOverride": {
+    "size": "1600x2560",
+    "density": 240
+  },
+  "restored": true,
+  "captures": [
+    {
+      "file": "H:\\MSS\\Bakery-Platform\\mobile\\docs\\flow-bc\\20261109\\review\\phone-android.png",
+      "sha256": "52c5ce3514f3fa06b5cfa4bdc4c5bde057d7af681be34d2165ec833abde25a75"
+    },
+    {
+      "file": "H:\\MSS\\Bakery-Platform\\mobile\\docs\\flow-bc\\20261109\\review\\phone-large-text-android.png",
+      "sha256": "cef4afbc360b335dd7a1b612932470353b22fe48d0b9b888f5c430645073b1a4"
+    },
+    {
+      "file": "H:\\MSS\\Bakery-Platform\\mobile\\docs\\flow-bc\\20261109\\review\\phone-form-android.png",
+      "sha256": "277c8230ba72be4bf4aea17e61596e2f82bc9638c108e8732c74df0d0d74d673"
+    },
+    {
+      "file": "H:\\MSS\\Bakery-Platform\\mobile\\docs\\flow-bc\\20261109\\review\\tablet-android.png",
+      "sha256": "dbcb83d00eb11ef27223e4f6dbc980517830d169471d5e2db4b149a5fe455439"
+    }
+  ],
+  "excluded": [
+    {
+      "file": "tablet-initial-surface-not-resized.png",
+      "reason": "Old Flutter surface not resized. Replaced after restart; not visual acceptance evidence."
+    }
+  ]
+}

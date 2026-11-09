@@ -16,6 +16,15 @@ public class IdentityServiceClient {
     }
 
     public IdentityClient.AddressResponse getAddress(UUID userId, UUID addressId) {
-        return executor.execute(() -> delegate.getAddress(userId, addressId));
+        try {
+            return executor.execute(() -> delegate.getAddress(userId, addressId));
+        } catch (RemoteServiceException exception) {
+            if (Integer.valueOf(404).equals(exception.getRemoteStatus())) {
+                // Identity deliberately hides foreign/deleted addresses behind 404.
+                throw new com.se193262.orderservice.feature.order.InvalidOrderRequestException(
+                        "Delivery address is unavailable for this customer");
+            }
+            throw exception;
+        }
     }
 }
