@@ -14,6 +14,16 @@ Order Service's snapshot contract and expires in five minutes. Subscription's
 internal entitlement endpoint and service JWT issuance are required for runtime
 calls. Quote IDs are generated per request; there is no server-side quote store.
 Internal profile and membership APIs are owned by InternalBakeryController.
+
+Delivery matching accepts Vietnamese diacritics, case/spacing variations, city
+prefixes and common Ho Chi Minh City aliases. Numbered urban districts accept
+`5`, `Quan 5`, `Quận 5`, `Q.5`, `District 5` and `D5`. City and district must both
+match; named administrative types are retained. Only active configured service
+areas qualify. Original address strings and fees are unchanged. This is a
+compatibility comparison, not an official location directory or code migration.
+All quote routes return HTTP 422 with `data.errorCode=DELIVERY_AREA_NOT_SERVED`
+and a specific Vietnamese message when the delivery area is unavailable.
+Order must preserve/map this error separately to show it in checkout.
 InternalCatalogController owns the direct-order `/catalog/quotes` contract.
 CatalogController provides `/users/{userId}/bakery-memberships`,
 `/catalog/customization-quotes` and `/catalog/add-on-quotes` for Marketplace.

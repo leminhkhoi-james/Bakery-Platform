@@ -2009,3 +2009,28 @@ mẫu rồi ADMIN duyệt thủ công. Mã tham chiếu là dữ liệu chứng 
 không phải mã bí mật xác thực hoặc xác nhận giao dịch ngân hàng. Demo không
 cần chuyển tiền thật. Điều kiện tự cấp `BAKERY_OWNER` vẫn là hồ sơ bakery đã
 được duyệt và subscription có hiệu lực.
+
+## Bổ sung đối chiếu khu vực giao hàng Bakery — 2026-11-09
+
+Giữ nguyên request/response thành công của các API hiện có và dữ liệu đã lưu.
+Ba endpoint quote nội bộ của Bakery (`/internal/v1/catalog/quotes`,
+`/internal/v1/catalog/customization-quotes`, `/internal/v1/catalog/add-on-quotes`)
+dùng chung quy tắc đối chiếu địa danh, bỏ khác biệt dấu tiếng Việt, hoa/thường,
+khoảng trắng và dấu chấm. Các dạng `5`, `Quan 5`, `Quận 5`, `Q.5`, `District 5`,
+`D5` cùng chỉ quận số 5 trong cùng tỉnh/thành. `HCM`, `TPHCM`, `TP. Hồ Chí Minh`,
+`Thành phố Hồ Chí Minh`, `Ho Chi Minh City` được nhận diện tương đương.
+Không quy đổi huyện/phường thành quận số và không mở rộng khu vực giao hàng.
+Tiệm vẫn phải có khu vực đang hoạt động, đúng tỉnh/thành và quận/huyện yêu cầu.
+
+Khu vực không được phục vụ trả HTTP 422 với `message` là
+`Tiệm chưa hỗ trợ giao đến khu vực này.` và `data` bổ sung:
+
+```json
+{ "errorCode": "DELIVERY_AREA_NOT_SERVED" }
+```
+
+Không thêm danh mục địa giới hành chính hay mã tỉnh/quận trong lần bổ sung này.
+Frontend có thể dùng `operations.serviceAreas` trong hồ sơ công khai của tiệm
+để giới hạn các khu vực tiệm đang phục vụ; danh sách địa danh đầy đủ cần được
+thống nhất riêng. Order cần giữ/ánh xạ mã lỗi này để hiển thị đúng ở checkout;
+phần Order và frontend không được thay đổi trong lần sửa Bakery này.

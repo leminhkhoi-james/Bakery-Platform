@@ -41,6 +41,14 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(HttpStatus.FORBIDDEN.value(), "Access is denied"));
     }
 
+    @ExceptionHandler(DeliveryAreaNotServedException.class)
+    ResponseEntity<ApiResponse<Map<String, String>>> handleDeliveryAreaNotServed(
+            DeliveryAreaNotServedException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(ApiResponse.of(exception.getStatus().value(), exception.getMessage(),
+                        Map.of("errorCode", DeliveryAreaNotServedException.ERROR_CODE)));
+    }
+
     @ExceptionHandler(AppException.class)
     ResponseEntity<ApiResponse<Void>> handleAppException(AppException exception) {
         return ResponseEntity.status(exception.getStatus())

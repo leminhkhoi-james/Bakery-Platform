@@ -1,5 +1,8 @@
 package com.se193262.bakeryservice.feature.catalog;
 
+import com.se193262.bakeryservice.exception.DeliveryAreaNotServedException;
+import com.se193262.bakeryservice.shared.DeliveryLocation;
+
 import com.se193262.bakeryservice.feature.catalog.dto.CatalogContracts.*;
 import com.se193262.platform.exception.BusinessException;
 import com.se193262.bakeryservice.infrastructure.client.SubscriptionEntitlementClient;
@@ -86,10 +89,9 @@ public class CatalogServiceImpl implements CatalogService {
         if (bakery.serviceAreas().stream()
                 .noneMatch(
                         a ->
-                                a.city().equalsIgnoreCase(request.deliveryCity())
-                                        && a.district()
-                                                .equalsIgnoreCase(request.deliveryDistrict())))
-            throw BusinessException.invalid("Outside service area");
+                                DeliveryLocation.matches(a.city(), a.district(),
+                                        request.deliveryCity(), request.deliveryDistrict())))
+            throw new DeliveryAreaNotServedException();
         Map<String, Object> product = null;
         if (productRequired && request.productId() == null)
             throw BusinessException.invalid("Product required");
