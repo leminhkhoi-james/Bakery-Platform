@@ -14,3 +14,10 @@
 .sc-account-dropdown button:hover, .sc-account-dropdown button:focus-visible { background: #fdf2f4; }
 .sc-account-dropdown .material-symbols-outlined { font-size: 1.2rem; }
 @media (max-width: 639px) { .sc-account-trigger-copy { display: none; } .sc-portal .sc-account-trigger { gap: .25rem; } .sc-account-menu { max-width: none; } }
+
+.sc-account-mode-chevron { margin-left:auto; }
+.sc-account-sources { padding:.15rem 0 .25rem .65rem; }
+.sc-account-sources button { gap:.45rem; padding:.5rem .55rem; font-size:.78rem; font-weight:500; }
+.sc-account-sources button[aria-checked=true] { color:#722637; background:#fdf2f4; }
+.sc-account-mode-error { padding:.5rem; font-size:.78rem; color:#722637; }
+.sc-account-dropdown { max-height:calc(100dvh - 6rem); overflow-y:auto; }

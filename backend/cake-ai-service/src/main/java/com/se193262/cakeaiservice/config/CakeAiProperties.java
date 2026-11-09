@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public record CakeAiProperties(
         @DefaultValue("") String apiKey,
         @DefaultValue("https://generativelanguage.googleapis.com/v1beta") String providerUrl,
-        @DefaultValue("gemini-2.0-flash") String imageModel,
-        @DefaultValue("gemini-2.0-flash") String moderationModel,
+        @DefaultValue("gemini-3.1-flash-image") String imageModel,
+        @DefaultValue("gemini-3.5-flash") String moderationModel,
         @DefaultValue("5s") Duration connectTimeout,
         @DefaultValue("120s") Duration readTimeout,
         @DefaultValue("2") int workers,

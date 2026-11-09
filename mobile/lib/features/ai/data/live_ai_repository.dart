@@ -126,7 +126,26 @@ class LiveAiRepository {
     ),
     expected: id,
   );
-  Future<Json> moderate(String id, String status) {
+  Future<ApiPage> moderationQueue(int page, String? status) async {
+    final v = object(
+      await api.request(
+        ApiService.cakeAi,
+        'GET',
+        '/api/v1/admin/generated-designs',
+        query: {'page': page - 1, 'size': 20, 'status': status ?? 'ALL'},
+      ),
+    );
+    return ApiPage.fromJson({
+      'result': objects(v['content']),
+      'meta': {
+        'page': (v['page'] as int) + 1,
+        'pages': v['totalPages'],
+        'total': v['totalElements'],
+      },
+    });
+  }
+
+  Future<Json> moderate(String id, String status, {String? reason}) {
     if (!['APPROVED', 'REJECTED'].contains(status)) {
       throw const FormatException('Trạng thái duyệt không hợp lệ.');
     }
@@ -135,7 +154,7 @@ class LiveAiRepository {
         ApiService.cakeAi,
         'PATCH',
         '/api/v1/admin/generated-designs/${apiId(id)}/moderation',
-        body: {'moderationStatus': status},
+        body: {'moderationStatus': status, 'reason': ?reason},
       ),
       expected: id,
     );

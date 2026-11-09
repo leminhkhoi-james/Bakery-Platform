@@ -3,7 +3,7 @@ import { test, before, after } from 'node:test'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createServer } from 'vite'
-import { loadManagedBakeries, loadDashboardAccess } from '../src/services/vendorDashboardService.js'
+import { loadManagedBakeries, loadDashboardAccess, loadDashboardCompletedOrders } from '../src/services/vendorDashboardService.js'
 import { createDemoStore } from '../src/mockData/store.js'
 import { createDemoTransport } from '../src/mockData/transport.js'
 
@@ -18,6 +18,24 @@ before(async () => {
   ;({ DashboardOverview: Overview } = await vite.ssrLoadModule('/src/pages/vendor/dashboard/VendorDashboardPage.jsx'))
 })
 after(async () => { globalThis.fetch = originalFetch; await vite?.close() })
+
+test('Completed-order totals include every page and reject mixed currencies', async () => {
+  const rows = Array.from({ length: 101 }, (_, i) => ({ id: 'cc000000-0000-4000-8000-' + String(i).padStart(12, '0'),
+    bakeryId: ids[0], customerId: userId, status: 'COMPLETED', currency: 'VND', totalAmount: 1000 }))
+  const calls = []
+  globalThis.fetch = async (url, options) => {
+    calls.push({ url, options })
+    const current = Number(new URL(url, 'http://local').searchParams.get('page'))
+    return response({ result: rows.slice((current - 1) * 100, current * 100), meta: { page: current, pageSize: 100, total: 101, pages: 2 } })
+  }
+  const complete = await loadDashboardCompletedOrders({ bakeryId: ids[0] })
+  assert.equal(complete.result.length, 101)
+  assert.equal(complete.result.reduce((sum, order) => sum + order.totalAmount, 0), 101000)
+  assert.equal(calls.length, 2)
+  assert.ok(calls.every(({ url, options }) => new URL(url, 'http://local').searchParams.get('status') === 'COMPLETED' && options.allowMockFallback === false))
+  rows[100].currency = 'USD'
+  await assert.rejects(loadDashboardCompletedOrders({ bakeryId: ids[0] }), { status: 502 })
+})
 
 test('Public bakery choices are verified with current user membership, without granting rights', async () => {
   const calls = []
@@ -43,18 +61,24 @@ test('Membership failures remain errors; inactive or another user membership can
   }
 })
 
-test('Existing local owner works; a different owner account does not inherit mock bakery rights', async () => {
+test('Owner discovery bypasses local bakery rights and preserves an empty API response for each account', async () => {
   const owner = { id: userId, roles: ['BAKERY_OWNER'] }, store = createDemoStore()
   let actor = owner
   store.bind(owner)
-  const transport = createDemoTransport({ store, getUser: () => actor, fetch: async () => response(page([])) })
+  let upstreamCalls = 0
+  const transport = createDemoTransport({ store, getUser: () => actor, fetch: async (url) => {
+    upstreamCalls++
+    return url.includes('/members') ? response(null, 403) : response(page([]))
+  } })
   globalThis.fetch = transport.fetch
   const bakeries = await loadManagedBakeries({ userId })
-  assert.ok(bakeries.length > 0)
-  assert.equal((await loadDashboardAccess({ bakeryId: bakeries[0].id, userId })).memberRole, 'OWNER')
+  assert.ok(store.state.bakeries.length > 0, 'Local bakery fixtures exist but must not grant API access')
+  assert.deepEqual(bakeries, [])
+  assert.equal(upstreamCalls, 1)
   actor = { id: ids[1], roles: ['BAKERY_OWNER'] }
-  await assert.rejects(loadDashboardAccess({ bakeryId: bakeries[0].id, userId: actor.id }), { status: 403 })
+  await assert.rejects(loadDashboardAccess({ bakeryId: store.state.bakeries[0].id, userId: actor.id }), { status: 403 })
   assert.deepEqual(await loadManagedBakeries({ userId: actor.id }), [])
+  assert.equal(upstreamCalls, 2)
 })
 
 test('Dashboard displays actual totals including empty zero; errors show no zero or stale orders and one alert', () => {

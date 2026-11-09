@@ -123,6 +123,6 @@ function VerifiedWorkspace({ bakery, userId, onNavigate }) {
 export default function VendorRfqMarketplacePage({ onNavigate, routeSearch = '' }) {
   const owner = useVendorBakery(routeSearch)
   const { bakeryId, selectBakery, user, available, bakery: currentBakery } = owner
-  const selectedBakery = currentBakery || (bakeryId ? { id: bakeryId } : null)
-  return <VendorFrame owner={owner} title="Yêu cầu báo giá" activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-owner-rfq"><BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />{selectedBakery ? <VerifiedWorkspace key={user.id + ':' + selectedBakery.id} bakery={selectedBakery} userId={user.id} onNavigate={onNavigate} /> : <p role="status">{available.status === 'loading' ? 'Đang tải cửa hàng…' : 'Chọn cửa hàng bạn có quyền quản lý để xem yêu cầu và báo giá.'}</p>}</div></VendorFrame>
+  const selectedBakery = currentBakery
+  return <VendorFrame owner={owner} title="Yêu cầu báo giá" activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-owner-rfq"><BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />{selectedBakery ? <VerifiedWorkspace key={user.id + ':' + selectedBakery.id} bakery={selectedBakery} userId={user.id} onNavigate={onNavigate} /> : owner.error ? <VendorRfqState resource={{ status: 'error', error: owner.error, reload: owner.reload }} /> : <p role="status">{owner.state === 'LOADING' || available.status === 'loading' ? 'Đang tải dữ liệu cửa hàng…' : 'Chọn cửa hàng bạn có quyền quản lý để xem yêu cầu và báo giá.'}</p>}</div></VendorFrame>
 }

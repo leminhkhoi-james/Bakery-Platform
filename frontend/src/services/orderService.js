@@ -8,16 +8,17 @@ export const orderService = {
     const bakeryId = params.bakeryId ? requireId(params.bakeryId, 'Cửa hàng') : undefined
     if (params.scope === 'bakery' && !bakeryId) requireId(params.bakeryId, 'Cửa hàng')
     const query = catalogQuery({ ...params, bakeryId }, ['scope', 'bakeryId', 'status', 'orderSource', 'createdFrom', 'createdTo', 'page', 'size', 'sort'])
-    const data = mapPage(await api.get('/orders' + query, options), (dto) => mapOrder(dto))
+    const request = params.scope === 'all' ? { ...options, allowMockFallback: false } : options
+    const data = mapPage(await api.get('/orders' + query, request), (dto) => mapOrder(dto))
     if (params.scope === 'bakery' && data.result.some((order) => order.bakeryId !== bakeryId)) throw new ApiError('Danh sách đơn trả sai cửa hàng.', 502)
     return data
   },
   async getOrderById(orderId, options = {}) {
     return mapOrder(await api.get('/orders/' + requireId(orderId, 'Đơn hàng'), options), true)
   },
-  async createDirectOrder(input, idempotencyKey) {
+  async createDirectOrder(input, idempotencyKey, options = {}) {
     const key = requireId(idempotencyKey, 'Idempotency-Key')
-    return mapOrder(await api.post('/orders/direct', directOrderPayload(input), { headers: { 'Idempotency-Key': key } }), true)
+    return mapOrder(await api.post('/orders/direct', directOrderPayload(input), { ...options, headers: { ...options.headers, 'Idempotency-Key': key } }), true)
   },
   async updateOrderStatus(orderId, targetStatus, reason = '') {
     if (!ORDER_STATUSES.includes(targetStatus) || typeof reason !== 'string' || reason.length > 1000) throw new ApiError('Trạng thái hoặc lý do không hợp lệ.', 400)

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { EmptyPanel, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { useAuth } from '../../../context/useAuth.js'
@@ -12,7 +11,7 @@ import AdminPlanActionDialog from './AdminPlanActionDialog.jsx'
 import './admin-plans.css'
 
 export { AdminPlanForm }
-export default function AdminPlansPage({ onNavigate }) {
+export default function AdminPlansPage() {
   const { roles } = useAuth(), resource = useCatalogResource(loadAdminPlans)
   const [selected, setSelected] = useState(null), [adding, setAdding] = useState(false)
   const [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState('')
@@ -44,7 +43,7 @@ export default function AdminPlansPage({ onNavigate }) {
     if (locked || !canManage || !planActions(plan.status).includes(action)) return
     setError(null); setNotice(''); setConfirmation({ plan, action })
   }
-  return <AdminFrame activeTab="admin-plans" onNavigate={onNavigate}>
+  return <>
     <section className={panelClass + ' sc-admin-plans'}>
       <div className="sc-admin-plans-toolbar"><p>{plans ? plans.length + ' gói dịch vụ' : 'Danh mục gói dịch vụ'}</p><div><button type="button" disabled={busy || !canManage} className="sc-button" onClick={() => { setError(null); setNotice(''); setAdding(true); setSelected(null) }}><Icon name="add" />Tạo gói mới</button></div></div>
       <ApiState resource={resource}>{sortedPlans && (sortedPlans.length ? <div className="sc-admin-plans-grid">{sortedPlans.map((plan) => <AdminPlanCard key={plan.id} plan={plan} disabled={locked || !canManage} onEdit={() => { if (!locked && canManage) { setError(null); setNotice(''); setSelected(plan); setAdding(false) } }} onAction={(action) => chooseAction(plan, action)} />)}</div> : <EmptyPanel title="Chưa có gói dịch vụ." description="Tạo gói mới để cấu hình quyền lợi cho tiệm bánh." icon="layers" />)}</ApiState>
@@ -57,5 +56,5 @@ export default function AdminPlansPage({ onNavigate }) {
       const { action } = confirmation
       return mutate(() => action === 'archive' ? adminManagementService.archivePlan(currentPlan.id) : adminManagementService.changePlanStatus(currentPlan.id, PLAN_ACTIONS[action].target), 'Đã cập nhật gói dịch vụ: ' + PLAN_ACTIONS[action].label.toLocaleLowerCase('vi') + '.')
     }} />}
-  </AdminFrame>
+  </>
 }

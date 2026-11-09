@@ -2,6 +2,7 @@ import { createDemoStore, DemoError } from './store.js'
 import { createSeed, demoId, isDemoId } from './seed.js'
 import { collectionPaths, readBody, routeDemo } from './router.js'
 import { createUserDirectory } from './admin/userDirectoryStore.js'
+import { simulationEnabled } from './business/runtime.js'
 
 export let displayRuntime = null
 const unwrap = (body) => body && Object.hasOwn(body, 'data') ? body.data : body
@@ -130,7 +131,7 @@ export function installDisplayData(getSession, configuration = {}) {
   window.fetch = displayRuntime.fetch
   return displayRuntime
 }
-export const displayDataSource = (data) => displayRuntime && (uuidValues(data).some(isDemoId) || data?.localCrud && displayRuntime.sources.get('/admin/users') === 'demo') ? 'demo' : 'real'
+export const displayDataSource = (data) => simulationEnabled() ? 'simulation' : displayRuntime && (uuidValues(data).some(isDemoId) || data?.localCrud && displayRuntime.sources.get('/admin/users') === 'demo') ? 'demo' : 'real'
 export function readPreviewBakeries() {
   return displayRuntime?.read('/bakeries', { page: '1', size: '100' }).result || []
 }

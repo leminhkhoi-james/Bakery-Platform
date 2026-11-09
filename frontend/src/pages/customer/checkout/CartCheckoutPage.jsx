@@ -1,7 +1,7 @@
 import { demoRuntime } from '../../../mockData/runtime.js'
 import { isDemoId } from '../../../mockData/seed.js'
 import React, { useState } from 'react'
-import { revalidateCartItem, ADDRESS_BLOCKER } from '../../../services/checkoutService.js'
+import { revalidateCartItem } from '../../../services/checkoutService.js'
 import { formatCatalogPrice, isCatalogId } from '../../../services/catalogModels.js'
 import { ApiErrorMessage, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
@@ -227,12 +227,6 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
                 <span>Xác nhận đơn hàng</span>
               </h2>
             </div>
-
-            {!(demoRuntime && cartItems.length > 0 && cartItems.every((item) => isDemoId(item.productId))) && (
-              <p role="status" className="text-xs font-semibold text-wine/80 bg-primary-fixed/40 p-2.5 rounded-xl border border-primary/20">
-                {ADDRESS_BLOCKER}
-              </p>
-            )}
 
             {!(demoRuntime && cartItems.length > 0 && cartItems.every((item) => isDemoId(item.productId))) && (
               <p className="text-xs text-on-surface-variant">

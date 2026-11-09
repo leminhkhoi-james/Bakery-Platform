@@ -1,3 +1,4 @@
+import { recordSource } from '../../services/unifiedDataService.js'
 import { vendorMoney } from '../../services/vendorPresentation.js'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { displayReference } from '../../services/displayReference.js'
@@ -204,7 +205,7 @@ export function OfferInfo({ offer, bakery: externalBakery, owner = false }) {
     </section>
   )
 }
-export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, footerExternal = false }) {
+export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, footerExternal = false, source }) {
   const [values, setValues] = useState(() => ({
     bakeryId,
     cakePrice: '',
@@ -216,6 +217,7 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
     expiresAt: toLocalInput(offer?.expiresAt) || toLocalInput(new Date(Date.now() + 3 * 86400000).toISOString())
   }))
   const addOns = useCatalogResource(loadRfqAddOns, { bakeryId })
+  const eligibleAddOns = (addOns.data || []).filter(item => !source || recordSource(item) === source)
   const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues({ ...values, [key]: event.target.value }) })
   return (
     <form id={footerExternal ? "vendor-offer-form" : undefined} className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}>
@@ -242,9 +244,9 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
             <Icon name="add_circle" className="text-sm" /> Phụ kiện kèm theo (tùy chọn)
           </h3>
           <ApiState resource={addOns}>
-            {addOns.data?.length > 0 ? (
+            {eligibleAddOns.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                {addOns.data.map((item) => (
+                {eligibleAddOns.map((item) => (
                   <label key={item.id} className="flex items-center justify-between p-2 rounded-xl border border-outline-variant/20 bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
                     <span className="flex items-center gap-2">
                       <input type="checkbox" checked={values.items.some((row) => row.addOnId === item.id)} onChange={(event) => setValues({ ...values, items: event.target.checked ? [...values.items, { addOnId: item.id, quantity: 1 }] : values.items.filter((row) => row.addOnId !== item.id) })} />

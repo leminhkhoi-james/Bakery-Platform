@@ -1,5 +1,7 @@
 # Cake AI live
 
-Public API xuất phát từ controller/DTO/GenerationReader thật. Danh sách job riêng Customer, phân trang Backend bắt đầu 0; UI chuyển về 1. Job detail bọc `job`, revisions, sourceImages, generatedDesigns. POST create multipart metadata + sourceImages; revision JSON; khóa logical action ổn định, không auto retry POST. Poll giới hạn và ngừng khi đổi phiên/đóng màn hình; refresh không tạo job. Kết quả SUCCEEDED chưa đồng nghĩa APPROVED. Chọn thiết kế từ result đã duyệt vào RFQ DRAFT cùng owner và ID được Backend xác minh.
+Public create uses multipart metadata/sourceImages with an action-scoped idempotency key; revise JSON and cancel preserve existing contracts. Customer jobs remain owner-scoped, bounded polling only reads status. DRAFT/OPEN RFQs allow generation; selection currently shown for DRAFT and validates readback selectedDesignId on the same request.
 
-Admin chỉ mở job/design qua RFQ.selectedDesignId hợp lệ; source chưa có queue AI Admin để khám phá PENDING chưa từng được chọn. Không thêm input UUID hoặc gọi internal. Thiếu runtime/provider/sandbox authorization phải báo blocker, không dựng kết quả giả.
+ADMIN entry from profile and Admin RFQ page opens `/admin-ai-designs`: public authorized list with server pagination and PENDING/APPROVED/REJECTED filters. Authorized PENDING preview, terminal decisions and audit history use public APIs; no internal endpoints or manual UUID entry. Cancelled confirmation sends no mutation/success feedback.
+
+Source attribution comes from persisted providerMetadata provider=GOOGLE_GEMINI and completed status, never from CAKE_AI_MODE. Missing/legacy metadata is explicitly unverified. Expired image links can be refreshed through authorized metadata GET. Customer PENDING/REJECTED media remains hidden; Admin rejected images remain hidden. SweetCake tokens, existing native components and accessibility behavior are preserved.

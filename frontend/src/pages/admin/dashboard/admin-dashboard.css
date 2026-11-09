@@ -528,60 +528,6 @@
   padding: 1.35rem 1.5rem;
 }
 
-.sc-dashboard-recent .sc-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-}
-
-.sc-dashboard-recent .sc-table th {
-  background: #f8fafc;
-  color: #334155;
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.sc-dashboard-recent .sc-table td {
-  height: 4rem;
-  font-size: 0.84rem;
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
-  vertical-align: middle;
-}
-
-.sc-dashboard-recent .sc-table tbody tr:hover td {
-  background: #ffffff;
-}
-
-.sc-dashboard-recent .sc-table :is(strong, small) {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sc-dashboard-recent .sc-table strong {
-  color: #0f172a;
-  font-weight: 700;
-  font-size: 0.88rem;
-}
-
-.sc-dashboard-recent .sc-table small {
-  color: #64748b;
-  font-size: 0.76rem;
-  margin-top: 0.15rem;
-}
-
-.sc-dashboard-recent .sc-money {
-  font-weight: 700;
-  color: var(--color-primary, #6b212e);
-  font-variant-numeric: tabular-nums;
-}
-
 .sc-dashboard-empty {
   padding: 2.5rem 1rem;
   text-align: center;

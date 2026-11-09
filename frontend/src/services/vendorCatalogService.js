@@ -22,7 +22,7 @@ export const vendorCatalogService = {
     return data
   },
   async getProductSnapshot(bakeryId, productId, options = {}) {
-    const dto = await api.get('/products/' + requireId(productId), { ...options, auth: false, retryAuth: false })
+    const dto = await api.get(root(bakeryId) + '/products/' + requireId(productId), { ...options, allowMockFallback: false })
     if (dto?.product?.id !== productId || dto.bakeryId !== bakeryId || !Array.isArray(dto.images) || !Array.isArray(dto.options?.groups)) throw new ApiError('Snapshot ảnh/options không khớp sản phẩm.', 502)
     return { images: mapManagedList(dto.images), options: mapOptions(dto.options) }
   },

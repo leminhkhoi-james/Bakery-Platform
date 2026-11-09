@@ -1,6 +1,8 @@
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadAdminPending } from '../../services/adminSummaryService.js'
+import { demoRuntime } from '../../mockData/runtime.js'
 import React from 'react'
+import { simulationEnabled } from '../../mockData/business/runtime.js'
 import BrandLogo from '../../components/common/BrandLogo'
 
 /**
@@ -45,7 +47,7 @@ export default function AdminSidebar({
       return 'admin-plans'
     }
     if (['admin-payments', 'payments', 'duyet-goi'].includes(cleanTab)) {
-      return 'admin-payments'
+      return 'admin-plans'
     }
     if (['admin-users', 'users', 'nguoi-dung'].includes(cleanTab)) {
       return 'admin-users'
@@ -81,14 +83,8 @@ export default function AdminSidebar({
       label: 'Đơn hàng',
       icon: 'shopping_bag',
     },
-    { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium' },
-    {
-      id: 'admin-payments',
-      route: 'admin-payments',
-      label: 'Duyệt gói dịch vụ',
-      icon: 'receipt_long',
-      badge: pendingPaymentsCount > 0 ? `${pendingPaymentsCount}` : null,
-    },
+    ...(simulationEnabled() ? [{ id: 'admin-rfq', route: 'admin-rfq', label: 'Yêu cầu & báo giá', icon: 'request_quote' }] : []),
+    { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium', badge: pendingPaymentsCount > 0 ? String(pendingPaymentsCount) : null },
     { id: 'admin-users', route: 'admin-users', label: 'Người dùng', icon: 'group' },
   ]
 
@@ -122,7 +118,7 @@ export default function AdminSidebar({
 
         {/* Navigation Links */}
         <nav className="space-y-1">
-          {navItems.map((item) => {
+          {navItems.filter((item) => item.id !== 'admin-users' || demoRuntime || typeof window !== 'undefined').map((item) => {
             const isActive = currentTab === item.id
 
             return (

@@ -54,7 +54,9 @@ test('Snapshot read verifies product/bakery; fresh form never invents a GET/PUT 
   assert.equal(await loadProductSnapshot({ bakeryId, productId: id, fresh: true }), null); assert.equal(calls.length, 0)
   handler = () => reply({ product: { id }, bakeryId, images: [], options })
   assert.equal((await service.getProductSnapshot(bakeryId, id)).options.groups[0].id, groupId)
-  assert.equal(calls[0].options.headers.has('Authorization'), false)
+  assert.equal(calls[0].options.headers.has('Authorization'), true)
+  assert.ok(calls[0].url.endsWith('/bakeries/' + bakeryId + '/products/' + id))
+  assert.equal(calls[0].options.allowMockFallback, false)
   handler = () => reply({ product: { id }, bakeryId: randomUUID(), images: [], options }); await assert.rejects(service.getProductSnapshot(bakeryId, id), { status: 502 })
 })
 test('Only active owner can edit catalog; membership is read-only', async () => {

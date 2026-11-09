@@ -1,11 +1,8 @@
-import { demoRuntime } from '../../../mockData/runtime.js'
-import { isDemoId } from '../../../mockData/seed.js'
 import React, { useState } from 'react'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadOffer, loadRfq } from '../../../services/rfqService.js'
 import { acceptableOffer, ownsRequest, moneyVnd } from '../../../services/marketplaceModels.js'
-import { ADDRESS_BLOCKER } from '../../../services/checkoutService.js'
 import VerifiedCheckout from '../../../components/orders/VerifiedCheckout.jsx'
 import MarketplaceState from '../../../components/marketplace/MarketplaceState.jsx'
 import { ChatForRequest } from '../../../components/marketplace/MarketplaceViews.jsx'
@@ -190,13 +187,6 @@ function QuoteContext({ offer, onNavigate }) {
                 <span className="font-serif text-2xl font-bold text-primary">{moneyVnd(offer.totalPrice)}</span>
               </div>
             </div>
-
-            {!(demoRuntime && isDemoId(offer.id)) && (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-900 space-y-1">
-                <p className="font-bold">{ADDRESS_BLOCKER}</p>
-                <p>Chưa thể hoàn tất đặt hàng lúc này. Vui lòng liên hệ tiệm để được hỗ trợ.</p>
-              </div>
-            )}
 
             {/* Verified Checkout & Delivery Address Selector */}
             <VerifiedCheckout

@@ -207,6 +207,11 @@ class LiveProfilePage extends StatelessWidget {
               ),
           if (session.hasRole('ADMIN')) ...[
             SCButton(
+              'Duyệt thiết kế AI',
+              key: const ValueKey('admin-ai-nav'),
+              onPressed: () => liveOpen(context, '/admin-ai-designs'),
+            ),
+            SCButton(
               'Giám sát báo giá',
               key: const ValueKey('admin-offers-nav'),
               onPressed: () => liveOpen(context, '/admin-offers'),

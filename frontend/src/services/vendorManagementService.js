@@ -20,7 +20,7 @@ export const vendorManagementService = {
     return mapPage(await api.get(bakeryPath(bakeryId) + '/products' + catalogQuery(params, ['query', 'categoryId', 'status', 'page', 'size', 'sort']), options), mapManagedProduct)
   },
   async getMembership(bakeryId, userId, options = {}) {
-    const members = list(await sharedApi.get(bakeryPath(bakeryId) + '/members', options))
+    const members = list(await api.get(bakeryPath(bakeryId) + '/members', options))
     return members.find((member) => member.userId === userId && member.status === 'ACTIVE') || null
   },
   async getCategories(bakeryId, options = {}) { return list(await api.get(bakeryPath(bakeryId) + '/categories', options)) },
@@ -34,13 +34,14 @@ export const vendorManagementService = {
   },
   async getPublicProfile(bakeryId, options = {}) { return api.get(bakeryPath(bakeryId), { ...options, auth: false, retryAuth: false }) },
   async getManagedProfile(bakeryId, includeOnboarding, options = {}) {
-    try { return await vendorManagementService.getPublicProfile(bakeryId, options) }
-    catch (error) {
-      if (error.status !== 404 || !includeOnboarding) throw error
-      const profile = await onboardingService.get(null, options)
-      if (profile?.id?.toLowerCase() !== bakeryId.toLowerCase()) throw error
-      return profile
+    // The applicant endpoint returns the owner's full profile even when public
+    // detail is unavailable (for example, an approved shop without entitlement).
+    // Read it first instead of deliberately issuing a public request that 404s.
+    if (includeOnboarding) {
+      const profile = await onboardingService.get(null, { ...options, allowMockFallback: false })
+      if (profile?.id?.toLowerCase() === bakeryId.toLowerCase()) return profile
     }
+    return vendorManagementService.getPublicProfile(bakeryId, options)
   },
   async createBakery(input) { return bakeryDto(await api.post('/bakeries', bakeryPayload(input, true))) },
   async updateBakery(bakeryId, input) {

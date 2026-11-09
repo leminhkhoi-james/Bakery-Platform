@@ -417,7 +417,7 @@ test('address labels avoid duplicate legacy defaults/locality and preserve Unico
   assert.equal(formatAddress({ addressLine: '東京', city: '大阪' }), '東京, 大阪')
 })
 
-test('Complete standardized mock flow: thêm địa chỉ → checkout → Order → Vendor → Admin', async () => {
+test('Standardized mock Customer/Vendor flow stays separate from the real Admin order list', async () => {
   const app = setup(); app.as(customer)
   const original = globalThis.fetch; globalThis.fetch = app.fetch
   try {
@@ -477,10 +477,10 @@ test('Complete standardized mock flow: thêm địa chỉ → checkout → Order
     const review = await orderService.saveReview(createdOrder.id, { rating: 5, comment: 'Bánh rất đẹp và ngon!' })
     assert.equal(review.rating, 5)
 
-    // 6. Admin kiểm tra đơn hàng toàn sàn (scope: all)
+    // Admin list is API-only; a completed local order is not a real business result.
     app.as(admin)
     const adminOrders = await orderService.getOrders({ scope: 'all', page: 1, size: 10 })
-    assert.ok(adminOrders.result.some((o) => o.id === createdOrder.id))
+    assert.deepEqual(adminOrders.result, [])
 
     const adminDetail = await orderService.getOrderById(createdOrder.id)
     assert.equal(adminDetail.status, 'COMPLETED')

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react'
 import AuthGuard from './AuthGuard.jsx'
 import { useAuth } from '../context/useAuth.js'
 import { sessionIdentity } from './sessionNavigation.js'
+const BusinessRequestsPage = lazy(() => import('../pages/admin/BusinessRequestsPage.jsx'))
 import { CustomerLayout, VendorLayout, AdminLayout } from '../layouts'
 
 // Customer Pages (Modular Feature Subfolders)
@@ -40,8 +41,7 @@ const VendorSettingsPage = lazy(() => import('../pages/vendor/settings/VendorSet
 const AdminDashboardPage = lazy(() => import('../pages/admin/dashboard/AdminDashboardPage'))
 const AdminUsersPage = lazy(() => import('../pages/admin/users/AdminUsersPage'))
 const AdminVendorsPage = lazy(() => import('../pages/admin/vendors/AdminVendorsPage'))
-const AdminPaymentsPage = lazy(() => import('../pages/admin/vendors/AdminPaymentsPage.jsx'))
-const AdminPlansPage = lazy(() => import('../pages/admin/vendors/AdminPlansPage.jsx'))
+const AdminSubscriptionManagementPage = lazy(() => import('../pages/admin/vendors/AdminSubscriptionManagementPage.jsx'))
 const AdminModerationPage = lazy(() => import('../pages/admin/vendors/AdminModerationPage.jsx'))
 const AdminOrdersEscrowPage = lazy(() => import('../pages/admin/orders/AdminOrdersEscrowPage'))
 const AdminRevenuePage = lazy(() => import('../pages/admin/revenue/AdminRevenuePage'))
@@ -85,6 +85,7 @@ function PageRoutes({
     currentPage === 'admin-plans' ||
     currentPage === 'admin-revenue' ||
     currentPage === 'admin-moderation' ||
+    currentPage === 'admin-rfq' ||
     currentPage === 'admin-users'
 
   const isVendorPortal =
@@ -102,15 +103,15 @@ function PageRoutes({
   // 1. Phân Hệ Admin
   if (isAdminPortal) {
     return (
-      <AdminLayout activeTab={currentPage} onNavigate={onNavigate}>
+      <AdminLayout activeTab={currentPage === 'admin-payments' ? 'admin-plans' : currentPage} onNavigate={onNavigate}>
         {currentPage === 'admin-orders' ? (
           <AdminOrdersEscrowPage routeSearch={routeSearch} onNavigate={onNavigate} />
-        ) : currentPage === 'admin-plans' ? (
-          <AdminPlansPage onNavigate={onNavigate} />
+        ) : ['admin-plans', 'admin-payments'].includes(currentPage) ? (
+          <AdminSubscriptionManagementPage onNavigate={onNavigate} routeSearch={routeSearch} legacyPayments={currentPage === 'admin-payments'} />
+        ) : currentPage === 'admin-rfq' ? (
+          <BusinessRequestsPage onNavigate={onNavigate} />
         ) : currentPage === 'admin-moderation' ? (
           <AdminModerationPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
-        ) : currentPage === 'admin-payments' ? (
-          <AdminPaymentsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-vendors' ? (
           <AdminVendorsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-users' ? (

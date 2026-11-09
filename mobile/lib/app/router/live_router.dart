@@ -69,6 +69,7 @@ abstract final class LiveRouter {
         }
       }
       return switch (path) {
+        '/admin-ai-designs' => const LiveAiModerationPage(),
         '/ai-jobs' =>
           w.session.hasRole('CUSTOMER')
               ? const LiveAiJobsPage()

@@ -5,10 +5,31 @@ import { readDashboardPages, loadAdminDashboard, loadDashboardPayment } from '..
 import { dashboardSupplement } from '../src/mockData/admin/dashboardSnapshot.js'
 import { createDemoStore } from '../src/mockData/store.js'
 import { setAuthToken } from '../src/services/apiClient.js'
+import { createDisplayTransport } from '../src/mockData/displayRuntime.js'
+import { orderService } from '../src/services/orderService.js'
 
 const ready = (rows, source = 'real') => ({ state: 'ready', rows, source })
 const now = Date.parse('2026-10-28T12:00:00Z')
 const page = (rows, current = 1, total = rows.length, pages = 1) => ({ result: rows, meta: { page: current, total, pages, pageSize: 100 } })
+
+test('Real Admin overview and order list never substitute seeded KPIs for empty API collections', async () => {
+  const original = globalThis.fetch
+  const user = { id: 'aa000000-0000-4000-8000-000000000002', roles: ['ADMIN'] }
+  const calls = []
+  const transport = createDisplayTransport({ emptyDemo: true, getSession: () => ({ source: 'real', user }),
+    fetch: async (url, options) => { calls.push({ url, options }); return Response.json({ data: page([], 1, 0, 0) }) } })
+  try {
+    setAuthToken('isolated-dashboard-test')
+    globalThis.fetch = transport.fetch
+    const collections = await loadAdminDashboard({ user }, { allowMockFallback: true })
+    for (const collection of Object.values(collections)) {
+      assert.equal(collection.state, 'ready'); assert.equal(collection.source, 'real'); assert.deepEqual(collection.rows, [])
+    }
+    assert.deepEqual((await orderService.getOrders({ scope: 'all' }, { allowMockFallback: true })).result, [])
+    assert.equal(calls.length, 5, 'Only the four source collections and requested order page are fetched')
+    assert.ok(calls.every(({ options }) => options.allowMockFallback === false))
+  } finally { globalThis.fetch = original; setAuthToken(null) }
+})
 test('Unique identities, not roles or repeated rows, drive KPI and status distributions', () => {
   const result = buildAdminDashboard({ bakeries: ready([{ id: 'b', status: 'PENDING_APPROVAL' }, { id: 'b', status: 'PENDING_APPROVAL' }]), users: ready([{ id: 'u', status: 'ACTIVE', roles: ['ADMIN', 'CUSTOMER'] }]), products: ready([{ id: 'p' }]), requests: ready([{ id: 'r' }]), offers: ready([{ id: 'q' }]), orders: ready([{ id: 'o', status: 'PENDING', createdAt: '2026-10-28T00:00:00Z' }]) }, { now })
   assert.deepEqual(result.counts, { bakeries: 1, pendingBakeries: 1, users: 1, products: 1, orders: 1, requests: 1, offers: 1, pendingPayments: null, pendingOrders: 1 })

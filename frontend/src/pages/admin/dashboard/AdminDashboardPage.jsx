@@ -1,3 +1,5 @@
+import { loadRfqs, loadOffers } from '../../../services/rfqService.js'
+import { unifiedEnabled, unifiedSnapshot, unifiedMetrics, recordSource } from '../../../services/unifiedDataService.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import React from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
@@ -12,15 +14,23 @@ import { orderStatusLabel } from '../../../services/orderModels.js'
 import { StatusDistribution } from './DashboardCharts.jsx'
 import AdminWorkQueue from './AdminWorkQueue.jsx'
 import './admin-dashboard.css'
+import { simulationStore } from '../../../mockData/business/runtime.js'
+import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 
 export default function AdminDashboardPage({ onNavigate }) {
   const { user } = useAuth()
   const resource = useCatalogResource(loadAdminDashboard, { user: { id: user?.id, roles: user?.roles || [] } })
   const demoStore = getDemoStore()
   const runtime = demoRuntime || (demoStore ? { store: demoStore } : null)
-  const supplement = dashboardSupplement(runtime, user, resource.data || {})
+  useCatalogResource(loadRfqs, { scope: 'all', size: 100 })
+  useCatalogResource(loadOffers, { scope: 'all', size: 100 })
+  const snapshot = unifiedSnapshot()
+  const localSubscriptionRevenue = snapshot ? unifiedMetrics(snapshot, {}).simulationSubscriptionRevenue : null
+  const simulated = snapshot ? { state: snapshot } : simulationStore()
+  const supplement = simulated ? Object.fromEntries(['products', 'requests', 'offers', 'designs', 'plans', 'reviews'].map(key => [key, { state: 'ready', source: 'simulation', rows: key === 'reviews' ? simulated.state.orders.filter(order => order.review).map(order => ({ ...order.review, id: order.id })) : simulated.state[key] || [] }])) : dashboardSupplement(runtime, user, resource.data || {})
   const combinedData = { ...resource.data, ...supplement }
   const dashboard = buildAdminDashboard(combinedData)
+  if (unifiedEnabled() && combinedData.payments?.rows) { const financial = buildAdminDashboard({ ...combinedData, payments: { ...combinedData.payments, rows: combinedData.payments.rows.filter(row => recordSource(row) === 'api') } }); dashboard.revenue = snapshot?.apiPaymentsComplete === false ? null : financial.revenue; dashboard.currencies = financial.currencies; dashboard.currency = financial.currency }
   const loading = resource.status === 'loading'
   const failing = resource.status === 'error' || Object.values(resource.data || {}).some((item) => item.state === 'error')
   const go = (route) => () => onNavigate(route)
@@ -51,7 +61,7 @@ export default function AdminDashboardPage({ onNavigate }) {
             ))
           : dashboardMoney(0),
       hasUrgentDot: false,
-      subContent: <span className="sc-kpi-sub-text">Doanh thu thực nhận</span>,
+      subContent: <span className="sc-kpi-sub-text">Thực nhận{localSubscriptionRevenue !== null && <> · Mô phỏng: <strong>{dashboardMoney(localSubscriptionRevenue, 'VND')}</strong></>}</span>,
     },
     {
       id: 'bakeries',
@@ -261,10 +271,10 @@ export default function AdminDashboardPage({ onNavigate }) {
                 </button>
               </div>
               {dashboard.recentOrders.length ? (
-                <DataTable label="Đơn hàng gần đây" className="sc-admin-fixed-table sc-admin-recent-table">
+                <DataTable label="Đơn hàng gần đây" className="sc-admin-fixed-table sc-admin-orders-table">
                   <colgroup>
                     <col style={{ width: '60px' }} />
-                    {[24, 20, 20, 20, 16].map((width, index) => (
+                    {[22, 18, 18, 22, 20].map((width, index) => (
                       <col key={index} style={{ width: width + '%' }} />
                     ))}
                   </colgroup>
@@ -273,7 +283,7 @@ export default function AdminDashboardPage({ onNavigate }) {
                       <th style={{ width: '60px', textAlign: 'center' }}>STT</th>
                       <th>Đơn hàng</th>
                       <th>Trạng thái</th>
-                      <th className="sc-money">Giá trị</th>
+                      <th className="sc-money">Tổng tiền</th>
                       <th>Ngày tạo</th>
                       <th className="sc-table-actions" scope="col">
                         Chi tiết
@@ -287,13 +297,13 @@ export default function AdminDashboardPage({ onNavigate }) {
                           {index + 1}
                         </td>
                         <td>
-                          <strong>{dashboardOrderName(row)}</strong>
+                          <strong className="break-all text-primary">{dashboardOrderName(row)}</strong>
                           <small>{cleanPresentationLabel(row.customerName || row.bakeryName, 'Đơn bánh')}</small>
                         </td>
                         <td>
                           <StatusBadge status={row.status} label={orderStatusLabel(row.status)} />
                         </td>
-                        <td className="sc-money">
+                        <td className="whitespace-nowrap font-semibold tabular-nums">
                           {row.totalAmount == null || !row.currency
                             ? '—'
                             : dashboardMoney(row.totalAmount, row.currency)}
@@ -301,12 +311,12 @@ export default function AdminDashboardPage({ onNavigate }) {
                         <td>{dashboardDateTime(row.createdAt)}</td>
                         <td className="sc-table-actions">
                           <button
-                            className="sc-button sc-action-button sc-action-button--secondary"
+                            className="sc-button"
                             onClick={go(orderRoute(row))}
                             aria-label={'Xem chi tiết ' + dashboardOrderName(row)}
                           >
                             <Icon name="visibility" />
-                            Xem
+                            Xem đơn
                           </button>
                         </td>
                       </tr>
@@ -326,6 +336,7 @@ export default function AdminDashboardPage({ onNavigate }) {
           </div>
         </section>
       </div>
+      <BusinessSimulationReport />
     </AdminFrame>
   )
 }

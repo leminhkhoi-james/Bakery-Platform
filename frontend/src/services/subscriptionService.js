@@ -2,6 +2,9 @@ import { api, ApiError } from './apiClient.js'
 import { requireSubscriptionId, mapSubscriptionPlan, mapSubscriptionOrders, mapSubscriptionOrder, mapBakerySubscription } from './subscriptionModels.js'
 
 export const subscriptionService = {
+  async getPaymentOptions(_params, options = {}) {
+    return api.get('/subscription-plans/payment-options', { ...options, allowMockFallback: false })
+  },
   async getPlans(options = {}) {
     const data = await api.get('/subscription-plans', { ...options, auth: false, retryAuth: false })
     if (!Array.isArray(data)) throw new ApiError('Danh sách gói phải là một mảng.', 502)

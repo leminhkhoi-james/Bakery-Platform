@@ -1,3 +1,4 @@
+import { unifiedEnabled, recordSource } from '../../services/unifiedDataService.js'
 import { displayReference } from '../../services/displayReference.js'
 import OrderTrackingView, { OrderTrackingHeader } from './OrderTrackingView.jsx'
 import { uiLabel, cleanPresentationLabel } from '../../services/uiLabels.js'
@@ -55,6 +56,7 @@ export function OrderDetail({ orderId, scope = 'mine', bakeryId, onChanged, onCl
   const actionsSlot = order && canManage ? <div className="sc-order-action-panel"><OrderStatusActions key={orderId} order={order} actions={actions} busy={busy} refreshing={resource.refreshing} onConfirm={transition} />{feedback}</div> : null
   const content = <section className="sc-order-detail space-y-4">
     <ApiState resource={resource}>{order && (matches ? <>
+      {scope !== 'mine' && unifiedEnabled() && <p className="text-xs">{recordSource(order) === 'local' ? 'Nguồn trình duyệt' : 'Nguồn API'}</p>}
       <OrderSnapshot order={order} showHeader={!onClose} actionsSlot={actionsSlot} />
       {scope === 'all' && <ReviewModeration key={'moderation-' + (order.review?.updatedAt || 'none')} review={order.review} onChanged={() => { resource.reload(); onChanged?.() }} />}
       {!user?.roles?.includes('ADMIN') && <OrderReview key={'review-' + (order.review?.updatedAt || 'none')} order={order} onChanged={() => { resource.reload(); onChanged?.() }} />}

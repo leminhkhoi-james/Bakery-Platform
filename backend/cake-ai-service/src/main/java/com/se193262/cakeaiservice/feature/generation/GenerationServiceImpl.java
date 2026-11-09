@@ -20,11 +20,12 @@ public class GenerationServiceImpl implements GenerationService {
     private final GenerationQueue queue;
     private final TransactionTemplate transaction;
     private final ObjectMapper json;
+    private final GenerationBudget budget;
 
     public GenerationServiceImpl(GenerationRepository repository, GenerationReader reader,
-            GenerationInputs inputs, GenerationQueue queue, PlatformTransactionManager manager, ObjectMapper json) {
+            GenerationInputs inputs, GenerationQueue queue, PlatformTransactionManager manager, ObjectMapper json, GenerationBudget budget) {
         this.repository = repository; this.reader = reader; this.inputs = inputs; this.queue = queue;
-        this.transaction = new TransactionTemplate(manager); this.json = json;
+        this.transaction = new TransactionTemplate(manager); this.json = json; this.budget = budget;
     }
 
     public GenerationJobResponse create(CreateGenerationJobRequest request, List<MultipartFile> files, String key) {
@@ -104,6 +105,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     private void insertRevision(UUID jobId, UUID customerId, int number, String prompt,
             String negative, GenerationParameters parameters) {
+        budget.reserve(customerId, 1 + 2 * parameters.numberOfDesigns());
         UUID revisionId = UUID.randomUUID();
         repository.insertRevision(new Revision(revisionId, jobId, number, prompt, negative, customerId, null),
                 new Execution(UUID.randomUUID(), jobId, revisionId, "QUEUED", inputs.model(), parameters, null));

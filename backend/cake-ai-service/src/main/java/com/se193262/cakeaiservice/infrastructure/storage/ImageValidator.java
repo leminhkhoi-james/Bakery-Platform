@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ImageValidator {
-    public record Image(byte[] bytes, String mediaType, int width, int height) {}
+    public record Image(byte[] bytes, String mediaType, int width, int height, java.util.Map<String, Object> provenance) {
+        public Image(byte[] bytes, String mediaType, int width, int height) { this(bytes, mediaType, width, height, java.util.Map.of()); }
+        public Image { provenance = java.util.Map.copyOf(provenance); }
+    }
 
     public Image validate(byte[] bytes) {
         if (bytes == null || bytes.length == 0 || bytes.length > 10 * 1024 * 1024)

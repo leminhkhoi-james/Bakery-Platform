@@ -1,6 +1,7 @@
 package com.se193262.cakeaiservice.infrastructure.scheduler;
 
 import com.se193262.cakeaiservice.config.CakeAiProperties;
+import com.se193262.cakeaiservice.config.GenerationPolicy;
 import com.se193262.cakeaiservice.feature.generation.*;
 import com.se193262.cakeaiservice.infrastructure.storage.ImageStorage;
 import jakarta.annotation.PreDestroy;
@@ -20,10 +21,11 @@ public class GenerationScheduler {
     private final Clock clock;
     private final ExecutorService executor;
     private final Semaphore slots;
+    private final GenerationPolicy policy;
 
     public GenerationScheduler(GenerationQueue queue, GenerationWorker worker, ImageStorage storage,
-            CakeAiProperties properties, Clock clock) {
-        this.queue = queue; this.worker = worker; this.storage = storage; this.clock = clock;
+            CakeAiProperties properties, Clock clock, GenerationPolicy policy) {
+        this.queue = queue; this.worker = worker; this.storage = storage; this.clock = clock; this.policy = policy;
         int count = Math.max(1, Math.min(16, properties.workers()));
         executor = Executors.newFixedThreadPool(count);
         slots = new Semaphore(count);
@@ -31,6 +33,7 @@ public class GenerationScheduler {
 
     @Scheduled(fixedDelayString = "${cake-ai.poll-delay-ms:1000}")
     public void poll() {
+        if (!policy.enabled()) return;
         queue.recoverExpired();
         while (slots.tryAcquire()) {
             try {
@@ -46,6 +49,7 @@ public class GenerationScheduler {
 
     @Scheduled(fixedDelayString = "${cake-ai.cleanup-delay-ms:3600000}", initialDelayString = "${cake-ai.cleanup-delay-ms:3600000}")
     public void cleanup() {
+        if (!policy.cleanupEnabled()) return;
         try {
             Instant cutoff = clock.instant().minus(Duration.ofHours(24));
             for (var object : storage.scan(100)) {

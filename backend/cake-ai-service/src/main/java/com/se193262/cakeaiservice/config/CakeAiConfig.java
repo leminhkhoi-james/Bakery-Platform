@@ -4,5 +4,5 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(CakeAiProperties.class)
+@EnableConfigurationProperties({CakeAiProperties.class, GenerationPolicy.class})
 public class CakeAiConfig {}

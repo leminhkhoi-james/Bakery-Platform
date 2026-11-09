@@ -13,21 +13,21 @@ before(async () => {
 })
 after(async () => { await vite?.close() })
 const render = (component, props, user) => renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user } }, React.createElement(component, props)))
-test('Address picker reports the missing original API and exposes no input or write control', () => {
-  const html = render(Picker, {})
-  assert.match(html, /Hiện chưa thể chọn địa chỉ/); assert.match(html, /role="status"/)
-  assert.doesNotMatch(html, /<select|<form|<input|<button/)
+test('Address picker shows the empty address state and allows adding an address', () => {
+  const html = render(Picker, { resource: { data: [], status: 'ready' } })
+  assert.match(html, /Chưa có địa chỉ nhận bánh/)
+  assert.match(html, /Thêm địa chỉ/)
 })
-test('Checkout and accept remain disabled for anonymous, Vendor and Customer users', () => {
-  for (const user of [null, { id: 'vendor', roles: ['BAKERY_OWNER'] }, { id: 'customer', roles: ['CUSTOMER'] }]) {
-    for (const props of [{ offerId: 'existing-offer' }, { items: [] }]) {
-      const html = render(Checkout, props, user)
-      assert.match(html, /Hiện chưa thể chọn địa chỉ/); assert.match(html, /disabled=""/)
-      assert.doesNotMatch(html, /<form|<input|<select|Thử lại cùng yêu cầu|Thanh toán thành công/)
-    }
-  }
+test('Checkout requires a customer and a verified address before ordering', () => {
+  const item = { catalogSource: 'backend', productId: 'a1000000-0000-4000-8000-000000000001', bakeryId: 'a1000000-0000-4000-8000-000000000002' }
+  assert.match(render(Checkout, { items: [item] }, { id: 'owner', roles: ['BAKERY_OWNER'] }), /đăng nhập tài khoản khách hàng/)
+  const customer = { id: 'customer', roles: ['CUSTOMER'] }
+  assert.match(render(Checkout, { items: [] }, customer), /Chưa có sản phẩm hoặc báo giá API hợp lệ/)
+  assert.match(render(Checkout, { items: [item] }, customer), /<button disabled=""[^>]*>Đặt hàng/)
 })
-test('Cart retains its empty/catalog entry UI while explicitly blocking checkout', () => {
+test('Empty cart retains its catalog entry without the obsolete address blocker', () => {
   const html = render(Cart, { cartItems: [], onNavigate() {} })
-  assert.match(html, /Giỏ hàng đang trống/); assert.match(html, /Khám phá bánh/); assert.match(html, /Hiện chưa thể chọn địa chỉ/)
+  assert.match(html, /Giỏ hàng đang trống/)
+  assert.match(html, /Khám phá bánh/)
+  assert.doesNotMatch(html, /Hiện chưa thể chọn địa chỉ/)
 })

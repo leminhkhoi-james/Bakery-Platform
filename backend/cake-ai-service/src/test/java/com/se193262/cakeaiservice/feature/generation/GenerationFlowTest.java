@@ -235,7 +235,9 @@ class GenerationFlowTest {
     void complete_crossJobRevision_rollsBack() {
         var first = create("first");
         var firstExecution = queue.claim().orElseThrow();
+        actor(UUID.randomUUID(), "CUSTOMER");
         var second = create("second");
+        actor(customerId, "CUSTOMER");
         var revision = repository.revisions(second.id()).getFirst();
         var invalid = new GenerationData.Design(UUID.randomUUID(), first.id(), revision.id(), firstExecution.id(),
                 "cake-ai/designs/test", null, "image/png", 1L, 1, 1, "APPROVED", "test", java.time.Instant.now());
@@ -252,6 +254,120 @@ class GenerationFlowTest {
         service.cancel(job.id());
         assertFalse(queue.isReferencedOrActive("cake-ai/designs/" + job.id() + "/temporary"));
         assertTrue(queue.isReferencedOrActive("marketplace/requests/" + job.id() + "/image"));
+    }
+
+    @Test @DisplayName("Failed RFQ admission creates no job and never calls the provider")
+    void create_unverifiedRfq_hasNoSideEffects() {
+        doThrow(BusinessException.unavailable()).when(marketplace).validate(any(), any());
+        assertEquals(503, assertThrows(BusinessException.class, () -> create("denied")).status());
+        assertEquals(0L, jdbc.sql("select count(*) from generation_jobs").query(Long.class).single());
+        verify(provider, never()).generate(anyString(), anyString(), anyString(), anyList());
+        verify(provider, never()).moderate(anyString(), anyList());
+        verify(storage, never()).upload(anyString(), any(), anyString());
+    }
+
+    @Test @DisplayName("Worker rechecks ownership and makes no provider call after validation outage")
+    void run_contextOutage_failsBeforeProvider() {
+        var job = create("worker-outage");
+        doThrow(BusinessException.unavailable()).when(marketplace).validate(any(), any());
+        worker.run(queue.claim().orElseThrow());
+        assertEquals("FAILED", service.detail(job.id()).job().status());
+        assertEquals(0L, jdbc.sql("select count(*) from generation_provider_calls").query(Long.class).single());
+        verify(provider, never()).moderate(anyString(), anyList());
+    }
+
+    @Test @DisplayName("An RFQ becoming ineligible after input moderation cannot generate an image")
+    void run_rfqStateChanges_stopsBeforeImage() {
+        var job = create("state-change");
+        doNothing().doThrow(BusinessException.conflict()).when(marketplace).validate(any(), any());
+        worker.run(queue.claim().orElseThrow());
+        assertEquals("FAILED", service.detail(job.id()).job().status());
+        verify(provider, never()).generate(anyString(), anyString(), anyString(), anyList());
+        assertEquals(1L, jdbc.sql("select count(*) from generation_provider_calls").query(Long.class).single());
+    }
+
+    @Test @DisplayName("Raw storage paths never disclose bytes for anonymous or authenticated users")
+    void rawMedia_knownKey_isRetired() throws Exception {
+        SecurityContextHolder.clearContext();
+        mvc.perform(get("/storage/cake-ai/designs/synthetic")).andExpect(status().isNotFound());
+        mvc.perform(get("/storage/cake-ai/designs/synthetic").with(jwt().jwt(j -> j.claim("token_type", "user"))))
+                .andExpect(status().isNotFound());
+        verify(storage, never()).read(anyString());
+    }
+
+    @Test @DisplayName("Admin discovers and previews pending designs, records decisions and prevents repeat transitions")
+    void admin_pendingQueueAndAudit_areAuthorized() throws Exception {
+        when(provider.moderate(anyString(), anyList())).thenReturn(ImageProvider.Moderation.APPROVED, ImageProvider.Moderation.PENDING);
+        var job = create("admin-queue"); worker.run(queue.claim().orElseThrow());
+        UUID designId = service.detail(job.id()).generatedDesigns().getFirst().id();
+        SecurityContextHolder.clearContext();
+        mvc.perform(get("/api/v1/admin/generated-designs")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/admin/generated-designs").with(jwt().jwt(j -> j.claim("token_type", "user"))
+                .authorities(new SimpleGrantedAuthority("ROLE_CUSTOMER")))).andExpect(status().isForbidden());
+        actor(UUID.randomUUID(), "CUSTOMER");
+        assertEquals(403, assertThrows(BusinessException.class, () -> designs.get(designId)).status());
+        UUID admin = UUID.randomUUID(); actor(admin, "ADMIN");
+        var page = designs.pending("PENDING", 0, 20);
+        assertEquals(1, page.totalElements()); assertNotNull(page.content().getFirst().imageUrl());
+        assertEquals(requestId, page.content().getFirst().cakeRequestId());
+        var approved = designs.moderate(designId, "APPROVED", "Reviewed synthetic cake");
+        assertEquals(admin, approved.moderatedBy()); assertNotNull(approved.moderatedAt());
+        assertEquals(1, approved.moderationHistory().size());
+        assertEquals("Reviewed synthetic cake", approved.moderationHistory().getFirst().reason());
+        assertEquals(409, assertThrows(BusinessException.class, () -> designs.moderate(designId, "REJECTED")).status());
+        assertEquals(0, designs.pending("PENDING", 0, 20).totalElements());
+        assertThrows(BusinessException.class, () -> designs.pending("INVALID", 0, 20));
+        assertThrows(BusinessException.class, () -> designs.pending("PENDING", -1, 20));
+    }
+
+    @Test @DisplayName("Fresh idempotency keys cannot bypass active-execution limits")
+    void create_activeLimit_isAtomicAndReplayStillWorks() {
+        var first = create("original");
+        assertEquals(first, create("original"));
+        assertEquals(429, assertThrows(BusinessException.class, () -> create("new-key")).status());
+        assertEquals(1L, jdbc.sql("select count(*) from generation_jobs").query(Long.class).single());
+    }
+
+    @Test @DisplayName("Cancellation does not refund reserved daily budget and another actor cannot bypass the global limit")
+    void create_dailyBudget_survivesCancellationAndAccountSwitch() {
+        for (int i = 0; i < 3; i++) { var job = create("cancel-" + i); service.cancel(job.id()); }
+        assertEquals(429, assertThrows(BusinessException.class, () -> create("fourth")).status());
+        actor(UUID.randomUUID(), "CUSTOMER");
+        assertEquals(429, assertThrows(BusinessException.class, () -> create("another-actor")).status());
+        assertEquals(3L, jdbc.sql("select count(*) from generation_jobs").query(Long.class).single());
+    }
+
+    @Test @DisplayName("Legacy unbudgeted queued work cannot incur provider costs")
+    void run_unreservedExecution_failsBeforeCall() {
+        var job = create("legacy-budget");
+        jdbc.sql("update generation_executions set reserved_provider_calls=0 where generation_job_id=:job")
+                .param("job", job.id()).update();
+        worker.run(queue.claim().orElseThrow());
+        assertEquals("FAILED", service.detail(job.id()).job().status());
+        verify(provider, never()).moderate(anyString(), anyList());
+    }
+
+    @Test @DisplayName("Concurrent Admin decisions create exactly one durable audit event")
+    void admin_concurrentDecisions_onlyOneWins() throws Exception {
+        when(provider.moderate(anyString(), anyList())).thenReturn(ImageProvider.Moderation.APPROVED, ImageProvider.Moderation.PENDING);
+        var job = create("concurrent-review"); worker.run(queue.claim().orElseThrow());
+        UUID id = service.detail(job.id()).generatedDesigns().getFirst().id();
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var gate = new CountDownLatch(1);
+            var results = new ArrayList<Future<Boolean>>();
+            for (String decision : List.of("APPROVED", "REJECTED")) results.add(pool.submit(() -> {
+                actor(UUID.randomUUID(), "ADMIN"); gate.await();
+                try { designs.moderate(id, decision, "Concurrent synthetic decision"); return true; }
+                catch (BusinessException error) { assertEquals(409, error.status()); return false; }
+                finally { SecurityContextHolder.clearContext(); }
+            }));
+            gate.countDown(); int successes = 0; for (var result : results) if (result.get()) successes++;
+            assertEquals(1, successes);
+        }
+        assertEquals(1L, jdbc.sql("select count(*) from design_moderation_events").query(Long.class).single());
+        actor(customerId, "CUSTOMER");
+        var result = designs.get(id);
+        if ("REJECTED".equals(result.moderationStatus())) assertNull(result.imageUrl());
     }
 
     private CreateGenerationJobRequest command() { return new CreateGenerationJobRequest(requestId, "Pink cake", null, null); }

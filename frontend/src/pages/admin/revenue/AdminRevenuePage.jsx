@@ -1,36 +1,66 @@
-import React, { useMemo, useState } from 'react'
+import { unifiedIssues, recordSource, unifiedSnapshot, unifiedMetrics } from '../../../services/unifiedDataService.js'
+import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
+import React, { useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { DataTable, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { ApiErrorMessage } from '../../../components/management/ApiState.jsx'
-import { loadApprovedRevenue, loadAdminPending } from '../../../services/adminSummaryService.js'
+import { loadRevenuePayments, loadAdminPending } from '../../../services/adminSummaryService.js'
 import { loadAdminPlans } from '../../../services/adminManagementService.js'
-import { paymentDateRange } from '../../../services/adminFilterModels.js'
+import { approvalDate, approvedPayments, businessDateSelected, businessDay, settledBusinessSales } from '../../../mockData/business/metrics.js'
+import { subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
 import { dashboardMoney, dashboardNumber, dashboardDateTime } from '../../../services/adminDashboardModels.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
-import { planName, planCodeLabel, sortPlansByTier } from '../../../services/planPresentation.js'
+import { planName, sortPlansByTier } from '../../../services/planPresentation.js'
 import './admin-revenue.css'
 
 function getPresetDates(preset) {
   const now = new Date()
-  const todayStr = now.toISOString().slice(0, 10)
+  const todayStr = businessDay(now)
   if (preset === 'today') {
     return { from: todayStr, to: todayStr }
   }
   if (preset === '7days') {
-    const d = new Date(now.getTime() - 7 * 86400000)
-    return { from: d.toISOString().slice(0, 10), to: todayStr }
+    const d = new Date(now.getTime() - 6 * 86400000)
+    return { from: businessDay(d), to: todayStr }
   }
   if (preset === '30days') {
-    const d = new Date(now.getTime() - 30 * 86400000)
-    return { from: d.toISOString().slice(0, 10), to: todayStr }
+    const d = new Date(now.getTime() - 29 * 86400000)
+    return { from: businessDay(d), to: todayStr }
   }
   if (preset === 'month') {
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)
+    const firstDay = todayStr.slice(0, 7) + '-01'
     return { from: firstDay, to: todayStr }
   }
   return { from: '', to: '' }
+}
+
+function groupMonthlyRevenue(rows, dateOf, amountOf) {
+  const totals = new Map()
+  for (const row of rows) {
+    const month = businessDay(dateOf(row)).slice(0, 7)
+    if (!month) continue
+    totals.set(month, (totals.get(month) || 0) + amountOf(row))
+  }
+  return totals
+}
+
+function MonthlyRevenueChart({ title, series }) {
+  if (!series.size) return null
+  const peak = Math.max(1, ...series.values())
+  return <section className="sc-revenue-month-chart" aria-label={title}>
+    <h4>{title}</h4>
+    {[...series].sort(([first], [second]) => first.localeCompare(second)).map(([month, amount]) => (
+      <div key={month} className="sc-revenue-month-row">
+        <span>{month.slice(5)}/{month.slice(0, 4)}</span>
+        <div className="sc-revenue-plan-bar-track" aria-hidden="true">
+          <div className="sc-revenue-plan-bar-fill" style={{ width: `${(amount / peak) * 100}%` }} />
+        </div>
+        <strong>{dashboardMoney(amount, 'VND')}</strong>
+      </div>
+    ))}
+  </section>
 }
 
 export default function AdminRevenuePage({ onNavigate }) {
@@ -39,27 +69,12 @@ export default function AdminRevenuePage({ onNavigate }) {
   const [appliedDates, setAppliedDates] = useState({ from: '', to: '' })
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [breakdownSource, setBreakdownSource] = useState('local')
+  const [statusFilter, setStatusFilter] = useState('')
   const [detailModal, setDetailModal] = useState(null)
   const [dateError, setDateError] = useState(null)
 
-  // 1. Build date range filter matching Backend API (@RequestParam submittedFrom, submittedTo)
-  const dateParams = useMemo(() => {
-    try {
-      if (!appliedDates.from && !appliedDates.to) return {}
-      const fromStr = appliedDates.from ? `${appliedDates.from}T00:00:00` : ''
-      const toStr = appliedDates.to ? `${appliedDates.to}T23:59:59` : ''
-      return paymentDateRange(fromStr || undefined, toStr || undefined)
-    } catch {
-      return {}
-    }
-  }, [appliedDates])
-
-  // 2. Query Approved payments matching backend contract: /api/v1/admin/bakery-payments?status=APPROVED
-  const paymentsResource = useCatalogResource(loadApprovedRevenue, {
-    status: 'APPROVED',
-    sort: 'submittedAt,desc',
-    ...dateParams,
-  })
+  const paymentsResource = useCatalogResource(loadRevenuePayments)
 
   // 3. Load plans to ensure all tiers (Khởi đầu, Nghệ nhân, Chuyên nghiệp) are represented
   const plansResource = useCatalogResource(loadAdminPlans)
@@ -107,17 +122,31 @@ export default function AdminRevenuePage({ onNavigate }) {
     setDraftDates({ from: '', to: '' })
     setAppliedDates({ from: '', to: '' })
     setSearch('')
+    setStatusFilter('')
     setPage(1)
   }
 
-  // Calculations for KPI in selected period
-  const rawPayments = useMemo(() => paymentsResource.data || [], [paymentsResource.data])
-  const totalApprovedTransactions = paymentsResource.status === 'ready' ? rawPayments.length : null
+  const allPayments = paymentsResource.data || []
+  const inPeriod = payment => businessDateSelected(payment.reviewedAt || payment.submittedAt, appliedDates.from, appliedDates.to)
+  const approvalInPeriod = payment => businessDateSelected(approvalDate(payment), appliedDates.from, appliedDates.to)
+  const payments = allPayments.filter(payment => payment.status === 'APPROVED' ? approvalInPeriod(payment) : inPeriod(payment))
+  const ready = paymentsResource.status === 'ready'
+  const apiReady = ready && !unifiedIssues().some(issue => issue.source === 'api' && issue.path === '/admin/bakery-payments')
+  const localReady = ready && !unifiedIssues().some(issue => issue.source === 'local' && issue.path === '/admin/bakery-payments')
+  const realPayments = approvedPayments(allPayments.filter(row => recordSource(row) === 'api')).filter(approvalInPeriod)
+  const simulatedPayments = approvedPayments(allPayments.filter(row => recordSource(row) === 'local')).filter(approvalInPeriod)
+  const sum = rows => rows.reduce((total, row) => total + row.amount, 0)
+  const realRevenue = apiReady ? sum(realPayments) : null
+  const simulatedRevenue = localReady ? sum(simulatedPayments) : null
+  const snapshot = unifiedSnapshot()
+  const simulatedSales = snapshot ? unifiedMetrics(snapshot, appliedDates).simulationSalesRevenue : null
+  const totalApprovedTransactions = ready ? realPayments.length + simulatedPayments.length : null
+  const rawPayments = breakdownSource === 'local' ? simulatedPayments : realPayments
 
-  const filteredPayments = useMemo(() => {
-    if (!search.trim()) return rawPayments
+  const filteredPayments = (() => {
     const q = search.toLowerCase().trim()
-    return rawPayments.filter((p) => {
+    return payments.filter((p) => {
+      if (statusFilter && p.status !== statusFilter) return false
       const bName = p.context?.profile?.bakery?.name || p.submittedByName || ''
       const pName = planName({ name: p.context?.order?.planNameSnapshot, code: p.context?.order?.planCodeSnapshot })
       const ref = p.paymentReference || p.id || ''
@@ -127,22 +156,25 @@ export default function AdminRevenuePage({ onNavigate }) {
         ref.toLowerCase().includes(q)
       )
     })
-  }, [rawPayments, search])
+  })()
 
-  // Total period revenue
-  const periodTotalRevenue = useMemo(() => {
-    if (paymentsResource.status !== 'ready') return null
-    return rawPayments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
-  }, [rawPayments, paymentsResource.status])
+  const periodTotalRevenue = breakdownSource === 'local' ? simulatedRevenue : realRevenue
+
+  const countedPayments = new Set([...realPayments, ...simulatedPayments].map(row => row.id))
+  const monthlyRevenue = groupMonthlyRevenue(rawPayments, approvalDate, payment => payment.amount)
+  const settledSales = snapshot
+    ? settledBusinessSales({ ...snapshot, orders: snapshot.orders.filter(order => recordSource(order) === 'local') }, appliedDates)
+    : []
+  const monthlySales = groupMonthlyRevenue(settledSales, row => row.recognizedAt, row => row.order.totalAmount)
 
   // Revenue breakdown by plan tier
-  const planTiers = useMemo(() => {
+  const planTiers = (() => {
     const plans = plansResource.data || []
     const breakdown = {}
 
     // Initialize all plans
     for (const plan of plans) {
-      breakdown[plan.id] = {
+      breakdown[plan.code || plan.id] = {
         id: plan.id,
         code: plan.code,
         name: planName(plan),
@@ -154,24 +186,33 @@ export default function AdminRevenuePage({ onNavigate }) {
 
     // Accumulate from approved payments
     for (const p of rawPayments) {
-      const planId = p.context?.order?.planId
+      const planId = p.context?.order?.planCodeSnapshot || p.context?.order?.planId || 'UNKNOWN'
       const pName = planName({ name: p.context?.order?.planNameSnapshot, code: p.context?.order?.planCodeSnapshot })
       if (planId && breakdown[planId]) {
         breakdown[planId].revenue += Number(p.amount) || 0
         breakdown[planId].count += 1
-      } else if (planId) {
-        breakdown[planId] = { id: planId, code: p.context?.order?.planCodeSnapshot || 'CUSTOM', name: pName, revenue: Number(p.amount), count: 1 }
+      } else {
+        breakdown[planId] = { id: planId, code: p.context?.order?.planCodeSnapshot || 'CUSTOM', name: planId === 'UNKNOWN' ? 'Chưa xác định gói' : pName, revenue: Number(p.amount), count: 1 }
       }
     }
 
-    return sortPlansByTier(Object.values(breakdown))
-  }, [plansResource.data, rawPayments])
+    const tiers = sortPlansByTier(Object.values(breakdown))
+    if (!periodTotalRevenue) return tiers.map(tier => ({ ...tier, share: 0 }))
+    const shares = tiers.map(tier => {
+      const exact = tier.revenue / periodTotalRevenue * 100
+      return { ...tier, share: Math.floor(exact), fraction: exact % 1 }
+    })
+    const remaining = 100 - shares.reduce((total, tier) => total + tier.share, 0)
+    const remainderOrder = [...shares].sort((a, b) => b.fraction - a.fraction)
+    remainderOrder.slice(0, remaining).forEach(tier => { tier.share++ })
+    return shares
+  })()
 
   // Top performing plan
-  const topPlan = useMemo(() => {
+  const topPlan = (() => {
     if (!planTiers.length) return null
     return [...planTiers].sort((a, b) => b.revenue - a.revenue)[0]
-  }, [planTiers])
+  })()
 
   return (
     <AdminFrame
@@ -184,10 +225,10 @@ export default function AdminRevenuePage({ onNavigate }) {
           <div className="sc-revenue-top-title-wrap">
             <span className="sc-revenue-top-badge">
               <Icon name="verified_user" />
-              Doanh thu đã đối soát
+              Doanh thu theo nguồn
             </span>
             <span className="sc-revenue-top-desc">
-              Chỉ ghi nhận từ các giao dịch thanh toán gói dịch vụ đã được phê duyệt hợp lệ.
+              Doanh thu gói được ghi nhận theo ngày duyệt. Doanh thu bán bánh mô phỏng ghi nhận khi đơn đã hoàn tất và đã thu tiền.
             </span>
           </div>
 
@@ -332,7 +373,7 @@ export default function AdminRevenuePage({ onNavigate }) {
             <div className="sc-revenue-status-chip">
               <span className="sc-revenue-status-dot" aria-hidden="true" />
               <span>
-                Đã đối soát: <strong>{dashboardNumber(totalApprovedTransactions)}</strong> giao dịch
+                Đã duyệt (hai nguồn): <strong>{dashboardNumber(totalApprovedTransactions)}</strong> giao dịch
                 {search && filteredPayments.length !== totalApprovedTransactions && (
                   <span className="sc-revenue-status-match">
                     {' '}(khớp <strong>{filteredPayments.length}</strong>)
@@ -350,41 +391,38 @@ export default function AdminRevenuePage({ onNavigate }) {
           )}
         </section>
 
-        {/* 3 Financial KPI Cards */}
+        {/* Financial KPI Cards */}
         <section className="sc-revenue-kpi-grid" aria-label="Chỉ số doanh thu trong kỳ">
-          <article className="sc-revenue-kpi-card sc-revenue-kpi-card--hero">
+          <article className="sc-revenue-kpi-card sc-revenue-kpi-card--hero" aria-label="Gói dịch vụ thực nhận">
             <div className="sc-revenue-kpi-top">
-              <span className="sc-revenue-kpi-label">Doanh thu trong kỳ</span>
+              <span className="sc-revenue-kpi-label">Gói dịch vụ thực nhận</span>
               <span className="sc-revenue-kpi-icon">
                 <Icon name="account_balance_wallet" />
               </span>
             </div>
             <div className="sc-revenue-kpi-value">
-              {loading ? '…' : dashboardMoney(periodTotalRevenue, 'VND')}
+              {loading ? '…' : dashboardMoney(realRevenue, 'VND')}
             </div>
             <div className="sc-revenue-kpi-sub">
-              {appliedDates.from || appliedDates.to
-                ? 'Thực thu theo khoảng thời gian đã chọn'
-                : 'Tổng doanh thu gói dịch vụ đã duyệt'}
+              Chứng từ Backend đã duyệt
             </div>
+          </article>
+
+          <article className="sc-revenue-kpi-card" aria-label="Gói dịch vụ mô phỏng">
+            <div className="sc-revenue-kpi-label">Gói dịch vụ mô phỏng</div>
+            <div className="sc-revenue-kpi-value">{loading ? '…' : dashboardMoney(simulatedRevenue, 'VND')}</div>
+            <div className="sc-revenue-kpi-sub">{simulatedPayments.length} chứng từ trình duyệt đã duyệt</div>
+          </article>
+
+          <article className="sc-revenue-kpi-card" aria-label="Bán bánh mô phỏng">
+            <div className="sc-revenue-kpi-label">Bán bánh mô phỏng</div>
+            <div className="sc-revenue-kpi-value">{dashboardMoney(simulatedSales, 'VND')}</div>
+            <div className="sc-revenue-kpi-sub">Đơn hoàn tất và đã ghi thu trong trình duyệt</div>
           </article>
 
           <article className="sc-revenue-kpi-card">
             <div className="sc-revenue-kpi-top">
-              <span className="sc-revenue-kpi-label">Giao dịch thành công</span>
-              <span className="sc-revenue-kpi-icon">
-                <Icon name="verified" />
-              </span>
-            </div>
-            <div className="sc-revenue-kpi-value">
-              {loading ? '…' : dashboardNumber(totalApprovedTransactions)}
-            </div>
-            <div className="sc-revenue-kpi-sub">Khoản thanh toán đã đối chiếu khớp lệnh</div>
-          </article>
-
-          <article className="sc-revenue-kpi-card">
-            <div className="sc-revenue-kpi-top">
-              <span className="sc-revenue-kpi-label">Gói đóng góp cao nhất</span>
+              <span className="sc-revenue-kpi-label">Gói cao nhất · {breakdownSource === 'local' ? 'Mô phỏng' : 'Thực nhận'}</span>
               <span className="sc-revenue-kpi-icon">
                 <Icon name="workspace_premium" />
               </span>
@@ -401,24 +439,25 @@ export default function AdminRevenuePage({ onNavigate }) {
         {/* Revenue Breakdown by Plan Tier */}
         {paymentsResource.error && <ApiErrorMessage error={paymentsResource.error} retry={paymentsResource.reload} />}
         {plansResource.error && <ApiErrorMessage error={plansResource.error} retry={plansResource.reload} />}
-        {!paymentsResource.error && planTiers.length > 0 && (
+        {(plansResource.data || paymentsResource.data) && (
           <section className="sc-revenue-breakdown-panel">
             <div className="sc-revenue-breakdown-heading">
               <h3>
                 <Icon name="pie_chart" />
-                Cơ cấu doanh thu theo gói dịch vụ
+                Cơ cấu doanh thu theo gói
               </h3>
-              <span className="text-xs text-muted">
-                {planTiers.filter((p) => p.revenue > 0).length} / {planTiers.length} gói có phát sinh doanh thu
-              </span>
+              <label>Nguồn cơ cấu gói
+                <select className="sc-input ml-2" value={breakdownSource} onChange={event => setBreakdownSource(event.target.value)}>
+                  <option value="local">Mô phỏng</option><option value="api">Thực nhận</option>
+                </select>
+              </label>
             </div>
+
+            {periodTotalRevenue !== null && <MonthlyRevenueChart title="Doanh thu gói theo tháng" series={monthlyRevenue} />}
 
             <div className="sc-revenue-plan-cards">
               {planTiers.map((tier) => {
-                const percentage =
-                  periodTotalRevenue > 0
-                    ? Math.round((tier.revenue / periodTotalRevenue) * 100)
-                    : 0
+                const percentage = tier.share
                 return (
                   <div key={tier.id} className="sc-revenue-plan-card">
                     <div className="sc-revenue-plan-header">
@@ -426,7 +465,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                     </div>
 
                     <div className="sc-revenue-plan-amount">
-                      {dashboardMoney(tier.revenue, 'VND')}
+                      {dashboardMoney(periodTotalRevenue === null ? null : tier.revenue, 'VND')}
                     </div>
 
                     <div className="sc-revenue-plan-bar-track">
@@ -437,7 +476,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                     </div>
 
                     <div className="sc-revenue-plan-meta">
-                      <span>Đã kích hoạt: {tier.count} kỳ</span>
+                      <span>Chứng từ đã duyệt: {tier.count}</span>
                       <strong className="text-primary">{percentage}% doanh thu</strong>
                     </div>
 
@@ -453,13 +492,19 @@ export default function AdminRevenuePage({ onNavigate }) {
 
         {/* Authoritative Revenue Transactions Table */}
         <section className="sc-revenue-table-panel">
+          <label className="mb-3 block">Trạng thái giao dịch
+            <select className="sc-input ml-2" value={statusFilter} onChange={event => { setStatusFilter(event.target.value); setPage(1) }}>
+              <option value="">Tất cả</option>
+              {['APPROVED', 'SUBMITTED', 'REJECTED'].map(status => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}
+            </select>
+          </label>
           <div className="sc-revenue-table-toolbar">
             <div>
               <h3 className="sc-revenue-table-title">
-                Chi tiết các giao dịch thực thu
+                Lịch sử giao dịch gói dịch vụ
               </h3>
               <p className="text-xs text-muted mt-1">
-                Các khoản thanh toán gói đã được phê duyệt trong khoảng thời gian đã chọn.
+                Giao dịch từ Backend và dữ liệu mô phỏng trong khoảng thời gian đã chọn.
               </p>
             </div>
             {search && (
@@ -485,7 +530,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                     <th>Gói dịch vụ</th>
                     <th className="sc-money">Số tiền</th>
                     <th>Mã GD / Phương thức</th>
-                    <th>Thời gian duyệt</th>
+                    <th>Thời gian / Trạng thái</th>
                     <th className="sc-table-actions">Biên lai</th>
                   </tr>
                 </thead>
@@ -505,23 +550,24 @@ export default function AdminRevenuePage({ onNavigate }) {
                         </td>
                         <td>
                           <strong>{cleanPresentationLabel(bakeryName)}</strong>
-                          <small>{payment.submittedByName || 'Chủ tiệm bánh'}</small>
+                          <small>{recordSource(payment) === 'local' ? 'Mô phỏng' : 'Backend'} · {payment.submittedByName || 'Chủ tiệm bánh'}</small>
                         </td>
                         <td>
                           <span className="font-semibold text-primary">{planDisplayName}</span>
                           <small className="block text-xs text-muted">
-                            Kỳ: {payment.context?.order?.billingPeriodMonths || 1} tháng
+                            Kỳ: {payment.context?.order?.billingPeriodMonths ? payment.context.order.billingPeriodMonths + ' tháng' : '—'}
                           </small>
                         </td>
                         <td className="sc-money text-emerald-700 font-bold">
-                          +{dashboardMoney(payment.amount, payment.currency || 'VND')}
+                          {dashboardMoney(payment.amount, payment.currency)}
                         </td>
                         <td>
-                          <strong>{payment.paymentReference || 'Chuyển khoản QR'}</strong>
-                          <small>{payment.paymentMethod || 'Vietcombank'}</small>
+                          <strong>{payment.paymentReference || '—'}</strong>
+                          <small>{payment.paymentMethod || '—'}</small>
                         </td>
                         <td>
-                          {dashboardDateTime(payment.reviewedAt || payment.submittedAt)}
+                          {dashboardDateTime(payment.status === 'APPROVED' ? approvalDate(payment) : payment.reviewedAt || payment.submittedAt)}<small>{subscriptionStatusLabel(payment.status)}</small>
+                          {payment.status === 'APPROVED' && !countedPayments.has(payment.id) && <small>Không tính lại vào doanh thu</small>}
                         </td>
                         <td className="sc-table-actions">
                           <button
@@ -556,6 +602,12 @@ export default function AdminRevenuePage({ onNavigate }) {
         </section>
 
         {/* Transaction Detail & Receipt Modal */}
+        {monthlySales.size > 0 && (
+          <section className="sc-revenue-breakdown-panel">
+            <MonthlyRevenueChart title="Doanh thu bán bánh mô phỏng theo tháng ghi nhận" series={monthlySales} />
+          </section>
+        )}
+
         {detailModal && (
           <div
             className="sc-revenue-modal-backdrop"
@@ -593,7 +645,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                     </strong>
                   </div>
                   <div className="sc-revenue-modal-cell">
-                    <small>Số tiền thực nhận</small>
+                    <small>Số tiền giao dịch</small>
                     <strong className="text-emerald-700 font-bold">
                       +{dashboardMoney(detailModal.amount, detailModal.currency || 'VND')}
                     </strong>
@@ -604,10 +656,10 @@ export default function AdminRevenuePage({ onNavigate }) {
                   </div>
                   <div className="sc-revenue-modal-cell">
                     <small>Phương thức</small>
-                    <strong>{detailModal.paymentMethod || 'Chuyển khoản Vietcombank'}</strong>
+                    <strong>{detailModal.paymentMethod || '—'}</strong>
                   </div>
                   <div className="sc-revenue-modal-cell">
-                    <small>Thời gian duyệt</small>
+                    <small>{detailModal.reviewedAt ? 'Thời gian xử lý' : 'Thời gian gửi'}</small>
                     <strong>
                       {dashboardDateTime(
                         detailModal.reviewedAt || detailModal.submittedAt
@@ -674,6 +726,7 @@ export default function AdminRevenuePage({ onNavigate }) {
           </div>
         )}
       </div>
+      <BusinessSimulationReport loadHistory dates={appliedDates} />
     </AdminFrame>
   )
 }

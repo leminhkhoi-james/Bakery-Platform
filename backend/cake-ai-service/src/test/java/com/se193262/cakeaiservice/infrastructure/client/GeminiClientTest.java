@@ -60,6 +60,8 @@ class GeminiClientTest {
         assertFalse(received.path("store").asBoolean(true));
         assertEquals("snapshot-model", received.path("model").asText());
         assertEquals("1K", received.path("response_format").path("image_size").asText());
+        assertEquals(4096, received.path("generation_config").path("max_output_tokens").asInt());
+        assertEquals("ISOLATED_HTTP_FIXTURE", actual.provenance().get("provider"));
     }
 
     @Test @DisplayName("Provider throttling is sanitized and never retried")
@@ -108,6 +110,28 @@ class GeminiClientTest {
                 () -> fastClient.generate("model", "cake", "1:1", List.of()));
         assertEquals("PROVIDER_RESULT_UNKNOWN", error.code());
         assertEquals(1, requests.get());
+    }
+
+    @Test @DisplayName("Missing key never generates Java2D or silently approves moderation")
+    void generate_missingKey_failsClosed() {
+        var unavailable = new GeminiClient(new CakeAiProperties("", "http://127.0.0.1:" + server.getAddress().getPort(),
+                "image-model", "moderation-model", Duration.ofSeconds(1), Duration.ofSeconds(1), 1,
+                Duration.ofMinutes(30), "", "", ""), json, new ImageValidator());
+        assertThrows(com.se193262.platform.exception.BusinessException.class,
+                () -> unavailable.generate("model", "cake", "1:1", List.of()));
+        assertEquals(ImageProvider.Moderation.PENDING, unavailable.moderate("cake", List.of()));
+        assertEquals(0, requests.get());
+    }
+
+    @Test @DisplayName("MIME mismatch and corrupt image bytes fail without local fallback")
+    void generate_invalidBytes_failsClosed() {
+        response = output(Map.of("type", "image", "mime_type", "image/jpeg", "data", Base64.getEncoder().encodeToString(image)));
+        assertEquals("INVALID_PROVIDER_IMAGE", assertThrows(ProviderException.class,
+                () -> client.generate("model", "cake", "1:1", List.of())).code());
+        response = output(Map.of("type", "image", "mime_type", "image/png", "data", "invalid"));
+        assertEquals("INVALID_PROVIDER_IMAGE", assertThrows(ProviderException.class,
+                () -> client.generate("model", "cake", "1:1", List.of())).code());
+        assertEquals(2, requests.get());
     }
 
     private String output(Map<String, Object> content) {

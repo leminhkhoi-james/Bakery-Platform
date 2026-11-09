@@ -20,7 +20,7 @@ class _AiModeNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       SCNotice(switch (LiveScope.of(context).session.environment.cakeAiMode) {
-        CakeAiMode.localFallback => 'Chế độ cục bộ: dịch vụ vẽ hình minh họa bánh, không gọi nhà cung cấp AI. Ảnh lưu tạm và mất khi dịch vụ khởi động lại.',
+        CakeAiMode.localFallback => 'Bản cài đặt đang khai báo chế độ cũ. Kiểm tra nguồn ảnh trên từng thiết kế; không dùng cấu hình ứng dụng để xác nhận nhà cung cấp.',
         CakeAiMode.providerConfigured => 'Môi trường có cấu hình nhà cung cấp. Trạng thái hoàn tất chưa xác nhận nguồn tạo ảnh; yêu cầu có thể phát sinh phí.',
         CakeAiMode.unknown => 'Chưa xác minh chế độ tạo ảnh của dịch vụ. Trạng thái hoàn tất không xác nhận ảnh được tạo bởi nhà cung cấp AI.',
       });
@@ -52,7 +52,7 @@ class LiveAiJobsPage extends StatelessWidget {
               outlined: true,
               onPressed: () => liveOpen(context, '/requests'),
             ),
-          if (request != null && request!['status'] == 'DRAFT')
+          if (request != null && ['DRAFT', 'OPEN'].contains(request!['status']))
             SCButton(
               'Tạo thiết kế',
               key: const ValueKey('ai-create'),
@@ -363,10 +363,9 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
               'Hủy tác vụ',
               key: const ValueKey('ai-cancel'),
               outlined: true,
+              confirm: () => confirmLive(context, 'Hủy tác vụ thiết kế?'),
               run: () async {
-                if (await confirmLive(context, 'Hủy tác vụ thiết kế?')) {
-                  await w.ai.cancel(widget.id);
-                }
+                await w.ai.cancel(widget.id);
               },
               after: reload,
             ),
@@ -411,11 +410,25 @@ class LiveAiDesignPage extends StatelessWidget {
       builder: (context, d, reload) => [
         const _AiModeNotice(),
         SCStatusBadge('${d['moderationStatus']}'),
-        if (d['moderationStatus'] == 'APPROVED')
+        Text(aiOriginLabel(d)),
+        if (admin && d['moderationStatus'] == 'PENDING')
+          const SCNotice(
+            'Bản xem trước dành cho quản trị viên. Khách chỉ được dùng ảnh sau khi được duyệt.',
+          ),
+        if (d['moderatedBy'] != null && d['moderatedAt'] != null)
+          Text('Quyết định ${displayInstant(d['moderatedAt'])}'),
+        for (final event in objects(d['moderationHistory'] ?? []))
+          Text(
+            '${event['decision']} · ${displayInstant(event['createdAt'])}\n${event['reason'] ?? ''}',
+          ),
+        if (d['moderationStatus'] == 'APPROVED' ||
+            admin && d['moderationStatus'] == 'PENDING')
           LiveMedia(
             d['imageUrl'] as String?,
             key: const ValueKey('ai-design-image'),
-            label: 'Thiết kế đã được duyệt',
+            label: admin && d['moderationStatus'] == 'PENDING'
+                ? 'Bản xem trước để duyệt'
+                : 'Thiết kế đã được duyệt',
             height: MediaQuery.orientationOf(context) == Orientation.landscape
                 ? 160
                 : (MediaQuery.sizeOf(context).width - 32)
@@ -455,6 +468,7 @@ class LiveAiDesignPage extends StatelessWidget {
           LiveCommand(
             'Chọn cho yêu cầu này',
             key: const ValueKey('ai-select'),
+            confirm: () => confirmLive(context, 'Chọn thiết kế cho yêu cầu?'),
             run: () async {
               final current = await w.marketplace.request(
                 apiId(request!['id']),
@@ -466,7 +480,7 @@ class LiveAiDesignPage extends StatelessWidget {
                 );
               }
               if (!context.mounted) return;
-              if (await confirmLive(context, 'Chọn thiết kế cho yêu cầu?')) {
+              {
                 await w.marketplace.selectDesign(apiId(current['id']), id);
                 final confirmed = await w.marketplace.request(
                   apiId(current['id']),
@@ -489,10 +503,14 @@ class LiveAiDesignPage extends StatelessWidget {
             if (d['moderationStatus'] != status)
               LiveCommand(
                 status == 'APPROVED' ? 'Duyệt thiết kế' : 'Từ chối thiết kế',
+                confirm: () => confirmLive(
+                  context,
+                  status == 'APPROVED'
+                      ? 'Duyệt thiết kế này?'
+                      : 'Từ chối thiết kế này?',
+                ),
                 run: () async {
-                  if (await confirmLive(context, 'Đổi trạng thái thiết kế?')) {
-                    await w.ai.moderate(id, status);
-                  }
+                  await w.ai.moderate(id, status);
                 },
                 after: reload,
               ),
@@ -502,6 +520,52 @@ class LiveAiDesignPage extends StatelessWidget {
           ),
         SCButton('Làm mới liên kết ảnh', outlined: true, onPressed: reload),
       ],
+    );
+  }
+}
+
+String aiOriginLabel(Json design) {
+  final metadata = object(design['providerMetadata'] ?? <String, dynamic>{});
+  if (metadata['provider'] == 'GOOGLE_GEMINI' &&
+      metadata['responseStatus'] == 'completed') {
+    return 'Nguồn ảnh: Google Gemini · ${metadata['returnedModel'] ?? metadata['requestedModel'] ?? ''}';
+  }
+  return 'Chưa có bằng chứng nguồn ảnh từ nhà cung cấp.';
+}
+
+class LiveAiModerationPage extends StatelessWidget {
+  const LiveAiModerationPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final w = LiveScope.of(context);
+    return LiveDomainList(
+      title: 'Duyệt thiết kế AI',
+      operational: true,
+      statuses: const ['PENDING', 'APPROVED', 'REJECTED'],
+      header: const Text(
+        'Chọn Chờ duyệt để kiểm tra ảnh trước khi khách sử dụng. Mỗi thiết kế chỉ nhận một quyết định.',
+      ),
+      load: w.ai.moderationQueue,
+      tile: (context, d) => SCCard(
+        key: ValueKey('admin-ai-${d['id']}'),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => LiveAiDesignPage(apiId(d['id']), admin: true),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SCStatusBadge('${d['moderationStatus']}'),
+            Text('Thiết kế ${d['id']}'),
+            Text('Yêu cầu ${d['cakeRequestId']}'),
+            Text(displayInstant(d['createdAt'])),
+            Text(aiOriginLabel(d)),
+            const Text('Mở ảnh và quyết định'),
+          ],
+        ),
+      ),
     );
   }
 }

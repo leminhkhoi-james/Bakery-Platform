@@ -42,12 +42,15 @@ management:
       show-details: never
       probes:
         enabled: true
+      group:
+        readiness:
+          include: readinessState,db,cakeAi
 
 cake-ai:
   api-key: ${CAKE_AI_API_KEY:}
   provider-url: ${CAKE_AI_PROVIDER_URL:https://generativelanguage.googleapis.com/v1beta}
-  image-model: ${CAKE_AI_IMAGE_MODEL:gemini-2.0-flash}
-  moderation-model: ${CAKE_AI_MODERATION_MODEL:gemini-2.0-flash}
+  image-model: ${CAKE_AI_IMAGE_MODEL:gemini-3.1-flash-image}
+  moderation-model: ${CAKE_AI_MODERATION_MODEL:gemini-3.5-flash}
   connect-timeout: ${CAKE_AI_CONNECT_TIMEOUT:5s}
   read-timeout: ${CAKE_AI_READ_TIMEOUT:120s}
   workers: ${CAKE_AI_WORKERS:2}
@@ -57,6 +60,23 @@ cake-ai:
   scheduler-enabled: ${CAKE_AI_SCHEDULER_ENABLED:true}
   poll-delay-ms: ${CAKE_AI_POLL_DELAY_MS:1000}
 
+
+  policy:
+    enabled: ${CAKE_AI_ENABLED:false}
+    require-admin-review: ${CAKE_AI_REQUIRE_ADMIN_REVIEW:false}
+    daily-executions-per-customer: ${CAKE_AI_DAILY_EXECUTIONS_PER_CUSTOMER:3}
+    active-executions-per-customer: ${CAKE_AI_ACTIVE_EXECUTIONS_PER_CUSTOMER:1}
+    daily-provider-requests: ${CAKE_AI_DAILY_PROVIDER_REQUESTS:9}
+    image-output-tokens: ${CAKE_AI_IMAGE_OUTPUT_TOKENS:4096}
+    moderation-output-tokens: ${CAKE_AI_MODERATION_OUTPUT_TOKENS:1024}
+    cleanup-enabled: ${CAKE_AI_CLEANUP_ENABLED:false}
+    max-designs-per-execution: ${CAKE_AI_MAX_DESIGNS_PER_EXECUTION:4}
+
+
 server:
   port: ${SERVER_PORT:8085}
 
+logging:
+  level:
+    org.springframework.web.client: INFO
+    org.springframework.http.converter: INFO

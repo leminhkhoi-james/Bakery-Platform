@@ -15,18 +15,18 @@ before(async () => {
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load,params){globalThis.__vendorQuery=params;return globalThis.__vendorResource}'
   }, transform(code, id) {
     if (id.replaceAll('\\', '/').endsWith('/VendorOrderList.jsx')) return code.replace("import React, { useState } from 'react'", "import React from 'react';const useState=(v)=>globalThis.__vendorState(v)")
-    if (id.replaceAll('\\', '/').endsWith('/useVendorBakery.js')) return code.replace("import { useCallback, useState } from 'react'", "const useState=(v)=>globalThis.__vendorState(v),useCallback=(fn)=>fn")
+    if (id.replaceAll('\\', '/').endsWith('/useVendorBakery.js')) return code.replace("import { useCallback, useEffect, useState } from 'react'", "const useState=(v)=>globalThis.__vendorState(v),useCallback=(fn)=>fn,useEffect=(fn)=>globalThis.__vendorEffects.push(fn)")
   } }] })
   List = (await vite.ssrLoadModule('/src/pages/vendor/orders/VendorOrderList.jsx')).default
   ;({ useVendorBakery } = await vite.ssrLoadModule('/src/hooks/useVendorBakery.js'))
 })
-after(async () => { globalThis.fetch = nativeFetch; setAuthToken(''); await vite?.close(); for (const key of ['__vendorAuth', '__vendorResource', '__vendorQuery', '__vendorState']) delete globalThis[key] })
+after(async () => { globalThis.fetch = nativeFetch; setAuthToken(''); await vite?.close(); for (const key of ['__vendorAuth', '__vendorResource', '__vendorQuery', '__vendorState', '__vendorEffects']) delete globalThis[key] })
 const nodes = (tree) => Array.isArray(tree) ? tree.flatMap(nodes) : tree?.props ? [tree, ...nodes(tree.props.children), ...nodes(tree.props.action)] : []
 const text = (tree) => Array.isArray(tree) ? tree.map(text).join('') : tree?.props ? text(tree.props.children) : String(tree ?? '')
 function harness(render) {
   let cursor = 0; const state = []
   globalThis.__vendorState = (initial) => { const i = cursor++; if (!(i in state)) state[i] = typeof initial === 'function' ? initial() : initial; return [state[i], (value) => { state[i] = typeof value === 'function' ? value(state[i]) : value }] }
-  return () => { cursor = 0; return render() }
+  return () => { cursor = 0; globalThis.__vendorEffects = []; const result = render(); for (const effect of globalThis.__vendorEffects) effect(); return result }
 }
 
 test('Calendar dates cover complete Vietnamese days, and invalid ranges never reach API', async () => {
@@ -94,6 +94,7 @@ test('List has columns; filters reset pagination and details retain selected ord
 test('Bakery selection synchronizes changed URL and clears previous account selection', () => {
   const a = 'aa000000-0000-4000-8000-000000000001', b = 'aa000000-0000-4000-8000-000000000002'
   let search = '?bakeryId=' + a
+  globalThis.__vendorResource = { status: 'loading' }
   globalThis.__vendorAuth = { user: { id: 'owner-a' }, roles: ['BAKERY_OWNER'] }
   const render = harness(() => useVendorBakery(search))
   assert.equal(render().bakeryId, a)

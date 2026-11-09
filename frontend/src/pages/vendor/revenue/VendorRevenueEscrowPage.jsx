@@ -1,8 +1,12 @@
+import { canonicalBakeryId, unifiedEnabled, unifiedSnapshot, unifiedMetrics, recordSource } from '../../../services/unifiedDataService.js'
+import { simulationStore } from '../../../mockData/business/runtime.js'
+import { businessMetrics, settledBusinessOrder } from '../../../mockData/business/metrics.js'
+import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 import React from 'react'
 import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
-import { loadOrders } from '../../../services/orderService.js'
+import { loadDashboardCompletedOrders } from '../../../services/vendorDashboardService.js'
 import { formatOrderDate, formatOrderMoney } from '../../../services/orderPresentation.js'
 import { displayReference } from '../../../services/displayReference.js'
 import { orderStatusLabel } from '../../../services/orderModels.js'
@@ -38,19 +42,20 @@ function SettlementDisclaimerNotice() {
 }
 
 function CompletedRevenueContent({ bakeryId, onNavigate }) {
-  const orders = useCatalogResource(loadOrders, {
-    scope: 'bakery',
-    bakeryId,
-    status: 'COMPLETED',
-    page: 1,
-    size: 50,
-    sort: 'createdAt,desc',
-  })
+  const orders = useCatalogResource(loadDashboardCompletedOrders, { bakeryId })
 
-  const completedList = orders.data?.result || []
-  const totalCount = orders.data?.meta?.total ?? completedList.length
-  const estimatedRevenue = completedList.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
-  const averageOrderValue = completedList.length > 0 ? Math.round(estimatedRevenue / completedList.length) : 0
+  const simulation = simulationStore()
+  const unified = unifiedEnabled()
+  const snapshot = unifiedSnapshot()
+  const scope = canonicalBakeryId(bakeryId)
+  const completedList = (orders.data?.result || []).filter(order => unified || !simulation || settledBusinessOrder(simulation.state, order))
+  const currency = completedList[0]?.currency || 'VND'
+  const metrics = simulation && !unifiedEnabled() ? businessMetrics(simulation.state, { bakeryId }) : null
+  const totalCount = unified ? completedList.length : metrics ? metrics.settledCount : orders.data?.meta?.total ?? completedList.length
+  const simulated = snapshot && scope ? unifiedMetrics(snapshot, { bakeryId: scope }) : null
+  const estimatedRevenue = unified ? simulated?.simulationSalesRevenue ?? null : metrics ? metrics.salesRevenue : completedList.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
+  const revenueOrderCount = unified ? simulated?.simulationSettledCount ?? 0 : totalCount
+  const averageOrderValue = estimatedRevenue == null ? null : revenueOrderCount > 0 ? Math.round(estimatedRevenue / revenueOrderCount) : 0
 
   return (
     <div className="space-y-6">
@@ -60,7 +65,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
         <div className="rounded-2xl border border-rose-200/80 bg-gradient-to-br from-white via-rose-50/40 to-rose-100/20 p-5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-rose-800">
-              Doanh thu ước tính
+              {unifiedEnabled() ? 'Doanh thu bán bánh mô phỏng' : simulation ? 'Doanh thu đã ghi nhận' : 'Doanh thu ước tính'}
             </span>
             <span className="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
               <Icon name="payments" className="text-lg" />
@@ -72,11 +77,11 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 ? 'Đang tính…'
                 : orders.error
                 ? '—'
-                : formatOrderMoney(estimatedRevenue, 'VND')}
+                : formatOrderMoney(estimatedRevenue, currency)}
             </div>
             <p className="text-xs text-rose-900/70 mt-1 flex items-center gap-1 font-medium">
               <span className="text-rose-500 font-bold">●</span>
-              <span>Từ {totalCount} đơn giao thành công</span>
+              <span>{unified ? 'API chưa có đối soát' : `Từ ${totalCount} đơn giao thành công`}</span>
             </p>
           </div>
         </div>
@@ -110,7 +115,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
         <div className="rounded-2xl border border-amber-200/80 bg-gradient-to-br from-white via-amber-50/40 to-amber-100/20 p-5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
-              Trung bình / đơn (AOV)
+              {unified ? 'Trung bình / đơn mô phỏng đã thu' : 'Trung bình / đơn (AOV)'}
             </span>
             <span className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
               <Icon name="trending_up" className="text-lg" />
@@ -122,7 +127,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 ? 'Đang tính…'
                 : orders.error
                 ? '—'
-                : formatOrderMoney(averageOrderValue, 'VND')}
+                : formatOrderMoney(averageOrderValue, currency)}
             </div>
             <p className="text-xs text-amber-900/70 mt-1 flex items-center gap-1 font-medium">
               <span className="text-amber-500 font-bold">✦</span>
@@ -133,7 +138,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
       </div>
 
       {/* Thông tin đối soát & cam kết minh bạch (Bảo toàn invariants của hệ thống & kiểm thử) */}
-      <SettlementDisclaimerNotice />
+      {!simulationStore() && <SettlementDisclaimerNotice />}
 
       {/* Danh sách đơn hàng hoàn tất */}
       <section className="rounded-3xl border border-primary/15 bg-white p-5 sm:p-6 shadow-xs">
@@ -141,7 +146,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
           <div>
             <h3 className="font-bold text-base text-primary flex items-center gap-2">
               <Icon name="receipt_long" className="text-primary text-lg" />
-              <span>Đơn hàng hoàn tất đã ghi nhận doanh thu</span>
+              <span>Đơn hàng hoàn tất</span>
             </h3>
             <p className="text-xs text-on-surface-variant mt-0.5">
               Danh sách các đơn hàng đã được tiệm bàn giao thành công tới khách hàng.
@@ -166,7 +171,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
               : 'Chưa tải được danh sách đơn hàng.'}
           </p>
         ) : completedList.length ? (
-          <DataTable label="Đơn hàng hoàn tất đã ghi nhận doanh thu" className="sc-vendor-orders-table">
+          <DataTable label="Đơn hàng hoàn tất" className="sc-vendor-orders-table">
             <colgroup>
               <col style={{ width: '22%' }} />
               <col style={{ width: '23%' }} />
@@ -179,7 +184,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 <th scope="col">Mã đơn</th>
                 <th scope="col">Khách hàng</th>
                 <th scope="col">Thời gian</th>
-                <th scope="col">Doanh thu ước tính</th>
+                <th scope="col">Giá trị đơn</th>
                 <th scope="col">Chi tiết</th>
               </tr>
             </thead>
@@ -188,7 +193,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 <tr key={order.id}>
                   <td>
                     <strong className="text-primary font-semibold">
-                      {displayReference(order.id, 'ORD', order.orderNumber)}
+                      {displayReference(order.id, 'ORD', order.orderNumber)}{unified && <small className="block">{recordSource(order) === 'local' ? 'Mô phỏng' : 'API'}</small>}
                     </strong>
                   </td>
                   <td>{order.customerName || 'Khách hàng'}</td>
@@ -266,10 +271,10 @@ export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
         <BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />
 
         {bakeryId ? (
-          <CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} />
+          <><CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} /><BusinessSimulationReport bakeryId={bakeryId} bakery={owner.bakery} loadHistory /></>
         ) : (
           <div className="space-y-4">
-            <SettlementDisclaimerNotice />
+            {!simulationStore() && <SettlementDisclaimerNotice />}
             <section className={panelClass}>
               <EmptyPanel
                 title="Chọn cửa hàng để xem doanh thu"
