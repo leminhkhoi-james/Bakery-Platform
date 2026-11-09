@@ -31,3 +31,53 @@
   :is(.sc-user-form-dialog, .sc-user-decision-dialog) > .sc-drawer-footer { padding: .7rem .75rem; }
   .sc-user-decision-content .sc-review-fields > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
 }
+
+/* Toolbar & Filters */
+.sc-user-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sc-user-filters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(107, 33, 46, 0.03);
+}
+
+.sc-user-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #5f4d43;
+  min-width: 170px;
+  flex: 1 1 170px;
+}
+
+.sc-user-filters label:first-child {
+  flex: 2 1 240px;
+}
+
+.sc-user-filters .sc-input {
+  width: 100%;
+}
+
+.sc-admin-users-table th.sc-col-stt,
+.sc-admin-users-table td.sc-col-stt {
+  text-align: center;
+  width: 60px;
+  min-width: 50px;
+  max-width: 65px;
+}

@@ -1,0 +1,12 @@
+{
+  "pid": 40540,
+  "ports": {
+    "identity": 18401,
+    "bakery": 18402,
+    "marketplace": 18403,
+    "subscription": 18404,
+    "order": 18406
+  },
+  "purpose": "Transparent native HTTP observation; explicitly armed one-shot synthetic committed ACK loss only",
+  "authMaterialLogged": false
+}

@@ -17,12 +17,20 @@ import java.util.concurrent.TimeUnit;
 public class MinioAttachmentStorage implements AttachmentStorage {
 
     private final MinioClient client;
+    private final MinioClient signingClient;
     private final String bucket;
 
     public MinioAttachmentStorage(StorageProperties properties) {
         this.bucket = properties.bucket();
         this.client = MinioClient.builder()
                 .endpoint(properties.endpoint())
+                .credentials(properties.accessKey(), properties.secretKey())
+                .build();
+        // Sign for the client-visible origin, never rewrite a signed URL. An
+        // explicit region avoids a discovery call to an external-only address.
+        this.signingClient = MinioClient.builder()
+                .endpoint(properties.publicEndpoint())
+                .region(properties.region())
                 .credentials(properties.accessKey(), properties.secretKey())
                 .build();
     }
@@ -47,7 +55,7 @@ public class MinioAttachmentStorage implements AttachmentStorage {
     @Override
     public String signedGetUrl(String objectKey, java.time.Duration expiry) {
         try {
-            return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+            return signingClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .method(Method.GET)
                     .bucket(bucket)
                     .object(objectKey)

@@ -12,6 +12,8 @@ import { useAuth } from '../../../context/useAuth.js'
 import { uiLabel } from '../../../services/uiLabels.js'
 import { loadUsers, userName, userStatus, userRestriction, roleErrors, updateUserRoles, deleteUser, changeUserStatus, PLATFORM_ROLES } from '../../../services/adminUserService.js'
 
+import { localUserDirectory } from '../../../mockData/admin/userManagement.js'
+import { LocalUserDirectory } from './LocalUserDirectory.jsx'
 import './admin-users.css'
 
 const sameRoles = (a, b) => a.length === b.length && a.every((role) => b.includes(role))
@@ -92,8 +94,8 @@ export function UserDirectory() {
   async function mutate(action, message) {
     if (inFlight.current || busy || !canManage) return false
     inFlight.current = true; setBusy(true); setError(null); setNotice('')
-    try { await action(); setEditor(null); setDecision(null); setNotice(message); resource.reload(); return true }
-    catch (failure) { setError(reviewError(failure)); return false }
+    try { await action(); setEditor(null); setDecision(null); setNotice(message); setPage(1); resource.reload(); return true }
+    catch (failure) { setError(reviewError(failure)); if (failure.status === 409) resource.reload(); return false }
     finally { inFlight.current = false; setBusy(false) }
   }
   function choose(person, action) { if (locked || !canManage) return; setError(null); setNotice(''); if (action === 'roles') setEditor({ person }); else setDecision({ person, action }) }
@@ -102,6 +104,7 @@ export function UserDirectory() {
     if (action === 'delete') return mutate(() => deleteUser(person, user), 'Đã xóa người dùng.')
     return mutate(() => changeUserStatus(person, user, person.status === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE'), 'Đã cập nhật trạng thái người dùng.')
   }
+  if (localUserDirectory()) return <LocalUserDirectory />
   const field = (key) => ({ value: draft[key], onChange: (event) => setDraft({ ...draft, [key]: event.target.value }) })
   return <section className={panelClass}>
     <div className="sc-user-toolbar"><p className="sc-review-help">{resource.data ? resource.data.meta.total + ' người dùng' : 'Danh sách người dùng'}</p><div className="sc-action-row"><RefreshButton disabled={locked} onClick={resource.reload}>Làm mới</RefreshButton></div></div>

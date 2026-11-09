@@ -6,7 +6,9 @@ Direct and accepted-offer orders with immutable transaction snapshots.
 
 ## Current state
 
-Internal accepted-offer order creation persists immutable items/address and a durable key/payload fingerprint. Replay checks precede remote calls. Direct orders, public status management and reviews remain pending.
+Direct and accepted-offer creation, public fulfillment and eligible reviews are implemented. Creation persists immutable items/address and durable key/payload fingerprints; replay checks precede remote calls. Direct uses the Identity address's persisted UUID and validates its flat internal response. Identity now returns `id` and `label` alongside its ownership-checked delivery fields.
+
+Identity address 404 becomes invalid order input (422), preserving privacy for foreign/deleted addresses. Catalog quote 404/422 also preserve validation meaning; quote 409 remains a business conflict. Internal authentication errors and outages remain remote failures (503), never successful fallback data. Address deletion or edits do not rewrite existing Order snapshots.
 
 ## Boundary
 

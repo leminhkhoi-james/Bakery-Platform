@@ -1,0 +1,138 @@
+{
+  "at": "2026-11-09T03:39:18.399191+00:00",
+  "syntheticFaultCleared": true,
+  "unneededAdminCopyRemoved": true,
+  "originalSecretsModified": false,
+  "nativeTransport": "ADB reverse184xx directly to same host184xx; no observation/fault proxy dependency",
+  "nativeProxyStopped": true,
+  "nativeAddressReloadOnDirectTransport": "PASS",
+  "originalIdentitySourceDatabaseRestoredStopped": true,
+  "readiness": [
+    {
+      "component": "identity",
+      "running": true,
+      "dockerHealth": "healthy",
+      "anonymousActuator": {
+        "authentication": "anonymous",
+        "status": 200,
+        "body": {
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "containerProbe": {
+        "path": "/.well-known/jwks.json",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "bakery",
+      "running": true,
+      "dockerHealth": "healthy",
+      "anonymousActuator": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:23.966755250Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "marketplace",
+      "running": true,
+      "dockerHealth": "healthy",
+      "anonymousActuator": {
+        "authentication": "anonymous",
+        "status": 200,
+        "body": {
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "subscription",
+      "running": true,
+      "dockerHealth": "healthy",
+      "anonymousActuator": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:24.794765300Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "order",
+      "running": true,
+      "dockerHealth": "healthy",
+      "anonymousActuator": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:25.080851873Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "db",
+      "running": true,
+      "dockerHealth": null,
+      "anonymousActuator": null,
+      "containerProbe": null
+    },
+    {
+      "component": "storage",
+      "running": true,
+      "dockerHealth": null,
+      "anonymousActuator": null,
+      "containerProbe": null
+    }
+  ],
+  "customerActuatorLastObserved": {
+    "identity": 200,
+    "bakery": 403,
+    "marketplace": 200,
+    "subscription": 403,
+    "order": 403
+  },
+  "webHttp": 200,
+  "storageHealthHttp": 200,
+  "postgresReadyExit": 0
+}

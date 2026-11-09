@@ -12,6 +12,9 @@ enum ApiService {
   cakeAi,
 }
 
+/// Deployment information, never inferred from a successful job or HTTP 2xx.
+enum CakeAiMode { unknown, localFallback, providerConfigured }
+
 /// Public origins only. Empty release defaults require explicit HTTPS endpoints.
 class ApiEnvironment {
   ApiEnvironment({
@@ -22,6 +25,7 @@ class ApiEnvironment {
     this.order,
     this.chat,
     this.cakeAi,
+    this.cakeAiMode = CakeAiMode.unknown,
   }) {
     for (final value in [
       identity,
@@ -52,9 +56,15 @@ class ApiEnvironment {
   }
   final Uri identity, bakery, subscription;
   final Uri? marketplace, order, chat, cakeAi;
+  final CakeAiMode cakeAiMode;
   static Uri? optionalOrigin(String value) =>
       value.isEmpty ? null : Uri.parse(value);
   static ApiEnvironment configured() => ApiEnvironment(
+    cakeAiMode: switch (const String.fromEnvironment('CAKE_AI_MODE')) {
+      'local-fallback' => CakeAiMode.localFallback,
+      'provider-configured' => CakeAiMode.providerConfigured,
+      _ => CakeAiMode.unknown,
+    },
     marketplace: optionalOrigin(
       const String.fromEnvironment('MARKETPLACE_URL'),
     ),

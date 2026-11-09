@@ -50,6 +50,7 @@ marketplace:
     connect-timeout: ${FIREBASE_CONNECT_TIMEOUT:2s}
     read-timeout: ${FIREBASE_READ_TIMEOUT:30s}
   scheduler-delay-ms: ${MARKETPLACE_SCHEDULER_DELAY_MS:30000}
+  orphan-cleanup-enabled: ${MARKETPLACE_ORPHAN_CLEANUP_ENABLED:true}
 
 server:
   port: ${SERVER_PORT:8083}

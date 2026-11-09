@@ -1,8 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import fs from 'node:fs'
-import path from 'node:path'
 
 export default defineConfig(({ mode }) => {
 
@@ -55,56 +53,6 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
-      {
-        name: 'sweetcake-dev-sync',
-        configureServer(server) {
-          const stateDir = path.resolve(import.meta.dirname, 'node_modules', '.sweetcake')
-          const stateFile = path.resolve(stateDir, 'demo_state.json')
-          let demoState = null
-          try {
-            if (fs.existsSync(stateFile)) {
-              demoState = JSON.parse(fs.readFileSync(stateFile, 'utf-8'))
-            }
-          } catch {}
-
-          server.middlewares.use((req, res, next) => {
-            const reqUrl = req.url || ''
-            if (reqUrl === '/__sweetcake_demo_sync__' || reqUrl.startsWith('/__sweetcake_demo_sync__?')) {
-              if (req.method === 'GET') {
-                try {
-                  if (fs.existsSync(stateFile)) {
-                    demoState = JSON.parse(fs.readFileSync(stateFile, 'utf-8'))
-                  }
-                } catch {}
-                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-                res.end(JSON.stringify(demoState))
-                return
-              }
-              if (req.method === 'POST') {
-                let body = ''
-                req.on('data', (chunk) => { body += chunk })
-                req.on('end', () => {
-                  try {
-                    const parsed = JSON.parse(body)
-                    demoState = parsed
-                    try {
-                      if (!fs.existsSync(stateDir)) fs.mkdirSync(stateDir, { recursive: true })
-                      fs.writeFileSync(stateFile, body, 'utf-8')
-                    } catch {}
-                    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-                    res.end(JSON.stringify({ ok: true }))
-                  } catch {
-                    res.writeHead(400)
-                    res.end()
-                  }
-                })
-                return
-              }
-            }
-            next()
-          })
-        },
-      },
       {
         name: 'unmapped-api-routes',
         configureServer(server) {

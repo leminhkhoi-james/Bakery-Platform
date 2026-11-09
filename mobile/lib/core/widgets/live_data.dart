@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
 import '../api/contracts.dart';
 import '../live/live_workspace.dart';
 import 'live_scaffold.dart';
@@ -12,11 +14,15 @@ class LiveData<T> extends StatefulWidget {
     required this.load,
     required this.builder,
     this.operational = false,
+    this.contentAlignment = Alignment.center,
+    this.navigationPath,
   });
   final String title;
   final Future<T> Function() load;
   final List<Widget> Function(BuildContext, T, VoidCallback) builder;
   final bool operational;
+  final Alignment contentAlignment;
+  final String? navigationPath;
   @override
   State<LiveData<T>> createState() => _LiveDataState<T>();
 }
@@ -38,6 +44,9 @@ class _LiveDataState<T> extends State<LiveData<T>> {
   void reload() {
     if (!mounted) return;
     final next = widget.load();
+    // A failed load may finish before the next frame attaches FutureBuilder.
+    // Observe it now; the original future still renders its real error below.
+    unawaited(next.then<void>((_) {}, onError: (Object _, StackTrace _) {}));
     setState(() {
       future = next;
     });
@@ -47,6 +56,8 @@ class _LiveDataState<T> extends State<LiveData<T>> {
   Widget build(BuildContext context) => LiveScaffold(
     title: widget.title,
     operational: widget.operational,
+    contentAlignment: widget.contentAlignment,
+    navigationPath: widget.navigationPath,
     onRefresh: () async {
       reload();
       try {
@@ -121,11 +132,13 @@ class LiveCommand extends StatefulWidget {
     required this.run,
     this.after,
     this.outlined = false,
+    this.confirm,
   });
   final String label;
   final Future<void> Function() run;
   final VoidCallback? after;
   final bool outlined;
+  final Future<bool> Function()? confirm;
   @override
   State<LiveCommand> createState() => _LiveCommandState();
 }
@@ -155,6 +168,8 @@ class _LiveCommandState extends State<LiveCommand> {
             error = null;
           });
           try {
+            if (widget.confirm != null && !await widget.confirm!()) return;
+            if (!mounted) return;
             await widget.run();
             if (mounted) {
               widget.after?.call();
@@ -182,10 +197,12 @@ class LiveMedia extends StatelessWidget {
     super.key,
     required this.label,
     this.height = 200,
+    this.fit = BoxFit.cover,
   });
   final String? url;
   final String label;
   final double height;
+  final BoxFit fit;
   @override
   Widget build(BuildContext context) {
     final uri = Uri.tryParse(url ?? '');
@@ -214,7 +231,7 @@ class LiveMedia extends StatelessWidget {
               url!,
               height: height,
               width: double.infinity,
-              fit: BoxFit.cover,
+              fit: fit,
               semanticLabel: label,
               errorBuilder: (_, _, _) => missing(),
               loadingBuilder: (_, child, progress) => progress == null

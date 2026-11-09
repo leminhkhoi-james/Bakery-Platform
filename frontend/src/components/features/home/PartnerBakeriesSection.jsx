@@ -26,10 +26,10 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
               <div className="flex flex-wrap gap-3">
                 <a
                   className="cakematch-btn py-2 px-5 text-sm"
-                  href="/vendor-dashboard"
+                  href="/subscription-plans"
                   onClick={(e) => {
                     e.preventDefault()
-                    onNavigate?.('vendor-dashboard')
+                    onNavigate?.('subscription-plans')
                   }}
                 >
                   <span>Đăng Ký Mở Tiệm Bánh</span>

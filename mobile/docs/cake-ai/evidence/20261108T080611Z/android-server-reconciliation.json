@@ -1,0 +1,155 @@
+{
+  "layer": "HOST_READ_ONLY_AFTER_ANDROID",
+  "checks": {
+    "jobId": {
+      "http": 200,
+      "idMatches": true,
+      "status": "SUCCEEDED",
+      "revision": 2,
+      "designs": 2,
+      "sources": 1,
+      "errorMessage": null
+    },
+    "cancelJobId": {
+      "http": 200,
+      "idMatches": true,
+      "status": "CANCELLED",
+      "revision": 1,
+      "designs": 0,
+      "sources": 0,
+      "errorMessage": null
+    },
+    "failedJobId": {
+      "http": 200,
+      "idMatches": true,
+      "status": "FAILED",
+      "revision": 1,
+      "designs": 0,
+      "sources": 0,
+      "errorMessage": "INPUT_REJECTED"
+    },
+    "selectedDesign": {
+      "http": 200,
+      "selectedMatchesAndroidDesign": true
+    },
+    "image": {
+      "http": 200,
+      "bytes": 20821,
+      "urlOrigin": "loopback:18105"
+    }
+  },
+  "events": [
+    {
+      "actor": "customer",
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "owner",
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "actor": "owner",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "owner",
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/bakeries/onboarding",
+      "status": 200
+    },
+    {
+      "actor": "owner",
+      "service": "bakery",
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "actor": "owner",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "admin",
+      "service": "identity",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200
+    },
+    {
+      "actor": "admin",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "admin",
+      "service": "identity",
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "cake",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/fcd17a21-3242-45aa-931a-c73ebc68e1b4",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "cake",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/b160fa45-61ea-46d7-b883-59f858b8b9b6",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "cake",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/cd2f8f9c-b999-4888-9e77-105a90570da2",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "marketplace",
+      "method": "GET",
+      "path": "/api/v1/cake-requests/08717cfd-4db6-42b3-a22e-57869dcf3d9a",
+      "status": 200
+    },
+    {
+      "actor": "customer",
+      "service": "cake",
+      "method": "GET",
+      "path": "/api/v1/generated-designs/4f9860e7-c5c1-4556-8fef-cf347e4fdd78",
+      "status": 200
+    }
+  ]
+}

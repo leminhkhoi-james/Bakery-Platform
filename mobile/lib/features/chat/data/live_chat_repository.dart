@@ -1,35 +1,33 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
-
 import '../../../core/api/api_client.dart';
 import '../../../core/api/contracts.dart';
 import '../../../core/api/environment.dart';
 import '../../../core/api/phase5_contracts.dart';
 import '../../../core/api/transport.dart';
-
-class PendingChatMessage {
-  PendingChatMessage(this.id, this.content, this.attachments);
-  final String id, content;
-  final List<UploadPart> attachments;
-  UploadPart? get attachment => attachments.isEmpty ? null : attachments.first;
-  String get signature => jsonEncode([
-    content,
-    for (final attachment in attachments)
-      [
-        attachment.name,
-        attachment.mime,
-        sha256.convert(attachment.bytes).toString(),
-      ],
-  ]);
-}
+import 'pending_chat_journal.dart';
+import 'pending_chat_message.dart';
+import 'pending_chat_recovery.dart';
+export 'pending_chat_message.dart';
 
 class LiveChatRepository {
-  LiveChatRepository(this.api);
+  LiveChatRepository(this.api, {PendingChatJournal? journal})
+    : recovery = PendingChatRecovery(
+        api,
+        journal ?? EncryptedPendingChatJournal(),
+      );
   final ApiClient api;
-  final Map<String, PendingChatMessage> pending = {};
-  void clearPending() => pending.clear();
+  final PendingChatRecovery recovery;
+  Map<String, PendingChatMessage> get pending => recovery.pending;
+  void clearPending() => recovery.detach();
+  Future<void> restorePending() => recovery.restore();
+  Future<void> discardAccountPending() => recovery.discardAccount();
+  Future<Json?> reconcile(String id, MessagePage page) => recovery.reconcile(
+    id,
+    page,
+    (cursor) => messages(id, before: cursor, limit: 100),
+  );
   String path(String id) => '/api/v1/conversations/${apiId(id)}';
   Future<ApiPage> list(Map<String, Object?> query) async => ApiPage.fromJson(
     await api.request(
@@ -130,20 +128,10 @@ class LiveChatRepository {
         'Tối đa 5 tệp JPEG, PNG, WEBP hoặc PDF, mỗi tệp tối đa 10 MiB.',
       );
     }
-    final command = PendingChatMessage(
-          logicalId,
-          content.trim(),
-          List.unmodifiable(files),
-        ),
-        previous = pending[id];
-    if (previous != null &&
-        (previous.id != logicalId || previous.signature != command.signature)) {
-      throw const ApiFailure(
-        409,
-        'Đang có tin nhắn chưa rõ kết quả. Giữ nguyên nội dung và clientMessageId để đối chiếu.',
-      );
-    }
-    pending[id] = command;
+    final attempt = await recovery.begin(
+      apiId(id),
+      PendingChatMessage(apiId(logicalId), content.trim(), files),
+    );
     final metadata = {
       'clientMessageId': apiId(logicalId),
       'messageType': files.isEmpty
@@ -167,7 +155,7 @@ class LiveChatRepository {
               'application/json',
               Uint8List.fromList(utf8.encode(jsonEncode(metadata))),
             ),
-            ...files,
+            ...attempt.message.attachments,
           ],
         ),
       );
@@ -178,9 +166,15 @@ class LiveChatRepository {
           uncertain: true,
         );
       }
-      pending.remove(id);
+      await recovery.complete(attempt);
       return result;
     } on ApiFailure catch (e) {
+      await recovery.failed(
+        attempt,
+        retain:
+            e.uncertain || e.status == 0 || e.status == 403 || e.status == 409,
+        uncertain: e.uncertain || e.status == 403 || e.status == 409,
+      );
       if (e.status == 403) {
         throw const ApiFailure(
           403,
@@ -188,7 +182,6 @@ class LiveChatRepository {
           uncertain: true,
         );
       }
-      if (!e.uncertain) pending.remove(id);
       rethrow;
     } on FormatException {
       throw const ApiFailure(
@@ -196,6 +189,14 @@ class LiveChatRepository {
         'Phản hồi tin nhắn chưa đúng contract. Giữ nguyên mã để đối chiếu.',
         uncertain: true,
       );
+    } on Object {
+      throw const ApiFailure(
+        0,
+        'Chưa xác nhận được kết quả. Tin đã lưu được giữ để đối chiếu và gửi lại cùng mã.',
+        uncertain: true,
+      );
+    } finally {
+      recovery.release(attempt);
     }
   }
 

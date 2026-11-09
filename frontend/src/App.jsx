@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import AppRoutes from './routes/AppRoutes'
-import { catalogUrl } from './routes/catalogNavigation.js'
+import { catalogUrl, parseAppRoute, shouldHandleAppLink } from './routes/catalogNavigation.js'
 import { catalogCartItem } from './services/catalogCart.js'
 
 function App() {
@@ -124,9 +124,8 @@ function App() {
     if (typeof window === 'undefined') return 'home'
     const rawHash = (window.location.hash || '').replace('#', '').trim()
     if (rawHash) {
-      const cleaned = rawHash.replace(/^\/+|\/+$/g, '')
-      const canonical = ROUTE_ALIASES[cleaned] || cleaned || 'home'
-      const cleanUrl = canonical === 'home' ? '/' : `/${canonical}`
+      const { page: canonical, query } = parseAppRoute(rawHash, ROUTE_ALIASES)
+      const cleanUrl = (canonical === 'home' ? '/' : `/${canonical}`) + (query ? '?' + query : '')
       window.history.replaceState({ page: canonical }, '', cleanUrl)
       return canonical
     }
@@ -156,8 +155,8 @@ function App() {
 
     const handleDocumentClick = (e) => {
       if (e.defaultPrevented) return
-      const anchor = e.target.closest('a')
-      if (!anchor) return
+      const anchor = e.target.closest?.('a')
+      if (!anchor || !shouldHandleAppLink(e, anchor)) return
       const href = anchor.getAttribute('href')
       if (!href) return
 
@@ -167,6 +166,12 @@ function App() {
         href.startsWith('mailto:') ||
         href.startsWith('tel:')
       ) {
+        return
+      }
+
+      if (href.startsWith('#') && document.getElementById(href.slice(1))) {
+        e.preventDefault()
+        document.getElementById(href.slice(1)).scrollIntoView({ behavior: 'smooth' })
         return
       }
 
@@ -279,13 +284,11 @@ function App() {
     if (cakeData) {
       setSelectedCake(cakeData)
     }
-    const cleaned = (path || '').replace('#', '').trim()
-    const [pageName, query = ''] = cleaned.split('?')
-    const resolvedPath = ROUTE_ALIASES[pageName] || pageName || 'home'
+    const { page: resolvedPath, query } = parseAppRoute(path, ROUTE_ALIASES)
     setCurrentPage(resolvedPath)
 
     if (typeof window !== 'undefined') {
-      const targetUrl = resolvedPath === 'home' ? '/' : query ? '/' + resolvedPath + '?' + query : catalogUrl(resolvedPath, cakeData)
+      const targetUrl = query ? (resolvedPath === 'home' ? '/' : '/' + resolvedPath) + '?' + query : resolvedPath === 'home' ? '/' : catalogUrl(resolvedPath, cakeData)
       setRouteSearch(new URL(targetUrl, window.location.origin).search)
       if (window.location.pathname + window.location.search !== targetUrl || window.location.hash) {
         window.history[navigation.replace ? 'replaceState' : 'pushState']({ page: resolvedPath }, '', targetUrl)

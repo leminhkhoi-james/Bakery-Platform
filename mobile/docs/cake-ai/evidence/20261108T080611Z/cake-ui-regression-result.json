@@ -1,0 +1,9 @@
+{
+  "exitCode": 0,
+  "command": [
+    "D:/HomeMind/audit-tools/flutter/bin/flutter.bat",
+    "test",
+    "test/cake_ai_runtime_widget_test.dart",
+    "--reporter=expanded"
+  ]
+}

@@ -11,8 +11,11 @@ export const rfqService = {
   async getRfqById(id, options = {}) { const data = mapRequest(await api.get(requestPath(id), options), true); if (data.id !== id.toLowerCase()) throw new ApiError('RFQ trả về sai ID.', 502); return data },
   async createRfq(input) { return mapRequest(await api.post('/cake-requests', rfqPayload(input)), true) },
   async updateRfq(id, input) { return mapRequest(await api.patch(requestPath(id), rfqPayload(input)), true) },
-  async publishRfq(id) { return mapRequest(await api.post(requestPath(id) + '/publish'), true) },
-  async simulateOffers(id) { return api.post(requestPath(id) + '/simulate-offers') },
+  async publishRfq(id) {
+    const request = mapRequest(await api.post(requestPath(id) + '/publish'), true)
+    if (request.id !== id.toLowerCase() || request.status !== 'OPEN') throw new ApiError('Chưa xác nhận được yêu cầu đã mở nhận báo giá. Vui lòng tải lại trước khi thử tiếp.', 502)
+    return request
+  },
   async cancelRfq(id, reason = '') { if (typeof reason !== 'string' || reason.length > 2000) throw new ApiError('Lý do tối đa 2000 ký tự.', 400); return mapRequest(await api.post(requestPath(id) + '/cancel', { reason }), true) },
   async selectDesign(id, generatedDesignId) { return mapRequest(await api.put(requestPath(id) + '/selected-design', { generatedDesignId: requireId(generatedDesignId) }), true) },
   async uploadImages(id, files) { await validateReferenceImages(files, 10); const form = new FormData(); files.forEach((file) => form.append('files', file)); const data = await api.post(requestPath(id) + '/images', form); if (!Array.isArray(data)) throw new ApiError('Image response không hợp lệ.', 502); return data },

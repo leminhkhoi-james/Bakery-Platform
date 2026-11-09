@@ -1,0 +1,17 @@
+{
+  "file": "H:\\MSS\\Bakery-Platform\\mobile\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+  "sha256": "ab4e39bae695b7a5477c8e7da4c0b06bc5b3dd9996d7615614887380affe4513",
+  "entrypoint": "lib/main.dart",
+  "dartDefines": {
+    "IDENTITY_URL": "http://127.0.0.1:18401",
+    "BAKERY_URL": "http://127.0.0.1:18402",
+    "MARKETPLACE_URL": "http://127.0.0.1:18403",
+    "SUBSCRIPTION_URL": "http://127.0.0.1:18404",
+    "ORDER_URL": "http://127.0.0.1:18406"
+  },
+  "serial": "emulator-5556",
+  "avd": "bakery_qa_20261108_141407",
+  "renderer": "software; Impeller disabled",
+  "installedAt": "2026-11-09T03:34:04.524422+00:00",
+  "scope": "Final address finish fixes; no checkout/acceptance business changes"
+}

@@ -42,6 +42,8 @@ clients:
 storage:
   minio:
     endpoint: ${CHAT_STORAGE_ENDPOINT:http://localhost:9000}
+    public-endpoint: ${CHAT_STORAGE_PUBLIC_ENDPOINT:${CHAT_STORAGE_ENDPOINT:http://localhost:9000}}
+    region: ${CHAT_STORAGE_REGION:us-east-1}
     access-key: ${CHAT_STORAGE_ACCESS_KEY:minioadmin}
     secret-key: ${CHAT_STORAGE_SECRET_KEY:minioadmin}
     bucket: ${CHAT_STORAGE_BUCKET:chat-attachments}

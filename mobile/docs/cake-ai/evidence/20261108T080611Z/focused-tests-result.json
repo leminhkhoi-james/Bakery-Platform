@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Program Files\\apache-maven-3.9.11\\BIN\\mvn.cmd",
+    "-B",
+    "-ntp",
+    "-pl",
+    "cake-ai-service",
+    "-am",
+    "-Dtest=FirebaseStorageAdapterTest,GenerationParametersTest,GeminiClientTest",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "test"
+  ],
+  "cwd": "H:\\MSS\\.runtime\\cake-ai-execution-20261108T080611Z\\backend",
+  "exitCode": 0,
+  "seconds": 19.64
+}

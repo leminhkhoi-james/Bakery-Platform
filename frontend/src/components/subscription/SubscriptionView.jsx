@@ -2,8 +2,8 @@ import { userFeedback, cleanPresentationLabel, publicCopy } from '../../services
 import React from 'react'
 import '../common/vendor-ui.css'
 import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
-import { canOrderPlan, formatSubscriptionMoney, subscriptionStatusLabel } from '../../services/subscriptionModels.js'
-import { planFeatureRows } from '../../services/planPresentation.js'
+import { canOrderPlan, subscriptionStatusLabel, formatSubscriptionMoney } from '../../services/subscriptionModels.js'
+import { planFeatureRows, planMonthlyPrice, planName, planTierRank, sortPlansByTier } from '../../services/planPresentation.js'
 
 export function SubscriptionError({ error, retry }) {
   const explanation = { 400: 'Thông tin chưa hợp lệ. Vui lòng kiểm tra lại.', 401: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.', 403: 'Bạn không có quyền thao tác với cửa hàng này.', 404: 'Không tìm thấy gói hoặc đơn mua được yêu cầu.', 409: 'Chưa thể tạo hoặc cập nhật đơn. Hãy kiểm tra đơn đang chờ trong lịch sử mua gói và tải lại trước khi thử tiếp.', 422: 'Gói hoặc chứng từ chưa đáp ứng điều kiện xử lý.' }[error?.status]
@@ -75,7 +75,7 @@ export function PlanCards({ plans, onSelect, canSelect = false, busy = false, cu
     if (plans.length === 3) return plans[1].id
     return null
   })()
-  return <div className="sc-owner-plan-grid">{plans.map((plan) => {
+  return <div className="sc-owner-plan-grid">{sortPlansByTier(plans).map((plan) => {
     const isCurrent = Boolean(activeCurrentPlan && (plan.id === activeCurrentPlan.id || plan.code === activeCurrentPlan.code))
     const isScheduled = Boolean(scheduledPlanId && plan.id === scheduledPlanId)
     const isUpgrade = Boolean(activeCurrentPlan && !isCurrent && Number(plan.monthlyPrice) > Number(activeCurrentPlan.monthlyPrice || 0))
@@ -89,7 +89,7 @@ export function PlanCards({ plans, onSelect, canSelect = false, busy = false, cu
     return (
       <article key={plan.id} className={'sc-panel sc-owner-plan-card' + (isCurrent ? ' is-current-plan' : plan.id === featuredId ? ' is-featured' : '')}>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-xl font-bold text-primary">{cleanPresentationLabel(plan.name, 'Chưa có tên gói')}</h3>
+          <h3 className="text-xl font-bold text-primary">{cleanPresentationLabel(planName(plan), 'Chưa có tên gói')}</h3>
           {isCurrent && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-primary text-white shadow-xs">
               <Icon name="check_circle" className="text-sm" /> Gói đang sử dụng
@@ -106,7 +106,7 @@ export function PlanCards({ plans, onSelect, canSelect = false, busy = false, cu
             </span>
           )}
         </div>
-        <p className="font-serif text-3xl font-semibold text-primary">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)}<span className="text-sm font-normal"> / tháng</span></p>
+        <p className="font-serif text-3xl font-semibold text-primary">{planMonthlyPrice(plan)}<span className="text-sm font-normal"> / tháng</span></p>
         <p className="text-sm text-on-surface-variant leading-relaxed">{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p>
         <p className="text-sm font-medium">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
         <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p>

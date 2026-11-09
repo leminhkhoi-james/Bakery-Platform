@@ -5,6 +5,7 @@ import com.se193262.marketplaceservice.feature.offer.*;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Clock;
 
@@ -16,6 +17,7 @@ public class MarketplaceScheduler {
     private final CakeRequestRepository requests;
     private final RequestImageService images;
     private final Clock clock;
+    private final boolean orphanCleanupEnabled;
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(MarketplaceScheduler.class);
 
@@ -25,13 +27,15 @@ public class MarketplaceScheduler {
             OfferRepository offers,
             CakeRequestRepository requests,
             RequestImageService images,
-            Clock clock) {
+            Clock clock,
+            @Value("${marketplace.orphan-cleanup-enabled:true}") boolean orphanCleanupEnabled) {
         this.acceptance = acceptance;
         this.expiration = expiration;
         this.offers = offers;
         this.requests = requests;
         this.images = images;
         this.clock = clock;
+        this.orphanCleanupEnabled = orphanCleanupEnabled;
     }
 
     @Scheduled(fixedDelayString = "${marketplace.scheduler-delay-ms:30000}")
@@ -53,6 +57,7 @@ public class MarketplaceScheduler {
             fixedDelayString = "${marketplace.orphan-cleanup-delay-ms:3600000}",
             initialDelayString = "${marketplace.orphan-cleanup-delay-ms:3600000}")
     public void clean() {
+        if (!orphanCleanupEnabled) return;
         safe(images::cleanOrphans);
     }
 

@@ -45,6 +45,30 @@ def restrict(p):
     else:p.chmod(0o600)
 
 
+def configure_firebase_sandbox():
+    """Explicit opt-in; reuse approved root references without copying secret files."""
+    source=read_env(ROOT/'.env')
+    required=['FIREBASE_PROJECT_ID','FIREBASE_STORAGE_BUCKET','FIREBASE_CREDENTIALS_FILE']
+    missing=[key for key in required if not source.get(key)]
+    if missing:raise RuntimeError('Missing Firebase configuration: '+', '.join(missing))
+    credential=Path(source['FIREBASE_CREDENTIALS_FILE'])
+    if not credential.is_absolute():credential=ROOT/credential
+    if not credential.is_file():raise RuntimeError('FIREBASE_CREDENTIALS_FILE does not reference an existing file')
+    material=json.loads(credential.read_text(encoding='utf-8-sig'))
+    if material.get('type')!='service_account' or material.get('project_id')!=source['FIREBASE_PROJECT_ID']:
+        raise RuntimeError('Firebase credential type/project mismatch; values suppressed')
+    os.environ.update({
+        'LOCAL_FIREBASE_PROJECT_ID':source['FIREBASE_PROJECT_ID'],
+        'LOCAL_FIREBASE_STORAGE_BUCKET':source['FIREBASE_STORAGE_BUCKET'],
+        'LOCAL_FIREBASE_ADC_PATH':'/run/secrets/firebase.json',
+        'FIREBASE_PROJECT_ID':source['FIREBASE_PROJECT_ID'],
+        'FIREBASE_STORAGE_BUCKET':source['FIREBASE_STORAGE_BUCKET'],
+        'FIREBASE_CREDENTIALS_FILE':str(credential.resolve()),
+    })
+    FILES.remove('compose.no-firebase.yaml')
+    print('Explicit Firebase sandbox mode: existing credential mounted read-only; automatic orphan cleanup disabled.')
+
+
 def prepare():
     SECRET_ROOT.mkdir(parents=True,exist_ok=True)
     if ENV.exists():
@@ -157,8 +181,11 @@ def verify():
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--firebase-sandbox',action='store_true',
+        help='Explicitly authorize the approved root Firebase sandbox; preserve no-Firebase mode by default')
     parser.add_argument('action',choices=['prepare','build','up','verify','restart','stop','status','gateway-attempt'])
     args=parser.parse_args()
+    if args.firebase_sandbox:configure_firebase_sandbox()
     if args.action=='prepare':prepare();compose('config','--quiet')
     elif args.action=='build':compose('build','--parallel',*SERVICES,'bakery-storage','subscription-storage','chat-storage')
     elif args.action=='up':compose('up','-d','--no-build',*SERVICES)

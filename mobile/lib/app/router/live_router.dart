@@ -16,6 +16,7 @@ import '../../features/orders/presentation/live_order_pages.dart';
 import '../../features/chat/presentation/live_chat_page.dart';
 import '../../features/cart/presentation/live_cart_page.dart';
 import '../../features/ai/presentation/live_ai_pages.dart';
+import '../../features/addresses/presentation/live_address_page.dart';
 
 abstract final class LiveRouter {
   static Route<void> generate(RouteSettings settings) => MaterialPageRoute(
@@ -30,7 +31,8 @@ abstract final class LiveRouter {
               path.startsWith('/order') ||
               path.startsWith('/chat') ||
               path.startsWith('/ai') ||
-              path == '/checkout') &&
+              path == '/checkout' ||
+              path == '/addresses') &&
           !w.session.authenticated) {
         return const LiveAuthPage();
       }
@@ -117,6 +119,7 @@ abstract final class LiveRouter {
               : LiveChatThread(args.id!, vendor: path.startsWith('/vendor')),
         '/cart' => const LiveCartPage(),
         '/checkout' => const LiveCheckoutPage(),
+        '/addresses' => const LiveAddressPage(),
         '/' => const LiveCatalogPage(home: true),
         '/explore' => const LiveCatalogPage(),
         '/stores' => const LiveCatalogPage(bakeries: true),

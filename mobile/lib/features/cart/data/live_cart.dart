@@ -78,7 +78,8 @@ class LiveCart extends ChangeNotifier {
     var total = unit * BigInt.from(count);
     for (final entry in extras.entries) {
       final matches = p.addOns.where(
-        (a) => a['id'] == entry.key && a['active'] == true,
+        // Public catalog returns active add-ons without an `active` property.
+        (a) => a['id'] == entry.key && a['active'] != false,
       );
       if (matches.length != 1 || entry.value < 1) {
         throw const ApiFailure(

@@ -1,0 +1,16 @@
+{
+  "project": "bakery-cake-ai-20261108t080611z",
+  "compose": "H:\\MSS\\.runtime\\cake-ai-execution-20261108T080611Z\\compose.cake-ai.yaml",
+  "origin": "http://127.0.0.1:18105",
+  "database": "new isolated named volume; no database host port",
+  "credentials": {
+    "CAKE_AI_DB_USERNAME": "H:\\MSS\\.secrets\\bakery-platform\\local-runtime.env",
+    "CAKE_AI_DB_PASSWORD": "H:\\MSS\\.secrets\\bakery-platform\\local-runtime.env"
+  },
+  "generatedSecrets": [],
+  "providerMode": "LOCAL_FALLBACK",
+  "storageMode": "IN_MEMORY_FALLBACK",
+  "serviceCredential": "unresolved: Cake AI client not registered in current Identity mount",
+  "pollDelayMs": 5000,
+  "pollDelayReason": "bounded local polling; permits observation/cancellation of queued jobs"
+}

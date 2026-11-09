@@ -122,10 +122,7 @@ class LiveAuthPage extends StatelessWidget {
             const SCNotice(
               'Đăng nhập để xác nhận tài khoản. Nếu chưa đăng nhập được, kiểm tra kết nối và thông tin trước khi đăng ký lại.',
             ),
-          if (!register)
-            const SCNotice(
-              'Chưa hỗ trợ đặt lại mật khẩu hoặc sửa địa chỉ tài khoản.',
-            ),
+          if (!register) const SCNotice('Chưa hỗ trợ đặt lại mật khẩu.'),
         ],
       ),
     );
@@ -165,6 +162,7 @@ class LiveProfilePage extends StatelessWidget {
             ('/requests', 'Yêu cầu bánh của tôi'),
             ('/offers', 'Báo giá nhận được'),
             ('/cart', 'Giỏ bánh'),
+            ('/addresses', 'Địa chỉ của tôi'),
             ('/orders', 'Đơn bánh của tôi'),
             ('/chat', 'Trò chuyện'),
           ])
@@ -240,7 +238,7 @@ class LiveProfilePage extends StatelessWidget {
             ),
           ],
           const SCNotice(
-            'Hồ sơ chỉ đọc. Backend chưa cung cấp API công khai để sửa hồ sơ, quản lý địa chỉ hoặc người dùng.',
+            'Địa chỉ giao hàng được quản lý riêng và xác minh theo tài khoản. Thông tin hồ sơ ở đây chỉ hiển thị để đối chiếu.',
           ),
           LiveCommand(
             'Đăng xuất',

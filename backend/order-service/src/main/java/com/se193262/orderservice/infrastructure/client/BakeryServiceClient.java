@@ -21,6 +21,19 @@ public class BakeryServiceClient {
     }
 
     public BakeryClient.CatalogQuoteResponse getCatalogQuote(BakeryClient.CatalogQuoteRequest request) {
-        return executor.execute(() -> delegate.getCatalogQuote(request));
+        try {
+            return executor.execute(() -> delegate.getCatalogQuote(request));
+        } catch (RemoteServiceException exception) {
+            Integer status = exception.getRemoteStatus();
+            if (Integer.valueOf(404).equals(status) || Integer.valueOf(422).equals(status)) {
+                throw new com.se193262.orderservice.feature.order.InvalidOrderRequestException(
+                        "Product, options or delivery area are unavailable for this order");
+            }
+            if (Integer.valueOf(409).equals(status)) {
+                throw new com.se193262.orderservice.feature.order.OrderConflictException(
+                        "Product or bakery is no longer available for ordering");
+            }
+            throw exception;
+        }
     }
 }

@@ -16,11 +16,15 @@ class LiveScaffold extends StatelessWidget {
     this.operational = false,
     this.onRefresh,
     this.navigation = true,
+    this.contentAlignment = Alignment.center,
+    this.navigationPath,
   });
   final String title;
   final List<Widget> children;
   final bool operational, navigation;
   final Future<void> Function()? onRefresh;
+  final Alignment contentAlignment;
+  final String? navigationPath;
   @override
   Widget build(BuildContext context) {
     final w = LiveScope.of(context),
@@ -56,7 +60,9 @@ class LiveScaffold extends StatelessWidget {
             ('/stores', 'Tiệm', Icons.storefront_outlined),
             ('/profile', 'Tài khoản', Icons.person_outline),
           ];
-    var selected = destinations.indexWhere((d) => d.$1 == route);
+    var selected = destinations.indexWhere(
+      (d) => d.$1 == (navigationPath ?? route),
+    );
     if (selected < 0) selected = 0;
     final large = MediaQuery.sizeOf(context).width >= 768;
     final body = RefreshIndicator(
@@ -65,7 +71,8 @@ class LiveScaffold extends StatelessWidget {
         key: const ValueKey('live-scroll'),
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
-        child: Center(
+        child: Align(
+          alignment: contentAlignment,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1100),
             child: Column(
@@ -126,6 +133,9 @@ class LiveScaffold extends StatelessWidget {
       ),
       body: SafeArea(
         child: Row(
+          crossAxisAlignment: contentAlignment == Alignment.topCenter
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
           children: [
             if (navigation && large)
               NavigationRail(

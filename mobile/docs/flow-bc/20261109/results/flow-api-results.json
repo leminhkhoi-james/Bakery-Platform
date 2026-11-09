@@ -1,0 +1,371 @@
+{
+  "direct": {
+    "status": "PASS",
+    "order": {
+      "id": "f0b2c930-0fb3-4b7a-bec9-294c8af3e610",
+      "orderNumber": "ORD-23BAFD08641646A88C40",
+      "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+      "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+      "cakeRequestId": null,
+      "offerId": null,
+      "orderSource": "DIRECT_CATALOG",
+      "customerName": "QA customerA",
+      "customerPhone": "QA-ONLY",
+      "bakeryName": "QA Flow BC Bakery",
+      "customerNote": "QA API Flow B; no real fulfillment",
+      "subtotal": 419000.0,
+      "deliveryFee": 15000.0,
+      "totalAmount": 434000.0,
+      "currency": "VND",
+      "status": "COMPLETED",
+      "neededAt": "2026-11-12T02:08:47.926902Z",
+      "acceptedAt": "2026-11-09T02:12:04.808573Z",
+      "completedAt": "2026-11-09T02:12:05.186516Z",
+      "createdAt": "2026-11-09T02:08:53.349551Z",
+      "updatedAt": "2026-11-09T02:12:05.186516Z",
+      "items": [
+        {
+          "id": "2c20d708-c1f0-43f4-97e5-302b96892ba4",
+          "sourceProductId": "f2dbe6f3-d8ba-42d4-95be-78372358b521",
+          "sourceOfferItemId": null,
+          "itemType": "CAKE",
+          "name": "QA Live Address Cake",
+          "description": "Synthetic local order lifecycle verification",
+          "configuration": {
+            "options": [
+              {
+                "values": [
+                  {
+                    "id": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451",
+                    "name": "QA Vanilla",
+                    "priceAdjustment": 20000.0
+                  }
+                ],
+                "groupId": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84",
+                "groupName": "QA Flavor"
+              }
+            ]
+          },
+          "quantity": 2,
+          "unitPrice": 200000.0,
+          "lineTotal": 400000.0
+        },
+        {
+          "id": "b7564a44-e85d-4ac6-be78-9655cb291c57",
+          "sourceProductId": null,
+          "sourceOfferItemId": null,
+          "itemType": "ADD_ON",
+          "name": "QA Candle",
+          "description": "Synthetic accessory",
+          "configuration": {},
+          "quantity": 1,
+          "unitPrice": 19000.0,
+          "lineTotal": 19000.0
+        }
+      ],
+      "deliveryAddress": {
+        "recipientName": "Synthetic recipient",
+        "recipientPhone": "QA-ONLY",
+        "addressLine": "QA TEST KITCHEN",
+        "ward": "QA Ward",
+        "district": "QA District",
+        "city": "QA City",
+        "latitude": null,
+        "longitude": null,
+        "deliveryNote": null
+      },
+      "statusHistory": [
+        {
+          "fromStatus": null,
+          "toStatus": "PENDING",
+          "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+          "note": "Order created",
+          "changedAt": "2026-11-09T02:08:53.349551Z"
+        },
+        {
+          "fromStatus": "PENDING",
+          "toStatus": "CONFIRMED",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:04.808573Z"
+        },
+        {
+          "fromStatus": "CONFIRMED",
+          "toStatus": "BAKING",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:05.042814Z"
+        },
+        {
+          "fromStatus": "BAKING",
+          "toStatus": "READY",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:05.092724Z"
+        },
+        {
+          "fromStatus": "READY",
+          "toStatus": "DELIVERING",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:05.138767Z"
+        },
+        {
+          "fromStatus": "DELIVERING",
+          "toStatus": "COMPLETED",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:05.186516Z"
+        }
+      ],
+      "review": {
+        "orderId": "f0b2c930-0fb3-4b7a-bec9-294c8af3e610",
+        "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+        "rating": 5,
+        "comment": "Synthetic local Flow B review",
+        "status": "PUBLISHED",
+        "createdAt": "2026-11-09T02:12:05.319101Z",
+        "updatedAt": "2026-11-09T02:12:05.319101Z"
+      }
+    },
+    "snapshotAfterAddressUpdate": "UNCHANGED",
+    "replayId": "f0b2c930-0fb3-4b7a-bec9-294c8af3e610"
+  },
+  "offer": {
+    "rfqId": "fb5cf34d-8b75-447d-bc6c-a83610126e9d",
+    "offerId": "1d9c3b85-c2bc-40b2-89c0-7ce91f6ec930",
+    "key": "ba3c16ff-5573-45f0-a1f0-9cbf44a8e9eb",
+    "receipt": {
+      "offerId": "1d9c3b85-c2bc-40b2-89c0-7ce91f6ec930",
+      "cakeRequestId": "fb5cf34d-8b75-447d-bc6c-a83610126e9d",
+      "orderId": "0091385a-690b-4460-9a13-2ee9948ad941",
+      "orderNumber": "ORD-20261109-0091385a690b44609a13",
+      "offerStatus": "ACCEPTED",
+      "requestStatus": "OFFER_SELECTED"
+    },
+    "order": {
+      "id": "0091385a-690b-4460-9a13-2ee9948ad941",
+      "orderNumber": "ORD-20261109-0091385a690b44609a13",
+      "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+      "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+      "cakeRequestId": "fb5cf34d-8b75-447d-bc6c-a83610126e9d",
+      "offerId": "1d9c3b85-c2bc-40b2-89c0-7ce91f6ec930",
+      "orderSource": "ACCEPTED_OFFER",
+      "customerName": "QA customerA",
+      "customerPhone": "QA-ONLY",
+      "bakeryName": "QA Flow BC Bakery",
+      "customerNote": null,
+      "subtotal": 369000.0,
+      "deliveryFee": 15000.0,
+      "totalAmount": 384000.0,
+      "currency": "VND",
+      "status": "COMPLETED",
+      "neededAt": "2026-11-13T02:12:05.369045Z",
+      "acceptedAt": "2026-11-09T02:12:13.918799Z",
+      "completedAt": "2026-11-09T02:12:14.107441Z",
+      "createdAt": "2026-11-09T02:12:13.695945Z",
+      "updatedAt": "2026-11-09T02:12:14.107441Z",
+      "items": [
+        {
+          "id": "6773680d-d9f8-4e0d-85a5-ba2e9181f641",
+          "sourceProductId": null,
+          "sourceOfferItemId": null,
+          "itemType": "CAKE",
+          "name": "QA API offer",
+          "description": "Synthetic RFQ for real isolated services",
+          "configuration": {
+            "title": "QA API offer",
+            "neededAt": "2026-11-13T02:12:05.369045Z",
+            "occasion": null,
+            "budgetMax": null,
+            "budgetMin": null,
+            "preference": null,
+            "description": "Synthetic RFQ for real isolated services",
+            "requestType": "OPEN_CUSTOM",
+            "servingSize": 6,
+            "deliveryCity": "QA City",
+            "baseProductId": null,
+            "offerDeadline": "2026-11-10T02:12:05.369067Z",
+            "targetBakeryId": null,
+            "deliveryDistrict": "QA District",
+            "optionSelections": [],
+            "selectedDesignId": null
+          },
+          "quantity": 1,
+          "unitPrice": 350000.0,
+          "lineTotal": 350000.0
+        },
+        {
+          "id": "e03a96fb-056f-4919-84bc-94704fa2efe0",
+          "sourceProductId": null,
+          "sourceOfferItemId": "76906331-53f0-40b1-8ef1-daf245fd0df4",
+          "itemType": "ADD_ON",
+          "name": "QA Candle",
+          "description": "Synthetic accessory",
+          "configuration": {},
+          "quantity": 1,
+          "unitPrice": 19000.0,
+          "lineTotal": 19000.0
+        }
+      ],
+      "deliveryAddress": {
+        "recipientName": "Synthetic recipient",
+        "recipientPhone": "QA-ONLY",
+        "addressLine": "QA TEST KITCHEN",
+        "ward": "QA Ward",
+        "district": "QA District",
+        "city": "QA City",
+        "latitude": null,
+        "longitude": null,
+        "deliveryNote": "QA API acceptance"
+      },
+      "statusHistory": [
+        {
+          "fromStatus": null,
+          "toStatus": "PENDING",
+          "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+          "note": null,
+          "changedAt": "2026-11-09T02:12:13.695945Z"
+        },
+        {
+          "fromStatus": "PENDING",
+          "toStatus": "CONFIRMED",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:13.918799Z"
+        },
+        {
+          "fromStatus": "CONFIRMED",
+          "toStatus": "BAKING",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:13.967530Z"
+        },
+        {
+          "fromStatus": "BAKING",
+          "toStatus": "READY",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:14.014531Z"
+        },
+        {
+          "fromStatus": "READY",
+          "toStatus": "DELIVERING",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:14.060455Z"
+        },
+        {
+          "fromStatus": "DELIVERING",
+          "toStatus": "COMPLETED",
+          "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+          "note": "Synthetic lifecycle only; no physical fulfillment",
+          "changedAt": "2026-11-09T02:12:14.107441Z"
+        }
+      ],
+      "review": null
+    },
+    "status": "PASS"
+  },
+  "recovery": {
+    "rfqId": "4f4240b3-856e-456c-a8c9-73dc080ea6f7",
+    "offerId": "67b6433a-655e-4a6d-94d3-7535d802812b",
+    "key": "7f3e1a23-4f37-4c51-87f6-31b4c20e1ed7",
+    "receipt": {
+      "offerId": "67b6433a-655e-4a6d-94d3-7535d802812b",
+      "cakeRequestId": "4f4240b3-856e-456c-a8c9-73dc080ea6f7",
+      "orderId": "41e2efc9-50ed-41cc-b4d3-67764b248638",
+      "orderNumber": "ORD-20261109-41e2efc950ed41ccb4d3",
+      "offerStatus": "ACCEPTED",
+      "requestStatus": "OFFER_SELECTED"
+    },
+    "order": {
+      "id": "41e2efc9-50ed-41cc-b4d3-67764b248638",
+      "orderNumber": "ORD-20261109-41e2efc950ed41ccb4d3",
+      "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+      "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+      "cakeRequestId": "4f4240b3-856e-456c-a8c9-73dc080ea6f7",
+      "offerId": "67b6433a-655e-4a6d-94d3-7535d802812b",
+      "orderSource": "ACCEPTED_OFFER",
+      "customerName": "QA customerA",
+      "customerPhone": "QA-ONLY",
+      "bakeryName": "QA Flow BC Bakery",
+      "customerNote": null,
+      "subtotal": 369000.0,
+      "deliveryFee": 15000.0,
+      "totalAmount": 384000.0,
+      "currency": "VND",
+      "status": "PENDING",
+      "neededAt": "2026-11-13T02:12:14.171993Z",
+      "acceptedAt": null,
+      "completedAt": null,
+      "createdAt": "2026-11-09T02:12:54.273161Z",
+      "updatedAt": "2026-11-09T02:12:54.273161Z",
+      "items": [
+        {
+          "id": "9abfc644-faea-4086-a49c-85e90e504f7c",
+          "sourceProductId": null,
+          "sourceOfferItemId": null,
+          "itemType": "CAKE",
+          "name": "QA API recovery",
+          "description": "Synthetic RFQ for real isolated services",
+          "configuration": {
+            "title": "QA API recovery",
+            "neededAt": "2026-11-13T02:12:14.171993Z",
+            "occasion": null,
+            "budgetMax": null,
+            "budgetMin": null,
+            "preference": null,
+            "description": "Synthetic RFQ for real isolated services",
+            "requestType": "OPEN_CUSTOM",
+            "servingSize": 6,
+            "deliveryCity": "QA City",
+            "baseProductId": null,
+            "offerDeadline": "2026-11-10T02:12:14.172026Z",
+            "targetBakeryId": null,
+            "deliveryDistrict": "QA District",
+            "optionSelections": [],
+            "selectedDesignId": null
+          },
+          "quantity": 1,
+          "unitPrice": 350000.0,
+          "lineTotal": 350000.0
+        },
+        {
+          "id": "bdd1ce31-bd45-470c-a01f-e8711c430e0c",
+          "sourceProductId": null,
+          "sourceOfferItemId": "76681fab-4fff-424f-8f95-6b1c96920d63",
+          "itemType": "ADD_ON",
+          "name": "QA Candle",
+          "description": "Synthetic accessory",
+          "configuration": {},
+          "quantity": 1,
+          "unitPrice": 19000.0,
+          "lineTotal": 19000.0
+        }
+      ],
+      "deliveryAddress": {
+        "recipientName": "Synthetic recipient",
+        "recipientPhone": "QA-ONLY",
+        "addressLine": "QA TEST KITCHEN",
+        "ward": "QA Ward",
+        "district": "QA District",
+        "city": "QA City",
+        "latitude": null,
+        "longitude": null,
+        "deliveryNote": "QA downstream outage recovery"
+      },
+      "statusHistory": [
+        {
+          "fromStatus": null,
+          "toStatus": "PENDING",
+          "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+          "note": null,
+          "changedAt": "2026-11-09T02:12:54.273161Z"
+        }
+      ],
+      "review": null
+    },
+    "status": "PASS"
+  }
+}

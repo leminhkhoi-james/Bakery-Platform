@@ -1,8 +1,7 @@
 import { AuthContext } from '../context/useAuth.js'
 import { sessionIdentity } from '../routes/sessionNavigation.js'
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { demoRuntime, getDemoStore } from '../mockData/runtime.js'
-import { DEMO_STORAGE_KEY } from '../mockData/seed.js'
+import { displayDataSource } from '../mockData/displayRuntime.js'
 
 export function useCatalogResource(load, params = {}) {
   const actor = sessionIdentity(useContext(AuthContext)?.user)
@@ -21,33 +20,18 @@ export function useCatalogResource(load, params = {}) {
   }, [load, paramsKey, key, actor])
   const reload = useCallback(() => setRevision((value) => value + 1), [])
   useEffect(() => {
-    const store = getDemoStore() || demoRuntime?.store
-    const unsubStore = store?.subscribe?.(reload)
-    if (typeof window === 'undefined') return unsubStore
-
-    const handleStorage = (event) => {
-      if (!event.key || event.key === DEMO_STORAGE_KEY) {
-        store?.reload?.()
-      }
-    }
-    const handleFocus = () => {
-      if (typeof document === 'undefined' || !document.hidden) {
-        store?.reload?.()
-      }
-    }
-
-    window.addEventListener('storage', handleStorage)
+    if (typeof window === 'undefined') return
+    const handleFocus = () => { if (!document.hidden) reload() }
     window.addEventListener('focus', handleFocus)
-    window.addEventListener('visibilitychange', handleFocus)
-
+    document.addEventListener('visibilitychange', handleFocus)
+    window.addEventListener('sweetcake:api-mutated', reload)
     return () => {
-      unsubStore?.()
-      window.removeEventListener('storage', handleStorage)
       window.removeEventListener('focus', handleFocus)
-      window.removeEventListener('visibilitychange', handleFocus)
+      document.removeEventListener('visibilitychange', handleFocus)
+      window.removeEventListener('sweetcake:api-mutated', reload)
     }
   }, [reload])
   const sameQuery = resource.actor === actor && resource.paramsKey === paramsKey && resource.status === 'ready'
   const currentResource = resource.key === key ? resource : sameQuery ? { ...resource, refreshing: true } : { data: null, error: null, status: 'loading' }
-  return { data: currentResource.data, error: currentResource.error, status: currentResource.status, refreshing: Boolean(currentResource.refreshing), reload }
+  return { data: currentResource.data, source: displayDataSource(currentResource.data), error: currentResource.error, status: currentResource.status, refreshing: Boolean(currentResource.refreshing), reload }
 }

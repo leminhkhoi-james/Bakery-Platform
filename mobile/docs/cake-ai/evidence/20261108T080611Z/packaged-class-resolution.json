@@ -1,0 +1,32 @@
+{
+  "classes": {
+    "com/google/auth/oauth2/GoogleCredentials.class": [
+      "BOOT-INF/lib/google-auth-library-oauth2-http-1.25.0.jar"
+    ],
+    "com/google/cloud/storage/Storage.class": [
+      "BOOT-INF/lib/google-cloud-storage-2.43.0.jar"
+    ],
+    "com/google/cloud/storage/StorageOptions.class": [
+      "BOOT-INF/lib/google-cloud-storage-2.43.0.jar"
+    ],
+    "com/google/cloud/storage/BlobInfo.class": [
+      "BOOT-INF/lib/google-cloud-storage-2.43.0.jar"
+    ],
+    "com/google/cloud/storage/Blob.class": [
+      "BOOT-INF/lib/google-cloud-storage-2.43.0.jar"
+    ],
+    "com/google/cloud/storage/StorageException.class": [
+      "BOOT-INF/lib/google-cloud-storage-2.43.0.jar"
+    ],
+    "com/google/cloud/http/HttpTransportOptions.class": [
+      "BOOT-INF/lib/google-cloud-core-http-2.43.0.jar"
+    ],
+    "com/se193262/platform/dto/ApiResponse.class": [
+      "BOOT-INF/lib/platform-support-0.0.1-SNAPSHOT.jar"
+    ]
+  },
+  "allPresentExactlyOnce": true,
+  "scannedAllNestedLibraries": true,
+  "nestedLibraryCount": 176,
+  "executableJarSha256": "0e8a49c457adfdf6b9f3f527c255a19c19f994d3001e8ebd2705c84bfc963539"
+}

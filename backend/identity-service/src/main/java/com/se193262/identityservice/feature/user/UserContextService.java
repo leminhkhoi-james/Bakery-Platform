@@ -45,7 +45,7 @@ public class UserContextService {
         user(userId);
         return jdbc.sql(
                         "SELECT"
-                            + " recipient_name,recipient_phone,address_line,ward,district,city,latitude,longitude"
+                            + " id,label,recipient_name,recipient_phone,address_line,ward,district,city,latitude,longitude"
                             + " FROM user_addresses WHERE id=:id AND user_id=:userId")
                 .param("id", addressId)
                 .param("userId", userId)
@@ -54,6 +54,8 @@ public class UserContextService {
                             Map<String, Object> result = new HashMap<>();
                             for (String field :
                                     List.of(
+                                            "id",
+                                            "label",
                                             "recipient_name",
                                             "recipient_phone",
                                             "address_line",

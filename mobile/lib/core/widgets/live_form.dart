@@ -205,8 +205,10 @@ class LiveFormPage<T> extends StatefulWidget {
     this.privateContext = true,
     this.recoveryBuilder,
     this.onSuccess,
+    this.operational = true,
   });
   final String title, action;
+  final bool operational;
   final List<FormFieldSpec> fields;
   final Json initial;
   final Future<T> Function(Json) save;
@@ -275,7 +277,7 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
       child: LiveScaffold(
         title: widget.title,
         navigation: false,
-        operational: true,
+        operational: widget.operational,
         children: [
           Form(
             key: form,

@@ -1,0 +1,113 @@
+{
+  "at": "2026-11-09T03:33:49.808916+00:00",
+  "analyzerIssues": 0,
+  "flutterTests": 134,
+  "suiteResult": "All tests passed",
+  "logs": [
+    {
+      "log": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\flutter-pub-get.log",
+      "sha256": "8d1531fe24e5bb2227b8ad15b32aadfa87737750ddc61d5af0a1b853f4ddaaa3",
+      "scope": "pub get"
+    },
+    {
+      "log": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\flutter-analyze-finish2.log",
+      "sha256": "835ad710425f529abed8b656a391ad5d568d45afb4e17a18666e6170182ab74d",
+      "scope": "analyzer final"
+    },
+    {
+      "log": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\flutter-test-finish2.log",
+      "sha256": "d14941b65f1289f63d15d38484bc604cb028f9b99b28972e32f9ba3c15471f1c",
+      "scope": "full suite final"
+    },
+    {
+      "log": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\flutter-build-finish2.log",
+      "sha256": "2ae9b10d438d42821164d94570eca04be570d178ffb4104e9ad6d4e1f29ea001",
+      "scope": "APK final"
+    }
+  ],
+  "testCoverageIsNotRuntimeEvidence": true,
+  "apkBuildExit": 0,
+  "analyzeExit": 0,
+  "testExit": 0,
+  "backendBuildCopySources": {
+    "files": [
+      {
+        "repositoryFile": "backend/order-service/src/test/java/com/se193262/orderservice/OrderServiceApplicationTests.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend-final\\order-service\\src\\test\\java\\com\\se193262\\orderservice\\OrderServiceApplicationTests.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/order-service/src/main/java/com/se193262/orderservice/infrastructure/client/BakeryServiceClient.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend-final\\order-service\\src\\main\\java\\com\\se193262\\orderservice\\infrastructure\\client\\BakeryServiceClient.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/order-service/src/main/java/com/se193262/orderservice/infrastructure/client/IdentityServiceClient.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend-final\\order-service\\src\\main\\java\\com\\se193262\\orderservice\\infrastructure\\client\\IdentityServiceClient.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/resources/application.yml",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\resources\\application.yml",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\user\\UserContextService.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressController.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\AddressController.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressRepository.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\AddressRepository.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressService.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\AddressService.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressServiceImpl.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\AddressServiceImpl.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/AddressResponse.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\dto\\AddressResponse.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/SaveAddressRequest.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\main\\java\\com\\se193262\\identityservice\\feature\\address\\dto\\SaveAddressRequest.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/identity-service/src/test/java/com/se193262/identityservice/feature/address/AddressApiIntegrationTest.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\src\\test\\java\\com\\se193262\\identityservice\\feature\\address\\AddressApiIntegrationTest.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/exception/MarketplaceConcurrencyExceptionHandler.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\marketplace-service\\src\\main\\java\\com\\se193262\\marketplaceservice\\exception\\MarketplaceConcurrencyExceptionHandler.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/order-service/src/test/java/com/se193262/orderservice/infrastructure/client/BakeryServiceClientTest.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend-final\\order-service\\src\\test\\java\\com\\se193262\\orderservice\\infrastructure\\client\\BakeryServiceClientTest.java",
+        "normalizedTextMatches": true
+      },
+      {
+        "repositoryFile": "backend/order-service/src/test/java/com/se193262/orderservice/infrastructure/client/IdentityServiceClientTest.java",
+        "buildCopy": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend-final\\order-service\\src\\test\\java\\com\\se193262\\orderservice\\infrastructure\\client\\IdentityServiceClientTest.java",
+        "normalizedTextMatches": true
+      }
+    ],
+    "mismatches": [],
+    "normalization": "Universal newline decoding only"
+  }
+}

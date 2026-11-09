@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../../../core/api/contracts.dart';
+import '../../../core/api/environment.dart';
 import '../../../core/api/phase5_contracts.dart';
 import '../../../core/api/transport.dart';
 import '../../../core/live/live_workspace.dart';
@@ -13,6 +14,17 @@ import '../../../core/widgets/live_scaffold.dart';
 import '../../../core/widgets/phase5_widgets.dart';
 import '../../../core/widgets/sweetcake_widgets.dart';
 import '../data/live_ai_repository.dart';
+
+class _AiModeNotice extends StatelessWidget {
+  const _AiModeNotice();
+  @override
+  Widget build(BuildContext context) =>
+      SCNotice(switch (LiveScope.of(context).session.environment.cakeAiMode) {
+        CakeAiMode.localFallback => 'Chế độ cục bộ: dịch vụ vẽ hình minh họa bánh, không gọi nhà cung cấp AI. Ảnh lưu tạm và mất khi dịch vụ khởi động lại.',
+        CakeAiMode.providerConfigured => 'Môi trường có cấu hình nhà cung cấp. Trạng thái hoàn tất chưa xác nhận nguồn tạo ảnh; yêu cầu có thể phát sinh phí.',
+        CakeAiMode.unknown => 'Chưa xác minh chế độ tạo ảnh của dịch vụ. Trạng thái hoàn tất không xác nhận ảnh được tạo bởi nhà cung cấp AI.',
+      });
+}
 
 class LiveAiJobsPage extends StatelessWidget {
   const LiveAiJobsPage({super.key, this.request});
@@ -32,9 +44,8 @@ class LiveAiJobsPage extends StatelessWidget {
             request?['title'] ?? 'Ý tưởng của bạn, từng phiên bản.',
             style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const Text(
-            'Làm mới chỉ đọc trạng thái. Tạo mới và chỉnh prompt là các yêu cầu riêng có thể phát sinh phí từ nhà cung cấp.',
-          ),
+          const _AiModeNotice(),
+          const Text('Làm mới chỉ đọc trạng thái, không tạo yêu cầu mới.'),
           if (request == null)
             SCButton(
               'Chọn yêu cầu để tạo thiết kế',
@@ -130,8 +141,9 @@ Future<Json?> openAiPrompt(
     ],
     extra: Column(
       children: [
-        const SCNotice(
-          'Yêu cầu sẽ chạy bất đồng bộ qua dịch vụ AI thật. Không tự gửi lại khi chưa rõ kết quả. Hủy job không hoàn lại phí đã phát sinh.',
+        const _AiModeNotice(),
+        const Text(
+          'Yêu cầu chạy bất đồng bộ. Không tự gửi lại khi chưa rõ kết quả. Hủy tác vụ không hoàn lại phí đã phát sinh nếu có.',
         ),
         if (jobId == null) _AiSourcePicker(onChanged: (v) => images = v),
       ],
@@ -296,6 +308,7 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
         }
         final mine = job['customerId'] == w.session.user?['id'];
         return [
+          const _AiModeNotice(),
           SCStatusBadge(status),
           Text(
             'Phiên bản ${d['currentRevision']}',
@@ -303,8 +316,10 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
           ),
           Text('Cập nhật ${displayInstant(job['updatedAt'])}'),
           if (status == 'FAILED')
-            const SCNotice(
-              'Dịch vụ không hoàn tất thiết kế. Xem lại ý tưởng và chủ động tạo phiên bản mới nếu muốn thử tiếp.',
+            SCNotice(
+              job['errorMessage'] == 'INPUT_REJECTED'
+                  ? 'Nội dung không vượt qua kiểm tra an toàn. Điều chỉnh ý tưởng để tạo phiên bản mới.'
+                  : 'Dịch vụ không hoàn tất thiết kế. Xem lại ý tưởng và chủ động tạo phiên bản mới nếu muốn thử tiếp.',
               warning: true,
             ),
           if (active)
@@ -330,6 +345,7 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
           for (final design in objects(d['generatedDesigns']))
             SCButton(
               'Xem thiết kế · ${design['moderationStatus']}',
+              key: ValueKey('ai-design-${design['id']}'),
               outlined: true,
               onPressed: () => Navigator.push(
                 context,
@@ -345,6 +361,7 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
           if (mine && active)
             LiveCommand(
               'Hủy tác vụ',
+              key: const ValueKey('ai-cancel'),
               outlined: true,
               run: () async {
                 if (await confirmLive(context, 'Hủy tác vụ thiết kế?')) {
@@ -356,12 +373,18 @@ class _LiveAiJobPageState extends State<LiveAiJobPage>
           if (mine && ['SUCCEEDED', 'FAILED'].contains(status))
             SCButton(
               'Điều chỉnh prompt',
+              key: const ValueKey('ai-revise'),
               onPressed: () async {
                 await openAiPrompt(context, jobId: widget.id);
                 if (mounted) reload();
               },
             ),
-          SCButton('Làm mới trạng thái', outlined: true, onPressed: reload),
+          SCButton(
+            'Làm mới trạng thái',
+            key: const ValueKey('ai-refresh'),
+            outlined: true,
+            onPressed: reload,
+          ),
         ];
       },
     );
@@ -386,14 +409,30 @@ class LiveAiDesignPage extends StatelessWidget {
       operational: admin,
       load: () => w.ai.design(id),
       builder: (context, d, reload) => [
+        const _AiModeNotice(),
         SCStatusBadge('${d['moderationStatus']}'),
         if (d['moderationStatus'] == 'APPROVED')
-          LiveMedia(d['imageUrl'] as String?, label: 'Thiết kế đã được duyệt')
+          LiveMedia(
+            d['imageUrl'] as String?,
+            key: const ValueKey('ai-design-image'),
+            label: 'Thiết kế đã được duyệt',
+            height: MediaQuery.orientationOf(context) == Orientation.landscape
+                ? 160
+                : (MediaQuery.sizeOf(context).width - 32)
+                      .clamp(200, 480)
+                      .toDouble(),
+            fit: BoxFit.contain,
+          )
         else
           const SCNotice(
             'Thiết kế chưa được phép hiển thị. Không dùng kết quả này cho yêu cầu bánh.',
           ),
-        if (d['moderationReason'] != null) Text('${d['moderationReason']}'),
+        if (d['moderationReason'] != null)
+          Text(switch (d['moderationReason']) {
+            'AUTOMATED_REVIEW' => 'Đã qua kiểm tra nội dung tự động.',
+            'ADMIN_REVIEW' => 'Đã được quản trị viên kiểm tra.',
+            _ => 'Nội dung cần được kiểm tra trước khi sử dụng.',
+          }),
         SCButton(
           'Xem tiến trình và phiên bản',
           outlined: true,
@@ -415,6 +454,7 @@ class LiveAiDesignPage extends StatelessWidget {
             d['moderationStatus'] == 'APPROVED')
           LiveCommand(
             'Chọn cho yêu cầu này',
+            key: const ValueKey('ai-select'),
             run: () async {
               final current = await w.marketplace.request(
                 apiId(request!['id']),
@@ -442,7 +482,9 @@ class LiveAiDesignPage extends StatelessWidget {
             },
             after: reload,
           ),
-        if (admin && w.session.hasRole('ADMIN'))
+        if (admin &&
+            w.session.hasRole('ADMIN') &&
+            d['moderationStatus'] == 'PENDING')
           for (final status in ['APPROVED', 'REJECTED'])
             if (d['moderationStatus'] != status)
               LiveCommand(
@@ -454,6 +496,10 @@ class LiveAiDesignPage extends StatelessWidget {
                 },
                 after: reload,
               ),
+        if (admin && d['moderationStatus'] != 'PENDING')
+          const Text(
+            'Thiết kế đã có quyết định duyệt. Dịch vụ chỉ nhận quyết định cho thiết kế đang chờ duyệt.',
+          ),
         SCButton('Làm mới liên kết ảnh', outlined: true, onPressed: reload),
       ],
     );

@@ -1,0 +1,450 @@
+{
+  "at": "2026-11-09T03:42:36.461406+00:00",
+  "primaryReport": {
+    "file": "H:\\MSS\\Bakery-Platform\\docs\\mobile\\BAKERY_PLATFORM_FLOW_B_C_ADDRESS_CHECKOUT_REMEDIATION_REPORT_VI.md",
+    "sha256": "9bfe1509cbba246a169d8697ca7986197b67a8d57597509ccf2cbb1b7fb8c6df"
+  },
+  "excludedFromHashIndex": [
+    "manifests/artifacts.json",
+    "results/final-validation.json"
+  ],
+  "reason": "Index excludes itself and the validator output that is updated after checking the index.",
+  "files": {
+    "manifests/android-screenshots.json": {
+      "sha256": "37022d9f3d17920826c0eecd735918672ddd1268f66ec3a5b049155101a54a0e",
+      "bytes": 27796
+    },
+    "manifests/apk-history.json": {
+      "sha256": "1f4d6a7663728cca481a34c22705ab31be94355d21b2a8e12bf57269270f371f",
+      "bytes": 2837
+    },
+    "manifests/apk.json": {
+      "sha256": "35738ca80114d9270a60a55d8ace6bd2360d8db53ee7e3499245664fe690f130",
+      "bytes": 728
+    },
+    "manifests/web-screenshots.json": {
+      "sha256": "c54bdca62da48fab20aa09e936bb6ec688399f49fba604932ab0269e2e2880ea",
+      "bytes": 2172
+    },
+    "results/ackloss-not-applied.json": {
+      "sha256": "e72b713b143593cca95cd98db44ba580d1c0b9f192677ae3781d4e5baf339465",
+      "bytes": 2643
+    },
+    "results/address-results.json": {
+      "sha256": "6004b7e007f99a3d5260ce762f12ea0054aebdcda0bb184ecc1ca397b070f71b",
+      "bytes": 317
+    },
+    "results/api-events.jsonl": {
+      "sha256": "d192921cf46397932ca2c3e0d8cdc9338c78fd44fa7079d280f7e6bc8b4929c5",
+      "bytes": 175631
+    },
+    "results/backend-tests.json": {
+      "sha256": "1d5ef828c958d3c6be3ff451c2183e2bc518b485300a48c3cf44ce90ec43b8fa",
+      "bytes": 9490
+    },
+    "results/final-runtime.json": {
+      "sha256": "0d60dc3d0a78a35ca63d1b4d4682349edaa55fcb40df065ef1d0b03df84112ff",
+      "bytes": 15490
+    },
+    "results/flow-api-results.json": {
+      "sha256": "72ba066c0b185ab0f409498e1bc28dc9c2bdac95acea075641477520824f35cc",
+      "bytes": 13603
+    },
+    "results/flutter-verification.json": {
+      "sha256": "8db6411e07efdb10ecf66b54522ace3ea1ff7db0aa90517a8c8ad532b253dba4",
+      "bytes": 6933
+    },
+    "results/handoff.json": {
+      "sha256": "f03c105ccdd3db4d3fc351df492ad7b3b5b9228ac6bbf8d321ffbdd054ac5af3",
+      "bytes": 3632
+    },
+    "results/identity-runtime-before.json": {
+      "sha256": "8ec6cb805432c215a4364a2ad2788f75f134ce663821da8a95050c3760d34b07",
+      "bytes": 891
+    },
+    "results/integrity.json": {
+      "sha256": "940a6551bafafe4efadcca5e59a889c2e9bad640feb2facd654800f38aa604f4",
+      "bytes": 18086
+    },
+    "results/native-ackloss.json": {
+      "sha256": "f060108aaf9ad1b8b096068c5f89579e97425bc7b440877acce89f7a04884213",
+      "bytes": 5537
+    },
+    "results/native-flow-b.json": {
+      "sha256": "00fc9932f7d62ae29e9bfbc1950772c57b070673b661059b741e78d1927e2c75",
+      "bytes": 16135
+    },
+    "results/native-flow-c.json": {
+      "sha256": "a44342f07fce74f3edc9b44988f50dc33236a6da10d82365df2404a56075bf5b",
+      "bytes": 19370
+    },
+    "results/native-network.jsonl": {
+      "sha256": "9b8fa14ae435ced919b8201e776085b9bdd9ae7f8b6963b2a0d794932aebee46",
+      "bytes": 100585
+    },
+    "results/native-proxy.json": {
+      "sha256": "ff6c9687566c4b4b6dd71aba36b0643457cc780e1b4288ac09de30652c833ce6",
+      "bytes": 296
+    },
+    "results/runtime-before.json": {
+      "sha256": "f4ba6ef16fed305f05ed670be1c66f316ba0dd1faec143cc86c5896333b652b3",
+      "bytes": 6415
+    },
+    "results/web-last-states.json": {
+      "sha256": "269bf5919e5dc0c4a118133da7a34c94b6cd3956ceb27c97c2270bbafbf6ad31",
+      "bytes": 22858
+    },
+    "results/web-network.json": {
+      "sha256": "198072c32ed7bf90fa8f3192ab607d431f0435a414e284590e7e26893e91eaed",
+      "bytes": 10928
+    },
+    "results/web-runtime.json": {
+      "sha256": "8bc25dff8565ce76c4d9c278801b521040cf3f9e3c5d2b9c54d3b25835f368f3",
+      "bytes": 1223
+    },
+    "review/cancel-verification.json": {
+      "sha256": "39dbf4726dd7b2e967b57bfba033b1c2f5ce852690189555b00bd500018603d7",
+      "bytes": 381
+    },
+    "review/capture-manifest.json": {
+      "sha256": "546fa3604a648f342c223cacdac31ee50bd68ebb7ae198e53a573f03e97d6fa7",
+      "bytes": 1315
+    },
+    "review/device-baseline.json": {
+      "sha256": "eb6c1014f7ad43daf12c6a744d162095f9ad50be6a14496b7d76d5fb3350b02c",
+      "bytes": 134
+    },
+    "review/finish-review.json": {
+      "sha256": "0ee787a8061abffa98cae8766c603b545935e92b3cb00cbc05bd1cb657a2ec01",
+      "bytes": 832
+    },
+    "review/phone-android.png": {
+      "sha256": "52c5ce3514f3fa06b5cfa4bdc4c5bde057d7af681be34d2165ec833abde25a75",
+      "bytes": 115691
+    },
+    "review/phone-delete-cancel-no-success.png": {
+      "sha256": "701deef03c60659ea68c585be4297e6a3686e039ccd41283349f3272a8c502b2",
+      "bytes": 115858
+    },
+    "review/phone-form-android.png": {
+      "sha256": "277c8230ba72be4bf4aea17e61596e2f82bc9638c108e8732c74df0d0d74d673",
+      "bytes": 129894
+    },
+    "review/phone-large-text-android.png": {
+      "sha256": "cef4afbc360b335dd7a1b612932470353b22fe48d0b9b888f5c430645073b1a4",
+      "bytes": 132671
+    },
+    "review/tablet-android.png": {
+      "sha256": "dbcb83d00eb11ef27223e4f6dbc980517830d169471d5e2db4b149a5fe455439",
+      "bytes": 78846
+    },
+    "review/tablet-initial-surface-not-resized.png": {
+      "sha256": "208f1bc24a10f4ea2d6d06a431f9c9169d25edd22d8b8067c7f80ff06bb008d7",
+      "bytes": 120491
+    },
+    "screenshots/android/customerA/account/logged-in-021601265149.png": {
+      "sha256": "21ea4ff362e77eeefc89fef41bb35ec1a076b6f5d0d446cb412f410f4528e6eb",
+      "bytes": 134390
+    },
+    "screenshots/android/customerA/account/logged-in-023350889111.png": {
+      "sha256": "a321bbc483114a948f6797196ec335ee6e55fa75cf706d2ad27bcd0404d6e7b4",
+      "bytes": 134403
+    },
+    "screenshots/android/customerA/account/logged-in-024317591979.png": {
+      "sha256": "8909ceef06da125bb7c7e5e835963465289809ce2058f4e4178c41d6468d1e6e",
+      "bytes": 134760
+    },
+    "screenshots/android/customerA/account/logged-in-025433555433.png": {
+      "sha256": "7651c661378ee5e9667e9af91f306413709fd05de70321d83820ebb7b3643cbb",
+      "bytes": 134686
+    },
+    "screenshots/android/customerA/account/logout-control-before-tap-022814456423.png": {
+      "sha256": "0e4b34dc8720ba011cd1e97cb81832ff382ad43677611d3e44b2f89b832b73e4",
+      "bytes": 130076
+    },
+    "screenshots/android/customerA/ack-loss/actual-cart-with-add-on-025620968113.png": {
+      "sha256": "2b7f37d4cfb8debe8d016cb134718a0779d661c48abfb4e4e1e51180d1c4af4a",
+      "bytes": 142686
+    },
+    "screenshots/android/customerA/ack-loss/cart-frozen-across-navigation-030228274405.png": {
+      "sha256": "6680bd0013b446c0ff56bf9fb34bf3d8077c29a0e8f9a6eb1d8eac6d2ff90981",
+      "bytes": 97836
+    },
+    "screenshots/android/customerA/ack-loss/checkout-selected-owned-address-025639549532.png": {
+      "sha256": "0a9b8f51d23f0050a1302db5985b067caf38ee50853fd6729b09d4e30666c0c9",
+      "bytes": 193712
+    },
+    "screenshots/android/customerA/ack-loss/configured-real-options-add-on-025617571195.png": {
+      "sha256": "ce25ff0c2f79802edc59514b798cec894362f9a6af099a92651baf37d030f821",
+      "bytes": 140556
+    },
+    "screenshots/android/customerA/ack-loss/one-real-order-recovered-030234454997.png": {
+      "sha256": "da6df8f5c6200128acd65f74946e7718577ddbee3250f5cf7fddbd1e957d65a9",
+      "bytes": 173651
+    },
+    "screenshots/android/customerA/ack-loss/persisted-address-selection-025633732836.png": {
+      "sha256": "afebb8c7e57cbb6bb845fb1a42d4983a935ed97d683b117ab28b440ee2bd6d06",
+      "bytes": 124873
+    },
+    "screenshots/android/customerA/ack-loss/real-commit-response-lost-030224392485.png": {
+      "sha256": "9db2fe3876c620cdf8ba18cd17adc855e6fcb95739c6ac2d13b0882e8744757d",
+      "bytes": 190068
+    },
+    "screenshots/android/customerA/ack-loss/same-command-restored-after-navigation-030230555330.png": {
+      "sha256": "80d181b24e158c3333f47aa08dbce2f079c6be8300321e1fb4bc05cf56a30d95",
+      "bytes": 195838
+    },
+    "screenshots/android/customerA/ack-loss/test-order-cancelled-through-supported-ui-030249426089.png": {
+      "sha256": "890139b5083af5578fc1e92b4ab451db730491863e04644fed094affcd9631e7",
+      "bytes": 177489
+    },
+    "screenshots/android/customerA/ack-loss/verified-synthetic-fault-prerequisites-030217052304.png": {
+      "sha256": "d5264f213c489360ffe62e680ca25d2762206dc3f7b7fbde9820d343eb03c1ed",
+      "bytes": 192765
+    },
+    "screenshots/android/customerA/address/created-persisted-021737634775.png": {
+      "sha256": "563b1693bc740d2c4938c950e3c5415d34b43e828304d62589542a527e97acd2",
+      "bytes": 161959
+    },
+    "screenshots/android/customerA/address/default-switched-022122539924.png": {
+      "sha256": "4d7d404f8793723378e4b7d6f8929040489406a91591f33ac0fa8d72eea27d65",
+      "bytes": 172233
+    },
+    "screenshots/android/customerA/address/deleted-spare-address-022125274388.png": {
+      "sha256": "f35fdb898ab832f338c2fb254e55e52b4d0a7cabf13356b3b4aa0e37e24b8c1c",
+      "bytes": 125093
+    },
+    "screenshots/android/customerA/address/edited-same-server-id-022119002796.png": {
+      "sha256": "ec49b44f8d632e48a908ba2c7995ab9d28d782ec4a1c606dab216d88d956bc33",
+      "bytes": 164391
+    },
+    "screenshots/android/customerA/address/list-before-create-021712999680.png": {
+      "sha256": "464eb75a0ea553c5b0f3cfcebfd15ca3e0cf95f7fb586251d86cfc1087677069",
+      "bytes": 105717
+    },
+    "screenshots/android/customerA/address/real-create-form-021736061054.png": {
+      "sha256": "707e540831f5bd1b35830e20b0571d54457078b23f8d7102a68fc6e08c7b7ac3",
+      "bytes": 125926
+    },
+    "screenshots/android/customerA/flow-b/actual-cart-with-add-on-022331223514.png": {
+      "sha256": "4d3b667f3479883084fad5005f984f277734491160cde37eefc6501f8e414229",
+      "bytes": 142054
+    },
+    "screenshots/android/customerA/flow-b/actual-created-order-022511824968.png": {
+      "sha256": "81bdf055e51718d470a14ddd846c146ae8e04b86d3ed8358d865e091f6eb4d33",
+      "bytes": 50976
+    },
+    "screenshots/android/customerA/flow-b/checkout-before-submit-ime-closed-022505683073.png": {
+      "sha256": "fc790d10091e160c0def7a76233aae33c963eae67894cede4dd78786ea910475",
+      "bytes": 197280
+    },
+    "screenshots/android/customerA/flow-b/checkout-selected-owned-address-022340972453.png": {
+      "sha256": "cf27cddb66b57cda4f1e581fb0be4f77551a7da548a75a473a9ed4d8edb6d978",
+      "bytes": 213398
+    },
+    "screenshots/android/customerA/flow-b/configured-real-options-add-on-022329788703.png": {
+      "sha256": "3c93253cd673a2861b26881881800ad90bdbf55c5ba0de58618cb6ff8d11f7f8",
+      "bytes": 142396
+    },
+    "screenshots/android/customerA/flow-b/customer-tracks-completed-order-023434976190.png": {
+      "sha256": "e3437ec0e06d7f0a2244e098295ecc6e3f0a1ec863e52fb4231ddadc9d34b633",
+      "bytes": 195148
+    },
+    "screenshots/android/customerA/flow-b/persisted-address-selection-022339415647.png": {
+      "sha256": "c58c37e87178e66ac7e53d23f555f2cd407b786c460deee7645c4ffcafd7cc75",
+      "bytes": 124674
+    },
+    "screenshots/android/customerA/flow-b/persisted-published-review-023553861083.png": {
+      "sha256": "87492ff29c871ee9cf508683f0e7a201da1975665c82239d43fe3401b6c98cca",
+      "bytes": 183055
+    },
+    "screenshots/android/customerA/flow-b/real-product-021755469336.png": {
+      "sha256": "9c6b8765a5471d16647aedcb1495afcf8d015f8c78b0b445abcb45388dc460c7",
+      "bytes": 448363
+    },
+    "screenshots/android/customerA/flow-b/review-form-023441486302.png": {
+      "sha256": "851d8bf9324ac9446e491a915e424961f93d7727da2059c3b1516c6935f938d6",
+      "bytes": 61840
+    },
+    "screenshots/android/customerA/flow-b/saved-delivery-snapshot-022630861356.png": {
+      "sha256": "480856286be071a43014c69d394ebc69ad6d5b5794b2257e9247d67a98787352",
+      "bytes": 179215
+    },
+    "screenshots/android/customerA/flow-c/customer-completed-order-025440971434.png": {
+      "sha256": "55e9c3900091c9d52f9f493633f7fb96fcaa4205da15a8eeb34af15e120741e2",
+      "bytes": 196032
+    },
+    "screenshots/android/customerA/flow-c/customer-tracks-same-completed-order-025439218723.png": {
+      "sha256": "55e9c3900091c9d52f9f493633f7fb96fcaa4205da15a8eeb34af15e120741e2",
+      "bytes": 196032
+    },
+    "screenshots/android/customerA/flow-c/draft-persisted-023654171166.png": {
+      "sha256": "4ca9d98e953184e7f5390317b42900395be866319ae546a8140c2a2775135f86",
+      "bytes": 169581
+    },
+    "screenshots/android/customerA/flow-c/owned-address-selected-024329275737.png": {
+      "sha256": "c4c60e40bdfc7e0161f9ca0c33c926a05187e930c0cff3d731dbe04de1f8f728",
+      "bytes": 161975
+    },
+    "screenshots/android/customerA/flow-c/published-real-rfq-023657101711.png": {
+      "sha256": "7d26a0b58553889015bed8768d9a3319cc537fa2b51e5956680e839e4527fdef",
+      "bytes": 174589
+    },
+    "screenshots/android/customerA/flow-c/real-offer-before-accept-024321710736.png": {
+      "sha256": "35be33a7c9da39a56488cd33f1cffc8b2a35dab92d5457e11d1c13be26e71369",
+      "bytes": 160237
+    },
+    "screenshots/android/customerA/flow-c/real-order-created-024421232117.png": {
+      "sha256": "0674722d0860e73ba35455775486c4f0841dae62dbcdaedf147b9c39f8bda4f4",
+      "bytes": 174911
+    },
+    "screenshots/android/customerA/flow-c/rfq-real-form-023647029948.png": {
+      "sha256": "90ff80a5e9d3b39f12175b4a9e962371ca286576bd0a4e1f314329690435241d",
+      "bytes": 139204
+    },
+    "screenshots/android/customerA/review/cancel-delete-address-result-030414750457.png": {
+      "sha256": "d254e1d54bd09a5e2d274d3c16042b583c0b81964abb027ef214604ad06fed43",
+      "bytes": 125087
+    },
+    "screenshots/android/customerA/review/phone-address-list-030411783774.png": {
+      "sha256": "70c4832f9ca1b6de72778bc8a4149a2fdb51e3030ee141d53f79c14a6f8f0595",
+      "bytes": 113232
+    },
+    "screenshots/android/guest/account/observed-guest-profile-022919739509.png": {
+      "sha256": "51084c94e8cca6aae86fa29db4e8ba93c57a80e029ff19f5e4bb836ec96f7f90",
+      "bytes": 78276
+    },
+    "screenshots/android/guest/account/observed-guest-profile-023339875221.png": {
+      "sha256": "c88a039544f6675b7791733f8dcc84030c5dafc8e6f7655faa60f83cd701b3b1",
+      "bytes": 78434
+    },
+    "screenshots/android/guest/account/observed-guest-profile-024005106110.png": {
+      "sha256": "3436a1f58739b4af0d00add9a3a3eaa546be6b73660f64b5659bae12ded5888f",
+      "bytes": 78573
+    },
+    "screenshots/android/guest/account/observed-guest-profile-024307300696.png": {
+      "sha256": "549627540e9699f9efb334f37d997e13c328995cb0b69b3dbbc139486855cc12",
+      "bytes": 78818
+    },
+    "screenshots/android/guest/account/observed-guest-profile-024530605186.png": {
+      "sha256": "7747a21c16c6803a265d0b34ccf61d23b79973eee89fe4e1930ee3858b7aa84a",
+      "bytes": 78665
+    },
+    "screenshots/android/guest/account/observed-guest-profile-025418311218.png": {
+      "sha256": "b8023810e8d3aa995bf949083e83e4d3a89fa59ce8debec0a78c53796457f5dc",
+      "bytes": 78792
+    },
+    "screenshots/android/guest/G-ACCOUNT-SWITCH/bounded-navigation-retry-profile-022652990437.png": {
+      "sha256": "446e45e3bba5d33cff2aab7f775af9376adff7447f57df0cff2b50c2d3524a24",
+      "bytes": 134896
+    },
+    "screenshots/android/guest/G-ACCOUNT-SWITCH/guest-profile-accessibility-fallback-022649440064.png": {
+      "sha256": "446e45e3bba5d33cff2aab7f775af9376adff7447f57df0cff2b50c2d3524a24",
+      "bytes": 134896
+    },
+    "screenshots/android/guest/startup/after-system-wait-021258569398.png": {
+      "sha256": "e14f1732184ae2ba4ee8be9e596f73624e8bbcfb46714392b508e3bb0cc18c04",
+      "bytes": 273567
+    },
+    "screenshots/android/guest/startup/profile-navigation-state-021349900039.png": {
+      "sha256": "00c7b6382715594e85edd7ceb4131467ced464d86b2b64cf8d09ea97e7aa6f7d",
+      "bytes": 65222
+    },
+    "screenshots/android/owner/account/logged-in-022931122393.png": {
+      "sha256": "4e6f97da31a140801b7254c192d2e1b02c64fb0a25302cfec4be1a0d082b53f3",
+      "bytes": 133265
+    },
+    "screenshots/android/owner/account/logged-in-024016315195.png": {
+      "sha256": "c35033664bda51b8d2f6e9f38bea734f107586e818aae9976ca1facf9576484b",
+      "bytes": 133592
+    },
+    "screenshots/android/owner/account/logged-in-024541040827.png": {
+      "sha256": "b72ebdb3002d067f46cfc3e7698269b40a0cb49adaf6400944335e17b552de7d",
+      "bytes": 133635
+    },
+    "screenshots/android/owner/flow-b/completed-order-same-resource-023257625379.png": {
+      "sha256": "bbd9f1a2fc36bb2960c24e6d53c0180c1580c485a1748b26491fd4e04aec841f",
+      "bytes": 175428
+    },
+    "screenshots/android/owner/flow-b/same-order-in-owner-queue-023204095167.png": {
+      "sha256": "e086bc081d879cc954e343b7b566644b4e51bb3ffe12ab949302c945e26790f8",
+      "bytes": 200183
+    },
+    "screenshots/android/owner/flow-b/transition-baking-023220737533.png": {
+      "sha256": "666bf1be399fd4ed57c36c5d76faf06c3f1c5a11ed96f5986699491b28833daa",
+      "bytes": 185570
+    },
+    "screenshots/android/owner/flow-b/transition-completed-023246699618.png": {
+      "sha256": "0df8302509335845f5db328e4f81945f1a5572ce296295ca21f33e3a29d816e6",
+      "bytes": 184133
+    },
+    "screenshots/android/owner/flow-b/transition-confirmed-023212973330.png": {
+      "sha256": "414af585b459be49c199cc76795a15be19c51021986f10db12dfb411b090a72b",
+      "bytes": 184707
+    },
+    "screenshots/android/owner/flow-b/transition-delivering-023238289082.png": {
+      "sha256": "aaf692a59aabd8d0efe097b5bf6109c240d64e8e8ed576797b0d618c851bec64",
+      "bytes": 184620
+    },
+    "screenshots/android/owner/flow-b/transition-ready-023229614181.png": {
+      "sha256": "0e7b97d91e0786b122f64257ad2bd1e1242845c52fc18fac06f8fc96725a1a19",
+      "bytes": 186055
+    },
+    "screenshots/android/owner/flow-c/completed-order-same-resource-025300612896.png": {
+      "sha256": "6c6fef4fe7417c55d6a1a29ddfd67660734acc1e6ac46fffa0420e7e748be263",
+      "bytes": 58731
+    },
+    "screenshots/android/owner/flow-c/offer-persisted-024052597176.png": {
+      "sha256": "37ec37b1e37114158464cc371b7c79a48017066dde2bcebb75c61e197704705f",
+      "bytes": 144735
+    },
+    "screenshots/android/owner/flow-c/offer-real-form-024049800064.png": {
+      "sha256": "b97a38c8f1797ce967576637fb01b03869af811e2aa172f17cc40986275f3678",
+      "bytes": 136751
+    },
+    "screenshots/android/owner/flow-c/same-order-in-owner-queue-025125106092.png": {
+      "sha256": "7be15f21e737473a099baeb648bafa2ecd1e64e30a34c806b4ce740212ac0535",
+      "bytes": 200420
+    },
+    "screenshots/android/owner/flow-c/same-rfq-eligible-owner-024026438039.png": {
+      "sha256": "b841ec558831e7e88df8deee5285ab230e29cf3955ba69206ea16615e8f1a855",
+      "bytes": 176941
+    },
+    "screenshots/android/owner/flow-c/transition-baking-025157341904.png": {
+      "sha256": "f4885355815cb5f143cee8e05d0430eb80fccb1ec321abea78f6b4fdc84c13fb",
+      "bytes": 189583
+    },
+    "screenshots/android/owner/flow-c/transition-completed-025247875852.png": {
+      "sha256": "e7ae6f30b3f724b59b69e9319cf98d520280def6b8eae05d217ddb552dc4e45a",
+      "bytes": 188304
+    },
+    "screenshots/android/owner/flow-c/transition-confirmed-025142297482.png": {
+      "sha256": "fc20db92190c58b4234a4700b0c27030936c25a61f90a6812ca1906f8fbe1ef1",
+      "bytes": 188431
+    },
+    "screenshots/android/owner/flow-c/transition-delivering-025231929329.png": {
+      "sha256": "80ffda3b0e67427288413883898660ce2090d7daf2d9e5a833f119abf6d1f83d",
+      "bytes": 188867
+    },
+    "screenshots/android/owner/flow-c/transition-ready-025214671210.png": {
+      "sha256": "5751e557949cffe2cb4f387ab34dd1b4be5b04082db1a490a93bab24f5a94ab8",
+      "bytes": 190527
+    },
+    "screenshots/web/customerA/WEB-ADDRESS-REVALIDATION/profile-address-current-021729880637.png": {
+      "sha256": "9f36714a8b835e766aa45994dd9180974e58ff3bc22dc34b5bfb1b08419f5d6d",
+      "bytes": 553420
+    },
+    "screenshots/web/customerA/WEB-ADDRESS-REVALIDATION/web-obsolete-address-blocker-021739324260.png": {
+      "sha256": "75c86c569cbba80abfb3c73cfb215cbc890d5c5f9e4b54652fbcab489d793f7d",
+      "bytes": 581494
+    },
+    "screenshots/web/customerA/WEB-FLOW-B-BLOCKER/real-cart-still-blocked-022424341345.png": {
+      "sha256": "b3c28f92bee67b3d3760bdaca940b69d0ea7985664bb19f7f95efe67fb996178",
+      "bytes": 1334792
+    },
+    "screenshots/web/customerA/WEB-NATIVE-OFFER-COMPATIBILITY/verified-native-offer-web-checkout-blocked-024247792746.png": {
+      "sha256": "f2373c3f14561922ff1b039abf3e8fee4c7d0b8f5c42690b02c5ae2980cd1c1a",
+      "bytes": 637316
+    }
+  }
+}

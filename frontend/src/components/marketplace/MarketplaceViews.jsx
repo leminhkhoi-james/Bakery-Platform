@@ -1252,21 +1252,7 @@ export function OfferCards({ resource, onPage, onOpen }) {
 
 export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
   const [filters, setFilters] = useState({ scope, cakeRequestId, bakeryId, page: 1, size: 12, sort: 'createdAt,desc', status: '' })
-  const [simulating, setSimulating] = useState(false)
   const resource = useCatalogResource(loadOffers, filters)
-
-  const handleSimulate = async () => {
-    if (!cakeRequestId || simulating) return
-    setSimulating(true)
-    try {
-      await rfqService.simulateOffers(cakeRequestId)
-      resource.reload()
-    } catch {
-      // Ignored
-    } finally {
-      setSimulating(false)
-    }
-  }
 
   const isEmpty = resource.status === 'ready' && resource.data?.result?.length === 0
 
@@ -1301,17 +1287,9 @@ export function Offers({ cakeRequestId, bakeryId, scope, onOpen }) {
           <span className="material-symbols-outlined text-4xl text-primary animate-pulse" aria-hidden="true">storefront</span>
           <h3 className="font-serif text-lg font-bold text-primary">Các tiệm bánh đang xem xét yêu cầu của bạn</h3>
           <p className="text-xs text-on-surface-variant max-w-md mx-auto leading-relaxed">
-            Thông thường các tiệm bánh đối tác sẽ gửi báo giá chi tiết trong vòng 1-2 giờ. Bạn cũng có thể kích hoạt báo giá đề xuất tức thì để so sánh ngay.
+            Báo giá sẽ xuất hiện khi tiệm bánh gửi phản hồi. Bạn có thể tải lại để kiểm tra.
           </p>
-          <button
-            type="button"
-            disabled={simulating}
-            onClick={handleSimulate}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-wine-dark text-white text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
-          >
-            <span className="material-symbols-outlined text-sm" aria-hidden="true">auto_awesome</span>
-            <span>{simulating ? 'Đang tạo báo giá từ các tiệm…' : '⚡ Nhận báo giá tức thì từ các tiệm đối tác'}</span>
-          </button>
+          <button type="button" className={buttonClass} disabled={resource.refreshing} onClick={resource.reload}>Tải lại báo giá</button>
         </div>
       )}
 

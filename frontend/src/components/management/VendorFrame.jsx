@@ -11,17 +11,20 @@ import './vendor-selector.css'
 import '../common/portal-header.css'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadManagedBakeries, dashboardErrorMessage } from '../../services/vendorDashboardService.js'
-import { rfqService } from '../../services/rfqService.js'
 import { moneyVnd } from '../../services/marketplaceModels.js'
 import VendorNotificationBell from './VendorNotificationBell.jsx'
+import { loadVendorRequests } from '../../services/vendorRfqService.js'
+
+const loadNotifications = ({ bakery, enabled }, options) => enabled ? loadVendorRequests({ bakery, status: 'OPEN', page: 1, size: 8 }, options) : Promise.resolve({ result: [] })
+
 
 export function BakerySelector(props) {
   return props.available ? <BakeryChoice {...props} /> : <LoadedBakerySelector {...props} />
 }
 
 function LoadedBakerySelector(props) {
-  const { user } = useAuth()
-  const available = useCatalogResource(loadManagedBakeries, { userId: user.id })
+  const { user, roles } = useAuth()
+  const available = useCatalogResource(loadManagedBakeries, { userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
   return <BakeryChoice {...props} available={available} />
 }
 
@@ -47,13 +50,13 @@ function BakeryChoice({ bakeryId, onSelect, disabled = false, available, showErr
   </section>
 }
 
-export default function VendorFrame({ title, activeTab, bakeryId, onNavigate, children }) {
+export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavigate, children }) {
   const { user } = useAuth()
   const [mobile, setMobile] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
   const navigate = (route) => onNavigate(vendorRoute(route, bakeryId))
 
-  const rfqsResource = useCatalogResource(rfqService.getRfqs, { scope: 'available', status: 'OPEN', page: 1, size: 8 })
+  const rfqsResource = useCatalogResource(loadNotifications, { bakery: owner.bakery, enabled: owner.state === 'ACTIVE' })
   const openRfqs = rfqsResource.data?.result || []
   const rfqCount = openRfqs.length
   const latestRfq = openRfqs[0]
@@ -62,7 +65,7 @@ export default function VendorFrame({ title, activeTab, bakeryId, onNavigate, ch
     ? new URLSearchParams(window.location.search).get('cakeRequestId')
     : null
 
-  const showBanner = !bannerDismissed && rfqCount > 0 && !currentCakeRequestId && activeTab !== 'rfq'
+  const showBanner = owner.state === 'ACTIVE' && !bannerDismissed && rfqCount > 0 && !currentCakeRequestId && activeTab !== 'rfq'
 
   const notificationBell = (
     <VendorNotificationBell
@@ -129,6 +132,7 @@ export default function VendorFrame({ title, activeTab, bakeryId, onNavigate, ch
               </div>
             </div>
           )}
+          {owner?.state === 'ACTIVE' && activeTab === 'rfq' && !owner.bakery?.operations?.serviceAreas?.some(area => area.active) && <section className="sc-panel space-y-2"><p>Tiệm chưa có khu vực giao hàng đang phục vụ. Cấu hình khu vực để nhận yêu cầu báo giá phù hợp.</p><button className={buttonClass} onClick={() => navigate('vendor-settings')}>Cấu hình giao hàng</button></section>}
           {children}
         </div>
       </main>

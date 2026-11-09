@@ -20,6 +20,10 @@
   gap: .7rem;
   padding: .9rem 1.1rem;
 }
+.sc-inline-record-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; min-width: 0; }
+.sc-inline-record-actions .sc-button { min-height: 2.2rem; max-width: 100%; padding: .35rem .55rem; gap: .3rem; font-size: .75rem; white-space: normal; color: var(--sc-color-primary); }
+.sc-inline-record-actions .sc-icon { flex-shrink: 0; font-size: 1rem; }
+.sc-inline-record-actions .sc-inline-action-danger { border-color: var(--sc-color-border); background: #fff7f8; }
 
 .sc-vendor-confirm>header {
   border-bottom: 1px solid #e2e8f0;

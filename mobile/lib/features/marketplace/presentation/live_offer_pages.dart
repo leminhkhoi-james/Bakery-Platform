@@ -9,6 +9,7 @@ import '../../../core/widgets/phase5_widgets.dart';
 import '../../../core/widgets/sweetcake_widgets.dart';
 
 import 'live_offer_editor.dart';
+import 'live_offer_acceptance.dart';
 export 'live_offer_editor.dart';
 
 class LiveOffersPage extends StatelessWidget {
@@ -158,11 +159,21 @@ class LiveOfferDetail extends StatelessWidget {
         ],
         if (!vendor &&
             !admin &&
-            o['status'] == 'PENDING' &&
-            DateTime.tryParse('${o['expiresAt']}')?.isAfter(DateTime.now()) ==
-                true) ...[
-          const SCNotice(addressContractBlocker, warning: true),
-          const SCButton('Chấp nhận báo giá', onPressed: null),
+            (w.pendingOfferAcceptances.containsKey(id) ||
+                o['status'] == 'PENDING' &&
+                    DateTime.tryParse('${o['expiresAt']}')
+                            ?.isAfter(DateTime.now()) ==
+                        true)) ...[
+          SCButton(
+            'Chấp nhận báo giá',
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute<void>(builder: (_) => LiveOfferAcceptance(o)),
+              );
+              reload();
+            },
+          ),
           const Text(
             'Sau khi chấp nhận, hãy kiểm tra báo giá và danh sách đơn nếu chưa nhận được kết quả rõ ràng.',
           ),

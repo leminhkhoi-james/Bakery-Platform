@@ -1,0 +1,218 @@
+[
+  {
+    "name": "/bakery-mobile-20261107-mobile-identity-1",
+    "image": "sha256:45faa1d4df00686a1a91b21ca793b7bba16394813939f6a2d1ceb8e030b4da33",
+    "state": "exited",
+    "envNames": [
+      "MARKETPLACE_CLIENT_SECRET_HASH",
+      "SUBSCRIPTION_SERVICE_URL",
+      "IDENTITY_CORS_ALLOWED_ORIGINS",
+      "IDENTITY_JWK_SET_URI",
+      "SUBSCRIPTION_SERVICE_BASE_URL",
+      "IDENTITY_SERVICE_URL",
+      "IDENTITY_REFRESH_COOKIE_SECURE",
+      "SPRING_CONFIG_ADDITIONAL_LOCATION",
+      "BAKERY_SERVICE_BASE_URL",
+      "BAKERY_CLIENT_SECRET_HASH",
+      "CHAT_SERVICE_CLIENT_SECRET_HASH",
+      "IDENTITY_JWT_PUBLIC_KEY_PATH",
+      "IDENTITY_DB_PASSWORD",
+      "IDENTITY_DB_USERNAME",
+      "BAKERY_SERVICE_URL",
+      "JAVA_TOOL_OPTIONS",
+      "IDENTITY_DB_URL",
+      "IDENTITY_SERVICE_BASE_URL",
+      "ORDER_CLIENT_SECRET_HASH",
+      "IDENTITY_JWT_PRIVATE_KEY_PATH",
+      "SERVER_PORT",
+      "IDENTITY_JWKS_URI",
+      "SUBSCRIPTION_CLIENT_SECRET_HASH",
+      "PATH",
+      "JAVA_HOME",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "JAVA_VERSION",
+      "HEALTH_PATH"
+    ],
+    "mounts": [
+      {
+        "source": "H:/MSS/.secrets/bakery-platform/identity-public.pem",
+        "target": "/run/secrets/identity-public.pem",
+        "rw": false
+      },
+      {
+        "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/identity-service.jar",
+        "target": "/app/application.jar",
+        "rw": false
+      },
+      {
+        "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/service-clients.yml",
+        "target": "/run/config/service-clients.yml",
+        "rw": false
+      },
+      {
+        "source": "H:/MSS/.secrets/bakery-platform/identity-private.pem",
+        "target": "/run/secrets/identity-private.pem",
+        "rw": false
+      }
+    ]
+  },
+  {
+    "name": "/bakery-mobile-20261107-mobile-bakery-1",
+    "image": "sha256:ba37c990f67fde43764254aec26d3d0d56f7aab403d12f2c840d5f0e59b3f7be",
+    "state": "exited",
+    "envNames": [
+      "BAKERY_MINIO_ENDPOINT",
+      "BAKERY_MINIO_BUCKET",
+      "BAKERY_DB_USERNAME",
+      "BAKERY_MINIO_ACCESS_KEY",
+      "SUBSCRIPTION_SERVICE_TOKEN",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_SERVICE_URL",
+      "BAKERY_IDENTITY_SERVICE_TOKEN",
+      "IDENTITY_SERVICE_BASE_URL",
+      "IDENTITY_JWKS_URI",
+      "IDENTITY_JWK_SET_URI",
+      "BAKERY_SERVICE_BASE_URL",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "BAKERY_MINIO_SECRET_KEY",
+      "BAKERY_DB_URL",
+      "SERVER_PORT",
+      "IDENTITY_SERVICE_URL",
+      "BAKERY_DB_PASSWORD",
+      "BAKERY_CLIENT_SECRET",
+      "JAVA_TOOL_OPTIONS",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "BAKERY_MINIO_PUBLIC_ENDPOINT",
+      "SUBSCRIPTION_SERVICE_BASE_URL",
+      "BAKERY_SERVICE_URL",
+      "IDENTITY_JWT_ISSUER",
+      "PATH",
+      "JAVA_HOME",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "JAVA_VERSION",
+      "HEALTH_PATH"
+    ],
+    "mounts": [
+      {
+        "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/bakery-service.jar",
+        "target": "/app/application.jar",
+        "rw": false
+      }
+    ]
+  },
+  {
+    "name": "/bakery-mobile-20261107-mobile-subscription-1",
+    "image": "sha256:829431fb61c6c1759ae9468dc619ae4054d0edf95f8b83e4c07608a043a72f0c",
+    "state": "exited",
+    "envNames": [
+      "IDENTITY_JWT_ISSUER",
+      "SERVER_PORT",
+      "SUBSCRIPTION_SERVICE_URL",
+      "BAKERY_SERVICE_URL",
+      "SUBSCRIPTION_MINIO_ENDPOINT",
+      "SUBSCRIPTION_MINIO_SECRET_KEY",
+      "JAVA_TOOL_OPTIONS",
+      "SUBSCRIPTION_MINIO_ACCESS_KEY",
+      "BAKERY_SERVICE_BASE_URL",
+      "IDENTITY_JWKS_URI",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_DB_URL",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "SUBSCRIPTION_MINIO_BUCKET",
+      "IDENTITY_SERVICE_BASE_URL",
+      "SUBSCRIPTION_DB_USERNAME",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT",
+      "IDENTITY_SERVICE_URL",
+      "SUBSCRIPTION_DB_PASSWORD",
+      "SUBSCRIPTION_SERVICE_BASE_URL",
+      "SUBSCRIPTION_BAKERY_SERVICE_TOKEN",
+      "SUBSCRIPTION_CLIENT_SECRET",
+      "PATH",
+      "JAVA_HOME",
+      "LANG",
+      "LANGUAGE",
+      "LC_ALL",
+      "JAVA_VERSION",
+      "HEALTH_PATH"
+    ],
+    "mounts": [
+      {
+        "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/jars/subscription-service.jar",
+        "target": "/app/application.jar",
+        "rw": false
+      }
+    ]
+  },
+  {
+    "name": "/bakery-mobile-phase5-marketplace",
+    "image": "sha256:e4a0af40a30513dfb2433819234c859c04160e86f4ef02392e52f361caabe6ee",
+    "state": "exited",
+    "envNames": [
+      "SERVICE_CLIENT_SECRET",
+      "HEALTH_PATH",
+      "JAVA_TOOL_OPTIONS",
+      "CAKE_AI_SERVICE_BASE_URL",
+      "LANGUAGE",
+      "IDENTITY_SERVICE_BASE_URL",
+      "GOOGLE_APPLICATION_CREDENTIALS",
+      "JAVA_HOME",
+      "FIREBASE_STORAGE_BUCKET",
+      "PATH",
+      "MARKETPLACE_DB_URL",
+      "LC_ALL",
+      "BAKERY_SERVICE_BASE_URL",
+      "IDENTITY_JWK_SET_URI",
+      "SERVICE_CLIENT_ID",
+      "SUBSCRIPTION_SERVICE_BASE_URL",
+      "MARKETPLACE_DB_USERNAME",
+      "MARKETPLACE_SERVICE_BASE_URL",
+      "FIREBASE_PROJECT_ID",
+      "SERVER_PORT",
+      "JAVA_VERSION",
+      "MARKETPLACE_ORPHAN_CLEANUP_ENABLED",
+      "ORDER_SERVICE_BASE_URL",
+      "MARKETPLACE_DB_PASSWORD",
+      "LANG"
+    ],
+    "mounts": [
+      {
+        "source": "H:\\MSS\\.secrets\\bakery-platform\\bakery-platform-mss-15ca53466ff7.json",
+        "target": "/run/secrets/firebase.json",
+        "rw": false
+      }
+    ]
+  },
+  {
+    "name": "/bakery-mobile-phase5-order",
+    "image": "sha256:521c06ea548b704321a043c12005195b279064e407aa3beb75e7427131e4fdf5",
+    "state": "exited",
+    "envNames": [
+      "IDENTITY_JWK_SET_URI",
+      "ORDER_SERVICE_CLIENT_ID",
+      "ORDER_DB_USERNAME",
+      "BAKERY_SERVICE_URL",
+      "LANG",
+      "HEALTH_PATH",
+      "ORDER_DB_PASSWORD",
+      "ORDER_DB_URL",
+      "IDENTITY_SERVICE_URL",
+      "JAVA_TOOL_OPTIONS",
+      "PATH",
+      "LC_ALL",
+      "SERVER_PORT",
+      "JAVA_HOME",
+      "JAVA_VERSION",
+      "MARKETPLACE_SERVICE_URL",
+      "CLIENTS_BAKERY_SCOPE",
+      "ORDER_SERVICE_CLIENT_SECRET",
+      "LANGUAGE"
+    ],
+    "mounts": []
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "container": "bakery-cake-ai-20261108t080611z-cake-ai-service-1",
+  "image": "sha256:29dc3becc0fc1b29db75e067f4a0976329c8573879f3bc113ec447c573905044",
+  "user": "app:app",
+  "health": "healthy",
+  "networks": [
+    "bakery-cake-ai-20261108t080611z_default",
+    "bakery-mobile-20261107_runtime"
+  ],
+  "ports": {
+    "8080/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "18105"
+      }
+    ]
+  },
+  "jarSha256": "0e8a49c457adfdf6b9f3f527c255a19c19f994d3001e8ebd2705c84bfc963539",
+  "migrations": [
+    "1|t",
+    "2|t"
+  ]
+}

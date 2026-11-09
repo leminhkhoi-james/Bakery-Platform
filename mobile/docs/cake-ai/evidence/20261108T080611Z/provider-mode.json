@@ -1,0 +1,17 @@
+{
+  "mode": "LOCAL_FALLBACK",
+  "apiKeyPresent": false,
+  "firebaseProjectPresent": false,
+  "firebaseBucketPresent": false,
+  "adcMounted": false,
+  "providerCalledByAgent": false,
+  "providerChargeableRequests": 0,
+  "outputOrigin": "GeminiClient.generateDynamicCake -> Java2D -> ImageValidator -> in-memory ImageStorage",
+  "providerSource": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/client/GeminiClient.java",
+  "realProviderResult": "BLOCKED_MISSING_API_KEY_AND_APPROVED_SANDBOX",
+  "cloudResult": "NOT_VERIFIED; existing service account is read-only inventory, not enabled for unapproved cloud writes",
+  "officialReferences": [
+    "https://ai.google.dev/api/interactions-api?hl=en",
+    "https://ai.google.dev/gemini-api/docs/image-generation?hl=en"
+  ]
+}

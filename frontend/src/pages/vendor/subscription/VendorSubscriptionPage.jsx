@@ -11,13 +11,13 @@ import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadSubscriptionPlans, loadBakerySubscription, loadSubscriptionOrders, subscriptionService } from '../../../services/subscriptionService.js'
 import { canOrderPlan, subscriptionPermissions, formatSubscriptionDate, formatSubscriptionMoney, subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
-import { FeatureList, PlanCards, ResourceState, SubscriptionError, findMatchingPlan, formatPeriodDate } from '../../../components/subscription/SubscriptionView.jsx'
+import { FeatureList, PlanCards, ResourceState, SubscriptionError, formatPeriodDate } from '../../../components/subscription/SubscriptionView.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import SubscriptionOrderDetail from './SubscriptionOrderDetail.jsx'
 
 function Period({ title, period, plans, currentPlan }) {
   const isCurrent = title === 'Kỳ hiện tại'
-  const plan = currentPlan || findMatchingPlan(plans, period) || plans?.find(p => p.id === period?.planId || p.code === period?.planCode)
+  const plan = currentPlan || plans?.find(p => p.id === period?.planId || period?.planCode && p.code === period.planCode)
   const daysRemaining = period?.periodEnd ? Math.max(0, Math.ceil((Date.parse(period.periodEnd) - Date.now()) / 86400000)) : 0
 
   return (
@@ -87,13 +87,16 @@ function Period({ title, period, plans, currentPlan }) {
   )
 }
 
+const loadOwnerPlans = (_params, options) => loadSubscriptionPlans(undefined, { ...options, allowMockFallback: false })
+
 function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
   const subscription = useCatalogResource(loadBakerySubscription, { bakeryId })
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
   const history = useCatalogResource(loadSubscriptionOrders, { bakeryId, page, size: 10, sort: 'createdAt,desc', status })
   const inFlight = useRef(false)
-  const [selected, setSelected] = useState(() => (initialPlanId && plans.data?.find((p) => p.id === initialPlanId && canOrderPlan(p))) || null)
+  const [selection, setSelected] = useState(undefined)
+  const selected = selection === undefined ? (initialPlanId && plans.data?.find((plan) => plan.id === initialPlanId && canOrderPlan(plan))) || null : selection
   const [attempt, setAttempt] = useState(null)
   const [busy, setBusy] = useState(false)
   const [detailBusy, setDetailBusy] = useState(false)
@@ -112,7 +115,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
     finally { inFlight.current = false; setBusy(false); onBusy(false) }
   }
   const locked = busy || detailBusy
-  const currentSub = subscription.data?.currentSubscription
+  const currentSub = subscription.error || subscription.status !== 'ready' ? null : subscription.data?.currentSubscription
   const currentPlan = plans.data?.find(p => p.id === currentSub?.planId || p.code === currentSub?.planCode)
   return <div className="space-y-6">
     <section className="rounded-3xl border border-primary/20 bg-gradient-to-br from-white via-surface to-rose-50/20 p-5 sm:p-6 shadow-xs">
@@ -126,7 +129,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                Chưa kích hoạt gói
+                {subscription.status === 'loading' || subscription.refreshing ? 'Đang tải trạng thái…' : subscription.error ? 'Chưa xác minh được gói' : 'Chưa kích hoạt gói'}
               </span>
             )}
           </div>
@@ -143,53 +146,10 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
             <Period title="Kỳ hiện tại" period={subscription.data.currentSubscription} plans={plans.data} currentPlan={currentPlan} />
             <Period title="Kỳ kế tiếp" period={subscription.data.scheduledSubscription} plans={plans.data} />
           </div>
-          <div className="border-t border-outline-variant/20 pt-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
-              <span>✨</span>
-              <span>Quyền lợi đang áp dụng cho tiệm</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-              <div className="p-3.5 rounded-2xl bg-white border border-rose-100 shadow-2xs">
-                <div className="text-xs font-semibold text-rose-800 mb-1 flex items-center gap-1.5">
-                  <Icon name="inventory_2" className="text-sm text-rose-600" />
-                  <span>Số sản phẩm tối đa</span>
-                </div>
-                <div className="text-lg font-extrabold text-primary">
-                  {subscription.data.features?.['MAX_PRODUCTS'] === '-1' || subscription.data.features?.['products'] === '-1' ? 'Không giới hạn' : (subscription.data.features?.['MAX_PRODUCTS'] || subscription.data.features?.['products'] || 'Không giới hạn')}
-                </div>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-white border border-amber-100 shadow-2xs">
-                <div className="text-xs font-semibold text-amber-800 mb-1 flex items-center gap-1.5">
-                  <Icon name="request_quote" className="text-sm text-amber-600" />
-                  <span>Báo giá mỗi tháng</span>
-                </div>
-                <div className="text-lg font-extrabold text-amber-900">
-                  {subscription.data.features?.['MAX_MONTHLY_OFFERS'] === '-1' || subscription.data.features?.['offers'] === '-1' ? 'Không giới hạn' : (subscription.data.features?.['MAX_MONTHLY_OFFERS'] || subscription.data.features?.['offers'] || 'Không giới hạn')}
-                </div>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-white border border-emerald-100 shadow-2xs">
-                <div className="text-xs font-semibold text-emerald-800 mb-1 flex items-center gap-1.5">
-                  <Icon name="verified" className="text-sm text-emerald-600" />
-                  <span>Ưu tiên hiển thị</span>
-                </div>
-                <div className="text-lg font-extrabold text-emerald-700">
-                  {subscription.data.features?.['FEATURED_LISTING'] === 'true' || subscription.data.features?.['featured'] === 'true' ? 'Có · Top Marketplace' : 'Tiêu chuẩn'}
-                </div>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-white border border-blue-100 shadow-2xs">
-                <div className="text-xs font-semibold text-blue-800 mb-1 flex items-center gap-1.5">
-                  <Icon name="support_agent" className="text-sm text-blue-600" />
-                  <span>Hỗ trợ đối tác</span>
-                </div>
-                <div className="text-xs font-bold text-blue-900 line-clamp-2 mt-1">
-                  {subscription.data.features?.['support'] || 'Hỗ trợ chuyên gia 24/7 & Top trang chủ'}
-                </div>
-              </div>
-            </div>
-            <div className="hidden">
-              <FeatureList features={subscription.data.features} />
-            </div>
-          </div>
+          {currentSub && <div className="border-t border-outline-variant/20 pt-4">
+            <h3 className="text-sm font-bold text-primary mb-3">Quyền lợi đang áp dụng cho tiệm</h3>
+            <FeatureList features={subscription.data.features} />
+          </div>}
         </>}
       </ResourceState>
     </section>
@@ -237,7 +197,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
     {selected && (
       <VendorConfirm
         title={
-          (currentSub?.planId === selected.id || currentSub?.planCode === selected.code)
+          (currentSub && (currentSub.planId === selected.id || currentSub.planCode && currentSub.planCode === selected.code))
             ? 'Xác nhận gia hạn gói dịch vụ'
             : (currentPlan && Number(selected.monthlyPrice) > Number(currentPlan.monthlyPrice || 0))
               ? 'Xác nhận nâng cấp gói dịch vụ'
@@ -272,11 +232,13 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
 
 export default function VendorSubscriptionPage({ routeSearch = '', onNavigate }) {
   const { roles } = useAuth()
-  const { bakeryId, selectBakery: setBakeryId } = useVendorBakery(routeSearch)
+  const owner = useVendorBakery(routeSearch)
+  const { bakeryId, selectBakery: setBakeryId, available } = owner
   const [busy, setBusy] = useState(false)
-  const plans = useCatalogResource(loadSubscriptionPlans)
-  return <VendorFrame title="Gói dịch vụ" activeTab="subscription" bakeryId={bakeryId} onNavigate={onNavigate}>
-    <BakerySelector key={bakeryId} bakeryId={bakeryId} onSelect={(value) => { setBakeryId(value); onNavigate('vendor-subscription?bakeryId=' + value) }} disabled={busy} />
-    {bakeryId ? <><BakeryWorkspace key={bakeryId} bakeryId={bakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
+  const activeBakeryId = bakeryId || new URLSearchParams(routeSearch).get('bakeryId') || ''
+  const plans = useCatalogResource(loadOwnerPlans)
+  return <VendorFrame owner={owner} title="Gói dịch vụ" activeTab="subscription" bakeryId={activeBakeryId} onNavigate={onNavigate}>
+    <BakerySelector available={available} key={activeBakeryId} bakeryId={activeBakeryId} onSelect={(value) => { setBakeryId(value); onNavigate('vendor-subscription?bakeryId=' + value) }} disabled={busy} />
+    {activeBakeryId ? <><BakeryWorkspace key={activeBakeryId} bakeryId={activeBakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
   </VendorFrame>
 }

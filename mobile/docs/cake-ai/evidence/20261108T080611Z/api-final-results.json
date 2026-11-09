@@ -1,0 +1,570 @@
+{
+  "checks": [
+    {
+      "label": "Cake AI host 20261108T080611Z",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/cake-requests",
+      "http": 201,
+      "expected": [
+        201
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:17.560521+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Cake AI foreign ownership 20261108T080611Z",
+      "actor": "owner",
+      "method": "POST",
+      "path": "/api/v1/cake-requests",
+      "http": 201,
+      "expected": [
+        201
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:17.628401+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Create multipart with controlled reference",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.209873+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "List own jobs zero-based page",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs?page=0&size=20",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.297980+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Filter by actual RFQ",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs?cakeRequestId=b995da76-d13d-4d07-a249-344b96179887&status=QUEUED",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.324820+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Replay same logical create",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.371206+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Idempotency conflict",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 409,
+      "expected": [
+        409
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.414327+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Missing key",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 400,
+      "expected": [
+        400
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.433732+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Blank prompt",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 400,
+      "expected": [
+        400
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.491870+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Invalid ratio",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 422,
+      "expected": [
+        400
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:20.523811+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid source bytes",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 422,
+      "expected": [
+        400
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:20.542804+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid pagination",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs?page=-1",
+      "http": 422,
+      "expected": [
+        400
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:20.558906+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid status filter",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs?status=UNKNOWN",
+      "http": 422,
+      "expected": [
+        400
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:20.573528+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Anonymous jobs",
+      "actor": "anonymous",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs",
+      "http": 401,
+      "expected": [
+        401
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.589928+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Admin cannot list Customer jobs",
+      "actor": "admin",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs",
+      "http": 200,
+      "expected": [
+        403
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:20.616878+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": "Existing Admin has CUSTOMER role; list restricted to its own customerId"
+    },
+    {
+      "label": "Other Customer cannot read job",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.646118+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Other Customer cannot revise job",
+      "actor": "owner",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/prompt-revisions",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.692028+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Other Customer cannot cancel job",
+      "actor": "owner",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/cancel",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:20.721719+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Customer job detail",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:25.971592+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Admin job detail",
+      "actor": "admin",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:25.993606+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Cannot cancel terminal job",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/cancel",
+      "http": 409,
+      "expected": [
+        409
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.025104+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Customer design detail",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.053269+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Other Customer cannot read design",
+      "actor": "owner",
+      "method": "GET",
+      "path": "/api/v1/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.078692+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Customer cannot moderate",
+      "actor": "customer",
+      "method": "PATCH",
+      "path": "/api/v1/admin/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e/moderation",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.113383+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Admin design detail",
+      "actor": "admin",
+      "method": "GET",
+      "path": "/api/v1/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.139380+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Admin cannot re-moderate already approved",
+      "actor": "admin",
+      "method": "PATCH",
+      "path": "/api/v1/admin/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e/moderation",
+      "http": 409,
+      "expected": [
+        409
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.166931+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Invalid moderation status",
+      "actor": "admin",
+      "method": "PATCH",
+      "path": "/api/v1/admin/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e/moderation",
+      "http": 400,
+      "expected": [
+        400
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:26.191603+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Marketplace selected design handoff",
+      "actor": "customer",
+      "method": "PUT",
+      "path": "/api/v1/cake-requests/b995da76-d13d-4d07-a249-344b96179887/selected-design",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:27.147843+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Reconcile selected design",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/cake-requests/b995da76-d13d-4d07-a249-344b96179887",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:27.182091+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Create revision",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/prompt-revisions",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:27.243228+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Replay revision",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/1053ab4d-93b8-4c7f-bceb-55ca7bae34a7/prompt-revisions",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:27.268405+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Create cancellable job",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:30.405685+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Cancel queued job",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/a64f45c4-0a8d-4559-8cf6-d7d3b86ded68/cancel",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:30.442993+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Cancelled detail",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/api/v1/generation-jobs/a64f45c4-0a8d-4559-8cf6-d7d3b86ded68",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:30.468712+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Create locally moderated rejection",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 202,
+      "expected": [
+        202
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:30.508927+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Foreign RFQ must be denied",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs",
+      "http": 202,
+      "expected": [
+        403
+      ],
+      "result": "FAIL",
+      "at": "2026-11-08T08:16:35.689995+00:00",
+      "adjudicatedResult": "FAIL",
+      "adjudication": null
+    },
+    {
+      "label": "Cancel unexpected foreign-RFQ job",
+      "actor": "customer",
+      "method": "POST",
+      "path": "/api/v1/generation-jobs/166a09a9-ab28-47ac-948f-dc2213861a42/cancel",
+      "http": 200,
+      "expected": [
+        200,
+        409
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:35.715876+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Internal design validation",
+      "actor": "marketplace-service",
+      "method": "GET",
+      "path": "/internal/v1/generated-designs/65e746f4-52b6-44ed-a9f5-fe08d433228e/validation?customerId=312d313a-aae9-4a0b-9726-b4038ea0fdc8&cakeRequestId=b995da76-d13d-4d07-a249-344b96179887",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:36.225601+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Internal request generation context",
+      "actor": "marketplace-service",
+      "method": "GET",
+      "path": "/internal/v1/cake-requests/b995da76-d13d-4d07-a249-344b96179887/generation-context",
+      "http": 200,
+      "expected": [
+        200
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:36.242257+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    },
+    {
+      "label": "Human cannot call internal validation",
+      "actor": "customer",
+      "method": "GET",
+      "path": "/internal/v1/cake-requests/b995da76-d13d-4d07-a249-344b96179887/generation-context",
+      "http": 403,
+      "expected": [
+        403
+      ],
+      "result": "PASS",
+      "at": "2026-11-08T08:16:36.254129+00:00",
+      "adjudicatedResult": "PASS",
+      "adjudication": null
+    }
+  ],
+  "pass": 39,
+  "fail": 1,
+  "initialExpectationErrors": 5,
+  "originalEvidence": "host-api-results.json",
+  "adjudicationEvidence": "host-expectation-adjudication.json"
+}

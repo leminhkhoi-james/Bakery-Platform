@@ -1,0 +1,250 @@
+[
+  {
+    "path": "docs/BAKERY_PLATFORM_BACKEND_FULL_SYSTEM_AND_API_AUDIT_VI.md",
+    "lines": 240,
+    "relevantExcerpts": [
+      {
+        "line": 5,
+        "text": "\u0110\u00e3 ho\u00e0n th\u00e0nh b\u1ed9 t\u00e0i li\u1ec7u v\u00e0 c\u00e1c ph\u00e9p ki\u1ec3m kh\u1ea3 thi trong ph\u1ea1m vi **audit read-only**. \u1ee8ng d\u1ee5ng ch\u01b0a v\u1eadn h\u00e0nh ho\u00e0n ch\u1ec9nh: Gateway ch\u01b0a c\u00f3 routing, Cake AI kh\u00f4ng compile, direct order v\u00e0 danh s\u00e1ch tin nh\u1eafn c\u00f3 l\u1ed7i \u0111\u00e3 t\u00e1i hi\u1ec7n. Kh\u00f4ng th\u1ef1c hi\u1ec7n remediation."
+      },
+      {
+        "line": 9,
+        "text": "C\u00f3 **7 microservice nghi\u1ec7p v\u1ee5**, 1 Gateway bootstrap, **113 API**, **37 workflow**, **7 database nghi\u1ec7p v\u1ee5 v\u00e0 49 b\u1ea3ng**. S\u00e1u business service build v\u00e0 ch\u1ea1y th\u1eadt t\u1eeb b\u1ea3n sao source ngo\u00e0i repository. Gateway kh\u1edfi \u0111\u1ed9ng r\u1ed3i exit 0 v\u00ec l\u00e0 \u1ee9ng d\u1ee5ng non-web; Cake AI b\u1ecb ch\u1eb7n khi bi\u00ean d\u1ecbch."
+      },
+      {
+        "line": 11,
+        "text": "\u0110\u00e3 th\u1ef1c thi 323 ca runtime: 306 PASS, 17 FAIL gi\u1eef nguy\u00ean trong b\u1eb1ng ch\u1ee9ng. C\u00f3 104 API \u0111\u01b0\u1ee3c g\u1ecdi, g\u1ed3m ki\u1ec3m tra t\u1eeb ch\u1ed1i truy c\u1eadp; **97 API c\u00f3 \u00edt nh\u1ea5t m\u1ed9t ph\u1ea3n h\u1ed3i 2xx PASS**. Case scheduler c\u00f3 assertion DB \u0111\u01b0\u1ee3c \u0111\u00e1nh d\u1ea5u ri\u00eang, kh\u00f4ng gi\u1ea3 th\u00e0nh HTTP 2xx. Ch\u00edn API ch\u01b0a th\u1ef1c thi v\u00ec Cake"
+      },
+      {
+        "line": 34,
+        "text": "| [Database metadata](backend-audit/evidence/isolated-database-metadata.json) | Column, constraint, index v\u00e0 Flyway | Cake AI ch\u1ec9 c\u00f3 DDL schema, kh\u00f4ng c\u00f3 app ch\u1ea1y |"
+      },
+      {
+        "line": 46,
+        "text": "Parent Maven g\u1ed3m `platform-support`, b\u1ea3y domain service, `api-gateway`, `integration-tests`. C\u00f3 source `cake-ai-integration-tests` ri\u00eang nh\u01b0ng kh\u00f4ng n\u1eb1m trong parent modules hi\u1ec7n t\u1ea1i. `frontend` v\u00e0 `mobile` ch\u1ec9 \u0111\u01b0\u1ee3c \u0111\u1ecdc \u0111\u1ec3 \u0111\u1ed1i chi\u1ebfu capability/contract."
+      },
+      {
+        "line": 58,
+        "text": "| cake-ai-service | 9 | 6 | 0 |"
+      },
+      {
+        "line": 67,
+        "text": "Identity s\u1edf h\u1eefu account/role/session; Bakery s\u1edf h\u1eefu profile/member/catalog/media; Marketplace s\u1edf h\u1eefu RFQ/offer/durable acceptance; Order s\u1edf h\u1eefu commercial/address snapshots, lifecycle v\u00e0 review; Subscription s\u1edf h\u1eefu plan/order/proof/period; Chat s\u1edf h\u1eefu participant/message/receipt;"
+      },
+      {
+        "line": 83,
+        "text": "C\u00f3 7 database logic, 49 b\u1ea3ng nghi\u1ec7p v\u1ee5: Identity 6, Bakery 11, Marketplace 9, Order 7, Chat 5, Cake AI 6, Subscription 5; 17 migration file. S\u00e1u DB \u1ee9ng d\u1ee5ng ch\u1ea1y 43 b\u1ea3ng. S\u00e1u b\u1ea3ng AI \u0111\u01b0\u1ee3c \u00e1p DDL v\u00e0o DB ri\u00eang ch\u1ec9 \u0111\u1ec3 ki\u1ec3m schema, kh\u00f4ng gi\u1ea3 Flyway/app runtime. Kh\u00f4ng t\u00ednh `flyway_sch"
+      },
+      {
+        "line": 93,
+        "text": "| cake-ai-service | 9 | 6 | 0 |"
+      },
+      {
+        "line": 106,
+        "text": "| Cake AI/design/generation | 9 |"
+      },
+      {
+        "line": 171,
+        "text": "Existing tests cu\u1ed1i c\u00f3 148 test, 146 PASS, 2 error, kh\u00f4ng assertion failure/skipped. Error Chat tr\u00f9ng SQL runtime; error Order \u1edf fixture JdbcTemplate bind Instant, kh\u00f4ng \u0111\u1ed3ng ngh\u0129a lifecycle Order h\u1ecfng v\u00ec flow HTTP \u0111\u00e3 PASS. Cake AI v\u00e0 to\u00e0n reactor ch\u01b0a xanh. Kh\u00f4ng ch\u1ea1y t\u1ea3i l\u1edbn, c"
+      }
+    ]
+  },
+  {
+    "path": "docs/backend-audit/BACKEND_API_DETAILED_SPECIFICATION_VI.md",
+    "lines": 28813,
+    "relevantExcerpts": [
+      {
+        "line": 5,
+        "text": "M\u1ed7i API c\u00f3 A\u2013K ri\u00eang. B\u1ea3ng schema l\u1ea5y t\u1eeb OpenAPI c\u1ee7a JAR build t\u1eeb baseline; Cake AI d\u00f9ng declaration DTO ngu\u1ed3n v\u00ec compile th\u1ea5t b\u1ea1i. Required trong OpenAPI kh\u00f4ng \u0111\u1ea3m b\u1ea3o \u0111\u1ea7y \u0111\u1ee7 validation th\u1ee7 c\u00f4ng: ph\u1ea7n G v\u00e0 catalogue x\u1eed l\u00fd l\u00e0 b\u1eaft bu\u1ed9c. Response example l\u00e0 JSON t\u1ed5ng h\u1ee3p theo schem"
+      },
+      {
+        "line": 54,
+        "text": "| [CAI-001](#cai-001) | cake-ai-service | PATCH /api/v1/admin/generated-designs/{id}/moderation | Admin ki\u1ec3m duy\u1ec7t design |"
+      },
+      {
+        "line": 55,
+        "text": "| [CAI-002](#cai-002) | cake-ai-service | GET /api/v1/generated-designs/{id} | \u0110\u1ecdc design \u0111\u01b0\u1ee3c ph\u00e9p |"
+      },
+      {
+        "line": 56,
+        "text": "| [CAI-003](#cai-003) | cake-ai-service | GET /api/v1/generation-jobs | Li\u1ec7t k\u00ea job theo ch\u1ee7 s\u1edf h\u1eefu |"
+      },
+      {
+        "line": 57,
+        "text": "| [CAI-004](#cai-004) | cake-ai-service | POST /api/v1/generation-jobs | T\u1ea1o generation job v\u00e0 revision \u0111\u1ea7u |"
+      },
+      {
+        "line": 58,
+        "text": "| [CAI-005](#cai-005) | cake-ai-service | GET /api/v1/generation-jobs/{id} | Chi ti\u1ebft job/revisions/designs |"
+      },
+      {
+        "line": 59,
+        "text": "| [CAI-006](#cai-006) | cake-ai-service | POST /api/v1/generation-jobs/{id}/cancel | H\u1ee7y job \u0111ang ch\u1edd ho\u1eb7c x\u1eed l\u00fd |"
+      },
+      {
+        "line": 60,
+        "text": "| [CAI-007](#cai-007) | cake-ai-service | POST /api/v1/generation-jobs/{id}/prompt-revisions | T\u1ea1o revision v\u00e0 execution m\u1edbi |"
+      },
+      {
+        "line": 61,
+        "text": "| [CAI-008](#cai-008) | cake-ai-service | GET /internal/v1/cake-requests/{id}/generation-context | Cung c\u1ea5p context job cho Marketplace |"
+      },
+      {
+        "line": 62,
+        "text": "| [CAI-009](#cai-009) | cake-ai-service | GET /internal/v1/generated-designs/{id}/validation | X\u00e1c minh design cho Marketplace |"
+      },
+      {
+        "line": 97,
+        "text": "| [MKT-017](#mkt-017) | marketplace-service | GET /internal/v1/cake-requests/{id}/context | Context RFQ cho Cake AI |"
+      },
+      {
+        "line": 10465,
+        "text": "`PATCH /api/v1/admin/generated-designs/{id}/moderation` \u2014 `cake-ai-service`; handler `DesignController.moderate`. B\u1ec1 m\u1eb7t HTTP \u1ee9ng d\u1ee5ng; public surface kh\u00f4ng \u0111\u1ed3ng ngh\u0129a truy c\u1eadp \u1ea9n danh. Workflow: WF-23."
+      },
+      {
+        "line": 10483,
+        "text": "Kh\u00f4ng c\u00f3 body schema runtime. Cake AI: xem DTO declaration b\u00ean d\u01b0\u1edbi; kh\u00f4ng \u0111\u01b0\u1ee3c suy r\u1eb1ng endpoint kh\u00f4ng c\u00f3 body."
+      },
+      {
+        "line": 10496,
+        "text": "Khai b\u00e1o `GeneratedDesignResponse` \u2014 [GeneratedDesignResponse.java:6](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/dto/GeneratedDesignResponse.java#L6). "
+      },
+      {
+        "line": 10516,
+        "text": "Khai b\u00e1o `ModerateDesignRequest` \u2014 [DesignController.java:15](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java#L15). "
+      },
+      {
+        "line": 10524,
+        "text": "Khai b\u00e1o `ModerationStatus` \u2014 [DesignController.java:14](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java#L14). Enum: APPROVED, REJECTED"
+      },
+      {
+        "line": 10545,
+        "text": "| [DesignController.moderate](reference/SOURCE_PROCESSING_CATALOG_VI.md#m496) | [DesignController.java:25](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java#L25) | Mapping/helper; xem to\u00e0n b\u1ed9 body li\u00ean k\u1ebft |"
+      },
+      {
+        "line": 10547,
+        "text": "| [DesignService.moderate](reference/SOURCE_PROCESSING_CATALOG_VI.md#m498) | [DesignService.java:9](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignService.java#L9) | Mapping/helper; xem to\u00e0n b\u1ed9 body li\u00ean k\u1ebft |"
+      }
+    ]
+  },
+  {
+    "path": "docs/backend-audit/BACKEND_BUSINESS_WORKFLOWS_VI.md",
+    "lines": 1421,
+    "relevantExcerpts": [
+      {
+        "line": 606,
+        "text": "| 7 | Service tham gia | cake-ai-service, marketplace-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 621,
+        "text": "| 22 | Ngu\u1ed3n | [GenerationController.java:27](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java#L27); [ApiResponse.java:6](../../backend/platform-support/src/main/java/com/se193262/platform/dto/ApiResponse.java#L6)"
+      },
+      {
+        "line": 638,
+        "text": "| 7 | Service tham gia | cake-ai-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 653,
+        "text": "| 22 | Ngu\u1ed3n | [GenerationController.java:34](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java#L34); [ApiResponse.java:6](../../backend/platform-support/src/main/java/com/se193262/platform/dto/ApiResponse.java#L6)"
+      },
+      {
+        "line": 670,
+        "text": "| 7 | Service tham gia | cake-ai-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 685,
+        "text": "| 22 | Ngu\u1ed3n | [GenerationController.java:46](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java#L46); [ApiResponse.java:6](../../backend/platform-support/src/main/java/com/se193262/platform/dto/ApiResponse.java#L6)"
+      },
+      {
+        "line": 702,
+        "text": "| 7 | Service tham gia | cake-ai-service, marketplace-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 717,
+        "text": "| 22 | Ngu\u1ed3n | [CakeRequestController.java:60](../../backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/feature/cakerequest/CakeRequestController.java#L60); [ApiResponse.java:6](../../backend/platform-support/src/main/java/com/se193262/platform/dto/ApiRespo"
+      },
+      {
+        "line": 734,
+        "text": "| 7 | Service tham gia | cake-ai-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 749,
+        "text": "| 22 | Ngu\u1ed3n | [DesignController.java:25](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/design/DesignController.java#L25); [ApiResponse.java:6](../../backend/platform-support/src/main/java/com/se193262/platform/dto/ApiResponse.java#L6); [DesignSer"
+      },
+      {
+        "line": 1182,
+        "text": "| 7 | Service tham gia | bakery-service, cake-ai-service, chat-service, marketplace-service; xem remote clients b\u00ean d\u01b0\u1edbi API processing trace. |"
+      },
+      {
+        "line": 1197,
+        "text": "| 22 | Ngu\u1ed3n | [BakeryController.java:70](../../backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/bakery/controller/BakeryController.java#L70); [ApiResponse.java:16](../../backend/bakery-service/src/main/java/com/se193262/bakeryservice/shared/dto/ApiResponse"
+      },
+      {
+        "line": 1398,
+        "text": "  RFQ -. context UUID .-> Job[Cake AI job]"
+      }
+    ]
+  },
+  {
+    "path": "docs/backend-audit/BACKEND_API_RUNTIME_VERIFICATION_VI.md",
+    "lines": 2060,
+    "relevantExcerpts": [
+      {
+        "line": 24,
+        "text": "| Kh\u00f4ng th\u1ef1c thi | 9 | 9 API Cake AI compile blocked |"
+      },
+      {
+        "line": 43,
+        "text": "| Cake AI | Build isolated | kh\u00f4ng listen | FAILED | Kh\u00f4ng gi\u1ea3 claim runtime/provider/storage PASS |"
+      },
+      {
+        "line": 54,
+        "text": "| cake-ai-service | 9 | NOT_AVAILABLE | NOT_AVAILABLE |"
+      },
+      {
+        "line": 82,
+        "text": "| [MKT-017](BACKEND_API_DETAILED_SPECIFICATION_VI.md#mkt-017) | Context RFQ cho Cake AI | Internal scope/client dependency happy path ch\u01b0a \u0111\u01b0\u1ee3c c\u1ea5p/ch\u1ea1y; m\u1edbi verify anonymous rejection |"
+      }
+    ]
+  },
+  {
+    "path": "docs/backend-audit/BACKEND_AUDIT_FINDINGS_VI.md",
+    "lines": 307,
+    "relevantExcerpts": [
+      {
+        "line": 19,
+        "text": "| F-002 | High | Cake AI kh\u00f4ng compile: thi\u1ebfu Google Storage dependencies v\u00e0 ApiResponse.accepted | BUILD_CONFIRMED |"
+      },
+      {
+        "line": 55,
+        "text": "## F-002 \u00b7 High \u00b7 Cake AI kh\u00f4ng compile: thi\u1ebfu Google Storage dependencies v\u00e0 ApiResponse.accepted"
+      },
+      {
+        "line": 61,
+        "text": "B\u1eb1ng ch\u1ee9ng: [FirebaseStorageAdapter:12](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java#L12); [GenerationController:51](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generat"
+      },
+      {
+        "line": 63,
+        "text": "T\u00e1i hi\u1ec7n/\u0111\u1ed1i chi\u1ebfu: Build isolated -pl cake-ai-service -am -DskipTests package exit1; missing com.google.auth.oauth2/cloud.storage/http v\u00e0 accepted method."
+      },
+      {
+        "line": 189,
+        "text": "B\u1eb1ng ch\u1ee9ng: [ProductServiceImpl:43](../../backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/product/service/impl/ProductServiceImpl.java#L43); [SubscriptionPlanServiceImpl:20](../../backend/subscription-service/src/main/java/com/se193262/subscriptionservice/"
+      },
+      {
+        "line": 253,
+        "text": "B\u1eb1ng ch\u1ee9ng: [QueryPaging:9](../../backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/shared/QueryPaging.java#L9); [GenerationReader:14](../../backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationReader.java#L14); [Me"
+      }
+    ]
+  },
+  {
+    "path": "docs/backend-audit/BACKEND_TO_FLUTTER_API_CONTRACT_REFERENCE_VI.md",
+    "lines": 91,
+    "relevantExcerpts": [
+      {
+        "line": 84,
+        "text": "7. Cake AI sau s\u1eeda compile, credential sandbox \u0111\u01b0\u1ee3c ph\u00ea duy\u1ec7t, moderation/storage/lease tests."
+      }
+    ]
+  }
+]

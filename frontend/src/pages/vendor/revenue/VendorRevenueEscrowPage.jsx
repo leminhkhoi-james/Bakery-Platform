@@ -238,10 +238,11 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
 }
 
 export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
-  const { bakeryId, selectBakery, available } = useVendorBakery(routeSearch)
+  const owner = useVendorBakery(routeSearch)
+  const { bakeryId, selectBakery, available } = owner
 
   return (
-    <VendorFrame title="Doanh thu" activeTab="revenue" bakeryId={bakeryId} onNavigate={onNavigate}>
+    <VendorFrame owner={owner} title="Doanh thu" activeTab="revenue" bakeryId={bakeryId} onNavigate={onNavigate}>
       <div className="sc-vendor-dashboard">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
           <div>

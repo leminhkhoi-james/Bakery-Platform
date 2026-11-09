@@ -1,0 +1,82 @@
+{
+  "status": "FAULT_NOT_APPLIED_EXCLUDED",
+  "finalOrder": {
+    "id": "0cb45736-127c-495c-bff5-e6e92fd2853c",
+    "orderNumber": "ORD-52A9D53A72E1413B8888",
+    "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+    "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+    "cakeRequestId": null,
+    "offerId": null,
+    "orderSource": "DIRECT_CATALOG",
+    "customerName": "QA customerA",
+    "customerPhone": "QA-ONLY",
+    "bakeryName": "QA Flow BC Bakery",
+    "customerNote": "QA BC ACKLOSS 20261109 final",
+    "subtotal": 200000.0,
+    "deliveryFee": 15000.0,
+    "totalAmount": 215000.0,
+    "currency": "VND",
+    "status": "CANCELLED",
+    "neededAt": "2026-11-12T02:56:22.897480Z",
+    "acceptedAt": null,
+    "completedAt": null,
+    "createdAt": "2026-11-09T02:58:25.940298Z",
+    "updatedAt": "2026-11-09T03:01:25.977589Z",
+    "items": [
+      {
+        "id": "c19378c7-1dc3-4b98-83fd-e07a1549bb88",
+        "sourceProductId": "f2dbe6f3-d8ba-42d4-95be-78372358b521",
+        "sourceOfferItemId": null,
+        "itemType": "CAKE",
+        "name": "QA Live Address Cake",
+        "description": "Synthetic local order lifecycle verification",
+        "configuration": {
+          "options": [
+            {
+              "values": [
+                {
+                  "id": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451",
+                  "name": "QA Vanilla",
+                  "priceAdjustment": 20000.0
+                }
+              ],
+              "groupId": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84",
+              "groupName": "QA Flavor"
+            }
+          ]
+        },
+        "quantity": 1,
+        "unitPrice": 200000.0,
+        "lineTotal": 200000.0
+      }
+    ],
+    "deliveryAddress": {
+      "recipientName": "QA Native Recipient",
+      "recipientPhone": "QA-ONLY",
+      "addressLine": "QA NATIVE UPDATED KITCHEN",
+      "ward": "QA Ward",
+      "district": "QA District",
+      "city": "QA City",
+      "latitude": null,
+      "longitude": null,
+      "deliveryNote": null
+    },
+    "statusHistory": [
+      {
+        "fromStatus": null,
+        "toStatus": "PENDING",
+        "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+        "note": "Order created",
+        "changedAt": "2026-11-09T02:58:25.940298Z"
+      },
+      {
+        "fromStatus": "PENDING",
+        "toStatus": "CANCELLED",
+        "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+        "note": "QA first injection not applied; cancel synthetic test order",
+        "changedAt": "2026-11-09T03:01:25.977589Z"
+      }
+    ],
+    "review": null
+  }
+}

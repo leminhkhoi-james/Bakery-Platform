@@ -21,6 +21,7 @@ class LiveSession extends ChangeNotifier {
   bool restoring = true;
   int generation = 0;
   Future<void>? _refresh;
+  Future<void> Function()? beforeLogout;
   Future<void> _storageQueue = Future.value();
   bool get authenticated => user != null;
   bool hasRole(String role) => (user?['roles'] as List? ?? []).contains(role);
@@ -258,6 +259,7 @@ class LiveSession extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    await beforeLogout?.call();
     final uri = environment.endpoint(
       ApiService.identity,
       '/api/v1/auth/logout',
