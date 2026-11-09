@@ -1,5 +1,6 @@
 import { reviewText } from './adminPresentation.js'
 import { publicCopy } from './uiLabels.js'
+import { simulationMediaUrl } from '../mockData/business/runtime.js'
 
 export function paymentSenderName(payment, profile) {
   const member = payment.submittedByUserId && Array.isArray(profile?.members) ? profile.members.find((item) => item?.userId === payment.submittedByUserId) : null
@@ -9,7 +10,7 @@ export function paymentSenderName(payment, profile) {
 export function paymentReviewFacts(payment, order, profile, profileError) {
   const sender = paymentSenderName(payment, profile)
   const reference = reviewText(publicCopy(payment.paymentReference))
-  const proof = typeof payment.proofUrl === 'string' && /^https?:\/\//i.test(payment.proofUrl) ? payment.proofUrl : null
+  const proof = simulationMediaUrl(payment.proofUrl) || (typeof payment.proofUrl === 'string' && /^https?:\/\//i.test(payment.proofUrl) ? payment.proofUrl : null)
   const missing = []
   const senderVerified = Array.isArray(profile?.members) && !profileError
   if (!sender && senderVerified) missing.push('tên người gửi')

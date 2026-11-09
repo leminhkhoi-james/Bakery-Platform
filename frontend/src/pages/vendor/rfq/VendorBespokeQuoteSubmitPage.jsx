@@ -1,3 +1,4 @@
+import { unifiedEnabled, recordSource, localBakeryFor, localSubscriptionFor } from '../../../services/unifiedDataService.js'
 import React, { useState } from 'react'
 import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
 import { ApiErrorMessage, inputClass, panelClass } from '../../../components/management/ApiState.jsx'
@@ -18,10 +19,15 @@ import { loadVendorRfqAccess, loadExistingVendorOffer } from '../../../services/
 import { requestMatchesBakery } from '../../../services/vendorRfqModels.js'
 import { VendorRfqState } from './VendorRfqMarketplacePage.jsx'
 import { loadDashboardAccess } from '../../../services/vendorDashboardService.js'
+import { loadBakerySubscription } from '../../../services/subscriptionService.js'
 
 function NewOffer({ id, bakery, onNavigate }) {
   const bakeryId = bakery.id
   const resource = useCatalogResource(loadRfq, { id }), existing = useCatalogResource(loadExistingVendorOffer, { bakeryId, cakeRequestId: id }), action = useMarketplaceAction(resource.reload)
+  const subscription = useCatalogResource(loadBakerySubscription, { bakeryId })
+  const localRequest = unifiedEnabled() && recordSource({ id }) === 'local'
+  const matchingBakery = localRequest ? localBakeryFor(bakeryId) : bakery
+  const canQuote = localRequest ? Boolean(localSubscriptionFor(bakeryId)) : subscription.status === 'ready' && !subscription.error && subscription.data?.currentSubscription?.status === 'ACTIVE'
   const ready = existing.status === 'ready' && !existing.error && !existing.refreshing
   return (
     <>
@@ -45,12 +51,15 @@ function NewOffer({ id, bakery, onNavigate }) {
                     </button>
                   </section>
                 ) : (
+                  <>
+                  {!localRequest && subscription.status === 'loading' ? <p role="status">Đang kiểm tra gói dịch vụ…</p> : !localRequest && subscription.error ? <ApiErrorMessage error={subscription.error} retry={subscription.reload} /> : !canQuote && <section className={panelClass}><p>Tiệm cần gói dịch vụ đang hiệu lực để gửi báo giá. Đơn mua gói đang chờ thanh toán hoặc duyệt chưa kích hoạt quyền này.</p><button className="sc-button" onClick={() => onNavigate('vendor-subscription?bakeryId=' + bakeryId)}>Kiểm tra gói dịch vụ</button></section>}
                   <OfferForm
                     key={bakeryId}
                     bakeryId={bakeryId}
-                    disabled={!requestAcceptsOffers(resource.data) || !requestMatchesBakery(resource.data, bakery)}
+                    source={unifiedEnabled() ? recordSource({ id }) : undefined}
+                    disabled={!canQuote || !requestAcceptsOffers(resource.data) || !matchingBakery || !requestMatchesBakery(resource.data, matchingBakery)}
                     busy={action.busy}
-                    onSave={(input) => action.run(async () => {
+                    onSave={(input) => canQuote && action.run(async () => {
                       const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
                       if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
                       const offer = await rfqService.submitOffer(id, input)
@@ -58,6 +67,7 @@ function NewOffer({ id, bakery, onNavigate }) {
                       onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
                     })}
                   />
+                  </>
                 ))}
               </VendorRfqState>
             </div>
@@ -125,7 +135,7 @@ export function ManageOffer({ id, bakeryId, user, roles }) {
                 onClose={() => setEditing(false)}
               >
                 <ModalFormState value={reason} busy={action.busy} />
-                <OfferForm footerExternal key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={async (input) => { await action.run(async () => { await rfqService.updateOffer(id, input); setEditing(false) }) }} />
+                <OfferForm source={unifiedEnabled() ? recordSource({ id }) : undefined} footerExternal key={resource.data.updatedAt} bakeryId={bakeryId} offer={resource.data} busy={action.busy} onSave={async (input) => { await action.run(async () => { await rfqService.updateOffer(id, input); setEditing(false) }) }} />
                 {action.error && <ApiErrorMessage error={action.error} />}
               </DetailDrawer>
             )}
@@ -154,7 +164,7 @@ export function ManageOffer({ id, bakeryId, user, roles }) {
   )
 }
 function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
-  const access = useCatalogResource(query.get('offerId') ? loadDashboardAccess : loadVendorRfqAccess, { bakeryId, userId: user.id })
+  const access = useCatalogResource(query.get('offerId') ? loadDashboardAccess : loadVendorRfqAccess, { bakeryId, userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
   if (access.status === 'loading' || access.error) return <VendorRfqState resource={access} />
   return query.get('offerId') ? <ManageOffer key={bakeryId + query.get('offerId')} id={query.get('offerId')} bakeryId={bakeryId} user={user} roles={roles} /> : query.get('cakeRequestId') ? <NewOffer key={bakeryId + query.get('cakeRequestId')} id={query.get('cakeRequestId')} bakery={access.data} onNavigate={onNavigate} /> : <p>Chọn một yêu cầu để xem chi tiết và gửi báo giá.</p>
 }

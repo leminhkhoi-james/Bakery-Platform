@@ -1,12 +1,16 @@
+import { unifiedEnabled } from './unifiedDataService.js'
 import { ApiError } from './apiClient.js'
 import { loadBakeries } from './vendorService.js'
 import { vendorManagementService } from './vendorManagementService.js'
 import { onboardingService } from './onboardingService.js'
 import { authService } from './authService.js'
+import { loadOrders } from './orderService.js'
 
 // Public catalog entries are candidates, never evidence of management rights.
 // There is currently no public "my bakeries" endpoint (ADR-004).
 export async function loadManagedBakeries({ userId, includeOnboarding = false }, options = {}) {
+  if (authService.getSnapshot().source === 'demo') throw new ApiError('Vui lòng đăng nhập tài khoản thật để quản lý tiệm.', 403)
+  options = { ...options, allowMockFallback: false }
   const catalog = { result: [] }
   const seen = new Set()
   // This authenticated endpoint also returns the applicant's unpublished shop.
@@ -32,7 +36,7 @@ export async function loadManagedBakeries({ userId, includeOnboarding = false },
   await Promise.all(Array.from({ length: Math.min(4, catalog.result.length) }, async () => {
     while (cursor < catalog.result.length) {
       const bakery = catalog.result[cursor++]
-      if (bakery.id === applicantBakery?.id) continue
+      if (bakery.id === applicantBakery?.id || (!unifiedEnabled() && bakery.id.startsWith('de000000-0000-4000-8000-'))) continue
       try {
         const member = await vendorManagementService.getMembership(bakery.id, userId, options)
         // The public collection contains only active, entitled shops. Preserve
@@ -46,7 +50,9 @@ export async function loadManagedBakeries({ userId, includeOnboarding = false },
     }
   }))
   options.signal?.throwIfAborted()
-  return verified.toSorted((a, b) => a.name.localeCompare(b.name, 'vi'))
+  return verified
+    .filter((b) => unifiedEnabled() || !b.id.startsWith('de000000-0000-4000-8000-'))
+    .toSorted((a, b) => a.name.localeCompare(b.name, 'vi'))
 }
 
 export async function loadOwnerBakery({ bakeryId, userId, includeOnboarding }, options = {}) {
@@ -64,6 +70,27 @@ export async function loadDashboardAccess({ bakeryId, userId }, options) {
   const member = await vendorManagementService.getMembership(bakeryId, userId, { ...options, allowMockFallback: false })
   if (member?.memberRole !== 'OWNER') throw new ApiError('Bạn chưa có quyền quản lý cửa hàng này.', 403)
   return member
+}
+
+// Dashboard requests retain the backend bakery scope and never use display data.
+export const loadDashboardOrders = (params, options = {}) => loadOrders({ ...params, scope: 'bakery' }, { ...options, allowMockFallback: false })
+
+export async function loadDashboardCompletedOrders({ bakeryId }, options = {}) {
+  const result = [], seen = new Set()
+  let total, pages = 1
+  for (let page = 1; page <= pages; page++) {
+    options.signal?.throwIfAborted()
+    const data = await loadDashboardOrders({ bakeryId, status: 'COMPLETED', page, size: 100, sort: 'createdAt,desc' }, options)
+    if (data.meta.page !== page || data.meta.pages > 200 || total !== undefined && data.meta.total !== total) throw new ApiError('Danh sách đơn hoàn tất đã thay đổi hoặc không hợp lệ. Vui lòng tải lại.', 409)
+    total = data.meta.total; pages = data.meta.pages
+    for (const order of data.result) {
+      if (seen.has(order.id) || order.status !== 'COMPLETED' || order.totalAmount === null || !Number.isFinite(order.totalAmount) || order.totalAmount < 0 || !order.currency) throw new ApiError('Dữ liệu doanh thu từ đơn hoàn tất không hợp lệ.', 502)
+      seen.add(order.id); result.push(order)
+    }
+    if (page < pages && !data.result.length) throw new ApiError('Chưa tải đủ đơn hoàn tất.', 502)
+  }
+  if (result.length !== total || new Set(result.map(order => order.currency)).size > 1) throw new ApiError('Chưa thể tổng hợp đầy đủ số tiền cùng loại tiền tệ.', 502)
+  return { result, meta: { page: 1, pageSize: Math.max(1, result.length), pages: result.length ? 1 : 0, total } }
 }
 
 export function dashboardErrorMessage(error) {

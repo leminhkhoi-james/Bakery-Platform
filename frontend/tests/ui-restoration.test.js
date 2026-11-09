@@ -63,8 +63,9 @@ test('Loading and errors conceal stale children and retain retry rather than sho
 test('Admin metrics use complete source collections, preserve counts and remove dashboard guidance', () => {
   setup({ loadAdminDashboard: ready({ bakeries: { state: 'ready', rows: Array.from({ length: 37 }, (_, i) => ({ id: 'b' + i, name: 'Tiệm ' + i, status: 'PENDING_APPROVAL' })) }, payments: { state: 'ready', rows: Array.from({ length: 12 }, (_, i) => ({ id: 'p' + i, subscriptionOrderId: 's' + i, status: 'SUBMITTED' })) } }) })
   const html = render(Dashboard, { onNavigate() {} })
-  assert.match(html, /sc-metric-value">37<\/strong>/); assert.match(html, /sc-metric-value">12<\/strong>/)
-  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend/); assert.equal((html.match(/sc-dashboard-kpi-footer/g) || []).length, 10); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/); assert.match(html, /Hoạt động gần đây/)
+  assert.match(html, /sc-metric-value">37<\/strong>/); assert.match(html, /Số công việc: 12/)
+  assert.match(html, /37 Tiệm chờ duyệt/); assert.match(html, /Gói dịch vụ chờ duyệt/)
+  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend/); assert.equal((html.match(/sc-dashboard-kpi-footer/g) || []).length, 4); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/); assert.match(html, /Hoạt động gần đây/)
 })
 test('Restored Admin table displays backend records with status, ID and original review action', () => {
   setup({ loadAdminBakeries: ready(page([{ id, name: 'Fixture API bakery', status: 'PENDING_APPROVAL' }])) })

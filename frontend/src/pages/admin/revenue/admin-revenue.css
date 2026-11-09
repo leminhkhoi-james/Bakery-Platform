@@ -414,8 +414,22 @@
    --------------------------------------------------------- */
 .sc-revenue-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.15rem;
+}
+
+.sc-revenue-month-chart {
+  display: grid;
+  gap: .65rem;
+  margin: 0 0 1.25rem;
+}
+
+.sc-revenue-month-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .75rem;
+  font-size: .875rem;
 }
 
 .sc-revenue-kpi-card {

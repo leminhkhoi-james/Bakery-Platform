@@ -1,3 +1,4 @@
+import { simulationMediaUrl } from '../mockData/business/runtime.js'
 import { ApiError } from './apiClient.js'
 import { isCatalogId, mapCatalogPage } from './catalogModels.js'
 import { requireId, text } from './managementModels.js'
@@ -7,7 +8,7 @@ export const MESSAGE_TYPES = ['TEXT', 'IMAGE', 'FILE', 'SYSTEM']
 export const CHAT_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
 export const CHAT_CONTEXT_GUIDANCE = 'Mở hội thoại từ yêu cầu bánh hoặc báo giá của bạn để trao đổi với tiệm.'
 const fail = (message) => { throw new ApiError(message, 502) }
-export const safeChatUrl = (value) => typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null
+export const safeChatUrl = (value) => simulationMediaUrl(value) || (typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null)
 
 export function mapConversation(dto, detail = false) {
   if (!dto || !['id', 'customerId', 'bakeryId', 'cakeRequestId'].every((key) => isCatalogId(dto[key]))) fail('Conversation DTO thiếu ID hợp lệ.')

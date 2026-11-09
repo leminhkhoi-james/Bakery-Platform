@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import { canonicalBakeryId } from '../services/unifiedDataService.js'
+import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '../context/useAuth.js'
 import { isCatalogId } from '../services/catalogModels.js'
 import { loadManagedBakeries, loadOwnerBakery } from '../services/vendorDashboardService.js'
@@ -7,7 +8,7 @@ import { useCatalogResource } from './useCatalogResource.js'
 function restoredSelection(key, search, useUrl = true) {
   let value = useUrl ? new URLSearchParams(search).get('bakeryId') : null
   try { value ??= sessionStorage.getItem(key) } catch { /* Storage is optional. */ }
-  return { key, search, id: isCatalogId(value) ? value.toLowerCase() : '', invalid: Boolean(value && !isCatalogId(value)) }
+  return { key, search, id: isCatalogId(value) ? canonicalBakeryId(value.toLowerCase()) : '', invalid: Boolean(value && !isCatalogId(value)) }
 }
 
 export function useVendorBakery(routeSearch = '') {
@@ -23,7 +24,7 @@ export function useVendorBakery(routeSearch = '') {
   }
   const requestedBakeryId = current.id
   const selectBakery = useCallback((value) => {
-    const normalized = isCatalogId(value) ? value.toLowerCase() : ''
+    const normalized = isCatalogId(value) ? canonicalBakeryId(value.toLowerCase()) : ''
     setSelection({ key, search: routeSearch, id: normalized })
     try { if (normalized) sessionStorage.setItem(key, normalized); else sessionStorage.removeItem(key) } catch { /* Storage is optional. */ }
     if (typeof window !== 'undefined') {
@@ -32,11 +33,27 @@ export function useVendorBakery(routeSearch = '') {
       else url.searchParams.delete('bakeryId')
       for (const param of ['orderId', 'conversationId', 'cakeRequestId', 'offerId']) url.searchParams.delete(param)
       window.history.replaceState(window.history.state, '', url.pathname + url.search)
-      window.dispatchEvent(new PopStateEvent('popstate'))
+      window.dispatchEvent(new PopStateEvent('popstate', { state: window.history.state }))
     }
   }, [key, routeSearch])
   const available = useCatalogResource(loadManagedBakeries, { userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
-  const candidateId = requestedBakeryId || available.data?.[0]?.id || ''
+  const hasMatchingRequested = Boolean(
+    requestedBakeryId && available.data?.some((b) => b.id.toLowerCase() === requestedBakeryId.toLowerCase())
+  )
+  const candidateId = (available.status === 'ready' && !hasMatchingRequested)
+    ? (available.data?.[0]?.id || '')
+    : (requestedBakeryId || (available.status === 'ready' ? available.data?.[0]?.id || '' : ''))
+
+  useEffect(() => {
+    if (available.status === 'ready' && available.data?.length) {
+      const nextId = candidateId || available.data[0]?.id
+      const urlHasBakery = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('bakeryId')
+      if (nextId && (!urlHasBakery || !hasMatchingRequested)) {
+        selectBakery(nextId)
+      }
+    }
+  }, [available.status, available.data, candidateId, hasMatchingRequested, selectBakery])
+
   const access = useCatalogResource(loadOwnerBakery, { bakeryId: available.status === 'ready' ? candidateId : '', userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
   const error = current.invalid ? { status: 400 } : available.error || access.error
   let state = 'LOADING'
@@ -47,5 +64,5 @@ export function useVendorBakery(routeSearch = '') {
   }
   const bakery = ['ACTIVE', 'PENDING'].includes(state) ? access.data : null
   const reload = useCallback(() => { available.reload(); access.reload() }, [available.reload, access.reload])
-  return { bakeryId: current.id || bakery?.id || '', requestedBakeryId: candidateId, bakery, state, error, reload, selectBakery, user, roles, available }
+  return { bakeryId: candidateId || current.id || bakery?.id || '', requestedBakeryId: candidateId, bakery, state, error, reload, selectBakery, user, roles, available }
 }

@@ -8,12 +8,14 @@ import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { authService } from './services/authService.js'
 import { installDisplayData } from './mockData/displayRuntime.js'
+import { installBusinessSimulation } from './mockData/business/runtime.js'
 
+const realFetch = window.fetch.bind(window)
 installDisplayData(authService.getSnapshot)
-createRoot(document.getElementById('root')).render(
+installBusinessSimulation(authService.getSnapshot, realFetch).then(() => createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
       <App />
     </AuthProvider>
   </StrictMode>,
-)
+))

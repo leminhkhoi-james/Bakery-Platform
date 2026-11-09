@@ -92,7 +92,7 @@ export function createSeed() {
   })
 
   const plans = [
-    { id: demoId(500), code: 'BASIC', name: 'Cơ bản', description: 'Gói dành cho tiệm mới tham gia nền tảng', monthlyPrice: 30000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '20', offers: '50', featured: 'false', support: 'Hỗ trợ trực tuyến cộng đồng' } },
+    { id: demoId(500), code: 'BASIC', name: 'Cơ bản', description: 'Gói dành cho tiệm mới tham gia nền tảng', monthlyPrice: 19000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '20', offers: '50', featured: 'false', support: 'Hỗ trợ trực tuyến cộng đồng' } },
     { id: demoId(501), code: 'PRO', name: 'Chuyên nghiệp', description: 'Gói dành cho tiệm có nhiều sản phẩm và offer', monthlyPrice: 100000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '100', offers: '300', featured: 'false', support: 'Hỗ trợ ưu tiên & Đề xuất nổi bật' } },
     { id: demoId(502), code: 'PREMIUM', name: 'Cao cấp', description: 'Gói có ưu tiên hiển thị trên nền tảng', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: { products: '-1', offers: '-1', featured: 'true', support: 'Hỗ trợ chuyên gia 24/7 & Top trang chủ' } },
   ]

@@ -12,8 +12,8 @@
 .sc-vendor-order-table :is(th, td) { padding: .75rem .65rem; vertical-align: middle; overflow-wrap: anywhere; }
 .sc-vendor-order-table td { font-size: .82rem; }
 .sc-vendor-order-table strong { color: #722637; font-weight: 600; }
-.sc-vendor-order-table :is(th, td):nth-child(4) { text-align: right; padding-right: 1rem; }
-.sc-vendor-order-table :is(th, td):nth-child(5) { padding-left: 1rem; }
+.sc-vendor-order-table :is(th, td):nth-child(5) { text-align: right; padding-right: 1rem; }
+.sc-vendor-order-table :is(th, td):nth-child(6) { padding-left: 1rem; }
 .sc-vendor-order-table :is(th, td):last-child { text-align: center; }
 .sc-vendor-order-table .sc-status { white-space: nowrap; }
 .sc-vendor-order-money { white-space: nowrap; font-variant-numeric: tabular-nums; }

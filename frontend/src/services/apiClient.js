@@ -21,7 +21,12 @@ export const getAuthToken = () => {
 
 export const setAuthToken = (token) => {
   accessToken = token || ''
-  // Legacy browser data is preserved but never trusted as an authenticated token.
+  // Remove credentials cached by the previous demo client. Never persist new JWTs.
+  try {
+    localStorage.removeItem('sweetcake_access_token')
+  } catch {
+    // Ignore localStorage errors
+  }
 }
 
 export const onSessionExpired = (listener) => {

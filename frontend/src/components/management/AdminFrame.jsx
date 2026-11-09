@@ -1,3 +1,4 @@
+import UnifiedSourceNotice from './UnifiedSourceNotice.jsx'
 import React, { useEffect, useRef, useState } from 'react'
 import AdminSidebar from '../../layouts/admin/AdminSidebar.jsx'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
@@ -9,6 +10,7 @@ import './admin-header.css'
 import './admin-layout.css'
 import './admin-tables.css'
 import { lockPageScroll } from '../common/modalState.js'
+import './business-simulation.css'
 
 const ADMIN_PAGE_HEADERS = {
   'admin-dashboard': { title: 'Tổng quan hệ thống', description: 'Theo dõi hoạt động và những việc cần xử lý.' },
@@ -57,7 +59,7 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
   return <div className="sc-portal sc-portal--admin">
     <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
     <PortalHeader title={heading.title} description={heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
-    <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}>{children}</div></main>
+    <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}><UnifiedSourceNotice />{children}</div></main>
     {newPaymentNotice && (
       <aside role="status" aria-live="polite" className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-secondary/30 bg-surface/95 backdrop-blur-md p-4 shadow-xl">
         <span className="material-symbols-outlined text-secondary text-2xl">notifications_active</span>

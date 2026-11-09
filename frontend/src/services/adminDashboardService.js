@@ -29,6 +29,7 @@ export async function readDashboardPages(load, options = {}, getSource = display
 }
 export async function loadAdminDashboard({ user }, options = {}) {
   if (!user?.roles?.includes('ADMIN')) throw new ApiError('Bạn không có quyền xem tổng quan quản trị.', 403)
+  options = { ...options, allowMockFallback: false }
   const definitions = {
     bakeries: ['/admin/bakeries', (params, request) => publicationAdminService.getBakeries(params, request)],
     payments: ['/admin/bakery-payments', (params, request) => publicationAdminService.getPayments({ ...params, sort: 'submittedAt,desc' }, request)],

@@ -5,6 +5,7 @@ import { publicationAdminService as admin, bakeryTransitions, mapAdminBakery, ma
 import { vendorManagementService as vendor } from '../src/services/vendorManagementService.js'
 import { setAuthToken } from '../src/services/apiClient.js'
 import { canAccess } from '../src/routes/routeAccess.js'
+import { createDisplayTransport } from '../src/mockData/displayRuntime.js'
 
 const bakeryId = randomUUID(), orderId = randomUUID(), paymentId = randomUUID(), key = randomUUID()
 const bakery = { id: bakeryId, name: 'Fixture only', status: 'PENDING_APPROVAL', operations: { addresses: [{ isPrimary: true }], serviceAreas: [{ active: true }], businessHours: [] } }
@@ -16,6 +17,24 @@ const nativeFetch = globalThis.fetch
 let handler, calls
 beforeEach(() => { calls = []; setAuthToken('isolated-test-token'); handler = () => reply(null, 500); globalThis.fetch = async (url, options) => { calls.push({ url, options }); return handler(url, options) } })
 after(() => { globalThis.fetch = nativeFetch; setAuthToken(null) })
+
+test('Admin payments bypass empty demo substitution and preserve API errors', async () => {
+  let upstreamCalls = 0
+  let status = 200
+  const transport = createDisplayTransport({
+    emptyDemo: true,
+    getSession: () => ({ source: 'real', user: { id: randomUUID(), roles: ['ADMIN'] } }),
+    fetch: async () => { upstreamCalls++; return status === 200 ? reply(page([])) : reply(null, status) },
+  })
+  assert.ok(transport.store.state.payments.length)
+  globalThis.fetch = transport.fetch
+  assert.deepEqual((await admin.getPayments({ status: 'SUBMITTED' }, { allowMockFallback: true })).result, [])
+  assert.equal(upstreamCalls, 1, 'No empty-list demo probe or mock payment may replace the API result')
+  for (status of [401, 403, 404, 500]) {
+    await assert.rejects(admin.getPayments({}, { retryAuth: false }), { status })
+  }
+  assert.equal(upstreamCalls, 5)
+})
 
 test('Admin reads unfiltered bakery statuses, query/city and page from real result/meta contract', async () => {
   handler = () => reply(page([bakery]))

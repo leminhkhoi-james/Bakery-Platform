@@ -2,6 +2,8 @@ import { api, ApiError } from './apiClient.js'
 import { catalogMoney, isCatalogId, mapProduct } from './catalogModels.js'
 import { requireId } from './managementModels.js'
 
+export const isRealCheckoutId = value => isCatalogId(value) && !/^(?:5c000000|de000000)-0000-4000-8000-/i.test(value)
+
 export const ADDRESS_BLOCKER = 'Hiện chưa thể chọn địa chỉ và xác nhận đơn hàng. Vui lòng kiểm tra địa chỉ nhận bánh hoặc thử lại sau.'
 
 export async function revalidateCartItem(item, options = {}) {

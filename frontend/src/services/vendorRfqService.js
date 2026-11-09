@@ -1,3 +1,4 @@
+import { unifiedEnabled, recordSource, localBakeryFor } from './unifiedDataService.js'
 import { ApiError } from './apiClient.js'
 import { rfqService } from './rfqService.js'
 import { vendorManagementService } from './vendorManagementService.js'
@@ -5,13 +6,13 @@ import { loadDashboardAccess } from './vendorDashboardService.js'
 import { requestMatchesBakery } from './vendorRfqModels.js'
 import { isDemoId } from '../mockData/seed.js'
 
-export async function loadVendorRfqAccess({ bakeryId, userId }, options) {
+export async function loadVendorRfqAccess({ bakeryId, userId, includeOnboarding = false }, options) {
   await loadDashboardAccess({ bakeryId, userId }, options)
-  return loadVendorRfqProfile(bakeryId, options)
+  return loadVendorRfqProfile(bakeryId, options, includeOnboarding)
 }
 
-async function loadVendorRfqProfile(bakeryId, options) {
-  const bakery = await vendorManagementService.getPublicProfile(bakeryId, { ...options, allowMockFallback: false })
+async function loadVendorRfqProfile(bakeryId, options, includeOnboarding = false) {
+  const bakery = await vendorManagementService.getManagedProfile(bakeryId, includeOnboarding, { ...options, allowMockFallback: false })
   if (bakery?.id?.toLowerCase() !== bakeryId.toLowerCase()) throw new ApiError('Chưa xác minh được cửa hàng.', 502)
   if (bakery.status && bakery.status !== 'ACTIVE') throw new ApiError('Cửa hàng chưa hoạt động.', 404)
   if (!bakery.operations) bakery.operations = { serviceAreas: [], addresses: [], businessHours: [] }
@@ -33,7 +34,10 @@ export async function loadVendorRequests({ bakery, page = 1, size = 12, ...filte
     for (const row of data.result) {
       if (seen.has(row.id)) throw new ApiError('Danh sách yêu cầu bị lặp trang.', 502)
       seen.add(row.id)
-      if (isDemoId(row.id) === isDemoId(bakery.id) && requestMatchesBakery(row, bakery)) result.push(row)
+      if (unifiedEnabled()) {
+        const scopeBakery = recordSource(row) === 'local' ? localBakeryFor(bakery.id) : bakery
+        if (scopeBakery && requestMatchesBakery(row, scopeBakery)) result.push(row)
+      } else if (isDemoId(row.id) === isDemoId(bakery.id) && requestMatchesBakery(row, bakery)) result.push(row)
     }
     next++
   } while (next <= pages)

@@ -1,0 +1,809 @@
+{
+  "shops": [
+    {
+      "sourceId": "91cdf727-8303-4282-83ad-1e1626738509",
+      "ownerId": "b2d7cc95-db3e-4a4d-876d-28781e8ab9fe",
+      "email": "owner@sweetcake.local",
+      "categories": [
+        {
+          "id": "0c2f2cac-3613-4a98-8f36-4e7dab550b6f",
+          "name": "Bánh Kem Pháp",
+          "slug": "banh-kem-phap-1794146397497",
+          "displayOrder": 0,
+          "active": true
+        },
+        {
+          "id": "a77247f7-be52-4eb9-9827-5f665f398400",
+          "name": "Bánh Kem Pháp",
+          "slug": "banh-kem-phap-1794146660801",
+          "displayOrder": 0,
+          "active": true
+        },
+        {
+          "id": "d1fcbe93-fd51-4176-8e5f-4577a4865c5a",
+          "name": "Bánh Kem Pháp",
+          "slug": "banh-kem-phap-1794146705277",
+          "displayOrder": 0,
+          "active": true
+        },
+        {
+          "id": "28ced831-d746-45d5-81ff-2c8cb3d7ed20",
+          "name": "Bánh Kem Pháp",
+          "slug": "banh-kem-phap-1794146780529",
+          "displayOrder": 0,
+          "active": true
+        },
+        {
+          "id": "0e8b48c8-cac3-42df-8bab-d47f52a3a9fd",
+          "name": "Bánh Kem Pháp",
+          "slug": "banh-kem-phap-1794146848262",
+          "displayOrder": 0,
+          "active": true
+        },
+        {
+          "id": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCQA-20261108 Entremets",
+          "slug": "scqa-20261108-b1-c1",
+          "displayOrder": 21,
+          "active": true
+        },
+        {
+          "id": "e0294447-638b-417a-8a86-4b399b4b4870",
+          "name": "SCQA-20261108 Viennoiserie",
+          "slug": "scqa-20261108-b1-c2",
+          "displayOrder": 22,
+          "active": true
+        },
+        {
+          "id": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "SCQA-20261108 Tartes",
+          "slug": "scqa-20261108-b1-c3",
+          "displayOrder": 23,
+          "active": true
+        },
+        {
+          "id": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "SCQA-20261108 Gâteaux",
+          "slug": "scqa-20261108-b1-c4",
+          "displayOrder": 24,
+          "active": true
+        }
+      ],
+      "products": [
+        {
+          "id": "7d004740-49cd-432d-9cad-22297be041bc",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCQA-20261108 Millefeuille UI",
+          "slug": "scqa-20261108-millefeuille-ui",
+          "description": "SCQA-20261108 — Sản phẩm được tạo bằng giao diện Chromium thật, ảnh QA.",
+          "basePrice": 325000,
+          "status": "DRAFT",
+          "customizable": false,
+          "defaultServingSize": null,
+          "minimumNoticeHours": 0
+        },
+        {
+          "id": "cc11b33c-f5fc-43ca-bf77-d96a604ebd95",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "SCQA-20261108 Caramel Fleur de Sel 12",
+          "slug": "scqa-20261108-b1-p12",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 480000,
+          "status": "ARCHIVED",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "792bc7f0-b7ae-4c62-bb19-c52a74e9f0d4",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "SCQA-20261108 Matcha Framboise 11",
+          "slug": "scqa-20261108-b1-p11",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 455000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "f6c12597-4cab-4e60-b349-65a2fb0a772a",
+          "categoryId": "e0294447-638b-417a-8a86-4b399b4b4870",
+          "name": "SCQA-20261108 Vanille Praliné 10",
+          "slug": "scqa-20261108-b1-p10",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 430000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "0194ec99-e5ca-46f8-9f33-1059cf981f74",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCQA-20261108 Citron Meringué 09",
+          "slug": "scqa-20261108-b1-p9",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 405000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "0c0c4e12-e13b-42b6-bba9-aca11f494a68",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "SCQA-20261108 Chocolat Noisette 08",
+          "slug": "scqa-20261108-b1-p8",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 380000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "3848e9c2-5dd7-4cc1-b0c5-0eb241826b8e",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "SCQA-20261108 Fraise Royale 07",
+          "slug": "scqa-20261108-b1-p7",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 355000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "4956f9c8-b1ab-4cb7-85aa-fff89b9d77ac",
+          "categoryId": "e0294447-638b-417a-8a86-4b399b4b4870",
+          "name": "SCQA-20261108 Caramel Fleur de Sel 06",
+          "slug": "scqa-20261108-b1-p6",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 330000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "62271c68-a24c-439c-934d-c6016a5b3d72",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCQA-20261108 Matcha Framboise 05",
+          "slug": "scqa-20261108-b1-p5",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 305000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "76850fff-4a9e-4054-8421-d383b99b6e1c",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "SCQA-20261108 Vanille Praliné 04",
+          "slug": "scqa-20261108-b1-p4",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 280000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "f59a91ac-9e57-4d21-8212-c5855716962c",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "SCQA-20261108 Citron Meringué 03",
+          "slug": "scqa-20261108-b1-p3",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 255000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "ed90f0f2-4676-4706-b594-2b2507583cb1",
+          "categoryId": "e0294447-638b-417a-8a86-4b399b4b4870",
+          "name": "SCQA-20261108 Chocolat Noisette 02",
+          "slug": "scqa-20261108-b1-p2",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 230000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "ba304e70-9ca1-4d3c-bb16-c71ad64d9a9b",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCQA-20261108 Fraise Royale 01",
+          "slug": "scqa-20261108-b1-p1",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 205000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "f97469d5-ea22-4deb-9537-4abb0ed5aa28",
+          "categoryId": null,
+          "name": "Bánh Croissant Bơ Pháp",
+          "slug": "banh-croissant-bo-phap",
+          "description": "",
+          "basePrice": 45000,
+          "status": "DRAFT",
+          "customizable": false,
+          "defaultServingSize": null,
+          "minimumNoticeHours": 0
+        },
+        {
+          "id": "b6c112fe-44ab-4822-a3ca-fba64ba211da",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "Velvet Raspberry Bliss",
+          "slug": "scmenu-20261108-01",
+          "description": "Bánh cốt nhung đỏ mềm mại hòa quyện mứt mâm xôi tự nấu và phô mai mascarpone hảo hạng. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 480000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "best-seller-1",
+          "sourceCategory": "Bánh Kem Sinh Nhật"
+        },
+        {
+          "id": "59a5d62f-2d2e-4177-af5c-420b6e46c4db",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "Parisian Earl Grey Mousse",
+          "slug": "scmenu-20261108-02",
+          "description": "Hương thơm thanh nhã từ trà Bá Tước Bergamot phủ caramel bóng và vụn hạt phỉ Piemonte thơm lừng. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 520000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "best-seller-2",
+          "sourceCategory": "Bánh Mousse"
+        },
+        {
+          "id": "756db365-47b7-4a10-88e3-7f6aa0d64f44",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "Hộp 6 Macarons Pháp Signature",
+          "slug": "scmenu-20261108-03",
+          "description": "Vỏ giòn tan bọc nhân ganache phúc bồn tử, hạt dẻ cười & socola đen 70%. Món tráng miệng kèm hoàn hảo cho mọi buổi tiệc ngọt. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 210000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "macarons-6",
+          "sourceCategory": "Bánh Tráng Miệng & Cookie"
+        },
+        {
+          "id": "793a14b0-e16e-410d-8a36-e04caf1aa9d6",
+          "categoryId": "e0294447-638b-417a-8a86-4b399b4b4870",
+          "name": "Croissant Bơ Tỏi Đen Lên Men",
+          "slug": "scmenu-20261108-04",
+          "description": "Bánh nướng ngàn lớp thơm nức từ bơ tươi kết hợp sốt tỏi đen cân bằng vị giác, món khai vị chuẩn vị tiệc ngọt phong cách Pháp. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 65000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "croissant-black-garlic",
+          "sourceCategory": "Bánh Nướng & Viennoiserie"
+        },
+        {
+          "id": "0d9c3050-bb2c-49f8-8a03-48658077b8ea",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "Pikachu Luminary 2 Tầng - Bánh Kem Tạo Hình 3D Fondant Thủ Công",
+          "slug": "scmenu-20261108-05",
+          "description": "Pikachu Luminary 2 Tầng - Bánh Kem Tạo Hình 3D Fondant Thủ Công · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 1100000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 72,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-2",
+          "sourceCategory": "Bánh Tạo Hình 3D"
+        },
+        {
+          "id": "8375051b-c481-4a5c-9048-0b7ee6ef2a3e",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "Pastel Blossom Korean Chiffon - Hoa Kem Bơ Tươi Tối Giản",
+          "slug": "scmenu-20261108-06",
+          "description": "Pastel Blossom Korean Chiffon - Hoa Kem Bơ Tươi Tối Giản · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 380000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-4",
+          "sourceCategory": "Bánh Kem Hình Hoa & Bó Hoa"
+        },
+        {
+          "id": "a7d3dcbc-9bea-4573-be9b-430ca1ba6d05",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "White Romance Wedding Tier - Bánh Cưới Hoa Tươi 3 Tầng Sang Trọng",
+          "slug": "scmenu-20261108-07",
+          "description": "White Romance Wedding Tier - Bánh Cưới Hoa Tươi 3 Tầng Sang Trọng · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 1850000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 72,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-9",
+          "sourceCategory": "Bánh Cưới (Wedding)"
+        },
+        {
+          "id": "198e55f2-0261-406a-91dd-2a41ce634270",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "SCake Banh Deo Sen Nhuyen Trung Muoi 4 Trung 400g",
+          "slug": "scmenu-20261108-08",
+          "description": "SCake Banh Deo Sen Nhuyen Trung Muoi 4 Trung 400g · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 374000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-1",
+          "sourceCategory": "Bánh Trung Thu & Quà Tặng"
+        },
+        {
+          "id": "7cce0be7-9309-44b8-8725-f0e8b3b26f05",
+          "categoryId": "6e61fbdb-1c44-4b29-95c2-446e8c05be38",
+          "name": "Hộp 12 bánh su kem Singapore hoa quả",
+          "slug": "scmenu-20261108-09",
+          "description": "Hộp 12 bánh su kem Singapore hoa quả · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 552500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-8",
+          "sourceCategory": "Bánh Su Kem"
+        },
+        {
+          "id": "83323f0d-9b23-4990-9fd3-7f1530d48e6e",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "thap-cuoi-tiramisu",
+          "slug": "scmenu-20261108-10",
+          "description": "thap-cuoi-tiramisu · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 459000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-16",
+          "sourceCategory": "Bánh Tiramisu"
+        },
+        {
+          "id": "70dd0244-f2ae-4b47-888c-9cc899f47db6",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "Combo Bánh kem order + Mousse Xoài",
+          "slug": "scmenu-20261108-11",
+          "description": "Combo Bánh kem order + Mousse Xoài · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 501500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-76",
+          "sourceCategory": "Combo & Set Bánh"
+        },
+        {
+          "id": "24b168d1-52aa-4a35-9ea9-693a7d1b235a",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "SCake Choco Dream Cake",
+          "slug": "scmenu-20261108-12",
+          "description": "SCake Choco Dream Cake · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 552500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-83",
+          "sourceCategory": "Bánh Lon & Hũ (Dream Cake)"
+        },
+        {
+          "id": "1bcb6e0a-c633-415c-ac64-8cfb3cbcc652",
+          "categoryId": "65d4d9e3-de48-4121-94f2-7128f73ac2f7",
+          "name": "Bánh Flan Gato",
+          "slug": "scmenu-20261108-13",
+          "description": "Bánh Flan Gato · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 289000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-126",
+          "sourceCategory": "Bánh Flan Gato"
+        },
+        {
+          "id": "78d1fb3c-9a26-4c16-86e1-9e6340540bac",
+          "categoryId": "ff56cba3-630d-4f28-b6af-6723cd8443b2",
+          "name": "Bánh Pudding Matcha Lava",
+          "slug": "scmenu-20261108-14",
+          "description": "Bánh Pudding Matcha Lava · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 501500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "91cdf727-8303-4282-83ad-1e1626738509",
+          "sourceId": "cake-web-166",
+          "sourceCategory": "Bánh Pudding & Jelly"
+        }
+      ]
+    },
+    {
+      "sourceId": "2a6e64b2-77c7-4f6b-8bd7-3d19d981762d",
+      "ownerId": "87b7c1af-369b-4a8c-9f32-766f2c1bbfea",
+      "email": "scqa-owner-2-20261108@sweetcake.local",
+      "categories": [
+        {
+          "id": "1e9878d5-4655-4976-a18f-b98762e12a56",
+          "name": "SCQA-20261108 Entremets",
+          "slug": "scqa-20261108-b2-c1",
+          "displayOrder": 21,
+          "active": true
+        },
+        {
+          "id": "b0d3bb6c-8891-4af2-a45a-ddd898a40669",
+          "name": "SCQA-20261108 Viennoiserie",
+          "slug": "scqa-20261108-b2-c2",
+          "displayOrder": 22,
+          "active": true
+        },
+        {
+          "id": "5c47a7ce-9688-4e9e-8cdc-4031a0056769",
+          "name": "SCQA-20261108 Tartes",
+          "slug": "scqa-20261108-b2-c3",
+          "displayOrder": 23,
+          "active": true
+        },
+        {
+          "id": "ae24416a-da77-4da1-8a92-3da5df3f57a4",
+          "name": "SCQA-20261108 Gâteaux",
+          "slug": "scqa-20261108-b2-c4",
+          "displayOrder": 24,
+          "active": true
+        }
+      ],
+      "products": [
+        {
+          "id": "05c61283-fb8d-455e-ac79-78afc966c1bd",
+          "categoryId": "b0d3bb6c-8891-4af2-a45a-ddd898a40669",
+          "name": "SCQA-20261108 Caramel Fleur de Sel 06",
+          "slug": "scqa-20261108-b2-p6",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 330000,
+          "status": "ARCHIVED",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "ef9eca01-6c3c-4d1d-8aeb-61db45d4994d",
+          "categoryId": "1e9878d5-4655-4976-a18f-b98762e12a56",
+          "name": "SCQA-20261108 Matcha Framboise 05",
+          "slug": "scqa-20261108-b2-p5",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 305000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "315f6ce0-cf5c-408d-96b1-b60905f0b90c",
+          "categoryId": "ae24416a-da77-4da1-8a92-3da5df3f57a4",
+          "name": "SCQA-20261108 Vanille Praliné 04",
+          "slug": "scqa-20261108-b2-p4",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 280000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "70f54724-f602-44bb-aba9-eedb51bb3a9a",
+          "categoryId": "5c47a7ce-9688-4e9e-8cdc-4031a0056769",
+          "name": "SCQA-20261108 Citron Meringué 03",
+          "slug": "scqa-20261108-b2-p3",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 255000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "16d2e1cd-c8bb-4d48-a30d-d1b9e5b99394",
+          "categoryId": "b0d3bb6c-8891-4af2-a45a-ddd898a40669",
+          "name": "SCQA-20261108 Chocolat Noisette 02",
+          "slug": "scqa-20261108-b2-p2",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 230000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "1830eb38-fa5b-41e1-814f-0b631488f15d",
+          "categoryId": "1e9878d5-4655-4976-a18f-b98762e12a56",
+          "name": "SCQA-20261108 Fraise Royale 01",
+          "slug": "scqa-20261108-b2-p1",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 205000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "75dcedb7-2caa-48cf-9a42-f03ad8f51e18",
+          "categoryId": "ae24416a-da77-4da1-8a92-3da5df3f57a4",
+          "name": "Truffle Dark Chocolate 70%",
+          "slug": "scmenu-20261108-15",
+          "description": "Đậm vị cacao Callebaut nguyên chất kết hợp cùng quả anh đào chua ngọt và rượu kirsch nhẹ tênh. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 550000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "2a6e64b2-77c7-4f6b-8bd7-3d19d981762d",
+          "sourceId": "best-seller-4",
+          "sourceCategory": "Bánh Kem Sinh Nhật"
+        },
+        {
+          "id": "ddcba876-c246-4907-b10b-ba8a1c4258da",
+          "categoryId": "1e9878d5-4655-4976-a18f-b98762e12a56",
+          "name": "Golden Mango Passion",
+          "slug": "scmenu-20261108-16",
+          "description": "Sự bùng nổ nhiệt đới tươi mát giữa xoài cát chín thơm và thạch chanh leo chua dịu cân bằng. · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 490000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "2a6e64b2-77c7-4f6b-8bd7-3d19d981762d",
+          "sourceId": "best-seller-3",
+          "sourceCategory": "Bánh Mousse"
+        },
+        {
+          "id": "aa080b29-f773-48ed-a5ca-cd101a760f26",
+          "categoryId": "5c47a7ce-9688-4e9e-8cdc-4031a0056769",
+          "name": "Cookie &amp; Bánh nướng",
+          "slug": "scmenu-20261108-17",
+          "description": "Cookie &amp; Bánh nướng · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 450500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "2a6e64b2-77c7-4f6b-8bd7-3d19d981762d",
+          "sourceId": "cake-web-154",
+          "sourceCategory": "Bánh Tráng Miệng & Cookie"
+        }
+      ]
+    },
+    {
+      "sourceId": "73645ce2-b2ff-4344-910d-6d1f7614821d",
+      "ownerId": "2f6d1747-f9e1-46d2-95ca-7259e22ed541",
+      "email": "scqa-owner-3-20261108@sweetcake.local",
+      "categories": [
+        {
+          "id": "d20f3025-7424-45ca-b65f-615834ec4cf4",
+          "name": "SCQA-20261108 Entremets",
+          "slug": "scqa-20261108-b3-c1",
+          "displayOrder": 21,
+          "active": true
+        },
+        {
+          "id": "39009c7b-0100-47ce-9983-790cc12fd0f8",
+          "name": "SCQA-20261108 Viennoiserie",
+          "slug": "scqa-20261108-b3-c2",
+          "displayOrder": 22,
+          "active": true
+        },
+        {
+          "id": "2b5697f1-a9b4-41d1-9aa8-c79633d05365",
+          "name": "SCQA-20261108 Tartes",
+          "slug": "scqa-20261108-b3-c3",
+          "displayOrder": 23,
+          "active": true
+        },
+        {
+          "id": "14cba9b2-0f53-4783-97af-fb2ba7b3d5ca",
+          "name": "SCQA-20261108 Gâteaux",
+          "slug": "scqa-20261108-b3-c4",
+          "displayOrder": 24,
+          "active": true
+        }
+      ],
+      "products": [
+        {
+          "id": "4644368b-9892-4d69-99ac-3d69be5e51d1",
+          "categoryId": "39009c7b-0100-47ce-9983-790cc12fd0f8",
+          "name": "SCQA-20261108 Caramel Fleur de Sel 06",
+          "slug": "scqa-20261108-b3-p6",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 330000,
+          "status": "ARCHIVED",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "7a9c6fc8-1dd3-4dc7-8731-f7607eaa08e6",
+          "categoryId": "d20f3025-7424-45ca-b65f-615834ec4cf4",
+          "name": "SCQA-20261108 Matcha Framboise 05",
+          "slug": "scqa-20261108-b3-p5",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 305000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "0e9428cc-93ba-47b5-8f06-254d979e0aa2",
+          "categoryId": "14cba9b2-0f53-4783-97af-fb2ba7b3d5ca",
+          "name": "SCQA-20261108 Vanille Praliné 04",
+          "slug": "scqa-20261108-b3-p4",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 280000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "64ecdb95-fca2-4247-bf2e-e97fcd2bd7f4",
+          "categoryId": "2b5697f1-a9b4-41d1-9aa8-c79633d05365",
+          "name": "SCQA-20261108 Citron Meringué 03",
+          "slug": "scqa-20261108-b3-p3",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 255000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "066c48a8-826a-4c8f-b83e-a08692c01634",
+          "categoryId": "39009c7b-0100-47ce-9983-790cc12fd0f8",
+          "name": "SCQA-20261108 Chocolat Noisette 02",
+          "slug": "scqa-20261108-b3-p2",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 230000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 10,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "1fb6cd0b-9edc-41cc-8c30-3481aaba1bf3",
+          "categoryId": "d20f3025-7424-45ca-b65f-615834ec4cf4",
+          "name": "SCQA-20261108 Fraise Royale 01",
+          "slug": "scqa-20261108-b3-p1",
+          "description": "SCQA-20261108 — Sản phẩm kiểm thử API thật; ảnh minh họa QA; chưa mở bán.",
+          "basePrice": 205000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 8,
+          "minimumNoticeHours": 24
+        },
+        {
+          "id": "8c677381-3ff7-41d8-bd2f-42ea74dfdbf1",
+          "categoryId": "14cba9b2-0f53-4783-97af-fb2ba7b3d5ca",
+          "name": "Bento Cake Gấu Nâu Dễ Thương - Kem Phô Mai Tươi Hàn Quốc",
+          "slug": "scmenu-20261108-18",
+          "description": "Bento Cake Gấu Nâu Dễ Thương - Kem Phô Mai Tươi Hàn Quốc · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 320000,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 72,
+          "bakeryId": "73645ce2-b2ff-4344-910d-6d1f7614821d",
+          "sourceId": "cake-6",
+          "sourceCategory": "Bánh Tạo Hình 3D"
+        },
+        {
+          "id": "32b798cb-9ef1-417e-80a1-5ab39cc22d66",
+          "categoryId": "14cba9b2-0f53-4783-97af-fb2ba7b3d5ca",
+          "name": "SCake Banh Kem Gio Hoa Xoai Dua",
+          "slug": "scmenu-20261108-19",
+          "description": "SCake Banh Kem Gio Hoa Xoai Dua · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 399500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "73645ce2-b2ff-4344-910d-6d1f7614821d",
+          "sourceId": "cake-web-2",
+          "sourceCategory": "Bánh Kem Hình Hoa & Bó Hoa"
+        },
+        {
+          "id": "3c36a052-0ce7-4a85-a846-e078b5dfa290",
+          "categoryId": "2b5697f1-a9b4-41d1-9aa8-c79633d05365",
+          "name": "Set 2 bánh trung thu tùy chọn vị",
+          "slug": "scmenu-20261108-20",
+          "description": "Set 2 bánh trung thu tùy chọn vị · SCMENU-20261108: menu thử nghiệm, chưa mở bán.",
+          "basePrice": 450500,
+          "status": "DRAFT",
+          "customizable": true,
+          "defaultServingSize": 6,
+          "minimumNoticeHours": 24,
+          "bakeryId": "73645ce2-b2ff-4344-910d-6d1f7614821d",
+          "sourceId": "cake-web-124",
+          "sourceCategory": "Bánh Trung Thu & Quà Tặng"
+        }
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "00000000-0000-0000-0000-000000000101",
+      "code": "BASIC",
+      "name": "Cơ bản",
+      "description": "Dành cho tiệm mới tham gia",
+      "monthlyPrice": 19000,
+      "currency": "VND",
+      "billingPeriodMonths": 1,
+      "status": "ACTIVE",
+      "features": {
+        "MAX_MONTHLY_OFFERS": "10",
+        "MAX_PRODUCTS": "10",
+        "FEATURED_LISTING": "false"
+      }
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000102",
+      "code": "PRO",
+      "name": "Chuyên nghiệp",
+      "description": "Dành cho tiệm đang phát triển",
+      "monthlyPrice": 49000,
+      "currency": "VND",
+      "billingPeriodMonths": 1,
+      "status": "ACTIVE",
+      "features": {
+        "MAX_MONTHLY_OFFERS": "100",
+        "MAX_PRODUCTS": "50",
+        "FEATURED_LISTING": "false"
+      }
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000103",
+      "code": "PREMIUM",
+      "name": "Cao cấp",
+      "description": "Dành cho tiệm kinh doanh lớn",
+      "monthlyPrice": 99000,
+      "currency": "VND",
+      "billingPeriodMonths": 1,
+      "status": "ACTIVE",
+      "features": {
+        "MAX_MONTHLY_OFFERS": "-1",
+        "MAX_PRODUCTS": "-1",
+        "FEATURED_LISTING": "true"
+      }
+    }
+  ]
+}

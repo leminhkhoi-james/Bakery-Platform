@@ -1,3 +1,4 @@
+import { recordSource, unifiedEnabled } from '../../services/unifiedDataService.js'
 import { vendorMoney, vendorName } from '../../services/vendorPresentation.js'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { displayReference } from '../../services/displayReference.js'
@@ -30,7 +31,7 @@ export function CategoryForm({ busy, onSave }) {
 
 export function ProductForm({ product, categories = [], busy, onSave, onClose, footerExternal = false }) {
   const [values, setValues] = useState(product || { name: '', slug: '', description: '', basePrice: '', customizable: false, defaultServingSize: '', minimumNoticeHours: '', categoryId: '' })
-  const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues((current) => ({ ...current, [key]: event.target.value })) })
+  const field = (key) => ({ 'aria-label': ({ name: 'Tên mẫu bánh', categoryId: 'Danh mục sản phẩm', description: 'Mô tả sản phẩm', basePrice: 'Giá bán cơ bản', defaultServingSize: 'Khẩu phần mặc định', minimumNoticeHours: 'Thời gian đặt trước' })[key] || key, value: values[key] ?? '', onChange: (event) => setValues((current) => ({ ...current, [key]: event.target.value })) })
 
   return (
     <form
@@ -269,7 +270,7 @@ export default function ProductManager({ bakeryId }) {
       {membership.status === 'loading' ? <p>Đang xác minh quyền quản lý…</p> : membership.error ? <><p className="text-sm">Chưa xác minh được quyền chủ tiệm. Các thao tác thay đổi đang được khóa.</p><ApiErrorMessage error={membership.error} retry={membership.reload} /></> : null}
       <div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{['DRAFT', 'PUBLISHED', 'HIDDEN', 'ARCHIVED'].map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{categories.data?.map((category) => <option key={category.id} value={category.id}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label><label>Sắp xếp<select value={sort} onChange={changeFilter(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="name,asc">Tên A–Z</option><option value="basePrice,asc">Giá tăng dần</option><option value="basePrice,desc">Giá giảm dần</option></select></label></div>
       {categories.error && <ApiErrorMessage error={categories.error} retry={categories.reload} />}
-      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
+      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3>{unifiedEnabled() && <small>{recordSource(product) === 'local' ? 'Trình duyệt' : 'API'}</small>}<p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
                     <button disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}>
                       <Icon name="edit" />Chỉnh sửa
                     </button>
@@ -367,7 +368,7 @@ export default function ProductManager({ bakeryId }) {
             footerExternal
             key={(editing?.id || 'new') + ':' + editorRevision}
             product={editing}
-            categories={categories.data || []}
+            categories={(categories.data || []).filter(category => !unifiedEnabled() || recordSource(category) === recordSource(editing || { id: bakeryId }))}
             busy={busy}
             onClose={() => { setAdding(false); setEditing(null) }}
             onSave={(values) => mutate(() => vendorManagementService.saveProduct(bakeryId, editing?.id, values), true)}

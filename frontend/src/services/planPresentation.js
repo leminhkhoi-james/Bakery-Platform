@@ -50,7 +50,12 @@ export function resolvePlanTier(plan) {
 }
 
 export function planFeatureRows(features = {}) {
-  const sourceFeatures = features
+  const canonical = new Map()
+  for (const [code, value] of Object.entries(features)) {
+    const key = planFeature(code)?.code || code
+    if (!canonical.has(key) || code.toLowerCase() === key.toLowerCase()) canonical.set(key, value)
+  }
+  const sourceFeatures = Object.fromEntries(canonical)
   return Object.entries(sourceFeatures).map(([code, value]) => ({
     code, label: planFeatureLabel(code),
     value: planFeature(code)?.limit && String(value).trim() === '-1' ? 'Không giới hạn' : String(value) === 'true' ? 'Có' : String(value) === 'false' ? 'Không' : publicCopy(String(value ?? '').trim(), 'Chưa có mô tả') || 'Chưa có mô tả',

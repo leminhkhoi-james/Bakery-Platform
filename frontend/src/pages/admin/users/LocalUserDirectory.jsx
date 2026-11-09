@@ -1,3 +1,6 @@
+import { unifiedEnabled, recordSource } from '../../../services/unifiedDataService.js'
+import { RoleForm } from './AdminUsersPage.jsx'
+import { updateUserRoles } from '../../../services/adminUserService.js'
 import React, { useRef, useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
@@ -64,6 +67,7 @@ export function LocalUserDirectory() {
   const [editor, setEditor] = useState(null)
   const [decision, setDecision] = useState(null)
   const [error, setError] = useState(null)
+  const [rolePerson, setRolePerson] = useState(null)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
   const inFlight = useRef(false)
@@ -138,8 +142,8 @@ export function LocalUserDirectory() {
           >
             <option value="">Tất cả trạng thái</option>
             <option value="ACTIVE">Đang hoạt động</option>
-            <option value="SUSPENDED">Tạm ngưng</option>
-            <option value="BLOCKED">Bị khóa</option>
+            {!unifiedEnabled() && <option value="SUSPENDED">Tạm ngưng</option>}
+            <option value="BLOCKED">{unifiedEnabled() ? 'Tạm ngưng hoặc bị khóa' : 'Bị khóa'}</option>
             <option value="DELETED">Đã xóa</option>
           </select>
         </label>
@@ -195,7 +199,7 @@ export function LocalUserDirectory() {
                     <tr key={person.id}>
                       <td data-label="STT" className="sc-col-stt font-medium text-on-surface-variant">{stt}</td>
                       <td data-label="Người dùng">
-                        <strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong>
+                        <strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong><small>{recordSource(person) === 'local' ? 'Trình duyệt' : 'API'}</small>
                         {restriction && <small>{restriction}</small>}
                       </td>
                       <td data-label="Liên hệ">{reviewText(person.email) || 'Chưa có email'}</td>
@@ -203,6 +207,7 @@ export function LocalUserDirectory() {
                       <td data-label="Trạng thái"><StatusBadge status={person.status} label={userStatus(person.status)} /></td>
                       <td className="sc-table-actions">
                         <div className="sc-action-row">
+                          {unifiedEnabled() && recordSource(person) === 'api' && <button className="sc-button sc-action-button--secondary" disabled={locked || !canManage || Boolean(userRestriction(person,user,'roles'))} onClick={() => setRolePerson(person)}>Vai trò</button>}
                           <button
                             className="sc-button sc-action-button--secondary"
                             disabled={locked || !canManage || !editable || Boolean(editReason)}
@@ -244,6 +249,7 @@ export function LocalUserDirectory() {
         {resource.data?.meta && <CatalogPagination meta={resource.data.meta} onPage={setPage} />}
       </ApiState>
 
+      {rolePerson && <RoleForm person={rolePerson} busy={busy} error={error} onClose={() => setRolePerson(null)} onSave={async roles => { const saved = await mutate(() => updateUserRoles(rolePerson,roles,user), 'Đã cập nhật vai trò qua API.'); if (saved) setRolePerson(null) }} />}
       {editor && canManage && (
         <UserForm
           key={editor.person?.id || 'new'}

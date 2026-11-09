@@ -1,3 +1,4 @@
+import { approvalDate, approvedPayments as selectApprovedPayments } from '../mockData/business/metrics.js'
 import { displayReference } from './displayReference.js'
 import { orderStatusLabel } from './orderModels.js'
 import { uiLabel } from './uiLabels.js'
@@ -28,7 +29,7 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
   const activeProducts = products?.filter((row) => ['PUBLISHED', 'ACTIVE', 'AVAILABLE'].includes(row.status) || (row.status == null && row.isOpenForSale !== false))
   const openRequests = requests?.filter((row) => ['OPEN', 'SUBMITTED', 'PENDING'].includes(row.status))
   const acceptedOffers = offers?.filter((row) => row.status === 'ACCEPTED')
-  const approvedPayments = payments && [...new Map(payments.filter((row) => row.status === 'APPROVED' && row.subscriptionOrderId && row.amount != null && Number.isFinite(Number(row.amount)) && Number(row.amount) >= 0 && /^[A-Z]{3}$/.test(row.currency || '')).map((row) => [row.subscriptionOrderId, row])).values()]
+  const approvedPayments = payments && selectApprovedPayments(payments)
   const invalidPayments = payments?.some((row) => row.status === 'APPROVED' && (!row.subscriptionOrderId || row.amount == null || String(row.amount).trim() === '' || !Number.isFinite(Number(row.amount)) || Number(row.amount) < 0 || !/^[A-Z]{3}$/.test(row.currency || '')))
   const conflictingPayments = payments?.some((row) => row.status === 'APPROVED' && approvedPayments?.some((approved) => approved.subscriptionOrderId === row.subscriptionOrderId && (Number(approved.amount) !== Number(row.amount) || approved.currency !== row.currency)))
   const revenue = approvedPayments && !invalidPayments && !conflictingPayments ? approvedPayments.reduce((sum, row) => ({ ...sum, [row.currency]: (sum[row.currency] || 0) + Number(row.amount) }), {}) : null
@@ -42,7 +43,7 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
   for (const row of approvedPayments || []) {
     if (row.currency !== currency) continue
     // Submission is not recognition: a payment must have an actual review timestamp.
-    const time = instant(row.reviewedAt || row.approvedAt)
+    const time = instant(approvalDate(row))
     if (time == null) undatedRevenue++
     else if (time <= now) { const point = byDay.get(dayKey(time)); if (point) point.revenue += Number(row.amount) }
   }

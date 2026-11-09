@@ -126,6 +126,7 @@ test('A rejected payment can be corrected with a fresh request after backend ret
     const render = harness(OrderDetail, { bakeryId, orderId, roles: ['BAKERY_OWNER'], onChanged() {}, onBusy() {} })
     const due = { id: orderId, bakeryId, status: 'PENDING_PAYMENT', expiresAt: '2099-01-01T00:00:00Z', totalAmount: 199000, currency: 'VND', featuresSnapshot: {}, payments: [] }
     globalThis.__flowResources.loadSubscriptionOrder = ready(due)
+    globalThis.__flowResources.getPaymentOptions = ready({ bankTransfer: { bankName: 'Unit fixture', accountNumber: 'unit-only', accountName: 'Unit fixture' } })
     await nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
     globalThis.__flowResources.loadSubscriptionOrder = ready({ ...due, payments: [{ id: randomUUID(), status: 'REJECTED' }] })
     await nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })

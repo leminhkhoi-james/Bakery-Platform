@@ -1,3 +1,4 @@
+import UnifiedSourceNotice from './UnifiedSourceNotice.jsx'
 import { cleanPresentationLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import VendorSidebar from '../../layouts/vendor/VendorSidebar.jsx'
@@ -13,6 +14,7 @@ import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadManagedBakeries, dashboardErrorMessage } from '../../services/vendorDashboardService.js'
 import { moneyVnd } from '../../services/marketplaceModels.js'
 import VendorNotificationBell from './VendorNotificationBell.jsx'
+import './business-simulation.css'
 import { loadVendorRequests } from '../../services/vendorRfqService.js'
 
 const loadNotifications = ({ bakery, enabled }, options) => enabled ? loadVendorRequests({ bakery, status: 'OPEN', page: 1, size: 8 }, options) : Promise.resolve({ result: [] })
@@ -35,7 +37,6 @@ function BakeryChoice({ bakeryId, onSelect, disabled = false, available, showErr
     <div className="sc-managed-bakery-row"><label htmlFor="managed-bakery"><Icon name="storefront" /> Cửa hàng đang quản lý</label>
       <select id="managed-bakery" className={inputClass} disabled={disabled || available.status === 'loading'} value={bakeryId || ''} onChange={(event) => onSelect(event.target.value)}>
         <option value="">{available.status === 'loading' ? 'Đang tải cửa hàng…' : 'Chọn cửa hàng'}</option>
-        {bakeryId && !available.data?.some((bakery) => bakery.id === bakeryId) && <option value={bakeryId}>Cửa hàng đã chọn</option>}
         {available.data?.map((bakery) => <option key={bakery.id} value={bakery.id}>{cleanPresentationLabel(bakery.name, 'Tiệm bánh')}</option>)}
       </select>
     </div>
@@ -133,7 +134,8 @@ export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavig
             </div>
           )}
           {owner?.state === 'ACTIVE' && activeTab === 'rfq' && !owner.bakery?.operations?.serviceAreas?.some(area => area.active) && <section className="sc-panel space-y-2"><p>Tiệm chưa có khu vực giao hàng đang phục vụ. Cấu hình khu vực để nhận yêu cầu báo giá phù hợp.</p><button className={buttonClass} onClick={() => navigate('vendor-settings')}>Cấu hình giao hàng</button></section>}
-          {children}
+
+          <UnifiedSourceNotice />{children}
         </div>
       </main>
     </div>

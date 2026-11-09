@@ -41,7 +41,7 @@ export const publicationAdminService = {
   },
   async getPayments(params = {}, options = {}) {
     if (params.bakeryId) requireId(params.bakeryId, 'Tiệm bánh')
-    return mapPage(await api.get('/admin/bakery-payments' + catalogQuery(params, ['status', 'bakeryId', 'submittedFrom', 'submittedTo', 'page', 'size', 'sort']), options), mapBakeryPayment)
+    return mapPage(await api.get('/admin/bakery-payments' + catalogQuery(params, ['status', 'bakeryId', 'submittedFrom', 'submittedTo', 'page', 'size', 'sort']), { ...options, allowMockFallback: false }), mapBakeryPayment)
   },
   async getOrder(id, options = {}) {
     const order = mapSubscriptionOrder(await api.get('/subscription-orders/' + requireId(id), options))
