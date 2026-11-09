@@ -1,5 +1,8 @@
 # Merge after compose.yaml and the Bakery/Subscription, Order and Chat compose files.
 services:
+  identity-service:
+    environment:
+      CAKE_AI_CLIENT_SECRET_HASH: ${CAKE_AI_CLIENT_SECRET_HASH:-}
   identity-db:
     image: ${IDENTITY_DB_IMAGE:-postgres:17-alpine}
   marketplace-db:
@@ -54,11 +57,29 @@ services:
     depends_on:
       cake-ai-db:
         condition: service_healthy
+      identity-service:
+        condition: service_healthy
+      marketplace-service:
+        condition: service_healthy
     environment:
       SERVER_PORT: 8085
       CAKE_AI_DB_URL: jdbc:postgresql://cake-ai-db:5432/cake_ai_db
       CAKE_AI_DB_USERNAME: ${CAKE_AI_DB_USERNAME:-postgres}
-      CAKE_AI_DB_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+      CAKE_AI_DB_PASSWORD: ${CAKE_AI_DB_PASSWORD:?Set CAKE_AI_DB_PASSWORD}
+      CAKE_AI_ENABLED: ${CAKE_AI_ENABLED:-false}
+      CAKE_AI_API_KEY: ${GEMINI_API_KEY:-}
+      CAKE_AI_IMAGE_MODEL: ${GEMINI_IMAGE_MODEL:-gemini-3.1-flash-image}
+      CAKE_AI_MODERATION_MODEL: ${GEMINI_MODERATION_MODEL:-gemini-3.5-flash}
+      CAKE_AI_FIREBASE_PROJECT_ID: ${LOCAL_FIREBASE_PROJECT_ID:-}
+      CAKE_AI_FIREBASE_BUCKET: ${LOCAL_FIREBASE_STORAGE_BUCKET:-}
+      GOOGLE_APPLICATION_CREDENTIALS: ${LOCAL_FIREBASE_ADC_PATH:-}
+      SERVICE_CLIENT_ID: cake-ai-service
+      SERVICE_CLIENT_SECRET: ${CAKE_AI_CLIENT_SECRET:-}
+      CAKE_AI_REQUIRE_ADMIN_REVIEW: ${CAKE_AI_REQUIRE_ADMIN_REVIEW:-false}
+      CAKE_AI_DAILY_PROVIDER_REQUESTS: ${CAKE_AI_DAILY_PROVIDER_REQUESTS:-9}
+      CAKE_AI_MAX_DESIGNS_PER_EXECUTION: ${CAKE_AI_MAX_DESIGNS_PER_EXECUTION:-4}
+      CAKE_AI_SCHEDULER_ENABLED: ${CAKE_AI_SCHEDULER_ENABLED:-true}
+      CAKE_AI_CLEANUP_ENABLED: "false"
       IDENTITY_JWK_SET_URI: http://identity-service:8081/.well-known/jwks.json
       IDENTITY_SERVICE_BASE_URL: http://identity-service:8081
       BAKERY_SERVICE_BASE_URL: http://bakery-service:8082

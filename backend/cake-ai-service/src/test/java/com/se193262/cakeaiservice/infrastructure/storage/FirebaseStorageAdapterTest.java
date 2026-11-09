@@ -7,23 +7,34 @@ import com.google.cloud.storage.*;
 import com.se193262.cakeaiservice.config.CakeAiProperties;
 import com.se193262.platform.exception.BusinessException;
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.time.Duration;
+import java.io.ByteArrayOutputStream;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 class FirebaseStorageAdapterTest {
     Storage client;
     FirebaseStorageAdapter adapter;
-    @BeforeEach void prepare() {
+    byte[] bytes;
+    @BeforeEach void prepare() throws Exception {
         client = mock(Storage.class);
-        adapter = new FirebaseStorageAdapter(new CakeAiProperties("", "", "", "", Duration.ofSeconds(1),
-                Duration.ofSeconds(1), 2, Duration.ofMinutes(30), "test-project", "private-bucket", "http://localhost:8085"));
+        adapter = new FirebaseStorageAdapter(properties("test-project", "private-bucket"));
         ReflectionTestUtils.setField(adapter, "storage", client);
+        var output = new ByteArrayOutputStream();
+        ImageIO.write(new BufferedImage(4, 4, BufferedImage.TYPE_INT_RGB), "png", output);
+        bytes = output.toByteArray();
+    }
+
+    CakeAiProperties properties(String project, String bucket) {
+        return new CakeAiProperties("", "", "", "", Duration.ofSeconds(1), Duration.ofSeconds(1),
+                2, Duration.ofMinutes(30), project, bucket, "http://localhost:8085");
     }
 
     @Test @DisplayName("Signed URLs use V4 with a fifteen minute TTL")
     void signedUrl_validObject_usesShortLivedV4() throws Exception {
-        var generator = java.security.KeyPairGenerator.getInstance("RSA");
-        generator.initialize(2048);
+        var generator = java.security.KeyPairGenerator.getInstance("RSA"); generator.initialize(2048);
         var credentials = com.google.auth.oauth2.ServiceAccountCredentials.newBuilder()
                 .setClientEmail("signer@test-project.iam.gserviceaccount.com")
                 .setPrivateKey(generator.generateKeyPair().getPrivate()).setPrivateKeyId("test-key").build();
@@ -35,19 +46,69 @@ class FirebaseStorageAdapterTest {
         assertTrue(url.contains("/private-bucket/cake-ai/designs/image"));
     }
 
-    @Test @DisplayName("Upload stores private object metadata and refuses overwrites")
-    void upload_validImage_storesContentType() {
-        byte[] bytes = {1, 2, 3};
+    @Test @DisplayName("Upload validates MIME and verifies bytes by reading durable cloud storage")
+    void upload_validImage_verifiesDurability() {
+        when(client.readAllBytes("private-bucket", "cake-ai/sources/image")).thenReturn(bytes);
         adapter.upload("cake-ai/sources/image", bytes, "image/png");
-        verify(client).create(BlobInfo.newBuilder("private-bucket", "cake-ai/sources/image")
-                .setContentType("image/png").build(), bytes, Storage.BlobTargetOption.doesNotExist());
+        var metadata = ArgumentCaptor.forClass(BlobInfo.class);
+        verify(client).create(metadata.capture(), eq(bytes), any(Storage.BlobTargetOption.class));
+        assertEquals("image/png", metadata.getValue().getContentType());
+        assertEquals(64, metadata.getValue().getMetadata().get("sha256").length());
+        verify(client).readAllBytes("private-bucket", "cake-ai/sources/image");
     }
 
-    @Test @DisplayName("Signing failures return a safe unavailable error")
+    @Test @DisplayName("Failed upload never becomes RAM-backed success")
+    void upload_cloudFailure_propagates() {
+        when(client.create(any(BlobInfo.class), any(byte[].class), any(Storage.BlobTargetOption.class)))
+                .thenThrow(new StorageException(503, "private details"));
+        assertEquals(503, assertThrows(StorageFailureException.class,
+                () -> adapter.upload("cake-ai/sources/image", bytes, "image/png")).status());
+        verify(client, never()).readAllBytes(anyString(), anyString());
+    }
+
+    @Test @DisplayName("Readback mismatch prevents publishing durable success")
+    void upload_corruptReadback_fails() {
+        when(client.readAllBytes("private-bucket", "key")).thenReturn(new byte[]{0});
+        assertThrows(StorageFailureException.class, () -> adapter.upload("key", bytes, "image/png"));
+    }
+
+    @Test @DisplayName("Corrupt content and MIME mismatch fail before a cloud write")
+    void upload_invalidBytes_rejects() {
+        assertEquals(422, assertThrows(BusinessException.class, () -> adapter.upload("key", bytes, "image/jpeg")).status());
+        assertThrows(BusinessException.class, () -> adapter.upload("key", new byte[]{1, 2}, "image/png"));
+        verifyNoInteractions(client);
+    }
+
+    @Test @DisplayName("Missing bucket or ADC fails closed instead of using RAM")
+    void storage_missingConfiguration_fails() {
+        var missing = new FirebaseStorageAdapter(properties("", ""));
+        assertThrows(StorageFailureException.class, missing::checkAvailable);
+        assertThrows(StorageFailureException.class, () -> missing.upload("key", bytes, "image/png"));
+        try (var credentials = mockStatic(com.google.auth.oauth2.GoogleCredentials.class)) {
+            credentials.when(com.google.auth.oauth2.GoogleCredentials::getApplicationDefault)
+                    .thenThrow(new java.io.IOException("private path"));
+            assertThrows(StorageFailureException.class,
+                    () -> new FirebaseStorageAdapter(properties("project", "bucket")).checkAvailable());
+        }
+    }
+
+    @Test @DisplayName("Cloud read failures remain failures even after an earlier upload")
+    void read_remoteFailure_hasNoMemoryFallback() {
+        when(client.readAllBytes("private-bucket", "key")).thenReturn(bytes);
+        adapter.upload("key", bytes, "image/png");
+        when(client.readAllBytes("private-bucket", "key")).thenThrow(new StorageException(503, "private"));
+        assertThrows(StorageFailureException.class, () -> adapter.read("key"));
+        doThrow(new StorageException(404, "private")).when(client).readAllBytes("private-bucket", "key");
+        assertEquals(404, assertThrows(BusinessException.class, () -> adapter.read("key")).status());
+    }
+
+    @Test @DisplayName("Signing and deletion errors are sanitized failures")
     void signedUrl_signerFailure_returnsUnavailable() {
-        when(client.signUrl(any(), anyLong(), any(), any(Storage.SignUrlOption.class))).thenThrow(new IllegalStateException("private details"));
-        BusinessException error = assertThrows(BusinessException.class, () -> adapter.signedUrl("cake-ai/designs/image"));
-        assertEquals(503, error.status());
-        assertFalse(error.getMessage().contains("private details"));
+        when(client.signUrl(any(), anyLong(), any(), any(Storage.SignUrlOption.class)))
+                .thenThrow(new IllegalStateException("private details"));
+        BusinessException error = assertThrows(BusinessException.class, () -> adapter.signedUrl("key"));
+        assertEquals(503, error.status()); assertFalse(error.getMessage().contains("private details"));
+        when(client.delete(eq("private-bucket"), eq("key"))).thenThrow(new StorageException(503, "private"));
+        assertThrows(StorageFailureException.class, () -> adapter.delete("key"));
     }
 }

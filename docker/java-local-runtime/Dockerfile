@@ -1,5 +1,9 @@
 FROM eclipse-temurin:21-jre
 ARG HEALTH_PATH=/v3/api-docs
+ARG BUILD_REVISION=unknown
+ARG JAR_SHA256=unknown
+LABEL org.opencontainers.image.revision=${BUILD_REVISION}
+LABEL org.bakery.jar-sha256=${JAR_SHA256}
 ENV HEALTH_PATH=${HEALTH_PATH}
 RUN groupadd --system --gid 10001 app && useradd --system --uid 10001 --gid app app
 WORKDIR /app

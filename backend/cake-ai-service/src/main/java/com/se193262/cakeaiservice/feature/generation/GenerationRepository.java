@@ -54,10 +54,11 @@ public class GenerationRepository {
                 + "values(:id,:job,:number,:prompt,:negative,:customer)")
                 .param("id", revision.id()).param("job", revision.generationJobId()).param("number", revision.revisionNumber())
                 .param("prompt", revision.prompt()).param("negative", revision.negativePrompt()).param("customer", revision.createdBy()).update();
-        jdbc.sql("insert into generation_executions(id,generation_job_id,prompt_revision_id,model_name,generation_parameters) "
-                + "values(:id,:job,:revision,:model,:parameters::jsonb)")
+        jdbc.sql("insert into generation_executions(id,generation_job_id,prompt_revision_id,model_name,generation_parameters,reserved_provider_calls) "
+                + "values(:id,:job,:revision,:model,:parameters::jsonb,:calls)")
                 .param("id", execution.id()).param("job", execution.generationJobId()).param("revision", revision.id())
-                .param("model", execution.modelName()).param("parameters", json.writeValueAsString(execution.generationParameters())).update();
+                .param("model", execution.modelName()).param("parameters", json.writeValueAsString(execution.generationParameters()))
+                .param("calls", 1 + 2 * execution.generationParameters().numberOfDesigns()).update();
         jdbc.sql("update generation_jobs set status='QUEUED',model_name=:model,generation_parameters=:parameters::jsonb,"
                 + "error_message=null,started_at=null,completed_at=null,updated_at=now(),version=version+1 where id=:id")
                 .param("id", execution.generationJobId()).param("model", execution.modelName())
@@ -85,31 +86,77 @@ public class GenerationRepository {
 
     public List<Design> designs(UUID jobId) {
         return jdbc.sql("select * from generated_designs where generation_job_id=:id order by created_at,id")
-                .param("id", jobId).query(Design.class).list();
+                .param("id", jobId).query(this::mapDesign).list();
     }
 
     public Design design(UUID id) {
         return jdbc.sql("select * from generated_designs where id=:id").param("id", id)
-                .query(Design.class).optional().orElseThrow(BusinessException::missing);
+                .query(this::mapDesign).optional().orElseThrow(BusinessException::missing);
     }
 
     public void insertDesign(Design design) {
         jdbc.sql("insert into generated_designs(id,generation_job_id,prompt_revision_id,execution_id,image_object_key,"
                 + "thumbnail_object_key,media_type,size_bytes,width,height,moderation_status,moderation_reason,moderated_at,model_metadata) "
                 + "values(:id,:job,:revision,:execution,:image,:thumbnail,:type,:size,:width,:height,:moderation,:reason,now(),"
-                + "(select jsonb_build_object('model',model_name,'generationParameters',generation_parameters) from generation_executions where id=:execution))")
+                + "(select jsonb_build_object('model',model_name,'generationParameters',generation_parameters) from generation_executions where id=:execution) || :provenance::jsonb)")
                 .param("id", design.id()).param("job", design.generationJobId()).param("revision", design.promptRevisionId())
                 .param("execution", design.executionId()).param("image", design.imageObjectKey())
                 .param("thumbnail", design.thumbnailObjectKey()).param("type", design.mediaType()).param("size", design.sizeBytes())
                 .param("width", design.width()).param("height", design.height()).param("moderation", design.moderationStatus())
-                .param("reason", design.moderationReason()).update();
+                .param("reason", design.moderationReason())
+                .param("provenance", json.writeValueAsString(design.providerMetadata())).update();
     }
 
-    public void moderate(UUID id, String status, UUID admin) {
-        int changed = jdbc.sql("update generated_designs set moderation_status=:status,moderation_reason='ADMIN_REVIEW',"
+    public void moderate(UUID id, String status, UUID admin, String reason) {
+        int changed = jdbc.sql("update generated_designs set moderation_status=:status,moderation_reason=:reason,"
                 + "moderated_by=:admin,moderated_at=now() where id=:id and moderation_status='PENDING'")
-                .param("id", id).param("status", status).param("admin", admin).update();
+                .param("id", id).param("status", status).param("admin", admin).param("reason", reason).update();
         if (changed != 1) throw BusinessException.conflict();
+        jdbc.sql("insert into design_moderation_events(id,design_id,admin_id,previous_status,decision,reason) "
+                + "values(:event,:id,:admin,'PENDING',:status,:reason)")
+                .param("event", UUID.randomUUID()).param("id", id).param("admin", admin)
+                .param("status", status).param("reason", reason).update();
+    }
+
+    public record ModerationEvent(UUID id, UUID adminId, String previousStatus, String decision, String reason, java.time.Instant createdAt) {}
+    public record DesignContext(Design design, UUID customerId, UUID cakeRequestId) {}
+
+    public DesignContext designContext(UUID id) {
+        return jdbc.sql("select d.*,j.customer_id,j.cake_request_id from generated_designs d "
+                + "join generation_jobs j on j.id=d.generation_job_id where d.id=:id").param("id", id)
+                .query((row, index) -> new DesignContext(mapDesign(row, index), row.getObject("customer_id", UUID.class),
+                        row.getObject("cake_request_id", UUID.class))).optional().orElseThrow(BusinessException::missing);
+    }
+
+    public List<DesignContext> moderationPage(String status, int page, int size) {
+        return jdbc.sql("select d.*,j.customer_id,j.cake_request_id from generated_designs d "
+                + "join generation_jobs j on j.id=d.generation_job_id where (:status::varchar is null or d.moderation_status=:status) "
+                + "order by d.created_at desc,d.id desc limit :size offset :offset")
+                .param("status", status).param("size", size).param("offset", (long) page * size)
+                .query((row, index) -> new DesignContext(mapDesign(row, index), row.getObject("customer_id", UUID.class),
+                        row.getObject("cake_request_id", UUID.class))).list();
+    }
+
+    public long moderationCount(String status) {
+        return jdbc.sql("select count(*) from generated_designs where (:status::varchar is null or moderation_status=:status)")
+                .param("status", status).query(Long.class).single();
+    }
+
+    public List<ModerationEvent> moderationHistory(UUID id) {
+        return jdbc.sql("select * from design_moderation_events where design_id=:id order by created_at,id")
+                .param("id", id).query(ModerationEvent.class).list();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Design mapDesign(java.sql.ResultSet row, int index) throws java.sql.SQLException {
+        var moderated = row.getTimestamp("moderated_at");
+        return new Design(row.getObject("id", UUID.class), row.getObject("generation_job_id", UUID.class),
+                row.getObject("prompt_revision_id", UUID.class), row.getObject("execution_id", UUID.class),
+                row.getString("image_object_key"), row.getString("thumbnail_object_key"), row.getString("media_type"),
+                (Long) row.getObject("size_bytes"), (Integer) row.getObject("width"), (Integer) row.getObject("height"),
+                row.getString("moderation_status"), row.getString("moderation_reason"), row.getTimestamp("created_at").toInstant(),
+                json.readValue(row.getString("model_metadata"), Map.class), row.getObject("moderated_by", UUID.class),
+                moderated == null ? null : moderated.toInstant());
     }
 
     public void lockIdempotency(UUID customerId, String operation, String key) {

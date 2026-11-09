@@ -207,8 +207,10 @@ class LiveRequestDetail extends StatelessWidget {
               ),
             ),
           if (admin)
-            const SCNotice(
-              'Thiết kế chỉ được khám phá từ yêu cầu có liên kết thật. Chưa có hàng đợi toàn bộ thiết kế AI chờ duyệt.',
+            SCButton(
+              'Mở hàng đợi thiết kế AI',
+              outlined: true,
+              onPressed: () => liveOpen(context, '/admin-ai-designs'),
             ),
           if (draft) ...[
             SCButton(

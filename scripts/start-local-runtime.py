@@ -3,6 +3,8 @@ from pathlib import Path
 import argparse
 import bcrypt
 import getpass
+import hashlib
+import zipfile
 import json
 import os
 import re
@@ -20,6 +22,8 @@ ENV=SECRET_ROOT/'local-runtime.env'
 CLIENTS=SECRET_ROOT/'local-service-clients.yml'
 MANIFEST=SECRET_ROOT/'local-runtime-sources.json'
 PROJECT='bakery-local'
+CAKE_AI_MODE=False
+VERIFY_OUTPUT=None
 FILES=['compose.yaml','docker-compose.bakery-subscription.yml','docker-compose.order-service.yml',
        'docker-compose.chat-service.yml','compose.services.yaml','compose.no-firebase.yaml','compose.local-runtime.yaml']
 MODULES=['identity-service','bakery-service','marketplace-service','subscription-service','order-service','chat-service','api-gateway']
@@ -67,6 +71,70 @@ def configure_firebase_sandbox():
     })
     FILES.remove('compose.no-firebase.yaml')
     print('Explicit Firebase sandbox mode: existing credential mounted read-only; automatic orphan cleanup disabled.')
+
+
+
+def configure_cake_ai(args):
+    """Read-only secret resolution; opt-in isolated runtime using the authoritative Compose chain."""
+    global CAKE_AI_MODE, PROJECT, VERIFY_OUTPUT
+    if not args.firebase_sandbox:
+        raise RuntimeError('--cake-ai requires the explicitly approved --firebase-sandbox')
+    if not ENV.is_file() or not CLIENTS.is_file():
+        raise RuntimeError('Existing local-runtime.env and local-service-clients.yml are required; no secrets generated')
+    values={**read_env(ROOT/'.env'),**read_env(ENV)}
+    required=['GEMINI_API_KEY','GEMINI_IMAGE_MODEL','GEMINI_MODERATION_MODEL','CAKE_AI_CLIENT_SECRET',
+              'CAKE_AI_CLIENT_SECRET_HASH','CAKE_AI_DB_USERNAME','CAKE_AI_DB_PASSWORD']
+    missing=[key for key in required if not values.get(key)]
+    if missing:raise RuntimeError('Missing Cake AI variables: '+', '.join(missing))
+    if not bcrypt.checkpw(values['CAKE_AI_CLIENT_SECRET'].encode(),values['CAKE_AI_CLIENT_SECRET_HASH'].encode()):
+        raise RuntimeError('Cake AI client secret/hash mismatch; values suppressed')
+    if not args.project or args.project=='bakery-local' or not re.fullmatch(r'bakery-[a-z0-9-]+',args.project):
+        raise RuntimeError('--cake-ai requires a distinct explicit --project bakery-... to protect existing local stacks')
+    if args.enable_generation and (args.provider_budget is None or not 1<=args.provider_budget<=9):
+        raise RuntimeError('--enable-generation requires an explicit --provider-budget between 1 and 9')
+    for key,value in values.items():
+        if key.startswith(('IDENTITY_','MARKETPLACE_','BAKERY_','SUBSCRIPTION_','ORDER_','CHAT_','CAKE_AI_','GEMINI_','FIREBASE_','LOCAL_')):
+            os.environ[key]=value
+    CAKE_AI_MODE=True;PROJECT=args.project
+    MODULES[:]=[module for module in MODULES if module!='api-gateway']+['cake-ai-service']
+    SERVICES[:]=MODULES
+    os.environ.update({'CAKE_AI_ENABLED':str(args.enable_generation).lower(),
+                       'CAKE_AI_REQUIRE_ADMIN_REVIEW':str(args.require_admin_review).lower(),
+                       'CAKE_AI_SCHEDULER_ENABLED':str(not args.scheduler_disabled).lower(),
+                       'CAKE_AI_DAILY_PROVIDER_REQUESTS':str(args.provider_budget or 9),
+                       'CAKE_AI_MAX_DESIGNS_PER_EXECUTION':'1',
+                       'LOCAL_BUILD_REVISION':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()+'-working-tree'})
+    if args.port_base is None:raise RuntimeError('--cake-ai requires an explicit nonconflicting --port-base')
+    base=args.port_base
+    if not 1024<=base<=65000:raise RuntimeError('Invalid local port base')
+    os.environ['LOCAL_WEB_PORT']=str(base+73)
+    offsets={'identity-service':1,'bakery-service':2,'marketplace-service':3,'subscription-service':4,
+             'cake-ai-service':5,'order-service':6,'chat-service':7}
+    for module,offset in offsets.items():
+        PORTS[module]=base+offset
+        os.environ['LOCAL_'+module.replace('-service','').replace('-','_').upper()+'_PORT']=str(base+offset)
+    for name,offset in [('BAKERY_STORAGE',22),('BAKERY_STORAGE_CONSOLE',23),('SUBSCRIPTION_STORAGE',24),
+                        ('SUBSCRIPTION_STORAGE_CONSOLE',25),('CHAT_STORAGE',26),('CHAT_STORAGE_CONSOLE',27)]:
+        os.environ['LOCAL_'+name+'_PORT']=str(base+offset)
+    VERIFY_OUTPUT=Path(args.evidence_dir) if args.evidence_dir else ROOT/'docs/mobile/evidence'/('flow-f-runtime-'+PROJECT)
+    print('Cake AI isolated runtime: existing secrets reused; generation='+str(args.enable_generation).lower()+
+          '; request ceiling='+str(args.provider_budget or 9)+'; synthetic Admin-review policy='+str(args.require_admin_review).lower())
+
+
+def validate_cake_ai_artifact():
+    if not CAKE_AI_MODE:return
+    module=ROOT/'backend/cake-ai-service';jar=module/'target/cake-ai-service-0.0.1-SNAPSHOT-exec.jar'
+    context=module/'target/docker-runtime/application.jar'
+    if not jar.is_file() or not context.is_file():raise RuntimeError('Package Cake AI and run prepare before build/up')
+    inputs=[file for file in (module/'src/main/java').rglob('*.java')]
+    inputs.extend(file for file in (module/'src/main/resources').rglob('*') if file.is_file())
+    if any(file.stat().st_mtime_ns>jar.stat().st_mtime_ns for file in inputs):
+        raise RuntimeError('Cake AI source/resources are newer than the executable JAR; rebuild before deployment')
+    digest=hashlib.sha256(jar.read_bytes()).hexdigest()
+    if hashlib.sha256(context.read_bytes()).hexdigest()!=digest:raise RuntimeError('Stale Cake AI Docker context; run prepare')
+    with zipfile.ZipFile(jar) as archive:
+        if 'BOOT-INF/classes/application.yml' not in archive.namelist():raise RuntimeError('Cake AI artifact is not executable Spring Boot JAR')
+    os.environ['LOCAL_CAKE_AI_JAR_SHA256']=digest
 
 
 def prepare():
@@ -152,7 +220,9 @@ def prepare():
 
 
 def compose(*args,check=True,capture=False):
+    if args and args[0] in ('build','up','restart'):validate_cake_ai_artifact()
     cmd=['docker','compose','--env-file',str(ENV),'-p',PROJECT]
+    if CAKE_AI_MODE:cmd.extend(['--profile','cake-ai'])
     for f in FILES:cmd.extend(['-f',f])
     return subprocess.run(cmd+list(args),cwd=ROOT,check=check,capture_output=capture,text=True)
 
@@ -162,7 +232,7 @@ def verify():
     for module,port in PORTS.items():
         status=0
         for _ in range(40):
-            try:status=requests.get(f'http://localhost:{port}/v3/api-docs',timeout=3).status_code
+            try:status=requests.get(f'http://127.0.0.1:{port}'+('/actuator/health/readiness' if module=='cake-ai-service' else '/v3/api-docs'),timeout=3).status_code
             except requests.RequestException:status=0
             if status==200:break
             time.sleep(1)
@@ -173,7 +243,7 @@ def verify():
         result=compose('exec','-T',db,'sh','-c','psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atc "SELECT count(*) FROM flyway_schema_history WHERE success"',check=False,capture=True)
         item=next(x for x in findings if x['service']==module)
         item['successfulMigrations']=result.stdout.strip() if result.returncode==0 else 'NOT_VERIFIED'
-    output=ROOT/'docs/audit/evidence/docker-runtime.json';output.parent.mkdir(parents=True,exist_ok=True)
+    output=(VERIFY_OUTPUT/'docker-runtime.json') if VERIFY_OUTPUT else ROOT/'docs/audit/evidence/docker-runtime.json';output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(findings,ensure_ascii=False,indent=2),encoding='utf-8')
     print(json.dumps(findings,ensure_ascii=False,indent=2))
     if any(x['openapiStatus']!=200 for x in findings):raise RuntimeError('Có service chưa sẵn sàng')
@@ -183,8 +253,18 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--firebase-sandbox',action='store_true',
         help='Explicitly authorize the approved root Firebase sandbox; preserve no-Firebase mode by default')
+    parser.add_argument('--cake-ai',action='store_true',help='Explicit isolated Gemini/Firebase runtime; secrets remain read-only')
+    parser.add_argument('--project',help='Distinct Docker Compose project; required with --cake-ai')
+    parser.add_argument('--port-base',type=int,help='Loopback service ports base+1..7, storage base+22..27')
+    parser.add_argument('--enable-generation',action='store_true',help='Enable chargeable jobs only after safety gates and current authorization')
+    parser.add_argument('--provider-budget',type=int,help='Explicit daily request ceiling, at most 9 in this sandbox launcher')
+    parser.add_argument('--require-admin-review',action='store_true',help='Preserve automated decisions but require Admin approval before selection')
+    parser.add_argument('--scheduler-disabled',action='store_true',help='Preflight/cancel verification without provider execution')
+    parser.add_argument('--evidence-dir',help='Sanitized runtime verification JSON directory')
     parser.add_argument('action',choices=['prepare','build','up','verify','restart','stop','status','gateway-attempt'])
     args=parser.parse_args()
+    if args.enable_generation and not args.cake_ai:parser.error('--enable-generation requires --cake-ai')
+    if args.cake_ai:configure_cake_ai(args)
     if args.firebase_sandbox:configure_firebase_sandbox()
     if args.action=='prepare':prepare();compose('config','--quiet')
     elif args.action=='build':compose('build','--parallel',*SERVICES,'bakery-storage','subscription-storage','chat-storage')

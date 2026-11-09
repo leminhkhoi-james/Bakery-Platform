@@ -17,5 +17,14 @@ public final class GenerationData {
             String modelName, GenerationParameters generationParameters, UUID claimToken) {}
     public record Design(UUID id, UUID generationJobId, UUID promptRevisionId, UUID executionId,
             String imageObjectKey, String thumbnailObjectKey, String mediaType, Long sizeBytes,
-            Integer width, Integer height, String moderationStatus, String moderationReason, Instant createdAt) {}
+            Integer width, Integer height, String moderationStatus, String moderationReason, Instant createdAt,
+            java.util.Map<String, Object> providerMetadata, UUID moderatedBy, Instant moderatedAt) {
+        public Design(UUID id, UUID generationJobId, UUID promptRevisionId, UUID executionId,
+                String imageObjectKey, String thumbnailObjectKey, String mediaType, Long sizeBytes,
+                Integer width, Integer height, String moderationStatus, String moderationReason, Instant createdAt) {
+            this(id, generationJobId, promptRevisionId, executionId, imageObjectKey, thumbnailObjectKey,
+                    mediaType, sizeBytes, width, height, moderationStatus, moderationReason, createdAt,
+                    java.util.Map.of(), null, null);
+        }
+    }
 }
