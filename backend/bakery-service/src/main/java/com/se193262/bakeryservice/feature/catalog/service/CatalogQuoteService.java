@@ -1,6 +1,8 @@
 package com.se193262.bakeryservice.feature.catalog.service;
 
 import com.se193262.bakeryservice.exception.AppException;
+import com.se193262.bakeryservice.exception.DeliveryAreaNotServedException;
+import com.se193262.bakeryservice.shared.DeliveryLocation;
 import com.se193262.bakeryservice.feature.addon.entity.AddOn;
 import com.se193262.bakeryservice.feature.addon.repository.AddOnRepository;
 import com.se193262.bakeryservice.feature.bakery.entity.BakeryStatus;
@@ -70,10 +72,9 @@ public class CatalogQuoteService {
         }
         ServiceArea area = areaRepository.findAllByBakery_Id(request.bakeryId()).stream()
                 .filter(candidate -> candidate.isActive()
-                        && candidate.getCity().equalsIgnoreCase(request.deliveryCity().trim())
-                        && candidate.getDistrict().equalsIgnoreCase(request.deliveryDistrict().trim()))
-                .findFirst().orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "Delivery area is not served"));
+                        && DeliveryLocation.matches(candidate.getCity(), candidate.getDistrict(),
+                                request.deliveryCity(), request.deliveryDistrict()))
+                .findFirst().orElseThrow(DeliveryAreaNotServedException::new);
 
         Map<UUID, CatalogQuoteRequest.OptionSelection> selections = new HashMap<>();
         for (var selection : request.optionSelections() == null ? List.<CatalogQuoteRequest.OptionSelection>of()

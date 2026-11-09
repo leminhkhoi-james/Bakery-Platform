@@ -1,6 +1,7 @@
 package com.se193262.bakeryservice.feature.catalog;
 
 import com.se193262.bakeryservice.exception.GlobalExceptionHandler;
+import com.se193262.bakeryservice.exception.DeliveryAreaNotServedException;
 import com.se193262.bakeryservice.feature.bakery.controller.InternalBakeryController;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryInternalService;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryOnboardingService;
@@ -103,5 +104,23 @@ class InternalCatalogRoutingTest {
                 .thenThrow(new org.springframework.security.access.AccessDeniedException("Denied"));
         mvc.perform(get("/internal/v1/users/" + ID + "/bakery-memberships"))
                 .andExpect(status().isForbidden()).andExpect(jsonPath("$.statusCode").value(403));
+    }
+
+    @Test
+    @DisplayName("Delivery rejection exposes a stable error code on all quote routes")
+    void quote_unservedArea_returnsSpecific422() throws Exception {
+        when(directOrderService.quote(any())).thenThrow(new DeliveryAreaNotServedException());
+        when(customizationService.quote(any(), anyBoolean())).thenThrow(new DeliveryAreaNotServedException());
+        String body = """
+                {"bakeryId":"%s","productId":"%s","quantity":1,
+                 "deliveryCity":"HCM","deliveryDistrict":"5","optionSelections":[],"addOns":[]}
+                """.formatted(ID, ID);
+        for (String path : new String[] {"quotes", "customization-quotes", "add-on-quotes"}) {
+            mvc.perform(post("/internal/v1/catalog/" + path)
+                            .contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(jsonPath("$.data.errorCode").value("DELIVERY_AREA_NOT_SERVED"))
+                    .andExpect(jsonPath("$.message").value("Tiệm chưa hỗ trợ giao đến khu vực này."));
+        }
     }
 }

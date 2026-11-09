@@ -98,4 +98,13 @@ class CatalogQuoteServiceTest {
         ReflectionTestUtils.setField(addOn, "id", addOnId);
         return addOn;
     }
+
+    @Test
+    @DisplayName("Direct order quote accepts a bare district number and Vietnamese city spelling")
+    void quote_equivalentDeliveryLocation_preservesConfiguredFee() {
+        var quote = quoteService.quote(new CatalogQuoteRequest(bakeryId, productId, 1,
+                List.of(), List.of(), "1", "TP. Hồ Chí Minh"));
+        assertThat(quote.deliveryFee()).isEqualByComparingTo("30000.00");
+        assertThat(quote.totalAmount()).isEqualByComparingTo("480000.00");
+    }
 }

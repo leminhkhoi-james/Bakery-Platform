@@ -1,6 +1,7 @@
 package com.se193262.bakeryservice.feature.catalog;
 
 import com.se193262.bakeryservice.exception.AppException;
+import com.se193262.bakeryservice.exception.DeliveryAreaNotServedException;
 import com.se193262.bakeryservice.feature.catalog.dto.CatalogContracts.QuoteRequest;
 import com.se193262.bakeryservice.infrastructure.client.SubscriptionEntitlementClient;
 import com.se193262.platform.exception.BusinessException;
@@ -59,5 +60,23 @@ class CatalogServiceImplTest {
     void quote_activeSubscription_returnsSnapshot() {
         when(entitlementClient.hasActiveSubscription(bakeryId)).thenReturn(true);
         assertThat(service.quote(request, false).addOnTotal()).isEqualByComparingTo(BigDecimal.ZERO);
+    }
+
+    @Test
+    @DisplayName("Marketplace quote uses the same normalized delivery location as direct orders")
+    void quote_equivalentDeliveryLocation_returnsSnapshot() {
+        when(entitlementClient.hasActiveSubscription(bakeryId)).thenReturn(true);
+        var equivalent = new QuoteRequest(bakeryId, null, "TP. Hồ Chí Minh", "1", List.of(), List.of());
+        assertThat(service.quote(equivalent, false).addOnTotal()).isEqualByComparingTo(BigDecimal.ZERO);
+    }
+
+    @Test
+    @DisplayName("A district outside the configured area remains rejected")
+    void quote_differentDistrict_returnsDeliveryAreaError() {
+        when(entitlementClient.hasActiveSubscription(bakeryId)).thenReturn(true);
+        var outside = new QuoteRequest(bakeryId, null, "HCM", "5", List.of(), List.of());
+        assertThatThrownBy(() -> service.quote(outside, false))
+                .isInstanceOf(DeliveryAreaNotServedException.class)
+                .hasMessage("Tiệm chưa hỗ trợ giao đến khu vực này.");
     }
 }

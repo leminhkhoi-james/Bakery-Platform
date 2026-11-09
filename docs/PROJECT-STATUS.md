@@ -466,3 +466,19 @@ Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trư
 - Maven offline test Subscription + platform-support thành công: 21 test pass,
   không skip, gồm PostgreSQL Testcontainers, gửi tham chiếu thủ công, chặn
   phương thức sandbox cũ, duyệt và idempotency.
+
+## Bakery đối chiếu khu vực giao hàng — 2026-11-09
+
+- Các API quote đặt bánh trực tiếp/custom/phụ kiện dùng cùng quy tắc nhận diện
+  dấu tiếng Việt, hoa/thường, khoảng trắng và tên viết tắt TP.HCM. Quận số chấp
+  nhận `5`, `Quan 5`, `Quận 5`, `Q.5`, `District 5`, `D5` trong cùng tỉnh/thành.
+  Giữ điều kiện khu vực hoạt động, phí giao hàng và dữ liệu gốc; không đổi schema.
+- Bakery trả HTTP 422, thông báo khu vực cụ thể và mã
+  `data.errorCode=DELIVERY_AREA_NOT_SERVED`. Order vẫn cần giữ/ánh xạ mã lỗi để
+  web hiển thị nguyên nhân cụ thể; Order và frontend không sửa trong lần này.
+- 27 test liên quan của Bakery pass, không skip; không chạy toàn bộ reactor.
+  Không sửa Identity hoặc Subscription vì lỗi này thuộc đối chiếu khu vực của
+  Bakery. API spec chỉ thêm ghi chú; chưa build lại image Docker cho sửa địa chỉ.
+- Bổ sung cấu hình Bearer JWT cho Swagger Bakery/Subscription để có nút Authorize
+  và gửi token cho các API cần đăng nhập; các API GET public giữ public.
+  Hai image Swagger đã build và xác minh trong lần kiểm tra HTTP onboarding trước.
