@@ -125,7 +125,7 @@ export function createUnifiedDataService({ realFetch, local, getSession, origin 
     }
     if (remote.status === 'rejected') note(path, remote.reason)
     else resolved(path)
-    if (saved.status === 'rejected') note(path, saved.reason, 'local')
+    if (saved.status === 'rejected' && remote.status !== 'fulfilled') note(path, saved.reason, 'local')
     else resolved(path, 'local')
     if (remote.status === 'rejected' && saved.status === 'rejected') {
       return remote.reason.response || failure('Chưa tải được các nguồn dữ liệu.', 503)
@@ -201,7 +201,7 @@ export function createUnifiedDataService({ realFetch, local, getSession, origin 
       options.signal?.throwIfAborted()
       if (sessionKey(getSession()) !== actorId) return failure('Phiên đăng nhập đã thay đổi.', 409)
       if (!response.ok) {
-        if (response.status >= 500 || response.status === 404) note(path, { status: response.status })
+        if (response.status >= 500) note(path, { status: response.status })
         return response
       }
       resolved(path)

@@ -178,6 +178,32 @@ export default function AdminRevenuePage({ onNavigate }) {
       onNavigate={onNavigate}
     >
       <div className="sc-admin-revenue">
+        {/* Top Info Bar: Completely separates Approval queue from Financial Revenue */}
+        <div className="sc-revenue-top-bar">
+          <div className="sc-revenue-top-title-wrap">
+            <span className="sc-revenue-top-badge">
+              <Icon name="verified_user" />
+              Doanh thu theo nguồn
+            </span>
+            <span className="sc-revenue-top-desc">
+              Doanh thu gói được ghi nhận theo ngày duyệt. Doanh thu bán bánh ghi nhận khi đơn đã hoàn tất và đã thu tiền.
+            </span>
+          </div>
+
+          {pendingCount > 0 && (
+            <button
+              type="button"
+              className="sc-revenue-pending-link"
+              onClick={() => onNavigate?.('admin-payments')}
+              title="Chuyển đến màn hình đối chiếu chứng từ mới"
+            >
+              <Icon name="receipt_long" />
+              <span>Duyệt gói dịch vụ</span>
+              <span className="sc-revenue-pending-badge">{pendingCount} chờ duyệt</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          )}
+        </div>
         {/* Filter Section: Presets, Custom Range & Search */}
         <section className="sc-revenue-filter-panel" aria-label="Bộ lọc doanh thu">
           {/* Row 1: Presets on Left, Search on Right (Balanced across width) */}

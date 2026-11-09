@@ -15,7 +15,7 @@ export function reviewPayload(input) {
   return { rating, comment }
 }
 export function reviewPermissions(order, user) {
-  const own = user?.roles?.includes('CUSTOMER') && order.customerId === user.id
+  const own = user?.roles?.includes('CUSTOMER') && String(order.customerId || '').toLowerCase() === String(user?.id || '').toLowerCase()
   return { create: Boolean(own && order.status === 'COMPLETED' && !order.review), edit: Boolean(own && order.review?.status === 'PUBLISHED'), delete: Boolean(own && order.review && order.review.status !== 'DELETED') }
 }
 export const orderStatusLabel = (value) => ({ PENDING: 'Chờ xác nhận', CONFIRMED: 'Đã xác nhận', BAKING: 'Đang làm bánh', READY: 'Sẵn sàng giao', DELIVERING: 'Đang giao', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' }[value] || value || 'Chưa rõ trạng thái')
@@ -24,7 +24,7 @@ export function allowedOrderActions(order, user, scope) {
   if (!user || user.roles?.includes('ADMIN')) return []
   const available = transitions[order.status] || []
   // Backend checks own CUSTOMER permissions before bakery roles.
-  if (user.roles?.includes('CUSTOMER') && order.customerId === user.id && !user.roles.includes('ADMIN')) return []
+  if (user.roles?.includes('CUSTOMER') && String(order.customerId || '').toLowerCase() === String(user.id || '').toLowerCase() && !user.roles.includes('ADMIN')) return []
   if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) return available
   return []
 }

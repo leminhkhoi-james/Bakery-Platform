@@ -13,14 +13,14 @@ export async function revalidateCartItem(item, options = {}) {
   // Detail completeness matters here: absent configuration is not an empty configuration.
   const dto = await api.get('/products/' + id, { ...options, auth: false, retryAuth: false })
   if (!Array.isArray(dto?.options?.groups) || !Array.isArray(dto?.addOns)) throw new ApiError('Chi tiết sản phẩm thiếu options/addOns để xác minh checkout.', 502)
-  if (dto.options.groups.some((group) => !isCatalogId(group?.id) || !Array.isArray(group.values) || !Number.isInteger(group.minimumSelections) || !Number.isInteger(group.maximumSelections) || typeof group.required !== 'boolean' || !['SINGLE', 'MULTIPLE'].includes(group.selectionType))) throw new ApiError('Cấu hình tùy chọn từ backend chưa đầy đủ.', 502)
+  if (dto.options.groups.some((group) => !isCatalogId(group?.id) || !Array.isArray(group.values) || !Number.isInteger(group.minimumSelections) || !Number.isInteger(group.maximumSelections) || typeof group.required !== 'boolean' || !['SINGLE', 'MULTIPLE'].includes(group.selectionType))) throw new ApiError('Thông tin tùy chọn từ hệ thống chưa đầy đủ.', 502)
   const product = mapProduct(dto)
   if (product.id !== id || product.bakeryId !== item.bakeryId || product.status !== 'PUBLISHED') throw new ApiError('Sản phẩm không còn hợp lệ hoặc thuộc cửa hàng khác.', 409)
   const unitPrice = catalogMoney(product.price)
   if (unitPrice === null || unitPrice < 0) throw new ApiError('Sản phẩm chưa có giá hợp lệ.', 422)
   let unitCents = Math.round(unitPrice * 100)
   const selections = item.optionSelections || [], addOns = item.addOns || []
-  if (!Array.isArray(selections) || !Array.isArray(addOns) || selections.length > 20 || addOns.length > 20) throw new ApiError('Cấu hình sản phẩm không hợp lệ.', 422)
+  if (!Array.isArray(selections) || !Array.isArray(addOns) || selections.length > 20 || addOns.length > 20) throw new ApiError('Tùy chọn sản phẩm không hợp lệ.', 422)
   const groups = new Map()
   for (const selection of selections) {
     if (groups.has(selection.optionGroupId) || !Array.isArray(selection.optionValueIds) || new Set(selection.optionValueIds).size !== selection.optionValueIds.length) throw new ApiError('Nhóm/giá trị tùy chọn bị trùng.', 422)
@@ -28,7 +28,7 @@ export async function revalidateCartItem(item, options = {}) {
   }
   for (const group of product.optionGroups) {
     const selected = groups.get(group.id) || []
-    if (selected.length < Math.max(group.minimumSelections ?? 0, group.required ? 1 : 0) || selected.length > (group.maximumSelections ?? (group.selectionType === 'SINGLE' ? 1 : Infinity))) throw new ApiError('Cấu hình bánh đã thay đổi. Vui lòng chọn lại tùy chọn tại chi tiết sản phẩm.', 422)
+    if (selected.length < Math.max(group.minimumSelections ?? 0, group.required ? 1 : 0) || selected.length > (group.maximumSelections ?? (group.selectionType === 'SINGLE' ? 1 : Infinity))) throw new ApiError('Tùy chọn bánh đã thay đổi. Vui lòng chọn lại tùy chọn tại chi tiết sản phẩm.', 422)
     for (const valueId of selected) {
       const value = group.values?.find((value) => value.id === valueId && value.active !== false)
       const price = catalogMoney(value?.priceAdjustment)
@@ -37,7 +37,7 @@ export async function revalidateCartItem(item, options = {}) {
     }
     groups.delete(group.id)
   }
-  if (groups.size || unitCents < 0) throw new ApiError('Cấu hình bánh không hợp lệ.', 422)
+  if (groups.size || unitCents < 0) throw new ApiError('Tùy chọn bánh không hợp lệ.', 422)
   let subtotal = unitCents * item.quantity
   const addOnIds = new Set()
   for (const selection of addOns) {

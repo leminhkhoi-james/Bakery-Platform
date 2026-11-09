@@ -4,23 +4,27 @@ import AdminPlansPage from './AdminPlansPage.jsx'
 import AdminPaymentsPage from './AdminPaymentsPage.jsx'
 
 export default function AdminSubscriptionManagementPage({ onNavigate, routeSearch = '', legacyPayments = false }) {
-  const reviewSection = useRef(null)
-  const params = new URLSearchParams(routeSearch)
-  const openReview = legacyPayments || params.get('tab') === 'review' || params.has('paymentId')
+  const review = legacyPayments || new URLSearchParams(routeSearch).get('tab') === 'review'
 
-  useEffect(() => {
-    if (!openReview) return
-    const frame = requestAnimationFrame(() => reviewSection.current?.scrollIntoView({ block: 'start' }))
-    return () => cancelAnimationFrame(frame)
-  }, [openReview, routeSearch])
-
-  return <AdminFrame activeTab="admin-plans" onNavigate={onNavigate}>
-    <div className="space-y-6">
-      <AdminPlansPage />
-      <section ref={reviewSection} aria-labelledby="admin-payment-review-heading" className="scroll-mt-[var(--sc-portal-content-top)]">
-        <h2 id="admin-payment-review-heading" className="mb-3 text-lg font-bold text-primary">Duyệt gói dịch vụ</h2>
-        <AdminPaymentsPage key={routeSearch} routeSearch={routeSearch} />
-      </section>
-    </div>
+  return <AdminFrame activeTab={review ? 'admin-payments' : 'admin-plans'} onNavigate={onNavigate}>
+    <nav aria-label="Quản lý gói dịch vụ" className="sc-tabs mb-4 flex w-fit max-w-full flex-wrap gap-2">
+      <button
+        type="button"
+        aria-pressed={review}
+        className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 font-bold rounded-xl transition-all cursor-pointer"
+        onClick={() => onNavigate('admin-payments')}
+      >
+        <Icon name="receipt_long" />Duyệt mua gói
+      </button>
+      <button
+        type="button"
+        aria-pressed={!review}
+        className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 font-bold rounded-xl transition-all cursor-pointer"
+        onClick={() => onNavigate('admin-plans')}
+      >
+        <Icon name="workspace_premium" />Cấu hình gói dịch vụ
+      </button>
+    </nav>
+    {review ? <AdminPaymentsPage key={routeSearch} routeSearch={routeSearch} /> : <AdminPlansPage />}
   </AdminFrame>
 }

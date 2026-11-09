@@ -65,7 +65,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
         <div className="rounded-2xl border border-rose-200/80 bg-gradient-to-br from-white via-rose-50/40 to-rose-100/20 p-5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-rose-800">
-              {unifiedEnabled() ? 'Doanh thu bán bánh mô phỏng' : simulation ? 'Doanh thu đã ghi nhận' : 'Doanh thu ước tính'}
+              Doanh thu ước tính
             </span>
             <span className="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
               <Icon name="payments" className="text-lg" />
@@ -81,7 +81,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
             </div>
             <p className="text-xs text-rose-900/70 mt-1 flex items-center gap-1 font-medium">
               <span className="text-rose-500 font-bold">●</span>
-              <span>{unified ? 'API chưa có đối soát' : `Từ ${totalCount} đơn giao thành công`}</span>
+              <span>{`Từ ${totalCount} đơn giao thành công`}</span>
             </p>
           </div>
         </div>
@@ -115,7 +115,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
         <div className="rounded-2xl border border-amber-200/80 bg-gradient-to-br from-white via-amber-50/40 to-amber-100/20 p-5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
-              {unified ? 'Trung bình / đơn mô phỏng đã thu' : 'Trung bình / đơn (AOV)'}
+              Trung bình / đơn (AOV)
             </span>
             <span className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
               <Icon name="trending_up" className="text-lg" />
@@ -193,7 +193,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 <tr key={order.id}>
                   <td>
                     <strong className="text-primary font-semibold">
-                      {displayReference(order.id, 'ORD', order.orderNumber)}{unified && <small className="block">{recordSource(order) === 'local' ? 'Mô phỏng' : 'API'}</small>}
+                      {displayReference(order.id, 'ORD', order.orderNumber)}
                     </strong>
                   </td>
                   <td>{order.customerName || 'Khách hàng'}</td>
@@ -271,7 +271,7 @@ export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
 
 
         {bakeryId ? (
-          <><CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} /><BusinessSimulationReport bakeryId={bakeryId} bakery={owner.bakery} loadHistory /></>
+          <CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} />
         ) : (
           <div className="space-y-4">
             {!simulationStore() && <SettlementDisclaimerNotice />}

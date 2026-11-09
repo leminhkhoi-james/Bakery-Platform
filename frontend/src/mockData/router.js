@@ -309,7 +309,19 @@ export function routeDemo(store, path, method, body, query, user) {
     if (result?.id) result = requestDto(result)
   } else if (parts[0] === 'offers') {
     requireUser(user)
-    if (!parts[1] && get) { if (query.get('scope') === 'sent') { requireUser(user, 'BAKERY_OWNER', 'ADMIN'); if (query.get('bakeryId')) bakeryAccess(user, query.get('bakeryId')) } result = page(s.offers.filter((o) => { const request = find('requests', o.cakeRequestId); if (request.customerId === user.id || has(user, 'ADMIN')) return true; try { bakeryAccess(user, o.bakeryId); return true } catch { return false } })) }
+    if (!parts[1] && get) {
+      if (query.get('scope') === 'sent') {
+        requireUser(user, 'BAKERY_OWNER', 'ADMIN')
+        if (query.get('bakeryId')) {
+          try { bakeryAccess(user, query.get('bakeryId')) }
+          catch (err) {
+            if (!s.bakeries.some((b) => b.id === query.get('bakeryId'))) { result = page([]); return }
+            throw err
+          }
+        }
+      }
+      result = page(s.offers.filter((o) => { const request = find('requests', o.cakeRequestId); if (request.customerId === user.id || has(user, 'ADMIN')) return true; try { bakeryAccess(user, o.bakeryId); return true } catch { return false } }))
+    }
     else {
       const offer = find('offers', parts[1]), request = find('requests', offer.cakeRequestId)
       if (get) { if (request.customerId !== user.id && !has(user, 'ADMIN')) bakeryAccess(user, offer.bakeryId); result = offer }
@@ -318,7 +330,18 @@ export function routeDemo(store, path, method, body, query, user) {
     }
   } else if (parts[0] === 'orders') {
     requireUser(user)
-    if (!parts[1] && get) { const scope = query.get('scope') || 'mine'; if (scope === 'all') requireUser(user, 'ADMIN'); if (scope === 'bakery') bakeryAccess(user, query.get('bakeryId')); result = page(s.orders.filter((o) => scope === 'all' || (scope === 'bakery' ? o.bakeryId === query.get('bakeryId') : o.customerId === user.id))) }
+    if (!parts[1] && get) {
+      const scope = query.get('scope') || 'mine'
+      if (scope === 'all') requireUser(user, 'ADMIN')
+      if (scope === 'bakery') {
+        try { bakeryAccess(user, query.get('bakeryId')) }
+        catch (err) {
+          if (!s.bakeries.some((b) => b.id === query.get('bakeryId'))) { result = page([]); return }
+          throw err
+        }
+      }
+      result = page(s.orders.filter((o) => scope === 'all' || (scope === 'bakery' ? o.bakeryId === query.get('bakeryId') : o.customerId === user.id)))
+    }
     else if (parts[1] === 'direct' && method === 'POST') result = store.createOrder(user, body)
     else {
       const order = find('orders', parts[1]); if (!has(user, 'ADMIN') && order.customerId !== user.id) bakeryAccess(user, order.bakeryId)

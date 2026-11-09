@@ -1,5 +1,3 @@
-import { demoRuntime } from '../../../mockData/runtime.js'
-import { isDemoId } from '../../../mockData/seed.js'
 import React, { useState } from 'react'
 import { revalidateCartItem } from '../../../services/checkoutService.js'
 import { formatCatalogPrice, isCatalogId } from '../../../services/catalogModels.js'
@@ -61,7 +59,7 @@ function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
             </span>
             <span className="text-primary/30">•</span>
             <span className="inline-block px-2 py-0.5 rounded-md bg-primary-fixed/50 text-[11px] font-bold text-wine border border-primary/15">
-              {item.sizeSpec || 'Theo cấu hình đã chọn'}
+              {item.sizeSpec || 'Theo tùy chọn đã chọn'}
             </span>
           </div>
 
@@ -115,7 +113,7 @@ function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
           className="text-xs font-bold text-secondary hover:underline cursor-pointer flex items-center gap-1"
           onClick={() => onNavigate('product-detail?id=' + encodeURIComponent(item.productId || ''))}
         >
-          <span>Chọn lại cấu hình</span>
+          <span>Chọn lại tùy chọn bánh</span>
           <span className="material-symbols-outlined text-xs">tune</span>
         </button>
       </div>
@@ -126,7 +124,7 @@ function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
         <div role="status" className="rounded-xl border border-primary/20 bg-primary-fixed/30 p-3 text-xs text-wine space-y-1">
           <p className="font-semibold flex items-center gap-1">
             <span className="material-symbols-outlined text-sm text-green-700">check_circle</span>
-            <span>Sản phẩm và cấu hình còn khả dụng.</span>
+            <span>Sản phẩm và tùy chọn còn khả dụng.</span>
           </p>
           <p>
             Tiền hàng tạm tính theo catalog hiện tại: <strong className="text-sm font-bold text-wine">{formatCatalogPrice(fresh.subtotal)}</strong>. Chưa gồm phí giao hàng; giá cuối cùng sẽ được xác nhận khi đặt hàng.
@@ -228,11 +226,9 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
               </h2>
             </div>
 
-            {!(demoRuntime && cartItems.length > 0 && cartItems.every((item) => isDemoId(item.productId))) && (
-              <p className="text-xs text-on-surface-variant">
-                Mỗi sản phẩm được đặt thành một đơn riêng, kèm tùy chọn và phụ kiện đã chọn.
-              </p>
-            )}
+            <p className="text-xs text-on-surface-variant">
+              Mỗi sản phẩm được đặt thành một đơn riêng, kèm tùy chọn và phụ kiện đã chọn.
+            </p>
 
             <>
               {cartItems.some((item) => item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId)) ? (
@@ -248,11 +244,9 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
               )}
             </>
 
-            {!(demoRuntime && cartItems.length > 0 && cartItems.every((item) => isDemoId(item.productId))) && (
-              <p className="text-[11px] text-center text-outline">
-                Kiểm tra sản phẩm, địa chỉ và lịch nhận trước khi xác nhận đơn hàng.
-              </p>
-            )}
+            <p className="text-[11px] text-center text-outline">
+              Kiểm tra sản phẩm, địa chỉ và lịch nhận trước khi xác nhận đơn hàng.
+            </p>
           </aside>
         </div>
       </div>

@@ -29,8 +29,8 @@ export function OrderDetail({ orderId, scope = 'mine', bakeryId, onChanged, onCl
   const inFlight = useRef(false)
   const order = confirmedOrder && resource.data === confirmedOrder.previous ? confirmedOrder.order : resource.data
   const matches = scope !== 'bakery' || order?.bakeryId === bakeryId
-  const canManage = matches && scope === 'bakery' && user?.roles?.includes('BAKERY_OWNER') && !user.roles.includes('ADMIN')
-  const actions = order && canManage ? allowedOrderActions(order, user, scope) : []
+  const actions = order && matches ? allowedOrderActions(order, user, scope) : []
+  const canManage = actions.length > 0
   async function transition(targetStatus, reason, expectedStatus) {
     if (inFlight.current || resource.refreshing) return false
     if (!actions.includes(targetStatus) || order.status !== expectedStatus) {
@@ -53,7 +53,18 @@ export function OrderDetail({ orderId, scope = 'mine', bakeryId, onChanged, onCl
     {notice && notice.status === order?.status && <p role="status" className="sc-order-action-success">{notice.message}</p>}
     {error && <p role="alert" className="sc-order-action-error">{error.status === 409 ? 'Trạng thái đơn đã thay đổi. Hãy kiểm tra lịch sử và chọn lại thao tác.' : error.status === 403 ? 'Bạn không có quyền thực hiện thao tác này.' : error.status === 401 ? 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại.' : 'Chưa thể cập nhật đơn hàng. Kiểm tra thông tin và thử lại.'}</p>}
   </>
-  const actionsSlot = order && canManage ? <div className="sc-order-action-panel"><OrderStatusActions key={orderId} order={order} actions={actions} busy={busy} refreshing={resource.refreshing} onConfirm={transition} />{feedback}</div> : null
+  const bakeryDeliveringNotice = scope === 'bakery' && order?.status === 'DELIVERING' ? (
+    <div className="sc-order-action-panel rounded-2xl border border-blue-200 bg-blue-50/80 p-4 text-xs text-blue-900 space-y-1">
+      <p className="font-bold flex items-center gap-1.5 text-sm text-blue-950">
+        <span className="material-symbols-outlined text-base text-blue-700">local_shipping</span>
+        <span>Đơn hàng đang trên đường giao tới khách</span>
+      </p>
+      <p className="text-blue-800">
+        Đơn hàng sẽ chính thức hoàn tất khi khách hàng bấm xác nhận đã nhận bánh, hoặc hệ thống sẽ tự động hoàn tất sau 24 giờ kể từ khi bắt đầu giao hàng.
+      </p>
+    </div>
+  ) : null
+  const actionsSlot = order && canManage ? <div className="sc-order-action-panel"><OrderStatusActions key={orderId} order={order} actions={actions} busy={busy} refreshing={resource.refreshing} onConfirm={transition} />{feedback}</div> : bakeryDeliveringNotice
   const content = <section className="sc-order-detail space-y-4">
     <ApiState resource={resource}>{order && (matches ? <>
       {scope === 'all' && unifiedEnabled() && recordSource(order) === 'api' && <p className="text-xs">Nguồn API</p>}

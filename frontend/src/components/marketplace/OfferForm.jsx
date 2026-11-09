@@ -205,7 +205,35 @@ export function OfferInfo({ offer, bakery: externalBakery, owner = false }) {
     </section>
   )
 }
-export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, footerExternal = false, source }) {
+function calculateOfferDates(offer, request) {
+  const now = Date.now()
+  const neededMs = request?.neededAt ? new Date(request.neededAt).getTime() : null
+  const deadlineMs = request?.offerDeadline ? new Date(request.offerDeadline).getTime() : null
+
+  let defaultEst = now + 2 * 86400000
+  if (neededMs && neededMs > now) {
+    defaultEst = Math.max(now + 3600000, neededMs - 3 * 3600000)
+  }
+
+  let defaultExp = now + 86400000
+  if (deadlineMs && deadlineMs > now) {
+    defaultExp = deadlineMs
+  } else if (neededMs && neededMs > now) {
+    defaultExp = Math.max(now + 1800000, neededMs - 12 * 3600000)
+  }
+  if (neededMs && defaultExp >= neededMs) {
+    defaultExp = Math.max(now + 1800000, neededMs - 3600000)
+  }
+
+  return {
+    estimatedCompletionAt: toLocalInput(offer?.estimatedCompletionAt) || toLocalInput(new Date(defaultEst).toISOString()),
+    expiresAt: toLocalInput(offer?.expiresAt) || toLocalInput(new Date(defaultExp).toISOString()),
+  }
+}
+
+export default function OfferForm({ bakeryId, offer, request, disabled, busy, onSave, footerExternal = false, source }) {
+  const [clientError, setClientError] = useState(null)
+  const initialDates = calculateOfferDates(offer, request)
   const [values, setValues] = useState(() => ({
     bakeryId,
     cakePrice: '',
@@ -213,14 +241,62 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
     message: '',
     items: [],
     ...offer,
-    estimatedCompletionAt: toLocalInput(offer?.estimatedCompletionAt) || toLocalInput(new Date(Date.now() + 5 * 86400000).toISOString()),
-    expiresAt: toLocalInput(offer?.expiresAt) || toLocalInput(new Date(Date.now() + 3 * 86400000).toISOString())
+    ...initialDates,
   }))
+
+  React.useEffect(() => {
+    if (!request?.neededAt || offer) return
+    const dates = calculateOfferDates(offer, request)
+    setValues((prev) => {
+      const neededMs = new Date(request.neededAt).getTime()
+      const curEst = prev.estimatedCompletionAt ? new Date(prev.estimatedCompletionAt).getTime() : 0
+      const curExp = prev.expiresAt ? new Date(prev.expiresAt).getTime() : 0
+      if ((!curEst || curEst > neededMs) || (!curExp || curExp > neededMs)) {
+        return { ...prev, ...dates }
+      }
+      return prev
+    })
+  }, [request?.neededAt, request?.offerDeadline, offer])
+
   const addOns = useCatalogResource(loadRfqAddOns, { bakeryId })
   const eligibleAddOns = (addOns.data || []).filter(item => !source || recordSource(item) === source)
-  const field = (key) => ({ value: values[key] ?? '', onChange: (event) => setValues({ ...values, [key]: event.target.value }) })
+  const field = (key) => ({ value: values[key] ?? '', onChange: (event) => { setClientError(null); setValues({ ...values, [key]: event.target.value }) } })
   return (
-    <form id={footerExternal ? "vendor-offer-form" : undefined} className={panelClass} onSubmit={(event) => { event.preventDefault(); if (!disabled && !busy) onSave(values) }}>
+    <form
+      id={footerExternal ? "vendor-offer-form" : undefined}
+      className={panelClass}
+      onSubmit={(event) => {
+        event.preventDefault()
+        setClientError(null)
+        if (disabled || busy) return
+
+        if (request?.neededAt) {
+          const now = Date.now()
+          const neededMs = new Date(request.neededAt).getTime()
+          const estMs = values.estimatedCompletionAt ? new Date(values.estimatedCompletionAt).getTime() : 0
+          const expMs = values.expiresAt ? new Date(values.expiresAt).getTime() : 0
+
+          if (!estMs || estMs <= now) {
+            setClientError('Thời gian hoàn thành dự kiến phải ở tương lai.')
+            return
+          }
+          if (estMs > neededMs) {
+            setClientError(`Thời gian hoàn thành dự kiến không được sau giờ khách hẹn nhận bánh (${formatQuoteDateTime(request.neededAt)}).`)
+            return
+          }
+          if (!expMs || expMs <= now) {
+            setClientError('Hạn hiệu lực báo giá phải ở tương lai.')
+            return
+          }
+          if (expMs > neededMs) {
+            setClientError(`Hạn hiệu lực báo giá không được sau giờ khách hẹn nhận bánh (${formatQuoteDateTime(request.neededAt)}).`)
+            return
+          }
+        }
+
+        onSave(values)
+      }}
+    >
       <ModalFormState value={values} busy={busy} />
       <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-outline-variant/20">
         <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
@@ -229,12 +305,35 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
         <h2 className="text-lg font-bold text-primary">{offer ? 'Chỉnh sửa báo giá' : 'Soạn báo giá gửi khách'}</h2>
       </div>
       <fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">
-        {[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => (
-          <label key={key} className="text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
-            <span>{label}</span>
-            <input id={'offer-' + key} required type={type} min={type === 'number' ? 0 : undefined} step={type === 'number' ? '0.01' : undefined} className={inputClass} {...field(key)} />
-          </label>
-        ))}
+        {[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => {
+          const maxVal = (key === 'estimatedCompletionAt' || key === 'expiresAt') && request?.neededAt ? toLocalInput(request.neededAt) : undefined
+          return (
+            <label key={key} className="text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
+              <span>{label}</span>
+              <input
+                id={'offer-' + key}
+                required
+                type={type}
+                min={type === 'number' ? 0 : undefined}
+                max={maxVal}
+                step={type === 'number' ? '0.01' : undefined}
+                className={inputClass}
+                {...field(key)}
+              />
+            </label>
+          )
+        })}
+        {request?.neededAt && (
+          <div className="sm:col-span-2 rounded-xl border border-amber-200/80 bg-amber-50/80 p-3 text-xs text-amber-900 flex items-start gap-2">
+            <Icon name="schedule" className="text-base text-amber-700 shrink-0 mt-0.5" />
+            <div>
+              <p><strong>Khách hàng hẹn nhận bánh:</strong> {formatQuoteDateTime(request.neededAt)}</p>
+              <p className="text-[11px] text-amber-800/90 mt-0.5">
+                Thời gian hoàn thành dự kiến và hạn báo giá <strong>phải trước hoặc đúng thời điểm này</strong>.
+              </p>
+            </div>
+          </div>
+        )}
         <label className="sm:col-span-2 text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
           <span>Lời nhắn & cam kết từ tiệm (loại kem, cốt bánh, quà tặng kèm)</span>
           <textarea id="offer-message" maxLength={4000} placeholder="Ví dụ: Tiệm cam kết làm chuẩn 95% theo mẫu thiết kế. Tặng kèm nến sinh nhật cao cấp và dao cắt bánh..." className={inputClass} rows={3} {...field('message')} />
@@ -262,6 +361,12 @@ export default function OfferForm({ bakeryId, offer, disabled, busy, onSave, foo
           </ApiState>
         </section>
       </fieldset>
+      {clientError && (
+        <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-semibold text-red-700 flex items-center gap-2">
+          <Icon name="error" className="text-base shrink-0" />
+          <span>{clientError}</span>
+        </div>
+      )}
       {!footerExternal && (
         <div className="mt-5 pt-3 border-t border-outline-variant/15 flex justify-end">
           <button id="offer-submit-btn" className={buttonClass + " px-6 py-2.5 text-sm font-semibold"} disabled={disabled || busy}>

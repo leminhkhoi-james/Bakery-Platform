@@ -52,21 +52,22 @@ function NewOffer({ id, bakery, onNavigate }) {
                   </section>
                 ) : (
                   <>
-                  {!localRequest && subscription.status === 'loading' ? <p role="status">Đang kiểm tra gói dịch vụ…</p> : !localRequest && subscription.error ? <ApiErrorMessage error={subscription.error} retry={subscription.reload} /> : !canQuote && <section className={panelClass}><p>Tiệm cần gói dịch vụ đang hiệu lực để gửi báo giá. Đơn mua gói đang chờ thanh toán hoặc duyệt chưa kích hoạt quyền này.</p><button className="sc-button" onClick={() => onNavigate('vendor-subscription?bakeryId=' + bakeryId)}>Kiểm tra gói dịch vụ</button></section>}
-                  <OfferForm
-                    key={bakeryId}
-                    bakeryId={bakeryId}
-                    source={unifiedEnabled() ? recordSource({ id }) : undefined}
-                    disabled={!canQuote || !requestAcceptsOffers(resource.data) || !matchingBakery || !requestMatchesBakery(resource.data, matchingBakery)}
-                    busy={action.busy}
-                    onSave={(input) => canQuote && action.run(async () => {
-                      const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
-                      if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
-                      const offer = await rfqService.submitOffer(id, input)
-                      if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
-                      onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
-                    })}
-                  />
+                    {!localRequest && subscription.status === 'loading' ? <p role="status">Đang kiểm tra gói dịch vụ…</p> : !localRequest && subscription.error ? <ApiErrorMessage error={subscription.error} retry={subscription.reload} /> : !canQuote && <section className={panelClass}><p>Tiệm cần gói dịch vụ đang hiệu lực để gửi báo giá. Đơn mua gói đang chờ thanh toán hoặc duyệt chưa kích hoạt quyền này.</p><button className="sc-button" onClick={() => onNavigate('vendor-subscription?bakeryId=' + bakeryId)}>Kiểm tra gói dịch vụ</button></section>}
+                    <OfferForm
+                      key={bakeryId}
+                      bakeryId={bakeryId}
+                      request={resource.data}
+                      source={unifiedEnabled() ? recordSource({ id }) : undefined}
+                      disabled={!canQuote || !requestAcceptsOffers(resource.data) || !matchingBakery || !requestMatchesBakery(resource.data, matchingBakery)}
+                      busy={action.busy}
+                      onSave={(input) => canQuote && action.run(async () => {
+                        const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
+                        if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
+                        const offer = await rfqService.submitOffer(id, input)
+                        if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
+                        onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
+                      })}
+                    />
                   </>
                 ))}
               </VendorRfqState>

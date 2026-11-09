@@ -59,7 +59,7 @@ export default function AdminDashboardPage({ onNavigate }) {
             ))
           : dashboardMoney(0),
       hasUrgentDot: false,
-      subContent: <span className="sc-kpi-sub-text">Thực nhận</span>,
+      subContent: <span className="sc-kpi-sub-text">Doanh thu gói thực nhận</span>,
     },
     {
       id: 'bakeries',

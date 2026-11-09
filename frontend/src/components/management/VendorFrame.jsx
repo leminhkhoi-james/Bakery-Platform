@@ -1,4 +1,3 @@
-import UnifiedSourceNotice from './UnifiedSourceNotice.jsx'
 import { cleanPresentationLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import VendorSidebar from '../../layouts/vendor/VendorSidebar.jsx'
@@ -116,7 +115,7 @@ export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavig
           )}
           {owner?.state === 'ACTIVE' && activeTab === 'rfq' && !owner.bakery?.operations?.serviceAreas?.some(area => area.active) && <section className="sc-panel space-y-2"><p>Tiệm chưa có khu vực giao hàng đang phục vụ. Cấu hình khu vực để nhận yêu cầu báo giá phù hợp.</p><button className={buttonClass} onClick={() => navigate('vendor-settings')}>Cấu hình giao hàng</button></section>}
 
-          {activeTab !== 'chat' && <UnifiedSourceNotice />}{children}
+          {children}
         </div>
       </main>
     </div>

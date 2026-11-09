@@ -158,7 +158,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
               setSaved(true)
             })}
           />
-          {saved && <p role="status" className="text-sm text-green-700 font-medium">Cấu hình vận hành đã được Backend xác nhận.</p>}
+          {saved && <p role="status" className="text-sm text-green-700 font-medium">Cấu hình vận hành đã được lưu thành công.</p>}
           <button
             type="button"
             disabled={busy || !saved}
@@ -182,12 +182,12 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
         <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-5 space-y-3">
           <p className="text-sm">
             Hồ sơ tiệm <strong>{bakery.name}</strong> đang ở trạng thái{' '}
-            <strong className="text-primary">{bakery.status === 'PENDING_APPROVAL' ? 'Chờ duyệt' : bakery.status}</strong>.
+            <strong className="text-primary">{uiLabel(bakery.status, 'Đang chờ duyệt')}</strong>.
           </p>
           {!isOwner && (
             <>
               <p className="text-xs text-stone-600">
-                Sau khi Admin duyệt hồ sơ và kích hoạt gói dịch vụ, bấm nút bên dưới để hoàn tất cập nhật quyền chủ tiệm.
+                Sau khi hồ sơ và gói dịch vụ được Ban quản trị phê duyệt hoàn tất, bấm nút bên dưới để truy cập Kênh quản lý tiệm bánh.
               </p>
               <button
                 type="button"
@@ -195,7 +195,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
                 className={buttonClass}
                 onClick={() => run(async () => {
                   const updatedUser = await onboardingService.complete(bakery.id)
-                  setActivationNotice('Kích hoạt quyền chủ tiệm thành công! Đang chuyển hướng…')
+                  setActivationNotice('Xác nhận thành công! Đang chuyển hướng đến Kênh quản lý tiệm bánh…')
                   onCreated?.(bakery)
                   setTimeout(() => {
                     if (typeof window !== 'undefined') {
@@ -204,7 +204,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
                   }, 800)
                 })}
               >
-                {busy ? 'Đang kiểm tra…' : 'Kiểm tra phê duyệt & kích hoạt quyền chủ tiệm'}
+                {busy ? 'Đang kiểm tra…' : 'Vào Kênh quản lý tiệm bánh'}
               </button>
             </>
           )}

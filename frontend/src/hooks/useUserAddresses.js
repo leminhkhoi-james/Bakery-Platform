@@ -1,21 +1,18 @@
 import { useEffect } from 'react'
 import { useAuth } from '../context/useAuth.js'
 import { useCatalogResource } from './useCatalogResource.js'
-import { loadUserAddresses, userDataKey } from '../services/userLocalData.js'
+import { addressService } from '../services/addressService.js'
 
 export function useUserAddresses() {
   const { user } = useAuth(), userId = user?.id
-  const resource = useCatalogResource(loadUserAddresses, { userId })
+  const resource = useCatalogResource(() => (userId ? addressService.list() : Promise.resolve([])), [userId])
   const reload = resource.reload
   useEffect(() => {
     if (!userId || typeof window === 'undefined') return
-    const local = event => { if (event.detail?.userId === userId && event.detail.feature === 'addresses') reload() }
-    const stored = event => { if (event.key === userDataKey(userId, 'addresses')) reload() }
-    window.addEventListener('sweetcake:user-data-changed', local)
-    window.addEventListener('storage', stored)
+    const mutateListener = () => reload()
+    window.addEventListener('sweetcake:api-mutated', mutateListener)
     return () => {
-      window.removeEventListener('sweetcake:user-data-changed', local)
-      window.removeEventListener('storage', stored)
+      window.removeEventListener('sweetcake:api-mutated', mutateListener)
     }
   }, [userId, reload])
   return resource

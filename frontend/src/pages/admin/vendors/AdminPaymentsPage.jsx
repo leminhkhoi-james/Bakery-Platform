@@ -69,13 +69,70 @@ export default function AdminPaymentsPage({ routeSearch = '' }) {
   const shortcut = useCatalogResource(loadDashboardPayment, { id: paymentId })
   const [dismissed, setDismissed] = useState(false), [selected, setSelected] = useState(null), [page, setPage] = useState(1), [notice, setNotice] = useState('')
   const [draft, setDraft] = useState({ query: '', status: 'SUBMITTED', from: '', to: '' }), [filters, setFilters] = useState({ status: 'SUBMITTED' }), [error, setError] = useState(null)
-  const { query: search = '', ...serverFilters } = filters
+  const serverFilters = filters
   const resource = useCatalogResource(loadPaymentDirectory, { page, size: 20, bakeryId: initialBakeryId, ...serverFilters, sort: 'submittedAt,desc' })
-  const rows = resource.data?.result.filter((payment) => !search || [payment.context?.profile?.bakery?.name, senderName(payment, payment.context?.profile), payment.context?.order?.planNameSnapshot].join(' ').toLocaleLowerCase('vi').includes(search.toLocaleLowerCase('vi')))
-  const field = (key) => ({ value: draft[key], onChange: (event) => setDraft({ ...draft, [key]: event.target.value }) }), current = selected || (!dismissed && shortcut.data)
+
+  const activeSearch = (draft.query || filters.query || '').trim().toLowerCase()
+  const rows = (resource.data?.result || []).filter((payment) => {
+    if (!activeSearch) return true
+    const haystack = [
+      payment.context?.profile?.bakery?.name,
+      payment.submittedByName,
+      senderName(payment, payment.context?.profile),
+      payment.context?.order?.planNameSnapshot,
+      payment.context?.order?.planCodeSnapshot,
+      payment.paymentReference,
+      payment.subscriptionOrderId,
+      payment.id,
+      payment.paymentMethod,
+      String(payment.amount),
+      subscriptionStatusLabel(payment.status),
+    ].filter(Boolean).join(' ').toLowerCase()
+    return haystack.includes(activeSearch)
+  })
+
+  const field = (key) => ({ value: draft[key], onChange: (event) => setDraft({ ...draft, [key]: event.target.value }) })
+  const handleStatusChange = (event) => {
+    const nextStatus = event.target.value
+    setDraft((prev) => ({ ...prev, status: nextStatus }))
+    setFilters((prev) => ({ ...prev, status: nextStatus }))
+    setPage(1)
+  }
+
+  const applyFilters = (event) => {
+    if (event) event.preventDefault()
+    try {
+      setFilters({
+        status: draft.status,
+        query: draft.query.trim(),
+        ...paymentDateRange(draft.from, draft.to),
+      })
+      setPage(1)
+      setError(null)
+    } catch (failure) {
+      setError(failure)
+    }
+  }
+
+  const current = selected || (!dismissed && shortcut.data)
   return <><section className={panelClass}>
-    <form className="sc-admin-filter" onSubmit={(event) => { event.preventDefault(); try { setFilters({ status: draft.status, query: draft.query.trim(), ...paymentDateRange(draft.from, draft.to) }); setPage(1); setError(null) } catch (failure) { setError(failure) } }}><label>Tìm trong trang<input {...field('query')} placeholder="Tên tiệm, người gửi, gói dịch vụ" className={inputClass} /></label><label>Trạng thái<select {...field('status')} className={inputClass}><option value="">Tất cả</option>{['SUBMITTED', 'APPROVED', 'REJECTED'].map((status) => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}</select></label><label>Từ ngày<input type="datetime-local" {...field('from')} className={inputClass} /></label><label>Đến ngày<input type="datetime-local" {...field('to')} className={inputClass} /></label><div className="sc-action-row"><button className={buttonClass} disabled={resource.refreshing}><Icon name="filter_alt" />Lọc</button></div></form>
-    <p className="sc-review-help">Tìm tên trong trang đang xem. Trạng thái và khoảng thời gian áp dụng cho toàn bộ danh sách.</p>{error && <ApiErrorMessage error={error} />}
-    <ApiState resource={resource}>{resource.data && <><p className="sc-review-help">{resource.data.meta.total} chứng từ theo bộ lọc{search ? ' · ' + rows.length + ' kết quả trong trang này' : ''}</p>{rows.length ? <DataTable label="Chứng từ mua gói" className="sc-admin-record-table"><thead><tr><th style={{ width: '60px', textAlign: 'center' }}>STT</th><th>Tiệm / người gửi</th><th>Gói dịch vụ</th><th>Số tiền</th><th>Ngày gửi</th><th>Trạng thái</th><th className="sc-table-actions">Thao tác</th></tr></thead><tbody>{rows.map((payment, index) => { const stt = (resource.data.meta.page - 1) * resource.data.meta.pageSize + index + 1; return <tr key={payment.id}><td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>{stt}</td><td data-label="Tiệm / người gửi"><strong>{reviewText(payment.context?.profile?.bakery?.name) || reviewText(payment.submittedByName) || 'Chưa tải được tên tiệm'}</strong><small>{senderName(payment, payment.context?.profile) || 'Chưa có tên người gửi'}</small></td><td data-label="Gói dịch vụ">{reviewText(planName({ name: payment.context?.order?.planNameSnapshot, code: payment.context?.order?.planCodeSnapshot })) || 'Chưa tải được tên gói'}</td><td data-label="Số tiền">{reviewMoney(payment.amount, payment.currency)}</td><td data-label="Ngày gửi">{formatOrderDate(payment.submittedAt)}</td><td data-label="Trạng thái"><StatusBadge status={payment.status} label={subscriptionStatusLabel(payment.status)} /></td><td className="sc-table-actions"><button className={buttonClass} onClick={() => { setSelected(payment); setDismissed(true); setNotice('') }}>Xem chi tiết</button></td></tr> })}</tbody></DataTable> : <EmptyPanel title="Chưa có chứng từ phù hợp." icon="receipt_long" />}<CatalogPagination meta={resource.data.meta} onPage={setPage} /></>}</ApiState>
+    <form className="sc-admin-filter" onSubmit={applyFilters}>
+      <label>Tìm kiếm chứng từ / tiệm
+        <input {...field('query')} placeholder="Tên tiệm, người gửi, mã đơn, mã FT..." className={inputClass} />
+      </label>
+      <label>Trạng thái
+        <select value={draft.status} onChange={handleStatusChange} className={inputClass}>
+          <option value="">Tất cả trạng thái</option>
+          {['SUBMITTED', 'APPROVED', 'REJECTED'].map((status) => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}
+        </select>
+      </label>
+      <label>Từ ngày<input type="datetime-local" {...field('from')} className={inputClass} /></label>
+      <label>Đến ngày<input type="datetime-local" {...field('to')} className={inputClass} /></label>
+      <div className="sc-action-row">
+        <button className={buttonClass} disabled={resource.refreshing}><Icon name="filter_alt" />Lọc</button>
+      </div>
+    </form>
+    <p className="sc-review-help">Chọn trạng thái để xem ngay danh sách tương ứng. Nhập từ khóa để tìm nhanh theo tên tiệm, mã đơn hoặc mã giao dịch.</p>{error && <ApiErrorMessage error={error} />}
+    <ApiState resource={resource}>{resource.data && <><p className="sc-review-help">{resource.data.meta.total} chứng từ theo trạng thái{activeSearch ? ' · ' + rows.length + ' kết quả khớp tìm kiếm' : ''}</p>{rows.length ? <DataTable label="Chứng từ mua gói" className="sc-admin-record-table"><thead><tr><th style={{ width: '60px', textAlign: 'center' }}>STT</th><th>Tiệm / người gửi</th><th>Gói dịch vụ</th><th>Số tiền</th><th>Ngày gửi</th><th>Trạng thái</th><th className="sc-table-actions">Thao tác</th></tr></thead><tbody>{rows.map((payment, index) => { const stt = (resource.data.meta.page - 1) * resource.data.meta.pageSize + index + 1; return <tr key={payment.id}><td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>{stt}</td><td data-label="Tiệm / người gửi"><strong>{reviewText(payment.context?.profile?.bakery?.name) || reviewText(payment.submittedByName) || 'Chưa tải được tên tiệm'}</strong><small>{senderName(payment, payment.context?.profile) || 'Chưa có tên người gửi'}</small></td><td data-label="Gói dịch vụ">{reviewText(planName({ name: payment.context?.order?.planNameSnapshot, code: payment.context?.order?.planCodeSnapshot })) || 'Chưa tải được tên gói'}</td><td data-label="Số tiền">{reviewMoney(payment.amount, payment.currency)}</td><td data-label="Ngày gửi">{formatOrderDate(payment.submittedAt)}</td><td data-label="Trạng thái"><StatusBadge status={payment.status} label={subscriptionStatusLabel(payment.status)} /></td><td className="sc-table-actions"><button className={buttonClass} onClick={() => { setSelected(payment); setDismissed(true); setNotice('') }}><Icon name="receipt_long" />Đối chiếu</button></td></tr> })}</tbody></DataTable> : <EmptyPanel title="Chưa có chứng từ phù hợp." icon="receipt_long" />}<CatalogPagination meta={resource.data.meta} onPage={setPage} /></>}</ApiState>
     </section>{paymentId && !dismissed && shortcut.error && <ApiErrorMessage error={shortcut.error} retry={shortcut.reload} />}{paymentId && !dismissed && shortcut.status === 'ready' && !shortcut.data && <p role="status">Không tìm thấy chứng từ đã chọn.</p>}{current && <PaymentReview key={current.id} payment={current} onReload={resource.reload} onClose={() => { setSelected(null); setDismissed(true) }} onComplete={(result) => { setSelected({ ...current, ...result.payment, proofUrl: result.payment.proofUrl || current.proofUrl }); setDismissed(true); setNotice('Đã cập nhật chứng từ: ' + subscriptionStatusLabel(result.payment.status).toLocaleLowerCase('vi') + '.'); resource.reload() }} />}{notice && <p role="status" className="sc-feedback">{notice}</p>}</>
 }

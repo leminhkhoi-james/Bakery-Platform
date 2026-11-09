@@ -116,4 +116,42 @@ class OrderManagementAuthorizationTest {
 
         verify(persistenceService).getOrder(ORDER_ID);
     }
+
+    @Test
+    void customerCanTransitionToCompletedAndCancelled() {
+        when(persistenceService.getAuthorizationContext(ORDER_ID))
+                .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
+
+        service.transitionOrder(ORDER_ID, OrderStatus.COMPLETED, "Received cake", CUSTOMER_ID, Set.of("CUSTOMER"));
+        verify(persistenceService).transition(ORDER_ID, OrderStatus.COMPLETED, "Received cake", CUSTOMER_ID);
+
+        service.transitionOrder(ORDER_ID, OrderStatus.CANCELLED, "Cancelled", CUSTOMER_ID, Set.of("CUSTOMER"));
+        verify(persistenceService).transition(ORDER_ID, OrderStatus.CANCELLED, "Cancelled", CUSTOMER_ID);
+    }
+
+    @Test
+    void customerCannotTransitionToIntermediateStatuses() {
+        when(persistenceService.getAuthorizationContext(ORDER_ID))
+                .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
+
+        assertThrows(OrderAccessDeniedException.class,
+                () -> service.transitionOrder(ORDER_ID, OrderStatus.CONFIRMED, null, CUSTOMER_ID, Set.of("CUSTOMER")));
+        assertThrows(OrderAccessDeniedException.class,
+                () -> service.transitionOrder(ORDER_ID, OrderStatus.BAKING, null, CUSTOMER_ID, Set.of("CUSTOMER")));
+        assertThrows(OrderAccessDeniedException.class,
+                () -> service.transitionOrder(ORDER_ID, OrderStatus.DELIVERING, null, CUSTOMER_ID, Set.of("CUSTOMER")));
+    }
+
+    @Test
+    void bakeryCannotTransitionDirectlyToCompleted() {
+        when(persistenceService.getAuthorizationContext(ORDER_ID))
+                .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
+        when(bakeryClient.getMembershipAuthorization(BAKERY_ID, OTHER_CUSTOMER_ID, "OWNER"))
+                .thenReturn(new BakeryClient.MembershipAuthorizationResponse(
+                        BAKERY_ID, OTHER_CUSTOMER_ID, true, "OWNER", true));
+
+        assertThrows(OrderAccessDeniedException.class,
+                () -> service.transitionOrder(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER")));
+        verify(persistenceService, never()).transition(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID);
+    }
 }
