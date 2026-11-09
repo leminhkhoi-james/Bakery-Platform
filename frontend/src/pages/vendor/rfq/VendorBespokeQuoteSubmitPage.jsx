@@ -1,6 +1,6 @@
 import { unifiedEnabled, recordSource, localBakeryFor, localSubscriptionFor } from '../../../services/unifiedDataService.js'
 import React, { useState } from 'react'
-import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
+import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { ApiErrorMessage, inputClass, panelClass } from '../../../components/management/ApiState.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -17,7 +17,7 @@ import { DetailDrawer, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
 import { loadVendorRfqAccess, loadExistingVendorOffer } from '../../../services/vendorRfqService.js'
 import { requestMatchesBakery } from '../../../services/vendorRfqModels.js'
-import { VendorRfqState } from './VendorRfqMarketplacePage.jsx'
+import { VendorRfqState } from './VendorRfqState.jsx'
 import { loadDashboardAccess } from '../../../services/vendorDashboardService.js'
 import { loadBakerySubscription } from '../../../services/subscriptionService.js'
 
@@ -163,13 +163,13 @@ export function ManageOffer({ id, bakeryId, user, roles }) {
     </>
   )
 }
-function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
+export function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
   const access = useCatalogResource(query.get('offerId') ? loadDashboardAccess : loadVendorRfqAccess, { bakeryId, userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
   if (access.status === 'loading' || access.error) return <VendorRfqState resource={access} />
   return query.get('offerId') ? <ManageOffer key={bakeryId + query.get('offerId')} id={query.get('offerId')} bakeryId={bakeryId} user={user} roles={roles} /> : query.get('cakeRequestId') ? <NewOffer key={bakeryId + query.get('cakeRequestId')} id={query.get('cakeRequestId')} bakery={access.data} onNavigate={onNavigate} /> : <p>Chọn một yêu cầu để xem chi tiết và gửi báo giá.</p>
 }
 export default function VendorBespokeQuoteSubmitPage({ routeSearch = '', onNavigate }) {
   const owner = useVendorBakery(routeSearch)
-  const { bakeryId, selectBakery, user, roles, available } = owner, query = new URLSearchParams(routeSearch)
-  return <VendorFrame owner={owner} title={query.get('offerId') ? 'Chi tiết báo giá' : 'Chi tiết yêu cầu'} activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-actions"><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-rfq' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="arrow_back" />Quay lại danh sách</button><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-chat' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="chat" />Mở hộp thư của tiệm</button></div><BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />{bakeryId ? <QuoteWorkspace key={user.id + ':' + bakeryId} bakeryId={bakeryId} user={user} roles={roles} query={query} onNavigate={onNavigate} /> : <p>Chọn cửa hàng để xem yêu cầu và gửi báo giá.</p>}</VendorFrame>
+  const { bakeryId, user, roles } = owner, query = new URLSearchParams(routeSearch)
+  return <VendorFrame owner={owner} title={query.get('offerId') ? 'Chi tiết báo giá' : 'Chi tiết yêu cầu'} activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-actions"><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-rfq' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="arrow_back" />Quay lại danh sách</button><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-chat' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="chat" />Mở hộp thư của tiệm</button></div>{bakeryId ? <QuoteWorkspace key={user.id + ':' + bakeryId} bakeryId={bakeryId} user={user} roles={roles} query={query} onNavigate={onNavigate} /> : <p>Chọn cửa hàng để xem yêu cầu và gửi báo giá.</p>}</VendorFrame>
 }

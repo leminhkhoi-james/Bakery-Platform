@@ -9,7 +9,7 @@ import { canSubmitSubscriptionPayment, formatSubscriptionDate, formatSubscriptio
 import { FeatureList, ResourceState, SubscriptionError } from '../../../components/subscription/SubscriptionView.jsx'
 import { simulationMediaUrl } from '../../../mockData/business/runtime.js'
 
-const getPaymentOptions = ({ orderId }, options) => unifiedEnabled() && recordSource({ id: orderId }) === 'local' ? Promise.resolve({ sandboxEnabled: false, bankTransfer: { bankName: 'Sổ trình duyệt', accountNumber: 'Không chuyển tiền', accountName: 'Bản ghi mô phỏng' } }) : subscriptionService.getPaymentOptions({}, options)
+const getPaymentOptions = ({ orderId }, options) => unifiedEnabled() && recordSource({ id: orderId }) === 'local' ? Promise.resolve({ sandboxEnabled: false, bankTransfer: { bankName: 'Sổ mô phỏng', accountNumber: 'Không chuyển tiền', accountName: 'Bản ghi mô phỏng' } }) : subscriptionService.getPaymentOptions({}, options)
 
 export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onChanged, onBusy, revision = 0 }) {
   const resource = useCatalogResource(loadSubscriptionOrder, { orderId, bakeryId, revision })
@@ -37,11 +37,23 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
     } catch (failure) { setError(failure); if ([400, 422].includes(failure.status)) setAttempt(null) }
     finally { inFlight.current = false; setBusy(false); onBusy(false) }
   }
-  return <section className="mt-6 space-y-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-5"><h3 className="text-xl font-bold">Chi tiết đơn mua gói</h3><button disabled={busy} className="underline" onClick={() => { setMessage(''); resource.reload(); onChanged() }}>Tải lại chi tiết đơn</button><ResourceState resource={resource}>{order && <>
-    <p className="text-xs">{recordSource(order) === 'local' ? 'Trình duyệt · không kích hoạt quyền Backend' : 'API thật'}</p><p className="break-all">{displayReference(order.id, 'SUB', order.orderNumber)} · {subscriptionStatusLabel(order.status)}</p><p>{cleanPresentationLabel(planName({ name: order.planNameSnapshot, code: order.planCodeSnapshot }), 'Chưa có tên gói')} · {formatSubscriptionMoney(order.totalAmount, order.currency)}</p>
-    <p>Hạn thanh toán: {formatSubscriptionDate(order.expiresAt)}</p><FeatureList features={order.featuresSnapshot} />
-    {order.period && <p>Kỳ dịch vụ: {subscriptionStatusLabel(order.period.status)} · {formatSubscriptionDate(order.period.periodStart)} → {formatSubscriptionDate(order.period.periodEnd)}</p>}
-    <h4 className="font-bold">Lịch sử chứng từ thanh toán</h4>{order.payments.length ? <ul className="space-y-3">{order.payments.map((payment) => <li key={payment.id} className="rounded-xl bg-background p-3"><p>{uiLabel(payment.paymentMethod, 'Chưa có phương thức')} · {formatSubscriptionMoney(payment.amount, order.currency)} · {subscriptionStatusLabel(payment.status)}</p><p className="break-all">{cleanPresentationLabel(payment.paymentReference, 'Không có mã tham chiếu')} · {formatSubscriptionDate(payment.submittedAt)}</p>{payment.proofUrl && (simulationMediaUrl(payment.proofUrl) || /^https?:\/\//i.test(payment.proofUrl)) && <a href={payment.proofUrl} target="_blank" rel="noreferrer" className="underline">Xem chứng từ</a>}</li>)}</ul> : <p>Chưa có chứng từ thanh toán cho đơn này.</p>}
+  return <div className="space-y-3">
+    <button type="button" disabled={busy} className="sc-button sc-action-button--secondary" onClick={() => { setMessage(''); resource.reload(); onChanged() }}>Tải lại chi tiết đơn</button>
+    <ResourceState resource={resource}>{order && <>
+      <section className="sc-detail-section">
+        <h3>Thông tin đơn mua gói</h3>
+        <dl className="sc-detail-fields">
+          <div><dt>Mã đơn</dt><dd>{displayReference(order.id, 'SUB', order.orderNumber)}</dd></div>
+          <div><dt>Trạng thái</dt><dd>{subscriptionStatusLabel(order.status)}</dd></div>
+          <div><dt>Gói dịch vụ</dt><dd>{cleanPresentationLabel(planName({ name: order.planNameSnapshot, code: order.planCodeSnapshot }), 'Chưa có tên gói')}</dd></div>
+          <div><dt>Số tiền</dt><dd>{formatSubscriptionMoney(order.totalAmount, order.currency)}</dd></div>
+          <div><dt>Hạn thanh toán</dt><dd>{formatSubscriptionDate(order.expiresAt)}</dd></div>
+          <div><dt>Nguồn</dt><dd>{recordSource(order) === 'local' ? 'Mô phỏng · không kích hoạt quyền Backend' : 'API thật'}</dd></div>
+          {order.period && <div className="sc-detail-wide"><dt>Kỳ dịch vụ</dt><dd>{subscriptionStatusLabel(order.period.status)} · {formatSubscriptionDate(order.period.periodStart)} → {formatSubscriptionDate(order.period.periodEnd)}</dd></div>}
+        </dl>
+      </section>
+      <section className="sc-detail-section"><h3>Quyền lợi của gói</h3><FeatureList features={order.featuresSnapshot} /></section>
+      <section className="sc-detail-section"><h3>Lịch sử chứng từ thanh toán</h3>{order.payments.length ? <ul className="space-y-3">{order.payments.map((payment) => <li key={payment.id} className="rounded-xl bg-background p-3"><p>{uiLabel(payment.paymentMethod, 'Chưa có phương thức')} · {formatSubscriptionMoney(payment.amount, order.currency)} · {subscriptionStatusLabel(payment.status)}</p><p className="break-all">{cleanPresentationLabel(payment.paymentReference, 'Không có mã tham chiếu')} · {formatSubscriptionDate(payment.submittedAt)}</p>{payment.proofUrl && (simulationMediaUrl(payment.proofUrl) || /^https?:\/\//i.test(payment.proofUrl)) && <a href={payment.proofUrl} target="_blank" rel="noreferrer" className="underline">Xem chứng từ</a>}</li>)}</ul> : <p>Chưa có chứng từ thanh toán cho đơn này.</p>}</section>
     {canSubmitSubscriptionPayment(roles, order) && (
       <div className="space-y-4 border-t border-outline-variant/30 pt-5">
         <div className="rounded-2xl border border-secondary/30 bg-secondary/5 p-4 sm:p-5 space-y-3">
@@ -70,5 +82,5 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
         </form>
       </div>
     )}
-  </>}</ResourceState>{error && <SubscriptionError error={error} />}{message && <p role="status">{message}</p>}</section>
+  </>}</ResourceState>{error && <SubscriptionError error={error} />}{message && <p role="status">{message}</p>}</div>
 }

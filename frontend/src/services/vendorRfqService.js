@@ -47,13 +47,16 @@ export async function loadVendorRequests({ bakery, page = 1, size = 12, ...filte
 export async function loadVendorOffers({ bakeryId, ...filters }, options) {
   const data = await rfqService.getOffers({ ...filters, scope: 'sent', bakeryId }, options)
   if (data.result.some((offer) => offer.bakeryId.toLowerCase() !== bakeryId.toLowerCase())) throw new ApiError('Danh sách báo giá trả sai cửa hàng.', 502)
-  const titles = new Map()
+  const requests = new Map()
   for (const offer of data.result) {
-    if (titles.has(offer.cakeRequestId)) continue
-    try { titles.set(offer.cakeRequestId, (await rfqService.getRfqById(offer.cakeRequestId, options)).title) }
-    catch (error) { if (error.status !== 404) throw error; titles.set(offer.cakeRequestId, null) }
+    if (requests.has(offer.cakeRequestId)) continue
+    try { requests.set(offer.cakeRequestId, await rfqService.getRfqById(offer.cakeRequestId, options)) }
+    catch (error) { if (error.status !== 404) throw error; requests.set(offer.cakeRequestId, null) }
   }
-  return { ...data, result: data.result.map((offer) => ({ ...offer, requestTitle: titles.get(offer.cakeRequestId) })) }
+  return { ...data, result: data.result.map(offer => {
+    const request = requests.get(offer.cakeRequestId)
+    return { ...offer, requestTitle: request?.title ?? null, customerName: request?.customerName }
+  }) }
 }
 
 export async function loadExistingVendorOffer({ bakeryId, cakeRequestId }, options) {

@@ -190,7 +190,8 @@ export function LocalUserDirectory() {
                   const restriction = userRestriction(person, user)
                   const editReason = userRestriction(person, user, 'edit')
                   const editable = local
-                  const statusReason = !editable ? 'Chức năng thay đổi trạng thái hiện chưa khả dụng.' : userRestriction(person, user, 'status')
+                  const accountRestriction = userRestriction(person, user, 'status')
+                  const statusReason = !editable ? 'Chức năng thay đổi trạng thái hiện chưa khả dụng.' : accountRestriction
                   const pageIndex = resource.data?.meta?.page || page
                   const pageSize = resource.data?.meta?.pageSize || resource.data?.meta?.size || 12
                   const stt = (pageIndex - 1) * pageSize + index + 1
@@ -199,8 +200,8 @@ export function LocalUserDirectory() {
                     <tr key={person.id}>
                       <td data-label="STT" className="sc-col-stt font-medium text-on-surface-variant">{stt}</td>
                       <td data-label="Người dùng">
-                        <strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong><small>{recordSource(person) === 'local' ? 'Trình duyệt' : 'API'}</small>
-                        {restriction && <small>{restriction}</small>}
+                        <strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong>
+                        {accountRestriction && <small>{accountRestriction}</small>}
                       </td>
                       <td data-label="Liên hệ">{reviewText(person.email) || 'Chưa có email'}</td>
                       <td data-label="Vai trò">{person.roles.map((r) => uiLabel(r, 'Chưa xác định')).join(', ')}</td>

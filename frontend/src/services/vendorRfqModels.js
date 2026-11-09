@@ -18,3 +18,12 @@ export function vendorRfqError(error) {
     0: 'Kết nối đang gián đoạn. Vui lòng thử lại.'
   })[error?.status] || 'Chưa thể tải yêu cầu và báo giá. Vui lòng thử lại.'
 }
+
+export function requestTitleWithoutCustomer(title, customerName) {
+  if (!title || !customerName) return title
+  const separator = title.lastIndexOf(' · ')
+  if (separator < 0) return title
+  const suffix = title.slice(separator + 3).trim().toLocaleLowerCase('vi')
+  const name = customerName.trim().toLocaleLowerCase('vi')
+  return suffix === name || suffix === name.split(/\s+/).at(-1) ? title.slice(0, separator) : title
+}

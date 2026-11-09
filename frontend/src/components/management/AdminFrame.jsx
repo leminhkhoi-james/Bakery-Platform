@@ -23,7 +23,7 @@ const ADMIN_PAGE_HEADERS = {
   'admin-users': { title: 'Quản lý người dùng', description: 'Tra cứu và quản lý thông tin người dùng.' },
 }
 
-export default function AdminFrame({ title, activeTab, onNavigate, children, headerAction }) {
+export default function AdminFrame({ title, activeTab, onNavigate, children, headerAction, headerDescription }) {
   const [mobile, setMobile] = useState(false)
   const { user } = useAuth()
   const heading = ADMIN_PAGE_HEADERS[activeTab] || { title }
@@ -58,7 +58,7 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
   }, [mobile])
   return <div className="sc-portal sc-portal--admin">
     <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
-    <PortalHeader title={heading.title} description={heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
+    <PortalHeader title={heading.title} description={headerDescription ?? heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
     <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}><UnifiedSourceNotice />{children}</div></main>
     {newPaymentNotice && (
       <aside role="status" aria-live="polite" className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-secondary/30 bg-surface/95 backdrop-blur-md p-4 shadow-xl">

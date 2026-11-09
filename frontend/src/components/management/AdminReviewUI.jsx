@@ -10,5 +10,5 @@ export function ReviewSection({ title, description, children, action = false }) 
   return <section className={'sc-review-section' + (action ? ' sc-review-section--action' : '')}><header><h3>{title}</h3>{description && <p>{description}</p>}</header>{children}</section>
 }
 export function AdminReviewDialog({ title, children, compact = false, className = '', ...props }) {
-  return <DetailDrawer {...props} title={title} headerContent={<h2>{title}</h2>} className={'sc-review-dialog' + (compact ? ' sc-review-dialog--compact' : '') + (className ? ' ' + className : '')}>{children}</DetailDrawer>
+  return <DetailDrawer {...props} title={title} headerContent={<h2>{title}</h2>} className={'sc-review-dialog' + (compact ? ' sc-review-dialog--compact' : ' sc-workspace-detail') + (className ? ' ' + className : '')}>{children}</DetailDrawer>
 }

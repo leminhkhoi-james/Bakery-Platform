@@ -3,7 +3,7 @@ import { simulationStore } from '../../../mockData/business/runtime.js'
 import { businessMetrics, settledBusinessOrder } from '../../../mockData/business/metrics.js'
 import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 import React from 'react'
-import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
+import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadDashboardCompletedOrders } from '../../../services/vendorDashboardService.js'
@@ -185,7 +185,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                 <th scope="col">Khách hàng</th>
                 <th scope="col">Thời gian</th>
                 <th scope="col">Giá trị đơn</th>
-                <th scope="col">Chi tiết</th>
+                <th scope="col" className="sc-table-actions">Chi tiết</th>
               </tr>
             </thead>
             <tbody>
@@ -201,10 +201,10 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                   <td className="tabular-nums font-bold text-wine text-base">
                     {formatOrderMoney(order.totalAmount, order.currency)}
                   </td>
-                  <td>
+                  <td className="sc-table-actions">
                     <button
                       type="button"
-                      className="sc-button sc-button--secondary cursor-pointer"
+                      className="sc-button sc-record-action cursor-pointer"
                       onClick={() =>
                         onNavigate(
                           'vendor-orders?bakeryId=' +
@@ -214,7 +214,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                         )
                       }
                     >
-                      Xem đơn
+                      Xem chi tiết
                     </button>
                   </td>
                 </tr>
@@ -244,7 +244,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
 
 export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
   const owner = useVendorBakery(routeSearch)
-  const { bakeryId, selectBakery, available } = owner
+  const { bakeryId } = owner
 
   return (
     <VendorFrame owner={owner} title="Doanh thu" activeTab="revenue" bakeryId={bakeryId} onNavigate={onNavigate}>
@@ -268,7 +268,7 @@ export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
           )}
         </div>
 
-        <BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />
+
 
         {bakeryId ? (
           <><CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} /><BusinessSimulationReport bakeryId={bakeryId} bakery={owner.bakery} loadHistory /></>
