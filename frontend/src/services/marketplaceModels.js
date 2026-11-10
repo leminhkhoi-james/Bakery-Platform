@@ -60,6 +60,7 @@ export function mapRequest(dto, detail = false) {
   const result = { id: dto.id }
   for (const key of ['customerId', 'targetBakeryId', 'baseProductId', 'selectedDesignId']) result[key] = isCatalogId(dto[key]) ? dto[key] : null
   for (const key of ['requestType', 'title', 'description', 'occasion', 'neededAt', 'deliveryDistrict', 'deliveryCity', 'status', 'offerDeadline', 'createdAt', 'updatedAt']) result[key] = text(dto[key])
+  if (typeof dto.customerName === 'string') result.customerName = dto.customerName
   for (const key of ['budgetMin', 'budgetMax']) result[key] = catalogMoney(dto[key])
   result.servingSize = Number.isInteger(dto.servingSize) ? dto.servingSize : null
   if (dto.preference) result.preference = dto.preference

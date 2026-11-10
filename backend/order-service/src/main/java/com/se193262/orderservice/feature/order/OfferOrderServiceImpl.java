@@ -56,8 +56,8 @@ public class OfferOrderServiceImpl implements OfferOrderService {
                         "bakery:profile:read",
                         Map.class);
         if (user.get("phoneNumber") == null
-                || !source.deliveryCity().equalsIgnoreCase((String) address.get("city"))
-                || !source.deliveryDistrict().equalsIgnoreCase((String) address.get("district")))
+                || !matchLocation(source.deliveryCity(), (String) address.get("city"))
+                || !matchLocation(source.deliveryDistrict(), (String) address.get("district")))
             throw BusinessException.invalid("Customer phone/address invalid");
         try {
             return repository.save(key, fingerprint, command, source, user, bakery, address);
@@ -110,5 +110,32 @@ public class OfferOrderServiceImpl implements OfferOrderService {
         } catch (java.security.NoSuchAlgorithmException impossible) {
             throw new IllegalStateException(impossible);
         }
+    }
+
+    static boolean matchLocation(String expected, String actual) {
+        if (expected == null || actual == null) return false;
+        if (expected.trim().equalsIgnoreCase(actual.trim())) return true;
+        String e = normalizeLocation(expected);
+        String a = normalizeLocation(actual);
+        if (e.equals(a)) return true;
+        if ((e.length() >= 3 && a.contains(e)) || (a.length() >= 3 && e.contains(a))) return true;
+        return false;
+    }
+
+    static String normalizeLocation(String text) {
+        if (text == null) return "";
+        String s = java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase(Locale.ROOT)
+                .replace("đ", "d")
+                .replaceAll("[^a-z0-9]", " ")
+                .trim();
+        s = s.replaceAll("^(?:thanh pho|tp|tinh|quan|huyen|thi xa|tx|district|d)\\s+", "");
+        s = s.replaceAll("^q(?=\\d)", "");
+        s = s.replaceAll("\\s+", " ").trim();
+        if (s.equals("hcm") || s.equals("ho chi minh") || s.equals("sai gon")) {
+            return "hcm";
+        }
+        return s;
     }
 }

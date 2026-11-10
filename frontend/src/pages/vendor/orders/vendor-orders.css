@@ -1,20 +1,24 @@
 .sc-vendor-orders { display: grid; gap: .85rem; min-width: 0; }
-.sc-vendor-orders > .sc-panel, .sc-vendor-orders .sc-vendor-order-list { padding: 1rem; margin: 0; border: 1px solid #e2e8f0; background: #ffffff; }
+.sc-vendor-orders > .sc-panel, .sc-vendor-orders .sc-vendor-order-list:not(.sc-vendor-order-list--embedded) { padding: 1rem; margin: 0; border: 1px solid #e2e8f0; background: #ffffff; }
 .sc-vendor-orders > .sc-managed-bakery-choice { padding-block: .7rem; gap: .35rem; }
 .sc-vendor-order-list { display: grid; gap: .8rem; min-width: 0; }
+.sc-vendor-order-list--embedded > .sc-business-tabs { margin: 0; }
 .sc-vendor-orders .sc-refresh-button { min-height: 2.25rem; padding: .4rem .65rem; font-size: .78rem; white-space: nowrap; }
-.sc-vendor-orders .sc-vendor-order-filters { display: grid; gap: .7rem; padding: .8rem; margin: 0; }
+:is(.sc-vendor-orders, .sc-business-report) .sc-vendor-order-filters { display: grid; gap: .7rem; padding: .8rem; margin: 0; }
 .sc-vendor-order-filter-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
-.sc-vendor-order-date-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: .75rem; }
+.sc-vendor-order-filter-row--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sc-vendor-order-date-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: .75rem; }
 .sc-vendor-order-filters label { display: grid; gap: .25rem; min-width: 0; color: #64748b; }
-.sc-vendor-orders .sc-input { min-height: 2.5rem; padding: .45rem .7rem; width: 100%; min-width: 0; font-size: .85rem; }
+:is(.sc-vendor-orders, .sc-business-report .sc-vendor-order-filters) .sc-input { min-height: 2.5rem; padding: .45rem .7rem; width: 100%; min-width: 0; font-size: .85rem; }
 .sc-vendor-order-table { table-layout: fixed; width: 100%; min-width: 58rem; }
 .sc-vendor-order-table :is(th, td) { padding: .75rem .65rem; vertical-align: middle; overflow-wrap: anywhere; }
 .sc-vendor-order-table td { font-size: .82rem; }
 .sc-vendor-order-table strong { color: #722637; font-weight: 600; }
 .sc-vendor-order-table :is(th, td):nth-child(5) { text-align: right; padding-right: 1rem; }
-.sc-vendor-order-table :is(th, td):nth-child(6) { padding-left: 1rem; }
+.sc-vendor-order-table:not(.sc-vendor-related-table) :is(th, td):nth-child(6) { padding-left: 1rem; }
 .sc-vendor-order-table :is(th, td):last-child { text-align: center; }
+.sc-vendor-related-table :is(th, td):first-child { width: 60px; }
+.sc-vendor-related-table :is(th, td):nth-child(2) { width: 28%; }
 .sc-vendor-order-table .sc-status { white-space: nowrap; }
 .sc-vendor-order-money { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .sc-vendor-order-table .sc-vendor-view-order { display: inline-flex; align-items: center; justify-content: center; gap: .25rem; min-height: 2.1rem; padding: .4rem .5rem; font-size: .73rem; white-space: nowrap; }
@@ -28,6 +32,13 @@
   .sc-vendor-order-date-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sc-vendor-order-date-row > .sc-refresh-button { grid-column: 1 / -1; justify-self: end; }
   .sc-vendor-order-filter-row { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
-  .sc-vendor-orders > .sc-panel, .sc-vendor-orders .sc-vendor-order-list { padding: .8rem; }
+  .sc-vendor-orders > .sc-panel, .sc-vendor-orders .sc-vendor-order-list:not(.sc-vendor-order-list--embedded) { padding: .8rem; }
   .sc-vendor-order-error { flex-wrap: wrap; }
+}
+
+@media (min-width: 640px) {
+  .sc-vendor-order-date-row--with-search { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 639px) {
+  .sc-vendor-order-date-row--with-search .sc-vendor-order-search { grid-column: 1 / -1; }
 }

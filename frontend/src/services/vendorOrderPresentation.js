@@ -1,5 +1,7 @@
 import { ApiError } from './apiClient.js'
 import { loadOrders } from './orderService.js'
+import { readDashboardPages } from './adminDashboardService.js'
+import { orderDisplayNumber } from './orderPresentation.js'
 
 export function vendorOrderDateRange(from = '', to = '') {
   for (const value of [from, to]) {
@@ -15,7 +17,27 @@ export function vendorOrderDateRange(from = '', to = '') {
   }
 }
 
-export const loadVendorOrders = async ({ from, to, ...params }, options) => loadOrders({ ...params, scope: 'bakery', ...vendorOrderDateRange(from, to) }, options)
+export const normalizeOrderSearch = value =>
+  value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('vi').replace(/đ/g, 'd')
+
+export async function loadVendorOrders({ from, to, search = '', page = 1, size = 10, ...params }, options) {
+  const filters = { ...params, scope: 'bakery', ...vendorOrderDateRange(from, to) }
+  const query = normalizeOrderSearch(search.trim())
+  if (!query) return loadOrders({ ...filters, page, size }, options)
+
+  const collection = await readDashboardPages((pagination, request) =>
+    loadOrders({ ...pagination, ...filters }, request), options)
+  const rows = collection.rows.filter(order =>
+    [order.customerName, order.orderNumber, orderDisplayNumber(order), order.id].some(value =>
+      normalizeOrderSearch(value || '').includes(query)))
+  const total = rows.length
+  const pages = Math.ceil(total / size)
+  const currentPage = Math.min(page, Math.max(1, pages))
+  return {
+    result: rows.slice((currentPage - 1) * size, currentPage * size),
+    meta: { page: currentPage, pageSize: size, total, pages },
+  }
+}
 
 export function vendorOrderError(error) {
   if (error?.status === 401) return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'

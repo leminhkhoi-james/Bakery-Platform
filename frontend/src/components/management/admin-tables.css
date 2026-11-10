@@ -20,15 +20,13 @@
 }
 .sc-portal--admin .sc-table.sc-admin-fixed-table .sc-table-actions .sc-button {
   display: inline-flex; flex: 0 0 auto; width: auto; min-width: 0;
-  height: 2.2rem; min-height: 2.2rem; padding: .4rem .5rem;
-  gap: .3rem; font-size: .72rem; line-height: 1; white-space: nowrap;
+  gap: .3rem; white-space: nowrap;
   word-break: normal; overflow-wrap: normal; align-items: center; justify-content: center;
 }
 .sc-portal--admin .sc-table.sc-admin-fixed-table .sc-table-actions .sc-icon { font-size: 1rem; }
 .sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-button { width: 3.625rem; padding-inline: .35rem; }
 .sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-user-status-action { width: 6rem; }
 .sc-portal--admin .sc-table.sc-admin-orders-table .sc-table-actions .sc-button { width: 6.25rem; }
-.sc-portal--admin .sc-table.sc-admin-recent-table .sc-table-actions .sc-button { width: 4.5rem; }
 .sc-portal--admin .sc-table.sc-admin-fixed-table .sc-status { max-width: 100%; white-space: normal; }
 .sc-portal--admin .sc-table.sc-admin-orders-table td:nth-child(3),
 .sc-portal--admin .sc-table.sc-admin-recent-table td:nth-child(3) { white-space: nowrap; font-variant-numeric: tabular-nums; }

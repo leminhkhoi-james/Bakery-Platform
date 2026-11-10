@@ -51,7 +51,7 @@ function ReviewDirectory({ onSelect }) {
           <td>{displayReference(order.id, 'ORD', order.orderNumber)}</td>
           <td>{order.review.rating}/5</td><td>{uiLabel(order.review.status)}</td>
           <td>{recordSource(order) === 'local' ? 'Mô phỏng' : 'API'}</td>
-          <td><button type="button" className={buttonClass} onClick={() => onSelect({ id: order.id, kind: 'review' })}>Xem chi tiết</button></td>
+          <td className="sc-table-actions"><button type="button" className={buttonClass} onClick={() => onSelect({ id: order.id, kind: 'review' })}>Xem chi tiết</button></td>
         </tr>)}</tbody>
       </DataTable> : <EmptyPanel title="Chưa có đánh giá đơn hàng" icon="rate_review" />)}
     </ApiState>

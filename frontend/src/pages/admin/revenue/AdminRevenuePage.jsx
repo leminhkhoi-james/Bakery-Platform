@@ -1,17 +1,18 @@
-import { unifiedIssues, recordSource, unifiedSnapshot, unifiedMetrics } from '../../../services/unifiedDataService.js'
+import AdminBakeryScope from '../../../components/management/AdminBakeryScope.jsx'
+import { unifiedIssues, recordSource, unifiedSnapshot } from '../../../services/unifiedDataService.js'
 import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 import React, { useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
-import { DataTable, Icon } from '../../../components/common/WorkspaceUI.jsx'
+import { DataTable, DetailDrawer, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { ApiErrorMessage } from '../../../components/management/ApiState.jsx'
-import { loadRevenuePayments, loadAdminPending } from '../../../services/adminSummaryService.js'
+import { loadRevenuePayments } from '../../../services/adminSummaryService.js'
 import { loadAdminPlans } from '../../../services/adminManagementService.js'
-import { approvalDate, approvedPayments, businessDateSelected, businessDay, settledBusinessSales } from '../../../mockData/business/metrics.js'
+import { approvalDate, approvedPayments, businessDateSelected, businessDay } from '../../../mockData/business/metrics.js'
 import { subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
 import { dashboardMoney, dashboardNumber, dashboardDateTime } from '../../../services/adminDashboardModels.js'
-import { cleanPresentationLabel } from '../../../services/uiLabels.js'
+import { cleanPresentationLabel, uiLabel } from '../../../services/uiLabels.js'
 import { planName, sortPlansByTier } from '../../../services/planPresentation.js'
 import './admin-revenue.css'
 
@@ -36,40 +37,13 @@ function getPresetDates(preset) {
   return { from: '', to: '' }
 }
 
-function groupMonthlyRevenue(rows, dateOf, amountOf) {
-  const totals = new Map()
-  for (const row of rows) {
-    const month = businessDay(dateOf(row)).slice(0, 7)
-    if (!month) continue
-    totals.set(month, (totals.get(month) || 0) + amountOf(row))
-  }
-  return totals
-}
-
-function MonthlyRevenueChart({ title, series }) {
-  if (!series.size) return null
-  const peak = Math.max(1, ...series.values())
-  return <section className="sc-revenue-month-chart" aria-label={title}>
-    <h4>{title}</h4>
-    {[...series].sort(([first], [second]) => first.localeCompare(second)).map(([month, amount]) => (
-      <div key={month} className="sc-revenue-month-row">
-        <span>{month.slice(5)}/{month.slice(0, 4)}</span>
-        <div className="sc-revenue-plan-bar-track" aria-hidden="true">
-          <div className="sc-revenue-plan-bar-fill" style={{ width: `${(amount / peak) * 100}%` }} />
-        </div>
-        <strong>{dashboardMoney(amount, 'VND')}</strong>
-      </div>
-    ))}
-  </section>
-}
-
 export default function AdminRevenuePage({ onNavigate }) {
+  const [reportBakeryId, setReportBakeryId] = useState('')
   const [activePreset, setActivePreset] = useState('all')
   const [draftDates, setDraftDates] = useState({ from: '', to: '' })
   const [appliedDates, setAppliedDates] = useState({ from: '', to: '' })
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
-  const [breakdownSource, setBreakdownSource] = useState('local')
   const [statusFilter, setStatusFilter] = useState('')
   const [detailModal, setDetailModal] = useState(null)
   const [dateError, setDateError] = useState(null)
@@ -81,10 +55,6 @@ export default function AdminRevenuePage({ onNavigate }) {
 
   const loading = paymentsResource.status === 'loading'
   const refreshing = paymentsResource.refreshing
-
-  // Count pending payments to display clean separation link
-  const pending = useCatalogResource(loadAdminPending)
-  const pendingCount = pending.data?.payments ?? null
 
   // Handle Preset Clicks
   const handlePresetSelect = (presetKey) => {
@@ -126,7 +96,7 @@ export default function AdminRevenuePage({ onNavigate }) {
     setPage(1)
   }
 
-  const allPayments = paymentsResource.data || []
+  const allPayments = (paymentsResource.data || []).filter(row => !reportBakeryId || row.bakeryId === reportBakeryId)
   const inPeriod = payment => businessDateSelected(payment.reviewedAt || payment.submittedAt, appliedDates.from, appliedDates.to)
   const approvalInPeriod = payment => businessDateSelected(approvalDate(payment), appliedDates.from, appliedDates.to)
   const payments = allPayments.filter(payment => payment.status === 'APPROVED' ? approvalInPeriod(payment) : inPeriod(payment))
@@ -139,9 +109,8 @@ export default function AdminRevenuePage({ onNavigate }) {
   const realRevenue = apiReady ? sum(realPayments) : null
   const simulatedRevenue = localReady ? sum(simulatedPayments) : null
   const snapshot = unifiedSnapshot()
-  const simulatedSales = snapshot ? unifiedMetrics(snapshot, appliedDates).simulationSalesRevenue : null
   const totalApprovedTransactions = ready ? realPayments.length + simulatedPayments.length : null
-  const rawPayments = breakdownSource === 'local' ? simulatedPayments : realPayments
+  const rawPayments = simulatedPayments
 
   const filteredPayments = (() => {
     const q = search.toLowerCase().trim()
@@ -158,15 +127,9 @@ export default function AdminRevenuePage({ onNavigate }) {
     })
   })()
 
-  const periodTotalRevenue = breakdownSource === 'local' ? simulatedRevenue : realRevenue
+  const periodTotalRevenue = simulatedRevenue
 
   const countedPayments = new Set([...realPayments, ...simulatedPayments].map(row => row.id))
-  const monthlyRevenue = groupMonthlyRevenue(rawPayments, approvalDate, payment => payment.amount)
-  const settledSales = snapshot
-    ? settledBusinessSales({ ...snapshot, orders: snapshot.orders.filter(order => recordSource(order) === 'local') }, appliedDates)
-    : []
-  const monthlySales = groupMonthlyRevenue(settledSales, row => row.recognizedAt, row => row.order.totalAmount)
-
   // Revenue breakdown by plan tier
   const planTiers = (() => {
     const plans = plansResource.data || []
@@ -208,15 +171,10 @@ export default function AdminRevenuePage({ onNavigate }) {
     return shares
   })()
 
-  // Top performing plan
-  const topPlan = (() => {
-    if (!planTiers.length) return null
-    return [...planTiers].sort((a, b) => b.revenue - a.revenue)[0]
-  })()
-
   return (
     <AdminFrame
       activeTab="admin-revenue"
+      headerDescription={<AdminBakeryScope value={reportBakeryId} onChange={value => { setReportBakeryId(value); setPage(1) }} />}
       onNavigate={onNavigate}
     >
       <div className="sc-admin-revenue">
@@ -228,7 +186,7 @@ export default function AdminRevenuePage({ onNavigate }) {
               Doanh thu theo nguồn
             </span>
             <span className="sc-revenue-top-desc">
-              Doanh thu gói được ghi nhận theo ngày duyệt. Doanh thu bán bánh mô phỏng ghi nhận khi đơn đã hoàn tất và đã thu tiền.
+              Doanh thu gói được ghi nhận theo ngày duyệt. Doanh thu bán bánh ghi nhận khi đơn đã hoàn tất và đã thu tiền.
             </span>
           </div>
 
@@ -246,9 +204,8 @@ export default function AdminRevenuePage({ onNavigate }) {
             </button>
           )}
         </div>
-
         {/* Filter Section: Presets, Custom Range & Search */}
-        <section className="sc-revenue-filter-panel" aria-label="Bộ lọc khoảng thời gian">
+        <section className="sc-revenue-filter-panel" aria-label="Bộ lọc doanh thu">
           {/* Row 1: Presets on Left, Search on Right (Balanced across width) */}
           <div className="sc-revenue-filter-row sc-revenue-filter-row--primary">
             <div className="sc-revenue-filter-col">
@@ -392,50 +349,10 @@ export default function AdminRevenuePage({ onNavigate }) {
         </section>
 
         {/* Financial KPI Cards */}
-        <section className="sc-revenue-kpi-grid" aria-label="Chỉ số doanh thu trong kỳ">
-          <article className="sc-revenue-kpi-card sc-revenue-kpi-card--hero" aria-label="Gói dịch vụ thực nhận">
-            <div className="sc-revenue-kpi-top">
-              <span className="sc-revenue-kpi-label">Gói dịch vụ thực nhận</span>
-              <span className="sc-revenue-kpi-icon">
-                <Icon name="account_balance_wallet" />
-              </span>
-            </div>
-            <div className="sc-revenue-kpi-value">
-              {loading ? '…' : dashboardMoney(realRevenue, 'VND')}
-            </div>
-            <div className="sc-revenue-kpi-sub">
-              Chứng từ Backend đã duyệt
-            </div>
-          </article>
-
-          <article className="sc-revenue-kpi-card" aria-label="Gói dịch vụ mô phỏng">
-            <div className="sc-revenue-kpi-label">Gói dịch vụ mô phỏng</div>
-            <div className="sc-revenue-kpi-value">{loading ? '…' : dashboardMoney(simulatedRevenue, 'VND')}</div>
-            <div className="sc-revenue-kpi-sub">{simulatedPayments.length} chứng từ trình duyệt đã duyệt</div>
-          </article>
-
-          <article className="sc-revenue-kpi-card" aria-label="Bán bánh mô phỏng">
-            <div className="sc-revenue-kpi-label">Bán bánh mô phỏng</div>
-            <div className="sc-revenue-kpi-value">{dashboardMoney(simulatedSales, 'VND')}</div>
-            <div className="sc-revenue-kpi-sub">Đơn hoàn tất và đã ghi thu trong trình duyệt</div>
-          </article>
-
-          <article className="sc-revenue-kpi-card">
-            <div className="sc-revenue-kpi-top">
-              <span className="sc-revenue-kpi-label">Gói cao nhất · {breakdownSource === 'local' ? 'Mô phỏng' : 'Thực nhận'}</span>
-              <span className="sc-revenue-kpi-icon">
-                <Icon name="workspace_premium" />
-              </span>
-            </div>
-            <div className="sc-revenue-kpi-value text-primary">
-              {loading ? '…' : topPlan?.revenue ? topPlan.name : 'Chưa có'}
-            </div>
-            <div className="sc-revenue-kpi-sub">
-              {topPlan?.revenue ? dashboardMoney(topPlan.revenue, 'VND') : 'Chưa có dữ liệu'}
-            </div>
-          </article>
-        </section>
-
+        {!snapshot && <section className="sc-revenue-kpi-card" aria-label="Doanh thu gói thực nhận">
+          <span className="sc-revenue-kpi-label">Doanh thu gói thực nhận</span>
+          <div className="sc-revenue-kpi-value">{loading ? '…' : dashboardMoney(realRevenue, 'VND')}</div>
+        </section>}
         {/* Revenue Breakdown by Plan Tier */}
         {paymentsResource.error && <ApiErrorMessage error={paymentsResource.error} retry={paymentsResource.reload} />}
         {plansResource.error && <ApiErrorMessage error={plansResource.error} retry={plansResource.reload} />}
@@ -444,16 +361,10 @@ export default function AdminRevenuePage({ onNavigate }) {
             <div className="sc-revenue-breakdown-heading">
               <h3>
                 <Icon name="pie_chart" />
-                Cơ cấu doanh thu theo gói
+                Cơ cấu doanh thu gói mô phỏng
               </h3>
-              <label>Nguồn cơ cấu gói
-                <select className="sc-input ml-2" value={breakdownSource} onChange={event => setBreakdownSource(event.target.value)}>
-                  <option value="local">Mô phỏng</option><option value="api">Thực nhận</option>
-                </select>
-              </label>
             </div>
 
-            {periodTotalRevenue !== null && <MonthlyRevenueChart title="Doanh thu gói theo tháng" series={monthlyRevenue} />}
 
             <div className="sc-revenue-plan-cards">
               {planTiers.map((tier) => {
@@ -491,6 +402,8 @@ export default function AdminRevenuePage({ onNavigate }) {
         )}
 
         {/* Authoritative Revenue Transactions Table */}
+        <BusinessSimulationReport loadHistory dates={appliedDates} reportBakeryId={reportBakeryId} showRecords={false} />
+
         <section className="sc-revenue-table-panel">
           <label className="mb-3 block">Trạng thái giao dịch
             <select className="sc-input ml-2" value={statusFilter} onChange={event => { setStatusFilter(event.target.value); setPage(1) }}>
@@ -503,9 +416,6 @@ export default function AdminRevenuePage({ onNavigate }) {
               <h3 className="sc-revenue-table-title">
                 Lịch sử giao dịch gói dịch vụ
               </h3>
-              <p className="text-xs text-muted mt-1">
-                Giao dịch từ Backend và dữ liệu mô phỏng trong khoảng thời gian đã chọn.
-              </p>
             </div>
             {search && (
               <span className="text-xs font-semibold text-secondary">
@@ -563,7 +473,7 @@ export default function AdminRevenuePage({ onNavigate }) {
                         </td>
                         <td>
                           <strong>{payment.paymentReference || '—'}</strong>
-                          <small>{payment.paymentMethod || '—'}</small>
+                          <small>{uiLabel(payment.paymentMethod, '—')}</small>
                         </td>
                         <td>
                           {dashboardDateTime(payment.status === 'APPROVED' ? approvalDate(payment) : payment.reviewedAt || payment.submittedAt)}<small>{subscriptionStatusLabel(payment.status)}</small>
@@ -574,10 +484,9 @@ export default function AdminRevenuePage({ onNavigate }) {
                             type="button"
                             className="sc-button sc-action-button sc-action-button--secondary"
                             onClick={() => setDetailModal(payment)}
-                            aria-label={'Xem biên lai ' + payment.id}
+                            aria-label={'Xem chi tiết biên lai ' + payment.id}
                           >
-                            <Icon name="receipt" />
-                            Xem
+                            Xem chi tiết
                           </button>
                         </td>
                       </tr>
@@ -602,71 +511,51 @@ export default function AdminRevenuePage({ onNavigate }) {
         </section>
 
         {/* Transaction Detail & Receipt Modal */}
-        {monthlySales.size > 0 && (
-          <section className="sc-revenue-breakdown-panel">
-            <MonthlyRevenueChart title="Doanh thu bán bánh mô phỏng theo tháng ghi nhận" series={monthlySales} />
-          </section>
-        )}
-
         {detailModal && (
-          <div
-            className="sc-revenue-modal-backdrop"
-            onClick={() => setDetailModal(null)}
-          >
-            <div
-              className="sc-revenue-modal"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sc-revenue-modal-header">
-                <h3>Chứng từ giao dịch doanh thu</h3>
-                <button
-                  type="button"
-                  className="sc-revenue-modal-close"
-                  onClick={() => setDetailModal(null)}
-                >
-                  <Icon name="close" />
-                </button>
-              </div>
-
-              <div className="sc-revenue-modal-body">
-                <div className="sc-revenue-modal-grid">
-                  <div className="sc-revenue-modal-cell">
-                    <small>Tiệm bánh</small>
-                    <strong>
+          <DetailDrawer className="sc-workspace-detail" title="Chứng từ giao dịch doanh thu" onClose={() => setDetailModal(null)}
+            headerContent={<><h2>Chứng từ giao dịch doanh thu</h2><p>{subscriptionStatusLabel(detailModal.status)} · {detailModal.paymentReference || detailModal.id}</p></>}
+            footer={<div className="sc-business-actions justify-end">
+              {detailModal.proofUrl && <a href={detailModal.proofUrl} target="_blank" rel="noreferrer" className="sc-button sc-action-button--secondary">Xem ảnh đầy đủ</a>}
+              <button type="button" className="sc-button" onClick={() => setDetailModal(null)}>Đóng</button>
+            </div>}>
+                <section className="sc-detail-section"><h3>Thông tin giao dịch</h3><dl className="sc-detail-fields">
+                  <div>
+                    <dt>Tiệm bánh</dt>
+                    <dd>
                       {detailModal.context?.profile?.bakery?.name ||
                         detailModal.submittedByName ||
                         'Tiệm bánh'}
-                    </strong>
+                    </dd>
                   </div>
-                  <div className="sc-revenue-modal-cell">
-                    <small>Gói dịch vụ</small>
-                    <strong>
+                  <div>
+                    <dt>Gói dịch vụ</dt>
+                    <dd>
                       {planName({ name: detailModal.context?.order?.planNameSnapshot, code: detailModal.context?.order?.planCodeSnapshot })}
-                    </strong>
+                    </dd>
                   </div>
-                  <div className="sc-revenue-modal-cell">
-                    <small>Số tiền giao dịch</small>
-                    <strong className="text-emerald-700 font-bold">
+                  <div>
+                    <dt>Số tiền giao dịch</dt>
+                    <dd className="text-emerald-700 font-bold">
                       +{dashboardMoney(detailModal.amount, detailModal.currency || 'VND')}
-                    </strong>
+                    </dd>
                   </div>
-                  <div className="sc-revenue-modal-cell">
-                    <small>Mã giao dịch</small>
-                    <strong>{detailModal.paymentReference || detailModal.id}</strong>
+                  <div>
+                    <dt>Mã giao dịch</dt>
+                    <dd>{detailModal.paymentReference || detailModal.id}</dd>
                   </div>
-                  <div className="sc-revenue-modal-cell">
-                    <small>Phương thức</small>
-                    <strong>{detailModal.paymentMethod || '—'}</strong>
+                  <div>
+                    <dt>Phương thức</dt>
+                    <dd>{uiLabel(detailModal.paymentMethod, '—')}</dd>
                   </div>
-                  <div className="sc-revenue-modal-cell">
-                    <small>{detailModal.reviewedAt ? 'Thời gian xử lý' : 'Thời gian gửi'}</small>
-                    <strong>
+                  <div>
+                    <dt>{detailModal.reviewedAt ? 'Thời gian xử lý' : 'Thời gian gửi'}</dt>
+                    <dd>
                       {dashboardDateTime(
                         detailModal.reviewedAt || detailModal.submittedAt
                       )}
-                    </strong>
+                    </dd>
                   </div>
-                </div>
+                </dl></section>
 
                 {detailModal.proofUrl && (
                   <div className="sc-revenue-proof-box">
@@ -700,33 +589,9 @@ export default function AdminRevenuePage({ onNavigate }) {
                     </p>
                   </div>
                 )}
-              </div>
-
-              <div className="sc-revenue-modal-footer">
-                {detailModal.proofUrl && (
-                  <a
-                    href={detailModal.proofUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="sc-button sc-action-button sc-action-button--secondary"
-                  >
-                    <Icon name="visibility" />
-                    Xem ảnh đầy đủ
-                  </a>
-                )}
-                <button
-                  type="button"
-                  className="sc-button sc-action-button sc-action-button--primary"
-                  onClick={() => setDetailModal(null)}
-                >
-                  Đóng
-                </button>
-              </div>
-            </div>
-          </div>
+          </DetailDrawer>
         )}
       </div>
-      <BusinessSimulationReport loadHistory dates={appliedDates} />
     </AdminFrame>
   )
 }

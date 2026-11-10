@@ -20,3 +20,16 @@
   :is(.sc-portal--admin, .sc-portal--vendor) .sc-admin-header-action .sc-icon { font-size: 1.15rem; }
   :is(.sc-portal--admin, .sc-portal--vendor) .sc-portal-main { padding-top: calc(var(--sc-portal-header-height) + .65rem); }
 }
+
+.sc-owner-header-shop {
+  max-width: 100%;
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-radius-control);
+  background: var(--color-surface, #fff);
+  color: var(--sc-color-primary);
+  padding: .25rem .5rem;
+  font: inherit;
+}
+
+.sc-admin-bakery-scope { display: inline-flex; align-items: center; gap: .4rem; max-width: 100%; }
+.sc-admin-bakery-scope select { min-width: 0; }

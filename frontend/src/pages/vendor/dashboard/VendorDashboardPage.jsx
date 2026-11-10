@@ -1,16 +1,13 @@
 import { canonicalBakeryId, unifiedEnabled, unifiedSnapshot, unifiedMetrics } from '../../../services/unifiedDataService.js'
 import React from 'react'
-import { displayReference } from '../../../services/displayReference.js'
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
-import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
+import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadManagedProducts } from '../../../services/vendorManagementService.js'
 import { loadDashboardAccess, dashboardErrorMessage, loadDashboardOrders, loadDashboardCompletedOrders } from '../../../services/vendorDashboardService.js'
-import { formatOrderDate, formatOrderMoney } from '../../../services/orderPresentation.js'
-import { orderStatusLabel } from '../../../services/orderModels.js'
-import { DataTable, EmptyPanel, Icon, SectionHeading, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
-import '../orders/vendor-orders.css'
+import { formatOrderMoney } from '../../../services/orderPresentation.js'
+import { EmptyPanel, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import './vendor-dashboard.css'
 import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 import { simulationStore } from '../../../mockData/business/runtime.js'
@@ -54,14 +51,11 @@ export function DashboardOverview({ bakeryId, products, orders, completedOrders,
       <Metric title="Sản phẩm" icon="cake" resource={products} onClick={() => navigate('vendor-menu')} link="Quản lý sản phẩm" />
       <Metric title="Tổng đơn hàng" icon="shopping_bag" resource={orders} onClick={() => navigate('vendor-orders')} link="Quản lý đơn hàng" />
       <section className="sc-panel sc-dashboard-kpi sc-vendor-kpi" aria-label="Doanh thu" aria-busy={completedOrders?.status === 'loading' || completedOrders?.refreshing}>
-        <div className="sc-vendor-kpi-heading"><div className="sc-kpi-header"><span className="sc-kpi-icon-wrap"><Icon name="account_balance_wallet" /></span><h2 className="sc-kpi-title">Doanh thu</h2></div><p className="sc-kpi-sub-text sc-vendor-kpi-caption">{unifiedEnabled() ? 'Bán bánh mô phỏng · API chưa có đối soát' : !completedOrders ? 'Chưa có số liệu đã đối soát' : completedOrders.error ? 'Chưa tải được doanh thu' : simulation ? 'Đối soát API; số liệu trình duyệt ghi riêng trong báo cáo' : 'Ước tính từ đơn hoàn tất · chưa đối soát'}</p></div>
+        <div className="sc-vendor-kpi-heading"><div className="sc-kpi-header"><span className="sc-kpi-icon-wrap"><Icon name="account_balance_wallet" /></span><h2 className="sc-kpi-title">Doanh thu</h2></div><p className="sc-kpi-sub-text sc-vendor-kpi-caption">{!completedOrders ? 'Chưa có số liệu đối soát' : completedOrders.error ? 'Chưa tải được doanh thu' : 'Ước tính từ các đơn hàng đã hoàn tất'}</p></div>
         <div className="sc-kpi-body">{!unifiedEnabled() && (completedOrders?.status === 'loading' || completedOrders?.refreshing) ? <p role="status" className="sc-vendor-kpi-loading">Đang tải…</p> : <strong className="sc-metric-value sc-vendor-kpi-value">{completedRevenue !== null ? formatOrderMoney(completedRevenue, completedList[0]?.currency || 'VND') : '—'}</strong>}</div>
         <footer className="sc-vendor-kpi-footer"><button className="sc-vendor-text-link" onClick={() => navigate('vendor-revenue')}>Xem doanh thu<Icon name="arrow_forward" /></button></footer>
       </section>
     </div>
-    <section className="sc-panel sc-vendor-recent"><SectionHeading title="Đơn hàng gần đây" icon="receipt_long" />
-      {orders.status === 'loading' || orders.refreshing ? <p role="status" className="sc-vendor-table-state">Đang tải đơn hàng…</p> : orders.error ? <p className="sc-vendor-table-state">{orders.error.status === 403 ? 'Chưa có quyền xem đơn hàng của cửa hàng này.' : 'Chưa tải được danh sách đơn hàng.'}</p> : orders.data?.result.length ? <DataTable label="Đơn hàng gần đây" className="sc-vendor-order-table"><colgroup><col style={{ width: '60px' }} />{[18, 19, 17, 14, 18, 14].map((width, i) => <col key={i} style={{ width: width + '%' }} />)}</colgroup><thead><tr><th scope="col" style={{ width: '60px', textAlign: 'center' }}>STT</th><th scope="col">Mã đơn</th><th scope="col">Khách hàng</th><th scope="col">Trạng thái</th><th scope="col">Tổng tiền</th><th scope="col">Ngày tạo</th><th scope="col">Thao tác</th></tr></thead><tbody>{orders.data.result.map((order, index) => <tr key={order.id}><td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>{index + 1}</td><td><strong>{displayReference(order.id, 'ORD', order.orderNumber)}</strong></td><td>{order.customerName || 'Xem trong chi tiết'}</td><td><StatusBadge status={order.status} label={orderStatusLabel(order.status)} /></td><td className="sc-vendor-order-money">{formatOrderMoney(order.totalAmount, order.currency)}</td><td>{formatOrderDate(order.createdAt)}</td><td className="sc-vendor-order-actions"><button type="button" className="sc-button sc-vendor-view-order" onClick={() => onNavigate('vendor-orders?bakeryId=' + encodeURIComponent(bakeryId) + '&orderId=' + encodeURIComponent(order.id))}><Icon name="visibility" />Xem chi tiết</button></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Chưa có đơn hàng" description="Đơn mới của cửa hàng sẽ xuất hiện tại đây." icon="shopping_bag" />}
-    </section>
   </>
 }
 
@@ -69,7 +63,7 @@ function DashboardData({ bakeryId, bakery, onNavigate }) {
   const products = useCatalogResource(loadManagedProducts, { bakeryId, page: 1, size: 1 })
   const orders = useCatalogResource(loadDashboardOrders, { scope: 'bakery', bakeryId, page: 1, size: 5, sort: 'createdAt,desc' })
   const completedOrders = useCatalogResource(loadDashboardCompletedOrders, { bakeryId })
-  return <><DashboardOverview bakeryId={bakeryId} products={products} orders={orders} completedOrders={completedOrders} onNavigate={onNavigate} /><BusinessSimulationReport bakeryId={bakeryId} bakery={bakery} /></>
+  return <DashboardOverview bakeryId={bakeryId} products={products} orders={orders} completedOrders={completedOrders} onNavigate={onNavigate} />
 }
 
 function VerifiedDashboard({ bakeryId, bakery, userId, onNavigate }) {
@@ -82,5 +76,5 @@ function VerifiedDashboard({ bakeryId, bakery, userId, onNavigate }) {
 export default function VendorDashboardPage({ onNavigate, routeSearch }) {
   const owner = useVendorBakery(routeSearch)
   const { bakeryId, bakery, selectBakery, user, available } = owner
-  return <VendorFrame owner={owner} title="Tổng quan cửa hàng" activeTab="dashboard" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-vendor-dashboard"><BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />{bakeryId ? <VerifiedDashboard key={user.id + ':' + bakeryId} bakeryId={bakeryId} bakery={bakery} userId={user.id} onNavigate={onNavigate} /> : available.status === 'loading' ? <p role="status">Đang tải cửa hàng…</p> : <section className="sc-panel"><EmptyPanel title="Chọn cửa hàng để bắt đầu" description="Chọn cửa hàng bạn có quyền quản lý hoặc nhập mã cửa hàng." icon="storefront" action={<button className="sc-button" onClick={() => onNavigate('vendor-settings')}>Hồ sơ cửa hàng</button>} /></section>}</div></VendorFrame>
+  return <VendorFrame owner={owner} title="Tổng quan cửa hàng" activeTab="dashboard" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-vendor-dashboard">{bakeryId ? <VerifiedDashboard key={user.id + ':' + bakeryId} bakeryId={bakeryId} bakery={bakery} userId={user.id} onNavigate={onNavigate} /> : available.status === 'loading' ? <p role="status">Đang tải cửa hàng…</p> : <section className="sc-panel"><EmptyPanel title="Chọn cửa hàng để bắt đầu" description="Chọn cửa hàng bạn có quyền quản lý hoặc nhập mã cửa hàng." icon="storefront" action={<button className="sc-button" onClick={() => onNavigate('vendor-settings')}>Hồ sơ cửa hàng</button>} /></section>}</div></VendorFrame>
 }

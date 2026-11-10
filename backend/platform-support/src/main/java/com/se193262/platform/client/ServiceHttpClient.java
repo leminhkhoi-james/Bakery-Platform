@@ -78,12 +78,28 @@ public class ServiceHttpClient {
             int status = error.getStatusCode().value();
             if (status == 404) throw BusinessException.missing();
             if (status == 409) throw BusinessException.conflict();
-            if (status == 422 || status == 400)
-                throw BusinessException.invalid("Remote validation failed");
+            if (status == 422 || status == 400) {
+                String responseBody = error.getResponseBodyAsString();
+                String message = extractErrorMessage(responseBody);
+                throw BusinessException.invalid(message != null ? message : "Remote validation failed");
+            }
             throw BusinessException.unavailable();
         } catch (RestClientException error) {
             throw BusinessException.unavailable();
         }
+    }
+
+    private static String extractErrorMessage(String body) {
+        if (body == null || body.isBlank()) return null;
+        try {
+            var matcher =
+                    java.util.regex.Pattern.compile("\"(?:message|detail|title)\"\\s*:\\s*\"([^\"]+)\"")
+                            .matcher(body);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 
     private synchronized String token(String audience, String scope) {

@@ -1,6 +1,71 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-07.
+> Cập nhật gần nhất: 2026-11-09.
+
+- **Frontend — Sửa lỗi giao diện Modal Đăng ký Đối tác, Đồng bộ Sổ địa chỉ & Chuẩn hóa Thông báo Người dùng — 2026-11-09**:
+  - **Chuẩn hóa thông báo & loại bỏ thuật ngữ kỹ thuật**:
+    - Chuyển toàn bộ các thông báo mang tính kỹ thuật hệ thống (`Backend`, `PENDING`, `APPROVED`, `PAYMENT_REVIEW`, `COMPLETED`, `cấp quyền`) sang văn phong nghiệp vụ thân thiện với người dùng (tiệm bánh và khách hàng).
+    - Cập nhật huy hiệu trạng thái: `Đang chờ duyệt`, `Đã duyệt`, `Cần bổ sung`, `Bản nháp`.
+    - Thiết kế lại toàn diện khu vực Thanh toán gói dịch vụ (`SubscriptionOrderDetail`):
+      - Bổ sung **Mã VietQR tự động** tích hợp sẵn ngân hàng, số tài khoản, số tiền và nội dung chuyển khoản, giúp người dùng quét mã thanh toán ngay trên ứng dụng ngân hàng mà không cần nhập tay.
+      - Bổ sung nút **[Sao chép] 1 chạm** cho Số tài khoản, Số tiền và Nội dung chuyển khoản kèm hiệu ứng phản hồi trực quan.
+      - Tích hợp công cụ **"Tạo giao dịch ảo test" (Sandbox Simulator)**: Hỗ trợ 1-click tự động vẽ biên lai chuyển khoản Vietcombank giả lập hợp lệ kèm mã giao dịch mẫu từ tài khoản ảo, giúp người phát triển/kiểm thử nộp thẳng chứng từ thanh toán lên Backend kiểm tra luồng duyệt mà không cần chuyển tiền thật hay chuẩn bị ảnh thủ công.
+      - Thay thế input file mặc định bằng **Khu vực tải ảnh biên lai chuyên nghiệp**: Hỗ trợ xem trước ảnh (preview thumbnail), tên tệp, dung lượng và nút xóa/thay đổi tệp.
+      - Ẩn menu dropdown thừa khi chỉ có 1 đơn mua gói duy nhất, mở thẳng giao diện thanh toán liền mạch.
+    - Việt hóa thông báo lỗi `Bakery already has an open subscription order`: *"Tiệm bánh đã có một đơn mua gói đang chờ xử lý bên dưới. Vui lòng thanh toán hoặc hoàn tất đơn này trước khi tạo đơn mới."*
+    - Chuẩn hóa hướng dẫn thanh toán gói: Hướng dẫn chuyển khoản rõ ràng, hiển thị tên phương thức *"Chuyển khoản ngân hàng (Ủy nhiệm chi)"* thay vì text field kỹ thuật `BANK_TRANSFER`.
+    - Nâng cấp `ApiErrorMessage` và `SubscriptionError`: Bổ sung mapping thông báo lỗi trực quan từ Backend sang tiếng Việt dễ hiểu (`Bakery approval and an active subscription are required`, `Delivery area is not served`, ...).
+  - **Căn giữa Modal Đăng ký Đối tác (`PartnerCheckoutModal`)**: Khắc phục lỗi dialog bị lệch góc trên bên trái do thiếu thuộc tính căn giữa native `<dialog>` (`inset: 0; margin: auto;`). Bổ sung class `.sc-partner-modal` trong [`modal.css`](file:///d:/MSS/Bakery-Platform/frontend/src/components/common/modal.css) và backdrop blur chuẩn chỉn cho toàn màn hình.
+  - **Đồng bộ Sổ địa chỉ cá nhân (`UserAddressBook`)**: Chuyển đổi 100% việc lưu trữ địa chỉ nhận hàng của khách từ `localStorage` sang Backend API thật (`GET / POST / PATCH / DELETE / PUT default` tại `/api/v1/users/me/addresses`), dùng chung dữ liệu với Cart Checkout.
+
+## Luồng Hoàn tất Đơn hàng theo chuẩn Shopee & Tự động hoàn tất sau 24 giờ — 2026-11-09
+
+- **Backend (`order-service`)**:
+  - Cập nhật phân quyền chuyển trạng thái trong `OrderManagementServiceImpl.java`:
+    - Khách hàng (`CUSTOMER`) sở hữu đơn hàng được phép chuyển trạng thái đơn hàng sang `COMPLETED` (Xác nhận đã nhận hàng) khi đơn đang ở trạng thái `DELIVERING`.
+    - Tiệm bánh (`BAKERY_OWNER`) quản lý các khâu làm bánh và giao bánh (`CONFIRMED` -> `BAKING` -> `READY` -> `DELIVERING`), không được tự ý hoàn tất đơn sớm của khách.
+  - Xây dựng tiến trình nền tự động hoàn tất `OrderAutoCompletionScheduler` (`@Scheduled` định kỳ):
+    - Quét các đơn hàng đang ở trạng thái `DELIVERING` có thời gian cập nhật quá thời hạn 24 giờ (`order.auto-completion.delay-hours: 24`).
+    - Tự động hoàn tất đơn sang `COMPLETED` với lý do *"Hệ thống tự động hoàn tất sau 24 giờ kể từ khi giao hàng"*.
+  - Bổ sung truy vấn `findAllByStatusAndUpdatedAtBefore` trong `CustomerOrderRepository`.
+  - Bổ sung unit tests cho phân quyền chuyển trạng thái (`OrderManagementAuthorizationTest`) và tiến trình tự động hoàn tất (`OrderAutoCompletionSchedulerTest`).
+- **Frontend**:
+  - `orderModels.js`: Cập nhật `allowedOrderActions` cho phép khách hàng nhấn `COMPLETED` khi đơn ở trạng thái `DELIVERING`, ẩn nút `COMPLETED` phía tiệm bánh.
+  - `OrderStatusActions.jsx`: Tối ưu giao diện nút hành động cho khách hàng:
+    - Nút **"Đã nhận được bánh"** (Icon `check_circle`), form xác nhận *"Xác nhận đã nhận bánh?"*, nút hành động *"Tôi đã nhận đủ bánh"*, gợi ý kiểm tra bánh trước khi xác nhận.
+  - `OrderViews.jsx`:
+    - Hiển thị banner thông báo thân thiện cho tiệm bánh khi đơn đang giao: *"Đơn hàng đang trên đường giao tới khách. Đơn sẽ chính thức hoàn tất khi khách hàng bấm xác nhận đã nhận bánh, hoặc hệ thống sẽ tự động hoàn tất sau 24 giờ"*.
+    - Mở ngay form đánh giá sản phẩm / tiệm bánh (`OrderReview`) cho khách hàng ngay sau khi đơn chuyển sang `COMPLETED`.
+  - `uiLabels.js`: Bổ sung dịch nghĩa tiếng Việt thân thiện cho các lỗi nghiệp vụ từ Backend (khu vực giao hàng, tùy chọn, tối thiểu đơn hàng...).
+- **Build & Quality**:
+  - Backend: Toàn bộ 10 unit tests trong `order-service` chạy `mvnw test` PASS 100%.
+  - Frontend: `npm run build` chạy thành công (Vite build sạch, 0 errors).
+
+## Frontend — Hoàn thiện tích hợp Trở thành đối tác, Mua gói dịch vụ & Địa chỉ giao hàng — 2026-11-09
+
+- **Trở thành đối tác (Become a Partner)**:
+  - Loại bỏ hoàn toàn mock data, fake localStorage (`DEMO_STORAGE_KEY`, `recordDemoPartnerPayment`) và modal giả lập trong `SubscriptionPlansPage.jsx`.
+  - Tích hợp `PartnerCheckoutModal.jsx` với API thật `POST /api/v1/bakeries/onboarding` qua `onboardingService.submit` và `GET /api/v1/bakeries/onboarding`.
+  - Validate đầy đủ các trường thông tin thực tế từ người dùng: tên tiệm, số điện thoại, địa chỉ xưởng, quận/huyện, tỉnh/thành.
+  - Phân định trạng thái hồ sơ tiệm từ Backend: `PENDING_APPROVAL` (PENDING - hiển thị badge và chặn gửi trùng hồ sơ), `ACTIVE` (APPROVED - đã duyệt), `DRAFT` (Bản nháp / Cần hoàn thiện thông tin), `REJECTED` (Bị từ chối).
+- **Mua gói dịch vụ (Subscription Purchase)**:
+  - Danh sách gói, giá và quyền lợi lấy trực tiếp từ `GET /api/v1/subscription-plans`.
+  - Tạo yêu cầu mua gói qua `POST /api/v1/bakeries/{bakeryId}/subscription-orders`. Đơn mua gói tạo ở trạng thái `PENDING_PAYMENT` (không tự động kích hoạt).
+  - Khách hàng cung cấp thông tin chuyển khoản / biên lai chứng từ qua `POST /api/v1/subscription-orders/{orderId}/payments`.
+  - Sau khi gửi chứng từ, đơn chuyển trạng thái `PAYMENT_REVIEW` (Chờ admin phê duyệt). Gói chỉ có hiệu lực sau khi Admin kiểm tra và duyệt thanh toán.
+  - Sửa lỗi `SubscriptionOrderDetail.jsx` phụ thuộc `bankTransfer` bị undefined từ API `/payment-options` khiến form bị khóa vô hiệu; cấu hình thông tin chuyển khoản mặc định rõ ràng cho nền tảng.
+- **Đặt bánh trực tiếp (Direct Order)**:
+  - Kiểm tra và tích hợp form chọn / thêm địa chỉ giao hàng (`AddressPicker.jsx` kết nối `GET / POST /api/v1/users/me/addresses`).
+  - Gửi đúng `deliveryAddressId`, `requestedDeliveryAt` (thời gian tương lai), `customerNote` theo chuẩn `CreateDirectOrderRequest` tới `POST /api/v1/orders/direct`.
+  - Đảm bảo snapshot địa chỉ được lưu và hiển thị chi tiết trong `OrderTrackingView.jsx` (người nhận, SĐT, địa chỉ chi tiết, phường, quận, thành phố).
+  - Xử lý điều hướng ngay tới trang chi tiết đơn hàng sau khi tạo đơn thành công.
+- **Yêu cầu báo giá (Request Quotation - RFQ)**:
+  - `RequestForm.jsx` hỗ trợ chọn nhanh từ sổ địa chỉ đã lưu (`loadAddresses`) để tự động điền `deliveryDistrict` và `deliveryCity`.
+  - Validate bắt buộc `deliveryDistrict` và `deliveryCity` gửi đúng chuẩn DTO `CreateCakeRequestRequest` tới `POST /api/v1/cake-requests`.
+  - Thông tin khu vực nhận bánh hiển thị rõ ràng trên chi tiết RFQ (`CustomerRequestDetail`) và danh sách yêu cầu.
+  - Luồng chấp nhận báo giá (`POST /api/v1/offers/{offerId}/accept`) truyền đúng `deliveryAddressId` theo chuẩn Backend.
+- **Build & Quality**:
+  - `npm run build` chạy thành công (Vite build sạch, 0 lỗi TypeScript / syntax).
 
 ## Flutter SweetCake UI local — 2026-11-07
 

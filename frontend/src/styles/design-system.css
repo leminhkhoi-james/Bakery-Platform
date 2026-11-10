@@ -186,7 +186,7 @@ button:disabled { opacity: .45; }
   text-align: center;
   vertical-align: middle;
 }
-:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table .sc-table-actions .sc-action-row {
+:is(.sc-portal, .sc-customer, .sc-drawer) .sc-table .sc-table-actions :is(.sc-action-row, .sc-business-actions) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,3 +228,63 @@ button:disabled { opacity: .45; }
 @media (max-width: 639px) { .sc-button.sc-refresh-button { min-height: 2.5rem; } .sc-toolbar-actions > label { flex: 1 1 12rem; } }
 .sc-toolbar > label { display: grid; gap: .35rem; min-width: 0; }
 :is(.sc-panel, .sc-drawer-body) :is(p, dd, [role="alert"], [role="status"]) { overflow-wrap: anywhere; line-height: 1.6; }
+
+/* Read-only workspace details share the plan editor's scrollable shell. */
+.sc-drawer.sc-workspace-detail:not(.sc-workspace-confirm) { inset: 0 0 0 auto; margin: 0; width: min(52rem, 100vw); height: 100dvh; max-height: 100dvh; border-radius: 0; overflow: clip; background: #f8fafc; }
+.sc-drawer.sc-workspace-detail[open], .sc-drawer.sc-review-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: clip; }
+:is(.sc-workspace-detail, .sc-review-dialog) > .sc-drawer-heading { position: static; background: #f8fafc; gap: .8rem; }
+.sc-workspace-detail > .sc-drawer-heading .sc-kicker { display: none; }
+.sc-workspace-detail > .sc-drawer-heading > div { min-width: 0; overflow-wrap: anywhere; }
+.sc-workspace-detail > .sc-drawer-heading > button { flex-shrink: 0; }
+:is(.sc-workspace-detail, .sc-review-dialog) > .sc-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; align-content: start; }
+:is(.sc-workspace-detail, .sc-review-dialog) > .sc-drawer-footer { padding: .75rem 1rem; border-top: 1px solid #e2e8f0; background: #fff; }
+.sc-drawer.sc-workspace-confirm { inset: 0; margin: auto; width: min(34rem, calc(100vw - 1rem)); background: #f8fafc; height: fit-content; max-height: calc(100dvh - 1rem); border-radius: 14px; }
+.sc-workspace-detail :is(.sc-detail-section, .sc-review-section) { min-width: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: .85rem; }
+.sc-workspace-detail .sc-review-section + .sc-review-section { margin-top: .8rem; }
+.sc-workspace-detail .sc-detail-section h3 { margin-bottom: .6rem; font-weight: 700; }
+
+.sc-workspace-detail .sc-detail-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem 1rem; }
+.sc-workspace-detail .sc-detail-wide { grid-column: 1 / -1; }
+.sc-workspace-detail :is(.sc-detail-fields, .sc-review-fields, .sc-bakery-review-fields) dt { color: #334155; font-size: .82rem; font-weight: 550; margin: 0 0 .3rem; }
+.sc-workspace-detail :is(.sc-detail-fields, .sc-review-fields, .sc-bakery-review-fields) dd,
+.sc-workspace-detail .sc-detail-value { min-width: 0; margin: 0; padding: .55rem .65rem; border: 1px solid #dfe6ee; border-radius: 10px; background: #f4f6f8; overflow-wrap: anywhere; }
+.sc-workspace-detail .sc-quote-workspace-layout { grid-template-columns: minmax(0, 1fr); }
+.sc-workspace-detail .sc-quote-side-request { position: static; }
+@media (max-width: 539px) {
+  .sc-workspace-detail .sc-detail-fields { grid-template-columns: minmax(0, 1fr); }
+}
+.sc-workspace-detail .sc-order-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sc-workspace-detail .sc-order-facts > div { display: block; }
+.sc-workspace-detail .sc-order-facts dd { margin-top: .3rem; padding: .55rem .65rem; border: 1px solid #dfe6ee; border-radius: 10px; background: #f4f6f8; overflow-wrap: anywhere; }
+.sc-workspace-detail .sc-order-tracking-card { border-radius: 12px; background: #fff; }
+@media (max-width: 539px) {
+  .sc-workspace-detail .sc-order-facts { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Owner/Admin record actions follow the filled workspace button style. */
+.sc-portal :is(.sc-table-actions, .sc-vendor-order-actions, .sc-admin-plan-actions, .sc-vendor-card-actions)
+  .sc-button:not(.sc-action-button--warning, .sc-action-button--danger, .sc-choice-button) {
+  background: var(--sc-color-primary);
+  border-color: var(--sc-color-primary);
+  color: #fff;
+}
+.sc-portal :is(.sc-table-actions, .sc-vendor-order-actions, .sc-admin-plan-actions, .sc-vendor-card-actions)
+  .sc-button:not(.sc-action-button--warning, .sc-action-button--danger, .sc-choice-button):hover:not(:disabled) {
+  background: var(--sc-color-primary-hover);
+  border-color: var(--sc-color-primary-hover);
+  color: #fff;
+}
+
+/* Text actions on workspace records share sizing and do not need an icon. */
+.sc-portal :is(td.sc-table-actions, td.sc-vendor-order-actions, .sc-admin-plan-actions, .sc-vendor-card-actions)
+  .sc-button:not([aria-haspopup], .sc-icon-button),
+.sc-portal .sc-button.sc-record-action {
+  min-height: 2.5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--sc-radius-control);
+  font-size: var(--sc-text-xs);
+  font-weight: var(--sc-weight-semibold);
+  line-height: 1.4;
+}
+.sc-portal :is(td.sc-table-actions, td.sc-vendor-order-actions, .sc-admin-plan-actions, .sc-vendor-card-actions)
+  .sc-button:not([aria-haspopup], .sc-icon-button) > .sc-icon { display: none; }

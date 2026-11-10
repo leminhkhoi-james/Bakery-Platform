@@ -1,5 +1,5 @@
 import { loadRfqs, loadOffers } from '../../../services/rfqService.js'
-import { unifiedEnabled, unifiedSnapshot, unifiedMetrics, recordSource } from '../../../services/unifiedDataService.js'
+import { unifiedEnabled, unifiedSnapshot, recordSource } from '../../../services/unifiedDataService.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import React from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
@@ -15,7 +15,6 @@ import { StatusDistribution } from './DashboardCharts.jsx'
 import AdminWorkQueue from './AdminWorkQueue.jsx'
 import './admin-dashboard.css'
 import { simulationStore } from '../../../mockData/business/runtime.js'
-import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 
 export default function AdminDashboardPage({ onNavigate }) {
   const { user } = useAuth()
@@ -25,7 +24,6 @@ export default function AdminDashboardPage({ onNavigate }) {
   useCatalogResource(loadRfqs, { scope: 'all', size: 100 })
   useCatalogResource(loadOffers, { scope: 'all', size: 100 })
   const snapshot = unifiedSnapshot()
-  const localSubscriptionRevenue = snapshot ? unifiedMetrics(snapshot, {}).simulationSubscriptionRevenue : null
   const simulated = snapshot ? { state: snapshot } : simulationStore()
   const supplement = simulated ? Object.fromEntries(['products', 'requests', 'offers', 'designs', 'plans', 'reviews'].map(key => [key, { state: 'ready', source: 'simulation', rows: key === 'reviews' ? simulated.state.orders.filter(order => order.review).map(order => ({ ...order.review, id: order.id })) : simulated.state[key] || [] }])) : dashboardSupplement(runtime, user, resource.data || {})
   const combinedData = { ...resource.data, ...supplement }
@@ -61,7 +59,7 @@ export default function AdminDashboardPage({ onNavigate }) {
             ))
           : dashboardMoney(0),
       hasUrgentDot: false,
-      subContent: <span className="sc-kpi-sub-text">Thực nhận{localSubscriptionRevenue !== null && <> · Mô phỏng: <strong>{dashboardMoney(localSubscriptionRevenue, 'VND')}</strong></>}</span>,
+      subContent: <span className="sc-kpi-sub-text">Doanh thu gói thực nhận</span>,
     },
     {
       id: 'bakeries',
@@ -266,8 +264,8 @@ export default function AdminDashboardPage({ onNavigate }) {
             <article className="sc-panel">
               <div className="sc-dashboard-panel-heading">
                 <h3>Đơn hàng mới nhất</h3>
-                <button className="sc-dashboard-link" onClick={go('admin-orders')}>
-                  Xem tất cả <Icon name="arrow_forward" />
+                <button className="sc-button sc-record-action" onClick={go('admin-orders')}>
+                  Xem tất cả
                 </button>
               </div>
               {dashboard.recentOrders.length ? (
@@ -316,7 +314,7 @@ export default function AdminDashboardPage({ onNavigate }) {
                             aria-label={'Xem chi tiết ' + dashboardOrderName(row)}
                           >
                             <Icon name="visibility" />
-                            Xem đơn
+                            Xem chi tiết
                           </button>
                         </td>
                       </tr>
@@ -336,7 +334,6 @@ export default function AdminDashboardPage({ onNavigate }) {
           </div>
         </section>
       </div>
-      <BusinessSimulationReport />
     </AdminFrame>
   )
 }

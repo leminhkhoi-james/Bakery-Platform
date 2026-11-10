@@ -5,8 +5,8 @@ import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { VendorConfirm } from '../../../components/common/VendorUi.jsx'
-import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
-import { Icon } from '../../../components/common/WorkspaceUI.jsx'
+import VendorFrame from '../../../components/management/VendorFrame.jsx'
+import { DetailDrawer, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -142,7 +142,6 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
           </p>
         </div>
       </div>
-      {localPeriod && <div className="rounded-xl border border-outline-variant/30 p-4"><h3 className="font-bold">Kỳ dịch vụ trình duyệt</h3><p>{subscriptionStatusLabel(localPeriod.status)} · {formatPeriodDate(localPeriod.periodStart)} → {formatPeriodDate(localPeriod.periodEnd)}</p><p className="text-xs">Áp dụng cho bản ghi trình duyệt. Quyền Marketplace được xác định từ kỳ API.</p></div>}
       <ResourceState resource={subscription}>
         {subscription.data && <>
           <div className="mb-4 grid gap-4 md:grid-cols-2">
@@ -227,7 +226,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
     )}
     {error && !selected && <SubscriptionError error={error} />}
     <section><div className="mb-4 flex flex-wrap items-center gap-3"><h2 className="mr-auto text-xl font-bold">Lịch sử mua gói</h2><label>Trạng thái <select value={status} disabled={locked} onChange={(event) => { setStatus(event.target.value); setPage(1) }} className="rounded-xl border p-2"><option value="">Tất cả</option>{['PENDING_PAYMENT', 'PAYMENT_REVIEW', 'COMPLETED', 'REJECTED', 'CANCELLED', 'EXPIRED'].map((value) => <option key={value} value={value}>{subscriptionStatusLabel(value)}</option>)}</select></label><RefreshButton disabled={locked} onClick={refresh} className="rounded-xl border px-3 py-2">Làm mới</RefreshButton></div>
-      <ResourceState resource={history}>{history.data && <>{history.data.result.length ? <ul className="space-y-3">{history.data.result.map((order) => <li key={order.id}><button disabled={locked} onClick={() => setOrderId(order.id)} className="w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4 text-left disabled:opacity-40"><span className="block break-all font-bold">{displayReference(order.id, 'SUB', order.orderNumber)} {unifiedEnabled() && <small>· {recordSource(order) === 'local' ? 'Trình duyệt' : 'API'}</small>} · {cleanPresentationLabel(order.planNameSnapshot || order.planCodeSnapshot, 'Chưa có tên gói')}</span><span>{formatSubscriptionMoney(order.totalAmount, order.currency)} · {subscriptionStatusLabel(order.status)} · {formatSubscriptionDate(order.createdAt)}</span></button></li>)}</ul> : <p>Chưa có đơn mua gói phù hợp.</p>}{history.data.meta.pages > 1 && <CatalogPagination meta={history.data.meta} onPage={(value) => { if (!locked) setPage(value) }} />}</>}</ResourceState>
+      <ResourceState resource={history}>{history.data && <>{history.data.result.length ? <ul className="space-y-3">{history.data.result.map((order) => <li key={order.id}><button disabled={locked} onClick={() => setOrderId(order.id)} className="w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4 text-left disabled:opacity-40"><span className="block break-all font-bold">{displayReference(order.id, 'SUB', order.orderNumber)} · {cleanPresentationLabel(order.planNameSnapshot || order.planCodeSnapshot, 'Chưa có tên gói')}</span><span>{formatSubscriptionMoney(order.totalAmount, order.currency)} · {subscriptionStatusLabel(order.status)} · {formatSubscriptionDate(order.createdAt)}</span></button></li>)}</ul> : <p>Chưa có đơn mua gói phù hợp.</p>}{history.data.meta.pages > 1 && <CatalogPagination meta={history.data.meta} onPage={(value) => { if (!locked) setPage(value) }} />}</>}</ResourceState>
       {orderId && <SubscriptionOrderDetail key={orderId} orderId={orderId} bakeryId={bakeryId} roles={roles} revision={detailRevision} onChanged={refresh} onBusy={(value) => { setDetailBusy(value); onBusy(value) }} />}
     </section><p className="text-sm text-on-surface-variant">Để mua kỳ dịch vụ tiếp theo, tạo đơn mới và chờ xác nhận thanh toán. Liên hệ quản trị viên nếu cần điều chỉnh gói.</p>
   </div>
@@ -236,12 +235,12 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
 export default function VendorSubscriptionPage({ routeSearch = '', onNavigate }) {
   const { roles } = useAuth()
   const owner = useVendorBakery(routeSearch)
-  const { bakeryId, selectBakery: setBakeryId, available } = owner
+  const { bakeryId } = owner
   const [busy, setBusy] = useState(false)
   const activeBakeryId = bakeryId || new URLSearchParams(routeSearch).get('bakeryId') || ''
   const plans = useCatalogResource(loadOwnerPlans)
-  return <VendorFrame owner={owner} title="Gói dịch vụ" activeTab="subscription" bakeryId={activeBakeryId} onNavigate={onNavigate}>
-    <BakerySelector available={available} key={activeBakeryId} bakeryId={activeBakeryId} onSelect={(value) => { setBakeryId(value); onNavigate('vendor-subscription?bakeryId=' + value) }} disabled={busy} />
+  return <VendorFrame owner={owner} title="Gói dịch vụ" activeTab="subscription" bakeryId={activeBakeryId} onNavigate={onNavigate} bakerySelectionDisabled={busy}>
+
     {activeBakeryId ? <><BakeryWorkspace key={activeBakeryId} bakeryId={activeBakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
   </VendorFrame>
 }

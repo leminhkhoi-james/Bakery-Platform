@@ -6,8 +6,27 @@ import { canOrderPlan, subscriptionStatusLabel, formatSubscriptionMoney } from '
 import { planFeatureRows, planMonthlyPrice, planName, planTierRank, sortPlansByTier } from '../../services/planPresentation.js'
 
 export function SubscriptionError({ error, retry }) {
-  const explanation = { 400: 'Thông tin chưa hợp lệ. Vui lòng kiểm tra lại.', 401: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.', 403: 'Bạn không có quyền thao tác với cửa hàng này.', 404: 'Không tìm thấy gói hoặc đơn mua được yêu cầu.', 409: 'Chưa thể tạo hoặc cập nhật đơn. Hãy kiểm tra đơn đang chờ trong lịch sử mua gói và tải lại trước khi thử tiếp.', 422: 'Gói hoặc chứng từ chưa đáp ứng điều kiện xử lý.' }[error?.status]
-  return <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800"><p>{explanation || userFeedback(error)}</p>{retry && <button className="mt-2 underline" onClick={retry}>Thử lại</button>}</div>
+  const feedback = userFeedback(error)
+  const explanation = feedback && feedback !== 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
+    ? feedback
+    : {
+        400: 'Thông tin chưa hợp lệ. Vui lòng kiểm tra lại.',
+        401: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
+        403: 'Bạn không có quyền thao tác với cửa hàng này.',
+        404: 'Không tìm thấy thông tin được yêu cầu.',
+        409: 'Hồ sơ tiệm bánh hoặc gói dịch vụ đang chờ Ban quản trị phê duyệt.',
+        422: 'Thông tin gửi lên chưa đáp ứng điều kiện xử lý.',
+      }[error?.status] || feedback || 'Đã có lỗi xảy ra. Vui lòng thử lại sau.'
+  return (
+    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800 text-xs space-y-1">
+      <div className="flex items-center gap-2 font-bold">
+        <span className="material-symbols-outlined text-sm">info</span>
+        <span>Thông báo</span>
+      </div>
+      <p>{explanation}</p>
+      {retry && <button className="mt-2 underline font-semibold cursor-pointer block" onClick={retry}>Thử lại</button>}
+    </div>
+  )
 }
 
 export function ResourceState({ resource, children }) {

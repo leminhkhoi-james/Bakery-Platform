@@ -2,17 +2,13 @@ import React, { useRef, useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { ApiErrorMessage, buttonClass, inputClass } from '../management/ApiState.jsx'
-import { loadAddresses } from '../../services/addressService.js'
+import { loadAddresses, selectedAddress, isAddressMatchingLocation } from '../../services/addressService.js'
 import { isRealCheckoutId } from '../../services/checkoutService.js'
 import { acceptVerifiedOffer, createVerifiedDirectOrder } from '../../services/verifiedCheckoutService.js'
 import { toLocalInput } from '../../services/marketplaceModels.js'
-import { selectedAddress } from '../../mockData/addressModels.js'
 import AddressPicker from './AddressPicker.jsx'
-import { demoRuntime } from '../../mockData/runtime.js'
-import { isDemoId } from '../../mockData/seed.js'
-import MockCheckout from '../../mockData/MockCheckout.jsx'
 
-function RealCheckout({ user, offerId, items, disabled, onConfirmed, onNavigate }) {
+function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConfirmed, onNavigate }) {
   const addresses = useCatalogResource(loadAddresses)
   const [addressId, setAddressId] = useState('')
   const [neededAt, setNeededAt] = useState(() => toLocalInput(new Date(Date.now() + 7 * 86400000).toISOString()))
@@ -23,14 +19,42 @@ function RealCheckout({ user, offerId, items, disabled, onConfirmed, onNavigate 
   const [retrying, setRetrying] = useState(false)
   const attempt = useRef(null)
   const running = useRef(false)
+
+  // Auto-select address matching expectedLocation if available
+  React.useEffect(() => {
+    if (expectedLocation && addresses.data?.length && !addressId) {
+      const match = addresses.data.find(a => isAddressMatchingLocation(a, expectedLocation))
+      if (match) {
+        setAddressId(match.id)
+      }
+    }
+  }, [expectedLocation, addresses.data, addressId])
+
   const address = selectedAddress(addresses.data || [], addressId)
+  const isLocationMismatch = Boolean(expectedLocation && address && !isAddressMatchingLocation(address, expectedLocation))
   const locked = busy || complete || retrying
   const ready = !disabled && !busy && !complete && addresses.status === 'ready' && !addresses.refreshing && address &&
-    (offerId || Number.isFinite(Date.parse(neededAt)))
+    !isLocationMismatch && (offerId || Number.isFinite(Date.parse(neededAt)))
 
   async function submit(event) {
     event.preventDefault()
     if (!ready || running.current) return
+
+    if (!address?.id) {
+      setError(new Error('Vui lòng chọn địa chỉ giao bánh hợp lệ.'))
+      return
+    }
+
+    if (isLocationMismatch) {
+      setError(new Error(`Địa chỉ giao hàng phải thuộc ${expectedLocation.district}, ${expectedLocation.city} như đã thỏa thuận trong yêu cầu báo giá.`))
+      return
+    }
+
+    if (!offerId && (!neededAt || Date.parse(neededAt) <= Date.now())) {
+      setError(new Error('Thời gian nhận bánh phải ở tương lai.'))
+      return
+    }
+
     running.current = true
     setBusy(true)
     setError(null)
@@ -41,16 +65,25 @@ function RealCheckout({ user, offerId, items, disabled, onConfirmed, onNavigate 
     }
     attempt.current = current
     try {
+      let lastOrderId = null
       for (; current.next < current.jobs.length; current.next++) {
         const { item, key } = current.jobs[current.next]
-        if (offerId) onConfirmed?.(await acceptVerifiedOffer(offerId, current.input, key))
-        else {
-          await createVerifiedDirectOrder(item, current.input, key)
+        if (offerId) {
+          const accepted = await acceptVerifiedOffer(offerId, current.input, key)
+          lastOrderId = accepted?.orderId
+          onConfirmed?.(accepted)
+        } else {
+          const created = await createVerifiedDirectOrder(item, current.input, key)
+          lastOrderId = created?.id
           onConfirmed?.(item.id)
         }
       }
       setComplete(true)
-      onNavigate?.('profile')
+      if (lastOrderId) {
+        onNavigate?.('tracking?orderId=' + encodeURIComponent(lastOrderId))
+      } else {
+        onNavigate?.('tracking')
+      }
     } catch (failure) {
       if (current.next === 0 && [400, 403, 404, 422].includes(failure.status)) attempt.current = null
       setRetrying(Boolean(attempt.current))
@@ -62,26 +95,86 @@ function RealCheckout({ user, offerId, items, disabled, onConfirmed, onNavigate 
   }
 
   return <section className="space-y-4">
-    <AddressPicker resource={addresses} selected={address} onSelect={setAddressId} user={user} disabled={locked || disabled} />
+    <AddressPicker
+      resource={addresses}
+      selected={address}
+      onSelect={setAddressId}
+      user={user}
+      disabled={locked || disabled}
+      expectedLocation={expectedLocation}
+    />
+    {isLocationMismatch && (
+      <div className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 space-y-1">
+        <div className="flex items-center gap-1.5 font-bold text-amber-800">
+          <span className="material-symbols-outlined text-sm">warning</span>
+          <span>Khu vực giao hàng chưa khớp với báo giá</span>
+        </div>
+        <p>
+          Báo giá này dành cho khu vực <strong>{expectedLocation.district}, {expectedLocation.city}</strong>.
+          Địa chỉ bạn đang chọn thuộc <strong>{address.district}, {address.city}</strong>.
+        </p>
+        <p className="text-amber-700">
+          Vui lòng chọn địa chỉ đúng khu vực trên hoặc nhấn <strong>"+ Thêm địa chỉ mới"</strong> để đơn hàng được chấp nhận chính xác.
+        </p>
+      </div>
+    )}
     <form onSubmit={submit} className="space-y-3">
-      {!offerId && <label>Thời gian nhận bánh<input required type="datetime-local" className={inputClass} disabled={locked || disabled} value={neededAt} onChange={event => setNeededAt(event.target.value)} /></label>}
-      <label>Ghi chú<textarea className={inputClass} maxLength={1000} disabled={locked || disabled} value={note} onChange={event => setNote(event.target.value)} /></label>
-      <p className="text-xs">Đặt hàng không thu tiền tại đây.</p>
-      <button disabled={!ready} className={buttonClass}>{busy ? 'Đang gửi…' : retrying ? 'Thử lại cùng yêu cầu' : offerId ? 'Chấp nhận báo giá' : 'Đặt hàng'}</button>
-      {complete && <p role="status">Đã xác nhận đơn hàng.</p>}
+      {!offerId && (
+        <label className="block text-xs font-bold text-primary">
+          Thời gian nhận bánh mong muốn *
+          <input
+            required
+            type="datetime-local"
+            className={inputClass + ' mt-1 w-full text-xs font-medium'}
+            disabled={locked || disabled}
+            value={neededAt}
+            onChange={event => setNeededAt(event.target.value)}
+          />
+        </label>
+      )}
+      <label className="block text-xs font-bold text-primary">
+        Ghi chú giao hàng cho tiệm bánh
+        <textarea
+          className={inputClass + ' mt-1 w-full text-xs'}
+          maxLength={1000}
+          rows={2}
+          placeholder="Lưu ý khi vận chuyển bánh, lời chúc ghi trên thiệp..."
+          disabled={locked || disabled}
+          value={note}
+          onChange={event => setNote(event.target.value)}
+        />
+      </label>
+
+      {!address && addresses.status === 'ready' && (
+        <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 p-2.5 rounded-xl">
+          Vui lòng chọn hoặc thêm địa chỉ nhận bánh ở trên để hoàn tất đơn hàng.
+        </p>
+      )}
+
+      <p className="text-xs text-on-surface-variant">
+        Thanh toán trực tiếp theo thỏa thuận với tiệm bánh (nền tảng không thu tiền mua bánh).
+      </p>
+
+      <button disabled={!ready} className={buttonClass + ' w-full py-3 text-sm font-bold shadow-md cursor-pointer disabled:opacity-50'}>
+        {busy ? 'Đang gửi đơn lên hệ thống…' : retrying ? 'Thử lại cùng yêu cầu' : offerId ? 'Xác nhận chấp nhận báo giá' : 'Đặt hàng'}
+      </button>
+
+      {complete && (
+        <p role="status" className="rounded-xl bg-green-50 border border-green-200 text-green-800 p-3 text-xs font-bold flex items-center gap-1.5">
+          <span className="material-symbols-outlined text-sm">check_circle</span>
+          <span>Đã xác nhận đơn hàng thành công! Đang chuyển hướng đến chi tiết đơn...</span>
+        </p>
+      )}
       {error && <ApiErrorMessage error={error} />}
     </form>
   </section>
 }
 
-export default function VerifiedCheckout({ offerId, items = [], ...props }) {
+export default function VerifiedCheckout({ offerId, items = [], expectedLocation, ...props }) {
   const { user } = useAuth()
-  if (demoRuntime && (isDemoId(offerId) || items.length > 0 && items.every(item => isDemoId(item.productId) && isDemoId(item.bakeryId)))) {
-    return <MockCheckout key={user?.id || 'anonymous'} {...props} offerId={offerId} items={items} />
-  }
-  if (!user?.roles?.includes('CUSTOMER')) return <p>Vui lòng đăng nhập tài khoản khách hàng để tiếp tục.</p>
+  if (!user?.roles?.includes('CUSTOMER')) return <p className="text-xs text-on-surface-variant p-4">Vui lòng đăng nhập tài khoản khách hàng để tiếp tục đặt bánh.</p>
   const valid = offerId ? isRealCheckoutId(offerId) : items.length > 0 && items.every(item =>
     item.catalogSource === 'backend' && isRealCheckoutId(item.productId) && isRealCheckoutId(item.bakeryId))
-  if (!valid) return <p>Chưa có sản phẩm hoặc báo giá API hợp lệ để đặt hàng.</p>
-  return <RealCheckout key={user.id + ':' + (offerId || 'cart')} {...props} user={user} offerId={offerId} items={items} />
+  if (!valid) return <p className="text-xs text-on-surface-variant p-4">Chưa có sản phẩm hoặc báo giá API hợp lệ để đặt hàng.</p>
+  return <RealCheckout key={user.id + ':' + (offerId || 'cart')} {...props} user={user} offerId={offerId} items={items} expectedLocation={expectedLocation} />
 }

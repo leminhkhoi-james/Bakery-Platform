@@ -9,6 +9,7 @@ import { uiLabel } from '../../services/uiLabels.js'
 import React, { useRef, useState } from 'react'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { useAuth } from '../../context/useAuth.js'
+import { loadOwnerBakery } from '../../services/vendorDashboardService.js'
 import { loadManagedProducts, loadManagedCategories, loadVendorMembership, vendorManagementService } from '../../services/vendorManagementService.js'
 import { memberCanEdit, productActions } from '../../services/managementModels.js'
 import { ApiState, ApiErrorMessage, inputClass, buttonClass, panelClass } from './ApiState.jsx'
@@ -239,8 +240,10 @@ function PublishedProductThumbnail({ bakeryId, product }) {
   return <><VendorImage src={image?.url} alt={vendorName(product.name)} />{resource.error && resource.error.status !== 404 && <p className="text-xs px-3" role="alert">Chưa tải được hình ảnh. <button className="underline" onClick={resource.reload}>Thử lại</button></p>}</>
 }
 
-export default function ProductManager({ bakeryId }) {
+export default function ProductManager({ bakeryId, navigation, bakeryName: initialBakeryName }) {
   const { user, roles } = useAuth()
+  const bakeryInfo = useCatalogResource(loadOwnerBakery, { bakeryId, userId: user?.id })
+  const bakeryName = initialBakeryName || bakeryInfo.data?.name || ''
   const membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
   const [page, setPage] = useState(1), [query, setQuery] = useState(''), [status, setStatus] = useState(''), [sort, setSort] = useState('createdAt,desc'), [categoryId, setCategory] = useState('')
   const products = useCatalogResource(loadManagedProducts, { bakeryId, page, size: 12, query, status, sort, categoryId })
@@ -259,7 +262,10 @@ export default function ProductManager({ bakeryId }) {
   }
   const changeFilter = (setter) => (event) => { setter(event.target.value); setPage(1) }
   return <div className="space-y-5">
-    {canEdit && <button type="button" className="sc-button sc-action-button--secondary justify-self-start" disabled={busy} onClick={() => setCategoryAdding(true)}>Thêm danh mục sản phẩm</button>}
+    <div className="flex flex-wrap items-center gap-3">
+      {navigation}
+      {canEdit && <button type="button" className="sc-button sc-action-button--secondary" disabled={busy} onClick={() => setCategoryAdding(true)}>Thêm danh mục sản phẩm</button>}
+    </div>
     {categoryAdding && canEdit && <CatalogEntityForm kind="categories" busy={busy} error={error} onClose={() => setCategoryAdding(false)} onSave={async input => {
       if (busy || inFlight.current) return
       inFlight.current = true; setBusy(true); setError(null)
@@ -270,7 +276,7 @@ export default function ProductManager({ bakeryId }) {
       {membership.status === 'loading' ? <p>Đang xác minh quyền quản lý…</p> : membership.error ? <><p className="text-sm">Chưa xác minh được quyền chủ tiệm. Các thao tác thay đổi đang được khóa.</p><ApiErrorMessage error={membership.error} retry={membership.reload} /></> : null}
       <div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{['DRAFT', 'PUBLISHED', 'HIDDEN', 'ARCHIVED'].map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{categories.data?.map((category) => <option key={category.id} value={category.id}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label><label>Sắp xếp<select value={sort} onChange={changeFilter(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="name,asc">Tên A–Z</option><option value="basePrice,asc">Giá tăng dần</option><option value="basePrice,desc">Giá giảm dần</option></select></label></div>
       {categories.error && <ApiErrorMessage error={categories.error} retry={categories.reload} />}
-      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3>{unifiedEnabled() && <small>{recordSource(product) === 'local' ? 'Trình duyệt' : 'API'}</small>}<p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
+      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
                     <button disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}>
                       <Icon name="edit" />Chỉnh sửa
                     </button>
@@ -293,6 +299,7 @@ export default function ProductManager({ bakeryId }) {
     {canEdit && (adding || editing) && (
       <DetailDrawer
         className="sc-vendor-drawer"
+        kicker={bakeryName ? `${bakeryName} · Chi tiết` : 'Chi tiết'}
         footer={
           <div className="flex items-center justify-between w-full">
             <div className="text-xs text-on-surface-variant hidden sm:block">

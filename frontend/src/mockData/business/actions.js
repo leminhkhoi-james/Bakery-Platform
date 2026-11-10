@@ -11,8 +11,10 @@ export async function businessAction(type, id, user, note = '') {
   store.inTransaction = true
   try {
     if (type === 'rejectOffer') {
-      store.requireUser(user, 'ADMIN')
+      store.requireUser(user, 'BAKERY_OWNER')
+      if (user.roles.includes('ADMIN')) throw new DemoError('Chỉ chủ tiệm được từ chối báo giá.', 403)
       const offer = store.find('offers', id)
+      store.bakeryAccess(user, offer.bakeryId, true)
       if (offer.status !== 'PENDING' || !note.trim()) throw new DemoError('Cần lý do từ chối báo giá đang chờ.', 422)
       offer.status = 'REJECTED'; offer.updatedAt = new Date().toISOString()
       store.inTransaction = false; await store.save(); return offer

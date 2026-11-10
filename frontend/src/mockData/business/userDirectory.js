@@ -4,7 +4,7 @@ export function businessUserDirectory(store) {
   const restriction = (person, actor, action) => {
     if (person?.id === actor?.id || person?.roles?.includes('ADMIN') || person?.roles?.includes('BAKERY_OWNER')) return 'Tài khoản quản trị hoặc chủ tiệm đang được bảo vệ.'
     if (person?.status === 'DELETED') return 'Hồ sơ đã bị xóa.'
-    if (action === 'delete' && store.state.orders.some(order => order.customerId === person?.id)) return 'Khách hàng có đơn liên kết; hãy tạm ngưng hồ sơ thay vì xóa.'
+    if (action === 'delete' && store.state.orders.some(order => order.customerId === person?.id)) return 'Không thể xóa hồ sơ có đơn liên kết.'
     return null
   }
   return {

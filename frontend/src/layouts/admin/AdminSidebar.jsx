@@ -43,10 +43,10 @@ export default function AdminSidebar({
     if (['admin-orders', 'orders', 'escrow', 'escrow-vault'].includes(cleanTab)) {
       return 'admin-orders'
     }
-    if (['admin-plans', 'plans', 'goi-dich-vu'].includes(cleanTab)) {
-      return 'admin-plans'
+    if (['admin-payments', 'payments', 'duyet-goi', 'duyet-thanh-toan', 'duyet-mua-goi'].includes(cleanTab)) {
+      return 'admin-payments'
     }
-    if (['admin-payments', 'payments', 'duyet-goi'].includes(cleanTab)) {
+    if (['admin-plans', 'plans', 'goi-dich-vu'].includes(cleanTab)) {
       return 'admin-plans'
     }
     if (['admin-users', 'users', 'nguoi-dung'].includes(cleanTab)) {
@@ -65,17 +65,24 @@ export default function AdminSidebar({
       icon: 'dashboard',
     },
     {
-      id: 'admin-revenue',
-      route: 'admin-revenue',
-      label: 'Doanh thu',
-      icon: 'account_balance_wallet',
-    },
-    {
       id: 'admin-vendors',
       route: 'admin-vendors',
-      label: 'Tiệm bánh',
+      label: 'Duyệt tiệm bánh',
       icon: 'storefront',
       badge: pendingVendors > 0 ? `${pendingVendors}` : null,
+    },
+    {
+      id: 'admin-payments',
+      route: 'admin-payments',
+      label: 'Duyệt mua gói',
+      icon: 'receipt_long',
+      badge: pendingPaymentsCount > 0 ? String(pendingPaymentsCount) : null,
+    },
+    {
+      id: 'admin-plans',
+      route: 'admin-plans',
+      label: 'Gói dịch vụ',
+      icon: 'workspace_premium',
     },
     {
       id: 'admin-orders',
@@ -83,8 +90,12 @@ export default function AdminSidebar({
       label: 'Đơn hàng',
       icon: 'shopping_bag',
     },
-    ...(simulationEnabled() ? [{ id: 'admin-rfq', route: 'admin-rfq', label: 'Yêu cầu & báo giá', icon: 'request_quote' }] : []),
-    { id: 'admin-plans', route: 'admin-plans', label: 'Gói dịch vụ', icon: 'workspace_premium', badge: pendingPaymentsCount > 0 ? String(pendingPaymentsCount) : null },
+    {
+      id: 'admin-revenue',
+      route: 'admin-revenue',
+      label: 'Doanh thu',
+      icon: 'account_balance_wallet',
+    },
     { id: 'admin-users', route: 'admin-users', label: 'Người dùng', icon: 'group' },
   ]
 

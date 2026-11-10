@@ -1,6 +1,6 @@
 import { unifiedEnabled, recordSource, localBakeryFor, localSubscriptionFor } from '../../../services/unifiedDataService.js'
 import React, { useState } from 'react'
-import VendorFrame, { BakerySelector } from '../../../components/management/VendorFrame.jsx'
+import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { ApiErrorMessage, inputClass, panelClass } from '../../../components/management/ApiState.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -17,7 +17,7 @@ import { DetailDrawer, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
 import { loadVendorRfqAccess, loadExistingVendorOffer } from '../../../services/vendorRfqService.js'
 import { requestMatchesBakery } from '../../../services/vendorRfqModels.js'
-import { VendorRfqState } from './VendorRfqMarketplacePage.jsx'
+import { VendorRfqState } from './VendorRfqState.jsx'
 import { loadDashboardAccess } from '../../../services/vendorDashboardService.js'
 import { loadBakerySubscription } from '../../../services/subscriptionService.js'
 
@@ -52,21 +52,22 @@ function NewOffer({ id, bakery, onNavigate }) {
                   </section>
                 ) : (
                   <>
-                  {!localRequest && subscription.status === 'loading' ? <p role="status">Đang kiểm tra gói dịch vụ…</p> : !localRequest && subscription.error ? <ApiErrorMessage error={subscription.error} retry={subscription.reload} /> : !canQuote && <section className={panelClass}><p>Tiệm cần gói dịch vụ đang hiệu lực để gửi báo giá. Đơn mua gói đang chờ thanh toán hoặc duyệt chưa kích hoạt quyền này.</p><button className="sc-button" onClick={() => onNavigate('vendor-subscription?bakeryId=' + bakeryId)}>Kiểm tra gói dịch vụ</button></section>}
-                  <OfferForm
-                    key={bakeryId}
-                    bakeryId={bakeryId}
-                    source={unifiedEnabled() ? recordSource({ id }) : undefined}
-                    disabled={!canQuote || !requestAcceptsOffers(resource.data) || !matchingBakery || !requestMatchesBakery(resource.data, matchingBakery)}
-                    busy={action.busy}
-                    onSave={(input) => canQuote && action.run(async () => {
-                      const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
-                      if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
-                      const offer = await rfqService.submitOffer(id, input)
-                      if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
-                      onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
-                    })}
-                  />
+                    {!localRequest && subscription.status === 'loading' ? <p role="status">Đang kiểm tra gói dịch vụ…</p> : !localRequest && subscription.error ? <ApiErrorMessage error={subscription.error} retry={subscription.reload} /> : !canQuote && <section className={panelClass}><p>Tiệm cần gói dịch vụ đang hiệu lực để gửi báo giá. Đơn mua gói đang chờ thanh toán hoặc duyệt chưa kích hoạt quyền này.</p><button className="sc-button" onClick={() => onNavigate('vendor-subscription?bakeryId=' + bakeryId)}>Kiểm tra gói dịch vụ</button></section>}
+                    <OfferForm
+                      key={bakeryId}
+                      bakeryId={bakeryId}
+                      request={resource.data}
+                      source={unifiedEnabled() ? recordSource({ id }) : undefined}
+                      disabled={!canQuote || !requestAcceptsOffers(resource.data) || !matchingBakery || !requestMatchesBakery(resource.data, matchingBakery)}
+                      busy={action.busy}
+                      onSave={(input) => canQuote && action.run(async () => {
+                        const found = await loadExistingVendorOffer({ bakeryId, cakeRequestId: id })
+                        if (found) { onNavigate('vendor-quote-submit?offerId=' + found.id + '&bakeryId=' + bakeryId); return }
+                        const offer = await rfqService.submitOffer(id, input)
+                        if (offer.bakeryId !== bakeryId || offer.cakeRequestId !== id || offer.status !== 'PENDING') throw Object.assign(new Error('Chưa xác nhận được báo giá.'), { status: 502 })
+                        onNavigate('vendor-quote-submit?offerId=' + offer.id + '&bakeryId=' + bakeryId)
+                      })}
+                    />
                   </>
                 ))}
               </VendorRfqState>
@@ -163,13 +164,13 @@ export function ManageOffer({ id, bakeryId, user, roles }) {
     </>
   )
 }
-function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
+export function QuoteWorkspace({ bakeryId, user, roles, query, onNavigate }) {
   const access = useCatalogResource(query.get('offerId') ? loadDashboardAccess : loadVendorRfqAccess, { bakeryId, userId: user.id, includeOnboarding: roles.includes('CUSTOMER') })
   if (access.status === 'loading' || access.error) return <VendorRfqState resource={access} />
   return query.get('offerId') ? <ManageOffer key={bakeryId + query.get('offerId')} id={query.get('offerId')} bakeryId={bakeryId} user={user} roles={roles} /> : query.get('cakeRequestId') ? <NewOffer key={bakeryId + query.get('cakeRequestId')} id={query.get('cakeRequestId')} bakery={access.data} onNavigate={onNavigate} /> : <p>Chọn một yêu cầu để xem chi tiết và gửi báo giá.</p>
 }
 export default function VendorBespokeQuoteSubmitPage({ routeSearch = '', onNavigate }) {
   const owner = useVendorBakery(routeSearch)
-  const { bakeryId, selectBakery, user, roles, available } = owner, query = new URLSearchParams(routeSearch)
-  return <VendorFrame owner={owner} title={query.get('offerId') ? 'Chi tiết báo giá' : 'Chi tiết yêu cầu'} activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-actions"><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-rfq' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="arrow_back" />Quay lại danh sách</button><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-chat' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="chat" />Mở hộp thư của tiệm</button></div><BakerySelector bakeryId={bakeryId} onSelect={selectBakery} available={available} />{bakeryId ? <QuoteWorkspace key={user.id + ':' + bakeryId} bakeryId={bakeryId} user={user} roles={roles} query={query} onNavigate={onNavigate} /> : <p>Chọn cửa hàng để xem yêu cầu và gửi báo giá.</p>}</VendorFrame>
+  const { bakeryId, user, roles } = owner, query = new URLSearchParams(routeSearch)
+  return <VendorFrame owner={owner} title={query.get('offerId') ? 'Chi tiết báo giá' : 'Chi tiết yêu cầu'} activeTab="rfq" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-actions"><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-rfq' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="arrow_back" />Quay lại danh sách</button><button className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-chat' + (bakeryId ? '?bakeryId=' + bakeryId : ''))}><Icon name="chat" />Mở hộp thư của tiệm</button></div>{bakeryId ? <QuoteWorkspace key={user.id + ':' + bakeryId} bakeryId={bakeryId} user={user} roles={roles} query={query} onNavigate={onNavigate} /> : <p>Chọn cửa hàng để xem yêu cầu và gửi báo giá.</p>}</VendorFrame>
 }

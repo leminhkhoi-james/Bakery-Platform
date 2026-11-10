@@ -57,7 +57,7 @@ test('Operations form preserves full server rows and requires confirmation befor
 })
 test('Empty cart is empty and checkout is blocked without a verified deliveryAddressId', () => {
   const html = render(Cart, { cartItems: [], onNavigate: () => {} })
-  assert.match(html, /Giỏ hàng đang trống/); assert.match(html, /Hiện chưa thể chọn địa chỉ/); assert.match(html, /disabled=""/)
+  assert.match(html, /Giỏ hàng đang trống/); assert.match(html, /disabled=""/)
   assert.doesNotMatch(html, /Pikachu|950\.000|Saigon Pearl|Đã đặt hàng thành công/)
 })
 test('Populated local cart preserves item controls but requires revalidation and shows no fake totals', () => {

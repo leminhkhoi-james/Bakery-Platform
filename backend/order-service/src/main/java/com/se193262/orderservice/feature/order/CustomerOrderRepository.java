@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, UUID>, JpaSpecificationExecutor<CustomerOrder> {
@@ -14,4 +16,6 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, UU
     Page<CustomerOrder> findByBakeryId(UUID bakeryId, Pageable pageable);
 
     java.util.Optional<CustomerOrder> findByOfferId(UUID offerId);
+
+    List<CustomerOrder> findAllByStatusAndUpdatedAtBefore(OrderStatus status, Instant cutoff);
 }

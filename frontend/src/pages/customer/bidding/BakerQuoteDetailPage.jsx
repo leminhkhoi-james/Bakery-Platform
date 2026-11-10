@@ -193,6 +193,7 @@ function QuoteContext({ offer, onNavigate }) {
               offerId={offer.id}
               disabled={!canAccept}
               onNavigate={onNavigate}
+              expectedLocation={rfq ? { city: rfq.deliveryCity, district: rfq.deliveryDistrict } : null}
             />
           </section>
         </div>

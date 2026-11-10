@@ -116,13 +116,16 @@ public class OrderManagementServiceImpl implements OrderManagementService {
             return persistenceService.transition(orderId, targetStatus, reason, actorId);
         }
         if (hasRole(roles, "CUSTOMER") && context.customerId().equals(actorId)) {
-            if (targetStatus != OrderStatus.CANCELLED) {
+            if (targetStatus != OrderStatus.CANCELLED && targetStatus != OrderStatus.COMPLETED) {
                 throw new OrderAccessDeniedException();
             }
             return persistenceService.transition(orderId, targetStatus, reason, actorId);
         }
         requireBakeryRole(roles);
         requireActiveMembership(context.bakeryId(), actorId);
+        if (targetStatus == OrderStatus.COMPLETED) {
+            throw new OrderAccessDeniedException();
+        }
         return persistenceService.transition(orderId, targetStatus, reason, actorId);
     }
 

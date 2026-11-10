@@ -13,7 +13,7 @@ export function userRestriction(person, actor, action = 'delete') {
   if (person?.id && person.id === actor?.id) return 'Không thể thay đổi tài khoản đang đăng nhập.'
   const local = localUserDirectory()
   if (local && (!unifiedEnabled() || recordSource(person) === 'local')) return local.restriction(person, actor, action)
-  if (unifiedEnabled() && recordSource(person) === 'api' && ['edit', 'save'].includes(action)) return 'Backend chưa hỗ trợ sửa tên/email tại đây.'
+  if (unifiedEnabled() && recordSource(person) === 'api' && ['edit', 'save'].includes(action)) return 'Chỉnh sửa hồ sơ hiện chưa khả dụng.'
   if (person?.status === 'DELETED') return 'Tài khoản đã bị xóa, không thể thao tác thêm.'
   return null
 }

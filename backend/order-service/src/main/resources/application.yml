@@ -54,6 +54,11 @@ platform:
     connect-timeout: ${SERVICE_CLIENT_CONNECT_TIMEOUT:2s}
     read-timeout: ${SERVICE_CLIENT_READ_TIMEOUT:5s}
 
+order:
+  auto-completion:
+    delay-hours: ${ORDER_AUTO_COMPLETION_DELAY_HOURS:24}
+    interval-ms: ${ORDER_AUTO_COMPLETION_INTERVAL_MS:60000}
+
 server:
   port: ${SERVER_PORT:8086}
 

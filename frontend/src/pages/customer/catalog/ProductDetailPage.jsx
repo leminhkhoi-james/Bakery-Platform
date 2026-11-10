@@ -134,7 +134,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
                 {formatCatalogPrice(unitPrice === null ? null : Math.round(unitPrice * 100) * quantity / 100)}
               </span>
               <span className="text-[11px] text-on-surface-variant font-medium">
-                Giá theo cấu hình đã chọn
+                Giá theo tùy chọn đã chọn
               </span>
             </div>
           </div>

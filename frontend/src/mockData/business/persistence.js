@@ -1,4 +1,4 @@
-import { BUSINESS_STORAGE_KEY, createBusinessSeed, repairSeedRequestDates } from './seed.js'
+import { BUSINESS_STORAGE_KEY, createBusinessSeed, repairSeedRequestDates, refreshSeedChatContent } from './seed.js'
 import { validSave } from '../store.js'
 
 export const BUSINESS_DB = 'sweetcake-business-simulation'
@@ -58,15 +58,24 @@ export async function openBusinessPersistence(legacyStorage, indexedDB = globalT
     if (backup != null) tx.objectStore('backups').put({ raw: backup, savedAt: new Date().toISOString() }, 'localStorage-v1-original')
     await done; cache = compact; channel?.postMessage('saved')
   }
-  async function repairSavedRequestDates() {
+  async function repairSavedSeedData() {
     const tx = db.transaction(['state', 'backups'], 'readwrite')
     const done = complete(tx)
     const states = tx.objectStore('state')
     const raw = await request(states.get(BUSINESS_STORAGE_KEY))
     if (raw) {
       const data = validate(raw)
-      if (repairSeedRequestDates(data)) {
-        tx.objectStore('backups').put({ raw, savedAt: new Date().toISOString() }, 'before-seed-rfq-date-repair')
+      const repairs = [
+        [repairSeedRequestDates, 'before-seed-rfq-date-repair'],
+        [refreshSeedChatContent, 'before-seed-chat-refresh'],
+      ]
+      let changed = false
+      for (const [repair, backupKey] of repairs) {
+        if (!repair(data)) continue
+        tx.objectStore('backups').put({ raw, savedAt: new Date().toISOString() }, backupKey)
+        changed = true
+      }
+      if (changed) {
         states.put(JSON.stringify(data), BUSINESS_STORAGE_KEY)
       }
     }
@@ -81,7 +90,7 @@ export async function openBusinessPersistence(legacyStorage, indexedDB = globalT
       await refresh()
       console.info('[SweetCake simulation] IndexedDB ready', { migrated: Boolean(legacy), businessBytes: cache.length })
     }
-    await repairSavedRequestDates()
+    await repairSavedSeedData()
     await refresh()
     return { initialized: true, getItem: key => key === BUSINESS_STORAGE_KEY ? cache : null, setItem: (key, raw) => { if (key !== BUSINESS_STORAGE_KEY) throw new Error('Invalid storage scope'); return commit(raw).catch(error => { throw new Error(storageMessage(error)) }) }, refresh: () => refresh().catch(error => { throw new Error(storageMessage(error)) }), close: () => { channel?.close(); db.close() } }
   } catch (error) { channel?.close(); db.close(); throw error }

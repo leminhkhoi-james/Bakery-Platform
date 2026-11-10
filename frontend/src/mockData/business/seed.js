@@ -20,6 +20,50 @@ export function repairSeedRequestDates(state) {
   return changed
 }
 
+const originalChat = [
+  'Chào tiệm, mình muốn bánh ít ngọt và giao trước 17 giờ nhé.',
+  'Tiệm có thể chuẩn bị đúng giờ. Bạn muốn ghi lời chúc như thế nào?',
+  'Ghi giúp mình “Chúc mừng sinh nhật” và tên người nhận nhé.',
+  'Tiệm đã ghi nhận, sẽ chuẩn bị đúng hẹn nhé.',
+]
+
+const sampleChats = [
+  ['Mình đặt bánh sinh nhật cho mẹ, tiệm làm hoa kem màu hồng phấn được không?', 'Dạ được. Mình phối hoa hồng phấn với lá xanh nhạt nhé?', 'Đẹp đó, ghi giúp mình “Mừng sinh nhật mẹ” bằng chữ nâu.', 'Em đã lưu mẫu hoa hồng phấn và lời chúc cho mẹ ạ.'],
+  ['Bên mình cần bánh tông xanh trắng cho tiệc công ty, khoảng 20 người.', 'Bánh chữ nhật sẽ dễ chia hơn. Chị có muốn chừa chỗ đặt logo không?', 'Có nhé, để logo ở giữa và chừa phần viền trắng.', 'Em chừa khoảng trống ở giữa để đặt logo công ty nhé.'],
+  ['Mình muốn bánh kỷ niệm cưới màu kem, trang trí đơn giản.', 'Tiệm có thể vẽ hai chiếc nhẫn nhỏ trên mặt bánh. Anh muốn ghi thêm ngày kỷ niệm không?', 'Ghi 18/11 dưới hai chiếc nhẫn giúp mình.', 'Em đã ghi chú hai chiếc nhẫn và ngày 18/11.'],
+  ['Bé nhà mình thôi nôi, tiệm có mẫu mây và sao màu vàng nhạt không?', 'Dạ có. Mình muốn viết tên bé ở mặt bánh hay trên bảng cắm?', 'Viết tên bé Bông trên bảng cắm nhé.', 'Em sẽ chuẩn bị bảng tên Bông riêng để đặt giữa cụm mây.'],
+  ['Tiệc trà cuối tuần bên mình có 10 người, mình muốn bánh vị nhẹ.', 'Chị thích bánh chanh hay bánh trà nhài ạ?', 'Mình chọn trà nhài, trang trí vài lát lê là được.', 'Em đã ghi vị trà nhài và phần trang trí lê lát.'],
+  ['Mình muốn bánh sinh nhật cho mẹ với hoa kem màu tím, tiệm tư vấn giúp nhé.', 'Tiệm gợi ý cụm hoa tím nhạt ở một góc, phần còn lại để thoáng.', 'Cho mình thêm dòng “Mẹ luôn vui nhé” ở góc đối diện.', 'Em đã ghi chú bố cục hoa tím và vị trí lời chúc.'],
+  ['Tiệc công ty bắt đầu lúc 15 giờ, bánh xanh trắng có thể giao trước giờ đó không?', 'Chị gửi giúp em tên người nhận và tầng để tiệm kiểm tra khung giao.', 'Chị Lan nhận ở lễ tân tầng 3 nhé.', 'Em đã lưu thông tin chị Lan, lễ tân tầng 3 để kiểm tra lịch giao.'],
+  ['Bánh kỷ niệm cưới cho hai người thì chọn cỡ nào vừa?', 'Tiệm gợi ý bánh nhỏ 12 cm. Anh muốn trang trí theo tông nào?', 'Cho mình tông trắng ngà, thêm hai chữ T và H.', 'Em ghi mẫu 12 cm trắng ngà với chữ T và H nhé.'],
+  ['Bánh thôi nôi có thể để riêng phần đồ trang trí để mình tự cắm không?', 'Dạ được. Tiệm sẽ đóng các món trang trí trong một hộp nhỏ.', 'Vậy để riêng số 1 và hình chú thỏ giúp mình.', 'Em sẽ đóng riêng số 1 và chú thỏ để chị tự trang trí.'],
+  ['Mình định lấy bánh cho tiệc trà, có thể đến lấy trực tiếp không?', 'Dạ được. Chị muốn nhận vào buổi sáng hay buổi chiều?', 'Khoảng 10 giờ sáng, cho mình xin chỗ đỗ xe gần tiệm nữa nhé.', 'Em sẽ gửi hướng dẫn nhận bánh và vị trí đỗ xe cùng nhau.'],
+  ['Bánh sinh nhật mẹ mình muốn có hoa kem nhưng chỉ trang trí nhẹ ở viền.', 'Dạ, tiệm có thể để phần giữa trống để gia đình đặt nến.', 'Giữ khoảng giữa trống giúp mình, nhà mình có nến riêng.', 'Em ghi chú chỉ trang trí viền và chừa chỗ đặt nến.'],
+  ['Bên mình đã nhận bánh tiệc công ty rồi, cảm ơn tiệm nhé.', 'Dạ, mọi người nhận bánh nguyên vẹn chứ ạ?', 'Bánh vẫn đẹp, cả nhóm thích màu xanh của lớp kem.', 'Cảm ơn anh đã báo lại. Chúc cả nhóm có buổi tiệc vui!'],
+]
+
+export function refreshSeedChatContent(state) {
+  const chats = new Map(state.conversations.map(chat => [chat.id, chat]))
+  const messages = new Map(state.messages.map(message => [message.id, message]))
+  let changed = false
+  for (const [index, contents] of sampleChats.entries()) {
+    const chat = chats.get(businessId(400000 + index))
+    if (!chat) continue
+    for (const [offset, content] of contents.entries()) {
+      const message = messages.get(businessId(410000 + index * 10 + offset))
+      if (message?.conversationId !== chat.id || message.deleted ||
+          message.clientMessageId !== businessId(420000 + index * 10 + offset) ||
+          message.content !== originalChat[offset]) continue
+      if (chat.lastMessageAt === message.createdAt && chat.lastMessagePreview === message.content) {
+        chat.lastMessagePreview = content
+      }
+      message.content = content
+      changed = true
+    }
+  }
+  return changed
+}
+
 export const BUSINESS_STORAGE_KEY = 'sweetcake.business-simulation.v1'
 export const BUSINESS_MODE_KEY = 'sweetcake.business-simulation.enabled'
 const day = 86400000
@@ -85,8 +129,8 @@ export function createBusinessSeed(now = Date.now()) {
   }
   for (let i = 0; i < 12; i++) {
     const req = state.requests[i], shop = state.bakeries[i < 8 ? 0 : i < 10 ? 1 : 2], customer = state.users.find(u => u.id === req.customerId), id = businessId(400000 + i), createdAt = time(-2, i / 2)
-    state.conversations.push({ id, cakeRequestId: req.id, bakeryId: shop.id, customerId: customer.id, customerName: customer.name, bakeryName: shop.name, requestTitle: req.title, orderId: state.orders.find(order => order.bakeryId === shop.id && order.customerId === customer.id)?.id || null, status: i === 11 ? 'CLOSED' : 'OPEN', createdAt, updatedAt: time(-1), lastMessageAt: time(-1), lastMessagePreview: 'Tiệm đã ghi nhận, sẽ chuẩn bị đúng hẹn nhé.', participants: [{ userId: customer.id, joinedAt: createdAt, lastReadAt: createdAt }, { userId: shop.ownerId, joinedAt: createdAt, lastReadAt: createdAt }] })
-    for (const [j, content] of ['Chào tiệm, mình muốn bánh ít ngọt và giao trước 17 giờ nhé.', 'Tiệm có thể chuẩn bị đúng giờ. Bạn muốn ghi lời chúc như thế nào?', 'Ghi giúp mình “Chúc mừng sinh nhật” và tên người nhận nhé.', 'Tiệm đã ghi nhận, sẽ chuẩn bị đúng hẹn nhé.'].entries()) state.messages.push({ id: businessId(410000 + i * 10 + j), conversationId: id, clientMessageId: businessId(420000 + i * 10 + j), senderId: j % 2 ? shop.ownerId : customer.id, messageType: 'TEXT', content, attachments: [], deleted: false, createdAt: new Date(Date.parse(createdAt) + j * 600000).toISOString() })
+    state.conversations.push({ id, cakeRequestId: req.id, bakeryId: shop.id, customerId: customer.id, customerName: customer.name, bakeryName: shop.name, requestTitle: req.title, orderId: state.orders.find(order => order.bakeryId === shop.id && order.customerId === customer.id)?.id || null, status: i === 11 ? 'CLOSED' : 'OPEN', createdAt, updatedAt: time(-1), lastMessageAt: time(-1), lastMessagePreview: sampleChats[i].at(-1), participants: [{ userId: customer.id, joinedAt: createdAt, lastReadAt: createdAt }, { userId: shop.ownerId, joinedAt: createdAt, lastReadAt: createdAt }] })
+    for (const [j, content] of sampleChats[i].entries()) state.messages.push({ id: businessId(410000 + i * 10 + j), conversationId: id, clientMessageId: businessId(420000 + i * 10 + j), senderId: j % 2 ? shop.ownerId : customer.id, messageType: 'TEXT', content, attachments: [], deleted: false, createdAt: new Date(Date.parse(createdAt) + j * 600000).toISOString() })
   }
   for (let i = 0; i < 12; i++) {
     const shop = state.bakeries[i % 3], plan = state.plans[i % 3], status = i === 0 ? 'PENDING_PAYMENT' : i === 2 ? 'PAYMENT_REVIEW' : i === 3 ? 'REJECTED' : i === 4 ? 'EXPIRED' : 'COMPLETED', id = businessId(600 + i)

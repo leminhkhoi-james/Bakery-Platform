@@ -85,7 +85,6 @@ function PageRoutes({
     currentPage === 'admin-plans' ||
     currentPage === 'admin-revenue' ||
     currentPage === 'admin-moderation' ||
-    currentPage === 'admin-rfq' ||
     currentPage === 'admin-users'
 
   const isVendorPortal =
@@ -103,13 +102,13 @@ function PageRoutes({
   // 1. Phân Hệ Admin
   if (isAdminPortal) {
     return (
-      <AdminLayout activeTab={currentPage === 'admin-payments' ? 'admin-plans' : currentPage} onNavigate={onNavigate}>
+      <AdminLayout activeTab={currentPage} onNavigate={onNavigate}>
         {currentPage === 'admin-orders' ? (
           <AdminOrdersEscrowPage routeSearch={routeSearch} onNavigate={onNavigate} />
-        ) : ['admin-plans', 'admin-payments'].includes(currentPage) ? (
-          <AdminSubscriptionManagementPage onNavigate={onNavigate} routeSearch={routeSearch} legacyPayments={currentPage === 'admin-payments'} />
-        ) : currentPage === 'admin-rfq' ? (
-          <BusinessRequestsPage onNavigate={onNavigate} />
+        ) : currentPage === 'admin-payments' ? (
+          <AdminSubscriptionManagementPage onNavigate={onNavigate} routeSearch={routeSearch} legacyPayments={true} />
+        ) : currentPage === 'admin-plans' ? (
+          <AdminSubscriptionManagementPage onNavigate={onNavigate} routeSearch={routeSearch} legacyPayments={false} />
         ) : currentPage === 'admin-moderation' ? (
           <AdminModerationPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-vendors' ? (
