@@ -1,14 +1,15 @@
-import { displayReference } from '../../../services/displayReference.js'
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../../context/useAuth.js'
+import { onboardingService } from '../../../services/onboardingService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadSubscriptionPlans, subscriptionService } from '../../../services/subscriptionService.js'
 import { PlanCards, ResourceState } from '../../../components/subscription/SubscriptionView.jsx'
-import { formatSubscriptionMoney } from '../../../services/subscriptionModels.js'
 import PartnerCheckoutModal from '../../../components/subscription/PartnerCheckoutModal.jsx'
 import './subscription-plans.css'
 
 const loadPlan = ({ id }, options) => subscriptionService.getPlan(id, options)
+const loadRegistration = ({ enabled }, options) => enabled ? onboardingService.get(null, options) : Promise.resolve(null)
 
 function PlanDetail({ id }) {
   const resource = useCatalogResource(loadPlan, { id })
@@ -28,15 +29,24 @@ function PlanDetail({ id }) {
 }
 
 export default function SubscriptionPlansPage({ onNavigate }) {
+  const { user, roles = [] } = useContext(AuthContext) || {}
+  const isOwner = roles.includes('BAKERY_OWNER')
+  const registration = useCatalogResource(loadRegistration, { enabled: Boolean(user && roles.includes('CUSTOMER') && !isOwner) })
   const plans = useCatalogResource(loadSubscriptionPlans)
   const [selected, setSelected] = useState(null)
   const [checkoutPlan, setCheckoutPlan] = useState(null)
+  const [trackingRegistration, setTrackingRegistration] = useState(false)
 
   const activePlans = plans.data?.filter((p) => p.status === 'ACTIVE') || []
   const minPrice = activePlans.length ? Math.min(...activePlans.map((p) => p.monthlyPrice || 0)) : 49000
   const formattedMinPrice = (minPrice || 49000).toLocaleString('vi-VN') + '₫'
   const startPlan = activePlans[0]
   const startPlanPrice = (startPlan?.monthlyPrice || 49000).toLocaleString('vi-VN') + '₫'
+  const hasRegistration = registration.status === 'ready' && Boolean(registration.data)
+  const openRegistration = () => {
+    setTrackingRegistration(true)
+    setCheckoutPlan(activePlans.find(plan => plan.id === selected) || activePlans[0])
+  }
 
   return (
     <main className="sc-customer sc-public-plans min-h-screen bg-transparent py-4 px-4 sm:px-6 lg:px-12">
@@ -57,12 +67,14 @@ export default function SubscriptionPlansPage({ onNavigate }) {
               type="button"
               className="scp-btn-primary"
               onClick={() => {
+                if (isOwner) { onNavigate?.('vendor-subscription'); return }
+                if (hasRegistration) { openRegistration(); return }
                 const el = document.getElementById('pricing-section')
                 if (el) el.scrollIntoView({ behavior: 'smooth' })
               }}
             >
               <span className="material-symbols-outlined text-base">rocket_launch</span>
-              Đăng ký ngay
+              {isOwner ? 'Quản lý gói' : hasRegistration ? 'Theo dõi đăng ký tiệm' : 'Đăng ký ngay'}
             </button>
           </div>
         </div>
@@ -96,6 +108,7 @@ export default function SubscriptionPlansPage({ onNavigate }) {
               plans={plans.data}
               canSelect={true}
               onSelect={(plan) => {
+                setTrackingRegistration(false)
                 setSelected(plan.id)
                 setCheckoutPlan(plan)
               }}
@@ -123,27 +136,30 @@ export default function SubscriptionPlansPage({ onNavigate }) {
           {selected && <PlanDetail key={selected} id={selected} />}
         </section>
 
-        {/* ── ALREADY HAVE ACCOUNT ── */}
-        <div className="scp-action-bar">
+        {/* Existing partners manage plans; applicants resume their actual registration. */}
+        {(isOwner || hasRegistration) && <div className="scp-action-bar">
           <div>
-            <p className="font-bold text-sm" style={{ color: '#5a1a2a' }}>Đã có tài khoản tiệm bánh?</p>
-            <p className="text-xs" style={{ color: '#7a4555' }}>Xem gói hiện tại, gia hạn hoặc nâng cấp chu kỳ dịch vụ.</p>
+            <p className="font-bold text-sm" style={{ color: '#5a1a2a' }}>{isOwner ? 'Gói dịch vụ của tiệm' : 'Hồ sơ đăng ký tiệm của bạn'}</p>
+            <p className="text-xs" style={{ color: '#7a4555' }}>{isOwner ? 'Xem gói hiện tại, gia hạn hoặc nâng cấp chu kỳ dịch vụ.' : 'Theo dõi hồ sơ, chứng từ và trạng thái xét duyệt.'}</p>
           </div>
           <button
             type="button"
             className="scp-btn-primary shrink-0"
-            onClick={() => onNavigate && onNavigate('vendor-subscription')}
+            onClick={() => {
+              if (isOwner) { onNavigate?.('vendor-subscription'); return }
+              openRegistration()
+            }}
           >
-            Quản lý gói
+            {isOwner ? 'Quản lý gói' : 'Theo dõi đăng ký tiệm'}
           </button>
-        </div>
+        </div>}
 
         {/* ── 3 STEPS (compact inline) ── */}
         <div className="scp-steps">
           {[
-            { n: '1', color: '#8b2240', label: 'Đăng ký tiệm', desc: 'Tạo tài khoản, điền tên tiệm, địa chỉ, ảnh cửa hàng.' },
-            { n: '2', color: '#c0485e', label: 'Chọn gói & kích hoạt', desc: `Từ ${formattedMinPrice}/tháng, thanh toán nhanh chóng.` },
-            { n: '3', color: '#5a1a2a', label: 'Đăng bánh & nhận đơn', desc: 'Nhận thông báo báo giá 3D/AI từ khách ngay lập tức.' },
+            { n: '1', color: '#8b2240', label: 'Gửi hồ sơ tiệm', desc: 'Điền thông tin tiệm, địa chỉ và khu vực giao hàng để admin duyệt.' },
+            { n: '2', color: '#c0485e', label: 'Chọn gói & gửi chứng từ', desc: `Từ ${formattedMinPrice}/tháng. Gửi mã giao dịch hoặc biên lai để admin đối chiếu.` },
+            { n: '3', color: '#5a1a2a', label: 'Mở kênh quản lý', desc: 'Quyền chủ tiệm tự cập nhật khi hồ sơ và thanh toán được duyệt, gói có hiệu lực.' },
           ].map(({ n, color, label, desc }) => (
             <div key={n} className="scp-step">
               <span className="scp-step-num" style={{ background: color }}>{n}</span>
@@ -182,10 +198,11 @@ export default function SubscriptionPlansPage({ onNavigate }) {
           ))}
         </div>
 
-        {checkoutPlan && (
+        {(checkoutPlan || trackingRegistration) && (
           <PartnerCheckoutModal
             plan={checkoutPlan}
-            onClose={() => setCheckoutPlan(null)}
+            tracking={trackingRegistration}
+            onClose={() => { setCheckoutPlan(null); setTrackingRegistration(false) }}
             onNavigate={onNavigate}
           />
         )}

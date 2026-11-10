@@ -120,7 +120,23 @@ export const authService = {
     })
   },
 
-  getCurrentUser: () => api.get('/auth/me'),
+  getCurrentUser: (options = {}) => api.get('/auth/me', options),
+
+  async refreshSession() {
+    const current = operation
+    const userId = snapshot.user?.id
+    await refreshAccessToken()
+    const user = await profile()
+    if (current !== operation || snapshot.user?.id !== userId) {
+      throw new ApiError('Phiên đăng nhập đã thay đổi.', 401)
+    }
+    if (!userId || user.id !== userId) {
+      clearAuthSession()
+      throw new ApiError('Phiên đăng nhập đã thay đổi. Vui lòng đăng nhập lại.', 401)
+    }
+    publish({ user, status: 'authenticated', error: null })
+    return user
+  },
 
   async reloadProfile() {
     const current = operation

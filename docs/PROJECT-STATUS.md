@@ -1,6 +1,17 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-09.
+> Cập nhật gần nhất: 2026-11-10.
+
+## Frontend — Đồng bộ luồng customer trở thành chủ tiệm — 2026-11-10
+
+- Bổ sung lối vào “Theo dõi đăng ký tiệm” ngay đầu trang gói. Màn hình tiến độ hiển thị riêng hồ sơ và thanh toán/gói, điều kiện còn thiếu cùng thời điểm cập nhật; nút kiểm tra đọc lại toàn bộ dữ liệu liên quan và có timeout, không tự phê duyệt.
+
+- Trang mở tiệm đã có tích hợp API thật trong code hiện tại. Hoàn thiện bước theo dõi hồ sơ và tự làm mới access token/profile khi backend cấp `BAKERY_OWNER`; không gọi thêm API hoàn tất onboarding và không bắt đăng nhập lại.
+- Luồng onboarding, subscription và admin duyệt hồ sơ/chứng từ dùng `allowMockFallback: false`. Unified transport tôn trọng lựa chọn này, không trộn hoặc thay bằng dữ liệu mô phỏng.
+- Bỏ số tài khoản và ảnh QR ngân hàng hardcode trong form thanh toán. Chỉ hiện thông tin tài khoản khi API cung cấp đầy đủ; thiếu cấu hình vẫn gửi được mã tham chiếu hoặc chứng từ để admin duyệt. Mã test local không tự kích hoạt gói, không có thanh toán tiền thật trong lần kiểm tra.
+- Gửi lại chứng từ sau lỗi kết nối giữ nguyên payload và idempotency key. Thông báo phân biệt đã gửi chứng từ, hồ sơ đã duyệt và gói đang có hiệu lực.
+- Kiểm tra local: tạo customer mới, gửi hồ sơ/tạo đơn/gửi tham chiếu từ giao diện; duyệt hồ sơ và chứng từ qua API admin. FE tự chuyển sang đúng tiệm, trang gói hiển thị kỳ `ACTIVE` và đơn `COMPLETED`. Không thay đổi backend hoặc API spec trong lần này.
+- 78 kiểm tra tập trung cho auth, subscription, admin review và unified transport đã qua. Frontend production build qua.
 
 - **Frontend — Sửa lỗi giao diện Modal Đăng ký Đối tác, Đồng bộ Sổ địa chỉ & Chuẩn hóa Thông báo Người dùng — 2026-11-09**:
   - **Chuẩn hóa thông báo & loại bỏ thuật ngữ kỹ thuật**:

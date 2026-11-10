@@ -1,7 +1,13 @@
-import { api, ApiError } from './apiClient.js'
+import { api as sharedApi, ApiError } from './apiClient.js'
 import { catalogQuery, isCatalogId } from './catalogModels.js'
 import { requireId, requireText, mapPage } from './managementModels.js'
 import { mapSubscriptionOrder } from './subscriptionModels.js'
+
+const api = {
+  get: (path, options = {}) => sharedApi.get(path, { ...options, allowMockFallback: false }),
+  post: (path, body, options = {}) => sharedApi.post(path, body, { ...options, allowMockFallback: false }),
+  patch: (path, body, options = {}) => sharedApi.patch(path, body, { ...options, allowMockFallback: false }),
+}
 
 export const BAKERY_STATUSES = ['DRAFT', 'PENDING_APPROVAL', 'ACTIVE', 'SUSPENDED', 'CLOSED']
 export const bakeryTransitions = (status) => ({ DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }[status] || [])

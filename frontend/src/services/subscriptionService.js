@@ -1,5 +1,11 @@
-import { api, ApiError } from './apiClient.js'
+import { api as sharedApi, ApiError } from './apiClient.js'
 import { requireSubscriptionId, mapSubscriptionPlan, mapSubscriptionOrders, mapSubscriptionOrder, mapBakerySubscription } from './subscriptionModels.js'
+
+// Subscription onboarding must persist in the backend, including for existing owners.
+const api = {
+  get: (url, options = {}) => sharedApi.get(url, { ...options, allowMockFallback: false }),
+  post: (url, body, options = {}) => sharedApi.post(url, body, { ...options, allowMockFallback: false }),
+}
 
 export const subscriptionService = {
   async getPaymentOptions(_params, options = {}) {

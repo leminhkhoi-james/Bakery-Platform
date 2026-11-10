@@ -167,6 +167,10 @@ export function createUnifiedDataService({ realFetch, local, getSession, origin 
     const url = new URL(input instanceof Request ? input.url : String(input), origin)
     const path = url.pathname.slice('/api/v1'.length)
     const method = (options.method || 'GET').toUpperCase()
+    // Explicit API requests must bypass simulation, aliases and merged local records.
+    if (url.origin === origin && url.pathname.startsWith('/api/v1/') && options.allowMockFallback === false) {
+      return realFetch(input, options)
+    }
     if (url.origin !== origin || !url.pathname.startsWith('/api/v1/') || !businessPath.test(path) || !ownedRole(getSession())) {
       return fallbackFetch(input, options)
     }

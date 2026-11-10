@@ -10,6 +10,7 @@ import { buttonClass, inputClass } from '../management/ApiState.jsx'
 import ModalSurface from '../common/ModalSurface.jsx'
 import CatalogPagination from '../catalog/CatalogPagination.jsx'
 import SubscriptionOrderDetail from '../../pages/vendor/subscription/SubscriptionOrderDetail.jsx'
+import { usePartnerActivation } from '../../hooks/usePartnerActivation.js'
 
 const loadOnboarding = ({ enabled }, options) => enabled ? onboardingService.get(null, options) : Promise.resolve(null)
 
@@ -31,7 +32,7 @@ function getBakeryStatusBadge(status) {
         text: 'Đã phê duyệt',
         classes: 'bg-emerald-100 text-emerald-900 border-emerald-300',
         icon: 'verified',
-        description: 'Hồ sơ tiệm đã được phê duyệt thành công. Bạn có thể mở bán và quản lý tiệm bánh.',
+        description: 'Hồ sơ tiệm đã được duyệt. Khi gói dịch vụ có hiệu lực, quyền chủ tiệm sẽ tự cập nhật.',
       }
     case 'REJECTED':
       return {
@@ -53,10 +54,10 @@ function getBakeryStatusBadge(status) {
   }
 }
 
-function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
+function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingApproval, subscription, checkedAt }) {
   const [page, setPage] = useState(1)
   const history = useCatalogResource(loadSubscriptionOrders, { bakeryId: bakery.id, page, size: 10, sort: 'createdAt,desc' })
-  const [orderId, setOrderId] = useState(null)
+  const [selectedOrderId, setOrderId] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [attempt, setAttempt] = useState(null)
@@ -66,14 +67,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
 
   const orders = history.data?.result || []
   const openOrder = orders.find((o) => ['PENDING_PAYMENT', 'PAYMENT_REVIEW'].includes(o.status))
-
-  // Auto-select open order or latest order so user can immediately view/pay
-  React.useEffect(() => {
-    if (!orderId && orders.length > 0) {
-      const active = openOrder || orders[0]
-      if (active?.id) setOrderId(active.id)
-    }
-  }, [orders, orderId, openOrder])
+  const orderId = selectedOrderId || openOrder?.id || orders[0]?.id || null
 
   async function run(action) {
     if (inFlight.current) return
@@ -99,6 +93,15 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
   }
 
   const statusInfo = getBakeryStatusBadge(bakery.status)
+  const planActive = subscription?.currentSubscription?.status === 'ACTIVE'
+  const paymentStatus = planActive ? 'Gói đang có hiệu lực'
+    : subscription?.scheduledSubscription ? 'Đã duyệt, chờ kỳ dịch vụ bắt đầu'
+    : history.status === 'loading' ? 'Đang tải trạng thái thanh toán…'
+    : history.status === 'error' ? 'Chưa tải được trạng thái thanh toán'
+    : orders[0] ? subscriptionStatusLabel(orders[0].status) : 'Chưa tạo đơn mua gói'
+  const nextStep = bakery.status !== 'ACTIVE' ? 'Đang chờ admin duyệt hồ sơ tiệm.'
+    : !planActive ? 'Hồ sơ đã duyệt. Cần gói dịch vụ có hiệu lực để trở thành chủ tiệm.'
+    : 'Hồ sơ và gói đã đủ điều kiện. Đang cập nhật quyền chủ tiệm.'
 
   return (
     <div className="space-y-5">
@@ -121,8 +124,17 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
         </div>
       </div>
 
+      <section aria-label="Tiến độ đăng ký tiệm" className="space-y-2 text-sm">
+        <h3 className="font-bold text-primary">Tiến độ đăng ký tiệm</h3>
+        <dl className="space-y-2">
+          <div className="flex flex-wrap justify-between gap-2"><dt>Hồ sơ tiệm</dt><dd className="font-semibold">{statusInfo.label}</dd></div>
+          <div className="flex flex-wrap justify-between gap-2"><dt>Gói dịch vụ / Thanh toán</dt><dd className="font-semibold">{paymentStatus}</dd></div>
+        </dl>
+        <p className="text-xs text-on-surface-variant">{nextStep}</p>
+      </section>
+
       {/* Plan Order CTA */}
-      <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
+      {plan && <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div>
             <h3 className="font-bold text-sm text-primary">Mua gói: {planName(plan)}</h3>
@@ -144,10 +156,10 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
                 const order = await subscriptionService.createOrder(request)
                 setOrderId(order.id)
                 setAttempt(null)
-                setSuccessNotice(`Đã tạo yêu cầu mua gói #${order.orderNumber || order.id} thành công! Vui lòng chuyển khoản theo hướng dẫn và gửi ảnh biên lai bên dưới.`)
+                setSuccessNotice(`Đã tạo đơn #${order.orderNumber || order.id}. Gửi mã giao dịch hoặc chứng từ bên dưới để quản trị viên duyệt.`)
                 refresh()
               } catch (failure) {
-                if (failure?.status === 409 || /already has an open subscription order/i.test(failure?.message)) {
+                if ([400, 403, 404, 409, 422].includes(failure?.status)) {
                   setAttempt(null)
                   refresh()
                 }
@@ -159,9 +171,9 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
           </button>
         </div>
         <p className="text-[11px] text-on-surface-variant leading-relaxed">
-          💡 <strong>Hướng dẫn thanh toán:</strong> Sau khi tạo yêu cầu mua gói, bạn chuyển khoản theo thông tin tài khoản và tải lên ảnh biên lai thanh toán. Đội ngũ kiểm soát sẽ xác thực chuyển khoản và kích hoạt gói cho tiệm bánh trong thời gian sớm nhất.
+          Sau khi tạo đơn, gửi mã giao dịch hoặc chứng từ để quản trị viên đối chiếu. Gói được kích hoạt sau khi thanh toán được duyệt. Khi test local, có thể dùng mã tham chiếu mẫu riêng cho từng đơn.
         </p>
-      </div>
+      </div>}
 
       {openOrder && !successNotice && (
         <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 font-medium flex items-center gap-2">
@@ -199,7 +211,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
             {history.data?.meta.pages > 1 && (
               <CatalogPagination
                 meta={history.data.meta}
-                onPage={(value) => { if (!busy) setPage(value) }}
+                onPage={(value) => { if (!busy) { setOrderId(null); setPage(value) } }}
               />
             )}
           </div>
@@ -225,18 +237,17 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
       {/* Complete Onboarding Button (if bakery is approved and plan is active) */}
       <div className="pt-3 border-t border-outline-variant/20 flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-on-surface-variant max-w-sm">
-          Khi hồ sơ cửa hàng và thanh toán gói đã được duyệt hoàn tất, bạn có thể truy cập Kênh quản lý tiệm bánh.
+          Kênh quản lý tiệm bánh tự mở sau khi hồ sơ được duyệt và gói dịch vụ có hiệu lực.
         </p>
         <button
+          type="button"
           className={buttonClass + ' text-xs py-2.5 px-4'}
-          disabled={busy}
-          onClick={() => run(async () => {
-            await onboardingService.complete(bakery.id)
-            onNavigate?.('vendor-dashboard?bakeryId=' + bakery.id)
-          })}
+          disabled={busy || checkingApproval}
+          onClick={() => { refresh(); onCheckApproval() }}
         >
-          {busy ? 'Đang kiểm tra…' : 'Vào Kênh quản lý tiệm bánh'}
+          {checkingApproval ? 'Đang kiểm tra…' : 'Kiểm tra trạng thái duyệt'}
         </button>
+        {checkedAt && <p role="status" className="basis-full text-xs text-on-surface-variant">Đã cập nhật lúc {new Date(checkedAt).toLocaleTimeString('vi-VN')}. {nextStep}</p>}
       </div>
 
       {error && <SubscriptionError error={error} />}
@@ -244,7 +255,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
   )
 }
 
-export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
+export default function PartnerCheckoutModal({ plan, tracking = false, onClose, onNavigate }) {
   const { user, roles } = useAuth()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
@@ -253,7 +264,14 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
   const resource = useCatalogResource(loadOnboarding, { enabled: roles.includes('CUSTOMER') && !roles.includes('BAKERY_OWNER') })
   const inFlight = useRef(false)
 
-  const bakery = submitted || resource.data
+  const savedBakery = submitted || resource.data
+  const activation = usePartnerActivation({
+    bakeryId: savedBakery?.id,
+    enabled: Boolean(savedBakery && savedBakery.status !== 'DRAFT' && !roles.includes('BAKERY_OWNER')),
+    paused: busy,
+    onActivated: (activeBakery) => onNavigate?.('vendor-dashboard?bakeryId=' + activeBakery.id),
+  })
+  const bakery = activation.bakery || savedBakery
 
   async function submit(event) {
     event.preventDefault()
@@ -342,11 +360,11 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
             Trở thành đối tác tiệm bánh
           </span>
           <h2 className="font-serif text-2xl font-bold text-primary">
-            Đăng ký gói {planName(plan)}
+            {tracking ? 'Theo dõi đăng ký tiệm' : <>Đăng ký gói {planName(plan)}</>}
           </h2>
-          <p className="text-xs text-on-surface-variant">
+          {!tracking && <p className="text-xs text-on-surface-variant">
             Mức phí: <strong className="text-primary font-bold">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)} / tháng</strong> · Chu kỳ {plan.billingPeriodMonths} tháng
-          </p>
+          </p>}
         </div>
         <button
           type="button"
@@ -381,7 +399,7 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
           </p>
           <button
             className={buttonClass}
-            onClick={() => onNavigate?.('vendor-subscription?planId=' + plan.id)}
+            onClick={() => onNavigate?.('vendor-subscription' + (plan?.id ? '?planId=' + plan.id : ''))}
           >
             Vào Kênh quản lý gói tiệm bánh
           </button>
@@ -397,7 +415,10 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
               plan={plan}
               roles={roles}
               onBusy={setBusy}
-              onNavigate={onNavigate}
+              onCheckApproval={activation.check}
+              checkingApproval={activation.checking}
+              subscription={activation.subscription}
+              checkedAt={activation.checkedAt}
             />
           ) : (
             /* Registration Form for new partner or DRAFT */
@@ -540,6 +561,7 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
       )}
 
       {error && <SubscriptionError error={error} />}
+      {activation.error && <SubscriptionError error={activation.error} />}
     </ModalSurface>
   )
 }
