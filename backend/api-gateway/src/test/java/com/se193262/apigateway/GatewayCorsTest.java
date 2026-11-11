@@ -19,7 +19,8 @@ import org.springframework.test.context.DynamicPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "gateway.cors.allowed-origins=http://localhost:5173,http://localhost:5174")
 class GatewayCorsTest {
     private static final AtomicInteger calls = new AtomicInteger();
     private static final HttpServer upstream = startUpstream();
@@ -55,6 +56,18 @@ class GatewayCorsTest {
         assertThat(response.body()).isEqualTo("upstream-ok");
         assertThat(response.headers().allValues("Access-Control-Allow-Origin")).containsExactly("http://localhost:5173");
         assertThat(response.headers().allValues("Access-Control-Allow-Credentials")).containsExactly("true");
+    }
+
+    @Test
+    void unapprovedPreflightDoesNotCallDownstream() throws Exception {
+        int before = calls.get();
+        var response = client.send(HttpRequest.newBuilder(uri("/bakery/api/v1/bakeries"))
+                .header("Origin", "https://unapproved.example")
+                .header("Access-Control-Request-Method", "POST")
+                .method("OPTIONS", HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
+        assertThat(response.statusCode()).isEqualTo(403);
+        assertThat(response.headers().firstValue("Access-Control-Allow-Origin")).isEmpty();
+        assertThat(calls.get()).isEqualTo(before);
     }
 
     @Test

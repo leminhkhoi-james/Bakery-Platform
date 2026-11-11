@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** Retires the insecure key-only route without changing other services' media policies. */
 @RestController
-@CrossOrigin(originPatterns = "*", allowCredentials = "true")
+@CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 public class PublicStorageController {
     @GetMapping("/storage/**")
     public ResponseEntity<byte[]> getFile() {

@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(originPatterns = "*", allowCredentials = "true")
+@CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 public class JwkSetController {
 
     private final RSAKey rsaKey;

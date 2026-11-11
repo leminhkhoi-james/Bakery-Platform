@@ -67,6 +67,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(403).body(ApiResponse.error(403, "Access denied"));
     }
 
+    @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+    ResponseEntity<ApiResponse<Void>> handleUnsupportedMethod(
+            org.springframework.web.HttpRequestMethodNotSupportedException exception) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .headers(exception.getHeaders())
+                .body(ApiResponse.error(405, "Method not allowed"));
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception exception) {
         log.error("Unexpected identity service error", exception);

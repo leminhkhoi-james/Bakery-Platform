@@ -7,16 +7,16 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${IDENTITY_JWKS_URI}
+          jwk-set-uri: ${IDENTITY_JWKS_URI:http://localhost:8081/.well-known/jwks.json}
           issuer-uri: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
   datasource:
-    url: ${BAKERY_DB_URL}
-    username: ${BAKERY_DB_USERNAME}
-    password: ${BAKERY_DB_PASSWORD}
+    url: ${BAKERY_DB_URL:jdbc:postgresql://localhost:5432/bakery}
+    username: ${BAKERY_DB_USERNAME:postgres}
+    password: ${BAKERY_DB_PASSWORD:12345}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
 
   flyway:
     enabled: true
@@ -57,4 +57,18 @@ storage:
 
 server:
   forward-headers-strategy: framework
-  port: ${SERVER_PORT:${BAKERY_SERVER_PORT:8082}}
+  port: ${SERVER_PORT:${SERVER_PORT_BAKERY:${BAKERY_SERVER_PORT:8082}}}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db

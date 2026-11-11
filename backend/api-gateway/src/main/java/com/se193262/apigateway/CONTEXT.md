@@ -38,10 +38,13 @@ Run `python scripts/Test-GatewayStack.py` for HTTP smoke verification.
 springdoc-openapi-starter-webmvc-ui 3.1.0 is already a dependency; Swagger UI is
 /swagger-ui.html or /swagger-ui/index.html, default gateway port 8080.
 
-Domain controllers own CORS via `@CrossOrigin(originPatterns = "*", allowCredentials = "true")`.
-`PreflightCorsConfig` answers only CORS OPTIONS requests because functional proxy
-routes do not use controller annotations. Actual requests forward downstream CORS
-headers unchanged; no header-removal filters are needed.
+Domain controllers use explicit origins from `BACKEND_CORS_ALLOWED_ORIGINS`.
+`PreflightCorsConfig` owns the single edge CORS filter for OPTIONS and actual
+requests, since functional proxy routes do not use controller annotations.
+`gateway.cors.allowed-origins` defaults to that same local policy; deployments can
+set `GATEWAY_CORS_ALLOWED_ORIGINS` explicitly. Unapproved origins are rejected.
+`UpstreamFailureFilter` prevents duplicate upstream credentialed CORS headers
+and maps only connection/timeout failures to 502/504 without changing business errors.
 
 GatewayCorsTest uses a local stub only: preflight bypasses the downstream,
 proxied responses have one CORS header set, Swagger UI and its seven spec URLs

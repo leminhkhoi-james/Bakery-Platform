@@ -168,14 +168,14 @@ public class OfferServiceImpl implements OfferService {
         for (String field : List.of("cakeRequestId", "bakeryId", "status"))
             if (filters.containsKey(field)) {
                 String value = filters.get(field);
+                Object parsed = field.equals("status")
+                        ? OfferStatus.valueOf(value) : UUID.fromString(value);
                 specification =
                         specification.and(
                                 (root, q, b) ->
                                         b.equal(
                                                 root.get(field),
-                                                field.equals("status")
-                                                        ? OfferStatus.valueOf(value)
-                                                        : UUID.fromString(value)));
+                                                parsed));
             }
         return PageResponse.from(
                 offers.findAll(

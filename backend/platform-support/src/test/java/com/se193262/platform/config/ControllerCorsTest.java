@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +33,8 @@ class ControllerCorsTest {
     void setup() {
         context = new AnnotationConfigWebApplicationContext();
         context.setServletContext(new MockServletContext());
+        context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("testCors",
+                java.util.Map.of("BACKEND_CORS_ALLOWED_ORIGINS", "https://frontend.example,http://192.168.1.20:5173")));
         context.register(TestConfiguration.class);
         context.refresh();
         mvc = MockMvcBuilders.webAppContextSetup(context)
@@ -41,7 +44,7 @@ class ControllerCorsTest {
     @AfterEach void close() { context.close(); }
 
     @Test
-    void annotationAllowsAnyOriginWithCredentialsAndIdempotencyPreflight() throws Exception {
+    void annotationAllowsConfiguredOriginWithCredentialsAndIdempotencyPreflight() throws Exception {
         mvc.perform(options("/api/v1/cors-test")
                 .header("Origin", "https://frontend.example")
                 .header("Access-Control-Request-Method", "POST")
@@ -59,6 +62,15 @@ class ControllerCorsTest {
                 .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
     }
 
+    @Test
+    void annotationRejectsUnconfiguredOrigin() throws Exception {
+        mvc.perform(options("/api/v1/cors-test")
+                .header("Origin", "https://unapproved.example")
+                .header("Access-Control-Request-Method", "POST"))
+                .andExpect(status().isForbidden())
+                .andExpect(header().doesNotExist("Access-Control-Allow-Origin"));
+    }
+
     @Configuration(proxyBeanMethods = false)
     @EnableWebMvc
     @EnableWebSecurity
@@ -70,7 +82,7 @@ class ControllerCorsTest {
     }
 
     @RestController
-    @CrossOrigin(originPatterns = "*", allowCredentials = "true")
+    @CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
     static class TestController {
         @PostMapping("/api/v1/cors-test") String post() { return "protected"; }
     }

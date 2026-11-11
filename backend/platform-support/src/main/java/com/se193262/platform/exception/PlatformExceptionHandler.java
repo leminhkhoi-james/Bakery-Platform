@@ -61,6 +61,12 @@ public class PlatformExceptionHandler {
         return ResponseEntity.status(403).body(ApiResponse.error(403, "Access denied"));
     }
 
+    @ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<?> unsupportedMedia(org.springframework.web.HttpMediaTypeNotSupportedException error) {
+        return ResponseEntity.status(415).headers(error.getHeaders())
+                .body(ApiResponse.error(415, "Unsupported media type"));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> unexpected(Exception error) {
         log.error("Unexpected service error", error);

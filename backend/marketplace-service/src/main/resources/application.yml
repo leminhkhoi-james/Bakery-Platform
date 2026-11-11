@@ -4,13 +4,13 @@ spring:
   application:
     name: marketplace-service
   datasource:
-    url: ${MARKETPLACE_DB_URL}
-    username: ${MARKETPLACE_DB_USERNAME}
-    password: ${MARKETPLACE_DB_PASSWORD}
+    url: ${MARKETPLACE_DB_URL:jdbc:postgresql://localhost:5432/marketplace}
+    username: ${MARKETPLACE_DB_USERNAME:postgres}
+    password: ${MARKETPLACE_DB_PASSWORD:12345}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   flyway:
     enabled: true
   servlet:
@@ -56,6 +56,6 @@ marketplace:
 
 server:
   forward-headers-strategy: framework
-  port: ${SERVER_PORT:${MARKETPLACE_SERVER_PORT:8083}}
+  port: ${SERVER_PORT:${SERVER_PORT_MARKETPLACE:${MARKETPLACE_SERVER_PORT:8083}}}
 
 management.endpoint.health.group.readiness.include: readinessState,db

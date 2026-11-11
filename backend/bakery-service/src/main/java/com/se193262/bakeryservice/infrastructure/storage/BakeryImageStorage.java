@@ -53,8 +53,13 @@ public class BakeryImageStorage {
         if (file == null || file.isEmpty() || file.getSize() > MAX_BYTES) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Image must be between 1 byte and 5 MB");
         }
+        final byte[] bytes;
         try {
-            byte[] bytes = file.getBytes();
+            bytes = file.getBytes();
+        } catch (IOException exception) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Image could not be read");
+        }
+        try {
             if (bytes.length == 0 || bytes.length > MAX_BYTES) {
                 throw new AppException(HttpStatus.BAD_REQUEST, "Image must be between 1 byte and 5 MB");
             }
@@ -76,8 +81,6 @@ public class BakeryImageStorage {
             return new StoredImage(key, mediaType);
         } catch (AppException exception) {
             throw exception;
-        } catch (IOException exception) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Image could not be read");
         } catch (Exception exception) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Image storage is unavailable");
         }

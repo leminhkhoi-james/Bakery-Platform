@@ -20,7 +20,8 @@ public class OpenApiConfig {
     public static final String BEARER_AUTH = "bearerAuth";
     private static final Set<String> PUBLIC_GET_PATHS = Set.of(
             "/api/v1/subscription-plans", "/api/v1/subscription-plans/{planId}",
-            "/api/v1/subscription-plans/payment-options");
+            "/api/v1/subscription-plans/payment-options",
+            "/api/v1/payments/vnpay/ipn", "/api/v1/payments/vnpay/return");
 
     @Bean
     OpenApiCustomizer bearerAuthOperations() {
@@ -29,6 +30,9 @@ public class OpenApiConfig {
             openApi.getPaths().forEach((path, item) -> item.readOperationsMap().forEach((method, operation) -> {
                 if (method != PathItem.HttpMethod.GET || !PUBLIC_GET_PATHS.contains(path)) {
                     operation.addSecurityItem(new SecurityRequirement().addList(BEARER_AUTH));
+                } else if (path.startsWith("/api/v1/payments/vnpay/")) {
+                    operation.setSecurity(java.util.List.of());
+                    operation.setDescription("VNPay callback authenticated by provider HMAC signature parameters, not user Bearer JWT.");
                 }
             }));
         };

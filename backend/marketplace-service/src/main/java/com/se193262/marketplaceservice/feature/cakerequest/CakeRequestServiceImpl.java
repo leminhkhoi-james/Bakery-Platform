@@ -134,6 +134,13 @@ public class CakeRequestServiceImpl implements CakeRequestService {
                 List.of("status", "requestType", "city", "district", "neededFrom", "neededTo")) {
             String value = filters.get(field);
             if (value == null) continue;
+            // Parse client input before entering Spring Data's exception translation.
+            Object parsed = switch (field) {
+                case "status" -> RequestStatus.valueOf(value);
+                case "requestType" -> RequestType.valueOf(value);
+                case "neededFrom", "neededTo" -> Instant.parse(value);
+                default -> value.toLowerCase(Locale.ROOT);
+            };
             specification =
                     specification.and(
                             (root, query, b) ->
@@ -141,25 +148,25 @@ public class CakeRequestServiceImpl implements CakeRequestService {
                                         case "status" ->
                                                 b.equal(
                                                         root.get("status"),
-                                                        RequestStatus.valueOf(value));
+                                                        parsed);
                                         case "requestType" ->
                                                 b.equal(
                                                         root.get("requestType"),
-                                                        RequestType.valueOf(value));
+                                                        parsed);
                                         case "city" ->
                                                 b.equal(
                                                         b.lower(root.get("deliveryCity")),
-                                                        value.toLowerCase(Locale.ROOT));
+                                                        parsed);
                                         case "district" ->
                                                 b.equal(
                                                         b.lower(root.get("deliveryDistrict")),
-                                                        value.toLowerCase(Locale.ROOT));
+                                                        parsed);
                                         case "neededFrom" ->
                                                 b.greaterThanOrEqualTo(
-                                                        root.get("neededAt"), Instant.parse(value));
+                                                        root.get("neededAt"), (Instant) parsed);
                                         default ->
                                                 b.lessThanOrEqualTo(
-                                                        root.get("neededAt"), Instant.parse(value));
+                                                        root.get("neededAt"), (Instant) parsed);
                                     });
         }
         return PageResponse.from(

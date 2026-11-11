@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(originPatterns = "*", allowCredentials = "true")
+@CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 @RequestMapping("/api/v1/admin/subscription-plans")
 public class AdminSubscriptionPlanController {
     private final SubscriptionPlanService planService;

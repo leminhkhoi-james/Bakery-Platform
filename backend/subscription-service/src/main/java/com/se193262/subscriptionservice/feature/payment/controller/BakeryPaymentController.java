@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(originPatterns = "*", allowCredentials = "true")
+@CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 @RequestMapping("/api/v1/subscription-orders/{orderId}/payments")
 public class BakeryPaymentController {
     private final BakeryPaymentService paymentService;
