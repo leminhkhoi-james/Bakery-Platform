@@ -44,6 +44,7 @@ erDiagram
         uuid subscription_order_id FK
         uuid submitted_by_user_id "External Identity reference"
         varchar payment_method
+        varchar verification_source
         varchar payment_reference UK
         varchar idempotency_key_hash UK "Nullable for legacy rows"
         varchar review_idempotency_key_hash UK
@@ -74,6 +75,23 @@ erDiagram
         bigint version
     }
 
+    VNPAY_ATTEMPTS {
+        uuid id PK
+        uuid subscription_order_id FK
+        uuid submitted_by_user_id "External Identity reference"
+        decimal amount
+        timestamptz created_at
+        timestamptz expires_at
+        varchar ip_address
+        varchar status
+        varchar transaction_no UK
+        varchar response_code
+        varchar transaction_status
+        timestamptz paid_at
+        bigint version
+    }
+
+    SUBSCRIPTION_ORDERS ||--o{ VNPAY_ATTEMPTS : checkout
     SUBSCRIPTION_PLANS ||--o{ PLAN_FEATURES : includes
     SUBSCRIPTION_PLANS ||--o{ SUBSCRIPTION_ORDERS : selected_in
     SUBSCRIPTION_ORDERS ||--o{ BAKERY_PAYMENTS : records

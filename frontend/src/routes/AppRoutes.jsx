@@ -22,6 +22,7 @@ const StoreDirectoryPage = lazy(() => import('../pages/customer/stores/StoreDire
 const BakeryDetailPage = lazy(() => import('../pages/customer/stores/BakeryDetailPage.jsx'))
 const SubscriptionPlansPage = lazy(() => import('../pages/customer/subscription/SubscriptionPlansPage.jsx'))
 const VendorSubscriptionPage = lazy(() => import('../pages/vendor/subscription/VendorSubscriptionPage.jsx'))
+const VnpayReturnPage = lazy(() => import('../pages/customer/subscription/VnpayReturnPage.jsx'))
 const CustomerChatPage = lazy(() => import('../pages/chat/ChatPage.jsx').then((module) => ({ default: module.CustomerChatPage })))
 const VendorChatPage = lazy(() => import('../pages/chat/ChatPage.jsx').then((module) => ({ default: module.VendorChatPage })))
 
@@ -77,6 +78,9 @@ function PageRoutes({
   onClearCart,
   showToast,
 }) {
+  if (currentPage === 'subscription-vnpay-return') {
+    return <VnpayReturnPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+  }
   const isAdminPortal =
     currentPage === 'admin-dashboard' ||
     currentPage === 'admin-orders' ||

@@ -1995,6 +1995,9 @@ Use the paginated offer endpoints for the full offer list. Option/add-on selecti
 Giữ nguyên contract thanh toán thủ công ban đầu: bakery gửi mã giao dịch hoặc
 chứng từ, payment `SUBMITTED`, order `PAYMENT_REVIEW`; ADMIN kiểm tra và approve
 mới chuyển payment sang `APPROVED`, hoàn tất order và tạo kỳ subscription.
+
+**Cập nhật 2026-11-10:** VNPay Sandbox được bổ sung theo ADR-006. Phần không có
+cổng thanh toán bên dưới chỉ mô tả luồng thủ công tại thời điểm 2026-11-08.
 Không yêu cầu VNPAY Sandbox hay mã test đặc biệt. QR/thông tin tài khoản nhận
 tiền là hướng dẫn chuyển khoản; spec chưa định nghĩa API tạo QR hoặc xác minh
 giao dịch qua cổng thanh toán.
@@ -2034,3 +2037,137 @@ Frontend có thể dùng `operations.serviceAreas` trong hồ sơ công khai c�
 để giới hạn các khu vực tiệm đang phục vụ; danh sách địa danh đầy đủ cần được
 thống nhất riêng. Order cần giữ/ánh xạ mã lỗi này để hiển thị đúng ở checkout;
 phần Order và frontend không được thay đổi trong lần sửa Bakery này.
+
+## VNPay Sandbox subscription payment — 2026-11-10
+
+### Admin purchase directory — 2026-11-11
+
+`GET /api/v1/admin/subscription-orders` 🔒 ADMIN lists **all purchase orders**,
+including PENDING_PAYMENT orders without any payment evidence. Gateway prefix
+is `/subscription`; frontend development proxy uses the unprefixed `/api/v1` path.
+
+Query parameters: optional `status` (subscription order enum), `bakeryId` UUID,
+`query` (max 120 characters; order number, snapshotted plan name/code, or exact
+numeric amount), `createdFrom`/`createdTo` ISO instants, `eligibleForApproval`
+boolean, `page=1`, `size=20` (1..100). Filters, total and pagination are server-side;
+default has no status/eligibility restriction. Sort is createdAt/id descending.
+Invalid bounds, dates or parameters return 400. Non-admin tokens return 401/403.
+
+200 standard envelope contains PageResult `{meta, result}`. Each result is:
+
+```json
+{
+  "order": { "id": "<uuid>", "bakeryId": "<uuid>", "orderNumber": "SUB-...", "status": "PENDING_PAYMENT", "totalAmount": 499000, "currency": "VND", "payments": [], "period": null },
+  "payments": [],
+  "eligibleForApproval": false,
+  "eligibilityReason": "WAITING_PAYMENT",
+  "reviewPaymentId": null
+}
+```
+
+`order` uses SubscriptionOrderDto with empty payment/period detail; top-level
+`payments` uses safe BakeryPaymentDto summaries without signed proof URLs.
+Existing `GET /subscription-orders/{id}` provides fresh full detail/proof URLs
+for admins when opened. No private storage keys are exposed in the list.
+
+Eligibility reasons: READY_FOR_REVIEW, WAITING_PAYMENT, COMPLETED, EXPIRED,
+CANCELLED, REJECTED, NO_SUBMITTED_PAYMENT, PAYMENT_MISMATCH. True eligibility
+requires PAYMENT_REVIEW plus a SUBMITTED manual payment with positive amount and
+matching amount/currency; `reviewPaymentId` identifies that candidate. VNPay
+payments use the gateway workflow rather than manual approval. Eligibility only
+allows opening evidence review: it does not confirm receipt of funds or mutate
+the order. Existing admin approve/reject endpoints revalidate current state.
+
+Các đường dẫn sau có prefix `/api/v1` trong Subscription Service; qua Gateway
+thêm `/subscription`. Luồng thủ công vẫn yêu cầu ADMIN duyệt; chỉ IPN VNPay đã
+xác minh được phép tự động hoàn tất đơn và tạo kỳ dịch vụ (ADR-006).
+
+### POST /subscription-orders/{orderId}/vnpay/checkout 🔒 CUSTOMER|BAKERY_OWNER
+
+Không nhận body/số tiền từ client. Kiểm tra ACTIVE OWNER membership của bakery
+thuộc order. Dùng giá/currency snapshot; chỉ nhận số nguyên VND dương. Đơn phải
+PENDING_PAYMENT và chưa hết hạn. Retry trả lại attempt PENDING còn hạn; không
+cần Idempotency-Key riêng. Amount và người gửi được lưu trước khi trả URL.
+
+**200** standard envelope:
+
+```json
+{
+  "statusCode": 200,
+  "message": "Success",
+  "data": {
+    "attemptId": "<uuid>",
+    "orderId": "<uuid>",
+    "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_...",
+    "expiresAt": "<instant>"
+  },
+  "timestamp": "<instant>"
+}
+```
+
+**Errors:** 401/403 auth/ownership; 404 missing order; 409 wrong state/expired;
+422 non-VND/nonpositive/fractional amount; 503 disabled/missing merchant config.
+Checkout expires after at most 15 minutes or at order expiry, whichever is first.
+While an unexpired attempt is PENDING, manual evidence submission returns 409.
+Manual evidence cannot claim paymentMethod=VNPAY or reference prefix VNPAY-.
+
+### GET /payments/vnpay/ipn — Public, signed VNPay callback
+
+Query fields follow VNPay PAY 2.1.0, including vnp_TmnCode, vnp_TxnRef (32 hex
+attempt UUID without dashes), vnp_Amount (VND × 100), vnp_ResponseCode,
+vnp_TransactionStatus and vnp_SecureHash. Successful payment also requires
+vnp_TransactionNo (nonzero numeric) and vnp_PayDate (GMT+7 yyyyMMddHHmmss).
+
+Reject duplicate query values. Validate HMAC-SHA512 and merchant before loading
+records; match the stored amount. Both result codes must be 00. On success,
+commit payment APPROVED with verification_source=VNPAY/no admin ID, order
+COMPLETED, one ACTIVE/SCHEDULED period and attempt SUCCEEDED atomically. Notify
+Bakery after commit. Failure marks attempt FAILED without granting a period.
+Repeated callbacks do not activate again. Valid paid callbacks outside the window
+or conflicting with an existing payment flow become REVIEW_REQUIRED for admin
+reconciliation. An expired unpaid order can settle from a delayed IPN when pay
+time is inside the attempt's original window.
+
+**200, VNPay protocol object (no ApiResponse wrapper):**
+
+```json
+{ "RspCode": "00", "Message": "Confirm success" }
+```
+
+| RspCode | Meaning |
+|---|---|
+| 00 | Recorded payment result, including failure or reconciliation |
+| 02 | Attempt already confirmed |
+| 01 | Missing/invalid reference |
+| 04 | Amount mismatch |
+| 97 | Invalid checksum/merchant or duplicate parameters |
+| 99 | Invalid success metadata or retryable processing failure |
+
+### GET /payments/vnpay/return — Public, signed browser callback
+
+Verifies checksum, merchant, reference and amount; **never changes payment/order**.
+Returns the standard envelope with data `{orderId, attemptId, status, responseCode}`.
+`status` is persisted attempt state, so PENDING is possible before IPN arrives.
+Use the authenticated order endpoint for the full authoritative order state.
+400 invalid signature/amount/duplicate query parameters; 404 missing attempt.
+
+### GET /admin/vnpay-attempts 🔒 ADMIN
+
+Query: optional `status=PENDING|SUCCEEDED|FAILED|REVIEW_REQUIRED`, `page=1`,
+`size=20` (1..100). Standard paginated envelope with rows
+`{id, orderId, amount, status, transactionNo, createdAt, expiresAt}` sorted newest
+first. Does not expose payer IP, secrets or signed callback URL.
+
+Setup and external sandbox verification: [VNPAY-SANDBOX.md](VNPAY-SANDBOX.md).
+The compatibility `sandboxEnabled=false` flag continues to describe the retired
+local code simulator; VNPay availability is controlled by merchant configuration.
+# Approval prerequisite for subscription purchase — 2026-11-11
+
+`POST /api/v1/bakeries/{bakeryId}/subscription-orders`,
+`POST /api/v1/subscription-orders/{orderId}/vnpay/checkout` and
+`POST /api/v1/subscription-orders/{orderId}/payments` require OWNER membership
+and an approved ACTIVE Bakery profile. Non-ACTIVE profiles return HTTP 409;
+unavailable Bakery validation fails closed (503). Order/history reads remain
+available. Verified IPN settlement and review of existing evidence are unchanged.
+See decisions/ADR-007-approval-before-subscription.md.
+

@@ -24,7 +24,7 @@ function planDto(dto) {
 }
 export const adminManagementService = {
   async getPlans(options = {}) {
-    const data = await api.get('/admin/subscription-plans', options)
+    const data = await api.get('/admin/subscription-plans', { ...options, allowMockFallback: false })
     if (!Array.isArray(data)) throw new ApiError('Danh sách gói quản trị không hợp lệ.', 502)
     return data.map(planDto)
   },

@@ -74,7 +74,7 @@ export default function AdminSidebar({
     {
       id: 'admin-payments',
       route: 'admin-payments',
-      label: 'Duyệt mua gói',
+      label: 'Đơn mua gói',
       icon: 'receipt_long',
       badge: pendingPaymentsCount > 0 ? String(pendingPaymentsCount) : null,
     },

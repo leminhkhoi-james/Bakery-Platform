@@ -56,6 +56,7 @@ export function createUnifiedDataService({ realFetch, local, getSession, origin 
       if (source === 'api') apiIds.add(result.id)
       result._origin = { source, id: result.id }
       if (kind === 'bakeries' && map.toApi.has(result.id)) result.id = map.toApi.get(result.id)
+      if (kind === 'payments' && result.amount != null && Number.isFinite(Number(result.amount))) result.amount = Number(result.amount)
     }
     return result
   }
@@ -167,9 +168,45 @@ export function createUnifiedDataService({ realFetch, local, getSession, origin 
     const url = new URL(input instanceof Request ? input.url : String(input), origin)
     const path = url.pathname.slice('/api/v1'.length)
     const method = (options.method || 'GET').toUpperCase()
-    // Explicit API requests must bypass simulation, aliases and merged local records.
+    // Explicit API requests must bypass simulation, aliases and merged local records,
+    // while still indexing returned API records so unifiedSnapshot() & unifiedMetrics() stay accurate.
     if (url.origin === origin && url.pathname.startsWith('/api/v1/') && options.allowMockFallback === false) {
-      return realFetch(input, options)
+      try {
+        const response = await realFetch(input, options)
+        if (!response.ok) {
+          if (response.status >= 500) note(path, { status: response.status })
+          return response
+        }
+        resolved(path)
+        if (method === 'GET') {
+          const raw = await response.clone().json().catch(() => null)
+          const unpacked = unpack(raw)
+          if (listPath(path)) {
+            const rows = Array.isArray(unpacked) ? unpacked : Array.isArray(unpacked?.result) ? unpacked.result : null
+            if (rows) {
+              const kind = kindFor(path)
+              const apiRows = transform(rows, aliases(), 'api', kind)
+              const unfiltered = [...url.searchParams.keys()].every(key => ['page', 'size', 'sort', 'scope'].includes(key))
+              const singlePage = Array.isArray(unpacked) || (unpacked?.meta?.page === 1 && unpacked?.meta?.pages <= 1)
+              if (unfiltered && singlePage) {
+                cache.delete(kind)
+                complete.add(kind)
+              } else if (unfiltered && unpacked?.meta?.page >= unpacked?.meta?.pages) {
+                complete.add(kind)
+              }
+              remember(kind, apiRows)
+            }
+          } else if (unpacked?.id) {
+            const kind = kindFor(path)
+            remember(kind, [transform(unpacked, aliases(), 'api', kind)])
+          }
+        }
+        return response
+      } catch (error) {
+        if (options.signal?.aborted || error.name === 'AbortError') throw error
+        note(path, error)
+        throw error
+      }
     }
     if (url.origin !== origin || !url.pathname.startsWith('/api/v1/') || !businessPath.test(path) || !ownedRole(getSession())) {
       return fallbackFetch(input, options)
@@ -235,7 +272,8 @@ export function unifiedSnapshot() {
   const state=structuredClone(store.state),map=active.aliases()
   for(const kind of ['orders','offers','requests','products','bakeries','categories','plans','payments','users','subscriptionOrders','conversations']) {
     const rows=(state[kind]||[]).map(row=>({...row,bakeryId:map.toApi.get(row.bakeryId)||row.bakeryId,...(kind==='bakeries'?{id:map.toApi.get(row.id)||row.id}:{}),_origin:{source:'local',id:row.id}}))
-    state[kind]=mergeSourceRows([...(active.cache.get(kind)?.values()||[])],rows,row=>['products','categories','plans'].includes(kind)?map.toApi.get(row.id)||row.id:row.id)
+    const apiRows=[...(active.cache.get(kind)?.values()||[])].map(row=>kind==='payments'&&!row.bakeryId?{...row,bakeryId:active.cache.get('subscriptionOrders')?.get(row.subscriptionOrderId)?.bakeryId}:row)
+    state[kind]=mergeSourceRows(apiRows,rows,row=>['products','categories','plans'].includes(kind)?map.toApi.get(row.id)||row.id:row.id)
   }
   state.apiPaymentsComplete = active.complete.has('payments') && !active.issues.has('api:/admin/bakery-payments')
   state.salesPayments=state.salesPayments.map(row=>({...row,bakeryId:map.toApi.get(row.bakeryId)||row.bakeryId}))

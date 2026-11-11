@@ -28,14 +28,13 @@ export default function AdminDashboardPage({ onNavigate }) {
   const supplement = simulated ? Object.fromEntries(['products', 'requests', 'offers', 'designs', 'plans', 'reviews'].map(key => [key, { state: 'ready', source: 'simulation', rows: key === 'reviews' ? simulated.state.orders.filter(order => order.review).map(order => ({ ...order.review, id: order.id })) : simulated.state[key] || [] }])) : dashboardSupplement(runtime, user, resource.data || {})
   const combinedData = { ...resource.data, ...supplement }
   const dashboard = buildAdminDashboard(combinedData)
-  if (unifiedEnabled() && combinedData.payments?.rows) { const financial = buildAdminDashboard({ ...combinedData, payments: { ...combinedData.payments, rows: combinedData.payments.rows.filter(row => recordSource(row) === 'api') } }); dashboard.revenue = snapshot?.apiPaymentsComplete === false ? null : financial.revenue; dashboard.currencies = financial.currencies; dashboard.currency = financial.currency }
+  if (unifiedEnabled() && combinedData.payments?.rows) { const financial = buildAdminDashboard({ ...combinedData, payments: { ...combinedData.payments, rows: combinedData.payments.rows.filter(row => recordSource(row) === 'api') } }); dashboard.revenue = (combinedData.payments.state === 'ready' || snapshot?.apiPaymentsComplete !== false) ? financial.revenue : null; dashboard.currencies = financial.currencies; dashboard.currency = financial.currency }
   const loading = resource.status === 'loading'
   const failing = resource.status === 'error' || Object.values(resource.data || {}).some((item) => item.state === 'error')
   const go = (route) => () => onNavigate(route)
   const orderRoute = (row) => 'admin-orders?orderId=' + encodeURIComponent(row.id)
   const workGroups = [
     { key: 'bakeries', title: 'Tiệm chờ duyệt', icon: 'storefront', route: 'admin-vendors?status=PENDING_APPROVAL', items: dashboard.pendingBakeries?.map((row) => ({ key: row.id, name: row.name || 'Tiệm bánh', route: 'admin-vendors?bakeryId=' + row.id })) },
-    { key: 'payments', title: 'Gói dịch vụ chờ duyệt', icon: 'receipt_long', route: 'admin-payments', items: dashboard.pendingPayments?.map((row) => ({ key: row.id, name: dashboard.bakeries?.find((bakery) => bakery.id === row.bakeryId)?.name || 'Chứng từ mua gói', detail: row.amount == null ? undefined : dashboardMoney(row.amount, row.currency || 'VND'), route: 'admin-payments?paymentId=' + row.id })) },
     { key: 'moderation', title: 'Kiểm duyệt nội dung', icon: 'fact_check', route: 'admin-moderation', items: dashboard.moderation?.map((row) => ({ key: row.kind + row.id, name: row.label, route: 'admin-moderation?kind=' + row.kind + '&id=' + row.id })) },
   ]
 

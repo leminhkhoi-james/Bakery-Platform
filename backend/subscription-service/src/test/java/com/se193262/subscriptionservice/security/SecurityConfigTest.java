@@ -33,6 +33,31 @@ class SecurityConfigTest {
     private MockMvc mockMvc;
 
     @Test
+    @DisplayName("Only admin user tokens may list all subscription purchase orders")
+    void adminOrderDirectory_requiresAdminUser() throws Exception {
+        String path = "/api/v1/admin/subscription-orders";
+        mockMvc.perform(get(path)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-customer")).andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer service-admin")).andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-admin")).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("VNPay IPN and return are public while checkout requires a customer or owner user JWT")
+    void vnpay_routes_enforceGatewayAndUserAccess() throws Exception {
+        mockMvc.perform(get("/api/v1/payments/vnpay/ipn")).andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/payments/vnpay/return")).andExpect(status().isOk());
+        String checkout = "/api/v1/subscription-orders/" + UUID.randomUUID() + "/vnpay/checkout";
+        mockMvc.perform(post(checkout)).andExpect(status().isUnauthorized());
+        mockMvc.perform(post(checkout).header("Authorization", "Bearer service-owner")).andExpect(status().isForbidden());
+        mockMvc.perform(post(checkout).header("Authorization", "Bearer user-customer")).andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/admin/vnpay-attempts").header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/v1/admin/vnpay-attempts").header("Authorization", "Bearer user-admin"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Public plan đọc được không cần JWT")
     void plans_withoutToken_isPublic() throws Exception {
         mockMvc.perform(get("/api/v1/subscription-plans"))
@@ -126,6 +151,11 @@ class SecurityConfigTest {
 
     @RestController
     static class ProbeController {
+        @GetMapping({"/api/v1/payments/vnpay/ipn", "/api/v1/payments/vnpay/return", "/api/v1/admin/vnpay-attempts"})
+        String vnpayRead() { return "ok"; }
+
+        @PostMapping("/api/v1/subscription-orders/{orderId}/vnpay/checkout")
+        String vnpayCheckout() { return "ok"; }
         @GetMapping("/api/v1/admin/method-denied")
         @org.springframework.security.access.prepost.PreAuthorize("denyAll()")
         public String methodDenied() { return "unreachable"; }
@@ -133,7 +163,7 @@ class SecurityConfigTest {
         @GetMapping("/api/v1/subscription-plans")
         String plans() { return "ok"; }
 
-        @GetMapping("/api/v1/admin/subscription-plans")
+        @GetMapping({"/api/v1/admin/subscription-plans", "/api/v1/admin/subscription-orders"})
         String adminPlans() { return "ok"; }
 
         @PostMapping("/api/v1/bakeries/{bakeryId}/subscription-orders")

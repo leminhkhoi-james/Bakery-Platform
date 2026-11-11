@@ -41,6 +41,17 @@ public class BakeryAccessClient {
         }
     }
 
+    public void requireApprovedBakery(UUID bakeryId) {
+        Profile profile = call("/internal/v1/bakeries/{bakeryId}", Profile.class, bakeryId);
+        if (!bakeryId.equals(profile.id()) || profile.status() == null) {
+            throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Invalid Bakery profile response");
+        }
+        if (!"ACTIVE".equals(profile.status())) {
+            throw new AppException(HttpStatus.CONFLICT,
+                    "Bakery profile must be approved and active before purchasing a subscription");
+        }
+    }
+
     public void notifySubscriptionApproved(UUID bakeryId) {
         try {
             String bearer = tokenClient.serviceToken("bakery-service", "bakery:onboarding:activate");

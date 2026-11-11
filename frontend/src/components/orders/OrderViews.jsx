@@ -21,7 +21,7 @@ export function OrderSnapshot({ order, showHeader = true, actionsSlot }) {
 
 export function OrderDetail({ orderId, scope = 'mine', bakeryId, onChanged, onClose }) {
   const { user } = useAuth()
-  const resource = useCatalogResource(loadOrder, { orderId })
+  const resource = useCatalogResource(loadOrder, { orderId, apiOnly: scope === 'all' })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [notice, setNotice] = useState(null)

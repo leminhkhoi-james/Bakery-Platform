@@ -1,5 +1,6 @@
 import { api as sharedApi, ApiError } from './apiClient.js'
 import { requireSubscriptionId, mapSubscriptionPlan, mapSubscriptionOrders, mapSubscriptionOrder, mapBakerySubscription } from './subscriptionModels.js'
+import { mapVnpayCheckout, mapVnpayResult, vnpayReturnQuery } from './vnpayModels.js'
 
 // Subscription onboarding must persist in the backend, including for existing owners.
 const api = {
@@ -8,6 +9,14 @@ const api = {
 }
 
 export const subscriptionService = {
+  async createVnpayCheckout(orderId, options = {}) {
+    requireSubscriptionId(orderId, 'Mã đơn')
+    return mapVnpayCheckout(await api.post('/subscription-orders/' + orderId + '/vnpay/checkout', undefined, options), orderId)
+  },
+  async getVnpayResult(search, options = {}) {
+    return mapVnpayResult(await api.get('/payments/vnpay/return?' + vnpayReturnQuery(search),
+      { ...options, auth: false, retryAuth: false }))
+  },
   async getPaymentOptions(_params, options = {}) {
     return api.get('/subscription-plans/payment-options', { ...options, allowMockFallback: false })
   },

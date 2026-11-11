@@ -5,6 +5,8 @@ import com.se193262.subscriptionservice.feature.payment.dto.BakeryPaymentDto;
 import com.se193262.subscriptionservice.feature.payment.dto.PaymentReviewResponse;
 import com.se193262.subscriptionservice.feature.payment.entity.BakeryPayment;
 import com.se193262.subscriptionservice.feature.payment.entity.PaymentStatus;
+import com.se193262.subscriptionservice.feature.payment.entity.VnpayAttempt;
+import com.se193262.subscriptionservice.feature.payment.repository.VnpayAttemptRepository;
 import com.se193262.subscriptionservice.feature.payment.repository.BakeryPaymentRepository;
 import com.se193262.subscriptionservice.feature.payment.service.BakeryPaymentService;
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrder;
@@ -24,6 +26,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,18 +49,21 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
     private final BakeryAccessClient bakeryClient;
     private final PaymentProofStorage proofStorage;
     private final TransactionTemplate transactions;
+    private final VnpayAttemptRepository attempts;
 
     public BakeryPaymentServiceImpl(BakeryPaymentRepository paymentRepository,
                                     SubscriptionOrderRepository orderRepository,
                                     BakerySubscriptionRepository subscriptionRepository,
                                     BakeryAccessClient bakeryClient, PaymentProofStorage proofStorage,
-                                    TransactionTemplate transactions) {
+                                    TransactionTemplate transactions,
+                                    VnpayAttemptRepository attempts) {
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.bakeryClient = bakeryClient;
         this.proofStorage = proofStorage;
         this.transactions = transactions;
+        this.attempts = attempts;
     }
 
     @Override
@@ -80,6 +86,10 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
             throw new AppException(HttpStatus.BAD_REQUEST, "Valid Idempotency-Key UUID is required");
         }
         String method = required(request.paymentMethod(), "paymentMethod");
+        if ("VNPAY".equalsIgnoreCase(method) || (request.paymentReference() != null
+                && request.paymentReference().trim().toUpperCase(java.util.Locale.ROOT).startsWith("VNPAY-"))) {
+            throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY, "VNPay payments require a verified IPN");
+        }
         if ("SANDBOX".equalsIgnoreCase(method)) {
             throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
                     "Sandbox payments are not supported; submit a payment reference or proof for admin review");
@@ -96,6 +106,7 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
         SubscriptionOrder order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found"));
         bakeryClient.requireMember(order.getBakeryId(), userId, true);
+        bakeryClient.requireApprovedBakery(order.getBakeryId());
         String hash = hash(orderId + ":" + idempotencyKey);
         boolean retry = paymentRepository.findByIdempotencyKeyHash(hash).isPresent();
         if (!retry) validateOrder(order, request);
@@ -130,8 +141,13 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
             }
             return toDto(existing);
         }
-        SubscriptionOrder order = orderRepository.findById(orderId)
+        SubscriptionOrder order = orderRepository.findLockedById(orderId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found"));
+        if (attempts.findFirstByOrderIdAndStatusAndExpiresAtAfterOrderByCreatedAtDesc(orderId,
+                VnpayAttempt.Status.PENDING,
+                Instant.now()).isPresent()) {
+            throw new AppException(HttpStatus.CONFLICT, "A VNPay payment is still in progress");
+        }
         validateOrder(order, request);
         if (reference != null && paymentRepository.findByPaymentReference(reference).isPresent()) {
             throw new AppException(HttpStatus.CONFLICT, "Payment reference already exists");
@@ -191,6 +207,19 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
         return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void settleVnpay(UUID orderId, UUID userId, String transactionNo, UUID attemptId) {
+        SubscriptionOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Subscription order not found"));
+        BakeryPayment payment = new BakeryPayment(order, userId, "VNPAY", "VNPAY-" + transactionNo,
+                hash("vnpay:" + attemptId), order.getTotalAmount(), order.getCurrency(), null);
+        payment.verifiedByVnpay();
+        order.submitPayment();
+        paymentRepository.saveAndFlush(payment);
+        approveInTransaction(payment.getId(), null, hash("vnpay-approve:" + attemptId), "Verified VNPay IPN");
+    }
+
     private PaymentReviewResponse approveInTransaction(UUID paymentId, UUID adminId, String keyHash,
             String reviewNote) {
         BakeryPayment payment = paymentRepository.findById(paymentId)
@@ -198,7 +227,7 @@ public class BakeryPaymentServiceImpl implements BakeryPaymentService {
         SubscriptionOrder order = payment.getOrder();
         if (payment.getStatus() == PaymentStatus.APPROVED
                 && keyHash.equals(payment.getReviewIdempotencyKeyHash())
-                && adminId.equals(payment.getReviewedByAdminId())
+                && java.util.Objects.equals(adminId, payment.getReviewedByAdminId())
                 && java.util.Objects.equals(reviewNote, payment.getReviewNote())) {
             BakerySubscription existing = subscriptionRepository.findBySourceOrder_Id(order.getId())
                     .orElseThrow(() -> new AppException(HttpStatus.CONFLICT, "Approved period is missing"));

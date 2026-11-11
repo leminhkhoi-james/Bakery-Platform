@@ -32,6 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 .vite/
+/.tmp/
 
 ### Local secrets and environment ###
 **/.env

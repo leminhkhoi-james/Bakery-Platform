@@ -16,7 +16,7 @@ const ADMIN_PAGE_HEADERS = {
   'admin-vendors': { title: 'Quản lý tiệm bánh', description: 'Tra cứu hồ sơ và duyệt hoạt động của tiệm bánh.' },
   'admin-orders': { title: 'Quản lý đơn hàng', description: 'Theo dõi đơn hàng, tiến độ giao nhận và đánh giá của khách.' },
   'admin-plans': { title: 'Quản lý gói dịch vụ', description: 'Quản lý các gói dịch vụ và quyền lợi dành cho tiệm bánh.' },
-  'admin-payments': { title: 'Duyệt chứng từ', description: 'Đối chiếu và duyệt chứng từ mua gói dịch vụ.' },
+  'admin-payments': { title: 'Đơn mua gói', description: 'Theo dõi tất cả đơn mua gói dịch vụ và trạng thái thanh toán của đối tác.' },
   'admin-revenue': { title: 'Doanh thu dịch vụ', description: 'Theo dõi doanh thu thực nhận từ các gói dịch vụ đã phê duyệt.' },
   'admin-moderation': { title: 'Kiểm duyệt nội dung', description: 'Nhập mã đơn hàng hoặc mã thiết kế để xem và kiểm duyệt.' },
   'admin-users': { title: 'Quản lý người dùng', description: 'Tra cứu và quản lý thông tin người dùng.' },

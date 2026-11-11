@@ -90,7 +90,7 @@ function Period({ title, period, plans, currentPlan }) {
 
 const loadOwnerPlans = (_params, options) => loadSubscriptionPlans(undefined, { ...options, allowMockFallback: false })
 
-function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
+function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId, initialOrderId }) {
   const subscription = useCatalogResource(loadBakerySubscription, { bakeryId })
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
@@ -102,7 +102,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId }) {
   const [busy, setBusy] = useState(false)
   const [detailBusy, setDetailBusy] = useState(false)
   const [error, setError] = useState(null)
-  const [orderId, setOrderId] = useState(null)
+  const [orderId, setOrderId] = useState(initialOrderId || null)
   const [detailRevision, setDetailRevision] = useState(0)
   const permissions = subscriptionPermissions(roles)
   const refresh = () => { history.reload(); subscription.reload(); setDetailRevision((value) => value + 1) }
@@ -241,6 +241,6 @@ export default function VendorSubscriptionPage({ routeSearch = '', onNavigate })
   const plans = useCatalogResource(loadOwnerPlans)
   return <VendorFrame owner={owner} title="Gói dịch vụ" activeTab="subscription" bakeryId={activeBakeryId} onNavigate={onNavigate} bakerySelectionDisabled={busy}>
 
-    {activeBakeryId ? <><BakeryWorkspace key={activeBakeryId} bakeryId={activeBakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
+    {activeBakeryId ? <><BakeryWorkspace key={activeBakeryId} bakeryId={activeBakeryId} roles={roles} plans={plans} onBusy={setBusy} initialPlanId={new URLSearchParams(routeSearch).get("planId") || null} initialOrderId={new URLSearchParams(routeSearch).get('orderId')} /></> : <><p>Chọn cửa hàng để xem kỳ dịch vụ và lịch sử mua gói.</p><ResourceState resource={plans}><PlanCards plans={plans.data} /></ResourceState></>}
   </VendorFrame>
 }

@@ -12,7 +12,10 @@ export async function loadPaymentDirectory(params = {}, options = {}) {
   const cache = new Map()
   const result = await Promise.all(data.result.map(async (payment) => {
     if (!cache.has(payment.subscriptionOrderId)) cache.set(payment.subscriptionOrderId, paymentContext(payment, options))
-    try { return { ...payment, context: await cache.get(payment.subscriptionOrderId) } }
+    try {
+      const context = await cache.get(payment.subscriptionOrderId)
+      return { ...payment, bakeryId: payment.bakeryId || context?.order?.bakeryId, context }
+    }
     catch (contextError) { if (options.signal?.aborted) throw contextError; return { ...payment, contextError } }
   }))
   return { ...data, result }

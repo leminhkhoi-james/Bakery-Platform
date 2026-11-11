@@ -31,7 +31,8 @@ export default defineConfig(({ mode }) => {
 
   const proxy = {
     '^/api/v1/bakeries/[^/?]+/(?:subscription|subscription-orders)(?:/|\\?|$)': upstream(subscription),
-    '^/api/v1/admin/(?:subscription-plans|bakery-payments)(?:/|\\?|$)': upstream(subscription),
+    '^/api/v1/admin/(?:subscription-plans|subscription-orders|bakery-payments|vnpay-attempts)(?:/|\\?|$)': upstream(subscription),
+    '^/api/v1/payments/vnpay/(?:return|ipn)(?:\\?|$)': upstream(subscription),
     '^/api/v1/admin/bakeries(?:/|\\?|$)': upstream(bakery),
     '^/api/v1/admin/reviews(?:/|\\?|$)': upstream(order),
     '^/api/v1/admin/generated-designs(?:/|\\?|$)': upstream(cakeAi),
@@ -50,7 +51,7 @@ export default defineConfig(({ mode }) => {
   const testEntry = process.argv.find((entry) => /\.test\.[cm]?js$/.test(entry))
 
   return {
-    ...(testEntry ? { cacheDir: 'node_modules/.vite-tests/' + testEntry.split(/[\\/]/).at(-1) } : {}),
+    cacheDir: testEntry ? 'node_modules/.vite-tests/' + testEntry.split(/[\\/]/).at(-1) : 'node_modules/.vite-dev',
     plugins: [
       react(),
       tailwindcss(),

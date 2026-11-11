@@ -1,9 +1,23 @@
 # Bakery payment feature
 
-Payment follows the original manual evidence and admin review flow. No sandbox
-code or gateway verification is required. The compatibility payment-options
-endpoint always returns sandboxEnabled=false; SANDBOX submissions are rejected.
-See the 2026-11-08 correction in ADR-005.
+ADR-007: initiating VNPay checkout or submitting manual evidence additionally
+requires an ACTIVE Bakery profile. Check occurs before upload/attempt persistence.
+Verified IPN settlement and admin review of existing payments remain unchanged so
+previously collected money is not lost when a profile changes status.
+
+Payment supports manual evidence/admin review and VNPay Sandbox (ADR-006).
+The retired SANDBOX evidence method remains rejected; sandboxEnabled=false on
+the compatibility endpoint describes that retired simulator, not VNPay availability.
+VNPay checkout requires configured merchant credentials and owner membership.
+Only verified IPN settles; browser return is read-only. Gateway verification_source
+is VNPAY with no admin identity. Manual verification_source remains MANUAL.
+Checkout, manual submission and IPN serialize on the order row. Active VNPay
+attempts block manual evidence; failed/expired attempts allow retry/fallback.
+Late successful IPNs with a pay time inside the original window can settle
+expired unpaid orders. Conflicting paid callbacks persist REVIEW_REQUIRED for
+admin reconciliation at GET /api/v1/admin/vnpay-attempts?status=REVIEW_REQUIRED.
+Settlement and attempt outcome commit atomically. Duplicate IPNs do not grant
+another period. See docs/VNPAY-SANDBOX.md for setup and external verification.
 Successful admin approval notifies Bakery after commit to check pending owner
 activation. Bakery retries activation if the notification fails.
 

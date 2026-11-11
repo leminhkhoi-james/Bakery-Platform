@@ -18,7 +18,7 @@ liệu của mình và không được đọc trực tiếp database của servi
 | Order Service | `order_db` | 7 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql), [V2](../database/postgresql/order-service/V2__order_creation_idempotency.sql), [V3](../database/postgresql/order-service/V3__offer_idempotency.sql) |
 | Chat Service | `chat_db` | 5 | [Xem ERD](erd/05-chat-service-logical.mmd) | [V1](../database/postgresql/chat-service/V1__init_schema.sql) |
 | Cake AI Service | `cake_ai_db` | 4 | [Xem ERD](erd/06-cake-ai-service-logical.mmd) | [V1](../database/postgresql/cake-ai-service/V1__init_schema.sql) |
-| Subscription Service | `subscription_db` | 5 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql) |
+| Subscription Service | `subscription_db` | 6 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql), [V5](../database/postgresql/subscription-service/V5__vnpay_attempts.sql) |
 
 **Tổng cộng: 47 bảng trong 7 database.**
 
@@ -358,9 +358,23 @@ private Map<String, Object> configurationSnapshot;
 
 ---
 
+## VNPay Sandbox additions — 2026-11-10
+
+Subscription V5 adds `vnpay_attempts` (UUID PK, local order FK, external payer UUID,
+NUMERIC(12,2) VND snapshot, IP address, created/expiry time, unique nullable VNPay
+transaction number, response/status codes, paid time, version). Status is PENDING,
+SUCCEEDED, FAILED or REVIEW_REQUIRED. Order/time and status/time indexes support
+checkout retries and paginated admin reconciliation. No tokens or secrets stored.
+
+`bakery_payments.verification_source` defaults to MANUAL for existing records.
+The review constraint permits APPROVED VNPAY payments without an admin ID only
+when verification_source and payment_method are both VNPAY. Manual reviewed
+payments still require an admin ID. One source order still creates at most one
+subscription period. Runtime and canonical V5 migrations are identical.
+
 ## Migration notes
 
-- **Tổng số bảng: 46**, chia trong 7 database.
+- **Tổng số bảng: 47**, chia trong 7 database.
 - Schema được quản lý bằng Flyway; production dùng `ddl-auto: validate`.
 - File tạo database: [00_create_databases.sql](../database/postgresql/00_create_databases.sql).
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).

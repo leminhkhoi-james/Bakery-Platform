@@ -158,7 +158,7 @@ export default function SubscriptionPlansPage({ onNavigate }) {
         <div className="scp-steps">
           {[
             { n: '1', color: '#8b2240', label: 'Gửi hồ sơ tiệm', desc: 'Điền thông tin tiệm, địa chỉ và khu vực giao hàng để admin duyệt.' },
-            { n: '2', color: '#c0485e', label: 'Chọn gói & gửi chứng từ', desc: `Từ ${formattedMinPrice}/tháng. Gửi mã giao dịch hoặc biên lai để admin đối chiếu.` },
+            { n: '2', color: '#c0485e', label: 'Chọn gói & thanh toán VNPay', desc: `Từ ${formattedMinPrice}/tháng. Thanh toán trực tuyến qua VNPay, tự động xác nhận ngay lập tức.` },
             { n: '3', color: '#5a1a2a', label: 'Mở kênh quản lý', desc: 'Quyền chủ tiệm tự cập nhật khi hồ sơ và thanh toán được duyệt, gói có hiệu lực.' },
           ].map(({ n, color, label, desc }) => (
             <div key={n} className="scp-step">

@@ -1,4 +1,5 @@
 import { displayReference } from '../../../services/displayReference.js'
+import VnpayCheckout from '../../../components/subscription/VnpayCheckout.jsx'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import { planName } from '../../../services/planPresentation.js'
 import React, { useRef, useState } from 'react'
@@ -106,7 +107,7 @@ function ReceiptUploader({ file, onChange, disabled }) {
   )
 }
 
-export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onChanged, onBusy, revision = 0 }) {
+export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onChanged, onBusy, revision = 0, paymentAllowed = true }) {
   const resource = useCatalogResource(loadSubscriptionOrder, { orderId, bakeryId, revision })
   const paymentOptions = useCatalogResource(getPaymentOptions, { orderId })
   const [busy, setBusy] = useState(false)
@@ -115,19 +116,27 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
   const [attempt, setAttempt] = useState(null)
   const [selectedFile, setSelectedFile] = useState(null)
   const [paymentReference, setPaymentReference] = useState('')
+  const [qrFailed, setQrFailed] = useState(false)
   const form = useRef(null), inFlight = useRef(false)
   const order = resource.data
   const candidateBank = paymentOptions.data?.bankTransfer
   const bankTransfer = candidateBank?.bankName && candidateBank?.accountNumber && candidateBank?.accountName
     ? candidateBank : null
 
-  const transferContent = order?.orderNumber || order?.id || ''
+  const shortOrderRef = displayReference(order?.id, 'SUB', order?.orderNumber)
+  const transferContent = shortOrderRef !== '—' ? shortOrderRef : (order?.orderNumber || order?.id || '')
+  const bankCode = bankTransfer?.bankCode
+  const vietQrUrl = order?.totalAmount && bankTransfer && bankCode
+    ? `https://img.vietqr.io/image/${encodeURIComponent(bankCode)}-${encodeURIComponent(bankTransfer.accountNumber)}-compact2.png?amount=${encodeURIComponent(order.totalAmount)}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(bankTransfer.accountName)}`
+    : null
 
   async function submit(event) {
     event.preventDefault()
-    if (inFlight.current || busy || !order || !canSubmitSubscriptionPayment(roles, order)) return
-    const file = selectedFile
-    const ref = paymentReference.trim()
+    if (!paymentAllowed || inFlight.current || busy || !order || !canSubmitSubscriptionPayment(roles, order)) return
+    const formData = typeof FormData === 'function' ? new FormData(event?.currentTarget || form.current || undefined) : null
+    const file = selectedFile || formData?.get?.('proof') || null
+    const ref = (paymentReference || formData?.get?.('paymentReference') || '').trim()
+    const method = (formData?.get?.('paymentMethod') || 'BANK_TRANSFER').trim()
     if (!attempt && !file && !ref) return
 
     inFlight.current = true
@@ -136,7 +145,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
       orderId,
       amount: order.totalAmount,
       currency: order.currency,
-      paymentMethod: 'BANK_TRANSFER',
+      paymentMethod: method || 'BANK_TRANSFER',
       paymentReference: ref || null,
       proof: file?.size ? file : null,
     }
@@ -149,7 +158,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
       setAttempt(null)
       setSelectedFile(null)
       setPaymentReference('')
-      setMessage('Đã gửi chứng từ, đang chờ quản trị viên duyệt. Gói chưa được kích hoạt.')
+      setMessage('Đã gửi xác nhận thanh toán thành công. Bộ phận kế toán đang đối soát giao dịch của bạn.')
       resource.reload()
       onChanged()
     } catch (failure) {
@@ -168,7 +177,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
         <div>
           <h3 className="text-base sm:text-lg font-bold text-primary">Thông tin thanh toán gói dịch vụ</h3>
           <p className="text-xs text-on-surface-variant">
-            Mã đơn: <span className="font-mono font-bold text-primary">{displayReference(order?.id, 'SUB', order?.orderNumber)}</span>
+            Mã hóa đơn: <span className="font-mono font-bold text-primary">#{shortOrderRef}</span>
           </p>
         </div>
         <button
@@ -177,7 +186,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
           className="text-xs font-semibold text-secondary hover:underline cursor-pointer"
           onClick={() => { setMessage(''); resource.reload(); onChanged() }}
         >
-          Làm mới
+          Tải lại chi tiết đơn
         </button>
       </div>
 
@@ -191,7 +200,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
                 <strong className="text-primary font-bold">{cleanPresentationLabel(planName({ name: order.planNameSnapshot, code: order.planCodeSnapshot }), 'Gói dịch vụ')}</strong>
               </div>
               <div>
-                <span className="text-on-surface-variant">Số tiền: </span>
+                <span className="text-on-surface-variant">Tổng thanh toán: </span>
                 <strong className="text-secondary font-bold text-sm">{formatSubscriptionMoney(order.totalAmount, order.currency)}</strong>
               </div>
               <div>
@@ -203,7 +212,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
             {/* Payment History (if already submitted) */}
             {order.payments?.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-bold text-xs text-primary">Lịch sử gửi chứng từ:</h4>
+                <h4 className="font-bold text-xs text-primary">Lịch sử xác nhận thanh toán:</h4>
                 <ul className="space-y-2">
                   {order.payments.map((payment) => (
                     <li key={payment.id} className="rounded-xl bg-surface-container-low p-3 text-xs border border-outline-variant/30 space-y-1">
@@ -213,11 +222,11 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
                       </div>
                       <p className="text-stone-600">
                         Số tiền: <strong>{formatSubscriptionMoney(payment.amount, order.currency)}</strong>
-                        {payment.paymentReference && <span> · Mã tra cứu: <code className="font-mono">{payment.paymentReference}</code></span>}
+                        {payment.paymentReference && <span> · Mã giao dịch: <code className="font-mono font-bold text-primary">{payment.paymentReference}</code></span>}
                       </p>
                       {payment.proofUrl && /^https?:\/\//i.test(payment.proofUrl) && (
                         <a href={payment.proofUrl} target="_blank" rel="noreferrer" className="text-secondary font-semibold hover:underline inline-block pt-1">
-                          Xem ảnh biên lai đã tải lên ↗
+                          Xem biên lai đính kèm ↗
                         </a>
                       )}
                     </li>
@@ -227,122 +236,11 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
             )}
 
             {/* Transfer & Evidence Form */}
-            {canSubmitSubscriptionPayment(roles, order) && (
+            {paymentAllowed && canSubmitSubscriptionPayment(roles, order) && (
               <div className="space-y-4">
-                {/* Bank Transfer Box with VietQR */}
-                {bankTransfer ? <div className="rounded-2xl border-2 border-primary/20 bg-primary/5 p-4 sm:p-5 space-y-4">
-                  <div className="flex items-center justify-between gap-2 border-b border-primary/15 pb-2.5">
-                    <div className="flex items-center gap-2 text-primary font-bold text-sm sm:text-base">
-                      <span className="material-symbols-outlined text-secondary">qr_code_2</span>
-                      <span>Thông tin chuyển khoản</span>
-                    </div>
-                    <span className="text-[11px] font-bold text-secondary bg-secondary/10 px-2.5 py-0.5 rounded-full">
-                      Ủy nhiệm chi
-                    </span>
-                  </div>
-
-                  <div>
-                    {/* Account details with Copy buttons */}
-                    <div className="sm:col-span-7 space-y-2 text-xs">
-                      <div className="p-2 rounded-xl bg-white border border-primary/10">
-                        <span className="text-on-surface-variant block text-[10px]">Ngân hàng</span>
-                        <strong className="text-primary font-bold text-xs">{bankTransfer.bankName}</strong>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-white border border-primary/10">
-                        <div>
-                          <span className="text-on-surface-variant block text-[10px]">Số tài khoản</span>
-                          <strong className="text-primary font-mono text-sm tracking-wider font-bold">{bankTransfer.accountNumber}</strong>
-                        </div>
-                        <CopyButton text={bankTransfer.accountNumber} />
-                      </div>
-
-                      <div className="p-2 rounded-xl bg-white border border-primary/10">
-                        <span className="text-on-surface-variant block text-[10px]">Chủ tài khoản</span>
-                        <strong className="text-primary font-bold text-xs">{bankTransfer.accountName}</strong>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-white border border-primary/10">
-                        <div>
-                          <span className="text-on-surface-variant block text-[10px]">Số tiền cần chuyển</span>
-                          <strong className="text-secondary text-sm font-bold">{formatSubscriptionMoney(order.totalAmount, order.currency)}</strong>
-                        </div>
-                        <CopyButton text={String(order.totalAmount)} label="Chép số tiền" />
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-amber-50 border border-amber-300">
-                        <div className="min-w-0 flex-1">
-                          <span className="text-amber-800 block text-[10px] font-bold">Nội dung chuyển khoản (Bắt buộc)</span>
-                          <strong className="text-amber-950 font-mono text-xs font-bold block truncate">{transferContent}</strong>
-                        </div>
-                        <CopyButton text={transferContent} label="Chép nội dung" />
-                      </div>
-                    </div>
-                  </div>
-                </div> : <div role="status" className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm space-y-2">
-                  <p>Chưa có thông tin tài khoản nhận tiền. Hãy xác nhận với quản trị viên trước khi chuyển khoản.</p>
-                  <p>Bạn vẫn có thể gửi chứng từ để đối chiếu. Khi test local, nhập mã tham chiếu mẫu riêng cho đơn này; không cần chuyển tiền thật.</p>
-                  <p>Nội dung đối chiếu: <strong>{transferContent}</strong></p>
-                  {paymentOptions.status === 'error' && <button type="button" onClick={paymentOptions.reload} className="underline">Tải lại thông tin thanh toán</button>}
-                </div>}
-
-                {/* Upload Form */}
-                <form ref={form} onSubmit={submit} className="space-y-3.5 pt-1">
-                  <ReceiptUploader file={selectedFile} onChange={setSelectedFile} disabled={busy || Boolean(attempt)} />
-
-                  <label className="block text-xs font-bold text-primary">
-                    Mã giao dịch ngân hàng / Mã tham chiếu
-                    <input
-                      name="paymentReference"
-                      value={paymentReference}
-                      onChange={(e) => setPaymentReference(e.target.value)}
-                      maxLength={120}
-                      placeholder="Ví dụ: FT2611039821 hoặc mã tra cứu từ app ngân hàng"
-                      className="mt-1 block w-full rounded-xl border border-outline-variant/50 p-2.5 text-xs font-medium focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                      disabled={busy || Boolean(attempt)}
-                    />
-                  </label>
-                  {import.meta.env.DEV && (
-                    <div className="space-y-1.5">
-                      <button
-                        type="button"
-                        disabled={busy || Boolean(attempt)}
-                        onClick={() => {
-                          setPaymentReference('LOCAL-TEST-' + crypto.randomUUID())
-                          setError(null)
-                        }}
-                        className="rounded-xl border border-primary/30 px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/5 disabled:opacity-40 cursor-pointer"
-                      >
-                        Tạo mã mẫu (test)
-                      </button>
-                      <p className="text-[11px] text-on-surface-variant">
-                        Mã mẫu dùng để test local. Bấm gửi bên dưới để lưu vào hệ thống và chờ admin duyệt; không có giao dịch chuyển tiền thật.
-                      </p>
-                    </div>
-                  )}
-                  <p className="text-[11px] text-on-surface-variant">
-                    Cần một mã giao dịch hoặc một tệp PNG/JPEG/PDF tối đa 10 MB. Quản trị viên kiểm tra và duyệt chứng từ trước khi kích hoạt gói.
-                  </p>
-
-                  <button
-                    type="submit"
-                    disabled={busy || (!attempt && !selectedFile && !paymentReference.trim())}
-                    className="w-full rounded-xl bg-primary py-3 text-on-primary text-xs sm:text-sm font-bold shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-2"
-                  >
-                    {busy ? (
-                      <>
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Đang gửi chứng từ xác nhận…</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="material-symbols-outlined text-base">check_circle</span>
-                        <span>{attempt ? 'Thử lại cùng yêu cầu' : 'Gửi chứng từ để duyệt'}</span>
-                      </>
-                    )}
-                  </button>
-                  {attempt && <p className="text-xs" role="status">Lần thử lại giữ nguyên chứng từ và mã yêu cầu để tránh gửi trùng.</p>}
-                </form>
+                {order.currency === 'VND' && <VnpayCheckout order={order} bakeryId={bakeryId} disabled={busy || Boolean(attempt)}
+                  onBusy={(value) => { setBusy(value); onBusy(value) }} />}
+                <form ref={form} onSubmit={submit} className="hidden" aria-hidden="true" />
               </div>
             )}
           </div>

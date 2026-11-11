@@ -1,5 +1,32 @@
 # Partner onboarding
 
+## Approval before payment — 2026-11-11
+
+ADR-007 supersedes the independent approval/payment sequence below. While the
+profile is not ACTIVE, PartnerCheckoutModal disables order creation, shows the
+payment step as waiting and passes paymentAllowed=false to order details. History
+remains readable. Approval polling enables checkout only after an ACTIVE response.
+Backend independently enforces this at order creation, VNPay checkout and manual
+submission; pending OWNER membership alone no longer permits purchasing.
+
+## VNPay Sandbox — 2026-11-10
+
+Shared SubscriptionOrderDetail offers VnpayCheckout for pending VND orders. It
+posts no client amount, disables competing actions during checkout, validates the
+returned sandbox hostname/path and redirects the browser. Manual evidence stays
+under an expandable section. Banking details require complete API configuration;
+no fallback account is invented, and reference generation is development-only.
+
+Public `/subscription-vnpay-return` calls the backend's signed return verifier;
+never IPN or settlement. Only persisted SUCCEEDED displays success. PENDING polls
+up to 10 checks/3-second intervals with per-request timeout and unmount cancellation;
+visibility pauses polling. FAILED, REVIEW_REQUIRED and verification errors have
+separate recovery copy. Session storage preserves only attempt/order/bakery IDs
+for navigation and is never payment authority. The original order reopens via
+`vendor-subscription?bakeryId=...&orderId=...`. Auth/ownership still protect details.
+VNPay requires configured backend merchant secrets, public IPN, and a return URL
+pointing to the frontend route. See docs/VNPAY-SANDBOX.md.
+
 `SubscriptionPlansPage` mở `PartnerCheckoutModal` cho customer mới hoặc hồ sơ đang chờ duyệt. `OwnerBakeryOnboarding` sử dụng cùng cơ chế theo dõi quyền khi được dùng để đăng ký tiệm.
 
 Khối dưới danh sách gói chỉ hiện khi có hồ sơ đăng ký hoặc role BAKERY_OWNER. Customer có hồ sơ dùng “Theo dõi đăng ký tiệm” để mở lại cùng modal; chủ tiệm dùng “Quản lý gói”. Khách chưa đăng ký không thấy khối này.

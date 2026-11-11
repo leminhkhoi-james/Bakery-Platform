@@ -51,6 +51,8 @@ public class SecurityConfig {
                                 "/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement")
                         .access(serviceScope("subscription:entitlement:read"))
                         .requestMatchers("/internal/v1/**").denyAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/payments/vnpay/ipn", "/api/v1/payments/vnpay/return")
+                        .permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/subscription-plans",
                                 "/api/v1/subscription-plans/{planId}")
@@ -58,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").access(userRole("ADMIN"))
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/bakeries/{bakeryId}/subscription-orders",
+                                "/api/v1/subscription-orders/{orderId}/vnpay/checkout",
                                 "/api/v1/subscription-orders/{orderId}/payments")
                         .access(userRole("BAKERY_OWNER", "CUSTOMER"))
                         .requestMatchers(HttpMethod.GET,

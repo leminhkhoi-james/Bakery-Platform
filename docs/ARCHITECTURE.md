@@ -184,6 +184,14 @@ Bakery chọn plan
   → Bakery/Marketplace Service gọi entitlement API trước khi publish/send offer
 ```
 
+Từ 2026-11-10, bakery cũng có thể tạo checkout VNPay Sandbox (ADR-006).
+Subscription lưu attempt với giá snapshot VND; IPN hợp lệ kiểm tra HMAC-SHA512,
+merchant, số tiền và hai mã thành công, sau đó ghi payment APPROVED, hoàn tất
+order và tạo kỳ trong cùng transaction. Không giả mạo admin cho xác minh gateway.
+Return URL chỉ đọc kết quả. Notification sang Bakery thực hiện sau commit.
+Callback lặp không tạo kỳ mới; giao dịch trả tiền nhưng xung đột được lưu
+REVIEW_REQUIRED và xuất hiện trong API đối soát chỉ dành cho ADMIN.
+
 Việc duyệt payment và kích hoạt subscription phải idempotent. Mỗi bakery chỉ
 có tối đa một kỳ `ACTIVE` tại một thời điểm. Payment ở đây chỉ là payment giữa
 bakery và nền tảng, không phải payment đơn bánh và không thay thế hóa đơn điện tử.
@@ -448,3 +456,12 @@ REST results without a broker or distributed transaction. Identity provides scop
 The platform-support library shares only technical concerns, never domain persistence. Local Compose
 runs Identity/Marketplace with separate PostgreSQL databases; other dependencies are configured externally.
 See ADR-002 for the complete consistency model and FIREBASE-SETUP.md / DOCKER.md for setup.
+# Approval before subscription — 2026-11-11
+
+ADR-007 replaces the independent onboarding payment order: approve the Bakery
+profile first, then allow subscription order creation/payment initiation.
+Subscription reads the Bakery profile over the existing authenticated internal
+API and requires ACTIVE, in addition to OWNER membership. Existing paid callback
+settlement is preserved. Seller activation/public listing still require both an
+ACTIVE profile and valid entitlement. No database boundary/schema changes.
+
