@@ -1,5 +1,7 @@
 package com.se193262.identityservice.config;
 
+import org.springframework.security.config.Customizer;
+
 import com.se193262.identityservice.security.CustomUserDetailsService;
 import com.se193262.identityservice.shared.dto.ApiResponse;
 
@@ -28,9 +30,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -47,11 +46,10 @@ public class SecurityConfig {
             HttpSecurity http,
             Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter,
             AuthenticationEntryPoint authenticationEntryPoint,
-            AccessDeniedHandler accessDeniedHandler,
-            CorsConfigurationSource corsConfigurationSource)
+            AccessDeniedHandler accessDeniedHandler)
             throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(Customizer.withDefaults())
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
@@ -119,25 +117,6 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);
-    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource(CorsProperties properties) {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(properties.allowedOrigins());
-        configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(
-                List.of(
-                        "Authorization",
-                        "Content-Type",
-                        "Cache-Control",
-                        "Idempotency-Key",
-                        "X-Correlation-Id"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
     @Bean

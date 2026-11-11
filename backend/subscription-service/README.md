@@ -1,8 +1,10 @@
 # Subscription Service
 
-Runs on port `8084` with its own `subscription_db`. Copy `.env.example` to `.env`
-for local execution, then set the database, Identity JWK, Bakery service token
-and MinIO values. The real `.env` file is ignored by Git.
+Runs on port `8084` with its own `subscription_db`. Local execution reads the
+shared `backend/.env` from working directory `backend`. Its template is
+`backend/.env.example`; configure database, Identity JWK, client secret, storage
+and VNPay there. The real `.env` is ignored by Git. A static Bakery service
+token is optional: leave it blank to acquire service JWTs automatically.
 
 For the verified owner-only setup, run from the repository root:
 
@@ -11,10 +13,10 @@ For the verified owner-only setup, run from the repository root:
 ```
 
 The `bakery-owner-dev` project uses separate volumes and preserves old databases.
-For local Java/IntelliJ, use `-InfrastructureOnly -NoBuild`; module `.env` uses
-PostgreSQL on 5437, Identity on 8081, Bakery on 8082 and MinIO on 9004. Match
-credentials to root Compose configuration. Both Docker and host Java execution
-were verified against real PostgreSQL and MinIO on 2026-10-28.
+Local Java/IntelliJ uses PostgreSQL on 5432, Identity on 8081, Bakery on 8082
+and the shared config described in [local setup](../../docs/LOCAL-SETUP.md).
+The optional separate Docker infrastructure exposes different DB/storage ports;
+configure those in the shared file if choosing that setup.
 
 From the repository root, `docker compose -f docker-compose.subscription-service.yml up --build`
 starts Subscription, PostgreSQL and MinIO. The defaults expose PostgreSQL on

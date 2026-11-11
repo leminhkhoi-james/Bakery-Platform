@@ -1,5 +1,7 @@
 package com.se193262.chatservice.feature.conversation;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.chatservice.feature.conversation.dto.CloseConversationRequest;
 import com.se193262.chatservice.feature.conversation.dto.ConversationResponse;
 import com.se193262.chatservice.feature.conversation.dto.ConversationSummaryResponse;
@@ -28,6 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @Validated
 @RequestMapping("/api/v1/conversations")
 public class ConversationController {

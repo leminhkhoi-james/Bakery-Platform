@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.addon.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.addon.dto.AddOnDto;
 import com.se193262.bakeryservice.feature.addon.service.AddOnService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/add-ons")
 public class AddOnController {
 

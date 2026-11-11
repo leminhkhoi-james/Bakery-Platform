@@ -1,5 +1,7 @@
 package com.se193262.orderservice.feature.order;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.orderservice.feature.order.dto.OrderContextResponse;
 import com.se193262.orderservice.shared.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1/orders")
 public class InternalOrderController {
 

@@ -1,11 +1,14 @@
 package com.se193262.subscriptionservice.feature.payment.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.payment.service.BakeryPaymentService;
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class PaymentOptionsController {
     private final BakeryPaymentService payments;
 

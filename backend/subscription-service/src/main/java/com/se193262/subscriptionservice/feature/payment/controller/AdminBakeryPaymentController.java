@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.payment.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.payment.dto.BakeryPaymentDto;
 import com.se193262.subscriptionservice.feature.payment.dto.PaymentReviewResponse;
 import com.se193262.subscriptionservice.feature.payment.dto.ReviewPaymentRequest;
@@ -25,6 +27,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/admin/bakery-payments")
 public class AdminBakeryPaymentController {
     private final BakeryPaymentService paymentService;

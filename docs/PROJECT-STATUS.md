@@ -2,6 +2,36 @@
 
 > Cập nhật gần nhất: 2026-11-11.
 
+## Gộp env backend local — 2026-11-11
+
+- Theo yêu cầu người dùng, gộp 8 module .env thành backend/.env (Git ignored), mẫu chung backend/.env.example không có secret thật. Xóa các .env riêng sau khi backup vào .local/backups/shared-env-*. Cấu hình local khác/root Docker env và toàn bộ database không đổi.
+- Working directory của cả 8 app là backend, IntelliJ project backend dùng $PROJECT_DIR$, không cần additional config arguments. Key JWT được tham chiếu tương đối từ backend tới identity-service/.keys, không đổi nội dung key.
+- Tách SERVER_PORT thành 8 biến *_SERVER_PORT. Marketplace/Cake AI dùng *_CLIENT_ID và *_CLIENT_SECRET riêng để không ghi đè nhau trong file chung. Các biến SERVER_PORT/SERVICE_CLIENT_* của container vẫn được hỗ trợ qua fallback. Giữ nguyên các giá trị DB, client secret/hash, Firebase, storage và merchant VNPay hiện tại.
+- Package cả 8 ứng dụng qua, kiểm tra port riêng và template không chứa secret thật qua. Không push.
+- Kiểm chứng khởi động cả 8 app với working directory backend và cùng một .env qua; Identity/Bakery/Marketplace cũng kiểm tra OpenAPI 200. Lượt probe đồng thời chạm giới hạn kết nối PostgreSQL, đã dừng và chỉ chạy lại Bakery/Marketplace với pool nhỏ cho probe; không sửa pool/DB của app thật. Toàn bộ process kiểm tra đã dừng, không tạo user/giao dịch hoặc chạy test suite.
+
+## Sửa Swagger register qua Gateway local — 2026-11-11
+
+- Xác nhận OpenAPI tại /identity/v3/api-docs qua Gateway sinh servers=http://localhost:8080 thiếu /identity, khiến Try it out gọi /api/v1/auth/register và 404. Forwarded-header handling trước đó chỉ nằm ở cấu hình runtime/Docker đã bỏ khi dọn local.
+- Bật server.forward-headers-strategy=framework trong application.yml của 7 service. Gateway bật trusted proxy processing cho loopback và không append prefix trùng; doc routes dùng Forwarded host/protocol thay PreserveHostHeader để tương thích JDK HTTP client. Không thêm endpoint hoặc sửa đăng ký/phân quyền/frontend.
+- Package Identity/Gateway qua; 4 GatewayCorsTest qua, thêm regression chuyển đúng một prefix tới docs downstream. Kiểm tra 2 app thực trên cổng tạm: Swagger qua Gateway sinh /identity đúng, direct Identity giữ URL riêng, gọi register từ server URL đó với body rỗng nhận 400 validation thay vì 404. Không tạo tài khoản, các app IDE đang chạy không bị restart, chưa push.
+
+## Cấu hình local đơn giản — 2026-11-11
+
+- Theo yêu cầu người dùng, bỏ launcher/config native: mỗi module dùng một .env, Working directory trỏ module, không còn additional config arguments. Tất cả DB URL là localhost:5432 với tên thường identity_db, bakery_db, marketplace_db, subscription_db, cake_ai_db, order_db, chat_db. Không thay nghiệp vụ/API.
+- Giữ dữ liệu DB thường cũ theo lựa chọn người dùng, không nhập fixture test. Bakery cũ có 0 dòng nghiệp vụ và V1 lệch checksum: backup pg_dump và giữ nguyên DB schema cũ bằng tên bakery_db_schema_backup_20261111045214, tạo bakery_db mới để Flyway khởi tạo đúng. Subscription giữ nguyên 3 plan/9 feature và dữ liệu hiện có; các DB thường còn thiếu được tạo. Toàn bộ bakery_native_* giữ nguyên để đối chiếu.
+- Đã xóa 6 log backend người dùng chụp, 8 file .env.native.properties và 3 file launcher/hướng dẫn native do agent thêm. Cấu hình cũ/backup và storage data giữ tại .local/ ignored; key JWT hiện dùng đặt riêng trong Identity .keys/. Các secret nội bộ vẫn khớp hash Identity, VNPay credentials giữ trong Subscription .env ignored.
+- Bổ sung import .env ở Order/Chat/Cake AI/Gateway để Run từ module nhất quán; sửa default Identity URL của Subscription về 8081. Biến SUBSCRIPTION_BAKERY_SERVICE_TOKEN được ghi rõ để trống: client tự xin JWT bằng secret, không bắt buộc token tĩnh.
+- Đã dừng các process launcher cũ do agent mở, giữ các process người dùng tự Run. Storage có lệnh Node trực tiếp, frontend chạy npm run dev. Chưa push.
+- Kiểm chứng: package cả 8 ứng dụng qua; một lượt khởi động từ từng module chỉ dùng .env trên cổng tạm, 7 Flyway/JPA và 8 OpenAPI 200 qua, sau đó dừng toàn bộ process kiểm tra. Không chạy test suite hoặc giao dịch/cloud. Xem docs/LOCAL-SETUP.md.
+
+## CORS trên toàn bộ backend và Gateway — 2026-11-11
+
+- 42 controller của 7 service dùng `@CrossOrigin(originPatterns = "*", allowCredentials = "true")`, tương thích FE gửi credentials. Spring Security đọc annotation bằng `.cors(Customizer.withDefaults())`; JWT/role/ownership không thay đổi.
+- Bỏ filter CORS và cấu hình origin riêng ở các domain service. Gateway giữ cấu hình nhỏ chỉ trả lời preflight OPTIONS; request thật lấy header từ controller downstream. Không thay frontend.
+- Gateway đã có springdoc UI 3.1.0 và 7 OpenAPI proxy URL. Xem `docs/CORS-DEV.md` cho cách dùng và hướng dẫn restart/build.
+- Kiểm chứng: compile cả 7 service và Gateway qua; 5 test CORS/Swagger tập trung qua; Compose config hợp lệ. Chưa build/restart container hoặc push code.
+
 ## Approval before subscription purchase — 2026-11-11
 
 - ADR-007 makes profile approval precede subscription purchase. Subscription now

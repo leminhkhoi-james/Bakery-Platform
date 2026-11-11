@@ -1,5 +1,7 @@
 package com.se193262.orderservice.config;
 
+import org.springframework.security.config.Customizer;
+
 import com.se193262.orderservice.shared.dto.ApiResponse;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -100,6 +102,7 @@ public class SecurityConfig {
     ) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/v3/api-docs.yaml",

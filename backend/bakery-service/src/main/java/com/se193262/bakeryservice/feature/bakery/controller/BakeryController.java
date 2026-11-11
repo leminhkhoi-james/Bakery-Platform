@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.bakery.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.bakery.dto.BakeryDto;
 import com.se193262.bakeryservice.feature.bakery.dto.BakeryOperationsDto;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryService;
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries")
 public class BakeryController {
 

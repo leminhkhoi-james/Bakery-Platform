@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.subscription.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.subscription.dto.EntitlementResponse;
 import com.se193262.subscriptionservice.feature.subscription.service.BakerySubscriptionService;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1/subscriptions/bakeries")
 public class InternalSubscriptionController {
     private final BakerySubscriptionService service;

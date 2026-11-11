@@ -1,5 +1,7 @@
 package com.se193262.orderservice.feature.review;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.orderservice.feature.order.OrderAuthenticationRequiredException;
 import com.se193262.orderservice.feature.review.dto.CreateReviewRequest;
 import com.se193262.orderservice.feature.review.dto.ReviewResponse;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1")
 public class ReviewController {
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class VnpayController {
     private final VnpayService vnpay;
 

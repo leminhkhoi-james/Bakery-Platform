@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: chat-service
   datasource:
@@ -50,4 +52,5 @@ storage:
     presigned-url-expiry: ${CHAT_STORAGE_URL_EXPIRY:15m}
 
 server:
-  port: ${SERVER_PORT:8087}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${CHAT_SERVER_PORT:8087}}

@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: order-service
   datasource:
@@ -60,5 +62,6 @@ order:
     interval-ms: ${ORDER_AUTO_COMPLETION_INTERVAL_MS:60000}
 
 server:
-  port: ${SERVER_PORT:8086}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${ORDER_SERVER_PORT:8086}}
 

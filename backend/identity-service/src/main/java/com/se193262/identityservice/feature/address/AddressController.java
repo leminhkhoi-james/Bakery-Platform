@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/users/me/addresses")
 public class AddressController {
     private final AddressService service;

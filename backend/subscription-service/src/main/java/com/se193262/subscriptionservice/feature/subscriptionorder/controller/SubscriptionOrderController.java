@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.subscriptionorder.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.subscriptionorder.dto.SubscriptionOrderDto;
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrderStatus;
 import com.se193262.subscriptionservice.feature.subscriptionorder.service.SubscriptionOrderService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1")
 public class SubscriptionOrderController {
     private final SubscriptionOrderService orderService;

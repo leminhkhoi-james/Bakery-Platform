@@ -38,7 +38,7 @@ import java.time.Clock;
 import java.util.Base64;
 
 @Configuration
-@EnableConfigurationProperties({JwtProperties.class, AuthProperties.class, CorsProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, AuthProperties.class})
 public class JwtConfig {
 
     private static final OAuth2Error INVALID_AUDIENCE = new OAuth2Error(

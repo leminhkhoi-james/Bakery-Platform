@@ -1,5 +1,7 @@
 package com.se193262.orderservice.feature.order;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.orderservice.feature.order.dto.CreateDirectOrderRequest;
 import com.se193262.orderservice.feature.order.dto.OrderResponse;
 import com.se193262.orderservice.feature.order.dto.OrderSummaryResponse;
@@ -30,6 +32,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @Validated
 @RequestMapping("/api/v1/orders")
 public class OrderController {

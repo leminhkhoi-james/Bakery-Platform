@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.bakery.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.bakery.dto.BakeryDto;
 import com.se193262.bakeryservice.feature.bakery.dto.BakeryOnboardingRequest;
 import com.se193262.bakeryservice.feature.bakery.service.BakeryOnboardingService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries")
 public class BakeryOnboardingController {
     private final BakeryOnboardingService onboarding;

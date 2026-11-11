@@ -1,5 +1,7 @@
 package com.se193262.identityservice.config;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import org.springframework.http.CacheControl;
@@ -11,6 +13,7 @@ import java.time.Duration;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class JwkSetController {
 
     private final RSAKey rsaKey;

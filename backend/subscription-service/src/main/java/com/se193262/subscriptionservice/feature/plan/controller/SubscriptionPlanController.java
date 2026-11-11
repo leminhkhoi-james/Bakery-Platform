@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.plan.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.plan.dto.SubscriptionPlanDto;
 import com.se193262.subscriptionservice.feature.plan.service.SubscriptionPlanService;
 import com.se193262.subscriptionservice.shared.dto.ApiResponse;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/subscription-plans")
 public class SubscriptionPlanController {
     private final SubscriptionPlanService planService;

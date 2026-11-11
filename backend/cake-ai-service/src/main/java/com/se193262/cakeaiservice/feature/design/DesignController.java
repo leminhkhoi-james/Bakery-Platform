@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1")
 public class DesignController {
     public enum ModerationStatus { APPROVED, REJECTED }

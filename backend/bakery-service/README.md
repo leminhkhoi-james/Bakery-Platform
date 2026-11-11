@@ -17,15 +17,15 @@ For the verified owner-only development environment, run from the repository roo
 ```
 
 This uses separate `bakery-owner-dev` volumes and preserves old databases.
-For local Java/IntelliJ, use `-InfrastructureOnly -NoBuild` instead; the module
-`.env` points to Docker PostgreSQL on 5436, Identity on 8081 and MinIO on 9002.
-Match its credentials to root Compose configuration. See the combined Docker
-guide for restart, verification and stop commands.
+Local Java/IntelliJ uses the shared `backend/.env` and `backend` working directory.
+The current local PostgreSQL port is 5432. If using the separate Docker
+infrastructure instead, adjust BAKERY_DB_URL/storage URLs in the shared file to
+its exposed ports. See [local setup](../../docs/LOCAL-SETUP.md).
 
 Local default port: `8082` (`SERVER_PORT` overrides it). Subscription Service
-defaults to `8084`. Copy `.env.example` to `.env` in this directory and set the
-database, Identity JWK and MinIO values before running the application from
-`backend/bakery-service`.
+defaults to `8084`. Configure the database, Identity JWK and MinIO values in
+`backend/.env`; the shared template is `backend/.env.example`. Run with
+`backend` as the working directory.
 
 For the isolated Docker stack, run from the repository root:
 

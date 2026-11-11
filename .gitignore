@@ -35,6 +35,7 @@ build/
 /.tmp/
 
 ### Local secrets and environment ###
+/.local/
 **/.env
 **/.env.*
 !**/.env.example

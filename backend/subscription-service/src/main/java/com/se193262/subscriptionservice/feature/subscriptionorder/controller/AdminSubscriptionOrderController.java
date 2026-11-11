@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.subscriptionorder.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.subscriptionservice.feature.subscriptionorder.dto.AdminSubscriptionOrderDto;
 import com.se193262.subscriptionservice.feature.subscriptionorder.dto.AdminSubscriptionOrderFilter;
 import com.se193262.subscriptionservice.feature.subscriptionorder.service.SubscriptionOrderService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class AdminSubscriptionOrderController {
     private final SubscriptionOrderService orders;
 

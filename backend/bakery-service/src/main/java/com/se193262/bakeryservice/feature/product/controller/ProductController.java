@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.product.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.product.dto.ProductDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductOptionsDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductImageResponse;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/products")
 public class ProductController {
 

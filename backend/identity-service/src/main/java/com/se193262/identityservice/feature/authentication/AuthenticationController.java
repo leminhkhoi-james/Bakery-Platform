@@ -1,5 +1,7 @@
 package com.se193262.identityservice.feature.authentication;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.identityservice.config.AuthProperties;
 import com.se193262.identityservice.config.OpenApiConfig;
 import com.se193262.identityservice.feature.authentication.dto.LoginRequest;
@@ -27,6 +29,7 @@ import java.time.Duration;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 

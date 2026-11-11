@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1")
 @PreAuthorize("hasAuthority('SCOPE_cake-ai:design:validate')")
 public class DesignValidationController {

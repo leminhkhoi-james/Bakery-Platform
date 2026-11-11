@@ -1,5 +1,7 @@
 package com.se193262.identityservice.feature.user;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.identityservice.feature.user.dto.ReplaceUserRolesRequest;
 import com.se193262.identityservice.feature.user.dto.UpdateUserStatusRequest;
 import com.se193262.identityservice.feature.user.dto.UserProfileResponse;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @Validated
 @RequestMapping("/api/v1/admin/users")
 public class AdminUserController {

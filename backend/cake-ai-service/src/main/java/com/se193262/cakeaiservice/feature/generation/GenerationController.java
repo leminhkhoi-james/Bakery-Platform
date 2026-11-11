@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/generation-jobs")
 @PreAuthorize("hasRole('CUSTOMER')")
 public class GenerationController {

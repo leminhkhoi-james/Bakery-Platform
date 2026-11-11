@@ -27,7 +27,7 @@ spring:
 
 platform:
   remote:
-    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8080}
+    identity-url: ${IDENTITY_SERVICE_URL:http://localhost:8081}
     client-id: subscription-service
     client-secret: ${SUBSCRIPTION_CLIENT_SECRET:}
     connect-timeout: 2s
@@ -62,5 +62,6 @@ subscription:
     timeout-minutes: 15
 
 server:
-  port: ${SERVER_PORT:8084}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${SUBSCRIPTION_SERVER_PORT:8084}}
 

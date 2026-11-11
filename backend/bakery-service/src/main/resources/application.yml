@@ -56,4 +56,5 @@ storage:
     bucket: ${BAKERY_MINIO_BUCKET:bakery-media}
 
 server:
-  port: ${SERVER_PORT:8082}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${BAKERY_SERVER_PORT:8082}}

@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.category.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.category.dto.ProductCategoryDto;
 import com.se193262.bakeryservice.feature.category.service.ProductCategoryService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/categories")
 public class ProductCategoryController {
 

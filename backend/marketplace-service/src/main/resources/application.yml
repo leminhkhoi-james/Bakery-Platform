@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: marketplace-service
   datasource:
@@ -28,8 +30,8 @@ platform:
     cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
     order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
     marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8083}
-    client-id: ${SERVICE_CLIENT_ID:marketplace-service}
-    client-secret: ${SERVICE_CLIENT_SECRET:}
+    client-id: ${MARKETPLACE_CLIENT_ID:${SERVICE_CLIENT_ID:marketplace-service}}
+    client-secret: ${MARKETPLACE_CLIENT_SECRET:${SERVICE_CLIENT_SECRET:}}
     connect-timeout: 2s
     read-timeout: 5s
 management:
@@ -53,6 +55,7 @@ marketplace:
   orphan-cleanup-enabled: ${MARKETPLACE_ORPHAN_CLEANUP_ENABLED:true}
 
 server:
-  port: ${SERVER_PORT:8083}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${MARKETPLACE_SERVER_PORT:8083}}
 
 management.endpoint.health.group.readiness.include: readinessState,db

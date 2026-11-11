@@ -1,5 +1,8 @@
 package com.se193262.bakeryservice.security;
 
+import org.springframework.security.config.Customizer;
+
+
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberRole;
 import com.se193262.bakeryservice.feature.member.entity.BakeryMemberStatus;
 import com.se193262.bakeryservice.feature.member.repository.BakeryMemberRepository;
@@ -51,6 +54,7 @@ public class SecurityConfig {
             AccessDeniedHandler accessDeniedHandler) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/api/v1/bakeries/onboarding")

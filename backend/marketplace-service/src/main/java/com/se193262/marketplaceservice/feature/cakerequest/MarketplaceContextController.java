@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1")
 public class MarketplaceContextController {
     private final CakeRequestService requests;

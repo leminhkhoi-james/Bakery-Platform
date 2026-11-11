@@ -1,5 +1,7 @@
 package com.se193262.platform.config;
 
+import org.springframework.security.config.Customizer;
+
 import com.se193262.platform.dto.ApiResponse;
 
 import org.springframework.context.annotation.*;
@@ -39,7 +41,8 @@ public class ResourceSecurityConfiguration {
 
     @Bean
     SecurityFilterChain security(HttpSecurity http, ObjectMapper mapper) throws Exception {
-        http.csrf(c -> c.disable()).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(a -> a.requestMatchers("/actuator/health", "/actuator/health/**").permitAll().requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-ui/**", "/swagger-ui.html", "/public/**", "/storage/**", "/files/**").permitAll().requestMatchers("/internal/v1/**").access((authentication, context) -> new AuthorizationDecision(isType(authentication.get(), "service"))).requestMatchers("/api/v1/**").access((authentication, context) -> new AuthorizationDecision(isType(authentication.get(), "user"))).anyRequest().denyAll()).oauth2ResourceServer(o -> o.jwt(j -> j.jwtAuthenticationConverter(token -> {
+        http.csrf(c -> c.disable())
+                .cors(Customizer.withDefaults()).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(a -> a.requestMatchers("/actuator/health", "/actuator/health/**").permitAll().requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-ui/**", "/swagger-ui.html", "/public/**", "/storage/**", "/files/**").permitAll().requestMatchers("/internal/v1/**").access((authentication, context) -> new AuthorizationDecision(isType(authentication.get(), "service"))).requestMatchers("/api/v1/**").access((authentication, context) -> new AuthorizationDecision(isType(authentication.get(), "user"))).anyRequest().denyAll()).oauth2ResourceServer(o -> o.jwt(j -> j.jwtAuthenticationConverter(token -> {
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             if ("user".equals(token.getClaimAsString("token_type"))) {
                 List<String> roles = token.getClaimAsStringList("roles");

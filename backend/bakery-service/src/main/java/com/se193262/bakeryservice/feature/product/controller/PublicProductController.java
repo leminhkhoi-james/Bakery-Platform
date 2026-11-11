@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.product.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.product.dto.PublicProductResponse;
 import com.se193262.bakeryservice.feature.product.service.PublicProductService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/products")
 public class PublicProductController {
     private final PublicProductService service;

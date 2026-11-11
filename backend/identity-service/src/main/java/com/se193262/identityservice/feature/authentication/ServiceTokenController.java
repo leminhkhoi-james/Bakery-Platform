@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1/auth")
 public class ServiceTokenController {
     private final ServiceTokenService service;

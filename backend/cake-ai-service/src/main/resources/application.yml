@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: cake-ai-service
   datasource:
@@ -28,8 +30,8 @@ platform:
     cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
     order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
     marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8083}
-    client-id: ${SERVICE_CLIENT_ID:cake-ai-service}
-    client-secret: ${SERVICE_CLIENT_SECRET:}
+    client-id: ${CAKE_AI_CLIENT_ID:${SERVICE_CLIENT_ID:cake-ai-service}}
+    client-secret: ${CAKE_AI_CLIENT_SECRET:${SERVICE_CLIENT_SECRET:}}
     connect-timeout: 2s
     read-timeout: 5s
 management:
@@ -74,7 +76,8 @@ cake-ai:
 
 
 server:
-  port: ${SERVER_PORT:8085}
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${CAKE_AI_SERVER_PORT:8085}}
 
 logging:
   level:

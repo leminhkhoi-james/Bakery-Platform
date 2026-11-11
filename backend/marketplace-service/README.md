@@ -8,6 +8,13 @@ See [Docker](../../docs/DOCKER.md), [Firebase setup](../../docs/FIREBASE-SETUP.m
 
 Outside Docker configure MARKETPLACE_DB_URL/USERNAME/PASSWORD, IDENTITY_JWK_SET_URI,
 IDENTITY_SERVICE_BASE_URL, SERVICE_CLIENT_ID/SECRET, remote service URLs and Firebase ADC variables.
-Default JVM port is 8080; choose SERVER_PORT=8082 when running locally next to Identity.
+Default local JVM port is 8083; Identity is 8081 and Bakery is 8082.
+All local services read `backend/.env`; use `backend` as the IDE working
+directory and `backend/.env.example` as the shared template. Marketplace uses
+MARKETPLACE_CLIENT_ID/MARKETPLACE_CLIENT_SECRET; Identity uses the matching
+MARKETPLACE_CLIENT_SECRET_HASH from the same file. For Firebase,
+GOOGLE_APPLICATION_CREDENTIALS must also be set in the IDE/OS environment because
+Google ADC does not read Spring properties. A missing JSON key leaves image operations
+unavailable; startup and non-storage APIs do not require a Firebase connection.
 Run `mvn -pl marketplace-service -am test` from backend. Integration tests require Docker.
 The executable build is `target/marketplace-service-0.0.1-SNAPSHOT-exec.jar`.

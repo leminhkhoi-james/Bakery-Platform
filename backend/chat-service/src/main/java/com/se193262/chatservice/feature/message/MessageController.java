@@ -1,5 +1,7 @@
 package com.se193262.chatservice.feature.message;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.chatservice.feature.message.dto.MessageMetadata;
 import com.se193262.chatservice.feature.message.dto.MessagePageResponse;
 import com.se193262.chatservice.feature.message.dto.MessageResponse;
@@ -30,6 +32,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @Validated
 @RequestMapping("/api/v1/conversations/{conversationId}")
 public class MessageController {

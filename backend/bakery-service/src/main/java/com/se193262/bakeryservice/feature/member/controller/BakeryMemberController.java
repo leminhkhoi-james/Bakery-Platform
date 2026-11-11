@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.member.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.member.dto.BakeryMemberDto;
 import com.se193262.bakeryservice.feature.member.service.BakeryMemberService;
 import com.se193262.bakeryservice.shared.dto.ApiResponse;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/bakeries/{bakeryId}/members")
 public class BakeryMemberController {
 

@@ -1,5 +1,7 @@
 package com.se193262.bakeryservice.feature.catalog.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.bakeryservice.feature.catalog.dto.CatalogQuoteRequest;
 import com.se193262.bakeryservice.feature.catalog.dto.CatalogQuoteResponse;
 import com.se193262.bakeryservice.feature.catalog.service.CatalogQuoteService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/internal/v1/catalog")
 public class InternalCatalogController {
     private final CatalogQuoteService quoteService;

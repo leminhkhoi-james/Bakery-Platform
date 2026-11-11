@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/cake-requests")
 public class CakeRequestController {
     private final CakeRequestService service;

@@ -3,6 +3,10 @@
 Identity Service requires PostgreSQL and an RSA key pair. Never commit the
 private key.
 
+For local Java/IntelliJ, all services read `backend/.env` from the `backend`
+working directory. Copy `backend/.env.example` to `backend/.env` if needed;
+do not create another `.env` in this module. See [local setup](../../docs/LOCAL-SETUP.md).
+
 Generate a development key pair outside the repository:
 
 ```powershell

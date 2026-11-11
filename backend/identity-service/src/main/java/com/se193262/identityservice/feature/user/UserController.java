@@ -1,5 +1,7 @@
 package com.se193262.identityservice.feature.user;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.se193262.identityservice.feature.user.dto.UpdateMyProfileRequest;
 import com.se193262.identityservice.feature.user.dto.UserProfileResponse;
 import com.se193262.identityservice.shared.dto.ApiResponse;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RequestMapping("/api/v1/users")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
