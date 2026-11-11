@@ -1,6 +1,7 @@
 import React, { useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { userName } from '../../../services/adminUserService.js'
+import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
 
 function ActionIcon({ name }) {
   const paths = {
@@ -21,7 +22,7 @@ function ActionIcon({ name }) {
 export default function UserRowActions({ person, disabled, edit, roles, status, remove }) {
   const popup = useRef(null)
   const id = useId()
-  const primary = edit && !edit.reason ? edit : roles
+  const primary = roles
   const secondary = [edit !== primary && edit, roles !== primary && roles, status, remove].filter(Boolean)
   const choose = action => { popup.current?.hidePopover(); action.onClick() }
   return <div className="sc-user-row-actions">
@@ -42,9 +43,9 @@ export default function UserRowActions({ person, disabled, edit, roles, status, 
       {createPortal(<div ref={popup} id={id} popover="auto" className="sc-user-actions-popover" aria-label={'Thao tác với ' + userName(person)}>
         <p className="sc-user-actions-person">{userName(person)}</p>
         {secondary.map(action => <div key={action.label} className={action.danger ? 'sc-user-action-danger' : ''}>
-          <button type="button" disabled={disabled || Boolean(action.reason)} onClick={() => choose(action)}>
+          {['edit', 'delete'].includes(action.icon) ? <RecordActionButton type="button" action={action.icon} label={action.label} disabled={disabled || Boolean(action.reason)} title={action.reason || action.label} onClick={() => choose(action)} /> : <button type="button" disabled={disabled || Boolean(action.reason)} onClick={() => choose(action)}>
             <ActionIcon name={action.icon} /><span>{action.label}</span>
-          </button>
+          </button>}
           {action.reason && <small>{action.reason}</small>}
         </div>)}
       </div>, document.body)}

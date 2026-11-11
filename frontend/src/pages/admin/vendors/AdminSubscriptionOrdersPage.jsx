@@ -1,3 +1,6 @@
+import PlanTierBadge from '../../../components/management/PlanTierBadge.jsx'
+import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
+import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
 import React, { useState } from 'react'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { DataTable, EmptyPanel, StatusBadge, Icon } from '../../../components/common/WorkspaceUI.jsx'
@@ -41,19 +44,20 @@ function OrderDetail({ row, onClose }) {
 }
 
 export function AdminOrderTable({ rows, meta, onDetail }) {
-  return <DataTable label="Tất cả đơn mua gói" className="sc-admin-record-table"><thead><tr>
-    <th>STT</th><th>Đơn / tiệm bánh</th><th>Gói dịch vụ</th><th>Số tiền</th><th>Ngày tạo</th><th>Trạng thái đơn</th><th className="sc-table-actions">Thao tác</th>
+  return <DataTable label="Tất cả đơn mua gói" className="sc-admin-record-table sc-admin-subscription-orders-table"><thead><tr>
+    <th>STT</th><th>Đơn mua gói</th><th>Tiệm bánh</th><th>Gói dịch vụ</th><th>Thời hạn</th><th>Số tiền</th><th>Ngày tạo</th><th>Trạng thái đơn</th><th className="sc-table-actions">Thao tác</th>
   </tr></thead><tbody>{rows.map((row, index) => {
     const order = row.order
     return <tr key={order.id}>
       <td data-label="STT">{(meta.page - 1) * meta.pageSize + index + 1}</td>
-      <td data-label="Đơn / tiệm bánh"><strong>{displayReference(order.id, 'SUB', order.orderNumber)}</strong><small>{row.profile?.bakery?.name || displayReference(order.bakeryId, 'BAK')}</small></td>
-      <td data-label="Gói dịch vụ">{planName({ name: order.planNameSnapshot, code: order.planCodeSnapshot })}<small>{order.billingPeriodMonths} tháng</small></td>
+      <td data-label="Đơn mua gói"><strong>{displayReference(order.id, 'SUB', order.orderNumber)}</strong></td><td data-label="Tiệm bánh">{row.profile?.bakery?.name || displayReference(order.bakeryId, 'BAK')}</td>
+      <td data-label="Gói dịch vụ"><PlanTierBadge name={order.planNameSnapshot} code={order.planCodeSnapshot} /></td>
+      <td data-label="Thời hạn">{order.billingPeriodMonths ? order.billingPeriodMonths + ' tháng' : '—'}</td>
       <td data-label="Số tiền">{reviewMoney(order.totalAmount, order.currency)}</td>
       <td data-label="Ngày tạo">{formatOrderDate(order.createdAt)}</td>
       <td data-label="Trạng thái đơn"><StatusBadge status={order.status} label={subscriptionStatusLabel(order.status)} /></td>
       <td className="sc-table-actions"><div className="flex flex-wrap gap-2">
-        <button type="button" className="sc-button sc-action-button--secondary" onClick={() => onDetail(row)}>Xem đơn</button>
+        <RecordActionButton type="button" className="sc-button sc-action-button--secondary" aria-label="Xem chi tiết đơn mua gói" onClick={() => onDetail(row)} action="view" />
       </div></td>
     </tr>
   })}</tbody></DataTable>
@@ -64,11 +68,12 @@ export default function AdminSubscriptionOrdersPage({ routeSearch = '', ReviewCo
   const paymentId = params.get('paymentId') || ''
   const shortcut = useCatalogResource(loadDashboardPayment, { id: paymentId })
   const [page, setPage] = useState(1)
+  const { containerRef, pageSize } = useViewportPageSize(() => setPage(1))
   const [draft, setDraft] = useState({ status: '', query: '', eligibility: '', from: '', to: '' })
   const [filters, setFilters] = useState({})
   const [detail, setDetail] = useState(null), [payment, setPayment] = useState(null), [dismissed, setDismissed] = useState(false)
   const [error, setError] = useState(null), [notice, setNotice] = useState('')
-  const resource = useCatalogResource(loadAdminSubscriptionOrders, { page, size: 20, bakeryId: params.get('bakeryId') || '', ...filters })
+  const resource = useCatalogResource(loadAdminSubscriptionOrders, { page, size: pageSize, bakeryId: params.get('bakeryId') || '', ...filters })
   const currentPayment = payment || (!dismissed && shortcut.data)
   function apply(event) {
     event.preventDefault()
@@ -84,20 +89,21 @@ export default function AdminSubscriptionOrdersPage({ routeSearch = '', ReviewCo
     if (!candidate) return
     setDetail(null); setPayment(candidate); setDismissed(true); setNotice('')
   }
-  const field = key => ({ value: draft[key], onChange: event => setDraft(previous => ({ ...previous, [key]: event.target.value })) })
+  const field = key => ({ value: draft[key], onChange: event => {
+    const next = { ...draft, [key]: event.target.value }; setDraft(next)
+    try { setFilters({ status: next.status, query: next.query.trim(), ...adminOrderDateRange(next.from, next.to) }); setPage(1); setError(null) }
+    catch (failure) { setError(failure) }
+  } })
   return <>
-    <section className={panelClass}>
+    <section ref={containerRef} className={panelClass}>
       <form className="sc-admin-filter" onSubmit={apply}>
         <label>Tìm đơn mua gói<input {...field('query')} placeholder="Mã đơn, tên gói hoặc số tiền…" className={inputClass} /></label>
         <label>Trạng thái đơn<select aria-label="Trạng thái đơn" {...field('status')} className={inputClass}><option value="">Tất cả trạng thái</option>{ADMIN_ORDER_STATUSES.map(status => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}</select></label>
         <label>Tạo từ ngày<input type="datetime-local" {...field('from')} className={inputClass} /></label>
         <label>Tạo đến ngày<input type="datetime-local" {...field('to')} className={inputClass} /></label>
-        <div className="sc-action-row"><button className={buttonClass} disabled={resource.refreshing}><Icon name="filter_alt" />Lọc</button><button type="button" className="sc-button sc-action-button--secondary" disabled={resource.refreshing} onClick={resource.reload}>Tải lại</button></div>
       </form>
-      <p className="sc-review-help">Hiển thị tất cả đơn mua gói dịch vụ. Đơn thanh toán qua cổng VNPay sẽ được hệ thống tự động xác nhận hoàn tất ngay khi khách thanh toán thành công.</p>
       {error && <ApiErrorMessage error={error} />}
       <ApiState resource={resource}>{resource.data && <>
-        <p className="sc-review-help">{resource.data.meta.total} đơn mua gói theo bộ lọc</p>
         {resource.data.result.length ? <AdminOrderTable rows={resource.data.result} meta={resource.data.meta} onDetail={setDetail} onReview={review} /> : <EmptyPanel title="Chưa có đơn mua gói phù hợp." icon="receipt_long" />}
         <CatalogPagination meta={resource.data.meta} onPage={setPage} />
       </>}</ApiState>

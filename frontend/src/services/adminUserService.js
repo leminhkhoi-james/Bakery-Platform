@@ -65,6 +65,7 @@ export async function updateUserRoles(person, roles, actor) {
   const unique = [...new Set(roles)]
   const invalid = roleErrors(unique)
   if (invalid) throw new ApiError(invalid, 422)
+  if (localUserDirectory() && (!unifiedEnabled() || recordSource(person) === 'local')) return localUserDirectory().change(actor, 'roles', person.id, { roles: unique })
   const result = assertUser(await api.put(userPath(person.id) + '/roles', { roles: unique }), person.id)
   if (result.roles.length !== unique.length || unique.some((role) => !result.roles.includes(role))) throw new ApiError('Chưa thể xác nhận vai trò đã lưu.', 502)
   return result

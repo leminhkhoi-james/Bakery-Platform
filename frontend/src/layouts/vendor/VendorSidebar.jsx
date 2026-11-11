@@ -11,7 +11,8 @@ export default function VendorSidebar({
   onNavigate,
   isMobileOpen = false,
   onCloseMobile,
-  rfqCount = 4,
+  rfqCount = 0,
+  pendingOrderCount = null,
   showMockBadges = true,
 }) {
   const handleNav = (route) => {
@@ -55,7 +56,9 @@ export default function VendorSidebar({
           {VENDOR_NAV_ITEMS.filter((item) => item.id !== 'revenue').map((item) => {
             const isActive = activeTab === item.id
             const badgeText =
-              item.badgeKey === 'rfqCount'
+              item.id === 'orders'
+                ? pendingOrderCount > 0 ? String(pendingOrderCount) : null
+                : item.badgeKey === 'rfqCount'
                 ? rfqCount > 0
                   ? `${rfqCount}${item.badgeSuffix || ''}`
                   : null
@@ -83,8 +86,9 @@ export default function VendorSidebar({
                     {item.label}
                   </span>
                 </div>
-                {((showMockBadges && badgeText) || (item.badgeKey === 'rfqCount' && rfqCount > 0)) && (
+                {((showMockBadges && badgeText) || (item.id === 'orders' && pendingOrderCount > 0) || (item.badgeKey === 'rfqCount' && rfqCount > 0)) && (
                   <span
+                    aria-label={item.id === 'orders' ? pendingOrderCount + ' đơn chờ xác nhận' : undefined}
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive
                         ? 'bg-on-primary/20 text-on-primary'
@@ -93,7 +97,7 @@ export default function VendorSidebar({
                         : 'bg-secondary-fixed text-on-secondary-fixed'
                     }`}
                   >
-                    {item.badgeKey === 'rfqCount' ? `${rfqCount}${item.badgeSuffix || ' mới'}` : badgeText}
+                    {item.badgeKey === 'rfqCount' ? rfqCount : badgeText}
                   </span>
                 )}
               </button>
@@ -111,7 +115,7 @@ export default function VendorSidebar({
           <span className="material-symbols-outlined text-lg text-outline">
             storefront
           </span>
-          <span>Xem Marketplace Khách</span>
+          <span>Về trang chủ</span>
         </button>
 
       </div>

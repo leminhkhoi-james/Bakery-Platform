@@ -18,7 +18,7 @@ const tones = {
   REJECTED: 'red', CANCELLED: 'red', CLOSED: 'red', SUSPENDED: 'red', EXPIRED: 'red',
 }
 export function StatusBadge({ status, label }) {
-  return <span className={'sc-status sc-status--' + (tones[status] || 'neutral')}><span aria-hidden="true" />{label || uiLabel(status, 'Chưa có trạng thái')}</span>
+  return <span className={'sc-status sc-status--' + (tones[status] || 'neutral')}>{label || uiLabel(status, 'Chưa có trạng thái')}</span>
 }
 
 export function DataTable({ label, children, className = '' }) {
@@ -33,7 +33,7 @@ export function EmptyPanel({ title, description, icon = 'inbox', action }) {
 // Used only as a presentation wrapper; mutations remain in the existing children.
 export function DetailDrawer({ title, onClose, busy = false, children, headerContent, footer, className = '', kicker }) {
   const heading = useId()
-  return <ModalSurface labelledBy={heading} className={'sc-drawer' + (className ? ' ' + className : '')} busy={busy} onClose={onClose}>
+  return <ModalSurface labelledBy={heading} className={'sc-drawer sc-portal-popup' + (className ? ' ' + className : '')} busy={busy} onClose={onClose}>
     {({ requestClose }) => <><header className="sc-drawer-heading"><div id={headerContent ? heading : undefined}>{headerContent || <><p className="sc-kicker">{kicker || 'Chi tiết'}</p><h2 id={heading}>{title}</h2></>}</div><button type="button" disabled={busy} onClick={requestClose} className="sc-icon-button" aria-label="Đóng bảng chi tiết"><Icon name="close" /></button></header>
     <div className="sc-drawer-body">{children}</div>{footer && <footer className="sc-drawer-footer">{footer}</footer>}</>}
   </ModalSurface>

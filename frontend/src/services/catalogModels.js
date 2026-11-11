@@ -4,6 +4,10 @@ export const isCatalogId = (id) => typeof id === 'string' && /^[0-9a-f]{8}-[0-9a
 export const catalogMoney = (value) => ['number', 'string'].includes(typeof value) && String(value).trim() !== '' && Number.isFinite(Number(value)) ? Number(value) : null
 export const formatCatalogPrice = (value) => value === null || value === undefined ? 'Chưa có giá' : Number(value).toLocaleString('vi-VN') + '₫'
 
+export function catalogCategoryLabel(name) {
+  return typeof name === 'string' ? name.replace(/\bEntremets\b/gi, 'Bánh mousse nhiều lớp') : name
+}
+
 export function mapProduct(dto) {
   const product = dto?.product
   if (!isCatalogId(product?.id)) throw new ApiError('Dữ liệu sản phẩm không hợp lệ.', 502)

@@ -10,6 +10,7 @@ import './admin-layout.css'
 import './admin-tables.css'
 import { lockPageScroll } from '../common/modalState.js'
 import './business-simulation.css'
+import '../../styles/portal-refinements.css'
 
 const ADMIN_PAGE_HEADERS = {
   'admin-dashboard': { title: 'Tổng quan hệ thống', description: 'Theo dõi hoạt động và những việc cần xử lý.' },

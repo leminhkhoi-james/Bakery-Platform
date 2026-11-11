@@ -10,8 +10,16 @@ export default function AuthGuard({ page, onNavigate, children }) {
   const previous = useRef({})
   const redirect = useRef('')
   useEffect(() => {
-    const target = sessionRedirect({ page, status, user }, previous.current)
+    let target = sessionRedirect({ page, status, user }, previous.current)
     if (status !== 'loading' && status !== 'error') previous.current = { status, identity: sessionIdentity(user) }
+    if (target && status === 'authenticated' && page === 'login') {
+      const requested = new URLSearchParams(window.location.search).get('returnTo')
+      if (requested?.startsWith('/') && !requested.startsWith('//') && !requested.includes('\\')) {
+        const url = new URL(requested, window.location.origin)
+        const destination = url.pathname.replace(/^\/+|\/+$/g, '') || 'home'
+        if (url.origin === window.location.origin && destination !== 'login' && canAccess(destination, user)) target = destination + url.search + url.hash
+      }
+    }
     const key = target ? `${sessionIdentity(user)}:${page}:${target}` : ''
     if (key && redirect.current !== key) {
       redirect.current = key

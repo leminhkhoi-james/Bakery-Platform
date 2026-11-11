@@ -51,7 +51,7 @@ export function DashboardOverview({ bakeryId, products, orders, completedOrders,
       <Metric title="Sản phẩm" icon="cake" resource={products} onClick={() => navigate('vendor-menu')} link="Quản lý sản phẩm" />
       <Metric title="Tổng đơn hàng" icon="shopping_bag" resource={orders} onClick={() => navigate('vendor-orders')} link="Quản lý đơn hàng" />
       <section className="sc-panel sc-dashboard-kpi sc-vendor-kpi" aria-label="Doanh thu" aria-busy={completedOrders?.status === 'loading' || completedOrders?.refreshing}>
-        <div className="sc-vendor-kpi-heading"><div className="sc-kpi-header"><span className="sc-kpi-icon-wrap"><Icon name="account_balance_wallet" /></span><h2 className="sc-kpi-title">Doanh thu</h2></div><p className="sc-kpi-sub-text sc-vendor-kpi-caption">{!completedOrders ? 'Chưa có số liệu đối soát' : completedOrders.error ? 'Chưa tải được doanh thu' : 'Ước tính từ các đơn hàng đã hoàn tất'}</p></div>
+        <div className="sc-vendor-kpi-heading"><div className="sc-kpi-header"><span className="sc-kpi-icon-wrap"><Icon name="account_balance_wallet" /></span><h2 className="sc-kpi-title">Doanh thu</h2></div><p className="sc-kpi-sub-text sc-vendor-kpi-caption">{!completedOrders ? 'Chưa có số liệu đối soát' : completedOrders.error ? 'Chưa tải được doanh thu' : ''}</p></div>
         <div className="sc-kpi-body">{!unifiedEnabled() && (completedOrders?.status === 'loading' || completedOrders?.refreshing) ? <p role="status" className="sc-vendor-kpi-loading">Đang tải…</p> : <strong className="sc-metric-value sc-vendor-kpi-value">{completedRevenue !== null ? formatOrderMoney(completedRevenue, completedList[0]?.currency || 'VND') : '—'}</strong>}</div>
         <footer className="sc-vendor-kpi-footer"><button className="sc-vendor-text-link" onClick={() => navigate('vendor-revenue')}>Xem doanh thu<Icon name="arrow_forward" /></button></footer>
       </section>
@@ -59,7 +59,7 @@ export function DashboardOverview({ bakeryId, products, orders, completedOrders,
   </>
 }
 
-function DashboardData({ bakeryId, bakery, onNavigate }) {
+export function DashboardData({ bakeryId, bakery, onNavigate }) {
   const products = useCatalogResource(loadManagedProducts, { bakeryId, page: 1, size: 1 })
   const orders = useCatalogResource(loadDashboardOrders, { scope: 'bakery', bakeryId, page: 1, size: 5, sort: 'createdAt,desc' })
   const completedOrders = useCatalogResource(loadDashboardCompletedOrders, { bakeryId })

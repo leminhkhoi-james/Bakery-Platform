@@ -1,3 +1,4 @@
+import { catalogCategoryLabel } from '../../../services/catalogModels.js'
 import { useEffect, useState } from 'react'
 import { loadProducts } from '../../../services/cakeService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -52,7 +53,7 @@ function initialFilters(search) {
   }
 }
 
-export const ExploreCakesPage = ({ onNavigate, routeSearch = '' }) => {
+export const ExploreCakesPage = ({ onNavigate, onAddToCart, routeSearch = '' }) => {
   const [filters, setFilters] = useState(() => initialFilters(routeSearch))
   const [showMobileFilter, setShowMobileFilter] = useState(false)
   const [masterCategories, setMasterCategories] = useState(DEFAULT_CATALOG_CATEGORIES)
@@ -160,7 +161,7 @@ export const ExploreCakesPage = ({ onNavigate, routeSearch = '' }) => {
                   }`}
                   onClick={() => update('categoryId', isActive ? '' : cat.id)}
                 >
-                  {cat.name}
+                  {catalogCategoryLabel(cat.name)}
                 </button>
               )
             })}
@@ -224,7 +225,7 @@ export const ExploreCakesPage = ({ onNavigate, routeSearch = '' }) => {
           <div className="lg:col-span-9">
             <div id="cakeGridContainer" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
               <CatalogState {...resource} empty={products.length === 0} emptyText="Chưa có mẫu bánh phù hợp. Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm." onRetry={resource.reload} onNavigate={onNavigate} />
-              {resource.status === 'ready' && products.map((product) => <ProductCard key={product.id} product={product} onNavigate={onNavigate} />)}
+              {resource.status === 'ready' && products.map((product) => <ProductCard key={product.id} product={product} onNavigate={onNavigate} onAddToCart={onAddToCart} />)}
             </div>
             {resource.status === 'ready' && <CatalogPagination meta={meta} onPage={(page) => setFilters((current) => ({ ...current, page }))} />}
           </div>

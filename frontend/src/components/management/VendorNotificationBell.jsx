@@ -67,7 +67,7 @@ export default function VendorNotificationBell({ openRfqs = [], onNavigate, bake
         <Icon name="notifications" className="text-xl" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-600 px-1 text-[10.5px] font-bold text-white shadow-xs animate-pulse">
-            {unreadCount > 9 ? '9+' : unreadCount}
+            {unreadCount}
           </span>
         )}
       </button>

@@ -65,7 +65,7 @@ test('Admin metrics use complete source collections, preserve counts and remove 
   const html = render(Dashboard, { onNavigate() {} })
   assert.match(html, /sc-metric-value">37<\/strong>/); assert.match(html, /Số công việc: 12/)
   assert.match(html, /37 Tiệm chờ duyệt/); assert.match(html, /Gói dịch vụ chờ duyệt/)
-  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend/); assert.equal((html.match(/sc-dashboard-kpi-footer/g) || []).length, 4); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/); assert.match(html, /Hoạt động gần đây/)
+  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend|Hoạt động gần đây/); assert.equal((html.match(/sc-dashboard-kpi-footer/g) || []).length, 4); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/)
 })
 test('Restored Admin table displays backend records with status, ID and original review action', () => {
   setup({ loadAdminBakeries: ready(page([{ id, name: 'Fixture API bakery', status: 'PENDING_APPROVAL' }])) })
@@ -112,9 +112,9 @@ test('Dashboard shows three status cards with counts and progress, without timel
   assert.match(html, /<meter[^>]*value="1"/)
   assert.match(html, /100%/ )
   for (const label of ['Trạng thái đơn hàng', 'Trạng thái tiệm bánh', 'Trạng thái người dùng', 'Xem đơn hàng', 'Xem tiệm bánh', 'Xem người dùng']) assert.ok(html.includes(label))
-  assert.match(html, /ORD-101/)
+  assert.doesNotMatch(html, /ORD-101/)
   assert.doesNotMatch(html, /<svg|Khoảng thời gian|Đơn hàng theo thời gian|Xu hướng hoạt động|7 ngày|30 ngày|90 ngày/)
-  assert.match(html, /Xem chi tiết ORD-101/)
+  assert.doesNotMatch(html, /Xem chi tiết ORD-101/)
   assert.ok(!html.includes(id))
 })
 

@@ -354,7 +354,7 @@ export const Header = ({
               className="p-0.5 sm:p-1 rounded-full border-2 border-primary/40 hover:border-primary transition-colors cursor-pointer shrink-0"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             >
-              <span aria-hidden="true" className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-primary-fixed font-semibold text-primary text-xs sm:text-sm">{(user?.displayName || user?.email || 'Khách').slice(0, 1).toUpperCase()}</span>
+              <span aria-hidden="true" className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-primary-fixed font-semibold text-primary text-xs sm:text-sm">{user ? (user.displayName || user.email || '').slice(0, 1).toUpperCase() : <span className="material-symbols-outlined">person</span>}</span>
             </button>
 
             {/* Profile Dropdown Menu */}

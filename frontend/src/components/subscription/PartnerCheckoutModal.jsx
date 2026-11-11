@@ -1,3 +1,5 @@
+import { phoneError, emailError } from '../../services/contactValidation.js'
+import { loadAddresses, selectedAddress } from '../../services/addressService.js'
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
@@ -288,13 +290,17 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingA
   )
 }
 
+const loadPartnerAddress = ({ enabled }, options) => enabled ? loadAddresses({}, options) : Promise.resolve([])
+
 export default function PartnerCheckoutModal({ plan, tracking = false, onClose, onNavigate }) {
   const { user, roles } = useAuth()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
+  const [fieldErrors, setFieldErrors] = useState({})
   const [successMsg, setSuccessMsg] = useState(null)
   const [submitted, setSubmitted] = useState(null)
   const resource = useCatalogResource(loadOnboarding, { enabled: roles.includes('CUSTOMER') && !roles.includes('BAKERY_OWNER') })
+  const addresses = useCatalogResource(loadPartnerAddress, { enabled: Boolean(user && roles.includes('CUSTOMER') && !roles.includes('BAKERY_OWNER')) })
   const inFlight = useRef(false)
 
   const savedBakery = submitted || resource.data
@@ -305,6 +311,9 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
     onActivated: (activeBakery) => onNavigate?.('vendor-dashboard?bakeryId=' + activeBakery.id),
   })
   const bakery = activation.bakery || savedBakery
+  const addressRows = bakery?.operations?.addresses || []
+  const defaultAddress = addressRows.find(row => row.isPrimary) || addressRows[0] || selectedAddress(addresses.data || [], '')
+  const fieldError = name => fieldErrors[name] && <span role="alert" className="sc-field-error block text-red-700">{fieldErrors[name]}</span>
 
   async function submit(event) {
     event.preventDefault()
@@ -322,13 +331,16 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
     const email = (fields.email || '').trim()
     const ward = (fields.ward || '').trim()
 
-    if (!name || !phoneNumber || !addressLine || !district || !city) {
-      setError(new Error('Vui lòng điền đầy đủ các trường bắt buộc (Tên tiệm, Số điện thoại, Địa chỉ, Quận/huyện, Tỉnh/thành).'))
-      return
+    const invalid = {}
+    for (const key of ['name', 'addressLine', 'district', 'city']) {
+      if (!fields[key]?.trim()) invalid[key] = 'Vui lòng điền thông tin này.'
     }
-
-    if (phoneNumber.length < 8 || phoneNumber.length > 30) {
-      setError(new Error('Số điện thoại không hợp lệ (từ 8 đến 30 ký tự).'))
+    const phoneMessage = phoneError(phoneNumber), emailMessage = emailError(email)
+    if (phoneMessage) invalid.phoneNumber = phoneMessage
+    if (emailMessage) invalid.email = emailMessage
+    setFieldErrors(invalid)
+    if (Object.keys(invalid).length) {
+      formElement.elements.namedItem(Object.keys(invalid)[0])?.focus()
       return
     }
 
@@ -430,6 +442,13 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
           <p className="text-xs text-on-surface-variant">
             Bạn có thể quản lý tiệm, nâng cấp hoặc gia hạn gói dịch vụ trực tiếp trong Kênh quản lý tiệm bánh.
           </p>
+          <label className="block text-sm">Bạn muốn thực hiện
+            <select className={inputClass} defaultValue="" onChange={event => { if (event.target.value) onNavigate?.(event.target.value) }}>
+              <option value="">Chọn chức năng</option>
+              <option value="vendor-settings?create=1">Mở thêm tiệm / chi nhánh</option>
+              <option value="vendor-subscription">Quản lý gói của tiệm</option>
+            </select>
+          </label>
           <button
             className={buttonClass}
             onClick={() => onNavigate?.('vendor-subscription' + (plan?.id ? '?planId=' + plan.id : ''))}
@@ -473,90 +492,100 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
                 </p>
               </div>
 
-              <form onSubmit={submit} className="space-y-4">
+              <form noValidate onSubmit={submit} onChange={event => {
+                const key = event.target.name
+                if (key) setFieldErrors(previous => ({ ...previous, [key]: '' }))
+              }} className="space-y-4">
                 <fieldset disabled={busy} className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <label className="sm:col-span-2 block text-xs font-bold text-primary">
                     Tên tiệm bánh của bạn *
                     <input
-                      name="name"
+                      name="name" aria-invalid={Boolean(fieldErrors.name)}
                       maxLength={180}
                       required
                       placeholder="Ví dụ: Tiệm Bánh Sweet Home, Artisan Bakery..."
                       className={inputClass + ' mt-1 w-full text-xs font-medium'}
                       defaultValue={bakery?.name || ''}
                     />
+                    {fieldError('name')}
                   </label>
 
                   <label className="block text-xs font-bold text-primary">
                     Số điện thoại liên hệ *
                     <input
-                      name="phoneNumber"
+                      name="phoneNumber" aria-invalid={Boolean(fieldErrors.phoneNumber)}
                       maxLength={30}
                       type="tel"
                       required
                       placeholder="0901234567"
                       className={inputClass + ' mt-1 w-full text-xs'}
-                      defaultValue={bakery?.phoneNumber || ''}
+                      defaultValue={bakery?.phoneNumber || user.phoneNumber || user.phone || ''}
                     />
+                    {fieldError('phoneNumber')}
                   </label>
 
                   <label className="block text-xs font-bold text-primary">
                     Email liên hệ (Tùy chọn)
                     <input
-                      name="email"
+                      name="email" aria-invalid={Boolean(fieldErrors.email)}
                       maxLength={320}
                       type="email"
                       placeholder="contact@tiembanh.vn"
                       className={inputClass + ' mt-1 w-full text-xs'}
                       defaultValue={bakery?.email || user.email || ''}
                     />
+                    {fieldError('email')}
                   </label>
 
                   <label className="sm:col-span-2 block text-xs font-bold text-primary">
                     Địa chỉ bếp / xưởng làm bánh *
                     <input
-                      name="addressLine"
+                      name="addressLine" aria-invalid={Boolean(fieldErrors.addressLine)}
                       maxLength={255}
                       required
                       placeholder="Số nhà, tên đường (Ví dụ: 12 Lê Lợi)"
                       className={inputClass + ' mt-1 w-full text-xs'}
-                      defaultValue={bakery?.operations?.addresses?.[0]?.addressLine || ''}
+                      defaultValue={defaultAddress?.addressLine || ''}
                     />
+                    {fieldError('addressLine')}
                   </label>
 
                   <label className="block text-xs font-bold text-primary">
                     Phường / Xã (Tùy chọn)
                     <input
-                      name="ward"
+                      name="ward" aria-invalid={Boolean(fieldErrors.ward)}
                       maxLength={120}
                       placeholder="Phường Bến Nghé"
                       className={inputClass + ' mt-1 w-full text-xs'}
-                      defaultValue={bakery?.operations?.addresses?.[0]?.ward || ''}
+                      defaultValue={defaultAddress?.ward || ''}
                     />
+                    {fieldError('ward')}
                   </label>
 
                   <label className="block text-xs font-bold text-primary">
                     Quận / Huyện *
                     <input
-                      name="district"
+                      name="district" aria-invalid={Boolean(fieldErrors.district)}
                       maxLength={120}
                       required
                       placeholder="Quận 1, Bình Thạnh..."
                       className={inputClass + ' mt-1 w-full text-xs'}
-                      defaultValue={bakery?.operations?.addresses?.[0]?.district || ''}
+                      defaultValue={defaultAddress?.district || ''}
                     />
+                    {fieldError('district')}
                   </label>
 
                   <label className="sm:col-span-2 block text-xs font-bold text-primary">
                     Tỉnh / Thành phố *
                     <input
-                      name="city"
+                      name="city" aria-invalid={Boolean(fieldErrors.city)}
                       maxLength={120}
                       required
                       placeholder="TP. Hồ Chí Minh, Hà Nội..."
                       className={inputClass + ' mt-1 w-full text-xs'}
-                      defaultValue={bakery?.operations?.addresses?.[0]?.city || ''}
+                      defaultValue={defaultAddress?.city || ''}
                     />
+                    {fieldError('city')}
                   </label>
                 </fieldset>
 

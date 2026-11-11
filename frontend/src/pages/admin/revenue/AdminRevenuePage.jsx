@@ -1,3 +1,6 @@
+import PlanTierBadge from '../../../components/management/PlanTierBadge.jsx'
+import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
+import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
 import AdminBakeryScope from '../../../components/management/AdminBakeryScope.jsx'
 import { unifiedIssues, recordSource, unifiedSnapshot } from '../../../services/unifiedDataService.js'
 import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
@@ -43,6 +46,7 @@ export default function AdminRevenuePage({ onNavigate }) {
   const [draftDates, setDraftDates] = useState({ from: '', to: '' })
   const [appliedDates, setAppliedDates] = useState({ from: '', to: '' })
   const [page, setPage] = useState(1)
+  const { containerRef, pageSize } = useViewportPageSize(() => setPage(1))
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [detailModal, setDetailModal] = useState(null)
@@ -83,6 +87,13 @@ export default function AdminRevenuePage({ onNavigate }) {
     } catch (err) {
       setDateError(err.message || 'Khoảng thời gian không hợp lệ.')
     }
+  }
+
+  const updateDates = (dates) => {
+    setDraftDates(dates); setActivePreset('custom'); setPage(1)
+    const invalid = dates.from && dates.to && dates.from > dates.to
+    setDateError(invalid ? 'Ngày bắt đầu không được sau ngày kết thúc.' : null)
+    if (!invalid) setAppliedDates(dates)
   }
 
   // Handle Reset Filter
@@ -177,152 +188,111 @@ export default function AdminRevenuePage({ onNavigate }) {
       onNavigate={onNavigate}
     >
       <div className="sc-admin-revenue">
-        {/* Top Info Bar: Completely separates Approval queue from Financial Revenue */}
-        <div className="sc-revenue-top-bar">
-          <div className="sc-revenue-top-title-wrap">
-            <span className="sc-revenue-top-badge">
-              <Icon name="verified_user" />
-              Doanh thu theo nguồn
-            </span>
-            <span className="sc-revenue-top-desc">
-              Doanh thu gói dịch vụ được ghi nhận tự động ngay khi thanh toán qua cổng VNPay thành công. Doanh thu bán bánh ghi nhận khi đơn đã hoàn tất và đã thu tiền.
-            </span>
-          </div>
-        </div>
         {/* Filter Section: Presets, Custom Range & Search */}
         <section className="sc-revenue-filter-panel" aria-label="Bộ lọc doanh thu">
-          {/* Row 1: Presets on Left, Search on Right (Balanced across width) */}
-          <div className="sc-revenue-filter-row sc-revenue-filter-row--primary">
-            <div className="sc-revenue-filter-col">
-              <span className="sc-revenue-row-label">
-                <Icon name="history_toggle_off" />
-                <span>Mốc thời gian:</span>
-              </span>
-              <div className="sc-revenue-segmented-control" role="tablist" aria-label="Mốc thời gian">
-                {[
-                  ['all', 'Tất cả'],
-                  ['today', 'Hôm nay'],
-                  ['7days', '7 ngày qua'],
-                  ['30days', '30 ngày qua'],
-                  ['month', 'Tháng này'],
-                ].map(([key, label]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    role="tab"
-                    aria-selected={activePreset === key}
-                    className={
-                      'sc-revenue-segment-btn' +
-                      (activePreset === key ? ' sc-revenue-segment-btn--active' : '')
-                    }
-                    onClick={() => handlePresetSelect(key)}
-                  >
-                    {label}
-                  </button>
-                ))}
+          <div className="sc-revenue-filter-col">
+            <span className="sc-revenue-row-label">
+              <Icon name="history_toggle_off" />
+              <span>Mốc thời gian:</span>
+            </span>
+            <div className="sc-revenue-segmented-control" role="tablist" aria-label="Mốc thời gian">
+              {[
+                ['all', 'Tất cả'],
+                ['today', 'Hôm nay'],
+                ['7days', '7 ngày'],
+                ['30days', '30 ngày'],
+                ['month', 'Tháng này'],
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={activePreset === key}
+                  className={
+                    'sc-revenue-segment-btn' +
+                    (activePreset === key ? ' sc-revenue-segment-btn--active' : '')
+                  }
+                  onClick={() => handlePresetSelect(key)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <form onSubmit={handleApplyFilter} className="sc-revenue-range-form">
+            <span className="sc-revenue-row-label">
+              <Icon name="date_range" />
+              <span>Khoảng ngày:</span>
+            </span>
+
+            <div className="sc-revenue-range-group">
+              <div className="sc-revenue-date-field">
+                <label htmlFor="rev-from-date" className="sc-revenue-date-label">Từ</label>
+                <input
+                  id="rev-from-date"
+                  type="date"
+                  value={draftDates.from}
+                  onChange={(e) => {
+                    updateDates({ ...draftDates, from: e.target.value })
+                    setActivePreset('custom')
+                  }}
+                  className="sc-revenue-date-input"
+                  aria-label="Từ ngày"
+                />
+              </div>
+
+              <span className="sc-revenue-date-sep" aria-hidden="true">→</span>
+
+              <div className="sc-revenue-date-field">
+                <label htmlFor="rev-to-date" className="sc-revenue-date-label">Đến</label>
+                <input
+                  id="rev-to-date"
+                  type="date"
+                  value={draftDates.to}
+                  onChange={(e) => {
+                    updateDates({ ...draftDates, to: e.target.value })
+                    setActivePreset('custom')
+                  }}
+                  className="sc-revenue-date-input"
+                  aria-label="Đến ngày"
+                />
               </div>
             </div>
 
-            <div className="sc-revenue-search-box">
-              <Icon name="search" />
-              <input
-                type="text"
-                placeholder="Tìm tiệm bánh, gói dịch vụ, mã GD..."
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-                aria-label="Tìm kiếm trong danh sách giao dịch"
-              />
-              {search && (
+            <div className="sc-revenue-range-actions">
+              {(appliedDates.from || appliedDates.to || activePreset !== 'all' || search) && (
                 <button
                   type="button"
-                  className="sc-revenue-search-clear"
-                  onClick={() => setSearch('')}
-                  aria-label="Xóa từ khóa tìm kiếm"
+                  className="sc-revenue-btn-reset"
+                  onClick={handleResetFilter}
+                  title="Đặt lại bộ lọc"
+                  aria-label="Đặt lại bộ lọc"
                 >
-                  <Icon name="close" />
+                  <Icon name="restart_alt" />
+                  <span>Đặt lại</span>
                 </button>
               )}
             </div>
-          </div>
-
-          {/* Row 2: Date Range on Left, Status Summary on Right (No repeated dates!) */}
-          <div className="sc-revenue-filter-row sc-revenue-filter-row--secondary">
-            <form onSubmit={handleApplyFilter} className="sc-revenue-range-form">
-              <span className="sc-revenue-row-label">
-                <Icon name="date_range" />
-                <span>Khoảng ngày:</span>
-              </span>
-
-              <div className="sc-revenue-range-group">
-                <div className="sc-revenue-date-field">
-                  <label htmlFor="rev-from-date" className="sc-revenue-date-label">Từ</label>
-                  <input
-                    id="rev-from-date"
-                    type="date"
-                    value={draftDates.from}
-                    onChange={(e) => {
-                      setDraftDates({ ...draftDates, from: e.target.value })
-                      setActivePreset('custom')
-                    }}
-                    className="sc-revenue-date-input"
-                    aria-label="Từ ngày"
-                  />
-                </div>
-
-                <span className="sc-revenue-date-sep" aria-hidden="true">→</span>
-
-                <div className="sc-revenue-date-field">
-                  <label htmlFor="rev-to-date" className="sc-revenue-date-label">Đến</label>
-                  <input
-                    id="rev-to-date"
-                    type="date"
-                    value={draftDates.to}
-                    onChange={(e) => {
-                      setDraftDates({ ...draftDates, to: e.target.value })
-                      setActivePreset('custom')
-                    }}
-                    className="sc-revenue-date-input"
-                    aria-label="Đến ngày"
-                  />
-                </div>
-              </div>
-
-              <div className="sc-revenue-range-actions">
-                <button
-                  type="submit"
-                  className="sc-revenue-btn-apply"
-                  disabled={refreshing}
-                  title="Áp dụng khoảng thời gian"
-                >
-                  <Icon name="filter_alt" />
-                  <span>Áp dụng</span>
-                </button>
-
-                {(appliedDates.from || appliedDates.to || activePreset !== 'all' || search) && (
-                  <button
-                    type="button"
-                    className="sc-revenue-btn-reset"
-                    onClick={handleResetFilter}
-                    title="Đặt lại bộ lọc"
-                  >
-                    <Icon name="restart_alt" />
-                    <span>Đặt lại</span>
-                  </button>
-                )}
-              </div>
-            </form>
-
-            <div className="sc-revenue-status-chip">
-              <span className="sc-revenue-status-dot" aria-hidden="true" />
-              <span>
-                Đã duyệt (hai nguồn): <strong>{dashboardNumber(totalApprovedTransactions)}</strong> giao dịch
-                {search && filteredPayments.length !== totalApprovedTransactions && (
-                  <span className="sc-revenue-status-match">
-                    {' '}(khớp <strong>{filteredPayments.length}</strong>)
-                  </span>
-                )}
-              </span>
-            </div>
+          </form>
+          <div className="sc-revenue-search-box">
+            <Icon name="search" />
+            <input
+              type="text"
+              placeholder="Tìm tiệm bánh, gói dịch vụ, mã GD..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+              aria-label="Tìm kiếm trong danh sách giao dịch"
+            />
+            {search && (
+              <button
+                type="button"
+                className="sc-revenue-search-clear"
+                onClick={() => setSearch('')}
+                aria-label="Xóa từ khóa tìm kiếm"
+              >
+                <Icon name="close" />
+              </button>
+            )}
           </div>
 
           {dateError && (
@@ -335,7 +305,7 @@ export default function AdminRevenuePage({ onNavigate }) {
 
         {/* Financial KPI Cards */}
         <section className="sc-revenue-kpi-card" aria-label="Doanh thu gói thực nhận">
-          <span className="sc-revenue-kpi-label">Doanh thu gói thực nhận (VNPay)</span>
+          <span className="sc-revenue-kpi-label">Doanh thu</span>
           <div className="sc-revenue-kpi-value">{loading ? '…' : dashboardMoney(realRevenue, 'VND')}</div>
         </section>
         {/* Revenue Breakdown by Plan Tier */}
@@ -389,7 +359,7 @@ export default function AdminRevenuePage({ onNavigate }) {
         {/* Authoritative Revenue Transactions Table */}
         <BusinessSimulationReport loadHistory dates={appliedDates} reportBakeryId={reportBakeryId} showRecords={false} />
 
-        <section className="sc-revenue-table-panel">
+        <section ref={containerRef} className="sc-revenue-table-panel">
           <label className="mb-3 block">Trạng thái giao dịch
             <select className="sc-input ml-2" value={statusFilter} onChange={event => { setStatusFilter(event.target.value); setPage(1) }}>
               <option value="">Tất cả</option>
@@ -414,30 +384,30 @@ export default function AdminRevenuePage({ onNavigate }) {
               <DataTable label="Giao dịch doanh thu" className="sc-admin-fixed-table">
                 <colgroup>
                   <col style={{ width: '60px' }} />
-                  {[20, 18, 16, 18, 16, 12].map((width, index) => (
+                  {[18, 15, 9, 15, 17, 17, 9].map((width, index) => (
                     <col key={index} style={{ width: width + '%' }} />
                   ))}
                 </colgroup>
                 <thead>
                   <tr>
                     <th style={{ width: '60px', textAlign: 'center' }}>STT</th>
-                    <th>Tiệm bánh / Người nộp</th>
+                    <th>Tiệm bánh</th>
                     <th>Gói dịch vụ</th>
+                    <th>Thời hạn</th>
                     <th className="sc-money">Số tiền</th>
                     <th>Mã GD / Phương thức</th>
-                    <th>Thời gian / Trạng thái</th>
+                    <th>Thời gian</th>
                     <th className="sc-table-actions">Biên lai</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPayments.slice((page - 1) * 20, page * 20).map((payment, index) => {
-                    const stt = (page - 1) * 20 + index + 1
+                  {filteredPayments.slice((page - 1) * pageSize, page * pageSize).map((payment, index) => {
+                    const stt = (page - 1) * pageSize + index + 1
                     const bakeryName =
                       payment.context?.profile?.bakery?.name ||
                       payment.submittedByName ||
                       'Tiệm bánh đối tác'
-                    const planDisplayName =
-                      planName({ name: payment.context?.order?.planNameSnapshot, code: payment.context?.order?.planCodeSnapshot })
+                    const order = payment.context?.order
                     return (
                       <tr key={payment.id}>
                         <td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>
@@ -445,14 +415,12 @@ export default function AdminRevenuePage({ onNavigate }) {
                         </td>
                         <td>
                           <strong>{cleanPresentationLabel(bakeryName)}</strong>
-                          <small>{recordSource(payment) === 'local' ? 'Mô phỏng' : 'Backend'} · {payment.submittedByName || 'Chủ tiệm bánh'}</small>
+                          
                         </td>
                         <td>
-                          <span className="font-semibold text-primary">{planDisplayName}</span>
-                          <small className="block text-xs text-muted">
-                            Kỳ: {payment.context?.order?.billingPeriodMonths ? payment.context.order.billingPeriodMonths + ' tháng' : '—'}
-                          </small>
+                          <PlanTierBadge name={order?.planNameSnapshot} code={order?.planCodeSnapshot} />
                         </td>
+                        <td data-label="Thời hạn">{payment.context?.order?.billingPeriodMonths ? payment.context.order.billingPeriodMonths + ' tháng' : '—'}</td>
                         <td className="sc-money text-emerald-700 font-bold">
                           {dashboardMoney(payment.amount, payment.currency)}
                         </td>
@@ -461,27 +429,25 @@ export default function AdminRevenuePage({ onNavigate }) {
                           <small>{uiLabel(payment.paymentMethod, '—')}</small>
                         </td>
                         <td>
-                          {dashboardDateTime(payment.status === 'APPROVED' ? approvalDate(payment) : payment.reviewedAt || payment.submittedAt)}<small>{subscriptionStatusLabel(payment.status)}</small>
+                          {dashboardDateTime(payment.status === 'APPROVED' ? approvalDate(payment) : payment.reviewedAt || payment.submittedAt)}
                           {payment.status === 'APPROVED' && !countedPayments.has(payment.id) && <small>Không tính lại vào doanh thu</small>}
                         </td>
                         <td className="sc-table-actions">
-                          <button
+                          <RecordActionButton
                             type="button"
                             className="sc-button sc-action-button sc-action-button--secondary"
                             onClick={() => setDetailModal(payment)}
                             aria-label={'Xem chi tiết biên lai ' + payment.id}
-                          >
-                            Xem chi tiết
-                          </button>
+                           action="view" />
                         </td>
                       </tr>
                     )
                   })}
                 </tbody>
               </DataTable>
-              {filteredPayments.length > 20 && (
+              {filteredPayments.length > pageSize && (
                 <CatalogPagination
-                  meta={{ page, pageSize: 20, total: filteredPayments.length, pages: Math.ceil(filteredPayments.length / 20) }}
+                  meta={{ page, pageSize, total: filteredPayments.length, pages: Math.ceil(filteredPayments.length / pageSize) }}
                   onPage={setPage}
                 />
               )}

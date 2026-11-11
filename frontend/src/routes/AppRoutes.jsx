@@ -30,7 +30,6 @@ const VendorChatPage = lazy(() => import('../pages/chat/ChatPage.jsx').then((mod
 const AuthPage = lazy(() => import('../pages/auth/AuthPage'))
 
 // Vendor Pages (Modular Feature Subfolders)
-const VendorDashboardPage = lazy(() => import('../pages/vendor/dashboard/VendorDashboardPage'))
 const VendorMenuCatalogPage = lazy(() => import('../pages/vendor/catalog/VendorMenuCatalogPage'))
 const VendorRfqMarketplacePage = lazy(() => import('../pages/vendor/rfq/VendorRfqMarketplacePage'))
 const VendorBespokeQuoteSubmitPage = lazy(() => import('../pages/vendor/rfq/VendorBespokeQuoteSubmitPage'))
@@ -70,6 +69,7 @@ function PageRoutes({
   selectedCake,
   activeCustomCake,
   setActiveCustomCake,
+  selectedCartIds, onSelectCartIds,
   cartItems,
   cartCount,
   onAddToCart,
@@ -149,7 +149,7 @@ function PageRoutes({
         ) : currentPage === 'vendor-profile' || currentPage === 'vendor-settings' ? (
           <VendorSettingsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : (
-          <VendorDashboardPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+          <VendorOrderManagementPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         )}
       </VendorLayout>
     )
@@ -181,8 +181,11 @@ function PageRoutes({
         <PaymentGatewayPage onNavigate={onNavigate} />
       ) : currentPage === 'cart' ? (
         <CartCheckoutPage
+          routeSearch={routeSearch}
           cartItems={cartItems}
           cartCount={cartCount}
+          selectedCartIds={selectedCartIds}
+          onSelectCartIds={onSelectCartIds}
           onUpdateQuantity={onUpdateQuantity}
           onRemoveItem={onRemoveItem}
           onClearCart={onClearCart}

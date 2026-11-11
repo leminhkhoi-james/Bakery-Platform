@@ -1,5 +1,6 @@
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadAdminPending } from '../../services/adminSummaryService.js'
+import { loadOrders } from '../../services/orderService.js'
 import { demoRuntime } from '../../mockData/runtime.js'
 import React from 'react'
 import { simulationEnabled } from '../../mockData/business/runtime.js'
@@ -17,6 +18,8 @@ export default function AdminSidebar({
   pendingVendorsCount = 0,
 }) {
   const pending = useCatalogResource(loadAdminPending)
+  const pendingOrders = useCatalogResource(loadOrders, { scope: 'all', status: 'PENDING', page: 1, size: 1 })
+  const pendingOrdersCount = pendingOrders.status === 'ready' ? pendingOrders.data?.meta.total : null
   const pendingPaymentsCount = pending.data?.payments ?? null
   const pendingVendors = pendingVendorsCount || pending.data?.bakeries || 0
   const handleNav = (route) => {
@@ -65,6 +68,12 @@ export default function AdminSidebar({
       icon: 'dashboard',
     },
     {
+      id: 'admin-revenue',
+      route: 'admin-revenue',
+      label: 'Doanh thu',
+      icon: 'account_balance_wallet',
+    },
+    {
       id: 'admin-vendors',
       route: 'admin-vendors',
       label: 'Duyệt tiệm bánh',
@@ -89,14 +98,11 @@ export default function AdminSidebar({
       route: 'admin-orders',
       label: 'Đơn hàng',
       icon: 'shopping_bag',
+      badge: pendingOrdersCount > 0 ? String(pendingOrdersCount) : null,
     },
-    {
-      id: 'admin-revenue',
-      route: 'admin-revenue',
-      label: 'Doanh thu',
-      icon: 'account_balance_wallet',
-    },
+
     { id: 'admin-users', route: 'admin-users', label: 'Người dùng', icon: 'group' },
+    { id: 'admin-moderation', route: 'admin-moderation', label: 'Kiểm duyệt nội dung', icon: 'fact_check' },
   ]
 
   const sidebarContent = (
@@ -135,6 +141,7 @@ export default function AdminSidebar({
             return (
               <button
                 key={item.id}
+                aria-current={isActive ? 'page' : undefined}
                 onClick={() => handleNav(item.route)}
                 className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-admin-body transition-all duration-200 cursor-pointer ${
                   isActive

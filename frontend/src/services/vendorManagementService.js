@@ -1,3 +1,5 @@
+import { ownerDraftReceipts, rememberOwnerDraft } from './ownerDraftReceipts.js'
+import { authService } from './authService.js'
 import { api as sharedApi, ApiError } from './apiClient.js'
 import { catalogQuery } from './catalogModels.js'
 import { bakeryPayload, productPayload, requireId, requireText, mapPage, mapManagedProduct, validateImage, productActions, operationsPayload } from './managementModels.js'
@@ -41,28 +43,42 @@ export const vendorManagementService = {
       const profile = await onboardingService.get(null, { ...options, allowMockFallback: false })
       if (profile?.id?.toLowerCase() === bakeryId.toLowerCase()) return profile
     }
+    const actor = authService.getSnapshot().user
+    const receipt = ownerDraftReceipts(actor?.id).find(row => row.id === bakeryId)
+    if (receipt) {
+      const member = await vendorManagementService.getMembership(bakeryId, actor.id, options)
+      if (member?.memberRole !== 'OWNER') throw new ApiError('Bạn không có quyền quản lý tiệm này.', 403)
+      return receipt
+    }
     return vendorManagementService.getPublicProfile(bakeryId, options)
   },
-  async createBakery(input) { return bakeryDto(await api.post('/bakeries', bakeryPayload(input, true))) },
+  async createBakery(input) { const saved = bakeryDto(await api.post('/bakeries', bakeryPayload(input, true))); rememberOwnerDraft(authService.getSnapshot().user?.id, saved); return saved },
   async updateBakery(bakeryId, input) {
     const bakery = bakeryDto(await api.patch(bakeryPath(bakeryId), bakeryPayload(input)))
     if (bakery.id.toLowerCase() !== bakeryId.toLowerCase()) throw new ApiError('Response cập nhật sai tiệm.', 502)
+    rememberOwnerDraft(authService.getSnapshot().user?.id, bakery)
     return bakery
   },
   async submitBakery(bakeryId) {
     const bakery = bakeryDto(await api.post(bakeryPath(bakeryId) + '/submit-for-approval'))
     if (bakery.id.toLowerCase() !== bakeryId.toLowerCase() || bakery.status !== 'PENDING_APPROVAL') throw new ApiError('Backend chưa xác nhận hồ sơ đã gửi duyệt.', 502)
+    rememberOwnerDraft(authService.getSnapshot().user?.id, bakery)
     return bakery
   },
   async saveOperations(bakeryId, operations) {
     const data = await api.put(bakeryPath(bakeryId) + '/operations', operationsPayload(operations))
     if (!['addresses', 'serviceAreas', 'businessHours'].every((key) => Array.isArray(data?.[key]))) throw new ApiError('Snapshot vận hành trả về không hợp lệ.', 502)
+    const actorId = authService.getSnapshot().user?.id
+    const receipt = ownerDraftReceipts(actorId).find(row => row.id === bakeryId)
+    if (receipt) rememberOwnerDraft(actorId, { ...receipt, operations: data })
     return data
   },
   async uploadBakeryImage(bakeryId, kind, file) {
     if (!['logo', 'cover'].includes(kind)) throw new ApiError('Loại ảnh không hợp lệ.', 400)
     const body = new FormData(); body.append('file', validateImage(file))
-    return api.post(bakeryPath(bakeryId) + '/' + kind, body)
+    const result = await api.post(bakeryPath(bakeryId) + '/' + kind, body)
+    if (typeof result?.url !== 'string' || !/^https?:\/\//.test(result.url)) throw new ApiError('Máy chủ chưa trả về đường dẫn ảnh hợp lệ.', 502)
+    return result
   },
   async saveProduct(bakeryId, productId, input) {
     const body = productPayload(input, !productId)

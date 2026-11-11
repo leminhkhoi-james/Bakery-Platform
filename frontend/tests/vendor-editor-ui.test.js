@@ -28,12 +28,12 @@ const snapshot = () => ({ addresses: [{ id: randomUUID(), addressLine: '12 Nguy�
 test('Editing hours alone preserves address IDs, coordinates and service areas in the atomic replacement', () => {
   const original = snapshot(), before = structuredClone(original), saved = []
   const render = editor({ operations: original, sections: ['businessHours'], onSave: value => saved.push(operationsPayload(value)) })
-  nodes(render()).find(node => node.type === 'select').props.onChange({ target: { value: '2' } })
+  nodes(render()).find(node => node.type === 'select' && node.props['aria-label'] === 'Giờ mở Thứ Hai').props.onChange({ target: { value: '09:00' } })
   const confirmationLabel = nodes(render()).find(node => node.type === 'label' && text(node.props.children).includes('Tôi xác nhận thay thế'))
   const confirmation = nodes(confirmationLabel).find(node => node.type === 'input')
   confirmation.props.onChange({ target: { checked: true } })
   render().props.onSubmit({ preventDefault() {} })
-  assert.equal(saved[0].businessHours[0].dayOfWeek, 2)
+  assert.deepEqual(saved[0].businessHours, [{ ...before.businessHours[0], opensAt: '09:00' }])
   assert.deepEqual(saved[0].addresses, before.addresses)
   assert.deepEqual(saved[0].serviceAreas, before.serviceAreas)
   assert.deepEqual(original, before)

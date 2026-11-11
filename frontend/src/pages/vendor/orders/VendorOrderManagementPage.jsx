@@ -6,6 +6,7 @@ import VendorOrderList, { VendorOrderError } from './VendorOrderList.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadDashboardAccess } from '../../../services/vendorDashboardService.js'
+import { DashboardData } from '../dashboard/VendorDashboardPage.jsx'
 import './vendor-orders.css'
 
 const orderTabs = [
@@ -16,7 +17,7 @@ const orderTabs = [
   ['transactions', 'Thu & hoàn'],
 ]
 
-function VerifiedVendorOrders({ bakeryId, bakery, userId, initialOrderId }) {
+function VerifiedVendorOrders({ bakeryId, bakery, userId, initialOrderId, onNavigate }) {
   const [tab, setTab] = useState('orders')
   const access = useCatalogResource(loadDashboardAccess, { bakeryId, userId })
   if (access.status === 'loading') return <p role="status" className="sc-panel">Đang xác minh quyền quản lý cửa hàng…</p>
@@ -27,12 +28,15 @@ function VerifiedVendorOrders({ bakeryId, bakery, userId, initialOrderId }) {
           aria-pressed={tab === key} onClick={() => setTab(key)}>{label}</button>
       ))}
   </nav>
-  return <section className="sc-panel">
+  return <>
+    <DashboardData bakeryId={bakeryId} bakery={bakery} onNavigate={onNavigate} />
+    <section className="sc-panel">
     <div hidden={tab !== 'orders'}>
       <VendorOrderList bakeryId={bakeryId} initialOrderId={initialOrderId} embedded navigation={tab === 'orders' ? navigation : null} />
     </div>
     {tab !== 'orders' && <BusinessSimulationReport key={tab} bakeryId={bakeryId} bakery={bakery} loadHistory showMetrics={false} activeTab={tab} navigation={navigation} />}
-  </section>
+    </section>
+  </>
 }
 
 export default function VendorOrderManagementPage({ onNavigate, routeSearch = '' }) {
@@ -40,5 +44,5 @@ export default function VendorOrderManagementPage({ onNavigate, routeSearch = ''
   const { bakeryId, user, available } = owner
   const query = new URLSearchParams(routeSearch)
   const orderId = !query.get('bakeryId') || canonicalBakeryId(query.get('bakeryId').toLowerCase()) === bakeryId ? query.get('orderId') : null
-  return <VendorFrame owner={owner} title="Quản lý đơn hàng" activeTab="orders" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-vendor-orders">{bakeryId ? <VerifiedVendorOrders key={user.id + ':' + bakeryId} bakeryId={bakeryId} bakery={owner.bakery} userId={user.id} initialOrderId={orderId || ''} /> : <p role="status">{available.status === 'loading' ? 'Đang tải cửa hàng…' : 'Chọn cửa hàng bạn có quyền quản lý để xem đơn hàng.'}</p>}</div></VendorFrame>
+  return <VendorFrame owner={owner} title="Quản lý đơn hàng" activeTab="orders" bakeryId={bakeryId} onNavigate={onNavigate}><div className="sc-vendor-orders">{bakeryId ? <VerifiedVendorOrders key={user.id + ':' + bakeryId} bakeryId={bakeryId} bakery={owner.bakery} userId={user.id} initialOrderId={orderId || ''} onNavigate={onNavigate} /> : <p role="status">{available.status === 'loading' ? 'Đang tải cửa hàng…' : 'Chọn cửa hàng bạn có quyền quản lý để xem đơn hàng.'}</p>}</div></VendorFrame>
 }

@@ -1,3 +1,4 @@
+import { ownerDraftReceipts, rememberOwnerDraft } from './ownerDraftReceipts.js'
 import { unifiedEnabled } from './unifiedDataService.js'
 import { ApiError } from './apiClient.js'
 import { loadBakeries } from './vendorService.js'
@@ -32,11 +33,21 @@ export async function loadManagedBakeries({ userId, includeOnboarding = false },
     const member = await vendorManagementService.getMembership(applicantBakery.id, userId, options)
     if (member?.memberRole === 'OWNER') verified.push(applicantBakery)
   }
+  for (const draft of ownerDraftReceipts(userId)) {
+    if (catalog.result.some(row => row.id === draft.id)) { rememberOwnerDraft(userId, { id: draft.id, status: 'ACTIVE' }); continue }
+    if (verified.some(row => row.id === draft.id)) continue
+    try {
+      const member = await vendorManagementService.getMembership(draft.id, userId, options)
+      if (member?.memberRole === 'OWNER') verified.push(draft)
+    } catch (error) {
+      if (![403, 404].includes(error.status)) throw error
+    }
+  }
   let cursor = 0
   await Promise.all(Array.from({ length: Math.min(4, catalog.result.length) }, async () => {
     while (cursor < catalog.result.length) {
       const bakery = catalog.result[cursor++]
-      if (bakery.id === applicantBakery?.id || (!unifiedEnabled() && bakery.id.startsWith('de000000-0000-4000-8000-'))) continue
+      if (verified.some(row => row.id === bakery.id) || bakery.id === applicantBakery?.id || (!unifiedEnabled() && bakery.id.startsWith('de000000-0000-4000-8000-'))) continue
       try {
         const member = await vendorManagementService.getMembership(bakery.id, userId, options)
         // The public collection contains only active, entitled shops. Preserve

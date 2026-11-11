@@ -19,10 +19,10 @@ import { CatalogEntityForm } from './CatalogEntityManager.jsx'
 import { DetailDrawer, EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 
 const productActionLabel = { publish: 'Mở bán trên cửa hàng', hide: 'Tạm ẩn sản phẩm', archive: 'Ngừng bán (Đưa vào lưu kho)' }
-const productActionItems = (product, canEdit) => productActions(product.status).map((action) => ({ key: action, label: productActionLabel[action],
+const productActionItems = (product, canEdit) => productActions(product.status).map((action) => ({ key: action, label: action === 'publish' && product.status === 'HIDDEN' ? 'Hiển thị lại' : productActionLabel[action],
   icon: { publish: 'storefront', hide: 'visibility_off', archive: 'archive' }[action], tone: { publish: 'primary', hide: 'warning', archive: 'danger' }[action],
   disabled: !canEdit, disabledReason: 'Cần quyền chủ tiệm.',
-  description: { publish: 'Mẫu bánh sẽ hiển thị trên cửa hàng để khách hàng có thể tìm thấy và đặt mua khi tiệm đang mở cửa.', hide: 'Tạm ngừng hiển thị mẫu bánh này trên cửa hàng. Các đơn đã đặt trước đó vẫn được giữ nguyên.', archive: 'Ngừng kinh doanh mẫu bánh này và chuyển vào kho lưu trữ. Lưu ý: Thao tác này để ngừng bán bánh, không dùng để lưu chỉnh sửa thông tin.' }[action],
+  description: { publish: 'Mẫu bánh sẽ hiển thị trên cửa hàng để khách hàng có thể tìm thấy và đặt mua khi tiệm đang mở cửa.', hide: 'Tạm ngừng hiển thị mẫu bánh này trên cửa hàng. Các đơn đã đặt trước đó vẫn được giữ nguyên.', archive: 'Ngừng bán và lưu trữ mẫu bánh này. Hiện chưa hỗ trợ khôi phục bánh đã lưu trữ. Nếu chỉ muốn ẩn tạm thời và mở bán lại, hãy chọn Tạm ẩn.' }[action],
 }))
 
 export function CategoryForm({ busy, onSave }) {
@@ -277,9 +277,7 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
       <div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{['DRAFT', 'PUBLISHED', 'HIDDEN', 'ARCHIVED'].map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{categories.data?.map((category) => <option key={category.id} value={category.id}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label><label>Sắp xếp<select value={sort} onChange={changeFilter(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="name,asc">Tên A–Z</option><option value="basePrice,asc">Giá tăng dần</option><option value="basePrice,desc">Giá giảm dần</option></select></label></div>
       {categories.error && <ApiErrorMessage error={categories.error} retry={categories.reload} />}
       <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
-                    <button disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}>
-                      <Icon name="edit" />Chỉnh sửa
-                    </button>
+                    <button type="button" disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}>Chỉnh sửa</button>
                     {productActionItems(product, canEdit).map((action) => (
                       <button
                         key={action.key}
@@ -290,10 +288,10 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
                         className={`sc-button text-xs ${action.tone === 'danger' ? 'sc-action-button--danger' : 'sc-action-button--secondary'}`}
                       >
                         <Icon name={action.icon} />
-                        <span>{action.key === 'publish' ? 'Mở bán' : action.key === 'hide' ? 'Tạm ẩn' : 'Ngừng bán'}</span>
+                        <span>{action.key === 'publish' ? product.status === 'HIDDEN' ? 'Hiển thị lại' : 'Mở bán' : action.key === 'hide' ? 'Tạm ẩn' : 'Ngừng bán'}</span>
                       </button>
                     ))}
-                    <VendorActionMenu error={error && <ApiErrorMessage error={error} />} actions={productActionItems(product, canEdit)} busy={busy || products.refreshing} onConfirm={(action) => mutate(() => vendorManagementService.changeProduct(bakeryId, product, action))} />
+
                   </div></div></article>)}</div> : <EmptyPanel title="Chưa có sản phẩm phù hợp." description="Thêm sản phẩm mới hoặc thay đổi bộ lọc để bắt đầu." icon="cake" />}<CatalogPagination meta={products.data.meta} onPage={setPage} /></>}</ApiState>
     </section>
     {canEdit && (adding || editing) && (

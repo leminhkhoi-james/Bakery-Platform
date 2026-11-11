@@ -1,8 +1,10 @@
+import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
+import { OrderDetail } from '../../../components/orders/OrderViews.jsx'
 import { canonicalBakeryId, unifiedEnabled, unifiedSnapshot, unifiedMetrics, recordSource } from '../../../services/unifiedDataService.js'
 import { simulationStore } from '../../../mockData/business/runtime.js'
 import { businessMetrics, settledBusinessOrder } from '../../../mockData/business/metrics.js'
 import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
-import React from 'react'
+import React, { useState } from 'react'
 import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
@@ -42,6 +44,7 @@ function SettlementDisclaimerNotice() {
 }
 
 function CompletedRevenueContent({ bakeryId, onNavigate }) {
+  const [selectedOrderId, setSelectedOrderId] = useState(null)
   const orders = useCatalogResource(loadDashboardCompletedOrders, { bakeryId })
 
   const simulation = simulationStore()
@@ -58,6 +61,8 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
   const averageOrderValue = estimatedRevenue == null ? null : revenueOrderCount > 0 ? Math.round(estimatedRevenue / revenueOrderCount) : 0
 
   return (
+    <>
+    {selectedOrderId && <OrderDetail orderId={selectedOrderId} scope="bakery" bakeryId={bakeryId} onClose={() => setSelectedOrderId(null)} onChanged={orders.reload} />}
     <div className="space-y-6">
       {/* 3 Thẻ chỉ số Doanh thu ước tính */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -202,20 +207,11 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
                     {formatOrderMoney(order.totalAmount, order.currency)}
                   </td>
                   <td className="sc-table-actions">
-                    <button
+                    <RecordActionButton
                       type="button"
                       className="sc-button sc-record-action cursor-pointer"
-                      onClick={() =>
-                        onNavigate(
-                          'vendor-orders?bakeryId=' +
-                            encodeURIComponent(bakeryId) +
-                            '&orderId=' +
-                            encodeURIComponent(order.id)
-                        )
-                      }
-                    >
-                      Xem chi tiết
-                    </button>
+                      onClick={() => setSelectedOrderId(order.id)}
+                     action="view" label="Xem chi tiết" />
                   </td>
                 </tr>
               ))}
@@ -239,6 +235,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
         )}
       </section>
     </div>
+    </>
   )
 }
 

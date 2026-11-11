@@ -1,3 +1,4 @@
+import { phoneError, emailError } from './contactValidation.js'
 import { ApiError } from './apiClient.js'
 import { isCatalogId, catalogMoney, mapCatalogPage } from './catalogModels.js'
 
@@ -49,7 +50,9 @@ export function bakeryPayload(input, create = false) {
   for (const key of ['name', 'description', 'phoneNumber', 'email']) if (input[key] !== undefined) body[key] = input[key]
   if (create || body.name !== undefined) body.name = requireText(body.name, 'Tên cửa hàng', 180)
   if (create || body.phoneNumber !== undefined) body.phoneNumber = requireText(body.phoneNumber, 'Số điện thoại', 30)
-  if (body.email && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email) || body.email.length > 320)) throw new ApiError('Email không hợp lệ.', 400)
+  if (body.phoneNumber && phoneError(body.phoneNumber)) throw new ApiError('Số điện thoại không hợp lệ.', 400)
+  if (typeof body.email === 'string') body.email = body.email.trim()
+  if (body.email && emailError(body.email)) throw new ApiError('Email không hợp lệ.', 400)
   if (!Object.keys(body).length) throw new ApiError('Chưa có thay đổi hồ sơ.', 400)
   return body
 }

@@ -7,7 +7,7 @@ export function sessionIdentity(user) {
 export function roleLandingPage(user) {
   const roles = user?.roles || []
   if (roles.includes('ADMIN')) return 'admin-dashboard'
-  if (roles.includes('BAKERY_OWNER')) return 'vendor-dashboard'
+  if (roles.includes('BAKERY_OWNER')) return 'vendor-orders'
   return 'home'
 }
 

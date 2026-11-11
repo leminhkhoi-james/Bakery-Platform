@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { revalidateCartItem } from '../../../services/checkoutService.js'
 import { formatCatalogPrice, isCatalogId } from '../../../services/catalogModels.js'
 import { ApiErrorMessage, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
 import VerifiedCheckout from '../../../components/orders/VerifiedCheckout.jsx'
 
-function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
+function CartLine({ item, selected, onSelect, onUpdateQuantity, onRemoveItem, onNavigate }) {
   const [busy, setBusy] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
@@ -30,7 +30,7 @@ function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
   return (
     <article className={panelClass + ' bg-white/95 backdrop-blur-md rounded-2xl border border-primary/15 shadow-md p-4 sm:p-5 transition-all hover:shadow-lg'}>
       <div className="flex flex-col gap-4 sm:flex-row items-start">
-        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-surface-container shrink-0 border border-primary/15 shadow-2xs">
+        <label className="shrink-0 flex items-center py-2"><input type="checkbox" aria-label={'Chọn ' + item.title} checked={selected} onChange={onSelect} className="accent-primary h-4 w-4" /></label><div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-surface-container shrink-0 border border-primary/15 shadow-2xs">
           <CatalogImage
             src={item.image}
             alt={item.title || 'Sản phẩm'}
@@ -135,7 +135,21 @@ function CartLine({ item, onUpdateQuantity, onRemoveItem, onNavigate }) {
   )
 }
 
-export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, onNavigate }) => {
+export const CartCheckoutPage = ({ routeSearch = '', cartItems = [], selectedCartIds = [], onSelectCartIds, onUpdateQuantity, onRemoveItem, onClearCart, onNavigate }) => {
+  const checkout = useRef(null)
+  const jumpToCheckout = new URLSearchParams(routeSearch).get('checkout') === '1'
+  useEffect(() => {
+    if (!jumpToCheckout) return
+    const frame = requestAnimationFrame(() => {
+      checkout.current?.focus({ preventScroll: true })
+      checkout.current?.scrollIntoView({ block: 'start' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [jumpToCheckout])
+  const eligible = cartItems.filter(item => item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId))
+  const selectedItems = eligible.filter(item => selectedCartIds.includes(item.id))
+  const total = selectedItems.reduce((sum, item) => sum + Math.round(Number(item.price) * 100) * Number(item.quantity), 0) / 100
+  const toggle = id => onSelectCartIds?.(selectedCartIds.includes(id) ? selectedCartIds.filter(value => value !== id) : [...selectedCartIds, id])
   return (
     <main className="sc-customer min-h-[60vh] px-4 sm:px-6 py-4 sm:py-6">
       <div className="mx-auto max-w-6xl space-y-5">
@@ -174,12 +188,15 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
           {/* Left: Cart Items List (7 cols on lg) */}
           <section className="space-y-4 lg:col-span-7">
+            {eligible.length > 0 && <label className="flex gap-2 items-center text-primary font-semibold"><input type="checkbox" aria-label="Chọn tất cả bánh" checked={selectedItems.length === eligible.length} ref={node => { if (node) node.indeterminate = selectedItems.length > 0 && selectedItems.length < eligible.length }} onChange={event => onSelectCartIds?.(event.target.checked ? eligible.map(item => item.id) : [])} className="accent-primary" />Chọn tất cả</label>}
             {cartItems.length ? (
               cartItems.map((item) =>
                 item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId) ? (
                   <CartLine
                     key={item.id}
                     item={item}
+                    selected={selectedCartIds.includes(item.id)}
+                    onSelect={() => toggle(item.id)}
                     onUpdateQuantity={onUpdateQuantity}
                     onRemoveItem={onRemoveItem}
                     onNavigate={onNavigate}
@@ -218,7 +235,7 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
           </section>
 
           {/* Right: Checkout & Confirmation Panel (5 cols on lg - Sticky) */}
-          <aside className={panelClass + ' sc-checkout-summary self-start lg:sticky lg:top-28 bg-white/95 backdrop-blur-md rounded-2xl border border-primary/15 shadow-md p-4 sm:p-6 space-y-3.5 lg:col-span-5'}>
+          <aside ref={checkout} tabIndex={-1} aria-label="Xác nhận đơn hàng" className={panelClass + ' sc-checkout-summary self-start lg:sticky lg:top-28 bg-white/95 backdrop-blur-md rounded-2xl border border-primary/15 shadow-md p-4 sm:p-6 space-y-3.5 lg:col-span-5'}>
             <div className="pb-1 border-b border-primary/10">
               <h2 className="font-savoure text-xl sm:text-2xl font-bold text-wine flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-xl">receipt_long</span>
@@ -231,9 +248,11 @@ export const CartCheckoutPage = ({ cartItems = [], onUpdateQuantity, onRemoveIte
             </p>
 
             <>
-              {cartItems.some((item) => item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId)) ? (
+              <p className="text-sm text-primary">Đã chọn {selectedItems.reduce((sum,item) => sum + item.quantity, 0)} bánh · Tạm tính: <strong>{formatCatalogPrice(total)}</strong></p>
+              {eligible.length > 0 ? (
                 <VerifiedCheckout
-                  items={cartItems.filter((item) => item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId))}
+                  items={selectedItems}
+                  disabled={!selectedItems.length}
                   onNavigate={onNavigate}
                   onConfirmed={onRemoveItem}
                 />

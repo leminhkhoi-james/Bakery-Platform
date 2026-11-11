@@ -224,6 +224,10 @@ function calculateOfferDates(offer, request) {
   if (neededMs && defaultExp >= neededMs) {
     defaultExp = Math.max(now + 1800000, neededMs - 3600000)
   }
+  if (neededMs && neededMs > now) {
+    defaultEst = Math.min(defaultEst, neededMs)
+    defaultExp = Math.min(defaultExp, neededMs)
+  }
 
   return {
     estimatedCompletionAt: toLocalInput(offer?.estimatedCompletionAt) || toLocalInput(new Date(defaultEst).toISOString()),

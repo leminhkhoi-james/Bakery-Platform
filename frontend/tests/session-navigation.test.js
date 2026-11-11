@@ -4,7 +4,7 @@ import { roleLandingPage, sessionIdentity, sessionRedirect } from '../src/routes
 import { canAccess } from '../src/routes/routeAccess.js'
 
 const actor = (role, id = role) => ({ id, roles: [role] })
-const cases = [['ADMIN', 'admin-dashboard'], ['BAKERY_OWNER', 'vendor-dashboard'], ['CUSTOMER', 'home']]
+const cases = [['ADMIN', 'admin-dashboard'], ['BAKERY_OWNER', 'vendor-orders'], ['CUSTOMER', 'home']]
 for (const [role, landing] of cases) {
   test(`${role}: login and account switch enter the permitted workspace once`, () => {
     const user = actor(role)
@@ -37,7 +37,7 @@ test('Role changes on the same account are detected; role order does not cause r
 })
 test('Switching accounts on the landing page still clears the previous account query context', () => {
   const user = actor('BAKERY_OWNER', 'new-owner')
-  assert.equal(sessionRedirect({ page: 'vendor-dashboard', status: 'authenticated', user }, { status: 'authenticated', identity: sessionIdentity(actor('BAKERY_OWNER', 'old-owner')) }), 'vendor-dashboard')
+  assert.equal(sessionRedirect({ page: 'vendor-orders', status: 'authenticated', user }, { status: 'authenticated', identity: sessionIdentity(actor('BAKERY_OWNER', 'old-owner')) }), 'vendor-orders')
 })
 
 test('Removed staff role never opens an owner workspace or causes a redirect loop', () => {

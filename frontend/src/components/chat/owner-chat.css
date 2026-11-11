@@ -1,4 +1,7 @@
 .sc-owner-chat-page { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .8rem; height: calc(100dvh - var(--sc-portal-content-top) - 1rem); min-height: 0; min-width: 0; }
+.sc-owner-chat-page:has(.sc-owner-chat-shell.is-empty) { height: auto; }
+.sc-owner-chat-shell.is-empty { min-height: 16rem; max-height: 24rem; }
+.sc-owner-chat-shell.is-empty .sc-chat-placeholder { min-height: 12rem; padding: 1.5rem; }
 .sc-portal--vendor:has(.sc-owner-chat-page) .sc-portal-main { padding-bottom: 1rem; }
 .sc-owner-chat-page > .sc-managed-bakery-choice { padding: .7rem 1rem; gap: .35rem; margin: 0; }
 .sc-owner-chat-page > .sc-chat-feedback, .sc-owner-chat-page > p { align-self: start; }

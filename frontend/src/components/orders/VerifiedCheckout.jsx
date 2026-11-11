@@ -32,6 +32,8 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
 
   const address = selectedAddress(addresses.data || [], addressId)
   const isLocationMismatch = Boolean(expectedLocation && address && !isAddressMatchingLocation(address, expectedLocation))
+  const addressFailure = error && /address|địa chỉ/i.test(error.message || '')
+  const timeFailure = error && /delivery.*time|notice period|thời gian|lịch nhận/i.test(error.message || '')
   const locked = busy || complete || retrying
   const ready = !disabled && !busy && !complete && addresses.status === 'ready' && !addresses.refreshing && address &&
     !isLocationMismatch && (offerId || Number.isFinite(Date.parse(neededAt)))
@@ -103,6 +105,7 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
       disabled={locked || disabled}
       expectedLocation={expectedLocation}
     />
+    {addressFailure && <ApiErrorMessage error={error} />}
     {isLocationMismatch && (
       <div className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 space-y-1">
         <div className="flex items-center gap-1.5 font-bold text-amber-800">
@@ -130,6 +133,7 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
             value={neededAt}
             onChange={event => setNeededAt(event.target.value)}
           />
+          {timeFailure && <ApiErrorMessage error={error} />}
         </label>
       )}
       <label className="block text-xs font-bold text-primary">
@@ -165,16 +169,17 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
           <span>Đã xác nhận đơn hàng thành công! Đang chuyển hướng đến chi tiết đơn...</span>
         </p>
       )}
-      {error && <ApiErrorMessage error={error} />}
+      {error && !addressFailure && (!timeFailure || offerId) && <ApiErrorMessage error={error} />}
     </form>
   </section>
 }
 
 export default function VerifiedCheckout({ offerId, items = [], expectedLocation, ...props }) {
   const { user } = useAuth()
-  if (!user?.roles?.includes('CUSTOMER')) return <p className="text-xs text-on-surface-variant p-4">Vui lòng đăng nhập tài khoản khách hàng để tiếp tục đặt bánh.</p>
+  if (!user?.roles?.includes('CUSTOMER')) return <p className="text-xs text-on-surface-variant p-4">Vui lòng đăng nhập tài khoản khách hàng để tiếp tục đặt bánh. <button type="button" className="text-primary underline font-semibold" onClick={() => props.onNavigate?.('login')}>Đăng nhập ngay</button></p>
   const valid = offerId ? isRealCheckoutId(offerId) : items.length > 0 && items.every(item =>
     item.catalogSource === 'backend' && isRealCheckoutId(item.productId) && isRealCheckoutId(item.bakeryId))
+  if (!offerId && !items.length && props.disabled) return <><p className="text-sm text-primary">Vui lòng chọn ít nhất một bánh để đặt hàng.</p><button disabled className={buttonClass + ' w-full'}>Đặt hàng</button></>
   if (!valid) return <p className="text-xs text-on-surface-variant p-4">Chưa có sản phẩm hoặc báo giá API hợp lệ để đặt hàng.</p>
   return <RealCheckout key={user.id + ':' + (offerId || 'cart')} {...props} user={user} offerId={offerId} items={items} expectedLocation={expectedLocation} />
 }

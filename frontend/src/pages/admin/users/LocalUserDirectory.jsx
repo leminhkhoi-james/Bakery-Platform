@@ -1,7 +1,9 @@
+import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
+import { maskedEmail, UserRoles } from './userDisplay.jsx'
 import UserRowActions from './UserRowActions.jsx'
 import { unifiedEnabled, recordSource } from '../../../services/unifiedDataService.js'
 import { RoleForm } from './AdminUsersPage.jsx'
-import { updateUserRoles } from '../../../services/adminUserService.js'
+import { PLATFORM_ROLES, updateUserRoles } from '../../../services/adminUserService.js'
 import React, { useRef, useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
@@ -19,7 +21,7 @@ import { localUserDirectory } from '../../../mockData/admin/userManagement.js'
 import './admin-users.css'
 
 export function UserForm({ person, busy, error, onClose, onSave }) {
-  const initial = { name: reviewText(userName(person)) || '', email: person?.email || '' }
+  const initial = { name: reviewText(userName(person)) || '', email: person?.email || '', role: person?.roles?.[0] || 'CUSTOMER' }
   const [values, setValues] = useState(() => initial), [errors, setErrors] = useState({}), [lastSentEmail, setLastSentEmail] = useState(null)
   const duplicateEmail = error?.status === 409 && /email đã được sử dụng|email already (?:exists|in use)/i.test(error.message || '')
   const emailConflict = duplicateEmail && values.email.trim() === lastSentEmail ? 'Email đã được sử dụng. Vui lòng chọn email khác.' : null
@@ -39,6 +41,7 @@ export function UserForm({ person, busy, error, onClose, onSave }) {
   }}><ModalFormState value={values} busy={busy} /><fieldset disabled={busy}>
     <label><span>Họ tên <span className="sc-user-required" aria-hidden="true">*</span></span><input required maxLength={100} autoComplete="name" className={inputClass} {...field('name')} />{errors.name && <span role="alert" id="user-error-name" className="sc-field-error">{errors.name}</span>}</label>
     <label><span>Email <span className="sc-user-required" aria-hidden="true">*</span></span><input required type="email" maxLength={254} autoComplete="email" className={inputClass} {...field('email')} />{emailError && <span role="alert" id="user-error-email" className="sc-field-error">{emailError}</span>}</label>
+    {!person && <label>Vai trò<select className={inputClass} value={values.role} onChange={event => setValues(current => ({ ...current, role: event.target.value }))}>{PLATFORM_ROLES.map(role => <option key={role} value={role}>{uiLabel(role)}</option>)}</select></label>}
   </fieldset>{error && !duplicateEmail && <ApiErrorMessage error={error} />}</form></AdminReviewDialog>
 }
 export function UserDecision({ person, action, busy, error, onClose, onConfirm, disabledReason }) {
@@ -47,7 +50,7 @@ export function UserDecision({ person, action, busy, error, onClose, onConfirm, 
   const label = deleting ? 'Xác nhận xóa' : suspending ? 'Tạm ngưng' : 'Kích hoạt lại'
   const footer = <div className="sc-action-row"><button type="button" className="sc-button sc-action-button--secondary" disabled={busy} data-modal-close>Hủy</button><button type="button" className={'sc-button ' + (deleting ? 'sc-user-delete-confirm' : '')} disabled={busy || Boolean(disabledReason)} onClick={onConfirm}><Icon name={deleting ? 'delete' : suspending ? 'pause_circle' : 'play_circle'} />{busy ? 'Đang xử lý…' : label}</button></div>
   return <AdminReviewDialog compact className="sc-user-decision-dialog" title={title} footer={footer} onClose={onClose} busy={busy}><div className="sc-user-decision-content"><dl className="sc-review-fields">
-    <ReviewField label="Họ tên" value={reviewText(userName(person))} fallback="Chưa cập nhật tên" /><ReviewField label="Email" value={reviewText(person.email)} fallback="Chưa có email" />
+    <ReviewField label="Họ tên" value={reviewText(userName(person))} fallback="Chưa cập nhật tên" /><ReviewField label="Email" value={maskedEmail(person.email)} fallback="Chưa có email" />
     {!deleting && <ReviewField label="Trạng thái sau xử lý" value={userStatus(suspending ? 'SUSPENDED' : 'ACTIVE')} />}
   </dl><p className={deleting ? 'sc-user-delete-warning' : 'sc-review-help'}>{deleting ? 'Hồ sơ sẽ bị xóa khỏi danh sách và không có chức năng khôi phục. Thao tác này không xóa tài khoản đăng nhập.' : suspending ? 'Tạm ngưng hồ sơ người dùng. Bạn có thể kích hoạt lại khi cần.' : 'Khôi phục trạng thái hoạt động của hồ sơ người dùng.'}</p>{disabledReason && <p role="alert" className="sc-field-error">{disabledReason}</p>}{error && <ApiErrorMessage error={error} />}</div></AdminReviewDialog>
 }
@@ -55,6 +58,7 @@ export function UserDecision({ person, action, busy, error, onClose, onConfirm, 
 export function LocalUserDirectory() {
   const { user, roles } = useAuth()
   const [page, setPage] = useState(1)
+  const { containerRef, pageSize } = useViewportPageSize(() => setPage(1))
   const [email, setEmail] = useState('')
   const [role, setRole] = useState('')
   const [status, setStatus] = useState('')
@@ -64,7 +68,7 @@ export function LocalUserDirectory() {
     ...(role ? { role } : {}),
     ...(status ? { status } : {}),
   }
-  const resource = useCatalogResource(loadUsers, { page, size: 12, ...filters })
+  const resource = useCatalogResource(loadUsers, { page, size: pageSize, sort: 'displayName,asc', ...filters })
   const [editor, setEditor] = useState(null)
   const [decision, setDecision] = useState(null)
   const [error, setError] = useState(null)
@@ -94,11 +98,8 @@ export function LocalUserDirectory() {
   const hasFilter = Boolean(email.trim() || role || status)
 
   return (
-    <section className={panelClass}>
+    <section ref={containerRef} className={panelClass}>
       <div className="sc-user-toolbar">
-        <p className="sc-review-help">
-          {resource.data ? resource.data.meta.total + ' người dùng' : 'Danh sách người dùng'}
-        </p>
         <div className="sc-action-row">
           <button
             className={buttonClass}
@@ -158,6 +159,7 @@ export function LocalUserDirectory() {
             <Icon name="clear" />Xóa bộ lọc
           </button>
         )}
+        <span className="sc-filter-count">{resource.data?.meta.total ?? '—'} người dùng</span>
       </form>
 
       {!local && resource.status === 'ready' && (
@@ -194,8 +196,8 @@ export function LocalUserDirectory() {
                   const accountRestriction = userRestriction(person, user, 'status')
                   const statusReason = !editable ? 'Chức năng thay đổi trạng thái hiện chưa khả dụng.' : accountRestriction
                   const pageIndex = resource.data?.meta?.page || page
-                  const pageSize = resource.data?.meta?.pageSize || resource.data?.meta?.size || 12
-                  const stt = (pageIndex - 1) * pageSize + index + 1
+                  const returnedPageSize = resource.data?.meta?.pageSize || resource.data?.meta?.size || pageSize
+                  const stt = (pageIndex - 1) * returnedPageSize + index + 1
 
                   return (
                     <tr key={person.id}>
@@ -204,13 +206,13 @@ export function LocalUserDirectory() {
                         <strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong>
                         {accountRestriction && <small>{accountRestriction}</small>}
                       </td>
-                      <td data-label="Liên hệ">{reviewText(person.email) || 'Chưa có email'}</td>
-                      <td data-label="Vai trò">{person.roles.map((r) => uiLabel(r, 'Chưa xác định')).join(', ')}</td>
+                      <td data-label="Liên hệ">{maskedEmail(person.email) || 'Chưa có email'}</td>
+                      <td data-label="Vai trò">{<UserRoles roles={person.roles} />}</td>
                       <td data-label="Trạng thái"><StatusBadge status={person.status} label={userStatus(person.status)} /></td>
                       <td className="sc-table-actions">
                         <UserRowActions person={person} disabled={locked || !canManage || Boolean(accountRestriction)}
                           edit={{ label: 'Chỉnh sửa', icon: 'edit', reason: editReason || (!editable ? 'Chỉnh sửa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'edit') }}
-                          roles={unifiedEnabled() && recordSource(person) === 'api' ? { label: 'Phân quyền', icon: 'manage_accounts', reason: userRestriction(person, user, 'roles'), onClick: () => { setError(null); setNotice(''); setRolePerson(person) } } : null}
+                          roles={{ label: 'Phân quyền', icon: 'manage_accounts', reason: userRestriction(person, user, 'roles'), onClick: () => { setError(null); setNotice(''); setRolePerson(person) } }}
                           status={['ACTIVE', 'SUSPENDED', 'BLOCKED'].includes(person.status) ? { label: person.status === 'ACTIVE' ? 'Tạm ngưng tài khoản' : 'Kích hoạt tài khoản', icon: person.status === 'ACTIVE' ? 'pause_circle' : 'play_circle', reason: statusReason, onClick: () => choose(person, 'status') } : null}
                           remove={{ label: 'Xóa người dùng', icon: 'delete', danger: true, reason: restriction || (!editable ? 'Xóa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'delete') }} />
                       </td>
@@ -226,7 +228,7 @@ export function LocalUserDirectory() {
         {resource.data?.meta && <CatalogPagination meta={resource.data.meta} onPage={setPage} />}
       </ApiState>
 
-      {rolePerson && <RoleForm person={rolePerson} busy={busy} error={error} onClose={() => setRolePerson(null)} onSave={async roles => { const saved = await mutate(() => updateUserRoles(rolePerson,roles,user), 'Đã cập nhật vai trò qua API.'); if (saved) setRolePerson(null) }} />}
+      {rolePerson && <RoleForm person={rolePerson} busy={busy} error={error} onClose={() => setRolePerson(null)} onSave={async roles => { const saved = await mutate(() => updateUserRoles(rolePerson,roles,user), 'Đã cập nhật vai trò.'); if (saved) setRolePerson(null) }} />}
       {editor && canManage && (
         <UserForm
           key={editor.person?.id || 'new'}

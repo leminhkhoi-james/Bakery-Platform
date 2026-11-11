@@ -116,12 +116,6 @@ export const ADMIN_NAV_ITEMS = [
 
 export const VENDOR_NAV_ITEMS = [
   {
-    id: 'dashboard',
-    label: 'Tổng quan',
-    icon: 'grid_view',
-    route: 'vendor-dashboard',
-  },
-  {
     id: 'orders',
     label: 'Quản lý đơn hàng',
     icon: 'cake',

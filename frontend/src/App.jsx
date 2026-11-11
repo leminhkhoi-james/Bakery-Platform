@@ -1,10 +1,11 @@
+import { useCheckoutCart } from './hooks/useCheckoutCart.js'
 import { useState, useEffect } from 'react'
 import AppRoutes from './routes/AppRoutes'
 import { catalogUrl, parseAppRoute, shouldHandleAppLink } from './routes/catalogNavigation.js'
 import { catalogCartItem } from './services/catalogCart.js'
 
 function App() {
-  const [cartItems, setCartItems] = useState([])
+  const { cartItems, setCartItems, selectedCartIds, setSelectedCartIds } = useCheckoutCart()
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
   const ROUTE_ALIASES = {
@@ -82,9 +83,10 @@ function App() {
     'quote-detail': 'baker-quote',
 
     // Vendor Portal
-    'vendor': 'vendor-dashboard',
-    'baker-hub': 'vendor-dashboard',
-    'kenh-nguoi-ban': 'vendor-dashboard',
+    'vendor-dashboard': 'vendor-orders',
+    'vendor': 'vendor-orders',
+    'baker-hub': 'vendor-orders',
+    'kenh-nguoi-ban': 'vendor-orders',
     'quan-ly-don-hang': 'vendor-orders',
     'quan-tri-don-hang': 'vendor-orders',
     'soan-bao-gia': 'vendor-quote-submit',
@@ -200,9 +202,13 @@ function App() {
   const handleAddToCart = (cake) => {
     if (cake.catalogSource === 'backend') {
       const item = catalogCartItem(cake)
+      if (cake.buyNow) {
+        item.id += ':buy-now'
+        setSelectedCartIds([item.id])
+      }
       setCartItems((previous) => {
         const existing = previous.find((entry) => entry.id === item.id)
-        return existing ? previous.map((entry) => entry.id === item.id ? { ...entry, quantity: entry.quantity + item.quantity } : entry) : [item, ...previous]
+        return existing ? previous.map((entry) => entry.id === item.id ? { ...entry, quantity: cake.buyNow ? item.quantity : Math.min(100, entry.quantity + item.quantity) } : entry) : [item, ...previous]
       })
       showToast(`Đã thêm "${cake.title}" vào giỏ hàng!`)
       return
@@ -272,11 +278,13 @@ function App() {
 
   const handleRemoveFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id))
+    setSelectedCartIds(ids => ids.filter(value => value !== id))
     showToast('Đã xóa bánh khỏi giỏ hàng!')
   }
 
   const handleClearCart = () => {
     setCartItems([])
+    setSelectedCartIds([])
     showToast('Đã làm trống giỏ hàng!')
   }
 
@@ -284,7 +292,10 @@ function App() {
     if (cakeData) {
       setSelectedCake(cakeData)
     }
-    const { page: resolvedPath, query } = parseAppRoute(path, ROUTE_ALIASES)
+    let { page: resolvedPath, query } = parseAppRoute(path, ROUTE_ALIASES)
+    if (resolvedPath === 'login' && currentPage !== 'login' && !new URLSearchParams(query).has('returnTo')) {
+      const params = new URLSearchParams(query); params.set('returnTo', window.location.pathname + window.location.search); query = params.toString()
+    }
     setCurrentPage(resolvedPath)
 
     if (typeof window !== 'undefined') {
@@ -319,6 +330,8 @@ function App() {
         setActiveCustomCake={setActiveCustomCake}
         cartItems={cartItems}
         cartCount={cartCount}
+        selectedCartIds={selectedCartIds}
+        onSelectCartIds={setSelectedCartIds}
         onAddToCart={handleAddToCart}
         onUpdateQuantity={handleUpdateCartQuantity}
         onRemoveItem={handleRemoveFromCart}

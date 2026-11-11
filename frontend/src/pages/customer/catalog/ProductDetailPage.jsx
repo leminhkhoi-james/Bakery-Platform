@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { targetedRequestRoute } from '../../../services/requestContextModels.js'
 import { loadProduct } from '../../../services/cakeService.js'
-import { catalogMoney, formatCatalogPrice } from '../../../services/catalogModels.js'
+import { catalogCategoryLabel, catalogMoney, formatCatalogPrice } from '../../../services/catalogModels.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
 import CatalogState from '../../../components/catalog/CatalogState.jsx'
@@ -26,11 +26,14 @@ export const ProductDetailPage = ({ routeSearch = '', onAddToCart, onNavigate })
   )
 }
 
-export function ProductDetails({ product, onAddToCart, onNavigate }) {
+export function ProductDetails({ product, onAddToCart, onNavigate, cartOnly = false }) {
   const [imageIndex, setImageIndex] = useState(() => Math.max(0, product.images.findIndex((image) => image.primary)))
-  const [selections, setSelections] = useState({})
-  const [addons, setAddons] = useState([])
-  const [quantity, setQuantity] = useState(1)
+  const draftKey = 'sweetcake.product-choice:' + product.id
+  const [draft] = useState(() => { try { return JSON.parse(sessionStorage.getItem(draftKey) || '{}') } catch { return {} } })
+  const [selections, setSelections] = useState(draft.selections || {})
+  const [addons, setAddons] = useState(draft.addons || [])
+  const [quantity, setQuantity] = useState(Number.isInteger(draft.quantity) && draft.quantity > 0 && draft.quantity <= 100 ? draft.quantity : 1)
+  useEffect(() => { try { sessionStorage.setItem(draftKey, JSON.stringify({ selections, addons, quantity })) } catch { /* Browsing stays usable without storage. */ } }, [draftKey, selections, addons, quantity])
   const groups = product.optionGroups
   const selectedValues = groups.flatMap((group) => (group.values || []).filter((value) => (selections[group.id] || []).includes(value.id)))
   const selectedAddons = product.addOns.filter((addon) => addons.includes(addon.id))
@@ -53,6 +56,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
     const configuration = groups.map((group) => ({ optionGroupId: group.id, optionValueIds: selections[group.id] || [] })).filter((group) => group.optionValueIds.length)
     onAddToCart?.({
       ...product,
+      buyNow: quick,
       quantity,
       price: unitPrice,
       optionSelections: configuration,
@@ -60,16 +64,13 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
       selectedSize: selectedValues.map((value) => value.name).join(', '),
       sizeSpec: selectedValues.map((value) => value.name).join(', '),
     })
-    if (quick) {
-      try { localStorage.setItem('sweetcake_direct_checkout', 'true') } catch { /* Optional demo checkout flag. */ }
-    }
-    onNavigate?.('cart')
+    if (quick) onNavigate?.('cart?checkout=1')
   }
 
   return (
     <>
       {/* Compact Top Bar */}
-      <div className="mb-2.5">
+      {!cartOnly && <div className="mb-2.5">
         <button
           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-primary/20 text-xs font-bold text-wine shadow-xs hover:bg-white hover:text-secondary hover:shadow transition-all cursor-pointer"
           onClick={() => onNavigate?.('explore')}
@@ -77,11 +78,11 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
           <span className="material-symbols-outlined text-sm">arrow_back</span>
           <span>Quay lại danh sách bánh</span>
         </button>
-      </div>
+      </div>}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div className={cartOnly ? "" : "grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch"}>
         {/* Left Gallery Showcase Card (6 cols on lg, balanced with right card) */}
-        <div className="lg:col-span-6 flex flex-col rounded-2xl bg-white/95 backdrop-blur-md border border-primary/15 shadow-md p-4 sm:p-5">
+        {!cartOnly && <div className="lg:col-span-6 flex flex-col rounded-2xl bg-white/95 backdrop-blur-md border border-primary/15 shadow-md p-4 sm:p-5">
           <div className="relative flex-1 w-full min-h-[380px] sm:min-h-[440px] overflow-hidden bg-surface-container rounded-xl">
             <CatalogImage
               src={product.images[imageIndex]?.url || product.image}
@@ -103,15 +104,15 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
               ))}
             </div>
           )}
-        </div>
+        </div>}
 
         {/* Right Product Details & Configuration Card (6 cols on lg - Symmetrical & Balanced) */}
-        <div className="lg:col-span-6 flex flex-col justify-between space-y-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-primary/15 shadow-md">
+        <div className={cartOnly ? "space-y-3" : "lg:col-span-6 flex flex-col justify-between space-y-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-primary/15 shadow-md"}>
           {/* Header Row: Tags & Bakery */}
-          <div className="flex items-center justify-between gap-2">
+          {!cartOnly && <div className="flex items-center justify-between gap-2">
             {product.category && (
               <span className="inline-block px-2.5 py-0.5 bg-primary-fixed/80 rounded-full text-[11px] text-primary font-bold border border-primary/20">
-                {product.category}
+                {catalogCategoryLabel(product.category)}
               </span>
             )}
             {product.vendor && (
@@ -122,15 +123,13 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
                 Tiệm: {product.vendor}
               </button>
             )}
-          </div>
+          </div>}
 
           {/* Title & Price Header */}
           <div className="space-y-1.5">
-            <h1 className="font-savoure text-2xl sm:text-3xl text-wine font-bold tracking-normal leading-tight">
-              {product.title}
-            </h1>
+            {cartOnly ? <p className="font-semibold text-wine">{product.title}</p> : <h1 className="font-savoure text-2xl sm:text-3xl text-wine font-bold tracking-normal leading-tight">{product.title}</h1>}
             <div className="bg-[#fff8fa] px-3.5 py-1.5 rounded-xl border border-primary/15 flex items-baseline justify-between shadow-2xs">
-              <span id="display-price" className="font-headline-md text-2xl sm:text-3xl font-bold text-wine">
+              <span id={cartOnly ? undefined : "display-price"} className="font-headline-md text-2xl sm:text-3xl font-bold text-wine">
                 {formatCatalogPrice(unitPrice === null ? null : Math.round(unitPrice * 100) * quantity / 100)}
               </span>
               <span className="text-[11px] text-on-surface-variant font-medium">
@@ -139,6 +138,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
             </div>
           </div>
 
+          {!cartOnly && <>
           {/* Description (Concise & Legible) */}
           <p className="text-xs sm:text-sm text-on-surface leading-relaxed line-clamp-2">
             {product.description || 'Tiệm chưa cung cấp mô tả sản phẩm.'}
@@ -165,6 +165,8 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
               </span>
             )}
           </div>
+
+          </>}
 
           {/* Option Groups (Sizes / Flavors - Compact Chips) */}
           {groups.map((group) => (
@@ -231,7 +233,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
               <span className="font-bold text-wine text-sm px-1">{quantity}</span>
               <button
                 type="button"
-                onClick={() => setQuantity(quantity + 1)}
+                onClick={() => setQuantity(Math.min(100, quantity + 1))}
                 className="w-6 h-6 flex items-center justify-center font-bold text-primary hover:bg-primary-fixed-dim rounded-md text-sm cursor-pointer"
               >
                 +
@@ -247,19 +249,18 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
               Thêm vào giỏ hàng
             </button>
 
-            {/* Quick Order */}
-            <button
+            {!cartOnly && <button
               disabled={!canAdd}
               onClick={() => add(true)}
               className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-xs sm:text-sm font-bold text-on-primary shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-1"
             >
               <span className="material-symbols-outlined text-base">bolt</span>
-              <span>Đặt nhanh</span>
-            </button>
+              <span>Mua ngay</span>
+            </button>}
           </div>
 
           {/* Bottom Secondary Actions */}
-          <div className="flex items-center justify-between pt-1 text-xs">
+          {!cartOnly && <div className="flex items-center justify-between pt-1 text-xs">
             {product.customizable === true && product.bakeryId ? (
               <button
                 className="text-primary font-bold hover:underline cursor-pointer flex items-center gap-0.5"
@@ -277,7 +278,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate }) {
               <span>Thiết kế bánh theo ý tưởng</span>
               <span className="material-symbols-outlined text-xs">arrow_forward</span>
             </button>
-          </div>
+          </div>}
         </div>
       </div>
     </>

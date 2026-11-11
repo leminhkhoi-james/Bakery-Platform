@@ -11,10 +11,13 @@ import { StatusBadge } from '../common/WorkspaceUI.jsx'
 import { usePartnerActivation } from '../../hooks/usePartnerActivation.js'
 import { uiLabel } from '../../services/uiLabels.js'
 
-export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
+export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, drafts = [] }) {
   const { roles, user } = useAuth()
   const isOwner = roles.includes('BAKERY_OWNER')
+  const [initialDefaults] = useState(defaults)
+  const [newRequested, setNewRequested] = useState(false)
   const [profileDraft, setProfileDraft] = useState(null)
+  const [editingBasics, setEditingBasics] = useState(true)
   const [savedBakery, setBakery] = useState(null)
   const [saved, setSaved] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -51,7 +54,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
     if (flight.current) return
     flight.current = true
     setBusy(true)
-    onBusy(true)
+    onBusy?.(true)
     setError(null)
     setActivationNotice(null)
     try {
@@ -61,39 +64,43 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
     } finally {
       flight.current = false
       setBusy(false)
-      onBusy(false)
+      onBusy?.(false)
     }
   }
 
-  const defaultOperations = {
+  const defaultOperations = initialDefaults?.operations?.addresses?.length ? initialDefaults.operations : {
     addresses: [{ addressLine: '', ward: '', district: '', city: '', isPrimary: true }],
     serviceAreas: [{ city: '', district: '', deliveryFee: 0, minimumOrder: 0, active: true }],
     businessHours: [1, 2, 3, 4, 5, 6, 7].map((day) => ({
       dayOfWeek: day,
-      closed: false,
+      closed: day > 5,
       opensAt: '08:00',
       closesAt: '20:00',
     })),
   }
 
+  if (isOwner && !bakery && !profileDraft && drafts.length && !newRequested) return <section className="space-y-3"><h3>Tiếp tục tiệm đã lưu</h3><p>Bạn có hồ sơ chưa hoàn tất. Chọn tiệm để tiếp tục, tránh đăng ký lại cùng một tiệm.</p>{drafts.map(draft => <button type="button" key={draft.id} className={buttonClass} onClick={() => onCreated?.(draft)}>{draft.name} · Tiếp tục hồ sơ nháp</button>)}<button type="button" className={buttonClass + ' sc-action-button--secondary'} onClick={() => setNewRequested(true)}>Đăng ký tiệm khác</button></section>
+
   // Step 1: Profile Form
-  if (!bakery && !profileDraft) {
+  if (!bakery && editingBasics) {
     return (
       <div className="space-y-4">
         <BakeryProfileForm
           create
+          error={error}
           busy={busy}
-          profile={user?.email ? { email: user.email } : undefined}
+          profile={profileDraft || { name: initialDefaults?.name || '', email: initialDefaults?.email || user?.email || '', phoneNumber: initialDefaults?.phoneNumber || user?.phoneNumber || user?.phone || '' }}
           onSave={(input) => run(async () => {
             if (isOwner) {
               const created = await vendorManagementService.createBakery(input)
               setBakery(created)
             } else {
               setProfileDraft(input)
+              setEditingBasics(false)
             }
           })}
         />
-        {error && <ApiErrorMessage error={error} />}
+
         {error && (
           <p className="text-sm">
             Nếu kết nối bị ngắt khi tạo tiệm, hãy kiểm tra hồ sơ với bộ phận hỗ trợ trước khi gửi lại để tránh tạo trùng.
@@ -116,6 +123,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
           </p>
         </div>
         <BakeryOperationsForm
+          error={error}
           operations={defaultOperations}
           busy={busy}
           onSave={(input) => run(async () => {
@@ -129,12 +137,12 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
             onCreated?.(confirmed)
           })}
         />
-        {error && <ApiErrorMessage error={error} />}
+
         <button
           type="button"
           disabled={busy}
           className="text-sm text-stone-600 underline"
-          onClick={() => setProfileDraft(null)}
+          onClick={() => setEditingBasics(true)}
         >
           ← Quay lại chỉnh sửa thông tin tiệm
         </button>
@@ -156,7 +164,8 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
       {bakery.status === 'DRAFT' && (
         <>
           <BakeryOperationsForm
-            operations={bakery.operations || defaultOperations}
+            error={error}
+            operations={bakery.operations?.addresses?.length ? bakery.operations : defaultOperations}
             busy={busy}
             onSave={(input) => run(async () => {
               const operations = operationsPayload(input)
@@ -179,6 +188,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
               const confirmed = isOwner
                 ? await vendorManagementService.submitBakery(bakery.id)
                 : bakery
+              setBakery(confirmed)
               onCreated?.(confirmed)
             })}
           >
@@ -216,7 +226,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated }) {
         </div>
       )}
 
-      {error && <ApiErrorMessage error={error} />}
+
       {activation.error && <ApiErrorMessage error={activation.error} />}
     </div>
   )

@@ -1,3 +1,4 @@
+import { phoneError } from './contactValidation.js'
 import { api, ApiError } from './apiClient.js'
 import { isRealCheckoutId } from './checkoutService.js'
 
@@ -26,6 +27,7 @@ export const addressService = {
       if (value.length > max || !value && key !== 'ward') throw new ApiError('Vui lòng kiểm tra các trường địa chỉ bắt buộc.', 422)
       body[key === 'title' ? 'label' : key] = value || null
     }
+    if (phoneError(body.recipientPhone)) throw new ApiError(phoneError(body.recipientPhone), 422)
     return mapAddress(await api.post(path, body, real))
   },
   async update(id, input) {
@@ -40,6 +42,7 @@ export const addressService = {
         body[key === 'title' ? 'label' : key] = value || null
       }
     }
+    if (body.recipientPhone !== undefined && phoneError(body.recipientPhone)) throw new ApiError(phoneError(body.recipientPhone), 422)
     return mapAddress(await api.patch(path + '/' + id, body, real))
   },
   async delete(id) {
