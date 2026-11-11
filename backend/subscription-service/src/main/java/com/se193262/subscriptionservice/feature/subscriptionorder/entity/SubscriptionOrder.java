@@ -1,14 +1,13 @@
 package com.se193262.subscriptionservice.feature.subscriptionorder.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import com.se193262.subscriptionservice.feature.plan.entity.SubscriptionPlan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -25,10 +24,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "subscription_orders")
-public class SubscriptionOrder {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+public class SubscriptionOrder extends UuidEntity {
     @Column(name = "order_number", nullable = false, unique = true, length = 40)
     private String orderNumber;
     @Column(name = "bakery_id", nullable = false)
@@ -65,7 +61,7 @@ public class SubscriptionOrder {
     @Version @Column(name = "version", nullable = false)
     private long version;
 
-    protected SubscriptionOrder() {}
+    public SubscriptionOrder() {}
 
     public SubscriptionOrder(String orderNumber, UUID bakeryId, SubscriptionPlan plan,
                              UUID requestedByUserId, Instant expiresAt) {
@@ -105,4 +101,20 @@ public class SubscriptionOrder {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setOrderNumber(String value) { this.orderNumber = value; }
+    public void setBakeryId(UUID value) { this.bakeryId = value; }
+    public void setPlan(SubscriptionPlan value) { this.plan = value; }
+    public void setRequestedByUserId(UUID value) { this.requestedByUserId = value; }
+    public void setPlanNameSnapshot(String value) { this.planNameSnapshot = value; }
+    public void setPlanCodeSnapshot(String value) { this.planCodeSnapshot = value; }
+    public void setFeaturesSnapshot(Map<String, String> value) { this.featuresSnapshot = value; }
+    public void setBillingPeriodMonths(int value) { this.billingPeriodMonths = value; }
+    public void setTotalAmount(BigDecimal value) { this.totalAmount = value; }
+    public void setCurrency(String value) { this.currency = value; }
+    public void setStatus(SubscriptionOrderStatus value) { this.status = value; }
+    public void setExpiresAt(Instant value) { this.expiresAt = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
+    public void setCompletedAt(Instant value) { this.completedAt = value; }
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BakerySubscriptionRepository extends JpaRepository<BakerySubscription, UUID> {
+    boolean existsByBakeryIdAndStatus(UUID bakeryId, SubscriptionStatus status);
     List<BakerySubscription> findAllByBakeryIdAndStatusInOrderByPeriodStartAsc(
             UUID bakeryId, Collection<SubscriptionStatus> statuses);
     Optional<BakerySubscription> findBySourceOrder_Id(UUID orderId);

@@ -1,12 +1,11 @@
 package com.se193262.chatservice.feature.conversation;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -18,11 +17,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "conversations")
-public class Conversation {
+public class Conversation extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
 
     @Column(name = "cake_request_id", nullable = false)
     private UUID cakeRequestId;
@@ -56,7 +52,7 @@ public class Conversation {
     @Column(nullable = false)
     private long version;
 
-    protected Conversation() {
+    public Conversation() {
     }
 
     public Conversation(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
@@ -95,4 +91,13 @@ public class Conversation {
     public String getCloseReason() { return closeReason; }
     public Instant getLastMessageAt() { return lastMessageAt; }
     public Instant getCreatedAt() { return createdAt; }
+
+    public void setCakeRequestId(UUID value) { this.cakeRequestId = value; }
+    public void setOrderId(UUID value) { this.orderId = value; }
+    public void setCustomerId(UUID value) { this.customerId = value; }
+    public void setBakeryId(UUID value) { this.bakeryId = value; }
+    public void setStatus(ConversationStatus value) { this.status = value; }
+    public void setLastMessageAt(Instant value) { this.lastMessageAt = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

@@ -11,7 +11,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,11 +20,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customer_orders")
-public class CustomerOrder {
+public class CustomerOrder extends com.se193262.platform.persistence.UuidEntity {
 
-    @Id
-    @UuidGenerator
-    private UUID id;
+
 
     @Column(name = "order_number", nullable = false, unique = true, length = 40)
     private String orderNumber;
@@ -105,7 +102,7 @@ public class CustomerOrder {
     @OneToOne(mappedBy = "customerOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderReview review;
 
-    protected CustomerOrder() {
+    public CustomerOrder() {
     }
 
     static CustomerOrder create(
@@ -215,4 +212,24 @@ public class CustomerOrder {
     public DeliveryAddressSnapshot getDeliveryAddressSnapshot() { return deliveryAddressSnapshot; }
     public List<OrderStatusHistory> getStatusHistory() { return statusHistory; }
     public OrderReview getReview() { return review; }
+
+    public void setOrderNumber(String value) { this.orderNumber = value; }
+    public void setCustomerId(UUID value) { this.customerId = value; }
+    public void setBakeryId(UUID value) { this.bakeryId = value; }
+    public void setCakeRequestId(UUID value) { this.cakeRequestId = value; }
+    public void setOfferId(UUID value) { this.offerId = value; }
+    public void setOrderSource(OrderSource value) { this.orderSource = value; }
+    public void setCustomerNameSnapshot(String value) { this.customerNameSnapshot = value; }
+    public void setCustomerPhoneSnapshot(String value) { this.customerPhoneSnapshot = value; }
+    public void setBakeryNameSnapshot(String value) { this.bakeryNameSnapshot = value; }
+    public void setSubtotal(BigDecimal value) { this.subtotal = value; }
+    public void setDeliveryFee(BigDecimal value) { this.deliveryFee = value; }
+    public void setTotalAmount(BigDecimal value) { this.totalAmount = value; }
+    public void setStatus(OrderStatus value) { this.status = value; }
+    public void setNeededAt(Instant value) { this.neededAt = value; }
+    public void setAcceptedAt(Instant value) { this.acceptedAt = value; }
+    public void setCompletedAt(Instant value) { this.completedAt = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
+    public void setCurrency(String value) { this.currency = value; }
 }

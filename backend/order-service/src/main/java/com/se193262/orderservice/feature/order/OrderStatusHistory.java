@@ -9,18 +9,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "order_status_history")
-public class OrderStatusHistory {
+public class OrderStatusHistory extends com.se193262.platform.persistence.UuidEntity {
 
-    @Id
-    @UuidGenerator
-    private UUID id;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
@@ -43,7 +40,7 @@ public class OrderStatusHistory {
     @Column(name = "changed_at", nullable = false)
     private Instant changedAt;
 
-    protected OrderStatusHistory() {
+    public OrderStatusHistory() {
     }
 
     static OrderStatusHistory initial(CustomerOrder customerOrder, UUID changedBy, Instant changedAt) {
@@ -80,4 +77,10 @@ public class OrderStatusHistory {
     public UUID getChangedBy() { return changedBy; }
     public String getNote() { return note; }
     public Instant getChangedAt() { return changedAt; }
+
+    public void setCustomerOrder(CustomerOrder value) { this.customerOrder = value; }
+    public void setToStatus(OrderStatus value) { this.toStatus = value; }
+    public void setChangedBy(UUID value) { this.changedBy = value; }
+    public void setNote(String value) { this.note = value; }
+    public void setChangedAt(Instant value) { this.changedAt = value; }
 }

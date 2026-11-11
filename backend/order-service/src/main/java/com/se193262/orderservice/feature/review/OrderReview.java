@@ -53,7 +53,7 @@ public class OrderReview {
     @Column(name = "version", nullable = false)
     private long version;
 
-    protected OrderReview() {
+    public OrderReview() {
     }
 
     static OrderReview create(CustomerOrder customerOrder, UUID customerId, short rating, String comment, Instant now) {
@@ -104,4 +104,12 @@ public class OrderReview {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setCustomerOrder(CustomerOrder value) { this.customerOrder = value; }
+    public void setCustomerId(UUID value) { this.customerId = value; }
+    public void setRating(short value) { this.rating = value; }
+    public void setComment(String value) { this.comment = value; }
+    public void setStatus(ReviewStatus value) { this.status = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

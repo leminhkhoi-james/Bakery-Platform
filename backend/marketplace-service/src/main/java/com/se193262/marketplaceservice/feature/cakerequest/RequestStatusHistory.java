@@ -30,7 +30,7 @@ public class RequestStatusHistory {
     @Column(name = "changed_at", nullable = false)
     private Instant changedAt;
 
-    protected RequestStatusHistory() {}
+    public RequestStatusHistory() {}
 
     public static RequestStatusHistory create() {
         return new RequestStatusHistory();

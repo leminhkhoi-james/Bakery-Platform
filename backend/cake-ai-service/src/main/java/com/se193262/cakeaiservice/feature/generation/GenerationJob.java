@@ -26,5 +26,19 @@ public class GenerationJob {
     @Column(name = "created_at", nullable = false) private Instant createdAt;
     @Column(name = "updated_at", nullable = false) private Instant updatedAt;
     @Version @Column(name = "version", nullable = false) private long version;
-    protected GenerationJob() {}
+    public GenerationJob() {}
+    public String getModelName() { return modelName; }
+    public String getErrorMessage() { return errorMessage; }
+
+    public void setId(UUID value) { this.id = value; }
+    public void setCustomerId(UUID value) { this.customerId = value; }
+    public void setCakeRequestId(UUID value) { this.cakeRequestId = value; }
+    public void setStatus(GenerationStatus value) { this.status = value; }
+    public void setModelName(String value) { this.modelName = value; }
+    public void setGenerationParameters(GenerationParameters value) { this.generationParameters = value; }
+    public void setErrorMessage(String value) { this.errorMessage = value; }
+    public void setStartedAt(Instant value) { this.startedAt = value; }
+    public void setCompletedAt(Instant value) { this.completedAt = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

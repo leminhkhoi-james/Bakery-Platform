@@ -1,12 +1,11 @@
 package com.se193262.chatservice.feature.conversation;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
@@ -15,11 +14,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "conversation_participants")
-public class ConversationParticipant {
+public class ConversationParticipant extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
 
     @Column(name = "conversation_id", nullable = false)
     private UUID conversationId;
@@ -40,7 +36,7 @@ public class ConversationParticipant {
     @Column(name = "last_read_at")
     private Instant lastReadAt;
 
-    protected ConversationParticipant() {
+    public ConversationParticipant() {
     }
 
     public ConversationParticipant(UUID conversationId, UUID userId, ParticipantType participantType) {
@@ -69,4 +65,10 @@ public class ConversationParticipant {
     public Instant getLastReadAt() { return lastReadAt; }
     public Instant getJoinedAt() { return joinedAt; }
     public Instant getLeftAt() { return leftAt; }
+
+    public void setConversationId(UUID value) { this.conversationId = value; }
+    public void setUserId(UUID value) { this.userId = value; }
+    public void setParticipantType(ParticipantType value) { this.participantType = value; }
+    public void setJoinedAt(Instant value) { this.joinedAt = value; }
+    public void setLastReadAt(Instant value) { this.lastReadAt = value; }
 }

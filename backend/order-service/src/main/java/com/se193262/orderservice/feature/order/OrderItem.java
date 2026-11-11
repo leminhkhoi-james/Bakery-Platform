@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -19,11 +18,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItem {
+public class OrderItem extends com.se193262.platform.persistence.UuidEntity {
 
-    @Id
-    @UuidGenerator
-    private UUID id;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
@@ -58,7 +55,7 @@ public class OrderItem {
     @Column(name = "line_total", nullable = false, precision = 12, scale = 2)
     private BigDecimal lineTotal;
 
-    protected OrderItem() {
+    public OrderItem() {
     }
 
     static OrderItem snapshot(
@@ -97,4 +94,14 @@ public class OrderItem {
     public int getQuantity() { return quantity; }
     public BigDecimal getUnitPrice() { return unitPrice; }
     public BigDecimal getLineTotal() { return lineTotal; }
+
+    public void setCustomerOrder(CustomerOrder value) { this.customerOrder = value; }
+    public void setSourceProductId(UUID value) { this.sourceProductId = value; }
+    public void setItemType(OrderItemType value) { this.itemType = value; }
+    public void setNameSnapshot(String value) { this.nameSnapshot = value; }
+    public void setDescriptionSnapshot(String value) { this.descriptionSnapshot = value; }
+    public void setConfigurationSnapshot(Map<String, Object> value) { this.configurationSnapshot = value; }
+    public void setQuantity(int value) { this.quantity = value; }
+    public void setUnitPrice(BigDecimal value) { this.unitPrice = value; }
+    public void setLineTotal(BigDecimal value) { this.lineTotal = value; }
 }

@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.subscription.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import com.se193262.subscriptionservice.feature.plan.entity.SubscriptionPlan;
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrder;
 import jakarta.persistence.Column;
@@ -7,9 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -26,10 +25,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "bakery_subscriptions")
-public class BakerySubscription {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+public class BakerySubscription extends UuidEntity {
     @Column(name = "bakery_id", nullable = false)
     private UUID bakeryId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -59,7 +55,7 @@ public class BakerySubscription {
     @Version @Column(name = "version", nullable = false)
     private long version;
 
-    protected BakerySubscription() {}
+    public BakerySubscription() {}
 
     public BakerySubscription(SubscriptionOrder order, Instant start, Instant end, Instant now) {
         this.bakeryId = order.getBakeryId();
@@ -88,4 +84,15 @@ public class BakerySubscription {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setBakeryId(UUID value) { this.bakeryId = value; }
+    public void setPlan(SubscriptionPlan value) { this.plan = value; }
+    public void setSourceOrder(SubscriptionOrder value) { this.sourceOrder = value; }
+    public void setStatus(SubscriptionStatus value) { this.status = value; }
+    public void setPeriodStart(Instant value) { this.periodStart = value; }
+    public void setPeriodEnd(Instant value) { this.periodEnd = value; }
+    public void setActivatedAt(Instant value) { this.activatedAt = value; }
+    public void setFeaturesSnapshot(Map<String, String> value) { this.featuresSnapshot = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

@@ -42,7 +42,7 @@ public class CakePreference {
     @Column(name = "extra_options", nullable = false, columnDefinition = "jsonb")
     private Map<String, Object> extraOptions = new LinkedHashMap<>();
 
-    protected CakePreference() {}
+    public CakePreference() {}
 
     public static CakePreference create() {
         return new CakePreference();

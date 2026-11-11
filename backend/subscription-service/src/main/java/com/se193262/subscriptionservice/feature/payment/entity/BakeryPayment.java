@@ -1,14 +1,13 @@
 package com.se193262.subscriptionservice.feature.payment.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,10 +20,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "bakery_payments")
-public class BakeryPayment {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+public class BakeryPayment extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subscription_order_id", nullable = false)
     private SubscriptionOrder order;
@@ -60,7 +56,7 @@ public class BakeryPayment {
     @Version @Column(name = "version", nullable = false)
     private long version;
 
-    protected BakeryPayment() {}
+    public BakeryPayment() {}
 
     public BakeryPayment(SubscriptionOrder order, UUID submittedByUserId, String paymentMethod,
                          String paymentReference, String idempotencyKeyHash,
@@ -107,4 +103,17 @@ public class BakeryPayment {
     public String getReviewNote() { return reviewNote; }
     public Instant getSubmittedAt() { return submittedAt; }
     public Instant getReviewedAt() { return reviewedAt; }
+
+    public void setOrder(SubscriptionOrder value) { this.order = value; }
+    public void setSubmittedByUserId(UUID value) { this.submittedByUserId = value; }
+    public void setPaymentMethod(String value) { this.paymentMethod = value; }
+    public void setPaymentReference(String value) { this.paymentReference = value; }
+    public void setAmount(BigDecimal value) { this.amount = value; }
+    public void setCurrency(String value) { this.currency = value; }
+    public void setStatus(PaymentStatus value) { this.status = value; }
+    public void setReviewedByAdminId(UUID value) { this.reviewedByAdminId = value; }
+    public void setReviewNote(String value) { this.reviewNote = value; }
+    public void setSubmittedAt(Instant value) { this.submittedAt = value; }
+    public void setReviewedAt(Instant value) { this.reviewedAt = value; }
+    public void setVerificationSource(String value) { this.verificationSource = value; }
 }

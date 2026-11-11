@@ -73,7 +73,7 @@ public class CakeRequest {
     @Column(name = "version", nullable = false)
     private Long version;
 
-    protected CakeRequest() {}
+    public CakeRequest() {}
 
     public static CakeRequest create() {
         return new CakeRequest();

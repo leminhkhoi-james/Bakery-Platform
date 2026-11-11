@@ -6,6 +6,9 @@ import java.time.Instant;
 import java.util.*;
 
 public interface GenerationJobRepository extends Repository<GenerationJob, UUID> {
+    boolean existsById(UUID id);
+    Optional<GenerationJob> findById(UUID id);
+    <S extends GenerationJob> S save(S job);
     interface JobView {
         UUID getId();
         UUID getCustomerId();

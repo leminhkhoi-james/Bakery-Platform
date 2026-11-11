@@ -54,7 +54,7 @@ public class Offer {
     @Column(name = "version", nullable = false)
     private Long version;
 
-    protected Offer() {}
+    public Offer() {}
 
     public static Offer create() {
         return new Offer();

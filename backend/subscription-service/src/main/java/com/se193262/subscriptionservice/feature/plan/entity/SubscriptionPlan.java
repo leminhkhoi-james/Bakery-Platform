@@ -1,5 +1,7 @@
 package com.se193262.subscriptionservice.feature.plan.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -7,9 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
@@ -25,10 +24,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "subscription_plans")
-public class SubscriptionPlan {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+public class SubscriptionPlan extends UuidEntity {
 
     @Column(name = "code", nullable = false, unique = true, length = 50)
     private String code;
@@ -57,7 +53,7 @@ public class SubscriptionPlan {
     @Version @Column(name = "version", nullable = false)
     private long version;
 
-    protected SubscriptionPlan() {}
+    public SubscriptionPlan() {}
 
     public SubscriptionPlan(String code, String name, BigDecimal monthlyPrice) {
         this.code = code;
@@ -94,4 +90,14 @@ public class SubscriptionPlan {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setCode(String value) { this.code = value; }
+    public void setName(String value) { this.name = value; }
+    public void setMonthlyPrice(BigDecimal value) { this.monthlyPrice = value; }
+    public void setCurrency(String value) { this.currency = value; }
+    public void setBillingPeriodMonths(int value) { this.billingPeriodMonths = value; }
+    public void setStatus(PlanStatus value) { this.status = value; }
+    public void setFeatures(Map<String, String> value) { this.features = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

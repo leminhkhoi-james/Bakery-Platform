@@ -1,14 +1,13 @@
 package com.se193262.bakeryservice.feature.member.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import com.se193262.bakeryservice.feature.bakery.entity.Bakery;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,12 +18,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "bakery_members")
-public class BakeryMember {
+public class BakeryMember extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "bakery_id", nullable = false)
@@ -52,7 +47,7 @@ public class BakeryMember {
     @Column(name = "joined_at", nullable = false, updatable = false)
     private Instant joinedAt;
 
-    protected BakeryMember() {
+    public BakeryMember() {
     }
 
     public BakeryMember(Bakery bakery, UUID userId, BakeryMemberRole memberRole) {
@@ -80,4 +75,11 @@ public class BakeryMember {
     public BakeryMemberRole getMemberRole() { return memberRole; }
     public BakeryMemberStatus getStatus() { return status; }
     public Instant getJoinedAt() { return joinedAt; }
+
+    public void setBakery(Bakery value) { this.bakery = value; }
+    public void setUserId(UUID value) { this.userId = value; }
+    public void setMemberRole(BakeryMemberRole value) { this.memberRole = value; }
+    public void setStatus(BakeryMemberStatus value) { this.status = value; }
+    public void setDisplayNameSnapshot(String value) { this.displayNameSnapshot = value; }
+    public void setOwnerActivationPending(boolean value) { this.ownerActivationPending = value; }
 }

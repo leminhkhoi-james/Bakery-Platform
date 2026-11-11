@@ -52,7 +52,7 @@ public class DeliveryAddressSnapshot {
     @Column(name = "delivery_note")
     private String deliveryNote;
 
-    protected DeliveryAddressSnapshot() {
+    public DeliveryAddressSnapshot() {
     }
 
     static DeliveryAddressSnapshot snapshot(
@@ -91,4 +91,13 @@ public class DeliveryAddressSnapshot {
     public BigDecimal getLatitude() { return latitude; }
     public BigDecimal getLongitude() { return longitude; }
     public String getDeliveryNote() { return deliveryNote; }
+
+    public void setCustomerOrder(CustomerOrder value) { this.customerOrder = value; }
+    public void setRecipientName(String value) { this.recipientName = value; }
+    public void setRecipientPhone(String value) { this.recipientPhone = value; }
+    public void setAddressLine(String value) { this.addressLine = value; }
+    public void setWard(String value) { this.ward = value; }
+    public void setDistrict(String value) { this.district = value; }
+    public void setCity(String value) { this.city = value; }
+    public void setDeliveryNote(String value) { this.deliveryNote = value; }
 }

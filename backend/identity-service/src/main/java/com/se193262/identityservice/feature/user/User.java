@@ -1,14 +1,13 @@
 package com.se193262.identityservice.feature.user;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -23,12 +22,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email;
@@ -70,7 +65,7 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private CustomerProfile customerProfile;
 
-    protected User() {
+    public User() {
     }
 
     public User(
@@ -163,4 +158,13 @@ public class User {
     public CustomerProfile getCustomerProfile() {
         return customerProfile;
     }
+
+    public void setEmail(String value) { this.email = value; }
+    public void setPasswordHash(String value) { this.passwordHash = value; }
+    public void setDisplayName(String value) { this.displayName = value; }
+    public void setPhoneNumber(String value) { this.phoneNumber = value; }
+    public void setStatus(UserStatus value) { this.status = value; }
+    public void setEmailVerified(boolean value) { this.emailVerified = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
+    public void setUpdatedAt(Instant value) { this.updatedAt = value; }
 }

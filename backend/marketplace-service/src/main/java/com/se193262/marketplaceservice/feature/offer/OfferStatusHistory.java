@@ -30,7 +30,7 @@ public class OfferStatusHistory {
     @Column(name = "changed_at", nullable = false)
     private Instant changedAt;
 
-    protected OfferStatusHistory() {}
+    public OfferStatusHistory() {}
 
     public static OfferStatusHistory create() {
         return new OfferStatusHistory();

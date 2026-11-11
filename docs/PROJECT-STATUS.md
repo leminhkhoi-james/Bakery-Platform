@@ -2,6 +2,32 @@
 
 > Cập nhật gần nhất: 2026-11-11.
 
+## Java DataInit cho dữ liệu mẫu — 2026-11-11
+
+- Cả 7 service nghiệp vụ tự chạy `DataInit` bằng `CommandLineRunner` mỗi lần khởi
+  động, không cần profile/biến bật riêng. Dùng entity → setter → repository.save
+  trong transaction riêng từng DB; không dùng SQL/JdbcClient trong seed.
+- Bộ dữ liệu: 15 tài khoản mật khẩu khởi tạo 123123; 6 tiệm, 12 sản phẩm cùng option,
+  add-on/vùng giao/giờ mở cửa; 5 đơn gói/4 chứng từ/3 kỳ gói; 8 yêu cầu/9 báo giá;
+  9 đơn bánh/2 đánh giá; 4 hội thoại/12 tin; 4 job AI đã kết thúc. Tên và nội dung
+  tự nhiên, tài khoản dễ nhớ admin/user/shop/newshop tại gmail.com. Xem DATA-INIT.md.
+- UUID mẫu khớp liên service. `UuidEntity` chỉ hỗ trợ kỹ thuật ID: ID thật giữ null
+  tới persist; tạo bản ghi thường vẫn sinh UUID, giữ semantics merge/optimistic
+  locking. Thêm setter và JPA mapping/repository còn thiếu, không đổi schema/API/FE.
+- Chạy lại chỉ thêm bản ghi còn thiếu và đổi nội dung seed cũ còn khớp chính xác
+  giá trị gốc. Giữ mật khẩu/role/giá/trạng thái và nội dung đã tự chỉnh; không phục
+  hồi tin nhắn đã xóa. Email mẫu trùng UUID khác bị từ chối trước khi ghi dữ liệu.
+  Chạy một instance DataInit mỗi service/DB. Không tự gia hạn kỳ gói đã hết hạn.
+- Không tạo ảnh/object key giả, không gọi VNPay hoặc AI. Ảnh bổ sung sau. Bộ SQL,
+  ZIP và script nhập SQL cũ giữ local; không đưa vào commit. `.env` thật/key/secret
+  không được theo dõi trong Git; template không cần dòng bật profile seed.
+- Kiểm chứng: package 7 service qua; kiểm tra PostgreSQL 17 tạm với migration/schema
+  thật qua, gồm chạy lại không trùng, cập nhật nhãn seed cũ và giữ nội dung tùy chỉnh,
+  tham chiếu UUID, tổng tiền, email collision và AI không gọi provider. Tạo/cập nhật
+  User/Bakery thường vẫn sinh UUID/tăng version; save bản ghi đã xóa không tạo lại.
+  DB tạm đã xóa. Sau khi bỏ profile, kiểm tra đủ 7 runner không có điều kiện profile;
+  không chạy lại full test suite hoặc restart ứng dụng/ghi seed vào DB đang dùng.
+
 ## Gộp env backend local — 2026-11-11
 
 - Theo yêu cầu người dùng, gộp 8 module .env thành backend/.env (Git ignored), mẫu chung backend/.env.example không có secret thật. Xóa các .env riêng sau khi backup vào .local/backups/shared-env-*. Cấu hình local khác/root Docker env và toàn bộ database không đổi.

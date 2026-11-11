@@ -1,11 +1,10 @@
 package com.se193262.bakeryservice.feature.bakery.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -15,12 +14,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "service_areas")
-public class ServiceArea {
+public class ServiceArea extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "bakery_id", nullable = false)
@@ -41,7 +36,7 @@ public class ServiceArea {
     @Column(name = "active", nullable = false)
     private boolean isActive = true;
 
-    protected ServiceArea() {
+    public ServiceArea() {
     }
 
     public ServiceArea(Bakery bakery, String city, String district) {
@@ -66,4 +61,11 @@ public class ServiceArea {
     public BigDecimal getDeliveryFee() { return deliveryFee; }
     public BigDecimal getMinimumOrder() { return minimumOrder; }
     public boolean isActive() { return isActive; }
+
+    public void setBakery(Bakery value) { this.bakery = value; }
+    public void setCity(String value) { this.city = value; }
+    public void setDistrict(String value) { this.district = value; }
+    public void setDeliveryFee(BigDecimal value) { this.deliveryFee = value; }
+    public void setMinimumOrder(BigDecimal value) { this.minimumOrder = value; }
+    public void setActive(boolean value) { this.isActive = value; }
 }

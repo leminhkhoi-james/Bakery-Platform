@@ -1,12 +1,11 @@
 package com.se193262.bakeryservice.feature.bakery.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,12 +16,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "bakeries")
-public class Bakery {
+public class Bakery extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @Column(name = "name", nullable = false, length = 180)
     private String name;
@@ -58,7 +53,7 @@ public class Bakery {
     @Column(name = "version", nullable = false)
     private long version;
 
-    protected Bakery() {
+    public Bakery() {
     }
 
     public Bakery(String name, String phoneNumber, String email) {
@@ -106,4 +101,10 @@ public class Bakery {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setName(String value) { this.name = value; }
+    public void setDescription(String value) { this.description = value; }
+    public void setPhoneNumber(String value) { this.phoneNumber = value; }
+    public void setEmail(String value) { this.email = value; }
+    public void setStatus(BakeryStatus value) { this.status = value; }
 }

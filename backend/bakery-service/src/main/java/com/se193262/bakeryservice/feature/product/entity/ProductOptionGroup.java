@@ -1,13 +1,12 @@
 package com.se193262.bakeryservice.feature.product.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -16,12 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "product_option_groups")
-public class ProductOptionGroup {
+public class ProductOptionGroup extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -46,7 +41,7 @@ public class ProductOptionGroup {
     @Column(name = "display_order", nullable = false)
     private int displayOrder;
 
-    protected ProductOptionGroup() {
+    public ProductOptionGroup() {
     }
 
     public ProductOptionGroup(Product product, String name, SelectionType selectionType) {
@@ -73,4 +68,12 @@ public class ProductOptionGroup {
     public int getMinimumSelections() { return minimumSelections; }
     public int getMaximumSelections() { return maximumSelections; }
     public int getDisplayOrder() { return displayOrder; }
+
+    public void setProduct(Product value) { this.product = value; }
+    public void setName(String value) { this.name = value; }
+    public void setSelectionType(SelectionType value) { this.selectionType = value; }
+    public void setRequired(boolean value) { this.isRequired = value; }
+    public void setMinimumSelections(int value) { this.minimumSelections = value; }
+    public void setMaximumSelections(int value) { this.maximumSelections = value; }
+    public void setDisplayOrder(int value) { this.displayOrder = value; }
 }

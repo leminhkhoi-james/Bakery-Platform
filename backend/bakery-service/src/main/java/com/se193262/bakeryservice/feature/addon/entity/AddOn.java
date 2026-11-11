@@ -1,12 +1,11 @@
 package com.se193262.bakeryservice.feature.addon.entity;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import com.se193262.bakeryservice.feature.bakery.entity.Bakery;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -20,12 +19,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "add_ons")
-public class AddOn {
+public class AddOn extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "bakery_id", nullable = false)
@@ -61,7 +56,7 @@ public class AddOn {
     @Column(name = "version", nullable = false)
     private long version;
 
-    protected AddOn() {
+    public AddOn() {
     }
 
     public AddOn(Bakery bakery, String name, String category, BigDecimal price) {
@@ -96,4 +91,10 @@ public class AddOn {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public long getVersion() { return version; }
+
+    public void setBakery(Bakery value) { this.bakery = value; }
+    public void setName(String value) { this.name = value; }
+    public void setCategory(String value) { this.category = value; }
+    public void setPrice(BigDecimal value) { this.price = value; }
+    public void setActive(boolean value) { this.isActive = value; }
 }

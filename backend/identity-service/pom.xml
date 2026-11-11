@@ -15,6 +15,11 @@
     <name>Identity Service</name>
 
     <dependencies>
+        <dependency>
+            <groupId>com.se193262</groupId>
+            <artifactId>platform-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

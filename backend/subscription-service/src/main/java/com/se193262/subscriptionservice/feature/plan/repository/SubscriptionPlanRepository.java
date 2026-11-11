@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SubscriptionPlanRepository extends JpaRepository<SubscriptionPlan, UUID> {
+    Optional<SubscriptionPlan> findByCode(String code);
     List<SubscriptionPlan> findAllByStatusOrderByMonthlyPriceAsc(PlanStatus status);
     Optional<SubscriptionPlan> findByIdAndStatus(UUID id, PlanStatus status);
     boolean existsByCode(String code);

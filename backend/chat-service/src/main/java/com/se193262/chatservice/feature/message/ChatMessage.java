@@ -1,12 +1,11 @@
 package com.se193262.chatservice.feature.message;
 
+import com.se193262.platform.persistence.UuidEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
@@ -15,11 +14,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "messages")
-public class ChatMessage {
+public class ChatMessage extends UuidEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
 
     @Column(name = "conversation_id", nullable = false)
     private UUID conversationId;
@@ -49,7 +45,7 @@ public class ChatMessage {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected ChatMessage() {
+    public ChatMessage() {
     }
 
     public ChatMessage(UUID conversationId, UUID senderParticipantId, UUID clientMessageId,
@@ -78,4 +74,12 @@ public class ChatMessage {
     public Instant getEditedAt() { return editedAt; }
     public Instant getDeletedAt() { return deletedAt; }
     public Instant getCreatedAt() { return createdAt; }
+
+    public void setConversationId(UUID value) { this.conversationId = value; }
+    public void setSenderParticipantId(UUID value) { this.senderParticipantId = value; }
+    public void setClientMessageId(UUID value) { this.clientMessageId = value; }
+    public void setPayloadFingerprint(String value) { this.payloadFingerprint = value; }
+    public void setMessageType(MessageType value) { this.messageType = value; }
+    public void setContent(String value) { this.content = value; }
+    public void setCreatedAt(Instant value) { this.createdAt = value; }
 }
