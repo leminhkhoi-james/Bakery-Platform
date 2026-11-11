@@ -53,6 +53,13 @@ storage:
 
 subscription:
   order-expiry-hours: 24
+  vnpay:
+    enabled: ${SUBSCRIPTION_VNPAY_ENABLED:false}
+    tmn-code: ${SUBSCRIPTION_VNPAY_TMN_CODE:}
+    hash-secret: ${SUBSCRIPTION_VNPAY_HASH_SECRET:}
+    payment-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    return-url: ${SUBSCRIPTION_VNPAY_RETURN_URL:}
+    timeout-minutes: 15
 
 server:
   port: ${SERVER_PORT:8084}

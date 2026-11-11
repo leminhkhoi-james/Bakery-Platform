@@ -34,11 +34,11 @@ test('User delete opens a dialog; cancellation sends nothing; confirmation sends
   const calls = []; let reloads = 0
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...person, status: 'DELETED' } }) }
   const render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }, () => reloads++) })
-  button(render(), 'Xóa').props.onClick()
+  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick()
   let dialog = nodes(render()).find((node) => node.type === UserDecision)
   assert.equal(calls.length, 0); assert.equal(dialog.props.person.email, person.email)
   dialog.props.onClose(); assert.equal(calls.length, 0); assert.ok(!nodes(render()).some((node) => node.type === UserDecision))
-  button(render(), 'Xóa').props.onClick(); dialog = nodes(render()).find((node) => node.type === UserDecision)
+  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick(); dialog = nodes(render()).find((node) => node.type === UserDecision)
   await dialog.props.onConfirm()
   assert.equal(calls.length, 1); assert.equal(calls[0].options.method, 'PATCH')
   assert.ok(String(calls[0].url).endsWith('/admin/users/' + id + '/status'))
@@ -49,7 +49,7 @@ test('Failed delete keeps the selected person and dialog; double confirm is supp
   let finish, calls = 0
   globalThis.fetch = async () => { calls++; return new Promise((resolve) => { finish = () => resolve(Response.json({ message: 'Không thể xóa.' }, { status: 500 })) }) }
   const render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }) })
-  button(render(), 'Xóa').props.onClick(); const dialog = nodes(render()).find((node) => node.type === UserDecision)
+  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick(); const dialog = nodes(render()).find((node) => node.type === UserDecision)
   const pending = dialog.props.onConfirm(); await dialog.props.onConfirm(); assert.equal(calls, 1)
   finish(); await pending
   const retained = nodes(render()).find((node) => node.type === UserDecision)
@@ -168,7 +168,7 @@ test('Payment directory enriches from existing order/bakery routes and preserves
 })
 test('Customer cannot open user mutations or payment review decisions', () => {
   let render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }) }, ['CUSTOMER'])
-  for (const label of ['Phân quyền', 'Xóa', 'Khóa']) assert.equal(button(render(), label).props.disabled, true)
+  assert.equal(nodes(render()).find(node => node.type?.name === 'UserRowActions').props.disabled, true)
   render = harness(PaymentReview, { payment: { id, subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 199000, currency: 'VND' } }, { loadPaymentContext: ready({ order: { id: orderId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' } }) }, ['CUSTOMER'])
   assert.ok(!button(render(), 'Phê duyệt thanh toán')); assert.ok(!button(render(), 'Từ chối'))
 })

@@ -1,3 +1,4 @@
+import UserRowActions from './UserRowActions.jsx'
 import React, { useRef, useState } from 'react'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
@@ -72,19 +73,16 @@ export function UserDecision({ person, action, busy, error, onClose, onConfirm, 
 function userRow({ person, actor, disabled, onChoose, stt }) {
   const restriction = userRestriction(person, actor)
   const toggleable = ['ACTIVE', 'BLOCKED'].includes(person.status)
-  const action = (name, icon, label, className = 'sc-button sc-action-button--secondary') =>
-    <button className={className} disabled={disabled || Boolean(restriction)} title={restriction || undefined} onClick={() => onChoose(person, name)}><Icon name={icon} />{label}</button>
   return <tr key={person.id}>
     <td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>{stt}</td>
     <td data-label="Người dùng"><strong>{reviewText(userName(person)) || 'Chưa cập nhật tên'}</strong>{restriction && <small>{restriction}</small>}</td>
     <td data-label="Liên hệ">{reviewText(person.email) || 'Chưa có email'}</td>
     <td data-label="Vai trò">{person.roles.map((role) => uiLabel(role, 'Chưa xác định')).join(', ')}</td>
     <td data-label="Trạng thái"><StatusBadge status={person.status} label={userStatus(person.status)} /></td>
-    <td className="sc-table-actions"><div className="sc-action-row">
-      {action('roles', 'manage_accounts', 'Phân quyền')}
-      {toggleable && action('status', person.status === 'ACTIVE' ? 'lock' : 'lock_open', person.status === 'ACTIVE' ? 'Khóa' : 'Mở khóa', 'sc-button sc-action-button--secondary sc-user-status-action')}
-      {action('delete', 'delete', 'Xóa', 'sc-button sc-action-button--danger')}
-    </div></td>
+    <td className="sc-table-actions"><UserRowActions person={person} disabled={disabled || Boolean(restriction)}
+      roles={{ label: 'Phân quyền', icon: 'manage_accounts', onClick: () => onChoose(person, 'roles') }}
+      status={toggleable ? { label: person.status === 'ACTIVE' ? 'Khóa tài khoản' : 'Mở khóa tài khoản', icon: person.status === 'ACTIVE' ? 'lock' : 'lock_open', onClick: () => onChoose(person, 'status') } : null}
+      remove={{ label: 'Xóa người dùng', icon: 'delete', danger: true, onClick: () => onChoose(person, 'delete') }} /></td>
   </tr>
 }
 
@@ -115,7 +113,7 @@ export function UserDirectory() {
       <label>Trạng thái<select className={inputClass} {...field('status')}><option value="">Tất cả trạng thái</option><option value="ACTIVE">Đang hoạt động</option><option value="BLOCKED">Đã khóa</option><option value="DELETED">Đã xóa</option></select></label>
       <button className={buttonClass} disabled={locked}><Icon name="search" />Lọc</button>
     </form>
-    <ApiState resource={resource}>{resource.data && (resource.data.result.length ? <DataTable label="Danh sách người dùng" className="sc-admin-fixed-table sc-admin-users-table"><colgroup><col style={{ width: '60px' }} />{[20, 24, 18, 14, 24].map((width, index) => <col key={index} style={{ width: width + '%' }} />)}</colgroup><thead><tr><th style={{ width: '60px', textAlign: 'center' }}>STT</th><th>Người dùng</th><th>Liên hệ</th><th>Vai trò</th><th>Trạng thái</th><th className="sc-table-actions">Thao tác</th></tr></thead><tbody>
+    <ApiState resource={resource}>{resource.data && (resource.data.result.length ? <DataTable label="Danh sách người dùng" className="sc-admin-fixed-table sc-admin-users-table"><colgroup><col style={{ width: '60px' }} />{[23, 25, 18, 16, 18].map((width, index) => <col key={index} style={{ width: width + '%' }} />)}</colgroup><thead><tr><th style={{ width: '60px', textAlign: 'center' }}>STT</th><th>Người dùng</th><th>Liên hệ</th><th>Vai trò</th><th>Trạng thái</th><th className="sc-table-actions">Thao tác</th></tr></thead><tbody>
       {resource.data.result.map((person, index) => userRow({ person, actor: user, disabled: locked || !canManage, onChoose: choose, stt: ((resource.data.meta?.page || 1) - 1) * (resource.data.meta?.pageSize || 12) + index + 1 }))}
     </tbody></DataTable> : <EmptyPanel title="Chưa có người dùng phù hợp." icon="group" />)}{resource.data?.meta && <CatalogPagination meta={resource.data.meta} onPage={setPage} />}</ApiState>
     {editor && canManage && <RoleForm key={editor.person.id} person={editor.person} busy={busy} error={error} onClose={() => { setEditor(null); setError(null) }} onSave={(next) => mutate(() => updateUserRoles(editor.person, next, user), 'Đã cập nhật vai trò người dùng.')} />}

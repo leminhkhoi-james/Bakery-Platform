@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BakeryPaymentService {
     boolean isSandboxEnabled();
+    void settleVnpay(UUID orderId, UUID userId, String transactionNo, UUID attemptId);
 
     BakeryPaymentDto submit(UUID orderId, UUID userId, String idempotencyKey,
                             BakeryPaymentDto request, MultipartFile proof);

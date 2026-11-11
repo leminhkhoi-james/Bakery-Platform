@@ -16,6 +16,7 @@ import com.se193262.subscriptionservice.feature.subscriptionorder.repository.Sub
 import com.se193262.subscriptionservice.infrastructure.client.BakeryAccessClient;
 import com.se193262.subscriptionservice.infrastructure.storage.PaymentProofStorage;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,12 +46,29 @@ import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentReviewTest {
+    @Test
+    @DisplayName("Unapproved bakery cannot upload or submit manual payment evidence")
+    void submit_unapprovedBakery_rejectsBeforeUpload() {
+        UUID orderId = UUID.randomUUID(), userId = UUID.randomUUID();
+        var plan = new SubscriptionPlan("BASIC", "Basic", BigDecimal.TEN);
+        var order = new SubscriptionOrder("SUB-PENDING", UUID.randomUUID(), plan, userId,
+                Instant.now().plusSeconds(3600));
+        when(orders.findById(orderId)).thenReturn(Optional.of(order));
+        org.mockito.Mockito.doThrow(new AppException(HttpStatus.CONFLICT, "Bakery profile must be approved"))
+                .when(bakeryClient).requireApprovedBakery(order.getBakeryId());
+        var request = new BakeryPaymentDto(null, null, null, "BANK_TRANSFER", "FT-TEST",
+                BigDecimal.TEN, "VND", null, null, null, null, null);
+        assertThatThrownBy(() -> service.submit(orderId, userId, UUID.randomUUID().toString(), request, null))
+                .hasMessageContaining("must be approved");
+        verifyNoInteractions(transactions, payments, proofStorage);
+    }
     @Mock BakeryPaymentRepository payments;
     @Mock SubscriptionOrderRepository orders;
     @Mock BakerySubscriptionRepository subscriptions;
     @Mock BakeryAccessClient bakeryClient;
     @Mock PaymentProofStorage proofStorage;
     @Mock TransactionTemplate transactions;
+    @Mock com.se193262.subscriptionservice.feature.payment.repository.VnpayAttemptRepository attempts;
     @InjectMocks BakeryPaymentServiceImpl service;
 
     @Test
@@ -65,6 +83,7 @@ class PaymentReviewTest {
         UUID orderId = UUID.randomUUID();
         ReflectionTestUtils.setField(order, "id", orderId);
         when(orders.findById(orderId)).thenReturn(Optional.of(order));
+        when(orders.findLockedById(orderId)).thenReturn(Optional.of(order));
         when(payments.saveAndFlush(any(BakeryPayment.class))).thenAnswer(invocation -> {
             BakeryPayment payment = invocation.getArgument(0);
             ReflectionTestUtils.setField(payment, "id", UUID.randomUUID());

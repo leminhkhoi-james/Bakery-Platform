@@ -1,3 +1,4 @@
+import UserRowActions from './UserRowActions.jsx'
 import { unifiedEnabled, recordSource } from '../../../services/unifiedDataService.js'
 import { RoleForm } from './AdminUsersPage.jsx'
 import { updateUserRoles } from '../../../services/adminUserService.js'
@@ -169,11 +170,11 @@ export function LocalUserDirectory() {
             <DataTable label="Danh sách người dùng" className="sc-admin-fixed-table sc-admin-users-table">
               <colgroup>
                 <col style={{ width: '60px' }} />
-                <col style={{ width: '22%' }} />
-                <col style={{ width: '22%' }} />
+                <col style={{ width: '23%' }} />
+                <col style={{ width: '25%' }} />
+                <col style={{ width: '18%' }} />
                 <col style={{ width: '16%' }} />
-                <col style={{ width: '14%' }} />
-                <col style={{ width: '26%' }} />
+                <col style={{ width: '18%' }} />
               </colgroup>
               <thead>
                 <tr>
@@ -207,36 +208,11 @@ export function LocalUserDirectory() {
                       <td data-label="Vai trò">{person.roles.map((r) => uiLabel(r, 'Chưa xác định')).join(', ')}</td>
                       <td data-label="Trạng thái"><StatusBadge status={person.status} label={userStatus(person.status)} /></td>
                       <td className="sc-table-actions">
-                        <div className="sc-action-row">
-                          {unifiedEnabled() && recordSource(person) === 'api' && <button className="sc-button sc-action-button--secondary" disabled={locked || !canManage || Boolean(userRestriction(person,user,'roles'))} onClick={() => setRolePerson(person)}>Vai trò</button>}
-                          <button
-                            className="sc-button sc-action-button--secondary"
-                            disabled={locked || !canManage || !editable || Boolean(editReason)}
-                            title={editReason || (!editable ? 'Chỉnh sửa hồ sơ hiện chưa khả dụng.' : undefined)}
-                            onClick={() => choose(person, 'edit')}
-                          >
-                            <Icon name="edit" />Sửa
-                          </button>
-                          {['ACTIVE', 'SUSPENDED', 'BLOCKED'].includes(person.status) && (
-                            <button
-                              className="sc-button sc-action-button--secondary sc-user-status-action"
-                              disabled={locked || !canManage || Boolean(statusReason)}
-                              title={statusReason || undefined}
-                              onClick={() => choose(person, 'status')}
-                            >
-                              <Icon name={person.status === 'ACTIVE' ? 'pause_circle' : 'play_circle'} />
-                              {person.status === 'ACTIVE' ? 'Tạm ngưng' : 'Kích hoạt'}
-                            </button>
-                          )}
-                          <button
-                            className="sc-button sc-action-button--danger"
-                            disabled={locked || !canManage || !editable || Boolean(restriction)}
-                            title={restriction || (!editable ? 'Xóa hồ sơ hiện chưa khả dụng.' : undefined)}
-                            onClick={() => choose(person, 'delete')}
-                          >
-                            <Icon name="delete" />Xóa
-                          </button>
-                        </div>
+                        <UserRowActions person={person} disabled={locked || !canManage || Boolean(accountRestriction)}
+                          edit={{ label: 'Chỉnh sửa', icon: 'edit', reason: editReason || (!editable ? 'Chỉnh sửa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'edit') }}
+                          roles={unifiedEnabled() && recordSource(person) === 'api' ? { label: 'Phân quyền', icon: 'manage_accounts', reason: userRestriction(person, user, 'roles'), onClick: () => { setError(null); setNotice(''); setRolePerson(person) } } : null}
+                          status={['ACTIVE', 'SUSPENDED', 'BLOCKED'].includes(person.status) ? { label: person.status === 'ACTIVE' ? 'Tạm ngưng tài khoản' : 'Kích hoạt tài khoản', icon: person.status === 'ACTIVE' ? 'pause_circle' : 'play_circle', reason: statusReason, onClick: () => choose(person, 'status') } : null}
+                          remove={{ label: 'Xóa người dùng', icon: 'delete', danger: true, reason: restriction || (!editable ? 'Xóa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'delete') }} />
                       </td>
                     </tr>
                   )

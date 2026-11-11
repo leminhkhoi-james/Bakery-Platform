@@ -150,7 +150,7 @@ test('Admin work area never promotes pending or overdue fulfilment orders into i
 
 test('All seven Admin pages share a single header title, description and account identity without the portal kicker', () => {
   setup()
-  const headings = { 'admin-dashboard': 'Tổng quan hệ thống', 'admin-vendors': 'Quản lý tiệm bánh', 'admin-orders': 'Quản lý đơn hàng', 'admin-plans': 'Quản lý gói dịch vụ', 'admin-payments': 'Duyệt chứng từ', 'admin-moderation': 'Kiểm duyệt nội dung', 'admin-users': 'Quản lý người dùng' }
+  const headings = { 'admin-dashboard': 'Tổng quan hệ thống', 'admin-vendors': 'Quản lý tiệm bánh', 'admin-orders': 'Quản lý đơn hàng', 'admin-plans': 'Quản lý gói dịch vụ', 'admin-payments': 'Đơn mua gói', 'admin-moderation': 'Kiểm duyệt nội dung', 'admin-users': 'Quản lý người dùng' }
   for (const [activeTab, title] of Object.entries(headings)) {
     const html = render(AdminFrame, { activeTab, onNavigate() {}, children: 'Nội dung trang' })
     assert.equal((html.match(/<h1\b/g) || []).length, 1)

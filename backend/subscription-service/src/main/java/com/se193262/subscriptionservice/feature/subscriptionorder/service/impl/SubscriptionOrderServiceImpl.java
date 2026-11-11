@@ -7,6 +7,11 @@ import com.se193262.subscriptionservice.feature.plan.entity.SubscriptionPlan;
 import com.se193262.subscriptionservice.feature.plan.repository.SubscriptionPlanRepository;
 import com.se193262.subscriptionservice.feature.subscription.repository.BakerySubscriptionRepository;
 import com.se193262.subscriptionservice.feature.subscriptionorder.dto.SubscriptionOrderDto;
+import com.se193262.subscriptionservice.feature.subscriptionorder.dto.AdminSubscriptionOrderDto;
+import com.se193262.subscriptionservice.feature.subscriptionorder.dto.AdminSubscriptionOrderFilter;
+import com.se193262.subscriptionservice.feature.payment.entity.BakeryPayment;
+import com.se193262.subscriptionservice.feature.payment.entity.PaymentStatus;
+import org.springframework.data.jpa.domain.Specification;
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrder;
 import com.se193262.subscriptionservice.feature.subscriptionorder.entity.SubscriptionOrderStatus;
 import com.se193262.subscriptionservice.feature.subscriptionorder.repository.SubscriptionOrderRepository;
@@ -61,6 +66,7 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
     public SubscriptionOrderDto create(UUID bakeryId, UUID userId, String idempotencyKey,
                                        SubscriptionOrderDto request) {
         bakeryClient.requireMember(bakeryId, userId, true);
+        bakeryClient.requireApprovedBakery(bakeryId);
         return transactions.execute(status -> createInTransaction(bakeryId, userId, idempotencyKey, request));
     }
 
@@ -128,6 +134,59 @@ public class SubscriptionOrderServiceImpl implements SubscriptionOrderService {
                 : orderRepository.findAllByBakeryIdAndStatus(bakeryId, status, pageable);
         return PageResult.fromPage(orders.map(order ->
                 SubscriptionOrderDto.fromEntity(order, List.of(), null)));
+    }
+
+    @Override @Transactional(readOnly = true)
+    public PageResult<AdminSubscriptionOrderDto> listAdmin(AdminSubscriptionOrderFilter filter) {
+        if (filter.page() < 1 || filter.size() < 1 || filter.size() > 100
+                || filter.query() != null && filter.query().length() > 120) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Invalid order filters");
+        }
+        if (filter.createdFrom() != null && filter.createdTo() != null && filter.createdFrom().isAfter(filter.createdTo())) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Start date must not be after end date");
+        }
+        var orders = orderRepository.findAll(adminFilter(filter), PageRequest.of(filter.page() - 1, filter.size(),
+                Sort.by(Sort.Order.desc("createdAt"), Sort.Order.desc("id"))));
+        var paymentsByOrder = orders.isEmpty() ? java.util.Map.<UUID, List<BakeryPayment>>of()
+                : paymentRepository.findAllByOrder_IdInOrderBySubmittedAtDesc(
+                        orders.stream().map(SubscriptionOrder::getId).toList()).stream()
+                        .collect(java.util.stream.Collectors.groupingBy(payment -> payment.getOrder().getId()));
+        return PageResult.fromPage(orders.map(order -> AdminSubscriptionOrderDto.fromEntity(order,
+                paymentsByOrder.getOrDefault(order.getId(), List.of()))));
+    }
+
+    private Specification<SubscriptionOrder> adminFilter(AdminSubscriptionOrderFilter filter) {
+        return (root, query, builder) -> {
+            var predicates = new java.util.ArrayList<jakarta.persistence.criteria.Predicate>();
+            if (filter.status() != null) predicates.add(builder.equal(root.get("status"), filter.status()));
+            if (filter.bakeryId() != null) predicates.add(builder.equal(root.get("bakeryId"), filter.bakeryId()));
+            if (filter.createdFrom() != null) predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), filter.createdFrom()));
+            if (filter.createdTo() != null) predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), filter.createdTo()));
+            if (filter.query() != null && !filter.query().isBlank()) {
+                String value = filter.query().trim().toLowerCase(java.util.Locale.ROOT);
+                String pattern = "%" + value.replace("!", "!!").replace("%", "!%").replace("_", "!_") + "%";
+                var textMatch = builder.or(builder.like(builder.lower(root.get("orderNumber")), pattern, '!'),
+                        builder.like(builder.lower(root.get("planNameSnapshot")), pattern, '!'),
+                        builder.like(builder.lower(root.get("planCodeSnapshot")), pattern, '!'));
+                predicates.add(value.matches("[0-9]{1,10}(\\.[0-9]{1,2})?")
+                        ? builder.or(textMatch, builder.equal(root.get("totalAmount"), new java.math.BigDecimal(value))) : textMatch);
+            }
+            if (filter.eligibleForApproval() != null) {
+                var paymentQuery = query.subquery(UUID.class);
+                var payment = paymentQuery.from(BakeryPayment.class);
+                paymentQuery.select(payment.get("id")).where(
+                        builder.equal(payment.get("order").get("id"), root.get("id")),
+                        builder.equal(payment.get("status"), PaymentStatus.SUBMITTED),
+                        builder.notEqual(builder.upper(payment.get("paymentMethod")), "VNPAY"),
+                        builder.greaterThan(payment.get("amount"), java.math.BigDecimal.ZERO),
+                        builder.equal(payment.get("amount"), root.get("totalAmount")),
+                        builder.equal(payment.get("currency"), root.get("currency")));
+                var eligible = builder.and(builder.equal(root.get("status"), SubscriptionOrderStatus.PAYMENT_REVIEW),
+                        builder.exists(paymentQuery));
+                predicates.add(filter.eligibleForApproval() ? eligible : builder.not(eligible));
+            }
+            return builder.and(predicates.toArray(jakarta.persistence.criteria.Predicate[]::new));
+        };
     }
 
     @Override @Transactional(readOnly = true)

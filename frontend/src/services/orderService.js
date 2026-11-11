@@ -34,4 +34,4 @@ export const orderService = {
   deleteReview(orderId) { return api.delete('/orders/' + requireId(orderId) + '/review') },
 }
 export const loadOrders = (params, options) => orderService.getOrders(params, options)
-export const loadOrder = ({ orderId }, options) => orderService.getOrderById(orderId, options)
+export const loadOrder = ({ orderId, apiOnly = false }, options) => orderService.getOrderById(orderId, apiOnly ? { ...options, allowMockFallback: false } : options)

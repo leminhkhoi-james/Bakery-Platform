@@ -7,7 +7,11 @@ import { planFeatureRows, planMonthlyPrice, planName, planTierRank, sortPlansByT
 
 export function SubscriptionError({ error, retry }) {
   const feedback = userFeedback(error)
-  const explanation = feedback && feedback !== 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
+  const explanation = error?.message === 'Bakery profile must be approved and active before purchasing a subscription'
+    ? 'Hồ sơ tiệm cần được duyệt và ở trạng thái hoạt động trước khi mua hoặc thanh toán gói. Hãy kiểm tra trạng thái hồ sơ.'
+    : error?.message === 'A VNPay payment is still in progress'
+    ? 'Đang có một lượt thanh toán VNPay cho đơn này. Hãy tiếp tục qua VNPay hoặc chờ liên kết hết hạn trước khi gửi biên lai chuyển khoản.'
+    : feedback && feedback !== 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
     ? feedback
     : {
         400: 'Thông tin chưa hợp lệ. Vui lòng kiểm tra lại.',

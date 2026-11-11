@@ -96,7 +96,7 @@ export default function AdminRevenuePage({ onNavigate }) {
     setPage(1)
   }
 
-  const allPayments = (paymentsResource.data || []).filter(row => !reportBakeryId || row.bakeryId === reportBakeryId)
+  const allPayments = (paymentsResource.data || []).filter(row => !reportBakeryId || (row.bakeryId || row.context?.order?.bakeryId) === reportBakeryId)
   const inPeriod = payment => businessDateSelected(payment.reviewedAt || payment.submittedAt, appliedDates.from, appliedDates.to)
   const approvalInPeriod = payment => businessDateSelected(approvalDate(payment), appliedDates.from, appliedDates.to)
   const payments = allPayments.filter(payment => payment.status === 'APPROVED' ? approvalInPeriod(payment) : inPeriod(payment))
@@ -105,12 +105,11 @@ export default function AdminRevenuePage({ onNavigate }) {
   const localReady = ready && !unifiedIssues().some(issue => issue.source === 'local' && issue.path === '/admin/bakery-payments')
   const realPayments = approvedPayments(allPayments.filter(row => recordSource(row) === 'api')).filter(approvalInPeriod)
   const simulatedPayments = approvedPayments(allPayments.filter(row => recordSource(row) === 'local')).filter(approvalInPeriod)
-  const sum = rows => rows.reduce((total, row) => total + row.amount, 0)
+  const sum = rows => rows.reduce((total, row) => total + Number(row.amount || 0), 0)
   const realRevenue = apiReady ? sum(realPayments) : null
   const simulatedRevenue = localReady ? sum(simulatedPayments) : null
-  const snapshot = unifiedSnapshot()
   const totalApprovedTransactions = ready ? realPayments.length + simulatedPayments.length : null
-  const rawPayments = simulatedPayments
+  const rawPayments = [...realPayments, ...simulatedPayments]
 
   const filteredPayments = (() => {
     const q = search.toLowerCase().trim()
@@ -127,7 +126,7 @@ export default function AdminRevenuePage({ onNavigate }) {
     })
   })()
 
-  const periodTotalRevenue = simulatedRevenue
+  const periodTotalRevenue = (apiReady || localReady) ? (realRevenue ?? 0) + (simulatedRevenue ?? 0) : null
 
   const countedPayments = new Set([...realPayments, ...simulatedPayments].map(row => row.id))
   // Revenue breakdown by plan tier
@@ -186,23 +185,9 @@ export default function AdminRevenuePage({ onNavigate }) {
               Doanh thu theo nguồn
             </span>
             <span className="sc-revenue-top-desc">
-              Doanh thu gói được ghi nhận theo ngày duyệt. Doanh thu bán bánh ghi nhận khi đơn đã hoàn tất và đã thu tiền.
+              Doanh thu gói dịch vụ được ghi nhận tự động ngay khi thanh toán qua cổng VNPay thành công. Doanh thu bán bánh ghi nhận khi đơn đã hoàn tất và đã thu tiền.
             </span>
           </div>
-
-          {pendingCount > 0 && (
-            <button
-              type="button"
-              className="sc-revenue-pending-link"
-              onClick={() => onNavigate?.('admin-payments')}
-              title="Chuyển đến màn hình đối chiếu chứng từ mới"
-            >
-              <Icon name="receipt_long" />
-              <span>Duyệt gói dịch vụ</span>
-              <span className="sc-revenue-pending-badge">{pendingCount} chờ duyệt</span>
-              <span aria-hidden="true">→</span>
-            </button>
-          )}
         </div>
         {/* Filter Section: Presets, Custom Range & Search */}
         <section className="sc-revenue-filter-panel" aria-label="Bộ lọc doanh thu">
@@ -349,10 +334,10 @@ export default function AdminRevenuePage({ onNavigate }) {
         </section>
 
         {/* Financial KPI Cards */}
-        {!snapshot && <section className="sc-revenue-kpi-card" aria-label="Doanh thu gói thực nhận">
-          <span className="sc-revenue-kpi-label">Doanh thu gói thực nhận</span>
+        <section className="sc-revenue-kpi-card" aria-label="Doanh thu gói thực nhận">
+          <span className="sc-revenue-kpi-label">Doanh thu gói thực nhận (VNPay)</span>
           <div className="sc-revenue-kpi-value">{loading ? '…' : dashboardMoney(realRevenue, 'VND')}</div>
-        </section>}
+        </section>
         {/* Revenue Breakdown by Plan Tier */}
         {paymentsResource.error && <ApiErrorMessage error={paymentsResource.error} retry={paymentsResource.reload} />}
         {plansResource.error && <ApiErrorMessage error={plansResource.error} retry={plansResource.reload} />}
@@ -361,7 +346,7 @@ export default function AdminRevenuePage({ onNavigate }) {
             <div className="sc-revenue-breakdown-heading">
               <h3>
                 <Icon name="pie_chart" />
-                Cơ cấu doanh thu gói mô phỏng
+                Cơ cấu doanh thu gói dịch vụ
               </h3>
             </div>
 
@@ -518,77 +503,77 @@ export default function AdminRevenuePage({ onNavigate }) {
               {detailModal.proofUrl && <a href={detailModal.proofUrl} target="_blank" rel="noreferrer" className="sc-button sc-action-button--secondary">Xem ảnh đầy đủ</a>}
               <button type="button" className="sc-button" onClick={() => setDetailModal(null)}>Đóng</button>
             </div>}>
-                <section className="sc-detail-section"><h3>Thông tin giao dịch</h3><dl className="sc-detail-fields">
-                  <div>
-                    <dt>Tiệm bánh</dt>
-                    <dd>
-                      {detailModal.context?.profile?.bakery?.name ||
-                        detailModal.submittedByName ||
-                        'Tiệm bánh'}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Gói dịch vụ</dt>
-                    <dd>
-                      {planName({ name: detailModal.context?.order?.planNameSnapshot, code: detailModal.context?.order?.planCodeSnapshot })}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Số tiền giao dịch</dt>
-                    <dd className="text-emerald-700 font-bold">
-                      +{dashboardMoney(detailModal.amount, detailModal.currency || 'VND')}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Mã giao dịch</dt>
-                    <dd>{detailModal.paymentReference || detailModal.id}</dd>
-                  </div>
-                  <div>
-                    <dt>Phương thức</dt>
-                    <dd>{uiLabel(detailModal.paymentMethod, '—')}</dd>
-                  </div>
-                  <div>
-                    <dt>{detailModal.reviewedAt ? 'Thời gian xử lý' : 'Thời gian gửi'}</dt>
-                    <dd>
-                      {dashboardDateTime(
-                        detailModal.reviewedAt || detailModal.submittedAt
-                      )}
-                    </dd>
-                  </div>
-                </dl></section>
+            <section className="sc-detail-section"><h3>Thông tin giao dịch</h3><dl className="sc-detail-fields">
+              <div>
+                <dt>Tiệm bánh</dt>
+                <dd>
+                  {detailModal.context?.profile?.bakery?.name ||
+                    detailModal.submittedByName ||
+                    'Tiệm bánh'}
+                </dd>
+              </div>
+              <div>
+                <dt>Gói dịch vụ</dt>
+                <dd>
+                  {planName({ name: detailModal.context?.order?.planNameSnapshot, code: detailModal.context?.order?.planCodeSnapshot })}
+                </dd>
+              </div>
+              <div>
+                <dt>Số tiền giao dịch</dt>
+                <dd className="text-emerald-700 font-bold">
+                  +{dashboardMoney(detailModal.amount, detailModal.currency || 'VND')}
+                </dd>
+              </div>
+              <div>
+                <dt>Mã giao dịch</dt>
+                <dd>{detailModal.paymentReference || detailModal.id}</dd>
+              </div>
+              <div>
+                <dt>Phương thức</dt>
+                <dd>{uiLabel(detailModal.paymentMethod, '—')}</dd>
+              </div>
+              <div>
+                <dt>{detailModal.reviewedAt ? 'Thời gian xử lý' : 'Thời gian gửi'}</dt>
+                <dd>
+                  {dashboardDateTime(
+                    detailModal.reviewedAt || detailModal.submittedAt
+                  )}
+                </dd>
+              </div>
+            </dl></section>
 
-                {detailModal.proofUrl && (
-                  <div className="sc-revenue-proof-box">
-                    <div className="flex items-center justify-between">
-                      <small className="font-bold text-muted uppercase text-xs">
-                        Ảnh chụp biên lai chuyển khoản
-                      </small>
-                      <a
-                        href={detailModal.proofUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
-                      >
-                        <Icon name="open_in_new" />
-                        Mở ảnh gốc
-                      </a>
-                    </div>
-                    <img
-                      src={detailModal.proofUrl}
-                      alt="Biên lai chuyển khoản"
-                      className="sc-revenue-proof-img"
-                    />
-                  </div>
-                )}
+            {detailModal.proofUrl && (
+              <div className="sc-revenue-proof-box">
+                <div className="flex items-center justify-between">
+                  <small className="font-bold text-muted uppercase text-xs">
+                    Ảnh chụp biên lai chuyển khoản
+                  </small>
+                  <a
+                    href={detailModal.proofUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+                  >
+                    <Icon name="open_in_new" />
+                    Mở ảnh gốc
+                  </a>
+                </div>
+                <img
+                  src={detailModal.proofUrl}
+                  alt="Biên lai chuyển khoản"
+                  className="sc-revenue-proof-img"
+                />
+              </div>
+            )}
 
-                {detailModal.reviewNote && (
-                  <div className="sc-revenue-modal-cell">
-                    <small>Ghi chú đối chiếu của Admin</small>
-                    <p className="text-xs text-primary font-medium mt-1">
-                      {detailModal.reviewNote}
-                    </p>
-                  </div>
-                )}
+            {detailModal.reviewNote && (
+              <div className="sc-revenue-modal-cell">
+                <small>Ghi chú đối chiếu của Admin</small>
+                <p className="text-xs text-primary font-medium mt-1">
+                  {detailModal.reviewNote}
+                </p>
+              </div>
+            )}
           </DetailDrawer>
         )}
       </div>

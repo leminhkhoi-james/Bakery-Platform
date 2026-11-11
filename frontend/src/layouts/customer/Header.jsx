@@ -327,53 +327,19 @@ export const Header = ({
               onClick={() => { setIsNotifOpen(!isNotifOpen); setIsProfileMenuOpen(false) }}
             >
               <span className="material-symbols-outlined text-xl">notifications</span>
-              <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
-                2
-              </span>
             </button>
 
             {isNotifOpen && (
               <div className="absolute right-0 mt-3 w-80 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
                 <div className="px-4 py-2.5 border-b border-primary/20 flex items-center justify-between">
                   <h4 className="font-savoure text-sm font-bold text-primary">Thông báo của bạn</h4>
-                  <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-800">2 mới</span>
                 </div>
-                <div className="py-1 divide-y divide-primary/10 max-h-72 overflow-y-auto">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      setIsNotifOpen(false)
-                      handleNav(e, 'bidding?cakeRequestId=de000000-0000-4000-8000-000000100200')
-                    }}
-                    className="w-full px-4 py-3 text-left hover:bg-primary-fixed-dim flex items-start gap-2.5 cursor-pointer transition-colors"
-                  >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-900 mt-0.5">
-                      <span className="material-symbols-outlined text-base">local_offer</span>
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-primary">Có báo giá mới cho bánh của bạn!</p>
-                      <p className="text-[11px] text-stone-600 line-clamp-2">Các tiệm bánh đã gửi đề xuất giá cạnh tranh cho yêu cầu bánh của bạn. Nhấn để so sánh ngay.</p>
-                      <span className="text-[10px] text-stone-400 mt-1 block">5 phút trước</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      setIsNotifOpen(false)
-                      handleNav(e, 'tracking')
-                    }}
-                    className="w-full px-4 py-3 text-left hover:bg-primary-fixed-dim flex items-start gap-2.5 cursor-pointer transition-colors"
-                  >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-900 mt-0.5">
-                      <span className="material-symbols-outlined text-base">task_alt</span>
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-primary">Đơn hàng #1000207 đã hoàn tất</p>
-                      <p className="text-[11px] text-stone-600 line-clamp-2">Bánh đã giao thành công. Hãy dành chút thời gian chia sẻ đánh giá trải nghiệm nhé!</p>
-                      <span className="text-[10px] text-stone-400 mt-1 block">1 giờ trước</span>
-                    </div>
-                  </button>
+                <div className="px-4 py-4 space-y-3">
+                  <p className="text-sm text-primary">{user ? 'Thông báo tự động hiện chưa khả dụng.' : 'Đăng nhập để theo dõi đơn hàng và báo giá của bạn.'}</p>
+                  {user ? <div className="flex flex-col gap-2">
+                    <button type="button" className="sc-button sc-action-button--secondary" onClick={event => { setIsNotifOpen(false); handleNav(event, 'tracking') }}>Xem đơn hàng của tôi</button>
+                    <button type="button" className="sc-button sc-action-button--secondary" onClick={event => { setIsNotifOpen(false); handleNav(event, 'rfqs') }}>Xem yêu cầu bánh của tôi</button>
+                  </div> : <button type="button" className="sc-button" onClick={event => { setIsNotifOpen(false); handleNav(event, 'login') }}>Đăng nhập</button>}
                 </div>
               </div>
             )}

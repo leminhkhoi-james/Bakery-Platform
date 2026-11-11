@@ -18,3 +18,15 @@ test('API-only creation is not redirected to local and local references are cano
 test('Owner query maps real shop to local scope without sending local IDs to Backend',async()=>{const f=setup(()=>response({result:[],meta:{page:1,pageSize:100,pages:0,total:0}}),true);const r=await f.api('GET','/orders?scope=bakery&bakeryId='+realShop+'&size=100');assert.equal(r.raw.data.meta.total,34);assert(r.raw.data.result.every(x=>x.bakeryId===realShop));assert(f.calls.every(c=>!c.url.includes('5c000000')))})
 
 test('Financial metrics never add local revenue to real receipts',()=>{const state=createBusinessSeed();state.payments.push({id:realId,bakeryId:businessId(10),status:'APPROVED',amount:100000,reviewedAt:new Date().toISOString(),_origin:{source:'api'}});const m=unifiedMetrics(state,{});assert.equal(m.subscriptionRevenue,100000);assert.equal(m.simulationSubscriptionRevenue,629000);assert.equal(m.realSalesRevenue,null);assert.equal(m.orders,54);assert.equal(mergeSourceRows([{id:realId,value:2}],[{id:realId,value:1}])[0].value,2)})
+
+test('Explicit API-only onboarding moderation never merges simulation or replaces an API error', async () => {
+  let status = 200
+  const f = setup(() => status === 200 ? response({ result: [], meta: { page: 1, pageSize: 10, pages: 0, total: 0 } }) : Response.json({ message: 'Unavailable' }, { status }))
+  const options = { method: 'GET', allowMockFallback: false }
+  const result = await f.service.fetch('http://localhost/api/v1/admin/bakeries?page=1&size=10', options)
+  assert.deepEqual((await result.json()).data.result, [])
+  assert.equal(f.calls.length, 1)
+  assert.equal(f.calls[0].url, 'http://localhost/api/v1/admin/bakeries?page=1&size=10')
+  status = 503
+  assert.equal((await f.service.fetch('http://localhost/api/v1/admin/bakeries', options)).status, 503)
+})

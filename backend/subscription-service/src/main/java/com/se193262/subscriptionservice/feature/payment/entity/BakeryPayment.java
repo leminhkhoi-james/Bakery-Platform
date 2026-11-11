@@ -32,6 +32,8 @@ public class BakeryPayment {
     private UUID submittedByUserId;
     @Column(name = "payment_method", nullable = false, length = 50)
     private String paymentMethod;
+    @Column(name = "verification_source", nullable = false, length = 20)
+    private String verificationSource = "MANUAL";
     @Column(name = "payment_reference", unique = true, length = 120)
     private String paymentReference;
     @Column(name = "idempotency_key_hash", unique = true, length = 64)
@@ -80,6 +82,8 @@ public class BakeryPayment {
         this.reviewedAt = now;
         this.reviewIdempotencyKeyHash = reviewKeyHash;
     }
+
+    public void verifiedByVnpay() { this.verificationSource = "VNPAY"; }
 
     public void reject(UUID adminId, String note, Instant now) {
         this.status = PaymentStatus.REJECTED;

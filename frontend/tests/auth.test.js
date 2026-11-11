@@ -202,3 +202,22 @@ test('Route roles come from the backend profile, not demo navigation', () => {
   assert.equal(canAccess('vendor-menu', { roles: ['BAKERY_OWNER'] }), true)
   assert.equal(canAccess('payment', { roles: ['BAKERY_OWNER'] }), false)
 })
+
+test('Owner activation refreshes both the access token and the authenticated profile', async () => {
+  handler = url => reply(url.endsWith('/login') ? token() : user)
+  await authService.login(user.email, password)
+  const fresh = token(), owner = { ...user, roles: ['CUSTOMER', 'BAKERY_OWNER'] }
+  handler = url => reply(url.endsWith('/refresh') ? fresh : owner)
+  assert.deepEqual(await authService.refreshSession(), owner)
+  assert.equal(getAuthToken(), fresh.accessToken)
+  assert.equal(authService.getSnapshot().user.roles.includes('BAKERY_OWNER'), true)
+})
+
+test('Owner activation never publishes a different user from a changed refresh cookie', async () => {
+  handler = url => reply(url.endsWith('/login') ? token() : user)
+  await authService.login(user.email, password)
+  handler = url => reply(url.endsWith('/refresh') ? token() : { ...user, id: randomUUID(), roles: ['BAKERY_OWNER'] })
+  await assert.rejects(authService.refreshSession(), { status: 401 })
+  assert.equal(authService.getSnapshot().user, null)
+  assert.equal(getAuthToken(), '')
+})

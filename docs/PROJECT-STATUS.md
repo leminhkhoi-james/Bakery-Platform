@@ -1,5 +1,169 @@
 # Project Status
 
+> Cập nhật gần nhất: 2026-11-11.
+
+## Approval before subscription purchase — 2026-11-11
+
+- ADR-007 makes profile approval precede subscription purchase. Subscription now
+  validates the Bakery internal profile is ACTIVE after checking OWNER membership
+  at order creation, VNPay checkout and manual evidence submission. Non-ACTIVE
+  returns 409; unavailable/malformed validation fails closed. Existing IPN settlement
+  and admin review remain intact for payments already initiated/collected.
+- Partner modal shows the payment step as waiting and disables order creation and
+  payment details until an ACTIVE profile is returned. Existing history stays
+  readable; initial period/renewal timing and role activation rules are unchanged.
+- Validation: production FE build and Chrome approval transition regression pass;
+  19 backend tests in BakeryApprovalGateTest, PaymentReviewTest and VnpayServiceTest
+  pass. Existing subscription-ui suite still has two unrelated expectations failing
+  (generic auth error wording and obsolete manual bakery selector text).
+- Source changes tested; running backend deployment has not been restarted.
+
+## Customer notification placeholder — 2026-11-11
+
+- Removed hardcoded customer bell notifications, unread count, relative times
+  and demo request/order references. No user notification API exists in backend.
+- Guests see a sign-in prompt; signed-in users see an availability message and
+  links to their existing order tracking and cake request pages. No fabricated
+  unread state or events. Frontend production build passes.
+
+## Admin user actions — 2026-11-11
+
+- User tables now show one primary edit/role action and an overflow popover for
+  status/delete actions. Shared by local and API directories; existing mutation
+  permissions, unsupported profile editing and confirmation dialogs are retained.
+- Popover uses the browser top layer to avoid table clipping, supports keyboard
+  activation/Escape/outside dismissal and keeps destructive actions separate.
+  Role selections now have full clickable rows with clear checked states.
+- Validation: production build, 11 review workflow tests and a Chrome browser
+  regression covering desktop/mobile, keyboard and confirmation behavior pass.
+
+## Admin revenue/order data — 2026-11-11
+
+- Revenue no longer mounts BusinessSimulationReport or includes local simulated
+  payments. Approved backend payments (VNPay and manual) are counted once per
+  subscription order; plan lookup bypasses mock fallback.
+- Order activity reads every page of GET /api/v1/orders?scope=all, filtered by
+  bakery and Vietnam creation dates. Unsupported simulated payment, dispute,
+  request and offer counters were removed from this report. Cake order value
+  excludes cancelled orders and is explicitly not collected sales revenue.
+- Admin order detail now also bypasses simulation; the existing admin list
+  already used the real API. Empty API results remain empty; failures show retry.
+- Validation: frontend production build, 27 existing admin/dashboard tests and
+  4 API regression tests pass. Full lint remains blocked by the existing parse
+  error in UnifiedSourceNotice.jsx and unrelated repository warnings.
+
+## Runtime — Kiểm tra IPN và chờ cấu hình trên VNPay SIT — 2026-11-11
+
+- Tunnel IPN public đang hoạt động. Kiểm tra không chữ ký trả RspCode 97; kiểm tra
+  chữ ký merchant hợp lệ với reference ngẫu nhiên không tồn tại trả HTTP 200/
+  RspCode 01. Hai probe không thay đổi đơn hoặc kích hoạt gói.
+- Logic settlement vẫn tạo payment APPROVED và kỳ subscription trong cùng
+  transaction sau khi IPN thành công được xác minh. Chưa nhận được xác nhận giao
+  dịch VNPay thật để kiểm thử activation end-to-end.
+- Đã mở cổng VNPay Sandbox SIT Testing và chuẩn bị email merchant. Cấu hình IPN
+  trên phía VNPay chưa được lưu vì đang chờ người dùng đăng nhập trực tiếp vào
+  cổng merchant; không có mật khẩu merchant trong cấu hình backend.
+
+## Runtime — Khôi phục admin từ dữ liệu Identity cũ — 2026-11-11
+
+- Theo yêu cầu rõ ràng của người dùng, khôi phục tài khoản admin cùng email từ
+  bakery-owner-dev_identity-data sang bakery-platform_identity-data đang chạy.
+  Chép nguyên BCrypt hash và bộ quyền ADMIN/CUSTOMER; giữ ID hiện tại để bảo toàn
+  liên kết dữ liệu. Thực hiện trong một transaction, kiểm tra hash/bộ quyền khớp
+  bản nguồn và lưu backup trước thao tác bằng Windows DPAPI trong thư mục ignored.
+- Thu hồi refresh sessions của riêng tài khoản khôi phục để lần đăng nhập mới
+  nhận đúng quyền. Database cũ được trả về trạng thái dừng như trước khi đọc.
+- Đã xác minh qua frontend localhost: đăng nhập 200, /auth/me có ADMIN,
+  /admin/users trả 200 và logout phiên kiểm thử 200. Không ghi password/hash/token
+  vào source hoặc log. Kiểm thử credential qua tunnel không thực hiện vì bị
+  auto-review chặn; xác minh localhost đã hoàn tất.
+
+## Runtime — Sửa xác thực qua tunnel HTTPS — 2026-11-10
+
+- Auth refresh từ origin tunnel bị Identity CORS chặn 403 vì cấu hình chỉ có
+  localhost. Compose hiện truyền IDENTITY_CORS_ALLOWED_ORIGINS; `.env` local bổ
+  sung đúng origin tunnel, không dùng wildcard. Recreate riêng Identity Service.
+- Kiểm tra refresh không cookie qua proxy: localhost/tunnel đều trả 401 và được
+  CORS cho phép; origin lạ vẫn 403. Gọi qua hostname public cũng trả 401 thay vì
+  403. Người dùng cần đăng nhập cùng tài khoản trên public hostname vì cookie
+  localhost không chia sẻ sang hostname khác. Chưa dùng phiên người dùng để
+  xác minh nội dung một đơn cụ thể.
+
+## Runtime — Bật merchant VNPay Sandbox — 2026-11-10
+
+- Đã nhận thông tin merchant do người dùng cung cấp, lưu riêng trong `.env` được
+  Git ignore và recreate riêng Subscription Service để nhận cấu hình. Không ghi
+  khóa vào source, example files hoặc tài liệu.
+- Tunnel frontend đang chạy; return URL dùng route frontend trên cùng tunnel.
+  Kiểm tra qua URL công khai: IPN không chữ ký trả HTTP 200/RspCode 97, return
+  không chữ ký trả 400. Lỗi thiếu cấu hình merchant đã được giải quyết.
+- Cần khai báo `/api/v1/payments/vnpay/ipn` trên hostname tunnel vào merchant/SIT
+  của VNPay để nhận kết quả và kích hoạt gói. Chưa thực hiện giao dịch thẻ Sandbox.
+
+## Runtime — Cập nhật Subscription container cho VNPay — 2026-11-10
+
+- Phát hiện container local còn image cũ: endpoint IPN mới trả JWT 401, checkout
+  từ frontend bị 403 dù source đã có matcher CUSTOMER/BAKERY_OWNER.
+- Đóng gói JAR, build runtime image và recreate riêng Subscription Service trong
+  project bakery-platform; không recreate database hoặc service khác. Flyway đã
+  áp dụng V5 thành công trên subscription_db hiện hữu.
+- Kiểm tra trực tiếp 8084 và qua proxy frontend 5173: IPN hiện trả protocol HTTP
+  200/RspCode 99 khi chưa cấu hình; return verifier trả 503 "VNPay is not configured".
+  Merchant chưa được cấu hình nên chưa thể kiểm thử checkout trên VNPay thật.
+
+## Frontend — Thanh toán VNPay cho đơn mua gói — 2026-11-10
+
+- Chi tiết đơn dùng chung ở đăng ký tiệm và quản lý gói có nút thanh toán VNPay
+  Sandbox, gọi checkout thật và chuyển hướng tới URL sandbox đã kiểm tra host.
+  Không gửi số tiền từ client. Chuyển khoản thủ công được giữ trong mục mở rộng;
+  chỉ dùng tài khoản do API cung cấp, mã mẫu chỉ hiện trong development.
+- Trang `/subscription-vnpay-return` xác minh query qua backend và đọc trạng thái
+  persisted. Chỉ SUCCEEDED hiển thị thành công; PENDING kiểm tra lại có giới hạn,
+  FAILED/REVIEW_REQUIRED/lỗi xác minh có nội dung và hành động riêng. Không gọi
+  IPN, không tự duyệt, không suy ra thành công từ query trình duyệt.
+- Lưu order/bakery theo attempt trong sessionStorage để mở lại đúng đơn; không
+  lưu token hoặc dùng storage làm nguồn xác nhận thanh toán. Auth/ownership của
+  workspace giữ nguyên. Vite proxy bổ sung return/IPN/admin reconciliation.
+- 35 test VNPay/subscription pass, gồm 3 bài Chrome headless với fixture API:
+  redirect, lỗi cấu hình, manual fallback, polling và các trạng thái kết quả.
+  Production build và lint các file VNPay mới pass. Bộ UI subscription cũ còn
+  hai assertion lệch copy/selector; lint toàn dự án còn parse error ở
+  UnifiedSourceNotice.jsx ngoài phần sửa này.
+  Đã xem ảnh checkout ở 1440/1024/820/768/390 px và trang kết quả ở 390 px.
+- Để chạy với merchant sandbox, cấu hình return URL về frontend (local mặc định
+  `http://localhost:5173/subscription-vnpay-return`); IPN vẫn là endpoint backend
+  public. Chưa có giao dịch qua merchant thật trong lượt kiểm thử fixture.
+
+## Backend — VNPay Sandbox cho mua gói tiệm — 2026-11-10
+
+- Thêm checkout VNPay PAY 2.1.0 cho subscription order: kiểm tra OWNER membership,
+  lấy giá VND snapshot từ server và lưu attempt trước khi trả URL ký HMAC-SHA512.
+- IPN xác minh chữ ký/merchant/reference/amount/hai mã kết quả; ghi payment
+  APPROVED, hoàn tất order và tạo đúng một kỳ trong cùng transaction. Return URL
+  chỉ đọc. Callback trùng không kích hoạt lại; transaction number không dùng lại.
+- V5 thêm vnpay_attempts và verification_source; gateway không giả mạo admin ID.
+  Manual evidence vẫn dùng ADMIN review; active checkout chặn gửi thủ công.
+- Callback đã trả tiền nhưng xung đột được lưu REVIEW_REQUIRED; ADMIN có API
+  danh sách đối soát. Duy trì notification Bakery sau commit và cơ chế retry cũ.
+- Đã chạy bộ test Subscription Service, gồm PostgreSQL Testcontainers: migration,
+  thanh toán thủ công, IPN đồng thời, chống tái sử dụng giao dịch và rollback đều
+  pass. Unit tests kiểm tra chữ ký, sai amount/merchant, giả mạo callback, return
+  không kích hoạt, giao dịch thất bại, thời gian thanh toán và checkout retry.
+- Cấu hình mặc định tắt. Chưa thực hiện giao dịch trên website VNPay vì cần
+  TmnCode/HashSecret merchant và public HTTPS IPN URL. Frontend đã nối nút và
+  trang kết quả ở mục cập nhật phía trên. Hướng dẫn tại
+  [VNPAY-SANDBOX.md](VNPAY-SANDBOX.md); quyết định tại ADR-006.
+
+## Frontend — Đồng bộ luồng customer trở thành chủ tiệm — 2026-11-10
+
+- Bổ sung lối vào “Theo dõi đăng ký tiệm” ngay đầu trang gói. Màn hình tiến độ hiển thị riêng hồ sơ và thanh toán/gói, điều kiện còn thiếu cùng thời điểm cập nhật; nút kiểm tra đọc lại toàn bộ dữ liệu liên quan và có timeout, không tự phê duyệt.
+
+- Trang mở tiệm đã có tích hợp API thật trong code hiện tại. Hoàn thiện bước theo dõi hồ sơ và tự làm mới access token/profile khi backend cấp `BAKERY_OWNER`; không gọi thêm API hoàn tất onboarding và không bắt đăng nhập lại.
+- Luồng onboarding, subscription và admin duyệt hồ sơ/chứng từ dùng `allowMockFallback: false`. Unified transport tôn trọng lựa chọn này, không trộn hoặc thay bằng dữ liệu mô phỏng.
+- Bỏ số tài khoản và ảnh QR ngân hàng hardcode trong form thanh toán. Chỉ hiện thông tin tài khoản khi API cung cấp đầy đủ; thiếu cấu hình vẫn gửi được mã tham chiếu hoặc chứng từ để admin duyệt. Mã test local không tự kích hoạt gói, không có thanh toán tiền thật trong lần kiểm tra.
+- Gửi lại chứng từ sau lỗi kết nối giữ nguyên payload và idempotency key. Thông báo phân biệt đã gửi chứng từ, hồ sơ đã duyệt và gói đang có hiệu lực.
+- Kiểm tra local: tạo customer mới, gửi hồ sơ/tạo đơn/gửi tham chiếu từ giao diện; duyệt hồ sơ và chứng từ qua API admin. FE tự chuyển sang đúng tiệm, trang gói hiển thị kỳ `ACTIVE` và đơn `COMPLETED`. Không thay đổi backend hoặc API spec trong lần này.
+- 78 kiểm tra tập trung cho auth, subscription, admin review và unified transport đã qua. Frontend production build qua.
 > Cập nhật gần nhất: 2026-11-10.
 
 ## Gateway business flows and live Cake AI — 2026-11-10

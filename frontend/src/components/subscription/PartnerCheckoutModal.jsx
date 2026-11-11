@@ -4,12 +4,14 @@ import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { onboardingService } from '../../services/onboardingService.js'
 import { subscriptionService, loadSubscriptionOrders } from '../../services/subscriptionService.js'
 import { formatSubscriptionMoney, subscriptionStatusLabel } from '../../services/subscriptionModels.js'
+import { displayReference } from '../../services/displayReference.js'
 import { planName } from '../../services/planPresentation.js'
 import { ResourceState, SubscriptionError } from './SubscriptionView.jsx'
 import { buttonClass, inputClass } from '../management/ApiState.jsx'
 import ModalSurface from '../common/ModalSurface.jsx'
 import CatalogPagination from '../catalog/CatalogPagination.jsx'
 import SubscriptionOrderDetail from '../../pages/vendor/subscription/SubscriptionOrderDetail.jsx'
+import { usePartnerActivation } from '../../hooks/usePartnerActivation.js'
 
 const loadOnboarding = ({ enabled }, options) => enabled ? onboardingService.get(null, options) : Promise.resolve(null)
 
@@ -31,7 +33,7 @@ function getBakeryStatusBadge(status) {
         text: 'Đã phê duyệt',
         classes: 'bg-emerald-100 text-emerald-900 border-emerald-300',
         icon: 'verified',
-        description: 'Hồ sơ tiệm đã được phê duyệt thành công. Bạn có thể mở bán và quản lý tiệm bánh.',
+        description: 'Hồ sơ tiệm đã được duyệt. Khi gói dịch vụ có hiệu lực, quyền chủ tiệm sẽ tự cập nhật.',
       }
     case 'REJECTED':
       return {
@@ -53,10 +55,10 @@ function getBakeryStatusBadge(status) {
   }
 }
 
-function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
+function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingApproval, subscription, checkedAt }) {
   const [page, setPage] = useState(1)
   const history = useCatalogResource(loadSubscriptionOrders, { bakeryId: bakery.id, page, size: 10, sort: 'createdAt,desc' })
-  const [orderId, setOrderId] = useState(null)
+  const [selectedOrderId, setOrderId] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [attempt, setAttempt] = useState(null)
@@ -66,14 +68,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
 
   const orders = history.data?.result || []
   const openOrder = orders.find((o) => ['PENDING_PAYMENT', 'PAYMENT_REVIEW'].includes(o.status))
-
-  // Auto-select open order or latest order so user can immediately view/pay
-  React.useEffect(() => {
-    if (!orderId && orders.length > 0) {
-      const active = openOrder || orders[0]
-      if (active?.id) setOrderId(active.id)
-    }
-  }, [orders, orderId, openOrder])
+  const orderId = selectedOrderId || openOrder?.id || orders[0]?.id || null
 
   async function run(action) {
     if (inFlight.current) return
@@ -99,41 +94,89 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
   }
 
   const statusInfo = getBakeryStatusBadge(bakery.status)
+  const planActive = subscription?.currentSubscription?.status === 'ACTIVE'
+  const bakeryApproved = bakery.status === 'ACTIVE'
+  const paymentSubmitted = Boolean(orders[0] && ['PAYMENT_REVIEW', 'PAID', 'COMPLETED'].includes(orders[0].status)) || planActive
+  const paymentStatus = !bakeryApproved ? 'Chờ hồ sơ được duyệt' : planActive ? 'Gói đang có hiệu lực'
+    : subscription?.scheduledSubscription ? 'Đã duyệt, chờ kỳ dịch vụ bắt đầu'
+    : history.status === 'loading' ? 'Đang tải trạng thái thanh toán…'
+    : history.status === 'error' ? 'Chưa tải được trạng thái thanh toán'
+    : orders[0] ? subscriptionStatusLabel(orders[0].status) : 'Chưa tạo đơn mua gói'
+  const nextStep = !bakeryApproved ? 'Hồ sơ tiệm đang được Ban quản trị thẩm định.'
+    : !planActive ? 'Hồ sơ đã được duyệt. Vui lòng hoàn tất thanh toán gói dịch vụ để kích hoạt cửa hàng.'
+    : 'Hồ sơ và gói dịch vụ đã hợp lệ. Đang kích hoạt Kênh Quản Lý Tiệm Bánh.'
 
   return (
-    <div className="space-y-5">
-      {/* Bakery Status Banner */}
-      <div className={`rounded-2xl border p-4 space-y-2 ${statusInfo.classes}`}>
+    <div className="space-y-4">
+      {/* Bakery Info + 3-Step Stepper Card */}
+      <div className={`rounded-2xl border p-4 space-y-3 ${statusInfo.classes}`}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-lg">{statusInfo.icon}</span>
             <span className="font-bold text-sm">Trạng thái hồ sơ: {statusInfo.label}</span>
           </div>
-          <span className="text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-white/70 border border-current">
+          <span className="text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-white/80 border border-current">
             {statusInfo.label}
           </span>
         </div>
         <p className="text-xs leading-relaxed opacity-90">{statusInfo.description}</p>
-        <div className="pt-1 text-xs border-t border-current/20 flex flex-wrap gap-x-4 gap-y-1">
+        <div className="pt-2 text-xs border-t border-current/20 flex flex-wrap gap-x-5 gap-y-1">
           <span>Tên tiệm: <strong>{bakery.name}</strong></span>
           {bakery.phoneNumber && <span>Hotline: <strong>{bakery.phoneNumber}</strong></span>}
           {bakery.email && <span>Email: <strong>{bakery.email}</strong></span>}
         </div>
       </div>
 
+      {/* Visual 3-Step Progress Stepper */}
+      <section aria-label="Tiến độ đăng ký tiệm" className="rounded-2xl border border-primary/15 bg-surface-container-low/60 p-3.5 space-y-2.5">
+        <div className="grid grid-cols-3 gap-2 text-xs">
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-primary/15 shadow-2xs">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${bakeryApproved ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'}`}>
+              {bakeryApproved ? '✓' : '1'}
+            </span>
+            <div className="min-w-0">
+              <p className="font-bold text-primary truncate">Hồ sơ đối tác</p>
+              <p className="text-[11px] text-on-surface-variant truncate">{statusInfo.label}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-primary/15 shadow-2xs">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${!bakeryApproved ? 'bg-stone-200 text-stone-600' : planActive ? 'bg-emerald-600 text-white' : paymentSubmitted ? 'bg-amber-500 text-white' : 'bg-primary text-white'}`}>
+              {planActive ? '✓' : '2'}
+            </span>
+            <div className="min-w-0">
+              <p className="font-bold text-primary truncate">Thanh toán gói</p>
+              <p className="text-[11px] text-on-surface-variant truncate">{paymentStatus}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-primary/15 shadow-2xs">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${bakeryApproved && planActive ? 'bg-emerald-600 text-white' : 'bg-stone-200 text-stone-600'}`}>
+              {bakeryApproved && planActive ? '✓' : '3'}
+            </span>
+            <div className="min-w-0">
+              <p className="font-bold text-primary truncate">Mở cửa hàng</p>
+              <p className="text-[11px] text-on-surface-variant truncate">{bakeryApproved && planActive ? 'Sẵn sàng' : 'Chờ kích hoạt'}</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-[11px] text-on-surface-variant px-1">{nextStep}</p>
+      </section>
+
       {/* Plan Order CTA */}
-      <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
+      {plan && <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-2.5">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <h3 className="font-bold text-sm text-primary">Mua gói: {planName(plan)}</h3>
+            <h3 className="font-bold text-sm text-primary">Gói dịch vụ đã chọn: {planName(plan)}</h3>
             <p className="text-xs text-on-surface-variant">
-              {formatSubscriptionMoney(plan.monthlyPrice, plan.currency)} / tháng · Chu kỳ {plan.billingPeriodMonths} tháng
+              {formatSubscriptionMoney(plan.monthlyPrice, plan.currency)} / tháng · Chu kỳ thanh toán {plan.billingPeriodMonths} tháng
             </p>
           </div>
           <button
             className={buttonClass + ' text-xs py-2 px-4 shadow-sm font-bold'}
-            disabled={busy || history.status !== 'ready' || Boolean(openOrder)}
+            disabled={!bakeryApproved || busy || history.status !== 'ready' || Boolean(openOrder)}
             onClick={() => run(async () => {
+              if (!bakeryApproved) return
               if (openOrder) {
                 setOrderId(openOrder.id)
                 return
@@ -144,10 +187,11 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
                 const order = await subscriptionService.createOrder(request)
                 setOrderId(order.id)
                 setAttempt(null)
-                setSuccessNotice(`Đã tạo yêu cầu mua gói #${order.orderNumber || order.id} thành công! Vui lòng chuyển khoản theo hướng dẫn và gửi ảnh biên lai bên dưới.`)
+                const refCode = displayReference(order.id, 'SUB', order.orderNumber)
+                setSuccessNotice(`Đã khởi tạo hóa đơn #${refCode}. Vui lòng thanh toán trực tuyến qua cổng VNPay bên dưới để kích hoạt gói.`)
                 refresh()
               } catch (failure) {
-                if (failure?.status === 409 || /already has an open subscription order/i.test(failure?.message)) {
+                if ([400, 403, 404, 409, 422].includes(failure?.status)) {
                   setAttempt(null)
                   refresh()
                 }
@@ -155,18 +199,18 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
               }
             })}
           >
-            {busy ? 'Đang tạo đơn…' : openOrder ? 'Đang có đơn chờ thanh toán' : attempt ? 'Thử lại tạo đơn' : 'Tạo đơn mua gói ngay'}
+            {busy ? 'Đang khởi tạo…' : openOrder ? 'Đang có hóa đơn chờ thanh toán' : attempt ? 'Thử lại tạo đơn' : 'Tạo đơn đăng ký gói'}
           </button>
         </div>
         <p className="text-[11px] text-on-surface-variant leading-relaxed">
-          💡 <strong>Hướng dẫn thanh toán:</strong> Sau khi tạo yêu cầu mua gói, bạn chuyển khoản theo thông tin tài khoản và tải lên ảnh biên lai thanh toán. Đội ngũ kiểm soát sẽ xác thực chuyển khoản và kích hoạt gói cho tiệm bánh trong thời gian sớm nhất.
+          {bakeryApproved ? 'Hồ sơ đã được duyệt. Bạn có thể tạo đơn và thanh toán qua VNPay. Gói có hiệu lực khi hệ thống xác nhận thanh toán thành công.' : 'Bạn có thể mua gói sau khi hồ sơ được duyệt. Trong thời gian chờ, bạn chưa cần tạo đơn hoặc thanh toán.'}
         </p>
-      </div>
+      </div>}
 
-      {openOrder && !successNotice && (
+      {bakeryApproved && openOrder && !successNotice && (
         <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 font-medium flex items-center gap-2">
-          <span className="material-symbols-outlined text-sm text-amber-700">info</span>
-          <span>Tiệm bánh đang có đơn mua gói #{openOrder.orderNumber || openOrder.id} ({subscriptionStatusLabel(openOrder.status)}). Vui lòng gửi chứng từ chuyển khoản bên dưới để hoàn tất.</span>
+          <span className="material-symbols-outlined text-sm text-amber-700">receipt_long</span>
+          <span>Hoá đơn <strong>#{displayReference(openOrder.id, 'SUB', openOrder.orderNumber)}</strong> đang ở trạng thái <strong>{subscriptionStatusLabel(openOrder.status)}</strong>. Vui lòng bấm nút Thanh toán qua VNPay bên dưới để hoàn tất.</span>
         </div>
       )}
 
@@ -182,7 +226,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
         {history.data?.result.length > 1 && (
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-primary">
-              Chọn đơn mua gói khác:
+              Hóa đơn dịch vụ của tiệm:
               <select
                 className={inputClass + ' mt-1 text-xs'}
                 disabled={busy}
@@ -191,7 +235,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
               >
                 {history.data.result.map((order) => (
                   <option key={order.id} value={order.id}>
-                    #{order.orderNumber || order.id} · {formatSubscriptionMoney(order.totalAmount, order.currency)} · {subscriptionStatusLabel(order.status)}
+                    #{displayReference(order.id, 'SUB', order.orderNumber)} · {formatSubscriptionMoney(order.totalAmount, order.currency)} · {subscriptionStatusLabel(order.status)}
                   </option>
                 ))}
               </select>
@@ -199,13 +243,13 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
             {history.data?.meta.pages > 1 && (
               <CatalogPagination
                 meta={history.data.meta}
-                onPage={(value) => { if (!busy) setPage(value) }}
+                onPage={(value) => { if (!busy) { setOrderId(null); setPage(value) } }}
               />
             )}
           </div>
         )}
         {!history.data?.result.length && (
-          <p className="text-xs text-on-surface-variant">Chưa có đơn mua gói nào cho tiệm này.</p>
+          <p className="text-xs text-on-surface-variant">Chưa có hóa đơn đăng ký gói nào cho tiệm này.</p>
         )}
       </ResourceState>
 
@@ -216,6 +260,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
           orderId={orderId}
           bakeryId={bakery.id}
           roles={roles}
+          paymentAllowed={bakeryApproved}
           revision={revision}
           onChanged={refresh}
           onBusy={(value) => { setBusy(value); onBusy(value) }}
@@ -225,18 +270,17 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
       {/* Complete Onboarding Button (if bakery is approved and plan is active) */}
       <div className="pt-3 border-t border-outline-variant/20 flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-on-surface-variant max-w-sm">
-          Khi hồ sơ cửa hàng và thanh toán gói đã được duyệt hoàn tất, bạn có thể truy cập Kênh quản lý tiệm bánh.
+          Kênh quản lý tiệm bánh tự mở sau khi hồ sơ được duyệt và gói dịch vụ có hiệu lực.
         </p>
         <button
+          type="button"
           className={buttonClass + ' text-xs py-2.5 px-4'}
-          disabled={busy}
-          onClick={() => run(async () => {
-            await onboardingService.complete(bakery.id)
-            onNavigate?.('vendor-dashboard?bakeryId=' + bakery.id)
-          })}
+          disabled={busy || checkingApproval}
+          onClick={() => { refresh(); onCheckApproval() }}
         >
-          {busy ? 'Đang kiểm tra…' : 'Vào Kênh quản lý tiệm bánh'}
+          {checkingApproval ? 'Đang kiểm tra…' : 'Kiểm tra trạng thái duyệt'}
         </button>
+        {checkedAt && <p role="status" className="basis-full text-xs text-on-surface-variant">Đã cập nhật lúc {new Date(checkedAt).toLocaleTimeString('vi-VN')}. {nextStep}</p>}
       </div>
 
       {error && <SubscriptionError error={error} />}
@@ -244,7 +288,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onNavigate }) {
   )
 }
 
-export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
+export default function PartnerCheckoutModal({ plan, tracking = false, onClose, onNavigate }) {
   const { user, roles } = useAuth()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
@@ -253,7 +297,14 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
   const resource = useCatalogResource(loadOnboarding, { enabled: roles.includes('CUSTOMER') && !roles.includes('BAKERY_OWNER') })
   const inFlight = useRef(false)
 
-  const bakery = submitted || resource.data
+  const savedBakery = submitted || resource.data
+  const activation = usePartnerActivation({
+    bakeryId: savedBakery?.id,
+    enabled: Boolean(savedBakery && savedBakery.status !== 'DRAFT' && !roles.includes('BAKERY_OWNER')),
+    paused: busy,
+    onActivated: (activeBakery) => onNavigate?.('vendor-dashboard?bakeryId=' + activeBakery.id),
+  })
+  const bakery = activation.bakery || savedBakery
 
   async function submit(event) {
     event.preventDefault()
@@ -342,11 +393,11 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
             Trở thành đối tác tiệm bánh
           </span>
           <h2 className="font-serif text-2xl font-bold text-primary">
-            Đăng ký gói {planName(plan)}
+            {tracking || bakery?.status === 'PENDING_APPROVAL' ? 'Theo dõi đăng ký tiệm' : <>Đăng ký gói {planName(plan)}</>}
           </h2>
-          <p className="text-xs text-on-surface-variant">
+          {!tracking && <p className="text-xs text-on-surface-variant">
             Mức phí: <strong className="text-primary font-bold">{formatSubscriptionMoney(plan.monthlyPrice, plan.currency)} / tháng</strong> · Chu kỳ {plan.billingPeriodMonths} tháng
-          </p>
+          </p>}
         </div>
         <button
           type="button"
@@ -381,7 +432,7 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
           </p>
           <button
             className={buttonClass}
-            onClick={() => onNavigate?.('vendor-subscription?planId=' + plan.id)}
+            onClick={() => onNavigate?.('vendor-subscription' + (plan?.id ? '?planId=' + plan.id : ''))}
           >
             Vào Kênh quản lý gói tiệm bánh
           </button>
@@ -397,7 +448,10 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
               plan={plan}
               roles={roles}
               onBusy={setBusy}
-              onNavigate={onNavigate}
+              onCheckApproval={activation.check}
+              checkingApproval={activation.checking}
+              subscription={activation.subscription}
+              checkedAt={activation.checkedAt}
             />
           ) : (
             /* Registration Form for new partner or DRAFT */
@@ -540,6 +594,7 @@ export default function PartnerCheckoutModal({ plan, onClose, onNavigate }) {
       )}
 
       {error && <SubscriptionError error={error} />}
+      {activation.error && <SubscriptionError error={activation.error} />}
     </ModalSurface>
   )
 }

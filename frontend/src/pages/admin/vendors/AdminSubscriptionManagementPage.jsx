@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { Icon } from '../../../components/common/WorkspaceUI.jsx'
 import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import AdminPlansPage from './AdminPlansPage.jsx'
 import AdminPaymentsPage from './AdminPaymentsPage.jsx'
@@ -14,7 +14,7 @@ export default function AdminSubscriptionManagementPage({ onNavigate, routeSearc
         className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 font-bold rounded-xl transition-all cursor-pointer"
         onClick={() => onNavigate('admin-payments')}
       >
-        <Icon name="receipt_long" />Duyệt mua gói
+        <Icon name="receipt_long" />Đơn mua gói
       </button>
       <button
         type="button"

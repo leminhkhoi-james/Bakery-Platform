@@ -18,6 +18,13 @@ after(async () => { await vite?.close() })
 const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props))
 const plan = () => mapSubscriptionPlan({ id: randomUUID(), code: 'DYNAMIC', name: 'Tên gói từ DTO', description: 'Mô tả từ DTO', monthlyPrice: 321987, currency: 'VND', billingPeriodMonths: 3, status: 'ACTIVE', features: { UNKNOWN_FEATURE: 'custom-value', FEATURED_LISTING: 'false', MAX_PRODUCTS: '-1' } })
 
+test('Active VNPay checkout explains why manual evidence must wait', () => {
+  const html = render(view.SubscriptionError, { error: { status: 409, message: 'A VNPay payment is still in progress' } })
+  assert.match(html, /tiếp tục qua VNPay/)
+  assert.match(html, /chờ liên kết hết hạn/)
+  assert.doesNotMatch(html, /đang chờ Ban quản trị phê duyệt/)
+})
+
 test('Plan UI uses DTO name/description/price/period/status/arbitrary feature values', () => {
   const record = plan(), before = JSON.stringify(record)
   const html = render(view.PlanCards, { plans: [record] })

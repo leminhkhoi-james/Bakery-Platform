@@ -1,16 +1,14 @@
 import { recordSource } from '../../../services/unifiedDataService.js'
 import React, { useRef, useState } from 'react'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
-import { DataTable, EmptyPanel, StatusBadge, Icon } from '../../../components/common/WorkspaceUI.jsx'
+import { Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { AdminReviewDialog, ReviewSection, ReviewField } from '../../../components/management/AdminReviewUI.jsx'
 import { reviewText, reviewMoney, reviewError } from '../../../services/adminPresentation.js'
-import { ApiState, ApiErrorMessage, inputClass, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
-import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
-import { paymentDateRange } from '../../../services/adminFilterModels.js'
+import { ApiState, ApiErrorMessage, inputClass, buttonClass } from '../../../components/management/ApiState.jsx'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { useAuth } from '../../../context/useAuth.js'
-import { loadDashboardPayment } from '../../../services/adminDashboardService.js'
-import { loadPaymentContext, loadPaymentDirectory } from '../../../services/adminPaymentPresentation.js'
+import { loadPaymentContext } from '../../../services/adminPaymentPresentation.js'
+import AdminSubscriptionOrdersPage from './AdminSubscriptionOrdersPage.jsx'
 import { publicationAdminService, canReviewPayment, canApprovePayment } from '../../../services/publicationAdminService.js'
 import { subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
 import { formatOrderDate } from '../../../services/orderPresentation.js'
@@ -18,15 +16,16 @@ import { displayReference } from '../../../services/displayReference.js'
 import { uiLabel } from '../../../services/uiLabels.js'
 import { planName } from '../../../services/planPresentation.js'
 
-import { paymentReviewFacts, paymentSenderName } from '../../../services/paymentReviewPresentation.js'
+import { paymentReviewFacts } from '../../../services/paymentReviewPresentation.js'
 import './admin-payments.css'
 
-const senderName = paymentSenderName
 export function PaymentReview({ payment: initialPayment, onComplete, onReload, onClose }) {
   const { roles } = useAuth(), resource = useCatalogResource(loadPaymentContext, { payment: initialPayment })
   const [confirmed, setConfirmed] = useState(null)
   const [decision, setDecision] = useState(null), [note, setNote] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState(null), [attempt, setAttempt] = useState(null)
-  const inFlight = useRef(false), payment = confirmed?.payment || initialPayment, order = confirmed?.order || resource.data?.order, profile = resource.data?.profile
+  const inFlight = useRef(false), order = confirmed?.order || resource.data?.order, profile = resource.data?.profile
+  const payment = confirmed?.payment || { ...initialPayment,
+    proofUrl: order?.payments?.find(item => item.id === initialPayment.id)?.proofUrl || initialPayment.proofUrl }
   const facts = paymentReviewFacts(payment, order, profile, resource.data?.profileError)
   const allowed = roles.includes('ADMIN') && resource.status === 'ready' && !resource.refreshing && canReviewPayment(payment, order), approval = allowed && canApprovePayment(payment, order)
   const blockReason = !roles.includes('ADMIN') ? 'Bạn không có quyền xử lý chứng từ.' : resource.status !== 'ready' || resource.refreshing ? 'Cần tải đầy đủ đơn mua gói trước khi đối chiếu.' : !canReviewPayment(payment, order) ? 'Chứng từ hoặc đơn không còn chờ duyệt.' : !approval ? facts.comparison + ' Không thể phê duyệt.' : null
@@ -65,74 +64,5 @@ export function PaymentReview({ payment: initialPayment, onComplete, onReload, o
 }
 
 export default function AdminPaymentsPage({ routeSearch = '' }) {
-  const params = new URLSearchParams(routeSearch), paymentId = params.get('paymentId') || '', initialBakeryId = params.get('bakeryId') || ''
-  const shortcut = useCatalogResource(loadDashboardPayment, { id: paymentId })
-  const [dismissed, setDismissed] = useState(false), [selected, setSelected] = useState(null), [page, setPage] = useState(1), [notice, setNotice] = useState('')
-  const [draft, setDraft] = useState({ query: '', status: 'SUBMITTED', from: '', to: '' }), [filters, setFilters] = useState({ status: 'SUBMITTED' }), [error, setError] = useState(null)
-  const serverFilters = filters
-  const resource = useCatalogResource(loadPaymentDirectory, { page, size: 20, bakeryId: initialBakeryId, ...serverFilters, sort: 'submittedAt,desc' })
-
-  const activeSearch = (draft.query || filters.query || '').trim().toLowerCase()
-  const rows = (resource.data?.result || []).filter((payment) => {
-    if (!activeSearch) return true
-    const haystack = [
-      payment.context?.profile?.bakery?.name,
-      payment.submittedByName,
-      senderName(payment, payment.context?.profile),
-      payment.context?.order?.planNameSnapshot,
-      payment.context?.order?.planCodeSnapshot,
-      payment.paymentReference,
-      payment.subscriptionOrderId,
-      payment.id,
-      payment.paymentMethod,
-      String(payment.amount),
-      subscriptionStatusLabel(payment.status),
-    ].filter(Boolean).join(' ').toLowerCase()
-    return haystack.includes(activeSearch)
-  })
-
-  const field = (key) => ({ value: draft[key], onChange: (event) => setDraft({ ...draft, [key]: event.target.value }) })
-  const handleStatusChange = (event) => {
-    const nextStatus = event.target.value
-    setDraft((prev) => ({ ...prev, status: nextStatus }))
-    setFilters((prev) => ({ ...prev, status: nextStatus }))
-    setPage(1)
-  }
-
-  const applyFilters = (event) => {
-    if (event) event.preventDefault()
-    try {
-      setFilters({
-        status: draft.status,
-        query: draft.query.trim(),
-        ...paymentDateRange(draft.from, draft.to),
-      })
-      setPage(1)
-      setError(null)
-    } catch (failure) {
-      setError(failure)
-    }
-  }
-
-  const current = selected || (!dismissed && shortcut.data)
-  return <><section className={panelClass}>
-    <form className="sc-admin-filter" onSubmit={applyFilters}>
-      <label>Tìm kiếm chứng từ / tiệm
-        <input {...field('query')} placeholder="Tên tiệm, người gửi, mã đơn, mã FT..." className={inputClass} />
-      </label>
-      <label>Trạng thái
-        <select value={draft.status} onChange={handleStatusChange} className={inputClass}>
-          <option value="">Tất cả trạng thái</option>
-          {['SUBMITTED', 'APPROVED', 'REJECTED'].map((status) => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}
-        </select>
-      </label>
-      <label>Từ ngày<input type="datetime-local" {...field('from')} className={inputClass} /></label>
-      <label>Đến ngày<input type="datetime-local" {...field('to')} className={inputClass} /></label>
-      <div className="sc-action-row">
-        <button className={buttonClass} disabled={resource.refreshing}><Icon name="filter_alt" />Lọc</button>
-      </div>
-    </form>
-    <p className="sc-review-help">Chọn trạng thái để xem ngay danh sách tương ứng. Nhập từ khóa để tìm nhanh theo tên tiệm, mã đơn hoặc mã giao dịch.</p>{error && <ApiErrorMessage error={error} />}
-    <ApiState resource={resource}>{resource.data && <><p className="sc-review-help">{resource.data.meta.total} chứng từ theo trạng thái{activeSearch ? ' · ' + rows.length + ' kết quả khớp tìm kiếm' : ''}</p>{rows.length ? <DataTable label="Chứng từ mua gói" className="sc-admin-record-table"><thead><tr><th style={{ width: '60px', textAlign: 'center' }}>STT</th><th>Tiệm / người gửi</th><th>Gói dịch vụ</th><th>Số tiền</th><th>Ngày gửi</th><th>Trạng thái</th><th className="sc-table-actions">Thao tác</th></tr></thead><tbody>{rows.map((payment, index) => { const stt = (resource.data.meta.page - 1) * resource.data.meta.pageSize + index + 1; return <tr key={payment.id}><td data-label="STT" style={{ width: '60px', textAlign: 'center', fontWeight: 'bold', color: 'var(--color-muted, #64748b)' }}>{stt}</td><td data-label="Tiệm / người gửi"><strong>{reviewText(payment.context?.profile?.bakery?.name) || reviewText(payment.submittedByName) || 'Chưa tải được tên tiệm'}</strong><small>{senderName(payment, payment.context?.profile) || 'Chưa có tên người gửi'}</small></td><td data-label="Gói dịch vụ">{reviewText(planName({ name: payment.context?.order?.planNameSnapshot, code: payment.context?.order?.planCodeSnapshot })) || 'Chưa tải được tên gói'}</td><td data-label="Số tiền">{reviewMoney(payment.amount, payment.currency)}</td><td data-label="Ngày gửi">{formatOrderDate(payment.submittedAt)}</td><td data-label="Trạng thái"><StatusBadge status={payment.status} label={subscriptionStatusLabel(payment.status)} /></td><td className="sc-table-actions"><button className={buttonClass} onClick={() => { setSelected(payment); setDismissed(true); setNotice('') }}><Icon name="receipt_long" />Đối chiếu</button></td></tr> })}</tbody></DataTable> : <EmptyPanel title="Chưa có chứng từ phù hợp." icon="receipt_long" />}<CatalogPagination meta={resource.data.meta} onPage={setPage} /></>}</ApiState>
-    </section>{paymentId && !dismissed && shortcut.error && <ApiErrorMessage error={shortcut.error} retry={shortcut.reload} />}{paymentId && !dismissed && shortcut.status === 'ready' && !shortcut.data && <p role="status">Không tìm thấy chứng từ đã chọn.</p>}{current && <PaymentReview key={current.id} payment={current} onReload={resource.reload} onClose={() => { setSelected(null); setDismissed(true) }} onComplete={(result) => { setSelected({ ...current, ...result.payment, proofUrl: result.payment.proofUrl || current.proofUrl }); setDismissed(true); setNotice('Đã cập nhật chứng từ: ' + subscriptionStatusLabel(result.payment.status).toLocaleLowerCase('vi') + '.'); resource.reload() }} />}{notice && <p role="status" className="sc-feedback">{notice}</p>}</>
+  return <AdminSubscriptionOrdersPage routeSearch={routeSearch} ReviewComponent={PaymentReview} />
 }
