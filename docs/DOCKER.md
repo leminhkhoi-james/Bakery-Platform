@@ -1,5 +1,9 @@
 # Identity and Marketplace with Docker Compose
 
+For the complete seven-service stack with API Gateway, use
+[Local Gateway stack](DOCKER-GATEWAY.md). The instructions below describe the
+older Identity/Marketplace stack.
+
 ## Prerequisites
 
 Docker Desktop must be running with Linux containers. The initial build downloads Maven/JRE images,

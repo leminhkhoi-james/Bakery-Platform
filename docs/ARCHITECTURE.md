@@ -15,7 +15,8 @@ ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thu�
 > cùng outbound calls được bảo vệ bằng service JWT audience/scope cụ thể.
 > Marketplace chat eligibility và Bakery membership được xác minh qua internal
 > contracts; Identity phát hành và Chat cache service tokens trong thời hạn ngắn.
-> Gateway routing, frontend và AI provider integration vẫn chưa được triển khai.
+> Gateway đã có Spring Cloud Gateway Web MVC routing tới bảy domain service;
+> local runtime và smoke checks được mô tả trong `DOCKER-GATEWAY.md`.
 > Chi tiết kiểm chứng thực tế nằm trong `PROJECT-STATUS.md`.
 
 ---

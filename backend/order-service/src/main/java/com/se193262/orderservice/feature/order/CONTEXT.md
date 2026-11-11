@@ -6,6 +6,10 @@ Direct and accepted-offer orders with immutable transaction snapshots.
 
 ## Current state
 
+The default Bakery client scope includes `bakery:catalog:quote`, with the same
+grant in Identity. Profile/membership scopes alone cannot authorize direct
+order catalog quotes.
+
 Direct and accepted-offer creation, public fulfillment and eligible reviews are implemented. Creation persists immutable items/address and durable key/payload fingerprints; replay checks precede remote calls. Direct uses the Identity address's persisted UUID and validates its flat internal response. Identity now returns `id` and `label` alongside its ownership-checked delivery fields.
 
 Identity address 404 becomes invalid order input (422), preserving privacy for foreign/deleted addresses. Catalog quote 404/422 also preserve validation meaning; quote 409 remains a business conflict. Internal authentication errors and outages remain remote failures (503), never successful fallback data. Address deletion or edits do not rewrite existing Order snapshots.

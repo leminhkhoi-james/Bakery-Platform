@@ -28,7 +28,7 @@ clients:
   bakery:
     base-url: ${BAKERY_SERVICE_URL:http://localhost:8082}
     audience: bakery-service
-    scope: bakery:profile:read bakery:membership:read
+    scope: bakery:profile:read bakery:membership:read bakery:catalog:quote
   marketplace:
     base-url: ${MARKETPLACE_SERVICE_URL:http://localhost:8083}
     audience: marketplace-service

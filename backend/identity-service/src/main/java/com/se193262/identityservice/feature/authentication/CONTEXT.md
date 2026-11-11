@@ -28,4 +28,7 @@ REST contracts.
 
 ## Internal service authentication
 
+Order's default Bakery grant includes `bakery:catalog:quote`, matching the
+catalog quote endpoint required for direct-order creation.
+
 ServiceTokenService issues five-minute target/scoped RS256 tokens after checking a configured BCrypt client secret hash and exact audience/scope grants. See ADR-002.

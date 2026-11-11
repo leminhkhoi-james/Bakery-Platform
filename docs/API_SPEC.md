@@ -24,6 +24,12 @@ Internal:    http://<service-name>:<port>/internal/v1
 Public URL đi qua API Gateway và không để lộ tên microservice. Internal URL chỉ
 được gọi trong trusted network bằng service JWT.
 
+**Current local runtime:** the Gateway implementation currently uses service
+prefixes: `/identity/api/v1`, `/bakery/api/v1`, `/marketplace/api/v1`,
+`/subscription/api/v1`, `/cake-ai/api/v1`, `/orders/api/v1`, `/chat/api/v1`.
+The unprefixed URL above remains the target contract. See
+[Local Gateway stack](DOCKER-GATEWAY.md) for the verified runtime commands.
+
 ---
 
 ## Authentication

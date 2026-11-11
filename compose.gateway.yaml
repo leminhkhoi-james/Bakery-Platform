@@ -1,0 +1,88 @@
+# Merge after compose.services.yaml. Run with scripts/Start-GatewayStack.ps1.
+x-java: &java
+  JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+  SERVER_FORWARD_HEADERS_STRATEGY: framework
+services:
+  identity-service:
+    build:
+      context: ./backend/identity-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment: *java
+  marketplace-service:
+    build:
+      context: ./backend/marketplace-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment:
+      <<: *java
+      MARKETPLACE_ORPHAN_CLEANUP_ENABLED: "false"
+  bakery-service:
+    build:
+      context: ./backend/bakery-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment: *java
+  subscription-service:
+    build:
+      context: ./backend/subscription-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment: *java
+  order-service:
+    build:
+      context: ./backend/order-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment: *java
+  chat-service:
+    build:
+      context: ./backend/chat-service/target/docker-runtime
+      dockerfile: Dockerfile
+    environment:
+      <<: *java
+      CHAT_STORAGE_ENDPOINT: http://chat-storage:9000
+  cake-ai-db:
+    # Existing bakery-platform Cake AI volume was initialized on PostgreSQL 17.
+    image: postgres:17-alpine
+  cake-ai-service:
+    build:
+      context: ./backend/cake-ai-service/target/docker-runtime
+      dockerfile: Dockerfile
+      args:
+        HEALTH_PATH: /actuator/health/readiness
+    environment:
+      <<: *java
+      CAKE_AI_ENABLED: "false"
+      CAKE_AI_SCHEDULER_ENABLED: "false"
+      CAKE_AI_CLEANUP_ENABLED: "false"
+  api-gateway:
+    build:
+      context: ./backend/api-gateway/target/docker-runtime
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:${GATEWAY_PORT:-8080}:8080"
+    environment:
+      <<: *java
+      SERVER_PORT: 8080
+      SERVER_FORWARD_HEADERS_STRATEGY: none
+      # Local Docker bridge/loopback ingress; required by Gateway's header filter.
+      SPRING_CLOUD_GATEWAY_SERVER_WEBMVC_TRUSTED_PROXIES: '(127\.0\.0\.1|172\.(1[6-9]|2[0-9]|3[01])\.[0-9]+\.[0-9]+|0:0:0:0:0:0:0:1)'
+      SPRING_CLOUD_GATEWAY_SERVER_WEBMVC_X_FORWARDED_REQUEST_HEADERS_FILTER_PREFIX_APPEND: "false"
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+      BAKERY_SERVICE_URL: http://bakery-service:8082
+      MARKETPLACE_SERVICE_URL: http://marketplace-service:8083
+      SUBSCRIPTION_SERVICE_URL: http://subscription-service:8084
+      CAKE_AI_SERVICE_URL: http://cake-ai-service:8085
+      ORDER_SERVICE_URL: http://order-service:8086
+      CHAT_SERVICE_URL: http://chat-service:8087
+    depends_on:
+      identity-service:
+        condition: service_healthy
+      bakery-service:
+        condition: service_healthy
+      marketplace-service:
+        condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+      cake-ai-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      chat-service:
+        condition: service_healthy

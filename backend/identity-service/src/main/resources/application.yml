@@ -64,7 +64,7 @@ security.service-clients:
       grants:
         marketplace-service: "marketplace:offer:read"
         identity-service: "identity:user:read identity:address:read"
-        bakery-service: "bakery:profile:read bakery:membership:read"
+        bakery-service: "bakery:profile:read bakery:membership:read bakery:catalog:quote"
     chat-service:
       secret-hash: ${CHAT_SERVICE_CLIENT_SECRET_HASH:}
       grants:

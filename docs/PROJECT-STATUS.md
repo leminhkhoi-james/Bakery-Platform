@@ -1,6 +1,46 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-09.
+> Cập nhật gần nhất: 2026-11-10.
+
+## Gateway business flows and live Cake AI — 2026-11-10
+
+- 215 HTTP/invariant checks passed across onboarding, subscription, catalog,
+  RFQ/offers, direct/accepted-offer orders, fulfillment, reviews, chat, replay,
+  concurrency, cancellation and quota. All calls used Gateway public routes.
+- Real Gemini original/refinement both SUCCEEDED; 6 provider calls within a
+  9-call reservation ceiling. Firebase, signed URLs, admin review and AI design
+  → completed order → review passed. Cancellation/quota added no provider calls.
+- Added resumable Gateway workflow scripts and `compose.gateway-e2e.yaml`.
+  Scoped credentials/state remain Git-ignored, with no secrets in evidence.
+- Fixed default Order/Identity grants for `bakery:catalog:quote`; rebuilt and
+  deployed both, then verified concurrent direct creation without overrides.
+- Maven reactor: 242 passed, 1 setup error in old MarketplaceEndToEndTest
+  (missing Bakery JWK URI in isolated-e2e). Follow-up token test/package passed.
+- Generation/scheduler disabled afterward; all applications kept healthy.
+  Details and limits: `docs/GATEWAY-E2E-REPORT-VI.md`.
+
+## Seven-service Gateway runtime — 2026-11-10
+
+- Added `compose.gateway.yaml` and `scripts/Start-GatewayStack.ps1` to package,
+  build and start seven domain services plus Spring Cloud Gateway Web MVC,
+  seven PostgreSQL databases and three MinIO instances. Gateway: localhost:8080.
+- Running project: `bakery-gateway`, separate persistent volumes. The existing
+  `bakery-platform` Identity database has V1/V2 Flyway checksum mismatches;
+  no repair, schema-history edits or old-volume deletion were performed.
+- Fixed runtime health checks to use the actual service ports; Cake AI uses
+  readiness. Added its missing Springdoc dependency for the Gateway docs route.
+- Gateway rewrites Identity refresh-cookie Path for the `/identity` prefix.
+  Swagger proxy routes preserve the public host/prefix; the local Compose
+  configuration handles forwarded headers from loopback/Docker bridge ingress.
+- `scripts/Test-GatewayStack.py` passed 44 checks: Gateway health, seven OpenAPI
+  schemas and public server URLs, missing/invalid JWT rejection, registration,
+  login, authenticated reads to all seven services, refresh, logout and cleanup
+  of its temporary customer. Evidence: `docs/audit/evidence/gateway-smoke.json`.
+- Maven packaging for all eight applications and the existing Gateway context
+  test passed. All eight applications were healthy at handoff. Scope is HTTP
+  routing/authentication smoke coverage; business transaction flows were not
+  exercised. AI generation, scheduler and cloud cleanup remain disabled in this
+  launcher. Instructions: `docs/DOCKER-GATEWAY.md`.
 
 - **Frontend — Sửa lỗi giao diện Modal Đăng ký Đối tác, Đồng bộ Sổ địa chỉ & Chuẩn hóa Thông báo Người dùng — 2026-11-09**:
   - **Chuẩn hóa thông báo & loại bỏ thuật ngữ kỹ thuật**:
