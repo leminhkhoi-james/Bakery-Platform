@@ -12,15 +12,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "gateway.cors.allowed-origins=http://localhost:5173,http://localhost:5174")
+@ActiveProfiles("test")
 class GatewayCorsTest {
     private static final AtomicInteger calls = new AtomicInteger();
     private static final HttpServer upstream = startUpstream();
@@ -29,7 +34,9 @@ class GatewayCorsTest {
 
     @DynamicPropertySource
     static void urls(DynamicPropertyRegistry registry) {
-        registry.add("services.bakery.url", () -> "http://127.0.0.1:" + upstream.getAddress().getPort());
+        for (String service : new String[]{"identity", "bakery", "marketplace", "subscription", "cake-ai", "order", "chat"}) {
+            registry.add("services." + service + ".url", () -> "http://127.0.0.1:" + upstream.getAddress().getPort());
+        }
     }
 
     @AfterAll static void stopUpstream() { upstream.stop(0); }
@@ -84,11 +91,13 @@ class GatewayCorsTest {
 
     private URI uri(String path) { return URI.create("http://127.0.0.1:" + port + path); }
 
-    @Test
-    void swaggerProxyForwardsExactlyOneServicePrefix() throws Exception {
-        var response = client.send(HttpRequest.newBuilder(uri("/bakery/v3/api-docs")).GET().build(), HttpResponse.BodyHandlers.ofString());
+    @DisplayName("All seven Swagger definitions use the shared root API path")
+    @ParameterizedTest
+    @ValueSource(strings = {"identity", "bakery", "marketplace", "subscription", "cake-ai", "orders", "chat"})
+    void swaggerProxy_serviceDefinition_forwardsRootPrefix(String service) throws Exception {
+        var response = client.send(HttpRequest.newBuilder(uri("/" + service + "/v3/api-docs")).GET().build(), HttpResponse.BodyHandlers.ofString());
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo("/bakery");
+        assertThat(response.body()).isEqualTo("/");
     }
 
     private static HttpServer startUpstream() {

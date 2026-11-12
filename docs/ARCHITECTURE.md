@@ -82,6 +82,12 @@ không có foreign key hay JPA association xuyên service.
 
 ## Request Flow
 
+Gateway supports public `/api/v1/**` resource routes as well as the existing
+service-prefixed aliases. Both route to the same owning service and preserve its
+authentication/authorization checks. In local development, a direct service API
+URL can use the same path on Gateway by changing only the port to 8080. Nested
+subscription resources are routed before Bakery's general resource prefix.
+
 ### Standard Authenticated Request
 
 ```text

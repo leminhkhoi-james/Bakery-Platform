@@ -1,6 +1,31 @@
 # Project Status
 
-> Cập nhật gần nhất: 2026-11-11.
+> Cập nhật gần nhất: 2026-11-12.
+
+## Gateway hỗ trợ URL giống service trực tiếp — 2026-11-12
+
+- Bổ sung chiều ngược từ Swagger Gateway sang service: 7 route tài liệu gửi
+  `X-Forwarded-Prefix: /`, tắt tự suy ra prefix tại Gateway để `/bakery/v3/api-docs`
+  không bị đổi lại thành server URL có `/bakery`. API definitions vẫn theo tên
+  service, nhưng Swagger Try it out dùng root `/api/v1/...` ở cả hai phía.
+- Kiểm chứng Swagger: đọc OpenAPI Bakery đang chạy cho thấy trực tiếp có server
+  `http://localhost:8082`, với forwarded host/root có `http://localhost:8080`.
+  7 ca chuyển tiếp Swagger root, 4 ca CORS/UI và 34 ca routing/cookie cũ+mới đều
+  qua (45 ca, chỉ Gateway/upstream giả, không DB). Cần Run lại Gateway và tải lại
+  Swagger; không sửa controller/domain service hoặc restart ứng dụng người dùng.
+- Thêm 7 route public không có tiền tố service: `/api/v1/bakeries`, `/products`,
+  `/auth`, `/users`, `/subscription-*`, `/cake-requests`, `/offers`, `/orders`,
+  `/conversations`, `/generation-jobs`, `/generated-designs` và các nhóm admin tương
+  ứng. Cake AI `/storage/**` cũng được chuyển tiếp. Đổi port service sang 8080 giữ
+  nguyên API path/query; các route cũ `/bakery/...`, `/identity/...` vẫn hoạt động.
+- Subscription có ưu tiên trước route Bakery cho `/bakeries/*/subscription` và
+  `/bakeries/*/subscription-orders`. Giữ JWT/role tại service, không tạo route
+  internal hoặc catch-all. Cookie Identity ở route mới giữ Path `/api/v1/auth`;
+  route Identity cũ vẫn rewrite Path riêng. Không đổi controller/service/FE/DB.
+- Kiểm tra Gateway dùng 7 HTTP upstream giả cho routing, path/query/header/body/
+  cookie, tương thích URL cũ và internal/unmapped không chuyển tiếp. Kết quả cuối:
+  34 ca GatewayRoutingTest và 11 ca GatewayCorsTest qua; không dùng DB hoặc khởi
+  động service nghiệp vụ. Không build Docker hoặc restart ứng dụng người dùng.
 
 ## Java DataInit cho dữ liệu mẫu — 2026-11-11
 
