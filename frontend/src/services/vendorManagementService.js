@@ -1,4 +1,4 @@
-import { ownerDraftReceipts, rememberOwnerDraft } from './ownerDraftReceipts.js'
+import { ownerDraftReceipts, rememberBranchParent, rememberOwnerDraft } from './ownerDraftReceipts.js'
 import { authService } from './authService.js'
 import { api as sharedApi, ApiError } from './apiClient.js'
 import { catalogQuery } from './catalogModels.js'
@@ -52,7 +52,13 @@ export const vendorManagementService = {
     }
     return vendorManagementService.getPublicProfile(bakeryId, options)
   },
-  async createBakery(input) { const saved = bakeryDto(await api.post('/bakeries', bakeryPayload(input, true))); rememberOwnerDraft(authService.getSnapshot().user?.id, saved); return saved },
+  async createBakery(input, parentBakeryId) {
+    const actorId = authService.getSnapshot().user?.id
+    const saved = bakeryDto(await api.post('/bakeries', bakeryPayload(input, true)))
+    rememberOwnerDraft(actorId, saved)
+    rememberBranchParent(actorId, saved.id, parentBakeryId)
+    return saved
+  },
   async updateBakery(bakeryId, input) {
     const bakery = bakeryDto(await api.patch(bakeryPath(bakeryId), bakeryPayload(input)))
     if (bakery.id.toLowerCase() !== bakeryId.toLowerCase()) throw new ApiError('Response cập nhật sai tiệm.', 502)

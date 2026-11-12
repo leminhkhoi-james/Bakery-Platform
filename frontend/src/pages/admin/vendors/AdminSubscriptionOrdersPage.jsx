@@ -18,7 +18,7 @@ import { planName } from '../../../services/planPresentation.js'
 function OrderDetail({ row, onClose }) {
   const resource = useCatalogResource(loadAdminSubscriptionOrderDetail, { orderId: row.order.id })
   const order = resource.data || row.order
-  return <AdminReviewDialog title="Chi tiết đơn mua gói" onClose={onClose} footer={<button type="button" className={buttonClass} data-modal-close>Đóng</button>}>
+  return <AdminReviewDialog title="Chi tiết đơn mua gói" className="sc-subscription-order-detail" onClose={onClose} footer={<button type="button" className={buttonClass} data-modal-close>Đóng</button>}>
     <ReviewSection title="Thông tin đơn mua gói">
       <dl className="sc-review-fields">
         <ReviewField label="Mã đơn" value={displayReference(order.id, 'SUB', order.orderNumber)} />
@@ -26,7 +26,7 @@ function OrderDetail({ row, onClose }) {
         <ReviewField label="Gói dịch vụ" value={planName({ name: order.planNameSnapshot, code: order.planCodeSnapshot })} />
         <ReviewField label="Số tiền" value={reviewMoney(order.totalAmount, order.currency)} />
         <ReviewField label="Trạng thái" value={subscriptionStatusLabel(order.status)} />
-        <ReviewField label="Ngày tạo" value={formatOrderDate(order.createdAt)} />
+        <ReviewField label="Thời gian" value={formatOrderDate(order.createdAt)} />
         <ReviewField label="Hạn thanh toán" value={formatOrderDate(order.expiresAt)} />
       </dl>
     </ReviewSection>
@@ -45,16 +45,20 @@ function OrderDetail({ row, onClose }) {
 
 export function AdminOrderTable({ rows, meta, onDetail }) {
   return <DataTable label="Tất cả đơn mua gói" className="sc-admin-record-table sc-admin-subscription-orders-table"><thead><tr>
-    <th>STT</th><th>Đơn mua gói</th><th>Tiệm bánh</th><th>Gói dịch vụ</th><th>Thời hạn</th><th>Số tiền</th><th>Ngày tạo</th><th>Trạng thái đơn</th><th className="sc-table-actions">Thao tác</th>
+    <th>STT</th><th>Đơn mua gói</th><th>Tiệm bánh</th><th>Gói dịch vụ</th><th>Thời hạn</th><th>Số tiền</th><th>Mã GD</th><th>Thời gian</th><th>Trạng thái đơn</th><th className="sc-table-actions">Thao tác</th>
   </tr></thead><tbody>{rows.map((row, index) => {
     const order = row.order
+    const withReference = (row.payments || []).filter(payment => payment.paymentReference?.trim())
+    const transaction = withReference.find(payment => payment.status === 'APPROVED') ||
+      withReference.find(payment => payment.id === row.reviewPaymentId) || withReference[0]
     return <tr key={order.id}>
       <td data-label="STT">{(meta.page - 1) * meta.pageSize + index + 1}</td>
       <td data-label="Đơn mua gói"><strong>{displayReference(order.id, 'SUB', order.orderNumber)}</strong></td><td data-label="Tiệm bánh">{row.profile?.bakery?.name || displayReference(order.bakeryId, 'BAK')}</td>
       <td data-label="Gói dịch vụ"><PlanTierBadge name={order.planNameSnapshot} code={order.planCodeSnapshot} /></td>
       <td data-label="Thời hạn">{order.billingPeriodMonths ? order.billingPeriodMonths + ' tháng' : '—'}</td>
-      <td data-label="Số tiền">{reviewMoney(order.totalAmount, order.currency)}</td>
-      <td data-label="Ngày tạo">{formatOrderDate(order.createdAt)}</td>
+      <td data-label="Số tiền" className="text-emerald-700 font-bold">{reviewMoney(order.totalAmount, order.currency)}</td>
+      <td data-label="Mã GD" className="break-all">{transaction?.paymentReference || '—'}</td>
+      <td data-label="Thời gian">{formatOrderDate(order.createdAt)}</td>
       <td data-label="Trạng thái đơn"><StatusBadge status={order.status} label={subscriptionStatusLabel(order.status)} /></td>
       <td className="sc-table-actions"><div className="flex flex-wrap gap-2">
         <RecordActionButton type="button" className="sc-button sc-action-button--secondary" aria-label="Xem chi tiết đơn mua gói" onClick={() => onDetail(row)} action="view" />

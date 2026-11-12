@@ -949,7 +949,8 @@ export default function ThreeCakeCanvas({
       ? createCrossSectionTexture(spongeColor, fillingColor)
       : null
 
-    let currentY = 0.04
+    const baseY = 0.04
+    let currentY = baseY
     const cutAngle = Math.PI * 1.58
 
     baseTierSpecs.forEach((spec, index) => {
@@ -1173,7 +1174,7 @@ export default function ThreeCakeCanvas({
         // Place berries on lower tier ledge if multi-tier (like Image 3!)
         if (baseTierSpecs.length > 1) {
           const ledgeTier = baseTierSpecs[0]
-          const ledgeY = boardHeight - 0.06 + ledgeTier.height + (drip && drip !== 'none' ? 0.055 : 0.01)
+          const ledgeY = baseY + ledgeTier.height + (drip && drip !== 'none' ? 0.055 : 0.01)
           const ledgeRadius = (ledgeTier.radius + baseTierSpecs[1].radius) * 0.52
           const ledgeCount = 8
           for (let i = 0; i < ledgeCount; i++) {

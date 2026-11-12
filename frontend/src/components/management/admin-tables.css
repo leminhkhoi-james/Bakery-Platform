@@ -25,7 +25,6 @@
 }
 .sc-portal--admin .sc-table.sc-admin-fixed-table .sc-table-actions .sc-icon { font-size: 1rem; }
 .sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-button { width: 3.625rem; padding-inline: .35rem; }
-.sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-user-status-action { width: 6rem; }
 .sc-portal--admin .sc-table.sc-admin-orders-table .sc-table-actions .sc-button { width: 6.25rem; }
 .sc-portal--admin .sc-table.sc-admin-fixed-table .sc-status { max-width: 100%; white-space: normal; }
 .sc-portal--admin .sc-table.sc-admin-orders-table td:nth-child(3),

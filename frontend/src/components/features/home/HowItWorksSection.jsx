@@ -5,20 +5,28 @@ export const HowItWorksSection = ({ onNavigate }) => {
   return (
     <>
       {/* Step Cards Section */}
-      <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-pink-light border-b-2 border-wine relative" id="cach-hoat-dong">
+      <section className="snap-section scroll-mt-24 sm:scroll-mt-28 py-20 bg-[#dceff2] home-process-decor border-b-2 border-wine relative" id="cach-hoat-dong">
         <div className="max-w-[1220px] mx-auto px-6 text-center">
           <ScrollReveal animation="fade-up">
             <span className="dotted-frame-badge">Từ ý tưởng đến chiếc bánh thật</span>
             <h2 className="font-savoure text-4xl sm:text-5xl font-bold text-wine mb-4">
               Quy trình đặt bánh đơn giản.
             </h2>
-            <p className="text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto mb-12">
+            <p className="text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto mb-5">
               Dù bạn chọn bánh có sẵn hay đặt thiết kế riêng, quy trình luôn rõ ràng và minh bạch.
             </p>
           </ScrollReveal>
 
+          <div className="home-process-icons" aria-hidden="true">
+            <span className="material-symbols-outlined">edit_note</span>
+            <span className="home-process-link" />
+            <span className="material-symbols-outlined">cake</span>
+            <span className="home-process-link" />
+            <span className="material-symbols-outlined">local_shipping</span>
+          </div>
+
           {/* Steps Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+          <div className="home-process-steps grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
             {HOW_IT_WORKS_STEPS.map((step, idx) => (
               <ScrollReveal key={step.stepNum} animation="fade-up" delay={idx * 120}>
                 <div className="bg-paper border-2 border-wine rounded-2xl p-6 shadow-[5px_6px_0_#e1a0af] flex flex-col justify-between h-full">

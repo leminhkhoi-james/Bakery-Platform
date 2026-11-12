@@ -22,7 +22,7 @@ export async function loadManagedBakeries({ userId, includeOnboarding = false },
     const data = await loadBakeries({ page, size: 100 }, options)
     if (data.meta.page !== page || data.meta.pages > 200) throw new ApiError('Danh sách tiệm trả về không hợp lệ.', 502)
     for (const row of data.result) {
-      if (seen.has(row.id)) throw new ApiError('Danh sách tiệm bị lặp trang. Vui lòng tải lại.', 409)
+      if (seen.has(row.id)) throw new ApiError('Danh sách tiệm bị lặp trang.', 409)
       seen.add(row.id); catalog.result.push(row)
     }
     if (page >= data.meta.pages) break
@@ -92,7 +92,7 @@ export async function loadDashboardCompletedOrders({ bakeryId }, options = {}) {
   for (let page = 1; page <= pages; page++) {
     options.signal?.throwIfAborted()
     const data = await loadDashboardOrders({ bakeryId, status: 'COMPLETED', page, size: 100, sort: 'createdAt,desc' }, options)
-    if (data.meta.page !== page || data.meta.pages > 200 || total !== undefined && data.meta.total !== total) throw new ApiError('Danh sách đơn hoàn tất đã thay đổi hoặc không hợp lệ. Vui lòng tải lại.', 409)
+    if (data.meta.page !== page || data.meta.pages > 200 || total !== undefined && data.meta.total !== total) throw new ApiError('Danh sách đơn hoàn tất đã thay đổi hoặc không hợp lệ.', 409)
     total = data.meta.total; pages = data.meta.pages
     for (const order of data.result) {
       if (seen.has(order.id) || order.status !== 'COMPLETED' || order.totalAmount === null || !Number.isFinite(order.totalAmount) || order.totalAmount < 0 || !order.currency) throw new ApiError('Dữ liệu doanh thu từ đơn hoàn tất không hợp lệ.', 502)
@@ -101,7 +101,12 @@ export async function loadDashboardCompletedOrders({ bakeryId }, options = {}) {
     if (page < pages && !data.result.length) throw new ApiError('Chưa tải đủ đơn hoàn tất.', 502)
   }
   if (result.length !== total || new Set(result.map(order => order.currency)).size > 1) throw new ApiError('Chưa thể tổng hợp đầy đủ số tiền cùng loại tiền tệ.', 502)
-  return { result, meta: { page: 1, pageSize: Math.max(1, result.length), pages: result.length ? 1 : 0, total } }
+  return {
+    result,
+    meta: { page: 1, pageSize: Math.max(1, result.length), pages: result.length ? 1 : 0, total },
+    totalAmount: result.reduce((sum, order) => sum + order.totalAmount, 0),
+    currency: result[0]?.currency || 'VND',
+  }
 }
 
 export function dashboardErrorMessage(error) {

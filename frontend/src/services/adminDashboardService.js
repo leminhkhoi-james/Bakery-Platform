@@ -16,7 +16,7 @@ export async function readDashboardPages(load, options = {}, getSource = display
     if (!Array.isArray(data?.result) || !meta || ![meta.total, meta.pages, meta.page].every(Number.isInteger) || meta.page !== page || meta.total < 0 || meta.pages < 0 || meta.pages > 200) throw new ApiError('Chưa thể tổng hợp dữ liệu. Vui lòng thử lại.', 502)
     const currentSource = getSource(data)
     if (page === 1) { source = currentSource; total = meta.total; pages = meta.pages }
-    if (source !== currentSource || total !== meta.total || pages !== meta.pages) throw new ApiError('Dữ liệu vừa thay đổi. Vui lòng tải lại tổng quan.', 409)
+    if (source !== currentSource || total !== meta.total || pages !== meta.pages) throw new ApiError('Dữ liệu vừa thay đổi trong khi đang tổng hợp.', 409)
     for (const row of data.result) {
       if (!row?.id || (source === 'real' && isDemoId(row.id))) throw new ApiError('Chưa thể tổng hợp dữ liệu.', 502)
       records.set(row.id, row)

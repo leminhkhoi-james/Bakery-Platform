@@ -1,14 +1,12 @@
 import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
 import { maskedEmail, UserRoles } from './userDisplay.jsx'
-import UserRowActions from './UserRowActions.jsx'
-import { unifiedEnabled, recordSource } from '../../../services/unifiedDataService.js'
-import { RoleForm } from './AdminUsersPage.jsx'
-import { PLATFORM_ROLES, updateUserRoles } from '../../../services/adminUserService.js'
+import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
+import { RoleForm, UserDecision } from './UserEditor.jsx'
+import { USER_STATUSES, PLATFORM_ROLES, updateUserRoles, updateUserProfile, isLocalUser } from '../../../services/adminUserService.js'
 import React, { useRef, useState } from 'react'
-import AdminFrame from '../../../components/management/AdminFrame.jsx'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
 import { DataTable, StatusBadge, Icon, EmptyPanel } from '../../../components/common/WorkspaceUI.jsx'
-import { AdminReviewDialog, ReviewField } from '../../../components/management/AdminReviewUI.jsx'
+import { AdminReviewDialog } from '../../../components/management/AdminReviewUI.jsx'
 import { reviewText, reviewError } from '../../../services/adminPresentation.js'
 import { ApiState, ApiErrorMessage, panelClass, inputClass, buttonClass } from '../../../components/management/ApiState.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
@@ -44,17 +42,6 @@ export function UserForm({ person, busy, error, onClose, onSave }) {
     {!person && <label>Vai trò<select className={inputClass} value={values.role} onChange={event => setValues(current => ({ ...current, role: event.target.value }))}>{PLATFORM_ROLES.map(role => <option key={role} value={role}>{uiLabel(role)}</option>)}</select></label>}
   </fieldset>{error && !duplicateEmail && <ApiErrorMessage error={error} />}</form></AdminReviewDialog>
 }
-export function UserDecision({ person, action, busy, error, onClose, onConfirm, disabledReason }) {
-  const deleting = action === 'delete', suspending = person.status === 'ACTIVE'
-  const title = deleting ? 'Xác nhận xóa người dùng' : suspending ? 'Tạm ngưng người dùng' : 'Kích hoạt lại người dùng'
-  const label = deleting ? 'Xác nhận xóa' : suspending ? 'Tạm ngưng' : 'Kích hoạt lại'
-  const footer = <div className="sc-action-row"><button type="button" className="sc-button sc-action-button--secondary" disabled={busy} data-modal-close>Hủy</button><button type="button" className={'sc-button ' + (deleting ? 'sc-user-delete-confirm' : '')} disabled={busy || Boolean(disabledReason)} onClick={onConfirm}><Icon name={deleting ? 'delete' : suspending ? 'pause_circle' : 'play_circle'} />{busy ? 'Đang xử lý…' : label}</button></div>
-  return <AdminReviewDialog compact className="sc-user-decision-dialog" title={title} footer={footer} onClose={onClose} busy={busy}><div className="sc-user-decision-content"><dl className="sc-review-fields">
-    <ReviewField label="Họ tên" value={reviewText(userName(person))} fallback="Chưa cập nhật tên" /><ReviewField label="Email" value={maskedEmail(person.email)} fallback="Chưa có email" />
-    {!deleting && <ReviewField label="Trạng thái sau xử lý" value={userStatus(suspending ? 'SUSPENDED' : 'ACTIVE')} />}
-  </dl><p className={deleting ? 'sc-user-delete-warning' : 'sc-review-help'}>{deleting ? 'Hồ sơ sẽ bị xóa khỏi danh sách và không có chức năng khôi phục. Thao tác này không xóa tài khoản đăng nhập.' : suspending ? 'Tạm ngưng hồ sơ người dùng. Bạn có thể kích hoạt lại khi cần.' : 'Khôi phục trạng thái hoạt động của hồ sơ người dùng.'}</p>{disabledReason && <p role="alert" className="sc-field-error">{disabledReason}</p>}{error && <ApiErrorMessage error={error} />}</div></AdminReviewDialog>
-}
-
 export function LocalUserDirectory() {
   const { user, roles } = useAuth()
   const [page, setPage] = useState(1)
@@ -72,7 +59,6 @@ export function LocalUserDirectory() {
   const [editor, setEditor] = useState(null)
   const [decision, setDecision] = useState(null)
   const [error, setError] = useState(null)
-  const [rolePerson, setRolePerson] = useState(null)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
   const inFlight = useRef(false)
@@ -138,15 +124,13 @@ export function LocalUserDirectory() {
         <label>
           Trạng thái
           <select
+            aria-label="Trạng thái"
             className={inputClass}
             value={status}
             onChange={(e) => { setStatus(e.target.value); setPage(1) }}
           >
             <option value="">Tất cả trạng thái</option>
-            <option value="ACTIVE">Đang hoạt động</option>
-            {!unifiedEnabled() && <option value="SUSPENDED">Tạm ngưng</option>}
-            <option value="BLOCKED">{unifiedEnabled() ? 'Tạm ngưng hoặc bị khóa' : 'Bị khóa'}</option>
-            <option value="DELETED">Đã xóa</option>
+            {USER_STATUSES.map(value => <option key={value} value={value}>{userStatus(value)}</option>)}
           </select>
         </label>
         {hasFilter && (
@@ -161,10 +145,6 @@ export function LocalUserDirectory() {
         )}
         <span className="sc-filter-count">{resource.data?.meta.total ?? '—'} người dùng</span>
       </form>
-
-      {!local && resource.status === 'ready' && (
-        <p className="sc-review-help">Hiện chưa thể thêm, chỉnh sửa, xóa hồ sơ hoặc thay đổi trạng thái người dùng tại đây.</p>
-      )}
 
       <ApiState resource={resource}>
         {resource.data && (
@@ -190,11 +170,7 @@ export function LocalUserDirectory() {
               </thead>
               <tbody>
                 {resource.data.result.map((person, index) => {
-                  const restriction = userRestriction(person, user)
-                  const editReason = userRestriction(person, user, 'edit')
-                  const editable = local
-                  const accountRestriction = userRestriction(person, user, 'status')
-                  const statusReason = !editable ? 'Chức năng thay đổi trạng thái hiện chưa khả dụng.' : accountRestriction
+                  const accountRestriction = userRestriction(person, user, 'edit')
                   const pageIndex = resource.data?.meta?.page || page
                   const returnedPageSize = resource.data?.meta?.pageSize || resource.data?.meta?.size || pageSize
                   const stt = (pageIndex - 1) * returnedPageSize + index + 1
@@ -208,13 +184,11 @@ export function LocalUserDirectory() {
                       </td>
                       <td data-label="Liên hệ">{maskedEmail(person.email) || 'Chưa có email'}</td>
                       <td data-label="Vai trò">{<UserRoles roles={person.roles} />}</td>
-                      <td data-label="Trạng thái"><StatusBadge status={person.status} label={userStatus(person.status)} /></td>
+                      <td data-label="Trạng thái"><StatusBadge status={['BLOCKED', 'SUSPENDED'].includes(person.status) ? 'NEUTRAL' : person.status} label={userStatus(person.status)} /></td>
                       <td className="sc-table-actions">
-                        <UserRowActions person={person} disabled={locked || !canManage || Boolean(accountRestriction)}
-                          edit={{ label: 'Chỉnh sửa', icon: 'edit', reason: editReason || (!editable ? 'Chỉnh sửa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'edit') }}
-                          roles={{ label: 'Phân quyền', icon: 'manage_accounts', reason: userRestriction(person, user, 'roles'), onClick: () => { setError(null); setNotice(''); setRolePerson(person) } }}
-                          status={['ACTIVE', 'SUSPENDED', 'BLOCKED'].includes(person.status) ? { label: person.status === 'ACTIVE' ? 'Tạm ngưng tài khoản' : 'Kích hoạt tài khoản', icon: person.status === 'ACTIVE' ? 'pause_circle' : 'play_circle', reason: statusReason, onClick: () => choose(person, 'status') } : null}
-                          remove={{ label: 'Xóa người dùng', icon: 'delete', danger: true, reason: restriction || (!editable ? 'Xóa hồ sơ hiện chưa khả dụng.' : null), onClick: () => choose(person, 'delete') }} />
+                        <RecordActionButton type="button" action="view" label="Chỉnh sửa người dùng" className="sc-button"
+                          disabled={locked || !canManage || Boolean(accountRestriction)} title={accountRestriction || 'Chỉnh sửa'}
+                          onClick={() => choose(person, 'edit')} />
                       </td>
                     </tr>
                   )
@@ -228,30 +202,57 @@ export function LocalUserDirectory() {
         {resource.data?.meta && <CatalogPagination meta={resource.data.meta} onPage={setPage} />}
       </ApiState>
 
-      {rolePerson && <RoleForm person={rolePerson} busy={busy} error={error} onClose={() => setRolePerson(null)} onSave={async roles => { const saved = await mutate(() => updateUserRoles(rolePerson,roles,user), 'Đã cập nhật vai trò.'); if (saved) setRolePerson(null) }} />}
-      {editor && canManage && (
-        <UserForm
-          key={editor.person?.id || 'new'}
-          person={editor.person}
-          busy={busy}
-          error={error}
-          onClose={() => { setEditor(null); setError(null) }}
-          onSave={(input) => mutate(async () => { const saved = await saveUser(editor.person, input, user); if (!editor.person) { setEmail(''); setRole(''); setStatus('') } return saved }, 'Đã lưu thông tin người dùng.')}
-        />
-      )}
+      {editor?.person && canManage && <RoleForm
+        key={editor.person.id}
+        person={editor.person}
+        local={isLocalUser(editor.person)}
+        busy={busy}
+        error={decision ? null : error}
+        removeReason={userRestriction(editor.person, user, 'delete')}
+        statusReason={userRestriction(editor.person, user, 'status')}
+        onClose={() => { setEditor(null); setError(null) }}
+        onAction={action => choose(editor.person, action)}
+        onSave={(nextRoles, changes) => mutate(async () => {
+          let current = editor.person
+          if (Object.keys(changes).length) {
+            current = isLocalUser(current)
+              ? await saveUser(current, { name: changes.name ?? userName(current), email: changes.email ?? current.email }, user)
+              : await updateUserProfile(current, {
+                ...(changes.name ? { displayName: changes.name } : {}),
+                ...(changes.phone ? { phoneNumber: changes.phone } : {}),
+              }, user)
+            setEditor({ person: current })
+            resource.reload()
+          }
+          const currentRoles = current.roles.filter(role => PLATFORM_ROLES.includes(role))
+          if (currentRoles.length !== nextRoles.length || nextRoles.some(role => !currentRoles.includes(role))) {
+            await updateUserRoles(current, nextRoles, user)
+          }
+        }, 'Đã cập nhật người dùng.')}
+      />}
+      {editor && !editor.person && canManage && <UserForm
+        key="new"
+        busy={busy}
+        error={error}
+        onClose={() => { setEditor(null); setError(null) }}
+        onSave={input => mutate(async () => {
+          await saveUser(null, input, user)
+          setEmail(''); setRole(''); setStatus('')
+        }, 'Đã lưu thông tin người dùng.')}
+      />}
       {decision && canManage && (
         <UserDecision
           person={decision.person}
           action={decision.action}
-          disabledReason={!local ? 'Thao tác hiện chưa khả dụng với hồ sơ này.' : userRestriction(decision.person, user, decision.action === 'status' ? 'status' : 'delete')}
+          local={isLocalUser(decision.person)}
+          disabledReason={userRestriction(decision.person, user, decision.action)}
           busy={busy}
           error={error}
           onClose={() => { setDecision(null); setError(null) }}
-          onConfirm={() => mutate(() => decision.action === 'delete' ? deleteUser(decision.person, user) : changeUserStatus(decision.person, user), decision.action === 'delete' ? 'Đã xóa thông tin người dùng.' : 'Đã cập nhật trạng thái người dùng.')}
+          onConfirm={() => mutate(() => decision.action === 'delete' ? deleteUser(decision.person, user) : changeUserStatus(decision.person, user, isLocalUser(decision.person) ? undefined : decision.person.status === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE'), decision.action === 'delete' ? 'Đã xóa thông tin người dùng.' : 'Đã cập nhật trạng thái người dùng.')}
         />
       )}
       {notice && <p role="status" className="sc-feedback">{notice}</p>}
     </section>
   )
 }
-export default function AdminUsersPage({ onNavigate }) { return <AdminFrame activeTab="admin-users" onNavigate={onNavigate}><LocalUserDirectory /></AdminFrame> }

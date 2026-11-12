@@ -32,20 +32,28 @@ export default function OrderStatusActions({ order, actions, busy = false, refre
     if (await onConfirm(pending.target, reason.trim(), pending.from)) { setPending(null); setReason('') }
   }
   return <section className="sc-order-action-controls space-y-3" aria-label="Thao tác đơn hàng" aria-busy={locked}>
-    <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-bold text-primary">Thao tác đơn hàng</h3><div className="flex flex-wrap items-center gap-2 text-sm"><span>Hiện tại:</span><StatusBadge status={order.status} label={orderStatusLabel(order.status)} /></div></div>
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <h3 className="font-bold text-primary">{pending ? actionLabel(pending.target) : 'Thao tác đơn hàng'}</h3>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        {!pending && <span>Hiện tại:</span>}
+        <StatusBadge status={order.status} label={orderStatusLabel(order.status)} />
+        {pending && !stale && <><span aria-hidden="true">→</span><StatusBadge status={pending.target} label={orderStatusLabel(pending.target)} /></>}
+      </div>
+    </div>
     {!pending ? <>
       <p className="text-sm text-on-surface-variant">{next ? steps[next]?.hint : order.status === 'COMPLETED' ? 'Đơn hàng đã hoàn tất.' : order.status === 'CANCELLED' ? 'Đơn hàng đã hủy. Không còn thao tác giao nhận.' : 'Chỉ có thể thực hiện thao tác được phân quyền cho đơn này.'}</p>
       <div className="flex flex-wrap gap-3">
         {next && <button type="button" disabled={locked} className={buttonClass + ' min-h-11 w-full justify-center sm:w-auto font-bold'} onClick={() => setPending({ target: next, from: order.status })}><Icon name={steps[next]?.icon || 'arrow_forward'} />{steps[next]?.label || orderStatusLabel(next)}</button>}
         {actions.includes('CANCELLED') && <button type="button" disabled={locked} className="sc-button sc-order-secondary min-h-11 w-full justify-center sm:w-auto" onClick={() => setPending({ target: 'CANCELLED', from: order.status })}><Icon name="cancel" />{cancelLabel}</button>}
       </div>
-    </> : <form onSubmit={confirm} className="space-y-4 rounded-2xl border border-outline-variant/40 bg-surface-container-low p-4" aria-label="Xác nhận chuyển trạng thái">
-      <h4 className="font-semibold text-primary">{actionLabel(pending.target)}?</h4>
-      <p className="text-sm">{orderStatusLabel(pending.from)} → {orderStatusLabel(pending.target)}</p>
+    </> : <form onSubmit={confirm} className="grid gap-3" aria-label="Xác nhận chuyển trạng thái">
       <p className="text-sm text-on-surface-variant">{actionHint(pending.target)}</p>
-      <label className="block space-y-1">{cancellation ? order.status === 'PENDING' ? 'Lý do từ chối đơn hàng' : 'Lý do hủy đơn' : 'Ghi chú cập nhật (tùy chọn)'}<textarea required={cancellation} maxLength={1000} rows={3} disabled={locked} value={reason} onChange={(event) => setReason(event.target.value)} placeholder={isCompleting ? 'Bánh ngon, đúng mẫu...' : ''} className={inputClass + ' w-full'} /></label>
+      <label className="grid gap-1.5 text-sm">{cancellation ? order.status === 'PENDING' ? 'Lý do từ chối đơn hàng' : 'Lý do hủy đơn' : 'Ghi chú cập nhật (tùy chọn)'}<textarea required={cancellation} maxLength={1000} rows={2} disabled={locked} value={reason} onChange={(event) => setReason(event.target.value)} placeholder={isCompleting ? 'Bánh ngon, đúng mẫu...' : ''} className={inputClass + ' w-full resize-y'} /></label>
       {stale && <p role="alert" className="text-sm text-primary">Trạng thái đơn đã thay đổi. Vui lòng quay lại và chọn thao tác phù hợp.</p>}
-      <div className="flex flex-wrap gap-3"><button type="submit" disabled={locked || !!stale || cancellation && !reason.trim()} className={buttonClass + ' min-h-11 w-full justify-center sm:w-auto font-bold'}>{busy ? 'Đang cập nhật…' : isCompleting ? 'Tôi đã nhận đủ bánh' : 'Xác nhận cập nhật'}</button><button type="button" disabled={locked} className="sc-button sc-order-secondary min-h-11 w-full justify-center sm:w-auto" onClick={() => setPending(null)}>Quay lại</button></div>
+      <div className="flex flex-wrap justify-end gap-2">
+        <button type="button" disabled={locked} className="sc-button sc-order-secondary min-h-11 justify-center" onClick={() => setPending(null)}>Quay lại</button>
+        <button type="submit" disabled={locked || !!stale || cancellation && !reason.trim()} className={buttonClass + ' min-h-11 justify-center font-bold'}>{busy ? 'Đang cập nhật…' : isCompleting ? 'Tôi đã nhận đủ bánh' : 'Xác nhận cập nhật'}</button>
+      </div>
     </form>}
   </section>
 }

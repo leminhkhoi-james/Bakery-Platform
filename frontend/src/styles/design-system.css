@@ -286,5 +286,5 @@ button:disabled { opacity: .45; }
   font-weight: var(--sc-weight-semibold);
   line-height: 1.4;
 }
-.sc-portal :is(td.sc-table-actions, td.sc-vendor-order-actions, .sc-admin-plan-actions, .sc-vendor-card-actions)
+.sc-portal :is(td.sc-table-actions, td.sc-vendor-order-actions, .sc-vendor-card-actions)
   .sc-button:not([aria-haspopup], .sc-icon-button) > .sc-icon { display: none; }

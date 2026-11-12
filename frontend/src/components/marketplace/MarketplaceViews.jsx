@@ -1,10 +1,11 @@
+import MoneyInput from '../common/MoneyInput.jsx'
 import { displayReference } from '../../services/displayReference.js'
 import { uiLabel } from '../../services/uiLabels.js'
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { rfqService, loadRfqs, loadRfq, loadOffers } from '../../services/rfqService.js'
-import { REQUEST_STATUSES, OFFER_STATUSES, editableRequest, ownsRequest, moneyVnd, toLocalInput } from '../../services/marketplaceModels.js'
+import { REQUEST_STATUSES, OFFER_STATUSES, editableRequest, ownsRequest, moneyVnd, toLocalInput, rfqPayload } from '../../services/marketplaceModels.js'
 import { chatService } from '../../services/chatService.js'
 import CatalogPagination from '../catalog/CatalogPagination.jsx'
 import { ApiErrorMessage, buttonClass, inputClass, panelClass } from '../management/ApiState.jsx'
@@ -16,7 +17,7 @@ import { EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { useMarketplaceAction } from '../../hooks/useMarketplaceAction.js'
 import ThreeCakeCanvas from '../../pages/customer/ai-studio/ThreeCakeCanvas.jsx'
 
-export function ReferenceImage({ url, label = 'Ảnh tham khảo', className }) {
+export function ReferenceImage({ url, label = 'Ảnh tham khảo', className, unavailableLabel }) {
   const [failed, setFailed] = useState(false)
   return url && !failed ? (
     <img
@@ -27,7 +28,7 @@ export function ReferenceImage({ url, label = 'Ảnh tham khảo', className }) 
     />
   ) : (
     <div className="rounded-2xl border border-outline-variant/20 bg-surface-container-low p-4 text-center text-xs text-outline">
-      Ảnh không khả dụng hoặc URL đã hết hạn. Tải lại dữ liệu để lấy URL mới.
+      {unavailableLabel || 'Ảnh không khả dụng hoặc URL đã hết hạn. Tải lại dữ liệu để lấy URL mới.'}
     </div>
   )
 }
@@ -115,7 +116,7 @@ export function RequestInfo({ request, compact = false }) {
 
   if (compact) {
     return (
-      <section className="space-y-3.5 rounded-2xl border border-outline-variant/30 bg-surface p-4 sm:p-5 shadow-xs">
+      <section className={`sc-popup-group sc-rfq-request-summary ${cake3DConfig || cake3DSnapshotUrl || selectedAiImageUrl || extraImages.length ? 'sc-rfq-request-summary--media' : ''} space-y-3.5 rounded-2xl border border-outline-variant/30 bg-surface p-4 sm:p-5 shadow-xs`}>
         {/* Status & Occasion header */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/20 pb-3">
           <div className="flex items-center gap-2">
@@ -137,8 +138,8 @@ export function RequestInfo({ request, compact = false }) {
         </h2>
 
         {/* Key Metrics: Budget & Location */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+        <div className="sc-popup-summary grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="sc-popup-group rounded-xl border border-primary/20 bg-primary/5 p-3">
             <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
               <Icon name="payments" className="text-sm" />
               <span>Ngân sách</span>
@@ -148,7 +149,7 @@ export function RequestInfo({ request, compact = false }) {
             </p>
           </div>
 
-          <div className="rounded-xl border border-outline-variant/25 bg-surface-container-low p-3">
+          <div className="sc-popup-group rounded-xl border border-outline-variant/25 bg-surface-container-low p-3">
             <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-outline">
               <Icon name="location_on" className="text-sm text-secondary" />
               <span>Giao tại</span>
@@ -164,7 +165,7 @@ export function RequestInfo({ request, compact = false }) {
 
         {/* Cake Visual */}
         {(cake3DSnapshotUrl || cake3DConfig) ? (
-          <div className="rounded-2xl border border-rose-200/90 bg-rose-50/40 p-3 space-y-2">
+          <div className="sc-rfq-reference rounded-2xl border border-rose-200/90 bg-rose-50/40 p-3 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-primary flex items-center gap-1.5">
                 <Icon name="view_in_ar" className="text-base" /> Mẫu bánh 3D
@@ -191,43 +192,46 @@ export function RequestInfo({ request, compact = false }) {
                 />
               </div>
             ) : (
-              <img
-                src={cake3DSnapshotUrl || selectedAiImageUrl}
-                alt="Mẫu bánh 3D"
+              <ReferenceImage key={cake3DSnapshotUrl || selectedAiImageUrl}
+                unavailableLabel="Ảnh mẫu hiện chưa xem được."
+                url={cake3DSnapshotUrl || selectedAiImageUrl}
+                label="Mẫu bánh 3D"
                 className="h-52 w-full rounded-xl object-contain bg-white/70 border border-stone-200"
               />
             )}
           </div>
         ) : selectedAiImageUrl ? (
-          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-3 space-y-2">
+          <div className="sc-rfq-reference rounded-2xl border border-primary/20 bg-primary/5 p-3 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-primary flex items-center gap-1.5">
                 <Icon name="auto_awesome" className="text-base" /> Mẫu bánh AI khách chọn
               </span>
             </div>
-            <img
-              src={selectedAiImageUrl}
-              alt="Mẫu bánh AI"
+            <ReferenceImage key={selectedAiImageUrl}
+              unavailableLabel="Ảnh mẫu hiện chưa xem được."
+              url={selectedAiImageUrl}
+              label="Mẫu bánh AI"
               className="h-52 w-full rounded-xl object-cover border border-outline-variant/30 shadow-xs"
             />
           </div>
         ) : extraImages.length > 0 ? (
-          <div className="rounded-2xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-2">
+          <div className="sc-rfq-reference rounded-2xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-2">
             <span className="text-xs font-bold text-outline">Ảnh khách đính kèm</span>
-            <img
-              src={extraImages[0].url}
-              alt="Ảnh đính kèm"
+            <ReferenceImage key={extraImages[0].url}
+              unavailableLabel="Ảnh đính kèm hiện chưa xem được."
+              url={extraImages[0].url}
+              label="Ảnh đính kèm"
               className="h-48 w-full rounded-xl object-cover border border-outline-variant/30"
             />
           </div>
         ) : null}
 
         {/* Specifications */}
-        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-1.5 text-xs">
+        <div className="sc-popup-group sc-rfq-specification-group rounded-xl border border-outline-variant/20 bg-surface-container-low p-3 space-y-1.5 text-xs">
           <div className="font-bold text-primary flex items-center gap-1.5">
             <Icon name="tune" className="text-sm" /> Yêu cầu quy cách
           </div>
-          <div className="grid grid-cols-2 gap-2 text-stone-700 pt-1">
+          <div className="sc-rfq-specifications grid grid-cols-2 gap-2 text-stone-700 pt-1">
             {request.servingSize != null && (
               <div><span className="text-outline">Khẩu phần:</span> <strong>{request.servingSize} người</strong></div>
             )}
@@ -258,7 +262,7 @@ export function RequestInfo({ request, compact = false }) {
 
         {/* Customer description */}
         {request.description && (
-          <div className="rounded-xl bg-amber-50/70 border border-amber-200/60 p-3 text-xs text-amber-950">
+          <div className="sc-rfq-customer-message rounded-xl bg-amber-50/70 border border-amber-200/60 p-3 text-xs text-amber-950">
             <div className="font-bold mb-1 flex items-center gap-1 text-amber-800">
               <Icon name="notes" className="text-sm" /> Lời nhắn của khách hàng
             </div>
@@ -732,7 +736,8 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
   const [deliveryDistrict, setDeliveryDistrict] = useState(request?.deliveryDistrict || 'Quận 1')
   const [deliveryCity, setDeliveryCity] = useState(request?.deliveryCity || 'TP. Hồ Chí Minh')
   const [neededAt, setNeededAt] = useState(() => toLocalInput(request?.neededAt))
-  const [savedToast, setSavedToast] = useState(false)
+  const [offerDeadline, setOfferDeadline] = useState(() => toLocalInput(request?.offerDeadline))
+  const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
     setBudgetMin(request?.budgetMin ?? '')
@@ -740,7 +745,8 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
     setDeliveryDistrict(request?.deliveryDistrict || 'Quận 1')
     setDeliveryCity(request?.deliveryCity || 'TP. Hồ Chí Minh')
     setNeededAt(toLocalInput(request?.neededAt))
-  }, [request?.updatedAt, request?.budgetMin, request?.budgetMax, request?.deliveryDistrict, request?.deliveryCity, request?.neededAt])
+    setOfferDeadline(toLocalInput(request?.offerDeadline))
+  }, [request?.updatedAt, request?.budgetMin, request?.budgetMax, request?.deliveryDistrict, request?.deliveryCity, request?.neededAt, request?.offerDeadline])
 
   const buildUpdatedPayload = () => ({
     ...request,
@@ -748,8 +754,21 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
     budgetMax: budgetMax === '' ? null : Number(budgetMax),
     deliveryDistrict: deliveryDistrict.trim() || request.deliveryDistrict || 'Quận 1',
     deliveryCity: deliveryCity.trim() || request.deliveryCity || 'TP. Hồ Chí Minh',
-    neededAt: neededAt ? new Date(neededAt).toISOString() : request.neededAt,
+    neededAt,
+    offerDeadline: offerDeadline || null,
   })
+
+  function submit(publish) {
+    setValidationError('')
+    try {
+      const payload = buildUpdatedPayload()
+      rfqPayload(payload)
+      if (publish) onSaveAndPublish(payload)
+      else onSaveOnly(payload)
+    } catch (error) {
+      setValidationError(error.message)
+    }
+  }
 
   return (
     <div className="space-y-3.5 rounded-2xl border-2 border-rose-300/90 bg-gradient-to-b from-rose-50/90 to-white p-4 shadow-xs">
@@ -801,8 +820,7 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
       <div className="grid grid-cols-2 gap-2.5">
         <label className="space-y-1 text-xs">
           <span className="font-semibold text-stone-700">Tối thiểu (VNĐ)</span>
-          <input
-            type="number"
+          <MoneyInput
             min={0}
             step={50000}
             disabled={busy}
@@ -814,8 +832,7 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
         </label>
         <label className="space-y-1 text-xs">
           <span className="font-semibold text-stone-700">Tối đa (VNĐ)</span>
-          <input
-            type="number"
+          <MoneyInput
             min={0}
             step={50000}
             disabled={busy}
@@ -863,24 +880,21 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
             className={inputClass + ' w-full bg-white text-xs'}
           />
         </label>
+        <label className="col-span-2 space-y-1 text-xs"><span className="font-semibold text-stone-700">Hạn nhận báo giá</span>
+          <input type="datetime-local" disabled={busy} value={offerDeadline} max={neededAt || undefined}
+            onChange={event => setOfferDeadline(event.target.value)} className={inputClass + ' w-full bg-white text-xs'} />
+          <span>Để trống nếu không đặt hạn riêng. Nếu chọn, hạn phải ở tương lai và trước thời gian nhận bánh.</span>
+        </label>
       </div>
 
-      {savedToast && (
-        <p className="rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-800">
-          ✓ Đã cập nhật ngân sách & thông tin giao nhận!
-        </p>
-      )}
+      {validationError && <p role="alert" className="text-xs text-red-700">{validationError}</p>}
 
       {/* Save / Publish Action Buttons */}
       <div className="space-y-2 pt-1">
         <button
           type="button"
           disabled={busy}
-          onClick={async () => {
-            await onSaveOnly(buildUpdatedPayload())
-            setSavedToast(true)
-            setTimeout(() => setSavedToast(false), 3000)
-          }}
+          onClick={() => submit(false)}
           className="w-full rounded-xl border border-primary/30 bg-white py-2.5 px-3 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <Icon name="save" className="text-sm" />
@@ -891,7 +905,7 @@ function QuickBudgetDeliveryCard({ request, busy, onSaveOnly, onSaveAndPublish }
           type="button"
           className={buttonClass + ' w-full py-3 text-sm font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer'}
           disabled={busy}
-          onClick={() => onSaveAndPublish(buildUpdatedPayload())}
+          onClick={() => submit(true)}
         >
           <Icon name="send" className="text-base" />
           2. Gửi yêu cầu để nhận báo giá ngay
@@ -924,7 +938,7 @@ export function CustomerRequestDetail({ id, onNavigate }) {
       <div className="sc-customer-heading flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="sc-kicker">SweetCake Marketplace / Đặt làm theo yêu cầu</p>
-          <h1 className="font-serif text-3xl font-semibold text-primary">Chi tiết yêu cầu bánh (RFQ)</h1>
+          <h1 className="font-serif text-3xl font-semibold text-primary">Chi tiết yêu cầu bánh</h1>
         </div>
         <button
           type="button"
@@ -1081,7 +1095,7 @@ export function CustomerRequestDetail({ id, onNavigate }) {
                     <button
                       type="button"
                       className="w-full rounded-2xl border-2 border-primary/20 bg-surface-container-low py-2.5 px-3 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                      onClick={() => onNavigate('ai-studio?cakeRequestId=' + id)}
+                      onClick={() => onNavigate('ai-studio?cakeRequestId=' + id + '&mode=prompt')}
                     >
                       <Icon name="auto_awesome" className="text-base text-secondary" /> Tạo thêm ảnh bằng AI
                     </button>

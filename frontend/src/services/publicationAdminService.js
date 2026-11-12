@@ -1,3 +1,4 @@
+import { BAKERY_STATUSES } from './statusCatalog.js'
 import { api as sharedApi, ApiError } from './apiClient.js'
 import { catalogQuery, isCatalogId } from './catalogModels.js'
 import { requireId, requireText, mapPage } from './managementModels.js'
@@ -9,7 +10,7 @@ const api = {
   patch: (path, body, options = {}) => sharedApi.patch(path, body, { ...options, allowMockFallback: false }),
 }
 
-export const BAKERY_STATUSES = ['DRAFT', 'PENDING_APPROVAL', 'ACTIVE', 'SUSPENDED', 'CLOSED']
+export { BAKERY_STATUSES } from './statusCatalog.js'
 export const bakeryTransitions = (status) => ({ DRAFT: ['CLOSED'], PENDING_APPROVAL: ['ACTIVE', 'DRAFT', 'CLOSED'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'], CLOSED: [] }[status] || [])
 export function mapAdminBakery(dto) {
   if (!dto?.id || !BAKERY_STATUSES.includes(dto.status)) throw new ApiError('BakeryDto quản trị không hợp lệ.', 502)
@@ -39,7 +40,7 @@ export const publicationAdminService = {
     return { ...data, bakery }
   },
   async changeBakeryStatus(bakery, status, _reason) {
-    if (!bakeryTransitions(bakery?.status).includes(status)) throw new ApiError('Chuyển trạng thái tiệm không hợp lệ. Hãy tải lại.', 409)
+    if (!bakeryTransitions(bakery?.status).includes(status)) throw new ApiError('Chuyển trạng thái tiệm không hợp lệ.', 409)
     const payload = { status }
     const result = mapAdminBakery(await api.patch('/admin/bakeries/' + requireId(bakery.id) + '/status', payload))
     if (result.id !== bakery.id || result.status !== status) throw new ApiError('Backend chưa xác nhận đúng tiệm/trạng thái yêu cầu.', 502)

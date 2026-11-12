@@ -1,6 +1,7 @@
+import { BAKERY_STATUSES, USER_STATUSES, USER_STATUS_LABELS } from './statusCatalog.js'
 import { approvalDate, approvedPayments as selectApprovedPayments } from '../mockData/business/metrics.js'
 import { displayReference } from './displayReference.js'
-import { orderStatusLabel } from './orderModels.js'
+import { ORDER_STATUSES, orderStatusLabel } from './orderModels.js'
 import { uiLabel } from './uiLabels.js'
 
 const unique = (rows = []) => [...new Map(rows.filter((row) => row?.id).map((row) => [row.id, row])).values()]
@@ -17,7 +18,7 @@ export const dashboardNumber = (value) => value == null ? '—' : value.toLocale
 export const dashboardMoney = (value, currency = 'VND') => value == null || !Number.isFinite(Number(value)) || !/^[A-Z]{3}$/.test(currency || '') ? '—' : new Intl.NumberFormat('vi-VN', { style: 'currency', currency, maximumFractionDigits: 0 }).format(Number(value))
 export const dashboardOrderName = (order) => displayReference(order.id, 'ORD', order.orderNumber)
 
-export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), currency = 'VND' } = {}) {
+export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), currency = 'VND', includeEmptyStatuses = false } = {}) {
   data ||= {}
   days = [7, 30, 90].includes(days) ? days : 30
   const rows = (key) => data[key]?.state === 'ready' ? unique(data[key].rows) : null
@@ -52,7 +53,19 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
     ...(designs || []).filter((row) => row.moderationStatus === 'PENDING').map((row) => ({ ...row, kind: 'design', label: 'Thiết kế bánh chờ duyệt' })),
     ...(reviews || []).filter((row) => row.status === 'PUBLISHED' && row.rating >= 1 && row.rating <= 2).map((row) => ({ ...row, kind: 'review', label: 'Đánh giá ' + row.rating + ' sao cần xem lại' })),
   ] : null
-  const distribution = (items, label) => items == null ? null : Object.entries(items.reduce((sum, row) => { const key = row.status || 'UNKNOWN'; sum[key] = (sum[key] || 0) + 1; return sum }, {})).sort((a, b) => b[1] - a[1]).map(([status, count]) => ({ status, label: status === 'UNKNOWN' ? 'Chưa phân loại' : label(status), count }))
+  const distribution = (items, label, statuses) => {
+    if (items == null) return null
+    const counts = Object.fromEntries((includeEmptyStatuses ? statuses : []).map(status => [status, 0]))
+    for (const row of items) {
+      const status = row.status || 'UNKNOWN'
+      counts[status] = (counts[status] || 0) + 1
+    }
+    const entries = Object.entries(counts)
+    if (!includeEmptyStatuses) entries.sort((a, b) => b[1] - a[1])
+    return entries.map(([status, count]) => ({
+      status, label: status === 'UNKNOWN' ? 'Chưa phân loại' : label(status), count,
+    }))
+  }
   const bakeryNames = new Map((bakeries || []).map((row) => [row.id, row.name]))
   const activities = []
   const add = (kind, items, date, describe, route, icon) => { for (const row of items || []) { const time = instant(date(row)); if (time != null && time <= now) activities.push({ key: kind + ':' + row.id, time, title: describe(row), route: route(row), icon }) } }
@@ -68,7 +81,11 @@ export function buildAdminDashboard(data = {}, { days = 30, now = Date.now(), cu
     openRequestsCount: openRequests?.length ?? null,
     acceptedOffersCount: acceptedOffers?.length ?? null,
     pendingBakeries, pendingPayments, moderation,
-    distributions: { orders: distribution(orders, orderStatusLabel), bakeries: distribution(bakeries, uiLabel), users: distribution(users, uiLabel) },
+    distributions: {
+      orders: distribution(orders, orderStatusLabel, ORDER_STATUSES),
+      bakeries: distribution(bakeries, uiLabel, BAKERY_STATUSES),
+      users: distribution(users?.map(row => row.status === 'SUSPENDED' ? { ...row, status: 'BLOCKED' } : row), status => USER_STATUS_LABELS[status] || uiLabel(status), USER_STATUSES),
+    },
     recentOrders: [...(orders || [])].sort((a, b) => ((instant(b.createdAt) ?? -Infinity) - (instant(a.createdAt) ?? -Infinity)) || String(a.id).localeCompare(String(b.id))).slice(0, 5),
     activities: activities.sort((a, b) => b.time - a.time || a.key.localeCompare(b.key)).slice(0, 7),
   }

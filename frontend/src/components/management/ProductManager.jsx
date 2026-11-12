@@ -1,11 +1,13 @@
+import MoneyInput from '../common/MoneyInput.jsx'
 import { recordSource, unifiedEnabled } from '../../services/unifiedDataService.js'
 import { vendorMoney, vendorName } from '../../services/vendorPresentation.js'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { displayReference } from '../../services/displayReference.js'
 import EntityActionButtons from '../common/EntityActionButtons.jsx'
-import { VendorActionMenu, VendorImage, VendorConfirm } from '../common/VendorUi.jsx'
+import { VendorImage, VendorConfirm } from '../common/VendorUi.jsx'
 import { loadProductSnapshot } from '../../services/vendorCatalogService.js'
-import { uiLabel } from '../../services/uiLabels.js'
+import { categoryTagLabel, categoryNameKey, groupProductCategories } from '../../services/vendorCatalogModels.js'
+import { readDashboardPages } from '../../services/adminDashboardService.js'
 import React, { useRef, useState } from 'react'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { useAuth } from '../../context/useAuth.js'
@@ -15,23 +17,38 @@ import { memberCanEdit, productActions } from '../../services/managementModels.j
 import { ApiState, ApiErrorMessage, inputClass, buttonClass, panelClass } from './ApiState.jsx'
 import CatalogPagination from '../catalog/CatalogPagination.jsx'
 import ProductAssets from './ProductAssets.jsx'
-import { CatalogEntityForm } from './CatalogEntityManager.jsx'
 import { DetailDrawer, EmptyPanel, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 
-const productActionLabel = { publish: 'Mở bán trên cửa hàng', hide: 'Tạm ẩn sản phẩm', archive: 'Ngừng bán (Đưa vào lưu kho)' }
-const productActionItems = (product, canEdit) => productActions(product.status).map((action) => ({ key: action, label: action === 'publish' && product.status === 'HIDDEN' ? 'Hiển thị lại' : productActionLabel[action],
+const productStatusLabel = { DRAFT: 'Bản nháp', PUBLISHED: 'Đang bán', HIDDEN: 'Tạm ẩn', ARCHIVED: 'Đã lưu trữ' }
+const productActionLabel = { publish: 'Mở bán trên cửa hàng', hide: 'Tạm ẩn sản phẩm', archive: 'Lưu trữ sản phẩm' }
+const productActionItems = (product, canEdit) => productActions(product.status).map((action) => ({ key: action, label: action === 'publish' && product.status === 'HIDDEN' ? 'Mở bán lại' : productActionLabel[action],
   icon: { publish: 'storefront', hide: 'visibility_off', archive: 'archive' }[action], tone: { publish: 'primary', hide: 'warning', archive: 'danger' }[action],
   disabled: !canEdit, disabledReason: 'Cần quyền chủ tiệm.',
-  description: { publish: 'Mẫu bánh sẽ hiển thị trên cửa hàng để khách hàng có thể tìm thấy và đặt mua khi tiệm đang mở cửa.', hide: 'Tạm ngừng hiển thị mẫu bánh này trên cửa hàng. Các đơn đã đặt trước đó vẫn được giữ nguyên.', archive: 'Ngừng bán và lưu trữ mẫu bánh này. Hiện chưa hỗ trợ khôi phục bánh đã lưu trữ. Nếu chỉ muốn ẩn tạm thời và mở bán lại, hãy chọn Tạm ẩn.' }[action],
+  description: { publish: 'Mẫu bánh sẽ hiển thị trên cửa hàng để khách hàng có thể tìm thấy và đặt mua khi tiệm đang mở cửa.', hide: 'Tạm ngừng hiển thị mẫu bánh này trên cửa hàng. Các đơn đã đặt trước đó vẫn được giữ nguyên.', archive: 'Mẫu bánh đã lưu trữ sẽ ngừng bán. Để bán lại, hãy tạo bản nháp mới từ mẫu này.' }[action],
 }))
 
-export function CategoryForm({ busy, onSave }) {
-  const [name, setName] = useState(''), [slug, setSlug] = useState(''), [displayOrder, setOrder] = useState('0'), [active, setActive] = useState(true)
-  return <form className={panelClass} onSubmit={(event) => { event.preventDefault(); onSave({ name, slug, displayOrder, active }) }}><h3 className="font-bold">Tạo danh mục của tiệm</h3><fieldset disabled={busy} className="grid gap-3 sm:grid-cols-2"><label>Tên danh mục<input required maxLength={120} value={name} onChange={(event) => setName(event.target.value)} className={inputClass} /></label><label>Slug danh mục<input required maxLength={140} value={slug} onChange={(event) => setSlug(event.target.value)} className={inputClass} /></label><label>Thứ tự hiển thị<input required type="number" min="0" step="1" value={displayOrder} onChange={(event) => setOrder(event.target.value)} className={inputClass} /></label><label className="flex items-center gap-2"><input type="checkbox" checked={active} onChange={(event) => setActive(event.target.checked)} />Đang hoạt động</label><button className={buttonClass}>Lưu danh mục</button></fieldset><p className="text-sm">Sau khi lưu, bạn có thể chọn danh mục này khi thêm hoặc sửa sản phẩm.</p></form>
+async function loadProductList({ categoryIds, page, size, ...params }, options) {
+  if (categoryIds.length <= 1) {
+    return loadManagedProducts({ ...params, page, size, categoryId: categoryIds[0] }, options)
+  }
+  const { rows } = await readDashboardPages(
+    (pagination, request) => loadManagedProducts({ ...pagination, ...params }, request), options,
+  )
+  const ids = new Set(categoryIds)
+  const matches = rows.filter(product => ids.has(product.categoryId))
+  const pages = Math.ceil(matches.length / size)
+  const currentPage = Math.min(page, Math.max(1, pages))
+  return {
+    result: matches.slice((currentPage - 1) * size, currentPage * size),
+    meta: { page: currentPage, pageSize: size, pages, total: matches.length },
+  }
 }
 
-export function ProductForm({ product, categories = [], busy, onSave, onClose, footerExternal = false }) {
-  const [values, setValues] = useState(product || { name: '', slug: '', description: '', basePrice: '', customizable: false, defaultServingSize: '', minimumNoticeHours: '', categoryId: '' })
+export function ProductForm({ product, draft, categories = [], busy, onSave, onClose, footerExternal = false }) {
+  const [values, setValues] = useState(product || draft || { name: '', slug: '', description: '', basePrice: '', customizable: false, defaultServingSize: '', minimumNoticeHours: '', categoryId: '' })
+  const categoryOptions = [...groupProductCategories(categories).values()].map(group =>
+    group.find(category => category.id === values.categoryId) || group[0],
+  )
   const field = (key) => ({ 'aria-label': ({ name: 'Tên mẫu bánh', categoryId: 'Danh mục sản phẩm', description: 'Mô tả sản phẩm', basePrice: 'Giá bán cơ bản', defaultServingSize: 'Khẩu phần mặc định', minimumNoticeHours: 'Thời gian đặt trước' })[key] || key, value: values[key] ?? '', onChange: (event) => setValues((current) => ({ ...current, [key]: event.target.value })) })
 
   return (
@@ -47,8 +64,7 @@ export function ProductForm({ product, categories = [], busy, onSave, onClose, f
       <ModalFormState value={values} busy={busy} />
       <input type="hidden" {...field('slug')} />
 
-      {/* Card 1: Thông tin cơ bản & Giá bán */}
-      <section className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm space-y-5">
+      <section className="sc-popup-group space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-rose-50 border border-rose-100/80 flex items-center justify-center text-rose-700">
@@ -56,12 +72,8 @@ export function ProductForm({ product, categories = [], busy, onSave, onClose, f
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Thông tin cơ bản</h3>
-              <p className="text-xs text-slate-500">Thiết lập tên mẫu bánh, phân loại danh mục và giá mở bán</p>
             </div>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-100/60">
-            {product ? 'Chỉnh sửa' : 'Tạo mới'}
-          </span>
         </div>
 
         <fieldset disabled={busy} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -90,9 +102,8 @@ export function ProductForm({ product, categories = [], busy, onSave, onClose, f
                 {vendorMoney(values.basePrice || 0)}
               </span>
             </div>
-            <input
+            <MoneyInput
               required
-              type="number"
               min="0"
               step="0.01"
               placeholder="0"
@@ -112,7 +123,7 @@ export function ProductForm({ product, categories = [], busy, onSave, onClose, f
                 className="w-full h-11 px-3.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/25 focus:border-rose-500 bg-white text-slate-900 transition-all appearance-none cursor-pointer pr-10"
               >
                 <option value="">{product?.categoryId ? 'Giữ danh mục hiện tại' : 'Không chọn danh mục'}</option>
-                {categories.map((category) => (
+                {categoryOptions.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name || displayReference(category.id, 'CAT')}
                     {category.active === false ? ' (không hoạt động)' : ''}
@@ -193,16 +204,6 @@ export function ProductForm({ product, categories = [], busy, onSave, onClose, f
         </fieldset>
       </section>
 
-      {/* Card 2: Thông báo hướng dẫn */}
-      <div className="flex items-start gap-3 p-4 rounded-2xl border border-amber-200/80 bg-amber-50/70 text-amber-900 text-xs leading-relaxed">
-        <Icon name="info" className="text-base text-amber-700 shrink-0 mt-0.5" />
-        <p>
-          {product
-            ? 'Ảnh và tùy chọn được lưu riêng ở các mục bên dưới.'
-            : 'Sản phẩm mới được lưu thành bản nháp. Để mở bán, cần ảnh chính, tiệm đang hoạt động và gói dịch vụ còn hiệu lực.'}
-        </p>
-      </div>
-
       {/* Card 3: Action buttons khi footerExternal = false */}
       {!footerExternal && (
         <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
@@ -236,8 +237,9 @@ function ProductThumbnail({ bakeryId, product, snapshot }) {
 }
 function PublishedProductThumbnail({ bakeryId, product }) {
   const resource = useCatalogResource(loadProductSnapshot, { bakeryId, productId: product.id })
+  const imageRetried = useRef(false)
   const images = resource.data?.images || [], image = images.find(item => item.primary) || images[0]
-  return <><VendorImage src={image?.url} alt={vendorName(product.name)} />{resource.error && resource.error.status !== 404 && <p className="text-xs px-3" role="alert">Chưa tải được hình ảnh. <button className="underline" onClick={resource.reload}>Thử lại</button></p>}</>
+  return <><VendorImage src={image?.url} alt={vendorName(product.name)} onLoadError={() => { if (!imageRetried.current) { imageRetried.current = true; resource.reload() } }} />{resource.error && resource.error.status !== 404 && <p className="text-xs px-3" role="alert">Chưa tải được hình ảnh.</p>}</>
 }
 
 export default function ProductManager({ bakeryId, navigation, bakeryName: initialBakeryName }) {
@@ -245,13 +247,34 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
   const bakeryInfo = useCatalogResource(loadOwnerBakery, { bakeryId, userId: user?.id })
   const bakeryName = initialBakeryName || bakeryInfo.data?.name || ''
   const membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
-  const [page, setPage] = useState(1), [query, setQuery] = useState(''), [status, setStatus] = useState(''), [sort, setSort] = useState('createdAt,desc'), [categoryId, setCategory] = useState('')
-  const products = useCatalogResource(loadManagedProducts, { bakeryId, page, size: 12, query, status, sort, categoryId })
+  const [page, setPage] = useState(1), [query, setQuery] = useState(''), [status, setStatus] = useState(''), [categoryId, setCategory] = useState('')
   const categories = useCatalogResource(loadManagedCategories, { bakeryId })
+  const categoriesById = new Map((categories.data || []).map(category => [category.id, category]))
+  const categoryGroups = groupProductCategories(categories.data || [])
+  const categoryIds = (categoryGroups.get(categoryId) || []).map(category => category.id)
+  const products = useCatalogResource(loadProductList, { bakeryId, page, size: 12, query, status, sort: 'createdAt,desc', categoryIds })
   const [editing, setEditing] = useState(null), [adding, setAdding] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [snapshots, setSnapshots] = useState({})
-  const [editorRevision, setEditorRevision] = useState(0), [categoryAdding, setCategoryAdding] = useState(false), [editorTab, setEditorTab] = useState('info'), [pendingAction, setPendingAction] = useState(null)
+  const [draft, setDraft] = useState(null)
+  const [editorRevision, setEditorRevision] = useState(0), [pendingAction, setPendingAction] = useState(null)
   const inFlight = useRef(false)
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
+  function openCreate(source) {
+    const category = categoriesById.get(source?.categoryId)
+    setDraft(source ? {
+      name: source.name,
+      slug: (source.slug || 'mau-banh').slice(0, 190) + '-' + crypto.randomUUID().slice(0, 8),
+      description: source.description,
+      basePrice: source.basePrice,
+      defaultServingSize: source.defaultServingSize,
+      minimumNoticeHours: source.minimumNoticeHours,
+      categoryId: category?.active ? category.id : '',
+      customizable: source.customizable ?? false,
+    } : null)
+    setAdding(true)
+    setEditing(null)
+    setError(null)
+    setNotice('')
+  }
   async function mutate(action, keepEditor = false) {
     if (busy || inFlight.current || !canEdit) return false
     inFlight.current = true
@@ -262,22 +285,15 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
   }
   const changeFilter = (setter) => (event) => { setter(event.target.value); setPage(1) }
   return <div className="space-y-5">
-    <div className="flex flex-wrap items-center gap-3">
-      {navigation}
-      {canEdit && <button type="button" className="sc-button sc-action-button--secondary" disabled={busy} onClick={() => setCategoryAdding(true)}>Thêm danh mục sản phẩm</button>}
-    </div>
-    {categoryAdding && canEdit && <CatalogEntityForm kind="categories" busy={busy} error={error} onClose={() => setCategoryAdding(false)} onSave={async input => {
-      if (busy || inFlight.current) return
-      inFlight.current = true; setBusy(true); setError(null)
-      try { await vendorManagementService.createCategory(bakeryId,input); categories.reload(); setCategoryAdding(false); setNotice('Đã tạo danh mục.') }
-      catch (failure) { setError(failure) } finally { inFlight.current = false; setBusy(false) }
-    }} />}
-    <section className={panelClass}><div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-bold text-primary">Danh sách mẫu bánh</h2><button disabled={!canEdit || busy || products.status !== 'ready'} onClick={() => { setAdding(true); setEditing(null); setError(null) }} className={buttonClass}>Thêm sản phẩm</button></div>
+    <section className={panelClass + ' sc-vendor-menu-panel'}>
       {membership.status === 'loading' ? <p>Đang xác minh quyền quản lý…</p> : membership.error ? <><p className="text-sm">Chưa xác minh được quyền chủ tiệm. Các thao tác thay đổi đang được khóa.</p><ApiErrorMessage error={membership.error} retry={membership.reload} /></> : null}
-      <div className="sc-toolbar grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{['DRAFT', 'PUBLISHED', 'HIDDEN', 'ARCHIVED'].map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{categories.data?.map((category) => <option key={category.id} value={category.id}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label><label>Sắp xếp<select value={sort} onChange={changeFilter(setSort)} className={inputClass}><option value="createdAt,desc">Mới nhất</option><option value="name,asc">Tên A–Z</option><option value="basePrice,asc">Giá tăng dần</option><option value="basePrice,desc">Giá giảm dần</option></select></label></div>
+      <div className="sc-vendor-menu-filterbar">{navigation}<div className="sc-toolbar sc-vendor-product-filters"><label>Tìm sản phẩm<input value={query} onChange={changeFilter(setQuery)} className={inputClass} /></label><label>Trạng thái<select value={status} onChange={changeFilter(setStatus)} className={inputClass}><option value="">Tất cả</option>{Object.entries(productStatusLabel).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label>Danh mục<select value={categoryId} onChange={changeFilter(setCategory)} className={inputClass}><option value="">Tất cả</option>{[...categoryGroups].map(([key, [category]]) => <option key={key} value={key}>{category.name || displayReference(category.id, 'CAT')}</option>)}</select></label></div>
+        <button disabled={!canEdit || busy || products.status !== 'ready'} onClick={() => openCreate()} className={buttonClass + ' ml-auto shrink-0'}>Thêm sản phẩm</button>
+      </div>
       {categories.error && <ApiErrorMessage error={categories.error} retry={categories.reload} />}
-      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card"><ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
-                    <button type="button" disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null); setEditorTab('info') }} className={buttonClass}>Chỉnh sửa</button>
+      <ApiState resource={products}>{products.data && <>{products.data.result.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{products.data.result.map((product) => <article key={product.id} className="sc-panel sc-vendor-product-card">{categoriesById.get(product.categoryId)?.name && <span className="sc-product-category-tag">{categoryTagLabel(categoryGroups.get(categoryNameKey(categoriesById.get(product.categoryId).name))?.[0]?.name || categoriesById.get(product.categoryId).name)}</span>}<ProductThumbnail bakeryId={bakeryId} product={product} snapshot={snapshots[product.id]} /><div className="sc-vendor-product-body"><div><StatusBadge status={product.status} label={productStatusLabel[product.status]} /></div><h3>{vendorName(product.name, 'Chưa có tên')}</h3><p className="text-lg font-bold text-primary">{vendorMoney(product.basePrice)}</p><p className="line-clamp-2 text-xs text-on-surface-variant">{vendorName(product.description, 'Chưa có mô tả')}</p><div className="sc-vendor-card-actions">
+                    <button type="button" disabled={!canEdit || busy} onClick={() => { setEditing(product); setAdding(false); setError(null) }} className={buttonClass}>Chỉnh sửa</button>
+                    {product.status === 'ARCHIVED' && <button type="button" disabled={!canEdit || busy || categories.status !== 'ready'} className="sc-button sc-action-button--secondary" onClick={() => openCreate(product)}>Tạo bản nháp để bán lại</button>}
                     {productActionItems(product, canEdit).map((action) => (
                       <button
                         key={action.key}
@@ -288,7 +304,7 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
                         className={`sc-button text-xs ${action.tone === 'danger' ? 'sc-action-button--danger' : 'sc-action-button--secondary'}`}
                       >
                         <Icon name={action.icon} />
-                        <span>{action.key === 'publish' ? product.status === 'HIDDEN' ? 'Hiển thị lại' : 'Mở bán' : action.key === 'hide' ? 'Tạm ẩn' : 'Ngừng bán'}</span>
+                        <span>{action.key === 'publish' ? product.status === 'HIDDEN' ? 'Mở bán lại' : 'Mở bán' : action.key === 'hide' ? 'Tạm ẩn' : 'Lưu trữ'}</span>
                       </button>
                     ))}
 
@@ -300,26 +316,14 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
         kicker={bakeryName ? `${bakeryName} · Chi tiết` : 'Chi tiết'}
         footer={
           <div className="flex items-center justify-between w-full">
-            <div className="text-xs text-on-surface-variant hidden sm:block">
-              {editorTab === 'info' && 'Nhớ nhấn Lưu sản phẩm sau khi sửa thông tin'}
-              {editorTab === 'images' && 'Ảnh chính sẽ hiển thị đại diện trên thực đơn'}
-              {editorTab === 'options' && 'Tùy chọn giúp khách hàng tùy biến chiếc bánh'}
-              {editorTab === 'status' && 'Quản lý trạng thái mở bán trên sàn SweetCake'}
-            </div>
+
             <div className="flex items-center gap-3 ml-auto">
               <button type="button" data-modal-close className="sc-button sc-action-button--secondary" disabled={busy}>
                 Đóng
               </button>
-              {editorTab === 'info' && (
-                <button form="vendor-product-form" type="submit" className="sc-button" disabled={busy}>
-                  {busy ? 'Đang lưu…' : 'Lưu sản phẩm'}
-                </button>
-              )}
-              {editorTab === 'options' && (
-                <button form="vendor-options-form" type="submit" className="sc-button" disabled={busy}>
-                  {busy ? 'Đang lưu…' : 'Lưu tùy chọn'}
-                </button>
-              )}
+              <button form="vendor-product-form" type="submit" className="sc-button" disabled={busy}>
+                {busy ? 'Đang lưu…' : 'Lưu sản phẩm'}
+              </button>
             </div>
           </div>
         }
@@ -329,10 +333,10 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
       >
         {editing && (
           <>
-            <section className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-3.5 mb-3 flex flex-wrap items-center justify-between gap-3">
+            <section className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-3.5 mt-2 mb-3 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Trạng thái:</span>
-                <StatusBadge status={editing.status} />
+                <StatusBadge status={editing.status} label={productStatusLabel[editing.status]} />
                 <span className="text-xs text-slate-400 font-medium hidden sm:inline">({vendorName(editing.name)})</span>
               </div>
               <EntityActionButtons
@@ -345,57 +349,34 @@ export default function ProductManager({ bakeryId, navigation, bakeryName: initi
               />
             </section>
 
-            <div className="sc-vendor-editor-tabs-wrap">
-              <nav aria-label="Phân mục chỉnh sửa" className="sc-tabs sc-vendor-editor-tabs">
-                {[
-                  ['info', 'Thông tin cơ bản', 'edit_note'],
-                  ['images', 'Hình ảnh', 'photo_library'],
-                  ['options', 'Tùy chọn & Topping', 'tune'],
-                ].map(([key, label, icon]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    aria-pressed={editorTab === key}
-                    onClick={() => setEditorTab(key)}
-                    className="flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Icon name={icon} />
-                    <span>{label}</span>
-                  </button>
-                ))}
-              </nav>
-            </div>
+
           </>
         )}
 
-        <div className={editorTab === 'info' ? 'block' : 'hidden'}>
+        {adding && draft && <p className="sc-feedback">Mẫu cũ vẫn được lưu trữ. Thêm ảnh và kiểm tra tùy chọn của bản nháp mới trước khi mở bán.</p>}
+        <div className="sc-vendor-product-editor">
           <ProductForm
             footerExternal
             key={(editing?.id || 'new') + ':' + editorRevision}
             product={editing}
+            draft={adding ? draft : null}
             categories={(categories.data || []).filter(category => !unifiedEnabled() || recordSource(category) === recordSource(editing || { id: bakeryId }))}
             busy={busy}
             onClose={() => { setAdding(false); setEditing(null) }}
             onSave={(values) => mutate(() => vendorManagementService.saveProduct(bakeryId, editing?.id, values), true)}
           />
-        </div>
-
-        
-
-        {editing && (
-          <div className={editorTab === 'images' || editorTab === 'options' ? 'block' : 'hidden'}>
+          {editing && (
             <ProductAssets
               key={editing.id}
               bakeryId={bakeryId}
               product={editing}
-              activeTab={editorTab}
               initialSnapshot={snapshots[editing.id]}
               onSnapshot={(snapshot) => setSnapshots((current) => ({ ...current, [editing.id]: snapshot }))}
               onChanged={products.reload}
               onBusy={setBusy}
             />
-          </div>
-        )}
+          )}
+        </div>
 
         {error && <ApiErrorMessage error={error} />}
         {notice && <p role="status" className="sc-feedback">{notice}</p>}

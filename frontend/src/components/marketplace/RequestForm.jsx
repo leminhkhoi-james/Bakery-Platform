@@ -1,3 +1,4 @@
+import MoneyInput from '../common/MoneyInput.jsx'
 import { uiLabel } from '../../services/uiLabels.js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { validTargetedSelection } from '../../services/requestContextModels.js'
@@ -5,7 +6,7 @@ import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { loadProduct } from '../../services/cakeService.js'
 import { loadAddresses } from '../../services/addressService.js'
 import { isCatalogId } from '../../services/catalogModels.js'
-import { REQUEST_TYPES, toLocalInput } from '../../services/marketplaceModels.js'
+import { REQUEST_TYPES, toLocalInput, rfqPayload } from '../../services/marketplaceModels.js'
 import { ApiState, buttonClass, inputClass, panelClass } from '../management/ApiState.jsx'
 import { consumeStudioRfqDraft } from '../../pages/customer/ai-studio/Cake3DBuilder.jsx'
 import ThreeCakeCanvas from '../../pages/customer/ai-studio/ThreeCakeCanvas.jsx'
@@ -42,8 +43,8 @@ export default function RequestForm({ request, initialValues, busy, disabled, on
     }
     return {
       ...merged,
-      neededAt: toLocalInput(request?.neededAt || studioDraft?.neededAt),
-      offerDeadline: toLocalInput(request?.offerDeadline || studioDraft?.offerDeadline),
+      neededAt: toLocalInput(merged.neededAt),
+      offerDeadline: toLocalInput(merged.offerDeadline),
       preference: request?.preference || studioDraft?.preference || {},
       optionSelections: request?.optionSelections || [],
     }
@@ -98,13 +99,19 @@ export default function RequestForm({ request, initialValues, busy, disabled, on
       return
     }
 
-    onSave({
+    const input = {
       ...values,
       title,
       description,
       deliveryDistrict,
       deliveryCity,
-    })
+    }
+    try {
+      rfqPayload(input)
+      onSave(input)
+    } catch (failure) {
+      setFormError(failure.message)
+    }
   }
 
   return <form className={panelClass} onSubmit={handleSubmit}>
@@ -189,7 +196,10 @@ export default function RequestForm({ request, initialValues, busy, disabled, on
       </div>
       <label>Loại yêu cầu<select {...field('requestType')} onChange={(event) => setValues((current) => ({ ...current, requestType: event.target.value, targetBakeryId: null, baseProductId: null, optionSelections: [] }))} className={inputClass}>{REQUEST_TYPES.map((type) => <option key={type} value={type}>{uiLabel(type)}</option>)}</select></label><label>Tiêu đề<input required maxLength={180} {...field('title')} className={inputClass} /></label><label className="sm:col-span-2">Mô tả<textarea required maxLength={10000} rows={4} {...field('description')} className={inputClass} /></label>
     {values.requestType === 'TARGETED_PRODUCT_CUSTOM' && <><label>Bakery ID đích (từ Catalog)<input required {...field('targetBakeryId')} className={inputClass} /></label><label>Product ID gốc (từ Catalog)<input required {...field('baseProductId')} className={inputClass} /></label>{isCatalogId(values.baseProductId) && <ProductSelections key={values.baseProductId} id={values.baseProductId} onProduct={receiveProduct} selections={values.optionSelections} onChange={(optionSelections) => setValues((current) => ({ ...current, optionSelections }))} />}</>}
-    {[['occasion', 'Dịp', 'text', 100], ['servingSize', 'Khẩu phần', 'number'], ['budgetMin', 'Ngân sách tối thiểu (VND)', 'number'], ['budgetMax', 'Ngân sách tối đa (VND)', 'number'], ['neededAt', 'Ngày/giờ cần bánh', 'datetime-local'], ['offerDeadline', 'Hạn nhận báo giá', 'datetime-local']].map(([key, label, type, max]) => <label key={key}>{label}<input type={type} maxLength={max} min={key === 'servingSize' ? 1 : type === 'number' ? 0 : undefined} step={key.startsWith('budget') ? '0.01' : undefined} required={key === 'neededAt'} {...field(key)} className={inputClass} /></label>)}
+    {[['occasion', 'Dịp', 'text', 100], ['servingSize', 'Khẩu phần', 'number'], ['budgetMin', 'Ngân sách tối thiểu (VND)', 'number'], ['budgetMax', 'Ngân sách tối đa (VND)', 'number'], ['neededAt', 'Ngày/giờ cần bánh', 'datetime-local'], ['offerDeadline', 'Hạn nhận báo giá', 'datetime-local']].map(([key, label, type, max]) => {
+      const FieldInput = key.startsWith('budget') ? MoneyInput : 'input'
+      return <label key={key}>{label}<FieldInput type={type} maxLength={max} min={key === 'servingSize' ? 1 : type === 'number' ? 0 : undefined} step={key.startsWith('budget') ? '0.01' : undefined} required={key === 'neededAt'} {...field(key)} className={inputClass} /></label>
+    })}
 
     {/* Saved Address Quick Selector for delivery location */}
     {addresses.status === 'ready' && addresses.data?.length > 0 && (

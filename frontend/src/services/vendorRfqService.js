@@ -93,7 +93,7 @@ export async function loadVendorOffers({ bakeryId, city = '', district = '', pag
   const rows = data.result.map(offer => {
     const request = requests.get(offer.cakeRequestId)
     return { ...offer, requestTitle: request?.title ?? null, customerName: request?.customerName,
-      description: request?.description, deliveryCity: request?.deliveryCity,
+      description: request?.description, budgetMin: request?.budgetMin, budgetMax: request?.budgetMax, deliveryCity: request?.deliveryCity,
       deliveryDistrict: request?.deliveryDistrict, servingSize: request?.servingSize }
   })
   if (!locationFilter) return { ...data, result: rows }

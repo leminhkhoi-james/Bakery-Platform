@@ -9,7 +9,7 @@ export default function AdminPlanActionDialog({ plan, action, busy, stale, unava
   return <DetailDrawer title={item.label} headerContent={<h2>{item.label}</h2>} className="sc-plan-action-dialog" footer={footer} busy={busy} onClose={onClose}>
     <p className="sc-plan-action-name">{planName(plan)}</p><p>{item.message}</p>
     {stale && <p role="alert" className="sc-note">Trạng thái gói đã thay đổi. Vui lòng đóng cửa sổ và kiểm tra lại.</p>}
-    {unavailable && !busy && <p role="status" className="sc-note">Chưa thể xác nhận trạng thái hiện tại. Vui lòng chờ tải lại thông tin gói.</p>}
+    {unavailable && !busy && <p role="status" className="sc-note">Chưa thể xác nhận trạng thái hiện tại của gói.</p>}
     {error && <ApiErrorMessage error={planFeedbackError(error)} />}
   </DetailDrawer>
 }

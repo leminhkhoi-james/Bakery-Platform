@@ -1,25 +1,26 @@
+import { USER_STATUSES, USER_STATUS_LABELS } from './statusCatalog.js'
 import { unifiedEnabled, recordSource } from './unifiedDataService.js'
 import { api, ApiError } from './apiClient.js'
 import { localUserDirectory } from '../mockData/admin/userManagement.js'
 import { requireId } from './managementModels.js'
 
 // Contract: docs/API_SPEC.md §2 User Administration (Identity Service, ADMIN only).
-export const USER_STATUSES = ['ACTIVE', 'BLOCKED', 'DELETED']
+export { USER_STATUSES } from './statusCatalog.js'
 export const PLATFORM_ROLES = ['CUSTOMER', 'BAKERY_OWNER', 'ADMIN']
 const LIST_PARAMS = ['page', 'size', 'sort', 'email', 'status', 'role']
+export const isLocalUser = person => Boolean(localUserDirectory() && (!unifiedEnabled() || recordSource(person) === 'local'))
 
 export function userRestriction(person, actor, action = 'delete') {
   // The API rejects self block/delete with 409; explain it before sending a request.
   if (person?.id && person.id === actor?.id) return 'Không thể thay đổi tài khoản đang đăng nhập.'
   const local = localUserDirectory()
   if (local && (!unifiedEnabled() || recordSource(person) === 'local')) return local.restriction(person, actor, action)
-  if (unifiedEnabled() && recordSource(person) === 'api' && ['edit', 'save'].includes(action)) return 'Chỉnh sửa hồ sơ hiện chưa khả dụng.'
   if (person?.status === 'DELETED') return 'Tài khoản đã bị xóa, không thể thao tác thêm.'
   return null
 }
 // `name` only exists on local demo records; the API contract uses `displayName`.
 export const userName = (person) => person?.displayName || person?.name || ''
-export const userStatus = (status) => ({ ACTIVE: 'Đang hoạt động', SUSPENDED: 'Tạm ngưng', BLOCKED: 'Đã khóa', DELETED: 'Đã xóa' }[status] || 'Chưa rõ trạng thái')
+export const userStatus = (status) => (USER_STATUS_LABELS[status === 'SUSPENDED' ? 'BLOCKED' : status] || 'Chưa rõ trạng thái')
 
 function userPath(id) { return '/admin/users/' + requireId(id) }
 function assertUser(result, expectedId) {
@@ -28,6 +29,7 @@ function assertUser(result, expectedId) {
 }
 
 export async function loadUsers(params = {}, options) {
+  if (params.status === 'BLOCKED' && localUserDirectory() && !unifiedEnabled()) params = { ...params, status: 'SUSPENDED' }
   const query = new URLSearchParams(LIST_PARAMS.filter((key) => params[key] !== '' && params[key] != null).map((key) => [key, params[key]]))
   const data = await api.get('/admin/users?' + query, options)
   if (!Array.isArray(data?.result) || data.result.some((row) => !row?.id || !Array.isArray(row.roles)) || !data.meta) throw new ApiError('Chưa tải được danh sách người dùng.', 502)
@@ -38,11 +40,18 @@ export async function getUser(id, options) {
   return assertUser(await api.get(userPath(id), options), String(id).toLowerCase())
 }
 
+export async function updateUserProfile(person, changes, actor) {
+  const reason = userRestriction(person, actor, 'edit')
+  if (reason) throw new ApiError(reason, 403)
+  return assertUser(await api.patch(userPath(person.id), changes, { allowMockFallback: false }), person.id)
+}
+
 export async function changeUserStatus(person, actor, status) {
   const reason = userRestriction(person, actor, 'status')
   if (reason) throw new ApiError(reason, 403)
   if (status == null && localUserDirectory() && (!unifiedEnabled() || recordSource(person) === 'local')) return localUserDirectory().change(actor, 'status', person.id, { expectedStatus: person.status })
   if (status == null && unifiedEnabled()) status = person.status === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE'
+  if (status === 'PENDING') throw new ApiError('Không thể chuyển tài khoản về trạng thái chờ kích hoạt.', 422)
   if (!USER_STATUSES.includes(status)) throw new ApiError('Trạng thái người dùng không hợp lệ.', 400)
   if (status === person.status) throw new ApiError('Người dùng đã ở trạng thái này.', 409)
   const result = assertUser(await api.patch(userPath(person.id) + '/status', { status }), person.id)

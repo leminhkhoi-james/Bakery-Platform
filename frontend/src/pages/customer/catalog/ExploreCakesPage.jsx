@@ -1,3 +1,4 @@
+import MoneyInput from '../../../components/common/MoneyInput.jsx'
 import { catalogCategoryLabel } from '../../../services/catalogModels.js'
 import { useEffect, useState } from 'react'
 import { loadProducts } from '../../../services/cakeService.js'
@@ -179,10 +180,10 @@ export const ExploreCakesPage = ({ onNavigate, onAddToCart, routeSearch = '' }) 
               <input className={fieldClass + ' mt-2'} placeholder="Nhập đúng tên thành phố" value={filters.city} onChange={(event) => update('city', event.target.value)} />
             </label>
             <label className="text-primary text-sm">Giá từ
-              <input type="number" min="0" step="1000" className={fieldClass + ' mt-2'} placeholder="Không giới hạn" value={filters.minPrice} onChange={(event) => update('minPrice', event.target.value)} />
+              <MoneyInput min="0" step="1000" className={fieldClass + ' mt-2'} placeholder="Không giới hạn" value={filters.minPrice} onChange={(event) => update('minPrice', event.target.value)} />
             </label>
             <label className="text-primary text-sm">Giá đến
-              <input type="number" min="0" step="1000" className={fieldClass + ' mt-2'} placeholder="Không giới hạn" value={filters.maxPrice} onChange={(event) => update('maxPrice', event.target.value)} />
+              <MoneyInput min="0" step="1000" className={fieldClass + ' mt-2'} placeholder="Không giới hạn" value={filters.maxPrice} onChange={(event) => update('maxPrice', event.target.value)} />
             </label>
             <label className="text-primary text-sm">Tùy biến sản phẩm
               <select className={fieldClass + ' mt-2'} value={filters.customizable} onChange={(event) => update('customizable', event.target.value)}>

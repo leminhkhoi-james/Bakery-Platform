@@ -83,7 +83,6 @@ function App() {
     'quote-detail': 'baker-quote',
 
     // Vendor Portal
-    'vendor-dashboard': 'vendor-orders',
     'vendor': 'vendor-orders',
     'baker-hub': 'vendor-orders',
     'kenh-nguoi-ban': 'vendor-orders',
@@ -107,6 +106,7 @@ function App() {
     'ho-so-tiem-banh': 'vendor-profile',
 
     // Admin Portal
+    'admin-revenue': 'admin-payments',
     'admin': 'admin-dashboard',
     'master-admin': 'admin-dashboard',
     'tong-quan-admin-dashboard': 'admin-dashboard',
@@ -133,6 +133,9 @@ function App() {
     }
     const rawPath = (window.location.pathname || '').replace(/^\/+|\/+$/g, '').trim()
     if (!rawPath) return 'home'
+    if (rawPath === 'admin-revenue') {
+      window.history.replaceState({ page: 'admin-payments' }, '', '/admin-payments' + window.location.search)
+    }
     return ROUTE_ALIASES[rawPath] || rawPath
   }
 

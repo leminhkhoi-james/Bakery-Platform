@@ -1,6 +1,24 @@
 import { ApiError } from './apiClient.js'
 import { requireId, requireText, memberCanEdit } from './managementModels.js'
 import { isCatalogId } from './catalogModels.js'
+
+export const categoryNameKey = (name) => name.normalize('NFC').trim().replace(/^SCQA-\d{8}\s+/i, '').replace(/\s+/g, ' ').toLocaleLowerCase('vi')
+export const categoryTagLabel = (name) => ({ entremets: 'Bánh mousse nhiều lớp', viennoiserie: 'Bánh nướng kiểu Pháp', tartes: 'Bánh tart', 'gâteaux': 'Bánh kem' }[categoryNameKey(name)] || name.replace(/^SCQA-\d{8}\s+/i, '').trim())
+
+export function groupProductCategories(categories) {
+  const groups = new Map()
+  for (const category of categories) {
+    const key = categoryNameKey(category.name || '') || category.id
+    const group = groups.get(key) || []
+    const preferred = /^SCQA-\d{8}\s+/i.test(category.name || '')
+    const currentPreferred = /^SCQA-\d{8}\s+/i.test(group[0]?.name || '')
+    if (preferred && !currentPreferred || preferred === currentPreferred && category.active && group[0]?.active === false) group.unshift(category)
+    else group.push(category)
+    groups.set(key, group)
+  }
+  return groups
+}
+
 export function mapManagedList(data, kind) {
   if (!Array.isArray(data) || data.some((row) => !isCatalogId(row?.id))) throw new ApiError('Danh sách quản lý không hợp lệ.', 502)
   return data.map((row) => {

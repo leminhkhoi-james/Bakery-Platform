@@ -19,20 +19,26 @@ export function reviewPermissions(order, user) {
   return { create: Boolean(own && order.status === 'COMPLETED' && !order.review), edit: Boolean(own && order.review?.status === 'PUBLISHED'), delete: Boolean(own && order.review && order.review.status !== 'DELETED') }
 }
 export const orderStatusLabel = (value) => ({ PENDING: 'Chờ xác nhận', CONFIRMED: 'Đã xác nhận', BAKING: 'Đang làm bánh', READY: 'Sẵn sàng giao', DELIVERING: 'Đang giao', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' }[value] || value || 'Chưa rõ trạng thái')
-const transitions = { PENDING: ['CONFIRMED', 'CANCELLED'], CONFIRMED: ['BAKING', 'CANCELLED'], BAKING: ['READY'], READY: ['DELIVERING'], DELIVERING: ['COMPLETED'], COMPLETED: [], CANCELLED: [] }
+const bakeryTransitions = { PENDING: ['CONFIRMED', 'CANCELLED'], CONFIRMED: ['BAKING', 'CANCELLED'], BAKING: ['READY'], READY: ['DELIVERING'], DELIVERING: [], COMPLETED: [], CANCELLED: [] }
 export function allowedOrderActions(order, user, scope) {
-  if (!user || user.roles?.includes('ADMIN')) return []
-  const available = transitions[order.status] || []
-  // Backend checks own CUSTOMER permissions before bakery roles.
-  if (user.roles?.includes('CUSTOMER') && String(order.customerId || '').toLowerCase() === String(user.id || '').toLowerCase() && !user.roles.includes('ADMIN')) return []
-  if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) return available
+  if (!user || user.roles?.includes('ADMIN') || !order) return []
+  const isOwnCustomer = user.roles?.includes('CUSTOMER') && String(order.customerId || '').toLowerCase() === String(user.id || '').toLowerCase()
+  if (isOwnCustomer) {
+    if (order.status === 'DELIVERING') return ['COMPLETED']
+    return []
+  }
+  if (scope === 'bakery' && user.roles?.some((role) => ['BAKERY_OWNER'].includes(role))) {
+    return bakeryTransitions[order.status] || []
+  }
   return []
 }
 export function mapOrder(dto, detail = false) {
   if (!isCatalogId(dto?.id) || !isCatalogId(dto?.bakeryId) || !isCatalogId(dto?.customerId)) throw new ApiError('Order DTO thiếu ID hợp lệ.', 502)
   const order = { id: dto.id, bakeryId: dto.bakeryId, customerId: dto.customerId }
+  if (isCatalogId(dto.cakeRequestId)) order.cakeRequestId = dto.cakeRequestId
   for (const key of ['orderNumber', 'bakeryName', 'customerName', 'customerPhone', 'customerNote', 'status', 'orderSource', 'currency', 'neededAt', 'createdAt', 'acceptedAt', 'completedAt']) order[key] = text(dto[key])
   for (const key of ['subtotal', 'deliveryFee', 'totalAmount']) order[key] = catalogMoney(dto[key])
+  if (['PAID', 'UNPAID', 'REFUNDED', 'CANCELLED'].includes(dto.paymentStatus)) order.paymentStatus = dto.paymentStatus
   if (detail) {
     if (!Array.isArray(dto.items) || !Array.isArray(dto.statusHistory)) throw new ApiError('Order detail thiếu items/statusHistory.', 502)
     order.items = dto.items.map((item) => {

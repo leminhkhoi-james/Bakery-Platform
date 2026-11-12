@@ -1,4 +1,5 @@
 import { api, ApiError } from './apiClient.js'
+import { recordSource } from './unifiedDataService.js'
 import { requireId, validateImage } from './managementModels.js'
 import { mapManagedList, catalogEntityPayload, optionsPayload, mapOptions } from './vendorCatalogModels.js'
 const root = (bakeryId) => '/bakeries/' + requireId(bakeryId)
@@ -14,6 +15,12 @@ export const vendorCatalogService = {
     mapManagedList([data], kind); if (id && data.id !== id.toLowerCase()) throw new ApiError('Backend trả sai bản ghi quản lý.', 502)
     return data
   },
+  async setCategoryOrder(bakeryId, id, displayOrder) {
+    const data = await api.patch(path(bakeryId, 'categories') + '/' + requireId(id), { displayOrder })
+    mapManagedList([data], 'categories')
+    if (data.id !== id.toLowerCase() || data.displayOrder !== displayOrder) throw new ApiError('Chưa xác nhận được thứ tự danh mục.', 502)
+    return data
+  },
   remove(bakeryId, kind, id) { if (kind === 'members') throw new ApiError('Không có thao tác xóa chủ tiệm.', 403); return api.delete(path(bakeryId, kind) + '/' + requireId(id)) },
   async uploadAddOn(bakeryId, id, file) {
     const form = new FormData(); form.append('file', validateImage(file))
@@ -22,7 +29,8 @@ export const vendorCatalogService = {
     return data
   },
   async getProductSnapshot(bakeryId, productId, options = {}) {
-    const dto = await api.get(root(bakeryId) + '/products/' + requireId(productId), { ...options, allowMockFallback: false })
+    const url = recordSource({ id: productId }) === 'local' ? root(bakeryId) + '/products/' + requireId(productId) : '/products/' + requireId(productId)
+    const dto = await api.get(url, { ...options, allowMockFallback: false })
     if (dto?.product?.id !== productId || dto.bakeryId !== bakeryId || !Array.isArray(dto.images) || !Array.isArray(dto.options?.groups)) throw new ApiError('Snapshot ảnh/options không khớp sản phẩm.', 502)
     return { images: mapManagedList(dto.images), options: mapOptions(dto.options) }
   },

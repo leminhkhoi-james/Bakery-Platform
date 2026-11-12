@@ -11,7 +11,7 @@ export function vendorRfqError(error) {
     401: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
     403: 'Bạn chưa có quyền xem yêu cầu và báo giá của cửa hàng này.',
     404: 'Cửa hàng chưa sẵn sàng nhận yêu cầu hoặc không còn khả dụng.',
-    409: 'Báo giá hoặc yêu cầu đã thay đổi. Hãy tải lại để kiểm tra.',
+    409: 'Báo giá hoặc yêu cầu đã thay đổi.',
     500: 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.',
     502: 'Không thể kết nối đến dịch vụ yêu cầu báo giá. Vui lòng thử lại.',
     503: 'Dịch vụ đang tạm thời gián đoạn. Vui lòng thử lại sau.',

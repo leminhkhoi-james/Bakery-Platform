@@ -31,9 +31,9 @@ const AuthPage = lazy(() => import('../pages/auth/AuthPage'))
 
 // Vendor Pages (Modular Feature Subfolders)
 const VendorMenuCatalogPage = lazy(() => import('../pages/vendor/catalog/VendorMenuCatalogPage'))
-const VendorRfqMarketplacePage = lazy(() => import('../pages/vendor/rfq/VendorRfqMarketplacePage'))
 const VendorBespokeQuoteSubmitPage = lazy(() => import('../pages/vendor/rfq/VendorBespokeQuoteSubmitPage'))
 const VendorOrderManagementPage = lazy(() => import('../pages/vendor/orders/VendorOrderManagementPage'))
+const VendorDashboardPage = lazy(() => import('../pages/vendor/dashboard/VendorDashboardPage'))
 const VendorRevenueEscrowPage = lazy(() => import('../pages/vendor/revenue/VendorRevenueEscrowPage'))
 const VendorSettingsPage = lazy(() => import('../pages/vendor/settings/VendorSettingsPage'))
 
@@ -44,7 +44,6 @@ const AdminVendorsPage = lazy(() => import('../pages/admin/vendors/AdminVendorsP
 const AdminSubscriptionManagementPage = lazy(() => import('../pages/admin/vendors/AdminSubscriptionManagementPage.jsx'))
 const AdminModerationPage = lazy(() => import('../pages/admin/vendors/AdminModerationPage.jsx'))
 const AdminOrdersEscrowPage = lazy(() => import('../pages/admin/orders/AdminOrdersEscrowPage'))
-const AdminRevenuePage = lazy(() => import('../pages/admin/revenue/AdminRevenuePage'))
 
 class RouteBoundary extends React.Component {
   state = { failed: false }
@@ -87,7 +86,6 @@ function PageRoutes({
     currentPage === 'admin-vendors' ||
     currentPage === 'admin-payments' ||
     currentPage === 'admin-plans' ||
-    currentPage === 'admin-revenue' ||
     currentPage === 'admin-moderation' ||
     currentPage === 'admin-users'
 
@@ -119,8 +117,6 @@ function PageRoutes({
           <AdminVendorsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'admin-users' ? (
           <AdminUsersPage onNavigate={onNavigate} />
-        ) : currentPage === 'admin-revenue' ? (
-          <AdminRevenuePage onNavigate={onNavigate} />
         ) : (
           <AdminDashboardPage onNavigate={onNavigate} />
         )}
@@ -141,7 +137,7 @@ function PageRoutes({
         ) : currentPage === 'vendor-quote-submit' ? (
           <VendorBespokeQuoteSubmitPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-rfq' ? (
-          <VendorRfqMarketplacePage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+          <VendorOrderManagementPage key={'requests:' + routeSearch} routeSearch={routeSearch} initialTab="requests" onNavigate={onNavigate} />
         ) : currentPage === 'vendor-menu' ? (
           <VendorMenuCatalogPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-revenue' ? (
@@ -149,7 +145,7 @@ function PageRoutes({
         ) : currentPage === 'vendor-profile' || currentPage === 'vendor-settings' ? (
           <VendorSettingsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : (
-          <VendorOrderManagementPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+          <VendorDashboardPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         )}
       </VendorLayout>
     )

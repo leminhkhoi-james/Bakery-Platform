@@ -1,9 +1,5 @@
 import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
 import { OrderDetail } from '../../../components/orders/OrderViews.jsx'
-import { canonicalBakeryId, unifiedEnabled, unifiedSnapshot, unifiedMetrics, recordSource } from '../../../services/unifiedDataService.js'
-import { simulationStore } from '../../../mockData/business/runtime.js'
-import { businessMetrics, settledBusinessOrder } from '../../../mockData/business/metrics.js'
-import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
 import React, { useState } from 'react'
 import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import { useVendorBakery } from '../../../hooks/useVendorBakery.js'
@@ -11,10 +7,8 @@ import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadDashboardCompletedOrders } from '../../../services/vendorDashboardService.js'
 import { formatOrderDate, formatOrderMoney } from '../../../services/orderPresentation.js'
 import { displayReference } from '../../../services/displayReference.js'
-import { orderStatusLabel } from '../../../services/orderModels.js'
 import { panelClass } from '../../../components/management/ApiState.jsx'
-import { DataTable, EmptyPanel, Icon, SectionHeading, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
-import RefreshButton from '../../../components/common/RefreshButton.jsx'
+import { DataTable, EmptyPanel, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import '../dashboard/vendor-dashboard.css'
 
 function SettlementDisclaimerNotice() {
@@ -47,18 +41,11 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
   const [selectedOrderId, setSelectedOrderId] = useState(null)
   const orders = useCatalogResource(loadDashboardCompletedOrders, { bakeryId })
 
-  const simulation = simulationStore()
-  const unified = unifiedEnabled()
-  const snapshot = unifiedSnapshot()
-  const scope = canonicalBakeryId(bakeryId)
-  const completedList = (orders.data?.result || []).filter(order => unified || !simulation || settledBusinessOrder(simulation.state, order))
-  const currency = completedList[0]?.currency || 'VND'
-  const metrics = simulation && !unifiedEnabled() ? businessMetrics(simulation.state, { bakeryId }) : null
-  const totalCount = unified ? completedList.length : metrics ? metrics.settledCount : orders.data?.meta?.total ?? completedList.length
-  const simulated = snapshot && scope ? unifiedMetrics(snapshot, { bakeryId: scope }) : null
-  const estimatedRevenue = unified ? simulated?.simulationSalesRevenue ?? null : metrics ? metrics.salesRevenue : completedList.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
-  const revenueOrderCount = unified ? simulated?.simulationSettledCount ?? 0 : totalCount
-  const averageOrderValue = estimatedRevenue == null ? null : revenueOrderCount > 0 ? Math.round(estimatedRevenue / revenueOrderCount) : 0
+  const completedList = orders.data?.result || []
+  const currency = orders.data?.currency
+  const totalCount = orders.data?.meta?.total
+  const estimatedRevenue = orders.data?.totalAmount
+  const averageOrderValue = totalCount ? Math.round(estimatedRevenue / totalCount) : 0
 
   return (
     <>
@@ -86,7 +73,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
             </div>
             <p className="text-xs text-rose-900/70 mt-1 flex items-center gap-1 font-medium">
               <span className="text-rose-500 font-bold">●</span>
-              <span>{`Từ ${totalCount} đơn giao thành công`}</span>
+              <span>{totalCount == null ? 'Đơn giao thành công' : `Từ ${totalCount} đơn giao thành công`}</span>
             </p>
           </div>
         </div>
@@ -143,7 +130,7 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
       </div>
 
       {/* Thông tin đối soát & cam kết minh bạch (Bảo toàn invariants của hệ thống & kiểm thử) */}
-      {!simulationStore() && <SettlementDisclaimerNotice />}
+      <SettlementDisclaimerNotice />
 
       {/* Danh sách đơn hàng hoàn tất */}
       <section className="rounded-3xl border border-primary/15 bg-white p-5 sm:p-6 shadow-xs">
@@ -156,14 +143,6 @@ function CompletedRevenueContent({ bakeryId, onNavigate }) {
             <p className="text-xs text-on-surface-variant mt-0.5">
               Danh sách các đơn hàng đã được tiệm bàn giao thành công tới khách hàng.
             </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <RefreshButton
-              disabled={orders.status === 'loading' || orders.refreshing}
-              onClick={orders.reload}
-            >
-              Tải lại
-            </RefreshButton>
           </div>
         </div>
 
@@ -271,7 +250,6 @@ export default function VendorRevenueEscrowPage({ onNavigate, routeSearch }) {
           <CompletedRevenueContent key={bakeryId} bakeryId={bakeryId} onNavigate={onNavigate} />
         ) : (
           <div className="space-y-4">
-            {!simulationStore() && <SettlementDisclaimerNotice />}
             <section className={panelClass}>
               <EmptyPanel
                 title="Chọn cửa hàng để xem doanh thu"

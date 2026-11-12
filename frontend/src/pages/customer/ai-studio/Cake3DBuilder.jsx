@@ -1,3 +1,4 @@
+import MoneyInput from '../../../components/common/MoneyInput.jsx'
 import React, { useRef, useState } from 'react'
 import { Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { buttonClass, inputClass } from '../../../components/management/ApiState.jsx'
@@ -104,17 +105,17 @@ export const DRIP_STYLES = [
 ]
 
 export const BORDER_PIPINGS = [
-  { id: 'pearl', label: 'Chuỗi hạt ngọc trai kem (Ảnh 1)', desc: 'Viền hạt tròn kem mịn ở chân tầng' },
-  { id: 'whipped_swirls', label: 'Búp kem xoắn Meringue (Ảnh 2 & 3)', desc: 'Chóp kem xoắn chuẩn phong cách Patisserie Pháp' },
+  { id: 'pearl', label: 'Chuỗi hạt ngọc trai kem', desc: 'Viền hạt tròn kem mịn ở chân tầng' },
+  { id: 'whipped_swirls', label: 'Búp kem xoắn Meringue', desc: 'Chóp kem xoắn chuẩn phong cách Patisserie Pháp' },
   { id: 'shell', label: 'Viền sò vỏ ốc cổ điển', desc: 'Múi kem bắt sò đều đặn truyền thống' },
   { id: 'vintage_ruffle', label: 'Viền ren bèo nhún Lambeth', desc: 'Bắt kem nhiều lớp cầu kỳ + dây kem rủ' },
   { id: 'none', label: 'Tối giản không bắt viền', desc: 'Cạnh bánh phẳng hiện đại' },
 ]
 
 export const TOPPING_ITEMS = [
-  { id: 'confetti_dots', label: 'Chấm bi Polka Dots đa sắc (Ảnh 1)', color: '#ff8fa3' },
-  { id: 'whipped_kisses', label: 'Búp kem xoắn Meringue dâu (Ảnh 2)', color: '#e62872' },
-  { id: 'strawberries', label: 'Dâu tây / Cherry đỏ căng bóng (Ảnh 3)', color: '#e0314b' },
+  { id: 'confetti_dots', label: 'Chấm bi Polka Dots đa sắc', color: '#ff8fa3' },
+  { id: 'whipped_kisses', label: 'Búp kem xoắn Meringue dâu', color: '#e62872' },
+  { id: 'strawberries', label: 'Dâu tây / Cherry đỏ căng bóng', color: '#e0314b' },
   { id: 'macarons', label: 'Bánh Macaron Pháp pastel', color: '#f3a6c8' },
   { id: 'roses', label: 'Hoa hồng kem bơ 3D', color: '#f49cbb' },
   { id: 'bows', label: 'Nơ ruy băng Coquette', color: '#e15b85' },
@@ -123,9 +124,9 @@ export const TOPPING_ITEMS = [
 ]
 
 export const CANDLE_STYLES = [
-  { id: 'twisted', label: 'Bộ 3 nến kẹo sọc Pastel phát sáng (Ảnh 1 & 2)' },
-  { id: 'single_wish', label: '1 nến ước nguyện chính giữa (Ảnh 3)' },
-  { id: 'party_ring', label: 'Vòng nến sinh nhật quanh bánh (Ảnh 4)' },
+  { id: 'twisted', label: 'Bộ 3 nến kẹo sọc Pastel phát sáng' },
+  { id: 'single_wish', label: '1 nến ước nguyện chính giữa' },
+  { id: 'party_ring', label: 'Vòng nến sinh nhật quanh bánh' },
   { id: 'gold_tall', label: 'Nến thon dài nhũ vàng (3 cây)' },
   { id: 'none', label: 'Không cắm nến' },
 ]
@@ -138,7 +139,7 @@ export const MESSAGE_POSITIONS = [
 export const DESIGN_PRESETS = [
   {
     id: 'pastel_clay_duo',
-    label: 'Pastel Clay 2 Tầng (Ảnh mẫu 1)',
+    label: 'Pastel Clay 2 Tầng',
     config: {
       tiers: 2,
       shape: 'round',
@@ -160,7 +161,7 @@ export const DESIGN_PRESETS = [
   },
   {
     id: 'royal_blue_cream',
-    label: 'Xanh Coban & Búp Kem Xoắn (Ảnh mẫu 2)',
+    label: 'Xanh Coban & Búp Kem Xoắn',
     config: {
       tiers: 2,
       shape: 'round',
@@ -182,7 +183,7 @@ export const DESIGN_PRESETS = [
   },
   {
     id: 'strawberry_cream',
-    label: 'Dâu & Búp Kem Vani (Ảnh mẫu 3)',
+    label: 'Dâu & Búp Kem Vani',
     config: {
       tiers: 2,
       shape: 'round',
@@ -204,7 +205,7 @@ export const DESIGN_PRESETS = [
   },
   {
     id: 'party_candle_ring',
-    label: 'Đại Tiệc Vòng Nến (Ảnh mẫu 4)',
+    label: 'Đại Tiệc Vòng Nến',
     config: {
       tiers: 1,
       shape: 'round',
@@ -1269,8 +1270,7 @@ export default function Cake3DBuilder({
                   <span className="block text-xs font-semibold text-stone-700">
                     Ngân sách tối thiểu (VNĐ)
                   </span>
-                  <input
-                    type="number"
+                  <MoneyInput
                     min={0}
                     step="10000"
                     placeholder="VD: 500000"
@@ -1283,8 +1283,7 @@ export default function Cake3DBuilder({
                   <span className="block text-xs font-semibold text-stone-700">
                     Ngân sách tối đa (VNĐ)
                   </span>
-                  <input
-                    type="number"
+                  <MoneyInput
                     min={0}
                     step="10000"
                     placeholder="VD: 800000"

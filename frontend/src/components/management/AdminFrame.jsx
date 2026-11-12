@@ -9,6 +9,7 @@ import './admin-header.css'
 import './admin-layout.css'
 import './admin-tables.css'
 import { lockPageScroll } from '../common/modalState.js'
+import { ManualRefreshContext } from '../../context/ManualRefreshContext.js'
 import './business-simulation.css'
 import '../../styles/portal-refinements.css'
 
@@ -56,7 +57,7 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
       document.removeEventListener('keydown', closeOnEscape)
     }
   }, [mobile])
-  return <div className="sc-portal sc-portal--admin">
+  return <ManualRefreshContext.Provider value={false}><div className="sc-portal sc-portal--admin">
     <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
     <PortalHeader title={heading.title} description={headerDescription ?? heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
     <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}>{children}</div></main>
@@ -82,5 +83,5 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
         </button>
       </aside>
     )}
-  </div>
+  </div></ManualRefreshContext.Provider>
 }

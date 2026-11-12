@@ -1,8 +1,21 @@
-.sc-drawer.sc-order-dialog { inset: 0; margin: auto; width: min(68rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1.25rem; overflow-y: auto; background: #fdf8fa; }
+.sc-drawer.sc-order-dialog { inset: 0; margin: auto; width: min(76rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1.25rem; overflow-y: auto; background: #fdf8fa; }
 .sc-order-dialog .sc-drawer-heading { padding: 1rem 1.25rem; gap: 1rem; z-index: 3; }
 .sc-order-dialog .sc-drawer-heading > div { flex: 1; min-width: 0; }
 .sc-order-dialog .sc-drawer-heading > button { flex-shrink: 0; }
 .sc-order-dialog .sc-drawer-body { padding: 1rem 1.25rem; }
+.sc-customer-order-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+.sc-customer-order-dialog > .sc-drawer-heading { flex-shrink: 0; }
+.sc-customer-order-dialog > .sc-drawer-body { min-height: 0; overflow-y: auto; }
+.sc-customer-order-dialog > .sc-drawer-footer {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .65rem;
+  padding: .75rem 1.25rem;
+  border-top: 1px solid var(--sc-color-border);
+  background: var(--color-surface, #fff);
+}
 .sc-order-detail { min-width: 0; }
 .sc-order-detail > button:first-child { display: inline-flex; align-items: center; gap: .35rem; margin-left: auto; font-size: .75rem; font-weight: 700; padding: .4rem .85rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(107, 33, 46, 0.2); color: var(--sc-color-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); min-height: 1.75rem; cursor: pointer; transition: all 0.2s; }
 .sc-order-detail > button:first-child:hover:not(:disabled) { background: #ffffff; box-shadow: 0 2px 6px rgba(107, 33, 46, 0.12); }
@@ -81,6 +94,7 @@ details.sc-order-history li > p { margin-top: .35rem; font-size: .78rem; line-he
 @media (max-width: 639px) {
   .sc-drawer.sc-order-dialog { width: calc(100vw - 1rem); height: fit-content; max-height: calc(100dvh - 1rem); margin: auto; border-radius: 1rem; }
   .sc-order-dialog .sc-drawer-heading, .sc-order-dialog .sc-drawer-body { padding: .85rem; }
+  .sc-customer-order-dialog > .sc-drawer-footer { padding-inline: .85rem; }
   .sc-order-tracking-header { flex-wrap: wrap; gap: .5rem; }
   :is(.sc-order-dialog, .sc-order-tracking-view) .sc-order-tracking-header h2 { font-size: 1.1rem; }
   .sc-order-tracking-card { padding: .85rem; }
@@ -91,6 +105,7 @@ details.sc-order-history li > p { margin-top: .35rem; font-size: .78rem; line-he
 }
 
 .sc-order-action-panel { display: grid; gap: .65rem; border: 1px solid #dfbac5; border-radius: .9rem; padding: 1rem; background: linear-gradient(120deg, #fff9fa, #fff0f5); }
+.sc-order-action-panel--controls { border-color: var(--sc-color-border); background: var(--color-surface, #fff); }
 .sc-order-action-panel .sc-order-action-controls > div:first-child h3 { font-size: .95rem; }
 .sc-order-action-success, .sc-order-action-error { padding: .75rem .85rem; border-radius: .65rem; font-size: .8rem; line-height: 1.5; }
 .sc-order-action-success { border: 1px solid #c4d8c6; background: #f1f7f1; color: #355a3b; }
@@ -130,3 +145,11 @@ details.sc-order-history li > p { margin-top: .35rem; font-size: .78rem; line-he
   }
 }
 
+
+.sc-order-item-options { margin-top: .5rem; }
+.sc-order-items { margin-top: .65rem; }
+
+.sc-order-bakery-name { color: var(--sc-color-primary); font-size: 1rem; overflow-wrap: anywhere; }
+.sc-order-step-time { color: var(--sc-color-muted); font-size: .7rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+
+.sc-order-tracking-view .sc-order-customer-heading { margin-top: 1.25rem; }

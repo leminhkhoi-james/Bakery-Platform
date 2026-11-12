@@ -42,7 +42,7 @@ export const adminManagementService = {
   async changePlanStatus(id, status) {
     if (!['ACTIVE', 'INACTIVE'].includes(status)) throw new ApiError('Chọn trạng thái cung cấp hợp lệ.', 400)
     const dto = planDto(await api.patch('/admin/subscription-plans/' + requireId(id), { status }))
-    if (dto.id !== id.toLowerCase() || dto.status !== status) throw new ApiError('Chưa thể xác nhận trạng thái gói. Vui lòng tải lại.', 502)
+    if (dto.id !== id.toLowerCase() || dto.status !== status) throw new ApiError('Chưa thể xác nhận trạng thái gói.', 502)
     return dto
   },
   async moderateReview(orderId, status) {

@@ -1,3 +1,4 @@
+import MoneyInput from '../../../components/common/MoneyInput.jsx'
 import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
 import React, { useId, useState } from 'react'
 import { ModalFormState } from '../../../components/common/ModalSurface.jsx'
@@ -5,7 +6,7 @@ import { ChoiceButtons } from '../../../components/common/EntityActionButtons.js
 import { DetailDrawer, Icon } from '../../../components/common/WorkspaceUI.jsx'
 import { ApiErrorMessage, inputClass } from '../../../components/management/ApiState.jsx'
 import { PLAN_FEATURES, planFeature, planFeatureLabel, planStatusLabel, planFeedbackError } from '../../../services/planPresentation.js'
-import { formatPlanPrice, parsePlanPrice, planFormErrors, planPriceDescriptionConflict } from '../../../services/planFormPresentation.js'
+import { planFormErrors, planPriceDescriptionConflict } from '../../../services/planFormPresentation.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 
 function FeatureRow({ row, rows, errors, onUpdate, onRemove }) {
@@ -33,7 +34,6 @@ function FeatureEditor({ rows, errors, onChange }) {
 export function AdminPlanForm({ plan, busy, onSave, onClose, error }) {
   const formId = useId()
   const [values, setValues] = useState(() => ({ ...(plan || { code: '', name: '', description: '', monthlyPrice: '', currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE' }), name: cleanPresentationLabel(plan?.name), description: cleanPresentationLabel(plan?.description), featureRows: Object.entries(plan?.features || {}).map(([code, value]) => ({ code, value, uiKey: code })) }))
-  const [priceText, setPriceText] = useState(() => formatPlanPrice(plan?.monthlyPrice ?? ''))
   const [touched, setTouched] = useState({}), [submitted, setSubmitted] = useState(false)
   const errors = planFormErrors(values), shown = (key) => (submitted || touched[key]) && errors[key]
   const field = (key) => ({ name: key, required: ['code', 'name', 'billingPeriodMonths'].includes(key), value: values[key] ?? '', 'aria-invalid': !!shown(key), onBlur: () => setTouched((current) => ({ ...current, [key]: true })), onChange: (event) => setValues((current) => ({ ...current, [key]: event.target.value })) })
@@ -54,17 +54,16 @@ export function AdminPlanForm({ plan, busy, onSave, onClose, error }) {
       for (const key of ['name', 'description']) if (plan && values[key] === cleanPresentationLabel(plan[key])) preserved[key] = plan[key]
       onSave(preserved)
     }}>
-      <ModalFormState value={values} busy={busy} /><p className="sc-plan-required-help"><span className="sc-plan-required" aria-hidden="true">*</span> Trường bắt buộc</p><fieldset disabled={busy} className="sc-plan-form-fields">
+      <ModalFormState value={values} busy={busy} /><fieldset disabled={busy} className="sc-plan-form-fields">
         <section className="sc-plan-form-section"><h3>Thông tin cơ bản</h3><div className="sc-plan-basic-grid">
           <label><span>Mã gói <span className="sc-plan-required" aria-hidden="true">*</span></span><input maxLength={50} {...field('code')} className={inputClass} />{fieldError('code')}{plan && <small className="sc-plan-form-help">Mã gói đã có đơn mua không thể thay đổi.</small>}</label>
           <label><span>Tên gói <span className="sc-plan-required" aria-hidden="true">*</span></span><input maxLength={120} {...field('name')} className={inputClass} />{fieldError('name')}</label>
-          <label><span>Giá mỗi tháng (đ) <span className="sc-plan-required" aria-hidden="true">*</span></span><input required name="monthlyPrice" inputMode="decimal" placeholder="199.000" value={priceText} aria-invalid={!!shown('monthlyPrice')} onBlur={() => { setTouched((current) => ({ ...current, monthlyPrice: true })); if (Number.isFinite(Number(values.monthlyPrice))) setPriceText(formatPlanPrice(values.monthlyPrice)) }} onChange={(event) => { setPriceText(event.target.value); setValues((current) => ({ ...current, monthlyPrice: parsePlanPrice(event.target.value) })) }} className={inputClass} />{fieldError('monthlyPrice')}</label>
+          <label><span>Giá mỗi tháng (đ) <span className="sc-plan-required" aria-hidden="true">*</span></span><MoneyInput required name="monthlyPrice" min="0" step="0.01" placeholder="199.000" value={values.monthlyPrice} aria-invalid={!!shown('monthlyPrice')} onBlur={() => setTouched(current => ({ ...current, monthlyPrice: true }))} onChange={event => setValues(current => ({ ...current, monthlyPrice: event.target.value }))} className={inputClass} />{fieldError('monthlyPrice')}</label>
           <label><span>Chu kỳ thanh toán (tháng) <span className="sc-plan-required" aria-hidden="true">*</span></span><input type="number" min="1" step="1" {...field('billingPeriodMonths')} className={inputClass} />{fieldError('billingPeriodMonths')}</label>
-          <label>Tiền tệ<input readOnly value={values.currency} className={inputClass} /><small className="sc-plan-form-help">Chỉ hỗ trợ đồng Việt Nam (VND).</small></label>
-          <p className="sc-plan-form-help sc-plan-billing-help">Số tiền cho một kỳ bằng giá mỗi tháng nhân số tháng của chu kỳ.</p>
+          <label>Tiền tệ<input readOnly value={values.currency} className={inputClass} /></label>
+          <div className="sc-plan-basic-description"><label><span>Mô tả gói</span><textarea {...field('description')} aria-label="Mô tả gói" rows={3} className={inputClass} /></label>{planPriceDescriptionConflict(values) && <p role="status" className="sc-plan-data-warning"><Icon name="info" />Mô tả đề cập miễn phí nhưng gói có giá lớn hơn 0 đ. Hãy đối chiếu lại nội dung trước khi lưu.</p>}</div>
         </div></section>
-        <section className="sc-plan-form-section"><h3>Trạng thái cung cấp</h3>{plan?.status === 'ARCHIVED' ? <p className="sc-plan-form-help">{planStatusLabel(plan.status)}. Khôi phục gói từ menu thao tác nếu cần mở cung cấp lại.</p> : <ChoiceButtons label="Cho phép đăng ký mới" value={values.status} options={['ACTIVE', 'INACTIVE'].map((value) => ({ value, label: planStatusLabel(value) }))} onChange={(status) => setValues((current) => ({ ...current, status }))} />}</section>
-        <section className="sc-plan-form-section"><h3>Mô tả gói</h3><label><span className="sr-only">Mô tả gói</span><textarea {...field('description')} aria-label="Mô tả gói" rows={3} className={inputClass} /></label>{planPriceDescriptionConflict(values) && <p role="status" className="sc-plan-data-warning"><Icon name="info" />Mô tả đề cập miễn phí nhưng gói có giá lớn hơn 0 đ. Hãy đối chiếu lại nội dung trước khi lưu.</p>}</section>
+        <section className="sc-plan-form-section"><h3>Trạng thái cung cấp</h3>{plan?.status === 'ARCHIVED' ? <p className="sc-plan-form-help">{planStatusLabel(plan.status)}. Khôi phục gói từ menu thao tác nếu cần mở cung cấp lại.</p> : <ChoiceButtons label={<span className="sr-only">Trạng thái cung cấp</span>} value={values.status} options={['ACTIVE', 'INACTIVE'].map((value) => ({ value, label: planStatusLabel(value) }))} onChange={(status) => setValues((current) => ({ ...current, status }))} />}</section>
         <FeatureEditor rows={values.featureRows} errors={submitted ? errors : Object.fromEntries(Object.entries(errors).filter(([key]) => key.includes(':')))} onChange={(featureRows) => setValues((current) => ({ ...current, featureRows }))} />
         <p className="sc-plan-form-help">Các kỳ đã mua giữ nguyên quyền lợi và giá cũ. Thay đổi áp dụng cho đăng ký mới.</p>
       </fieldset>{submitted && Object.keys(errors).length > 0 && <p role="alert" className="sc-plan-field-error">Vui lòng kiểm tra các trường được đánh dấu trước khi lưu.</p>}{error && <ApiErrorMessage error={planFeedbackError(error)} />}

@@ -28,10 +28,10 @@ export default function CustomerProfilePage({ onNavigate }) {
         {[['orders', 'Lịch sử đơn hàng', 'shopping_bag'], ['profile', 'Thông tin hồ sơ', 'person'], ['addresses', 'Địa chỉ nhận bánh', 'location_on'], ['security', 'Bảo mật', 'shield']].filter(([key]) => key !== 'orders' || canReadOrders).map(([key, label, icon]) => <button key={key} aria-pressed={tab === key} onClick={() => setTab(key)}><Icon name={icon} />{label}</button>)}
         <div className="border-t border-outline-variant/30 pt-3 text-xs text-on-surface-variant"><p className="px-3 font-semibold">Quyền tài khoản</p><p className="mt-2 break-words px-3">{roles.join(' · ')}</p></div>
       </nav>
-      <section className="sc-profile-content w-full min-w-0">{tab === 'orders' && canReadOrders ? <OrderList scope="mine" onNavigate={onNavigate} /> : <div className={panelClass}>
+      <section className="sc-profile-content w-full min-w-0">{tab === 'orders' && canReadOrders ? <OrderList scope="mine" onNavigate={onNavigate} detailsInModal /> : <div className={panelClass}>
         {tab === 'addresses' ? <UserAddressBook />
           : tab === 'security' ? <><EmptyPanel title="Bảo mật" description="Hiện chưa thể cập nhật mật khẩu và tùy chọn thông báo tại đây." icon="shield" /><button disabled className={buttonClass}>Đổi mật khẩu</button></>
-            : <><h2 className="flex items-center gap-2 text-xl font-bold text-primary"><Icon name="person" /> Thông tin hồ sơ từ Identity</h2><dl className="sc-profile-fields">{[['Tên hiển thị', user.displayName], ['Email', user.email], ['Số điện thoại', user.phoneNumber || 'Chưa có số điện thoại']].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl><p className="sc-note">Hiện chưa thể cập nhật hồ sơ. Vui lòng thử lại sau.</p><button disabled className={buttonClass}>Cập nhật hồ sơ</button></>}
+            : <><h2 className="flex items-center gap-2 text-xl font-bold text-primary"><Icon name="person" /> Thông tin hồ sơ</h2><dl className="sc-profile-fields">{[['Tên hiển thị', user.displayName], ['Email', user.email], ['Số điện thoại', user.phoneNumber || 'Chưa có số điện thoại']].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl><p className="sc-note">Hiện chưa thể cập nhật hồ sơ. Vui lòng thử lại sau.</p><button disabled className={buttonClass}>Cập nhật hồ sơ</button></>}
       </div>}</section>
     </div>
     {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">{error}</p>}

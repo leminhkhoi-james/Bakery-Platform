@@ -1,5 +1,6 @@
 import { cleanPresentationLabel, publicCopy } from './uiLabels.js'
 import { formatOrderDate, formatOrderMoney } from './orderPresentation.js'
+import { planName } from './planPresentation.js'
 
 const uuid = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
 export function bakeryReviewText(value) {
@@ -36,9 +37,9 @@ export function bakeryReviewProfile(detail) {
   const primaryVerified = addressesKnown && (hasPrimary || addresses.every((address) => primaryFlag(address) !== null))
   const areaVerified = areasKnown && (activeArea || areas.every((area) => typeof area.active === 'boolean'))
   const missing = []
-  if (!primaryVerified) missing.push('Chưa xác minh được địa chỉ chính. Vui lòng tải lại hồ sơ.')
+  if (!primaryVerified) missing.push('Chưa xác minh được địa chỉ chính.')
   else if (!hasPrimary) missing.push('Chưa có địa chỉ chính.')
-  if (!areaVerified) missing.push('Chưa xác minh được trạng thái hoạt động của khu vực giao hàng. Vui lòng tải lại hồ sơ.')
+  if (!areaVerified) missing.push('Chưa xác minh được trạng thái hoạt động của khu vực giao hàng.')
   else if (!activeArea) missing.push('Chưa có khu vực giao hàng đang hoạt động.')
   return {
     name: cleanPresentationLabel(bakeryReviewText(bakery.name), 'Chưa cung cấp'),
@@ -48,7 +49,7 @@ export function bakeryReviewProfile(detail) {
     addresses: addresses.map((address, index) => ({ key: address.id || index, text: addressText(address) || 'Chưa cung cấp địa chỉ', primary: primaryFlag(address) })),
     areas: areas.map((area, index) => ({ key: area.id || index, text: [bakeryReviewText(area.district), bakeryReviewText(area.city)].filter(Boolean).join(', ') || 'Chưa cung cấp khu vực', active: typeof area.active === 'boolean' ? area.active : null, deliveryFee: amount(area.deliveryFee), minimumOrder: amount(area.minimumOrder) })),
     members: (Array.isArray(detail?.members) ? detail.members.filter((item) => item && typeof item === 'object') : []).map((member, index) => ({ key: member.id || member.userId || index, name: cleanPresentationLabel(bakeryReviewText(member.displayNameSnapshot) || bakeryReviewText(member.displayName), 'Chưa cung cấp'), role: { OWNER: 'Chủ tiệm', MANAGER: 'Quản lý', STAFF: 'Nhân viên' }[member.memberRole] || 'Chưa cung cấp', status: { ACTIVE: 'Đang hoạt động', INVITED: 'Đã mời', INACTIVE: 'Ngừng hoạt động' }[member.status] || 'Chưa cung cấp', joinedAt: member.joinedAt ? formatOrderDate(member.joinedAt) : null })),
-    subscription: { state: detail?.subscription === null ? 'error' : detail?.subscription?.registrationStatus === 'NOT_REGISTERED' ? 'not_registered' : detail?.subscription?.active === true ? 'active' : detail?.subscription?.active === false ? 'inactive' : 'unknown', plan: cleanPresentationLabel(bakeryReviewText(detail?.subscription?.planCode), 'Chưa có thông tin gói'), end: detail?.subscription?.periodEnd ? formatOrderDate(detail.subscription.periodEnd) : 'Chưa có thông tin thời hạn' },
+    subscription: { state: detail?.subscription === null ? 'error' : detail?.subscription?.registrationStatus === 'NOT_REGISTERED' ? 'not_registered' : detail?.subscription?.active === true ? 'active' : detail?.subscription?.active === false ? 'inactive' : 'unknown', plan: bakeryReviewText(detail?.subscription?.planCode) ? planName(detail.subscription.planCode) : 'Chưa có thông tin gói', end: detail?.subscription?.periodEnd ? formatOrderDate(detail.subscription.periodEnd) : 'Chưa có thông tin thời hạn' },
     operationsKnown: operations != null,
     addressesKnown, areasKnown,
     membersKnown: Array.isArray(detail?.members),
@@ -57,14 +58,14 @@ export function bakeryReviewProfile(detail) {
     checks: [{ label: 'Có địa chỉ chính', passed: primaryVerified ? hasPrimary : null }, { label: 'Khu vực giao hàng đang hoạt động', passed: areaVerified ? activeArea : null }],
     missing,
     // Publication and subscription entitlement remain independent operations.
-    actions: ({ PENDING_APPROVAL: ['ACTIVE', 'DRAFT'], ACTIVE: ['CLOSED'] }[bakery.status] || []).map((target) => ({
+    actions: ({ PENDING_APPROVAL: ['ACTIVE', 'DRAFT'], ACTIVE: ['SUSPENDED', 'CLOSED'], SUSPENDED: ['ACTIVE', 'CLOSED'] }[bakery.status] || []).map((target) => ({
       key: target,
-      label: { ACTIVE: 'Duyệt tiệm', DRAFT: 'Trả hồ sơ', CLOSED: 'Đóng tiệm' }[target],
-      icon: { ACTIVE: 'verified', DRAFT: 'assignment_return', CLOSED: 'storefront' }[target],
+      label: target === 'ACTIVE' && bakery.status === 'SUSPENDED' ? 'Kích hoạt lại' : { ACTIVE: 'Duyệt tiệm', DRAFT: 'Trả hồ sơ', SUSPENDED: 'Tạm ngưng tiệm', CLOSED: 'Đóng tiệm' }[target],
+      icon: { ACTIVE: 'verified', DRAFT: 'assignment_return', SUSPENDED: 'pause_circle', CLOSED: 'storefront' }[target],
       tone: target === 'CLOSED' ? 'danger' : target === 'DRAFT' ? 'secondary' : 'primary',
-      disabled: target === 'ACTIVE' && missing.length > 0,
-      disabledReason: target === 'ACTIVE' ? missing.join(' ') : undefined,
-      description: { ACTIVE: 'Xác nhận hồ sơ đủ điều kiện hoạt động. Duyệt tiệm không tự kích hoạt gói dịch vụ.', DRAFT: 'Trả hồ sơ về bản nháp để chủ tiệm bổ sung thông tin và gửi lại.', CLOSED: 'Đóng tiệm sẽ dừng hoạt động. Hiện không thể mở lại tiệm đã đóng.' }[target],
+      disabled: target === 'ACTIVE' && bakery.status === 'PENDING_APPROVAL' && missing.length > 0,
+      disabledReason: target === 'ACTIVE' && bakery.status === 'PENDING_APPROVAL' ? missing.join(' ') : undefined,
+      description: target === 'ACTIVE' && bakery.status === 'SUSPENDED' ? 'Kích hoạt lại tiệm đã tạm ngưng. Quyền nhận đơn và báo giá vẫn phụ thuộc gói dịch vụ hiện có.' : { SUSPENDED: 'Tạm dừng hoạt động của tiệm. Quản trị viên có thể kích hoạt lại sau khi đối chiếu hồ sơ.', ACTIVE: 'Xác nhận hồ sơ đủ điều kiện hoạt động. Duyệt tiệm không tự kích hoạt gói dịch vụ.', DRAFT: 'Trả hồ sơ về bản nháp để chủ tiệm bổ sung thông tin và gửi lại.', CLOSED: 'Đóng tiệm sẽ dừng hoạt động. Hiện không thể mở lại tiệm đã đóng.' }[target],
       reasonLabel: target === 'DRAFT' ? 'Lý do trả hồ sơ' : undefined,
       reasonRequired: target === 'DRAFT',
       confirmText: target === 'CLOSED' ? 'Tôi hiểu rằng tiệm đã đóng sẽ không thể mở lại.' : undefined,

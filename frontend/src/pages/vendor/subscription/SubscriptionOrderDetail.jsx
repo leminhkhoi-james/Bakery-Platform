@@ -180,14 +180,6 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
             Mã hóa đơn: <span className="font-mono font-bold text-primary">#{shortOrderRef}</span>
           </p>
         </div>
-        <button
-          type="button"
-          disabled={busy}
-          className="text-xs font-semibold text-secondary hover:underline cursor-pointer"
-          onClick={() => { setMessage(''); resource.reload(); onChanged() }}
-        >
-          Tải lại chi tiết đơn
-        </button>
       </div>
 
       <ResourceState resource={resource}>
@@ -224,11 +216,6 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
                         Số tiền: <strong>{formatSubscriptionMoney(payment.amount, order.currency)}</strong>
                         {payment.paymentReference && <span> · Mã giao dịch: <code className="font-mono font-bold text-primary">{payment.paymentReference}</code></span>}
                       </p>
-                      {payment.proofUrl && /^https?:\/\//i.test(payment.proofUrl) && (
-                        <a href={payment.proofUrl} target="_blank" rel="noreferrer" className="text-secondary font-semibold hover:underline inline-block pt-1">
-                          Xem biên lai đính kèm ↗
-                        </a>
-                      )}
                     </li>
                   ))}
                 </ul>
