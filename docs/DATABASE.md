@@ -1,5 +1,10 @@
 # Thiết kế cơ sở dữ liệu
 
+Order review moderation nằm trong `V5__review_moderation_pending.sql`
+(đổi từ tên V2 mới bị trùng idempotency). Nội dung DDL không đổi: review mặc định
+PENDING và constraint nhận PENDING/PUBLISHED/HIDDEN/DELETED. V1–V4 đã áp dụng
+được giữ nguyên; không repair hoặc xóa lịch sử Flyway để xử lý việc trùng tên.
+
 > Logical database design cho MSS Bakery Platform sử dụng PostgreSQL.
 > Cập nhật tài liệu này mỗi khi Mermaid ERD hoặc Flyway migration thay đổi.
 

@@ -1,5 +1,16 @@
 # Project Status
 
+## Order: sửa trùng phiên bản Flyway — 2026-11-13
+
+- Commit e14c726 thêm review moderation dưới tên V2 trùng migration idempotency.
+  Flyway không thể resolve nên entityManagerFactory không khởi tạo được.
+- DB local đã có V1–V4 thành công, V2 là order creation idempotency. Đổi riêng
+  file review mới chưa áp dụng sang V5 trong resources và bản SQL tham chiếu;
+  giữ nguyên nội dung SQL/migration đã áp dụng và dữ liệu đang dùng.
+- Clean output riêng Order để xóa bản V2 cũ còn trong target/classes trước khi Run.
+- Build Order qua. Kiểm tra Flyway chỉ đọc xác nhận V1–V4 hợp lệ và duy nhất V5
+  đang chờ áp dụng; không chạy migration hoặc khởi động lại service khi kiểm tra.
+
 ## Chọn nến tặng kèm ngay khi mua bánh — 2026-11-13
 
 - Khách chọn nến thẳng hoặc nến số ngay ở chi tiết sản phẩm; nến số yêu cầu số
