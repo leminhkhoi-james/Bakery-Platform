@@ -57,6 +57,8 @@ const technicalCopy = /\b(?:backend|API|DEMO|mock\s*data|debug)(?:\b|_)|dữ\s+l
 export const uiLabel = (value, fallback = 'Chưa có thông tin') => labels[value] || (technicalCopy.test(String(value || '')) ? fallback : value || fallback)
 export function userFeedback(error) {
   const message = String(error?.message || error?.data?.message || '')
+  if (/^Phụ kiện .+ chỉ còn \d+ sản phẩm\.$/u.test(message)) return message.replace(/ chỉ còn \d+ sản phẩm\.$/u, ' không đủ số lượng đã chọn. Vui lòng giảm số lượng hoặc bỏ chọn.')
+  if (/^Phụ kiện .+ chưa được tiệm nhập tồn kho\.$/u.test(message)) return message.replace(/ chưa được tiệm nhập tồn kho\.$/u, ' hiện chưa khả dụng. Vui lòng bỏ chọn phụ kiện này.')
   if (businessErrorMessages[message]) return businessErrorMessages[message]
   for (const [key, translated] of Object.entries(businessErrorMessages)) {
     if (message.toLowerCase().includes(key.toLowerCase())) return translated

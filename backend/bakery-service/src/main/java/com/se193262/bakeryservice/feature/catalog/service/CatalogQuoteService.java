@@ -139,6 +139,8 @@ public class CatalogQuoteService {
             if (!addOn.isActive()) {
                 throw new AppException(HttpStatus.CONFLICT, "Add-on is inactive");
             }
+            com.se193262.bakeryservice.feature.addon.service.AddOnInventoryService.requireStock(
+                    addOn.getName(), addOn.getStockQuantity(), selection.quantity());
             BigDecimal lineTotal = addOn.getPrice().multiply(BigDecimal.valueOf(selection.quantity()));
             subtotal = subtotal.add(lineTotal);
             items.add(new CatalogQuoteResponse.QuotedItem(addOn.getId(), "ADD_ON", addOn.getName(),

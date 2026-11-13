@@ -3,8 +3,10 @@ import { addressService } from './addressService.js'
 import { isRealCheckoutId, revalidateCartItem } from './checkoutService.js'
 import { orderService } from './orderService.js'
 import { rfqService } from './rfqService.js'
+import { orderNoteWithGift } from './giftAccessories.js'
 
 export async function createVerifiedDirectOrder(item, { deliveryAddressId, requestedDeliveryAt, customerNote }, key) {
+  const note = orderNoteWithGift(customerNote, item.giftAccessories)
   if (![item.productId, item.bakeryId, deliveryAddressId].every(isRealCheckoutId)) {
     throw new ApiError('Sản phẩm, cửa hàng và địa chỉ phải là dữ liệu API.', 400)
   }
@@ -15,7 +17,7 @@ export async function createVerifiedDirectOrder(item, { deliveryAddressId, reque
   ]
   if (!references.every(isRealCheckoutId)) throw new ApiError('Tùy chọn và phụ kiện phải thuộc dữ liệu API.', 400)
   return orderService.createDirectOrder({
-    productId: item.productId, bakeryId: item.bakeryId, deliveryAddressId, requestedDeliveryAt, customerNote,
+    productId: item.productId, bakeryId: item.bakeryId, deliveryAddressId, requestedDeliveryAt, customerNote: note,
     quantity: verified.quantity, optionSelections: verified.optionSelections, addOns: verified.addOns,
   }, key, { allowMockFallback: false })
 }

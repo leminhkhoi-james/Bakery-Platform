@@ -202,6 +202,8 @@ function App() {
   const handleAddToCart = (cake) => {
     if (cake.catalogSource === 'backend') {
       const item = catalogCartItem(cake)
+      // Accessories are counts for one order. Separate additions must keep both purchases.
+      if (item.addOns.length) item.id += ':' + crypto.randomUUID()
       if (cake.buyNow) {
         item.id += ':buy-now'
         setSelectedCartIds([item.id])

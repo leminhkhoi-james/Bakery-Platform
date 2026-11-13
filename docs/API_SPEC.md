@@ -2194,3 +2194,41 @@ unavailable Bakery validation fails closed (503). Order/history reads remain
 available. Verified IPN settlement and review of existing evidence are unchanged.
 See decisions/ADR-007-approval-before-subscription.md.
 
+# Bổ sung tồn kho phụ kiện — 2026-11-13
+
+Các contract cũ giữ nguyên; bổ sung các trường sau:
+
+- Add-on management DTO có `stockQuantity` (integer >= 0, nullable với dữ liệu cũ)
+  và `version`. Create thiếu tồn mặc định 0. PATCH gửi `stockQuantity` phải kèm
+  `version` đã đọc; lệch/thiếu version trả 409, tải lại trước khi lưu.
+- Public product detail `addOns[]` có `stockQuantity`; NULL chưa nhập tồn, 0 hết
+  hàng. `quantity` phụ kiện là số cái cho cả đơn, không nhân theo số bánh.
+- Cả ba catalog quote routes kiểm tra đủ tồn, thiếu trả 409 kèm tên/số còn lại.
+  Quote không trừ tồn. Order có thể từ chối nếu tồn thay đổi sau quote.
+- POST `/internal/v1/bakeries/{bakeryId}/inventory/orders/{orderId}/allocate` nhận
+  `{ "addOns": [{ "addOnId": "UUID", "quantity": 2 }] }`, tối đa 100 phụ kiện,
+  mỗi loại 1–100 cái, không trùng ID. Thành công 204; retry cùng payload không trừ
+  lại. Khác payload/đã hoàn/thiếu tồn trả 409; không thuộc tiệm trả 404.
+- POST cùng base path với `/release`: không cần body, trả 204, lặp không cộng lại.
+  Chỉ Order service JWT subject `order-service`, audience `bakery-service`, scope
+  `bakery:catalog:quote`, header `X-Correlation-Id` được gọi hai API này.
+- Đặt đơn trực tiếp và chấp nhận offer đều trừ tồn; hủy hoàn lại. Nếu Bakery tạm
+  mất kết nối, hủy vẫn lưu thành công và worker Order thử hoàn lại mỗi 30 giây.
+  Đơn lịch sử không có allocation không tự cộng tồn.
+
+Bổ sung cách hiểu đơn vị hiển thị: nến bán theo **bộ**, `quantity: 2` là hai bộ,
+không phải hai cây nến. API không quy định số cây trong một bộ. Giao diện khách
+không hiển thị số tồn và không cho chọn thiệp viết tay làm phụ kiện mua kèm;
+dữ liệu tồn và lịch sử vẫn được giữ cho chủ tiệm/BE xử lý.
+
+Bổ sung nghiệp vụ quà kèm bánh: bộ dĩa/nĩa và nến thẳng hoặc nến số được tặng
+kèm, không tự thêm vào `addOns` có tính phí. Khách có thể ghi loại nến và số tuổi
+trong `customerNote` hiện có của đơn. Phụ kiện mua thêm là nến thẳng (theo bộ),
+nón sinh nhật (theo cái) và bộ dĩa/nĩa (theo bộ); chỉ lựa chọn được tick mới gửi
+`addOns`/cộng tiền. Không tạo API hoặc trường thanh toán cho phần quà tặng.
+
+Bổ sung UI chọn trực tiếp: lựa chọn nến được lưu trong giỏ FE và khi đặt đơn được
+ghép vào `customerNote` dạng `Phụ kiện tặng kèm: bộ dĩa/nĩa và nến số 18.` hoặc
+`... nến thẳng.`. Ghi chú riêng của khách được giữ, tổng vẫn tối đa 1000 ký tự.
+Không gửi một add-on tính phí cho phần nến tặng. Đây là ghi chú của đơn, không có
+trường `giftAccessories` mới trong DTO BE.

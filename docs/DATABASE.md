@@ -412,3 +412,17 @@ Identity has three platform roles: ADMIN, CUSTOMER and BAKERY_OWNER.
 Bakery membership accepts OWNER only. Chat participant types are CUSTOMER and
 BAKERY_OWNER. Initial schemas/seeds define these values directly because no real
 data exists. No role-retirement migrations or archive tables are needed.
+# Bổ sung schema tồn kho — 2026-11-13
+
+Bakery migration V4: `add_ons.stock_quantity INTEGER NULL CHECK >= 0`; NULL là
+chưa nhập tồn. `add_on_allocations` có PK order_id (external Order UUID), bakery_id
+FK nội bộ, state ALLOCATED/RELEASED, fingerprint và timestamps. Bảng con
+`add_on_allocation_items` PK(order_id,add_on_id), FK nội bộ tới allocation/add-on,
+quantity > 0. Khóa transaction theo order và khóa hàng phụ kiện theo UUID bảo vệ
+trừ/hoàn nguyên tử. version của add-on tăng khi tồn thay đổi.
+
+Order migration V4: `order_items.source_add_on_id` external UUID Bakery, không FK.
+`order_inventory_intents` PK order_id, bakery_id external UUID, state RESERVING/
+COMMITTED/RELEASE_REQUIRED/RELEASED và timestamps; index(state,updated_at). Intent
+có trước order nên không FK sang customer_orders. Commit intent cùng transaction
+order/idempotency; cancel cùng transaction trạng thái. Xem ADR-008 và ERD 02/04.

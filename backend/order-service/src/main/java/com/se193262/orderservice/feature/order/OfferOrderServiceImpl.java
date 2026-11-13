@@ -15,8 +15,10 @@ import java.util.*;
 public class OfferOrderServiceImpl implements OfferOrderService {
     private final OfferOrderRepository repository;
     private final ServiceHttpClient http;
+    private final OrderInventoryService inventory;
 
-    public OfferOrderServiceImpl(OfferOrderRepository repository, ServiceHttpClient http) {
+    public OfferOrderServiceImpl(OfferOrderRepository repository, ServiceHttpClient http, OrderInventoryService inventory) {
+        this.inventory = inventory;
         this.repository = repository;
         this.http = http;
     }
@@ -59,15 +61,19 @@ public class OfferOrderServiceImpl implements OfferOrderService {
                 || !matchLocation(source.deliveryCity(), (String) address.get("city"))
                 || !matchLocation(source.deliveryDistrict(), (String) address.get("district")))
             throw BusinessException.invalid("Customer phone/address invalid");
-        try {
-            return repository.save(key, fingerprint, command, source, user, bakery, address);
-        } catch (DataIntegrityViolationException concurrent) {
-            return new Creation(
-                    repository
-                            .existing(key, fingerprint, command.offerId())
-                            .orElseThrow(BusinessException::conflict),
-                    false);
-        }
+        var selections = source.items().stream().filter(item -> item.addOnId() != null)
+                .map(item -> new com.se193262.orderservice.infrastructure.client.AddOnInventoryClient.Selection(item.addOnId(), item.quantity())).toList();
+        return inventory.create(source.bakeryId(), selections, candidateId -> {
+            try {
+                return repository.save(candidateId, key, fingerprint, command, source, user, bakery, address);
+            } catch (DataIntegrityViolationException concurrent) {
+                return new Creation(
+                        repository
+                                .existing(key, fingerprint, command.offerId())
+                                .orElseThrow(BusinessException::conflict),
+                        false);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")

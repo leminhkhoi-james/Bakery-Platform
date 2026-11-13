@@ -29,6 +29,12 @@ public class OrderItem extends com.se193262.platform.persistence.UuidEntity {
     @Column(name = "source_product_id")
     private UUID sourceProductId;
 
+    @Column(name = "source_add_on_id")
+    private UUID sourceAddOnId;
+
+    public UUID getSourceAddOnId() { return sourceAddOnId; }
+    public void setSourceAddOnId(UUID value) { this.sourceAddOnId = value; }
+
     @Column(name = "source_offer_item_id")
     private UUID sourceOfferItemId;
 

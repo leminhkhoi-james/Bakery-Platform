@@ -3,6 +3,9 @@ import { targetedRequestRoute } from '../../../services/requestContextModels.js'
 import { loadProduct } from '../../../services/cakeService.js'
 import { catalogCategoryLabel, catalogMoney, formatCatalogPrice } from '../../../services/catalogModels.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
+import AddOnSelector from '../../../components/catalog/AddOnSelector.jsx'
+import { addOnDisplayName, addOnSelectionError, addOnUnit, isCustomerAddOn } from '../../../services/addOnInventory.js'
+import { defaultGiftAccessories, giftAccessoriesError } from '../../../services/giftAccessories.js'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
 import CatalogState from '../../../components/catalog/CatalogState.jsx'
 
@@ -31,21 +34,28 @@ export function ProductDetails({ product, onAddToCart, onNavigate, cartOnly = fa
   const draftKey = 'sweetcake.product-choice:' + product.id
   const [draft] = useState(() => { try { return JSON.parse(sessionStorage.getItem(draftKey) || '{}') } catch { return {} } })
   const [selections, setSelections] = useState(draft.selections || {})
-  const [addons, setAddons] = useState(draft.addons || [])
+  const [addons, setAddons] = useState(Array.isArray(draft.addons) ? draft.addons : [])
+  const [addonQuantities, setAddonQuantities] = useState(draft.addonQuantities || {})
+  const [giftAccessories, setGiftAccessories] = useState(() => draft.giftAccessories?.candleType === 'NUMBER'
+    ? { candleType: 'NUMBER', candleNumber: String(draft.giftAccessories.candleNumber ?? '') } : defaultGiftAccessories())
   const [quantity, setQuantity] = useState(Number.isInteger(draft.quantity) && draft.quantity > 0 && draft.quantity <= 100 ? draft.quantity : 1)
-  useEffect(() => { try { sessionStorage.setItem(draftKey, JSON.stringify({ selections, addons, quantity })) } catch { /* Browsing stays usable without storage. */ } }, [draftKey, selections, addons, quantity])
+  useEffect(() => { try { sessionStorage.setItem(draftKey, JSON.stringify({ selections, addons, addonQuantities, quantity, giftAccessories })) } catch { /* Browsing stays usable without storage. */ } }, [draftKey, selections, addons, addonQuantities, quantity, giftAccessories])
   const groups = product.optionGroups
   const selectedValues = groups.flatMap((group) => (group.values || []).filter((value) => (selections[group.id] || []).includes(value.id)))
-  const selectedAddons = product.addOns.filter((addon) => addons.includes(addon.id))
-  const amounts = [product.price, ...selectedValues.map((value) => catalogMoney(value.priceAdjustment)), ...selectedAddons.map((addon) => catalogMoney(addon.price))]
+  const availableAddOns = product.addOns.filter(isCustomerAddOn)
+  const selectedAddons = availableAddOns.filter((addon) => addons.includes(addon.id))
+  const amounts = [product.price, ...selectedValues.map((value) => catalogMoney(value.priceAdjustment))]
   const unitPrice = amounts.some((amount) => amount === null) ? null : amounts.reduce((sum, amount) => sum + Math.round(amount * 100), 0) / 100
+  const addOnError = selectedAddons.map(addon => addOnSelectionError(addon, addonQuantities[addon.id] ?? 1)).find(Boolean) || ''
+  const addOnSubtotal = selectedAddons.reduce((sum, addon) => sum + Math.round(Number(addon.price) * 100) * Number(addonQuantities[addon.id] ?? 1), 0) / 100
   const validOptions = groups.every((group) => {
     const count = (selections[group.id] || []).length
     const min = group.minimumSelections ?? (group.required ? 1 : 0)
     const max = group.maximumSelections ?? (group.selectionType === 'SINGLE' ? 1 : Infinity)
     return count >= min && count <= max
   })
-  const canAdd = validOptions && unitPrice !== null && unitPrice >= 0 && Boolean(product.bakeryId)
+  const giftError = giftAccessoriesError(giftAccessories)
+  const canAdd = validOptions && !addOnError && !giftError && Number.isFinite(addOnSubtotal) && unitPrice !== null && unitPrice >= 0 && Boolean(product.bakeryId)
   const selectValue = (group, value) => setSelections((current) => {
     const selected = current[group.id] || []
     const next = selected.includes(value.id) ? selected.filter((id) => id !== value.id) : group.selectionType === 'SINGLE' ? [value.id] : [...selected, value.id]
@@ -58,9 +68,12 @@ export function ProductDetails({ product, onAddToCart, onNavigate, cartOnly = fa
       ...product,
       buyNow: quick,
       quantity,
+      giftAccessories: { ...giftAccessories, candleNumber: giftAccessories.candleType === 'NUMBER' ? giftAccessories.candleNumber.trim() : '' },
       price: unitPrice,
+      addOnSubtotal,
+      addOnSummary: selectedAddons.map(addon => ({ name: addOnDisplayName(addon), quantity: addonQuantities[addon.id] ?? 1, unit: addOnUnit(addon) })),
       optionSelections: configuration,
-      addOns: selectedAddons.map((addon) => ({ addOnId: addon.id, quantity: 1 })),
+      addOns: selectedAddons.map((addon) => ({ addOnId: addon.id, quantity: addonQuantities[addon.id] ?? 1 })),
       selectedSize: selectedValues.map((value) => value.name).join(', '),
       sizeSpec: selectedValues.map((value) => value.name).join(', '),
     })
@@ -130,7 +143,7 @@ export function ProductDetails({ product, onAddToCart, onNavigate, cartOnly = fa
             {cartOnly ? <p className="font-semibold text-wine">{product.title}</p> : <h1 className="font-savoure text-2xl sm:text-3xl text-wine font-bold tracking-normal leading-tight">{product.title}</h1>}
             <div className="bg-[#fff8fa] px-3.5 py-1.5 rounded-xl border border-primary/15 flex items-baseline justify-between shadow-2xs">
               <span id={cartOnly ? undefined : "display-price"} className="font-headline-md text-2xl sm:text-3xl font-bold text-wine">
-                {formatCatalogPrice(unitPrice === null ? null : Math.round(unitPrice * 100) * quantity / 100)}
+                {formatCatalogPrice(unitPrice === null ? null : (Math.round(unitPrice * 100) * quantity + Math.round(addOnSubtotal * 100)) / 100)}
               </span>
               <span className="text-[11px] text-on-surface-variant font-medium">
                 Giá theo tùy chọn đã chọn
@@ -192,30 +205,15 @@ export function ProductDetails({ product, onAddToCart, onNavigate, cartOnly = fa
             </fieldset>
           ))}
 
-          {/* Add-ons (Accessories - 2-Column Compact Grid) */}
-          {product.addOns.length > 0 && (
-            <fieldset className="space-y-1.5 rounded-xl border border-primary/15 bg-[#fff8fa] p-2.5">
-              <legend className="font-bold text-wine text-xs px-1">Phụ kiện từ tiệm</legend>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 max-h-24 overflow-y-auto pr-1">
-                {product.addOns.map((addon) => (
-                  <label key={addon.id} className="flex items-center gap-2 text-xs text-wine font-medium cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={addons.includes(addon.id)}
-                      onChange={() => setAddons((current) => current.includes(addon.id) ? current.filter((id) => id !== addon.id) : [...current, addon.id])}
-                      className="w-3.5 h-3.5 accent-primary rounded cursor-pointer"
-                    />
-                    <span className="truncate">{addon.name} · {formatCatalogPrice(catalogMoney(addon.price))}</span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
+          <AddOnSelector addOns={availableAddOns} selectedIds={addons} quantities={addonQuantities}
+            giftAccessories={giftAccessories} onGiftChange={setGiftAccessories}
+            onToggle={id => setAddons(current => current.includes(id) ? current.filter(value => value !== id) : [...current, id])}
+            onQuantity={(id, value) => setAddonQuantities(current => ({ ...current, [id]: value }))} />
 
           {/* Validation Message if Incomplete */}
           {!canAdd && (
             <p role="status" className="text-xs font-semibold text-wine/80 bg-primary-fixed/40 p-2 rounded-lg border border-primary/20">
-              {!validOptions ? 'Vui lòng chọn đủ tùy chọn bắt buộc.' : 'Chưa đủ thông tin giá hoặc cửa hàng để thêm vào giỏ.'}
+              {!validOptions ? 'Vui lòng chọn đủ tùy chọn bắt buộc.' : giftError || addOnError || 'Chưa đủ thông tin giá hoặc cửa hàng để thêm vào giỏ.'}
             </p>
           )}
 

@@ -24,10 +24,12 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 
     private final OrderQueryPersistenceService persistenceService;
     private final BakeryServiceClient bakeryClient;
+    private final OrderInventoryService inventory;
 
     public OrderManagementServiceImpl(
             OrderQueryPersistenceService persistenceService,
-            BakeryServiceClient bakeryClient) {
+            BakeryServiceClient bakeryClient, OrderInventoryService inventory) {
+        this.inventory = inventory;
         this.persistenceService = persistenceService;
         this.bakeryClient = bakeryClient;
     }
@@ -113,25 +115,31 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         requireActor(actorId);
         OrderAuthorizationContext context = persistenceService.getAuthorizationContext(orderId);
         if (hasRole(roles, ADMIN_ROLE)) {
-            return persistenceService.transition(orderId, targetStatus, reason, actorId);
+            return transitionAndRelease(orderId, targetStatus, reason, actorId);
         }
         if (hasRole(roles, "CUSTOMER") && context.customerId().equals(actorId)) {
             if (targetStatus != OrderStatus.CANCELLED && targetStatus != OrderStatus.COMPLETED) {
                 throw new OrderAccessDeniedException();
             }
-            return persistenceService.transition(orderId, targetStatus, reason, actorId);
+            return transitionAndRelease(orderId, targetStatus, reason, actorId);
         }
         requireBakeryRole(roles);
         requireActiveMembership(context.bakeryId(), actorId);
         if (targetStatus == OrderStatus.COMPLETED) {
             throw new OrderAccessDeniedException();
         }
-        return persistenceService.transition(orderId, targetStatus, reason, actorId);
+        return transitionAndRelease(orderId, targetStatus, reason, actorId);
     }
 
     @Override
     public OrderContextResponse getContext(UUID orderId) {
         return persistenceService.getContext(orderId);
+    }
+
+    private OrderResponse transitionAndRelease(UUID orderId, OrderStatus status, String reason, UUID actorId) {
+        OrderResponse response = persistenceService.transition(orderId, status, reason, actorId);
+        if (status == OrderStatus.CANCELLED) inventory.release(orderId);
+        return response;
     }
 
     private void authorizeRead(OrderAuthorizationContext context, UUID actorId, Set<String> roles) {

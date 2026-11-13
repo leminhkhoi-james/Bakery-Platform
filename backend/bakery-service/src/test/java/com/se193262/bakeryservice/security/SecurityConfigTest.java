@@ -183,8 +183,29 @@ class SecurityConfigTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    @DisplayName("Only Order may allocate and release, with a valid service scope and correlation ID")
+    void inventory_requiresOrderSubjectAndServiceScope() throws Exception {
+        for (String action : List.of("allocate", "release")) {
+            String path = "/internal/v1/bakeries/" + BAKERY_ID + "/inventory/orders/" + UUID.randomUUID() + "/" + action;
+            mockMvc.perform(post(path).header("Authorization", "Bearer service-order-inventory")
+                    .header("X-Correlation-Id", "inventory-check")).andExpect(status().isOk());
+            mockMvc.perform(post(path).header("Authorization", "Bearer service-marketplace-inventory")
+                    .header("X-Correlation-Id", "inventory-check")).andExpect(status().isForbidden());
+            mockMvc.perform(post(path).header("Authorization", "Bearer service-order-inventory"))
+                    .andExpect(status().isForbidden());
+            mockMvc.perform(post(path).header("Authorization", "Bearer user-owner")
+                    .header("X-Correlation-Id", "inventory-check")).andExpect(status().isForbidden());
+        }
+    }
+
     @RestController
     static class ProbeController {
+        @PostMapping("/internal/v1/bakeries/{bakeryId}/inventory/orders/{orderId}/allocate")
+        String allocate() { return "ok"; }
+
+        @PostMapping("/internal/v1/bakeries/{bakeryId}/inventory/orders/{orderId}/release")
+        String release() { return "ok"; }
         @PostMapping("/api/v1/bakeries")
         String create() { return "ok"; }
 
@@ -218,13 +239,14 @@ class SecurityConfigTest {
                 String role = token.contains("customer") ? "CUSTOMER"
                         : token.contains("admin") ? "ADMIN" : "BAKERY_OWNER";
                 String scope = switch (token) {
+                    case "service-order-inventory", "service-marketplace-inventory" -> "bakery:catalog:quote";
                     case "service-profile" -> "bakery:profile:read";
                     case "service-membership", "user-membership" -> "bakery:membership:read";
                     default -> "";
                 };
                 return Jwt.withTokenValue(token)
                         .header("alg", "RS256")
-                        .subject(USER_ID.toString())
+                        .subject(token.equals("service-order-inventory") ? "order-service" : USER_ID.toString())
                         .claim("token_type", tokenType)
                         .claim("roles", List.of(role))
                         .audience(List.of(token.startsWith("service") ? "bakery-service" : "bakery-platform-api"))

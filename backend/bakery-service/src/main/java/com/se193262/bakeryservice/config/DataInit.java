@@ -217,25 +217,41 @@ public class DataInit implements CommandLineRunner {
                     }
                 }
             }
-            for (int addon = 0; addon < 2; addon++) {
-            int seedAddon = addon;
-                addOnRepository.findById(id(20, (bakery - 1) * 2 + addon + 1)).ifPresent(existing -> {
-                    if (java.util.Objects.equals(existing.getName(), seedAddon == 0 ? "Nến sinh nhật Demo" : "Thiệp chúc mừng Demo")) existing.setName(seedAddon == 0 ? "Bộ nến sinh nhật" : "Thiệp viết tay");
-                });
-                if (!addOnRepository.existsById(id(20, (bakery - 1) * 2 + addon + 1))) {
-                    AddOn demoAddOn = new AddOn();
-                    demoAddOn.setId(id(20, (bakery - 1) * 2 + addon + 1));
-                    demoAddOn.setBakery(bakeryRepository.getReferenceById(id(10, bakery)));
-                    demoAddOn.setName(addon == 0 ? "Bộ nến sinh nhật" : "Thiệp viết tay");
-                    demoAddOn.setCategory(addon == 0 ? "DECORATION" : "CARD");
-                    demoAddOn.setPrice(BigDecimal.valueOf(addon == 0 ? 20000 : 15000));
-                    demoAddOn.setActive(true);
-                    addOnRepository.save(demoAddOn);
-                }
-            }
+            seedExtraAccessories(bakery);
         }
         // No object keys are invented: image uploads remain available through the normal APIs.
         LoggerFactory.getLogger(DataInit.class).info("DataInit ready: 6 seed bakeries and 12 products");
+    }
+
+    private void seedExtraAccessories(int bakery) {
+        // Keep the old ID for historical cross-service snapshots, but stop offering fixture cards.
+        seedAccessory(id(20, (bakery - 1) * 2 + 2), bakery, "Thiệp viết tay", "CARD", 15000);
+        addOnRepository.findById(id(20, (bakery - 1) * 2 + 2)).ifPresent(existing -> {
+            if ("CARD".equals(existing.getCategory()) && java.util.Set.of("Thiệp viết tay", "Thiệp chúc mừng Demo").contains(existing.getName()))
+                existing.disable();
+        });
+        seedAccessory(id(20, (bakery - 1) * 2 + 1), bakery, "Bộ nến thẳng", "DECORATION", 20000);
+        seedAccessory(id(21, bakery), bakery, "Nón sinh nhật", "PARTY_HAT", 10000);
+        seedAccessory(id(22, bakery), bakery, "Bộ dĩa và nĩa", "CUTLERY", 15000);
+    }
+
+    private void seedAccessory(UUID addOnId, int bakery, String name, String category, int price) {
+        addOnRepository.findById(addOnId).ifPresentOrElse(existing -> {
+            if (existing.getStockQuantity() == null) existing.setStockQuantity(100);
+            if (name.equals("Bộ nến thẳng") && java.util.Set.of("Nến sinh nhật Demo", "Bộ nến sinh nhật").contains(existing.getName()))
+                existing.setName(name);
+        }, () -> {
+            AddOn accessory = new AddOn();
+            accessory.setId(addOnId);
+            accessory.setBakery(bakeryRepository.getReferenceById(id(10, bakery)));
+            accessory.setName(name);
+            accessory.setCategory(category);
+            accessory.setPrice(BigDecimal.valueOf(price));
+            accessory.update(null, "Phụ kiện mua thêm ngoài phần đã tặng kèm bánh.", null, null, null);
+            accessory.setActive(true);
+            accessory.setStockQuantity(100);
+            addOnRepository.save(accessory);
+        });
     }
 
     private static UUID id(int kind, int number) {

@@ -79,6 +79,10 @@ public class SecurityConfig {
                                 "/internal/v1/catalog/customization-quotes",
                                 "/internal/v1/catalog/add-on-quotes")
                         .access(serviceScope("bakery:catalog:quote"))
+                        .requestMatchers(HttpMethod.POST,
+                                "/internal/v1/bakeries/{bakeryId}/inventory/orders/{orderId}/allocate",
+                                "/internal/v1/bakeries/{bakeryId}/inventory/orders/{orderId}/release")
+                        .access(orderInventory())
                         .requestMatchers("/internal/v1/**").denyAll()
                         .requestMatchers("/api/v1/admin/**").access(userRole("ADMIN"))
                         .requestMatchers(HttpMethod.POST, "/api/v1/bakeries").access(userRole("BAKERY_OWNER"))
@@ -169,6 +173,16 @@ public class SecurityConfig {
                     && correlationId != null && !correlationId.isBlank()
                     && scopes != null && Arrays.asList(scopes.split(" ")).contains(scope);
             return new AuthorizationDecision(allowed);
+        };
+    }
+
+    private AuthorizationManager<RequestAuthorizationContext> orderInventory() {
+        return (authentication, context) -> {
+            Authentication resolved = authentication.get();
+            boolean order = resolved instanceof JwtAuthenticationToken token
+                    && "order-service".equals(token.getToken().getSubject());
+            var scope = serviceScope("bakery:catalog:quote").authorize(authentication, context);
+            return new AuthorizationDecision(order && scope != null && scope.isGranted());
         };
     }
 

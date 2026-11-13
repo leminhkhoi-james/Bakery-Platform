@@ -6,6 +6,7 @@ import { loadAddresses, selectedAddress, isAddressMatchingLocation } from '../..
 import { isRealCheckoutId } from '../../services/checkoutService.js'
 import { acceptVerifiedOffer, createVerifiedDirectOrder } from '../../services/verifiedCheckoutService.js'
 import { toLocalInput } from '../../services/marketplaceModels.js'
+import { noteLimitWithGift } from '../../services/giftAccessories.js'
 import AddressPicker from './AddressPicker.jsx'
 
 function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConfirmed, onNavigate }) {
@@ -13,6 +14,7 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
   const [addressId, setAddressId] = useState('')
   const [neededAt, setNeededAt] = useState(() => toLocalInput(new Date(Date.now() + 7 * 86400000).toISOString()))
   const [note, setNote] = useState('')
+  const noteLimit = offerId ? 1000 : noteLimitWithGift(items)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [complete, setComplete] = useState(false)
@@ -140,9 +142,9 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
         Ghi chú giao hàng cho tiệm bánh
         <textarea
           className={inputClass + ' mt-1 w-full text-xs'}
-          maxLength={1000}
+          maxLength={noteLimit}
           rows={2}
-          placeholder="Lưu ý khi vận chuyển bánh, lời chúc ghi trên thiệp..."
+          placeholder="Lời nhắn cho tiệm hoặc lưu ý khi giao bánh…"
           disabled={locked || disabled}
           value={note}
           onChange={event => setNote(event.target.value)}

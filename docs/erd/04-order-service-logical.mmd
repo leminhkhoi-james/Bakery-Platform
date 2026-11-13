@@ -1,4 +1,11 @@
 erDiagram
+    ORDER_INVENTORY_INTENTS {
+        uuid order_id PK "Exists before order; no FK"
+        uuid bakery_id "External Bakery reference"
+        varchar state
+        timestamptz created_at
+        timestamptz updated_at
+    }
     CUSTOMER_ORDERS {
         uuid id PK
         varchar order_number UK
@@ -25,6 +32,7 @@ erDiagram
     }
 
     ORDER_ITEMS {
+        uuid source_add_on_id "External Bakery reference"
         uuid id PK
         uuid order_id FK
         uuid source_product_id "Optional external Bakery reference"

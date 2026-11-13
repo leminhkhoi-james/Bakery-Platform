@@ -31,9 +31,20 @@ public class BakeryServiceClient {
             }
             if (Integer.valueOf(409).equals(status)) {
                 throw new com.se193262.orderservice.feature.order.OrderConflictException(
-                        "Product or bakery is no longer available for ordering");
+                        inventoryMessage(exception));
             }
             throw exception;
         }
+    }
+
+    private String inventoryMessage(RemoteServiceException exception) {
+        if (exception.getCause() instanceof org.springframework.web.client.RestClientResponseException response) {
+            try {
+                String message = new tools.jackson.databind.ObjectMapper().readTree(response.getResponseBodyAsString())
+                        .path("message").asText("");
+                if (message.startsWith("Phụ kiện ")) return message;
+            } catch (RuntimeException ignored) { /* Preserve the existing fallback for other catalog conflicts. */ }
+        }
+        return "Product or bakery is no longer available for ordering";
     }
 }

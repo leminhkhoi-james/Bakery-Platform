@@ -50,6 +50,7 @@ public class AddOnServiceImpl implements AddOnService {
         String category = required(request.category(), "category");
         BigDecimal price = requiredPrice(request.price());
         AddOn addOn = new AddOn(bakery, name, category, price);
+        addOn.setStockQuantity(request.stockQuantity() == null ? 0 : request.stockQuantity());
         addOn.update(null, request.description(), null, null, request.active());
         return AddOnDto.fromEntity(addOnRepository.saveAndFlush(addOn));
     }
@@ -60,6 +61,11 @@ public class AddOnServiceImpl implements AddOnService {
         rejectId(request);
         AddOn addOn = addOnRepository.findByIdAndBakery_Id(addOnId, bakeryId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Add-on not found"));
+        if (request.stockQuantity() != null) {
+            if (request.version() == null || request.version() != addOn.getVersion())
+                throw new AppException(HttpStatus.CONFLICT, "Tồn kho đã thay đổi. Vui lòng đóng bảng, mở lại phụ kiện và kiểm tra số còn có thể bán.");
+            addOn.setStockQuantity(request.stockQuantity());
+        }
         addOn.update(request.name() == null ? null : required(request.name(), "name"),
                 request.description(),
                 request.category() == null ? null : required(request.category(), "category"),

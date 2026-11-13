@@ -132,7 +132,7 @@ public class PublicProductService {
                     .map(addOn -> new PublicAddOnResponse(addOn.getId(), addOn.getName(),
                             addOn.getDescription(), addOn.getCategory(), addOn.getPrice(),
                             addOn.getImageObjectKey() == null ? null
-                                    : imageStorage.signedUrl(addOn.getImageObjectKey())))
+                                    : imageStorage.signedUrl(addOn.getImageObjectKey()), addOn.getStockQuantity()))
                     .toList();
         }
         return new PublicProductResponse(ProductDto.fromEntity(product), bakeryId,

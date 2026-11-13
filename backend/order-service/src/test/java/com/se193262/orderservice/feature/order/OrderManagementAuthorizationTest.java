@@ -41,7 +41,7 @@ class OrderManagementAuthorizationTest {
 
     @BeforeEach
     void setUp() {
-        service = new OrderManagementServiceImpl(persistenceService, bakeryClient);
+        service = new OrderManagementServiceImpl(persistenceService, bakeryClient, org.mockito.Mockito.mock(OrderInventoryService.class));
     }
 
     @Test

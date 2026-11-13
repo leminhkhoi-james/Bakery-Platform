@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { cartLineSubtotal } from '../../../services/addOnInventory.js'
+import { giftAccessoriesLabel } from '../../../services/giftAccessories.js'
 import { revalidateCartItem } from '../../../services/checkoutService.js'
 import { formatCatalogPrice, isCatalogId } from '../../../services/catalogModels.js'
 import { ApiErrorMessage, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
@@ -9,7 +11,7 @@ function CartLine({ item, selected, onSelect, onUpdateQuantity, onRemoveItem, on
   const [busy, setBusy] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
-  const signature = JSON.stringify([item.productId, item.bakeryId, item.quantity, item.optionSelections, item.addOns])
+  const signature = JSON.stringify([item.productId, item.bakeryId, item.quantity, item.optionSelections, item.addOns, item.giftAccessories])
   const fresh = result?.signature === signature ? result.data : null
 
   async function verify() {
@@ -64,8 +66,10 @@ function CartLine({ item, selected, onSelect, onUpdateQuantity, onRemoveItem, on
           </div>
 
           <p className="text-xs text-on-surface-variant font-medium">
-            Giá lưu khi thêm vào giỏ: <strong className="text-sm font-bold text-wine">{formatCatalogPrice(item.price)}</strong> / lựa chọn.
+            Giá lưu khi thêm vào giỏ: <strong className="text-sm font-bold text-wine">{formatCatalogPrice(item.price)}</strong> / bánh theo lựa chọn.
           </p>
+          {item.addOnSummary?.length > 0 && <p className="text-sm text-wine">Phụ kiện cho đơn: {item.addOnSummary.map(addon => addon.name + ' × ' + addon.quantity + (addon.unit ? ' ' + addon.unit : '')).join(', ')} · {formatCatalogPrice(item.addOnSubtotal)}</p>}
+          {item.giftAccessories && <p className="text-sm text-wine">Tặng kèm: bộ dĩa/nĩa · {giftAccessoriesLabel(item.giftAccessories)}</p>}
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div className="flex items-center border-2 border-primary/25 rounded-xl bg-white px-2 py-0.5 shadow-2xs">
@@ -148,7 +152,7 @@ export const CartCheckoutPage = ({ routeSearch = '', cartItems = [], selectedCar
   }, [jumpToCheckout])
   const eligible = cartItems.filter(item => item.catalogSource === 'backend' && isCatalogId(item.productId) && isCatalogId(item.bakeryId))
   const selectedItems = eligible.filter(item => selectedCartIds.includes(item.id))
-  const total = selectedItems.reduce((sum, item) => sum + Math.round(Number(item.price) * 100) * Number(item.quantity), 0) / 100
+  const total = selectedItems.reduce((sum, item) => sum + Math.round(cartLineSubtotal(item) * 100), 0) / 100
   const toggle = id => onSelectCartIds?.(selectedCartIds.includes(id) ? selectedCartIds.filter(value => value !== id) : [...selectedCartIds, id])
   return (
     <main className="sc-customer min-h-[60vh] px-4 sm:px-6 py-4 sm:py-6">

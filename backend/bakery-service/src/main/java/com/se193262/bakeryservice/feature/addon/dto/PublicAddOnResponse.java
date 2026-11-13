@@ -4,4 +4,4 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record PublicAddOnResponse(UUID id, String name, String description,
-        String category, BigDecimal price, String imageUrl) { }
+        String category, BigDecimal price, String imageUrl, Integer stockQuantity) { }

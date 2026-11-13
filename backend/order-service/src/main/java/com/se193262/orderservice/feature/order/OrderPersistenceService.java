@@ -12,12 +12,15 @@ import java.util.UUID;
 @Service
 public class OrderPersistenceService {
 
+    private final OrderInventoryStore inventoryStore;
+
     private final CustomerOrderRepository customerOrderRepository;
     private final OrderIdempotencyRepository idempotencyRepository;
 
     public OrderPersistenceService(
             CustomerOrderRepository customerOrderRepository,
-            OrderIdempotencyRepository idempotencyRepository) {
+            OrderIdempotencyRepository idempotencyRepository, OrderInventoryStore inventoryStore) {
+        this.inventoryStore = inventoryStore;
         this.customerOrderRepository = customerOrderRepository;
         this.idempotencyRepository = idempotencyRepository;
     }
@@ -49,6 +52,7 @@ public class OrderPersistenceService {
         CustomerOrder savedOrder = customerOrderRepository.saveAndFlush(order);
         idempotencyRepository.saveAndFlush(OrderIdempotencyRecord.create(
                 operation, customerId, idempotencyKey, payloadHash, savedOrder, now));
+        inventoryStore.commit(savedOrder.getId());
         return new OrderCreationResult(OrderResponseMapper.toResponse(savedOrder), false);
     }
 

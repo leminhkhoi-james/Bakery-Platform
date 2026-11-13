@@ -10,8 +10,8 @@ import com.se193262.orderservice.infrastructure.client.MarketplaceClient;
 import com.se193262.orderservice.infrastructure.client.MarketplaceServiceClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import static com.se193262.orderservice.feature.order.OrderCreationValidator.*;
 
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,13 +32,15 @@ public class OrderCreationServiceImpl implements OrderCreationService {
     private final BakeryServiceClient bakeryClient;
     private final MarketplaceServiceClient marketplaceClient;
     private final Clock clock;
+    private final OrderInventoryService inventory;
 
     public OrderCreationServiceImpl(
             OrderPersistenceService persistenceService,
             IdentityServiceClient identityClient,
             BakeryServiceClient bakeryClient,
             MarketplaceServiceClient marketplaceClient,
-            Clock clock) {
+            Clock clock, OrderInventoryService inventory) {
+        this.inventory = inventory;
         this.persistenceService = persistenceService;
         this.identityClient = identityClient;
         this.bakeryClient = bakeryClient;
@@ -153,90 +155,17 @@ public class OrderCreationServiceImpl implements OrderCreationService {
             UUID idempotencyKey,
             String payloadHash,
             Instant now) {
-        try {
-            return persistenceService.saveNew(order, operation, customerId, idempotencyKey, payloadHash, now);
-        } catch (DataIntegrityViolationException exception) {
-            return persistenceService.findReplayAfterConflict(operation, customerId, idempotencyKey, payloadHash)
-                    .orElseThrow(() -> new OrderConflictException("Order conflicts with an existing order"));
-        }
-    }
-
-    private void validateActiveCustomer(IdentityClient.UserResponse customer, UUID expectedCustomerId) {
-        if (customer == null || !expectedCustomerId.equals(customer.id()) || !"ACTIVE".equals(customer.status())) {
-            throw new InvalidOrderRequestException("Customer account is unavailable");
-        }
-        if (isBlank(customer.displayName()) || isBlank(customer.phoneNumber())) {
-            throw new InvalidOrderRequestException("Customer profile is incomplete");
-        }
-    }
-
-    private void validateAddress(IdentityClient.AddressResponse address, UUID expectedAddressId) {
-        if (address == null || !expectedAddressId.equals(address.id())
-                || isBlank(address.recipientName()) || isBlank(address.recipientPhone())
-                || isBlank(address.addressLine()) || isBlank(address.district()) || isBlank(address.city())) {
-            throw new InvalidOrderRequestException("Delivery address is missing or incomplete");
-        }
-    }
-
-    private void validateQuote(BakeryClient.CatalogQuoteResponse quote, CreateDirectOrderRequest request, Instant now) {
-        if (quote == null || !request.bakeryId().equals(quote.bakeryId())
-                || !request.productId().equals(quote.productId())
-                || quote.expiresAt() == null || !quote.expiresAt().isAfter(now)
-                || quote.items() == null || quote.items().isEmpty()) {
-            throw new InvalidOrderRequestException("Bakery quote is invalid or expired");
-        }
-        if (quote.minimumNoticeHours() < 0
-                || request.requestedDeliveryAt().isBefore(now.plusSeconds(quote.minimumNoticeHours() * 3600L))) {
-            throw new InvalidOrderRequestException("Requested delivery time does not meet the minimum notice period");
-        }
-        for (BakeryClient.QuotedItem item : quote.items()) {
-            validateItem(item.name(), item.itemType(), item.quantity(), item.unitPrice(), item.lineTotal());
-        }
-        validateAmounts(quote.subtotal(), quote.deliveryFee(), quote.totalAmount(), quote.items().stream()
-            .map(BakeryClient.QuotedItem::lineTotal).toList());
-    }
-
-    private void validateOfferSnapshot(
-            MarketplaceClient.AcceptedOfferOrderSourceResponse offer, CreateOfferOrderRequest request) {
-        if (offer == null || offer.customerId() == null || !request.offerId().equals(offer.offerId())
-                || !request.cakeRequestId().equals(offer.cakeRequestId())
-                || !request.customerId().equals(offer.customerId())
-                || offer.bakeryId() == null || isBlank(offer.bakeryName())) {
-            throw new InvalidOrderRequestException("Marketplace offer snapshot does not match the request");
-        }
-    }
-
-    private void validateOfferAmounts(MarketplaceClient.AcceptedOfferOrderSourceResponse offer) {
-        if (offer.items() == null || offer.items().isEmpty()) {
-            throw new InvalidOrderRequestException("Accepted offer must contain at least one item");
-        }
-        for (MarketplaceClient.OfferItemSnapshot item : offer.items()) {
-            validateItem(item.name(), item.itemType(), item.quantity(), item.unitPrice(), item.lineTotal());
-        }
-        validateAmounts(offer.subtotal(), offer.deliveryFee(), offer.totalAmount(), offer.items().stream()
-                .map(MarketplaceClient.OfferItemSnapshot::lineTotal).toList());
-    }
-
-    private void validateItem(String name, String itemType, int quantity, BigDecimal unitPrice, BigDecimal lineTotal) {
-        parseItemType(itemType);
-        if (isBlank(name) || quantity <= 0 || unitPrice == null || lineTotal == null
-                || unitPrice.signum() < 0 || lineTotal.compareTo(unitPrice.multiply(BigDecimal.valueOf(quantity))) != 0) {
-            throw new InvalidOrderRequestException("Order item snapshot is invalid");
-        }
-    }
-
-    private void validateAmounts(
-            BigDecimal subtotal, BigDecimal deliveryFee, BigDecimal totalAmount, List<BigDecimal> lineTotals) {
-        if (subtotal == null || deliveryFee == null || totalAmount == null
-                || subtotal.signum() < 0 || deliveryFee.signum() < 0
-                || totalAmount.compareTo(subtotal.add(deliveryFee)) != 0
-                || lineTotals.stream().anyMatch(line -> line == null || line.signum() < 0)) {
-            throw new InvalidOrderRequestException("Order price snapshot is invalid");
-        }
-        BigDecimal calculatedSubtotal = lineTotals.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        if (calculatedSubtotal.compareTo(subtotal) != 0) {
-            throw new InvalidOrderRequestException("Order item totals do not match the quoted subtotal");
-        }
+        var selections = order.getItems().stream().filter(item -> item.getSourceAddOnId() != null)
+                .map(item -> new com.se193262.orderservice.infrastructure.client.AddOnInventoryClient.Selection(item.getSourceAddOnId(), item.getQuantity())).toList();
+        return inventory.create(order.getBakeryId(), selections, candidateId -> {
+            if (candidateId != null) order.setId(candidateId);
+            try {
+                return persistenceService.saveNew(order, operation, customerId, idempotencyKey, payloadHash, now);
+            } catch (DataIntegrityViolationException exception) {
+                return persistenceService.findReplayAfterConflict(operation, customerId, idempotencyKey, payloadHash)
+                        .orElseThrow(() -> new OrderConflictException("Order conflicts with an existing order"));
+            }
+        });
     }
 
     private void addQuoteItems(CustomerOrder order, BakeryClient.CatalogQuoteResponse quote, UUID productId) {
@@ -244,7 +173,7 @@ public class OrderCreationServiceImpl implements OrderCreationService {
             throw new InvalidOrderRequestException("Bakery quote must contain at least one item");
         }
         for (BakeryClient.QuotedItem item : quote.items()) {
-            order.addItem(OrderItem.snapshot(
+            OrderItem snapshot = OrderItem.snapshot(
                     order,
                     "CAKE".equals(item.itemType()) ? productId : null,
                     null,
@@ -254,7 +183,9 @@ public class OrderCreationServiceImpl implements OrderCreationService {
                     item.configuration(),
                     item.quantity(),
                     item.unitPrice(),
-                    item.lineTotal()));
+                    item.lineTotal());
+            if ("ADD_ON".equals(item.itemType())) snapshot.setSourceAddOnId(item.sourceId());
+            order.addItem(snapshot);
         }
     }
 
@@ -263,7 +194,7 @@ public class OrderCreationServiceImpl implements OrderCreationService {
             throw new InvalidOrderRequestException("Accepted offer must contain at least one item");
         }
         for (MarketplaceClient.OfferItemSnapshot item : items) {
-            order.addItem(OrderItem.snapshot(
+            OrderItem snapshot = OrderItem.snapshot(
                     order,
                     null,
                     item.sourceOfferItemId(),
@@ -273,15 +204,12 @@ public class OrderCreationServiceImpl implements OrderCreationService {
                     item.configuration(),
                     item.quantity(),
                     item.unitPrice(),
-                    item.lineTotal()));
-        }
-    }
-
-    private OrderItemType parseItemType(String itemType) {
-        try {
-            return OrderItemType.valueOf(itemType);
-        } catch (RuntimeException exception) {
-            throw new InvalidOrderRequestException("Order snapshot contains an unsupported item type");
+                    item.lineTotal());
+            if ("ADD_ON".equals(item.itemType())) {
+                if (item.addOnId() == null) throw new InvalidOrderRequestException("Offer add-on source ID is required");
+                snapshot.setSourceAddOnId(item.addOnId());
+            }
+            order.addItem(snapshot);
         }
     }
 
@@ -314,13 +242,4 @@ public class OrderCreationServiceImpl implements OrderCreationService {
         }
     }
 
-    private void requireUuid(UUID value, String message) {
-        if (value == null) {
-            throw new InvalidOrderRequestException(message);
-        }
-    }
-
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
-    }
 }

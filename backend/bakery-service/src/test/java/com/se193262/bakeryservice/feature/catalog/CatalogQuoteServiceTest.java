@@ -96,6 +96,7 @@ class CatalogQuoteServiceTest {
         Bakery bakery = new Bakery("Sweet Home", "0900000000", null);
         AddOn addOn = new AddOn(bakery, "Candle", "CANDLE", new BigDecimal("20000.00"));
         ReflectionTestUtils.setField(addOn, "id", addOnId);
+        addOn.setStockQuantity(10);
         return addOn;
     }
 

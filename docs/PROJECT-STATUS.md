@@ -1,5 +1,36 @@
 # Project Status
 
+## Chọn nến tặng kèm ngay khi mua bánh — 2026-11-13
+
+- Khách chọn nến thẳng hoặc nến số ngay ở chi tiết sản phẩm; nến số yêu cầu số
+  tuổi 0–999. Không cộng tiền hoặc tạo add-on tính phí cho lựa chọn tặng kèm.
+- Lưu lựa chọn trong draft/giỏ, phân biệt các dòng giỏ có nến khác nhau và hiện
+  lại tại giỏ. Checkout ghép vào customerNote hiện có, giữ ghi chú khách và giới
+  hạn 1000 ký tự. Chủ tiệm đọc được lựa chọn trong ghi chú đơn, không thêm API/DB.
+- Build FE và 29 test liên quan qua; Chrome kiểm tra chọn nến số/nhập tuổi,
+  chặn tuổi trống, lưu sau tải lại và desktop/mobile qua. Chưa push.
+
+## Phân biệt quà kèm bánh và phụ kiện mua thêm — 2026-11-13
+
+- FE ghi rõ bánh kèm bộ dĩa/nĩa và nến thẳng hoặc nến số. Khách ghi loại nến/số
+  tuổi tại Ghi chú khi đặt hàng; chỉ tick mua thêm mới cộng tiền và gửi addOns.
+- Mua thêm gồm nến thẳng theo bộ, nón theo cái và dĩa/nĩa theo bộ; không bán thêm
+  nến số hoặc thiệp trong catalog khách. Ghi chú quà kèm vẫn hiện khi không có
+  add-on mua thêm. Không hiển thị số tồn.
+- Bakery DataInit thêm nón/dĩa-nĩa, cập nhật tên nến mẫu cũ; giữ giá/tồn đã chỉnh.
+  Thiệp mẫu được ngừng bán, giữ ID để bảo toàn tham chiếu/lịch sử cũ.
+- Build Bakery + FE, 9 test FE liên quan và Chrome desktop/mobile qua. Chạy lại
+  Bakery để nạp phụ kiện mẫu mới; chưa restart app hoặc push trong lượt này.
+
+## Gọn phần phụ kiện cho khách — 2026-11-13
+
+- Giá nến ghi theo bộ, bộ chọn có nhãn Số bộ; số lượng trong API vẫn là số bộ.
+- Bỏ thiệp khỏi catalog chọn mua, lọc cả draft cũ trước khi tính giá/gửi đơn.
+  Giỏ cũ có thiệp phải chọn lại cấu hình khi kiểm tra sản phẩm.
+- Giao diện khách không hiện số tồn, kể cả thông báo thiếu hàng; chủ tiệm vẫn
+  quản lý tồn và BE vẫn kiểm tra/trừ/hoàn. Không thay đổi schema hoặc API.
+- Build FE, 9 test liên quan và kiểm tra Chrome desktop/mobile qua; chưa push.
+
 > Cập nhật gần nhất: 2026-11-12.
 
 ## Gateway hỗ trợ URL giống service trực tiếp — 2026-11-12
@@ -832,3 +863,16 @@ Các mục bên dưới giữ nguyên lịch sử các đợt thực hiện trư
 - Bổ sung cấu hình Bearer JWT cho Swagger Bakery/Subscription để có nút Authorize
   và gửi token cho các API cần đăng nhập; các API GET public giữ public.
   Hai image Swagger đã build và xác minh trong lần kiểm tra HTTP onboarding trước.
+## Số lượng và tồn kho phụ kiện — 2026-11-13
+
+- Bakery thêm số lượng tồn có thể bán, optimistic version khi chỉnh tồn, kiểm tra
+  tồn trong quote và internal allocate/release idempotent dành riêng Order.
+- Order nối allocation vào tạo đơn trực tiếp/offer; hủy ghi yêu cầu hoàn cùng
+  transaction. Intent bền vững và worker xử lý timeout/lỗi giữa hai DB.
+- FE thêm chọn số lượng từng phụ kiện, hiển thị tồn/hết hàng, chủ tiệm nhập tồn.
+  Giá bánh nhân số bánh, tiền phụ kiện cộng riêng theo số đã chọn.
+- Phạm vi: Bakery, Order và FE. Chưa push. Build hai BE + FE qua; 38 test BE
+  liên quan và 7 test FE qua. PostgreSQL 17 tạm kiểm tra tranh chấp/trừ/hoàn,
+  idempotency, tombstone, recovery, JPA + JDBC cùng transaction và version chủ tiệm
+  qua; DB tạm đã xóa. Chrome kiểm tra desktop/mobile và payload chọn phụ kiện qua.
+  Không restart/ghi dữ liệu vào các DB đang dùng, không chạy lại toàn dự án.

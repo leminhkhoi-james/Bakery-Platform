@@ -20,6 +20,11 @@ export function catalogEntityPayload(kind, input) {
     body.slug = requireText(input.slug, 'Slug', 140); body.displayOrder = Number(input.displayOrder)
     if (input.displayOrder === '' || !Number.isInteger(body.displayOrder) || body.displayOrder < 0) throw new ApiError('Thứ tự phải là số nguyên không âm.', 400)
   } else if (kind === 'add-ons') {
+    if (input.stockQuantity != null) {
+      body.stockQuantity = Number(input.stockQuantity)
+      if (input.stockQuantity === '' || !Number.isInteger(body.stockQuantity) || body.stockQuantity < 0 || body.stockQuantity > 2147483647) throw new ApiError('Tồn kho phải là số nguyên không âm.', 400)
+      if (input.version != null) body.version = input.version
+    }
     body.category = requireText(input.category, 'Nhóm phụ kiện', 80); body.description = input.description ?? ''; body.price = Number(input.price)
     if (input.price === '' || !Number.isFinite(body.price) || body.price < 0 || typeof body.description !== 'string') throw new ApiError('Giá/mô tả phụ kiện không hợp lệ.', 400)
   } else throw new ApiError('Loại quản lý không hợp lệ.', 400)
@@ -49,4 +54,3 @@ export function mapOptions(dto) {
     return result
   } catch { throw new ApiError('Snapshot options từ backend không hợp lệ.', 502) }
 }
-

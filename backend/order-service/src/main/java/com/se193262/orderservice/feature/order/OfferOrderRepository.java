@@ -16,10 +16,13 @@ import java.util.*;
 
 @Repository
 public class OfferOrderRepository {
+
+    private final OrderInventoryStore inventoryStore;
     private final JdbcClient jdbc;
     private final ObjectMapper json;
 
-    public OfferOrderRepository(JdbcClient jdbc, ObjectMapper json) {
+    public OfferOrderRepository(JdbcClient jdbc, ObjectMapper json, OrderInventoryStore inventoryStore) {
+        this.inventoryStore = inventoryStore;
         this.jdbc = jdbc;
         this.json = json;
     }
@@ -51,6 +54,7 @@ public class OfferOrderRepository {
 
     @Transactional
     public OfferOrderService.Creation save(
+            UUID candidateOrderId,
             String key,
             String fingerprint,
             CreateOfferOrderRequest command,
@@ -60,7 +64,7 @@ public class OfferOrderRepository {
             Map<String, Object> address) {
         var existing = existing(key, fingerprint, command.offerId());
         if (existing.isPresent()) return new OfferOrderService.Creation(existing.get(), false);
-        UUID orderId = UUID.randomUUID();
+        UUID orderId = candidateOrderId == null ? UUID.randomUUID() : candidateOrderId;
         String number =
                 "ORD-"
                         + LocalDate.now(java.time.ZoneOffset.UTC).toString().replace("-", "")
@@ -102,7 +106,7 @@ public class OfferOrderRepository {
                     item.quantity(),
                     item.unitPrice(),
                     item.lineTotal(),
-                    Map.of());
+                    item.addOnId() == null ? Map.of() : Map.of("addOnId", item.addOnId().toString()));
         Map<String, Object> delivery = new HashMap<>();
         delivery.put("order_id", orderId);
         for (String field :
@@ -140,6 +144,7 @@ public class OfferOrderRepository {
                         command.offerId(),
                         "payload_fingerprint",
                         fingerprint));
+        inventoryStore.commit(orderId);
         return new OfferOrderService.Creation(
                 new OrderCreationResponse(orderId, number, "PENDING"), true);
     }
@@ -164,6 +169,7 @@ public class OfferOrderRepository {
         values.put("id", UUID.randomUUID());
         values.put("order_id", orderId);
         values.put("source_offer_item_id", sourceId);
+        values.put("source_add_on_id", configuration.get("addOnId") == null ? null : UUID.fromString(configuration.get("addOnId").toString()));
         values.put("item_type", type);
         values.put("name_snapshot", name);
         values.put("description_snapshot", description);

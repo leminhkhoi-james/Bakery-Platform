@@ -75,7 +75,7 @@ huống sử dụng thông thường; tài khoản đăng nhập ngắn và mậ
 | Service | Dữ liệu |
 |---|---|
 | Identity | 15 tài khoản, role/profile, 6 địa chỉ |
-| Bakery | 6 tiệm, thành viên OWNER, địa chỉ/vùng giao/giờ mở cửa, 3 danh mục, 12 sản phẩm (9 PUBLISHED), option kích thước, 6 add-on |
+| Bakery | 6 tiệm, thành viên OWNER, địa chỉ/vùng giao/giờ mở cửa, 3 danh mục, 12 sản phẩm (9 PUBLISHED), option kích thước, 9 add-on mua thêm và 3 thiệp cũ ngừng bán |
 | Subscription | Giữ 3 gói có sẵn; 5 đơn đăng ký, 4 chứng từ, 3 kỳ gói ACTIVE |
 | Marketplace | 8 yêu cầu ở nhiều trạng thái, sở thích bánh, 9 báo giá và lịch sử trạng thái |
 | Order | 9 đơn (7 direct, 2 từ offer), item/địa chỉ snapshot, lịch sử, 2 đánh giá |

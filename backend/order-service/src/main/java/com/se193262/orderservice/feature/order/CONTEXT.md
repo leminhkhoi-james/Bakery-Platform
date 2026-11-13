@@ -26,3 +26,11 @@ REST contracts.
 Platform roles are ADMIN, CUSTOMER and BAKERY_OWNER. Bakery membership only
 supports OWNER. Bakery access requires ownership of the requested bakery;
 only the owner can manage the bakery. See ADR-004.
+Catalog add-on inventory is allocated before order persistence. Order V4 stores
+durable intents, committed atomically with order/idempotency. Failed attempts and
+cancellation queue idempotent release; the worker retries and fences stale attempts.
+Historical orders without an intent never credit inventory. See ADR-008.
+
+Customer UI free candle choices are rendered into the existing customerNote on
+direct checkout (for example: numeral candles 18). They do not create paid add-on
+items or change pricing. This is a note snapshot, not a new structured BE field.

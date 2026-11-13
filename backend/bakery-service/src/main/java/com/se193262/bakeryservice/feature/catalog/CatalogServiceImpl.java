@@ -112,6 +112,8 @@ public class CatalogServiceImpl implements CatalogService {
                             "select * from add_ons where id=:id and bakery_id=:bakeryId and"
                                     + " active=true",
                             Map.of("id", selected.addOnId(), "bakeryId", request.bakeryId()));
+            com.se193262.bakeryservice.feature.addon.service.AddOnInventoryService.requireStock(
+                    (String) item.get("name"), (Integer) item.get("stock_quantity"), selected.quantity());
             BigDecimal price = (BigDecimal) item.get("price");
             items.add(
                     new ItemSnapshot(

@@ -1,5 +1,7 @@
 import { api, ApiError } from './apiClient.js'
 import { catalogMoney, isCatalogId, mapProduct } from './catalogModels.js'
+import { addOnSelectionError } from './addOnInventory.js'
+import { giftAccessoriesError } from './giftAccessories.js'
 import { requireId } from './managementModels.js'
 
 export const isRealCheckoutId = value => isCatalogId(value) && !/^(?:5c000000|de000000)-0000-4000-8000-/i.test(value)
@@ -7,6 +9,8 @@ export const isRealCheckoutId = value => isCatalogId(value) && !/^(?:5c000000|de
 export const ADDRESS_BLOCKER = 'Hiện chưa thể chọn địa chỉ và xác nhận đơn hàng. Vui lòng kiểm tra địa chỉ nhận bánh hoặc thử lại sau.'
 
 export async function revalidateCartItem(item, options = {}) {
+  const giftError = item.giftAccessories == null ? '' : giftAccessoriesError(item.giftAccessories)
+  if (giftError) throw new ApiError(giftError, 422)
   const id = requireId(item.productId, 'Sản phẩm trong giỏ')
   requireId(item.bakeryId, 'Cửa hàng trong giỏ')
   if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 100) throw new ApiError('Số lượng bánh phải từ 1 đến 100.', 422)
@@ -44,6 +48,8 @@ export async function revalidateCartItem(item, options = {}) {
     const addOn = product.addOns.find((addOn) => addOn.id === selection.addOnId)
     const price = catalogMoney(addOn?.price)
     if (!addOn || price === null || price < 0 || addOnIds.has(selection.addOnId) || !Number.isInteger(selection.quantity) || selection.quantity < 1 || selection.quantity > 100) throw new ApiError('Phụ kiện không còn hợp lệ.', 422)
+    const stockError = addOnSelectionError(addOn, selection.quantity)
+    if (stockError) throw new ApiError(stockError, 409)
     addOnIds.add(selection.addOnId)
     subtotal += Math.round(price * 100) * selection.quantity
   }

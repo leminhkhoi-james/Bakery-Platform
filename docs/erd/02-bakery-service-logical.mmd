@@ -58,6 +58,7 @@ erDiagram
     }
 
     ADD_ONS {
+        integer stock_quantity "NULL until initialized"
         uuid id PK
         uuid bakery_id FK
         varchar name
@@ -141,3 +142,20 @@ erDiagram
     PRODUCTS ||--o{ PRODUCT_IMAGES : displays
     PRODUCTS ||--o{ PRODUCT_OPTION_GROUPS : configures
     PRODUCT_OPTION_GROUPS ||--|{ PRODUCT_OPTION_VALUES : offers
+
+    ADD_ON_ALLOCATIONS {
+        uuid order_id PK "External Order reference"
+        uuid bakery_id FK
+        varchar state
+        text fingerprint
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    ADD_ON_ALLOCATION_ITEMS {
+        uuid order_id PK, FK
+        uuid add_on_id PK, FK
+        int quantity
+    }
+    BAKERIES ||--o{ ADD_ON_ALLOCATIONS : allocates
+    ADD_ON_ALLOCATIONS ||--o{ ADD_ON_ALLOCATION_ITEMS : contains
+    ADD_ONS ||--o{ ADD_ON_ALLOCATION_ITEMS : reserves

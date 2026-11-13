@@ -40,7 +40,12 @@ public interface MarketplaceClient {
             int quantity,
             BigDecimal unitPrice,
             BigDecimal lineTotal,
-            Map<String, Object> configuration
+            Map<String, Object> configuration,
+            UUID addOnId
     ) {
+        public OfferItemSnapshot(UUID sourceOfferItemId, String itemType, String name, String description,
+                int quantity, BigDecimal unitPrice, BigDecimal lineTotal, Map<String, Object> configuration) {
+            this(sourceOfferItemId, itemType, name, description, quantity, unitPrice, lineTotal, configuration, null);
+        }
     }
 }

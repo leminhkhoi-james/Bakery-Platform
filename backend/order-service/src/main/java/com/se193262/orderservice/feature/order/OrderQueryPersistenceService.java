@@ -16,9 +16,12 @@ import java.util.UUID;
 @Service
 public class OrderQueryPersistenceService {
 
+    private final OrderInventoryStore inventoryStore;
+
     private final CustomerOrderRepository orderRepository;
 
-    public OrderQueryPersistenceService(CustomerOrderRepository orderRepository) {
+    public OrderQueryPersistenceService(CustomerOrderRepository orderRepository, OrderInventoryStore inventoryStore) {
+        this.inventoryStore = inventoryStore;
         this.orderRepository = orderRepository;
     }
 
@@ -47,7 +50,9 @@ public class OrderQueryPersistenceService {
     public OrderResponse transition(UUID orderId, OrderStatus targetStatus, String reason, UUID actorId) {
         CustomerOrder order = findOrder(orderId);
         order.transitionTo(targetStatus, actorId, reason, java.time.Instant.now());
-        return OrderResponseMapper.toResponse(orderRepository.saveAndFlush(order));
+        OrderResponse response = OrderResponseMapper.toResponse(orderRepository.saveAndFlush(order));
+        if (targetStatus == OrderStatus.CANCELLED) inventoryStore.cancel(orderId);
+        return response;
     }
 
     @Transactional(readOnly = true)

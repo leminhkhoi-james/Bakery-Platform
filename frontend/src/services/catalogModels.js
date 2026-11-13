@@ -1,4 +1,5 @@
 import { ApiError } from './apiClient.js'
+import { isCustomerAddOn } from './addOnInventory.js'
 
 export const isCatalogId = (id) => typeof id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
 export const catalogMoney = (value) => ['number', 'string'].includes(typeof value) && String(value).trim() !== '' && Number.isFinite(Number(value)) ? Number(value) : null
@@ -23,7 +24,7 @@ export function mapProduct(dto) {
     category: dto.category?.name || null,
     images, image: (images.find((image) => image.primary) || images[0])?.url || null,
     optionGroups: Array.isArray(dto.options?.groups) ? dto.options.groups : [],
-    addOns: Array.isArray(dto.addOns) ? dto.addOns : [],
+    addOns: Array.isArray(dto.addOns) ? dto.addOns.filter(isCustomerAddOn) : [],
   }
 }
 

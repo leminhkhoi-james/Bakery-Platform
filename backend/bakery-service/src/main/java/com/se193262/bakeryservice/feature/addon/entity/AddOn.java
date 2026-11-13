@@ -38,6 +38,9 @@ public class AddOn extends UuidEntity {
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "stock_quantity")
+    private Integer stockQuantity;
+
     @Column(name = "image_object_key", length = 512)
     private String imageObjectKey;
 
@@ -72,6 +75,12 @@ public class AddOn extends UuidEntity {
         if (category != null) this.category = category;
         if (price != null) this.price = price;
         if (active != null) this.isActive = active;
+    }
+
+    public Integer getStockQuantity() { return stockQuantity; }
+    public void setStockQuantity(Integer value) {
+        if (value != null && value < 0) throw new IllegalArgumentException("Stock must be non-negative");
+        this.stockQuantity = value;
     }
 
     public void disable() {

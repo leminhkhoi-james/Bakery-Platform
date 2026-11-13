@@ -62,7 +62,9 @@ class OrderCreationServiceImplTest {
     void setUp() {
         service = new OrderCreationServiceImpl(
                 persistenceService, identityClient, bakeryClient, marketplaceClient,
-                Clock.fixed(NOW, ZoneOffset.UTC));
+                Clock.fixed(NOW, ZoneOffset.UTC), new OrderInventoryService(
+                        org.mockito.Mockito.mock(OrderInventoryStore.class),
+                        org.mockito.Mockito.mock(com.se193262.orderservice.infrastructure.client.AddOnInventoryClient.class)));
     }
 
     @Test
