@@ -13,6 +13,7 @@ test('Direct checkout validates API address and product before creating an order
   let addressStatus = 200
   globalThis.fetch = async (url, options) => {
     calls.push({ url, options })
+    if (url.endsWith('/bakeries/' + bakeryId)) return Response.json({ data: { id: bakeryId, name: 'Tiệm', operations: { businessHours: Array.from({ length: 7 }, (_, index) => ({ dayOfWeek: index + 1, opensAt: '00:00', closesAt: '23:59', closed: false })) } } })
     if (url.endsWith('/addresses/' + id)) return Response.json({ data: address }, { status: addressStatus })
     if (url.endsWith('/addresses')) return Response.json({ data: options.method === 'POST' ? address : [address] })
     if (url.endsWith('/products/' + productId)) return Response.json({ data: {

@@ -1,3 +1,4 @@
+import MoneyInput from '../common/MoneyInput.jsx'
 import { recordSource } from '../../services/unifiedDataService.js'
 import { vendorMoney } from '../../services/vendorPresentation.js'
 import { ModalFormState } from '../common/ModalSurface.jsx'
@@ -34,7 +35,7 @@ function formatQuoteDateTime(isoString) {
 
 function OwnerOfferInfo({ offer, bakery }) {
   const overdue = offer.status === 'PENDING' && Number.isFinite(Date.parse(offer.expiresAt)) && Date.parse(offer.expiresAt) <= Date.now()
-  return <section className={panelClass}><div className="sc-toolbar-actions"><h2>Báo giá của tiệm</h2><StatusBadge status={offer.status} label={overdue ? 'Đã qua hạn phản hồi' : OFFER_STATUS_LABELS[offer.status] || uiLabel(offer.status)} /></div><p className="font-semibold">{bakery?.name || 'Chưa có tên cửa hàng'}</p><dl className="sc-vendor-summary-grid">{[['Giá bánh',vendorMoney(offer.cakePrice)],['Phí giao hàng',vendorMoney(offer.deliveryFee)],['Phụ kiện',vendorMoney(offer.addOnTotal)],['Tổng giá đã báo',vendorMoney(offer.totalPrice)],['Hoàn thành dự kiến',Number.isFinite(Date.parse(offer.estimatedCompletionAt)) ? formatQuoteDateTime(offer.estimatedCompletionAt) : 'Chưa cập nhật'],['Hiệu lực đến',Number.isFinite(Date.parse(offer.expiresAt)) ? formatQuoteDateTime(offer.expiresAt) : 'Chưa cập nhật']].map(([label,value]) => <div key={label}><dt>{label}</dt><dd className={label === 'Tổng giá đã báo' ? 'text-lg text-primary' : ''}>{value}</dd></div>)}</dl><div><h3>Lời nhắn &amp; điều kiện</h3><p className="whitespace-pre-wrap text-sm">{offer.message || 'Chưa có lời nhắn'}</p></div>{offer.items?.length > 0 && <ul className="text-sm space-y-2">{offer.items.map((item,i) => <li key={item.id || i}>{item.itemNameSnapshot || 'Phụ kiện'} · {item.quantity} × {vendorMoney(item.unitPrice)} · {vendorMoney(item.lineTotal)}</li>)}</ul>}<details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(offer.id,'QTE')}</details></section>
+  return <section className={panelClass + ' sc-popup-group'}><div className="sc-toolbar-actions"><h2>Báo giá của tiệm</h2><StatusBadge status={offer.status} label={overdue ? 'Đã qua hạn phản hồi' : OFFER_STATUS_LABELS[offer.status] || uiLabel(offer.status)} /></div><p className="font-semibold">{bakery?.name || 'Chưa có tên cửa hàng'}</p><dl className="sc-vendor-summary-grid">{[['Giá bánh',vendorMoney(offer.cakePrice)],['Phí giao hàng',vendorMoney(offer.deliveryFee)],['Phụ kiện',vendorMoney(offer.addOnTotal)],['Tổng giá đã báo',vendorMoney(offer.totalPrice)],['Hoàn thành dự kiến',Number.isFinite(Date.parse(offer.estimatedCompletionAt)) ? formatQuoteDateTime(offer.estimatedCompletionAt) : 'Chưa cập nhật'],['Hiệu lực đến',Number.isFinite(Date.parse(offer.expiresAt)) ? formatQuoteDateTime(offer.expiresAt) : 'Chưa cập nhật']].map(([label,value]) => <div key={label}><dt>{label}</dt><dd className={label === 'Tổng giá đã báo' ? 'text-lg text-primary' : ''}>{value}</dd></div>)}</dl><div><h3>Lời nhắn &amp; điều kiện</h3><p className="whitespace-pre-wrap text-sm">{offer.message || 'Chưa có lời nhắn'}</p></div>{offer.items?.length > 0 && <ul className="text-sm space-y-2">{offer.items.map((item,i) => <li key={item.id || i}>{item.itemNameSnapshot || 'Phụ kiện'} · {item.quantity} × {vendorMoney(item.unitPrice)} · {vendorMoney(item.lineTotal)}</li>)}</ul>}<details className="text-xs"><summary>Thông tin tham chiếu</summary>{displayReference(offer.id,'QTE')}</details></section>
 }
 
 export function OfferInfo({ offer, bakery: externalBakery, owner = false }) {
@@ -310,11 +311,12 @@ export default function OfferForm({ bakeryId, offer, request, disabled, busy, on
       </div>
       <fieldset disabled={disabled || busy} className="grid gap-4 sm:grid-cols-2">
         {[['cakePrice', 'Giá bánh (VND)', 'number'], ['deliveryFee', 'Phí giao hàng (VND)', 'number'], ['estimatedCompletionAt', 'Hoàn thành dự kiến', 'datetime-local'], ['expiresAt', 'Báo giá có hiệu lực đến', 'datetime-local']].map(([key, label, type]) => {
+          const FieldInput = type === 'number' ? MoneyInput : 'input'
           const maxVal = (key === 'estimatedCompletionAt' || key === 'expiresAt') && request?.neededAt ? toLocalInput(request.neededAt) : undefined
           return (
             <label key={key} className="text-xs font-semibold text-on-surface-variant flex flex-col gap-1">
               <span>{label}</span>
-              <input
+              <FieldInput
                 id={'offer-' + key}
                 required
                 type={type}

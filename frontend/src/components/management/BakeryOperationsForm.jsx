@@ -1,3 +1,4 @@
+import MoneyInput from '../common/MoneyInput.jsx'
 import { VendorConfirm } from '../common/VendorUi.jsx'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { operationsPayload } from '../../services/managementModels.js'
@@ -16,26 +17,55 @@ const timeFields = { opensAt: ['Giờ mở ', '08:00'], closesAt: ['Giờ đóng
 const timeOptions = Array.from({ length: 48 }, (_, i) => String(Math.floor(i / 2)).padStart(2, '0') + (i % 2 ? ':30' : ':00'))
 const numeric = field => ['deliveryFee', 'minimumOrder'].includes(field)
 const fieldKey = (kind, index, field) => [kind, index, field].join('-')
+const locationFields = new Set(['city', 'district', 'ward'])
+const locationKey = value => String(value || '').trim().toLocaleLowerCase('vi')
 
-export default function BakeryOperationsForm({ operations, busy, onSave, sections = Object.keys(labels), footerExternal = false, onConfirmChange, error }) {
+function LocationField({ field, value, choices, inputProps, onChange }) {
+  const [manual, setManual] = useState(false)
+  const selected = choices.findIndex(option => locationKey(option) === locationKey(value))
+  const editingText = manual || !choices.length || (Boolean(value) && selected < 0)
+  const required = field !== 'ward'
+
+  return <div className="sc-operation-location">
+    <label>{names[field]}
+      {editingText ? <input {...inputProps} required={required} maxLength={120} className={inputClass}
+        value={value || ''} onChange={event => onChange(event.target.value)} /> :
+        <select {...inputProps} required={required} className={inputClass} value={selected < 0 ? '' : String(selected)} onChange={event => {
+          const option = event.target.value
+          if (option === 'other') { setManual(true); onChange(''); return }
+          onChange(option === '' ? '' : choices[Number(option)])
+        }}>
+          <option value="">{required ? 'Chọn ' + names[field].toLowerCase() : 'Không chọn'}</option>
+          {choices.map((option, index) => <option key={option} value={index}>{option}</option>)}
+          <option value="other">Nhập địa danh khác</option>
+        </select>}
+    </label>
+    {editingText && choices.length > 0 && <button type="button" className="text-xs underline" onClick={() => { setManual(false); onChange('') }}>Chọn từ danh sách</button>}
+  </div>
+}
+
+export default function BakeryOperationsForm({ operations, busy, onSave, onEdited, locationOptions = [], sections = Object.keys(labels), footerExternal = false, notice, error }) {
   const [values, setValues] = useState(() => structuredClone(operations))
   const [validation, setValidation] = useState(null)
   const [fieldErrors, setFieldErrors] = useState({})
-  const [confirmed, setConfirmed] = useState(false)
   const [removing, setRemoving] = useState(null)
   const clearErrors = () => { setValidation(null); setFieldErrors({}) }
+  const edited = () => { clearErrors(); onEdited?.() }
   const update = (kind, index, field, value) => {
-    clearErrors()
+    edited()
     setValues(current => ({
       ...current,
       [kind]: current[kind].map((row, position) => {
         if (kind === 'addresses' && field === 'isPrimary' && value) return { ...row, isPrimary: position === index }
-        return position === index ? { ...row, [field]: value } : row
+        if (position !== index) return row
+        if (field === 'city' && row.city !== value) return { ...row, city: value, district: '', ...(kind === 'addresses' ? { ward: '' } : {}) }
+        if (field === 'district' && kind === 'addresses' && row.district !== value) return { ...row, district: value, ward: '' }
+        return { ...row, [field]: value }
       }),
     }))
   }
   const updateHours = (dayOfWeek, patch) => {
-    clearErrors()
+    edited()
     setValues(current => {
       const old = current.businessHours.find(item => Number(item.dayOfWeek) === dayOfWeek)
       const row = { dayOfWeek, ...old, ...patch }
@@ -44,12 +74,13 @@ export default function BakeryOperationsForm({ operations, busy, onSave, section
   }
   const submit = event => {
     event.preventDefault()
-    if (busy || !confirmed) return
+    if (busy) return
     const invalid = {}
     for (const kind of sections) {
       if (kind === 'businessHours') {
         for (const row of values.businessHours) {
-          if (!row.closed && (!row.opensAt || !row.closesAt || row.opensAt.padEnd(8, ':00') >= row.closesAt.padEnd(8, ':00'))) invalid[fieldKey(kind, row.dayOfWeek, 'closesAt')] = 'Giờ đóng cửa phải sau giờ mở cửa.'
+          const withSeconds = value => value?.length === 5 ? value + ':00' : value
+          if (!row.closed && (!row.opensAt || !row.closesAt || withSeconds(row.opensAt) >= withSeconds(row.closesAt))) invalid[fieldKey(kind, row.dayOfWeek, 'closesAt')] = 'Giờ đóng cửa phải sau giờ mở cửa.'
         }
         continue
       }
@@ -60,6 +91,7 @@ export default function BakeryOperationsForm({ operations, busy, onSave, section
           const key = fieldKey(kind, index, field)
           if (field !== 'ward' && !value) invalid[key] = 'Vui lòng điền thông tin này.'
           else if (numeric(field) && (!Number.isFinite(Number(value)) || Number(value) < 0)) invalid[key] = 'Nhập số tiền lớn hơn hoặc bằng 0.'
+          else if (!numeric(field) && value.length > (field === 'addressLine' ? 255 : 120)) invalid[key] = 'Thông tin này vượt quá độ dài cho phép.'
         }
         if (kind === 'serviceAreas' && row.city?.trim() && row.district?.trim()) {
           const area = row.city.trim().toLowerCase() + ':' + row.district.trim().toLowerCase()
@@ -91,42 +123,50 @@ export default function BakeryOperationsForm({ operations, busy, onSave, section
     <fieldset disabled={busy} className="space-y-5">
       {sections.map(kind => kind === 'businessHours' ? <section key={kind}>
         <h4 className="font-bold">Giờ mở cửa</h4>
-        <table className="sc-opening-hours">
-          <thead><tr><th scope="col">Ngày mở cửa</th><th scope="col">Mở cửa</th><th scope="col">Đóng cửa</th></tr></thead>
-          <tbody>{days.map((day, i) => {
+        <ul className="sc-opening-hours-list">{days.map((day, i) => {
             const dayOfWeek = i + 1
             const row = values.businessHours.find(item => Number(item.dayOfWeek) === dayOfWeek)
             const open = Boolean(row && !row.closed)
-            return <tr key={day}>
-              <td><label><input type="checkbox" checked={open} onChange={event => updateHours(dayOfWeek, {
+            return <li key={day}>
+              <label className="sc-opening-day"><input type="checkbox" checked={open} onChange={event => updateHours(dayOfWeek, {
                 closed: !event.target.checked,
                 opensAt: row?.opensAt || '08:00',
                 closesAt: row?.closesAt || '20:00',
-              })} /> {day}{!open && <small> · Nghỉ</small>}</label></td>
-              {Object.entries(timeFields).map(([field, [label, defaultTime]]) => {
+              })} /> {day}</label>
+              {!open ? <span>Nghỉ</span> : <div className="sc-opening-time-range">{Object.entries(timeFields).map(([field, [label, defaultTime]]) => {
                 const time = (row?.[field] || defaultTime).slice(0, 5)
                 const choices = timeOptions.includes(time) ? timeOptions : [...timeOptions, time].sort()
                 const key = fieldKey(kind, dayOfWeek, field)
-                return <td key={field}>
-                  <select {...inputErrorProps(key)} aria-label={label + day} className={inputClass} disabled={!open} value={open ? time : ''} onChange={event => updateHours(dayOfWeek, { [field]: event.target.value })}>
-                    {!open && <option value="">—</option>}
+                return <label key={field}><span>{label.trim()}</span>
+                  <select {...inputErrorProps(key)} aria-label={label + day} className={inputClass} value={time} onChange={event => updateHours(dayOfWeek, { [field]: event.target.value })}>
                     {choices.map(option => <option key={option} value={option}>{option}</option>)}
                   </select>
                   {fieldMessage(key)}
-                </td>
-              })}
-            </tr>
-          })}</tbody>
-        </table>
+                </label>
+              })}</div>}
+            </li>
+          })}</ul>
       </section> : <section key={kind} className="space-y-3">
         <h4 className="font-bold">{labels[kind]}</h4>
         {values[kind].map((row, index) => {
           const toggle = kind === 'addresses' ? 'isPrimary' : 'active'
-          return <div key={row.id || index} className="grid gap-3 rounded-xl border border-outline-variant/30 p-4 sm:grid-cols-2 lg:grid-cols-3">
+          return <div key={row.id || index} className="sc-popup-group grid gap-3 rounded-xl border border-outline-variant/30 p-4 sm:grid-cols-2 lg:grid-cols-3">
             {fields[kind].map(field => {
               const key = fieldKey(kind, index, field)
+              if (locationFields.has(field)) {
+                const matching = [...operations.addresses, ...operations.serviceAreas, ...locationOptions]
+                  .filter(option => (field === 'city' || locationKey(row.city) === locationKey(option.city)) &&
+                    (field !== 'ward' || locationKey(row.district) === locationKey(option.district)))
+                const choices = [...new Map(matching.map(option => option[field]?.trim()).filter(Boolean)
+                  .map(option => [locationKey(option), option])).values()].sort((a, b) => a.localeCompare(b, 'vi'))
+                return <div key={field} className="text-sm"><LocationField
+                  key={field === 'city' ? field : JSON.stringify([row.city, field === 'ward' ? row.district : null])}
+                  field={field} choices={choices} value={row[field]} inputProps={inputErrorProps(key)}
+                  onChange={value => update(kind, index, field, value)} />{fieldMessage(key)}</div>
+              }
+              const FieldInput = numeric(field) ? MoneyInput : 'input'
               return <label key={field} className="text-sm">{names[field]}
-                <input {...inputErrorProps(key)} required={field !== 'ward'} type={numeric(field) ? 'number' : 'text'}
+                <FieldInput {...inputErrorProps(key)} required type={numeric(field) ? 'number' : 'text'}
                   min={numeric(field) ? 0 : undefined} step={numeric(field) ? '0.01' : undefined}
                   maxLength={field === 'addressLine' ? 255 : 120} value={row[field] ?? ''}
                   onChange={event => update(kind, index, field, event.target.value)} className={inputClass} />
@@ -140,18 +180,17 @@ export default function BakeryOperationsForm({ operations, busy, onSave, section
             <button type="button" className="text-left text-sm text-red-700 underline" onClick={() => setRemoving({ kind, index })}>Xóa dòng</button>
           </div>
         })}
-        <button type="button" className="text-sm underline" onClick={() => setValues(current => ({ ...current, [kind]: [...current[kind], { ...newRow[kind] }] }))}>Thêm {labels[kind].toLowerCase()}</button>
+        <button type="button" className="text-sm underline" onClick={() => { edited(); setValues(current => ({ ...current, [kind]: [...current[kind], { ...newRow[kind] }] })) }}>Thêm {labels[kind].toLowerCase()}</button>
       </section>)}
       {(error || validation) && <ApiErrorMessage error={validation || error} />}
-      <label className="flex items-center gap-2"><input type="checkbox" checked={confirmed} onChange={event => {
-        setConfirmed(event.target.checked)
-        onConfirmChange?.(event.target.checked)
-      }} />Tôi xác nhận thay thế toàn bộ cấu hình bằng các dòng trên.</label>
-      <button disabled={!confirmed || busy} className={buttonClass} type="submit" id="vendor-operations-save" hidden={footerExternal}>Lưu cấu hình vận hành</button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button disabled={busy} className={buttonClass} type="submit" id="vendor-operations-save" hidden={footerExternal}>Lưu cấu hình vận hành</button>
+        {notice && <p role="status" className="text-sm text-green-700">{notice}</p>}
+      </div>
     </fieldset>
     {removing && <VendorConfirm title="Xóa dòng cấu hình" label="Xóa khỏi cấu hình" danger onClose={() => setRemoving(null)} onConfirm={() => {
       setValues(current => ({ ...current, [removing.kind]: current[removing.kind].filter((_, index) => index !== removing.index) }))
-      clearErrors()
+      edited()
       setRemoving(null)
     }}><p>Dòng này sẽ được bỏ khỏi cấu hình khi bạn lưu. Các dữ liệu khác được giữ nguyên.</p></VendorConfirm>}
   </form>

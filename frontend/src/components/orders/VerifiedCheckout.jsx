@@ -8,6 +8,21 @@ import { acceptVerifiedOffer, createVerifiedDirectOrder } from '../../services/v
 import { toLocalInput } from '../../services/marketplaceModels.js'
 import { noteLimitWithGift } from '../../services/giftAccessories.js'
 import AddressPicker from './AddressPicker.jsx'
+import { checkDeliveryWithinHours, loadBakeriesHours } from '../../services/businessHours.js'
+import { loadOffer, loadRfq } from '../../services/rfqService.js'
+
+async function loadCheckoutHours({ offerId, bakeryIds }, options) {
+  const requestOptions = { ...options, allowMockFallback: false }
+  let deliveryAt = null
+  if (offerId) {
+    const offer = await loadOffer({ id: offerId }, requestOptions)
+    const request = await loadRfq({ id: offer.cakeRequestId }, requestOptions)
+    bakeryIds = [offer.bakeryId]
+    deliveryAt = request.neededAt
+  }
+  const bakeries = await loadBakeriesHours({ ids: bakeryIds }, requestOptions)
+  return { bakeries, deliveryAt }
+}
 
 function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConfirmed, onNavigate }) {
   const addresses = useCatalogResource(loadAddresses)
@@ -21,6 +36,10 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
   const [retrying, setRetrying] = useState(false)
   const attempt = useRef(null)
   const running = useRef(false)
+  const hours = useCatalogResource(loadCheckoutHours, { offerId, bakeryIds: [...new Set(items.map(item => item.bakeryId))].sort() })
+  const deliveryAt = offerId ? hours.data?.deliveryAt : neededAt
+  const hoursError = hours.data && deliveryAt ? Object.values(hours.data.bakeries)
+    .map(bakery => checkDeliveryWithinHours(deliveryAt, bakery.hours, bakery.name)).find(Boolean) : null
 
   // Auto-select address matching expectedLocation if available
   React.useEffect(() => {
@@ -35,10 +54,11 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
   const address = selectedAddress(addresses.data || [], addressId)
   const isLocationMismatch = Boolean(expectedLocation && address && !isAddressMatchingLocation(address, expectedLocation))
   const addressFailure = error && /address|địa chỉ/i.test(error.message || '')
-  const timeFailure = error && /delivery.*time|notice period|thời gian|lịch nhận/i.test(error.message || '')
+  const timeFailure = error && /delivery.*time|notice period|thời gian|lịch nhận|giờ|nhận bánh|giao bánh|nghỉ vào/i.test(error.message || '')
   const locked = busy || complete || retrying
   const ready = !disabled && !busy && !complete && addresses.status === 'ready' && !addresses.refreshing && address &&
-    !isLocationMismatch && (offerId || Number.isFinite(Date.parse(neededAt)))
+    !isLocationMismatch && hours.status === 'ready' && !hours.refreshing && !hoursError &&
+    (offerId ? Boolean(deliveryAt) : Number.isFinite(Date.parse(neededAt)))
 
   async function submit(event) {
     event.preventDefault()
@@ -133,11 +153,17 @@ function RealCheckout({ user, offerId, items, disabled, expectedLocation, onConf
             className={inputClass + ' mt-1 w-full text-xs font-medium'}
             disabled={locked || disabled}
             value={neededAt}
-            onChange={event => setNeededAt(event.target.value)}
+            aria-invalid={Boolean(hoursError || timeFailure) || undefined}
+            aria-describedby={hoursError ? 'checkout-hours-error' : undefined}
+            onChange={event => { setNeededAt(event.target.value); if (timeFailure) setError(null) }}
           />
+          {hoursError && <p id="checkout-hours-error" role="alert" className="mt-1 text-xs font-normal text-red-700">{hoursError}</p>}
           {timeFailure && <ApiErrorMessage error={error} />}
         </label>
       )}
+      {offerId && hoursError && <p role="alert" className="text-xs text-red-700">{hoursError}</p>}
+      {hours.status === 'loading' && <p role="status" className="text-xs">Đang kiểm tra giờ hoạt động của tiệm…</p>}
+      {hours.error && <ApiErrorMessage error={hours.error} />}
       <label className="block text-xs font-bold text-primary">
         Ghi chú giao hàng cho tiệm bánh
         <textarea

@@ -1,22 +1,29 @@
+import { recordSource } from '../../../services/unifiedDataService.js'
+import { businessAction } from '../../../mockData/business/actions.js'
+import { VendorConfirm } from '../../../components/common/VendorUi.jsx'
+import { ApiErrorMessage } from '../../../components/management/ApiState.jsx'
 import RecordActionButton from '../../../components/common/RecordActionButton.jsx'
 import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
 import React, { useState } from 'react'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
-import { loadVendorOrders, vendorOrderError } from '../../../services/vendorOrderPresentation.js'
+import { loadVendorOrders, orderDeliveryArea, vendorOrderError, vendorOrderSourceLabels } from '../../../services/vendorOrderPresentation.js'
 import { ORDER_STATUSES, ORDER_SOURCES, orderStatusLabel } from '../../../services/orderModels.js'
 import { formatOrderDate, formatOrderMoney, orderDisplayNumber } from '../../../services/orderPresentation.js'
-import { cleanPresentationLabel, uiLabel } from '../../../services/uiLabels.js'
+import { cleanPresentationLabel } from '../../../services/uiLabels.js'
 import { OrderDetail } from '../../../components/orders/OrderViews.jsx'
 import { DataTable, EmptyPanel, Icon, StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 
+const collectionLabels = { PAID: 'Đã thu', REFUNDED: 'Đã hoàn', CANCELLED: 'Đã hủy thu' }
+
 export function VendorOrderError({ resource }) {
   return <div className="sc-vendor-order-error" role="alert"><Icon name={resource.error?.status === 403 ? 'lock' : 'info'} /><p>{vendorOrderError(resource.error)}</p>{![400, 401].includes(resource.error?.status) && <RefreshButton onClick={resource.reload}>Thử lại</RefreshButton>}</div>
 }
 
-export default function VendorOrderList({ bakeryId, initialOrderId = '', embedded = false, navigation }) {
-  const [filters, setFilters] = useState({ page: 1, status: '', orderSource: '', sort: 'createdAt,desc', from: '', to: '', search: '' })
+export default function VendorOrderList({ bakeryId, initialOrderId = '', embedded = false, navigation, actor }) {
+  const [collecting, setCollecting] = useState(null), [collectBusy, setCollectBusy] = useState(false), [collectError, setCollectError] = useState(null)
+  const [filters, setFilters] = useState({ page: 1, status: '', orderSource: '', sort: 'createdAt,desc', from: '', to: '', search: '', address: '' })
   const [orderId, setOrderId] = useState(initialOrderId)
   const { containerRef, pageSize } = useViewportPageSize(() => setFilters(current => ({ ...current, page: 1 })))
   const resource = useCatalogResource(loadVendorOrders, { bakeryId, size: pageSize, ...filters })
@@ -25,18 +32,66 @@ export default function VendorOrderList({ bakeryId, initialOrderId = '', embedde
   const badRange = Boolean(filters.from && filters.to && filters.from > filters.to)
   return <section ref={containerRef} className={embedded ? "sc-vendor-order-list sc-vendor-order-list--embedded" : "sc-panel sc-vendor-order-list"}>
     <div className="sc-toolbar sc-vendor-order-filters">
-      <div className="sc-vendor-order-filter-row">
+      <div className="sc-vendor-order-filter-row sc-vendor-order-filter-row--address">
+        <label className="sc-vendor-order-search">Tìm tên hoặc mã đơn<input className="sc-input" type="search" value={filters.search} onChange={change('search')} placeholder="Nhập tên hoặc một phần mã" /></label>
+        <label>Địa chỉ giao<input className="sc-input" type="search" value={filters.address} onChange={change('address')} placeholder="Nhập địa chỉ hoặc khu vực" /></label>
         <label>Trạng thái<select className="sc-input" value={filters.status} onChange={change('status')}><option value="">Tất cả</option>{ORDER_STATUSES.map((status) => <option key={status} value={status}>{orderStatusLabel(status)}</option>)}</select></label>
-        <label>Nguồn đơn<select className="sc-input" value={filters.orderSource} onChange={change('orderSource')}><option value="">Tất cả</option>{ORDER_SOURCES.map((source) => <option key={source} value={source}>{uiLabel(source)}</option>)}</select></label>
-        <label>Sắp xếp<select className="sc-input" value={filters.sort} onChange={change('sort')}><option value="createdAt,desc">Mới nhất</option><option value="createdAt,asc">Cũ nhất</option><option value="neededAt,asc">Ngày cần giao tăng dần</option><option value="totalAmount,desc">Tổng tiền giảm dần</option></select></label>
+        <label>Nguồn đơn<select className="sc-input" value={filters.orderSource} onChange={change('orderSource')}><option value="">Tất cả</option>{ORDER_SOURCES.map((source) => <option key={source} value={source}>{vendorOrderSourceLabels[source]}</option>)}</select></label>
       </div>
-      <div className="sc-vendor-order-date-row sc-vendor-order-date-row--with-search"><label>Tạo từ<input className="sc-input" type="date" value={filters.from} onChange={change('from')} aria-invalid={badRange || undefined} /></label><label>Tạo đến<input className="sc-input" type="date" value={filters.to} onChange={change('to')} aria-invalid={badRange || undefined} /></label><label className="sc-vendor-order-search">Tìm theo tên hoặc mã<input className="sc-input" type="search" value={filters.search} onChange={change('search')} placeholder="Nhập tên hoặc một phần mã" /></label></div>
+      <div className="sc-vendor-order-date-row"><label>Tạo từ<input className="sc-input" type="date" value={filters.from} onChange={change('from')} aria-invalid={badRange || undefined} /></label><label>Tạo đến<input className="sc-input" type="date" value={filters.to} onChange={change('to')} aria-invalid={badRange || undefined} /></label></div>
     </div>
     {navigation}
     {loading ? <div className="sc-vendor-order-loading" role="status" aria-live="polite"><p>Đang tải đơn hàng…</p><div aria-hidden="true" /></div> : resource.error ? <VendorOrderError resource={resource} /> : resource.data && <>
-      {resource.data.result.length ? <DataTable label="Đơn hàng của cửa hàng" className="sc-vendor-order-table"><colgroup><col style={{ width: '60px' }} />{[18, 19, 17, 14, 18, 14].map((width, index) => <col key={index} style={{ width: width + '%' }} />)}</colgroup><thead><tr><th scope="col">STT</th><th scope="col">Mã đơn</th><th scope="col">Khách hàng</th><th scope="col">Trạng thái</th><th scope="col">Tổng tiền</th><th scope="col">Hẹn giao</th><th scope="col">Thao tác</th></tr></thead><tbody>{resource.data.result.map((order, index) => <tr key={order.id}><td data-label="STT">{((resource.data.meta?.page || filters.page || 1) - 1) * (resource.data.meta?.pageSize || pageSize) + index + 1}</td><td><strong>{orderDisplayNumber(order)}</strong></td><td>{cleanPresentationLabel(order.customerName, 'Xem trong chi tiết')}{order.deliveryAddress?.district && <span className="sc-vendor-order-dest block text-xs text-on-surface-variant">📍 {order.deliveryAddress.district}{order.deliveryAddress.city ? `, ${order.deliveryAddress.city}` : ''}</span>}</td><td><StatusBadge status={order.status} label={orderStatusLabel(order.status)} />{order.review?.rating && <span className="mt-1 flex items-center gap-0.5 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-full w-fit"><span className="text-amber-500 text-xs">★</span> {order.review.rating}/5</span>}</td><td className="sc-vendor-order-money">{formatOrderMoney(order.totalAmount, order.currency)}</td><td><div>{formatOrderDate(order.neededAt)}</div>{order.status === 'DELIVERING' && <span className="sc-vendor-delivering-badge inline-flex items-center gap-1 text-xs font-semibold text-secondary"><Icon name="local_shipping" />Đang giao</span>}</td><td className="sc-vendor-order-actions"><RecordActionButton type="button" className="sc-button sc-vendor-view-order" aria-label="Xem chi tiết đơn hàng" onClick={() => setOrderId(order.id)} action="view" /></td></tr>)}</tbody></DataTable> : <EmptyPanel title="Chưa có đơn hàng phù hợp" description={filters.status || filters.orderSource || filters.from || filters.to ? 'Thử thay đổi bộ lọc để xem các đơn hàng khác.' : 'Đơn mới của cửa hàng sẽ xuất hiện tại đây.'} icon="shopping_bag" />}
+      {resource.data.result.length ? <DataTable label="Đơn hàng của cửa hàng" className="sc-vendor-order-table sc-vendor-expanded-orders">
+        <colgroup>
+          {['number', 'cake', 'customer', 'area', 'status', 'source', 'budget', 'total', 'date', 'action'].map(column =>
+            <col key={column} className={'sc-vendor-order-col--' + column} />)}
+        </colgroup>
+        <thead><tr>
+          {['STT', 'Nội dung bánh', 'Khách hàng', 'Khu vực giao', 'Trạng thái', 'Nguồn đơn', 'Ngân sách', 'Tổng tiền', 'Hẹn giao', 'Thao tác'].map(label =>
+            <th key={label} scope="col">{label}</th>)}
+        </tr></thead>
+        <tbody>{resource.data.result.map((order, index) => {
+          const cakes = order.items?.filter(item => item.itemType !== 'ADD_ON' && item.name) || []
+          const budget = [...new Set([order.budgetMin, order.budgetMax].filter(value => value != null))]
+          return <tr key={order.id}>
+            <td>{(resource.data.meta.page - 1) * (resource.data.meta.pageSize || pageSize) + index + 1}</td>
+            <td>
+              {cakes.length ? <ul>{cakes.map(item => <li key={item.id}><strong>{item.quantity ? item.quantity + ' × ' : ''}{item.name}</strong></li>)}</ul> : '—'}
+              <small className="sc-vendor-order-code">{orderDisplayNumber(order)}</small>
+            </td>
+            <td><div className="sc-vendor-order-customer">
+              <span>{cleanPresentationLabel(order.customerName, order.customerLookupFailed ? 'Chưa tải được tên' : 'Chưa có tên khách hàng')}</span>
+              {order.customerPhone && <small>SĐT: {order.customerPhone}</small>}
+            </div></td>
+            <td>{orderDeliveryArea(order) || '—'}</td>
+            <td>
+              <StatusBadge status={order.status} label={orderStatusLabel(order.status)} />
+              {collectionLabels[order.paymentStatus] && <small className="sc-order-collection block mt-1">{collectionLabels[order.paymentStatus]}{recordSource(order) === 'local' && ' · Mô phỏng'}</small>}
+              {order.review?.rating && <span className="block text-xs mt-1">★ {order.review.rating}/5</span>}
+            </td>
+            <td>{vendorOrderSourceLabels[order.orderSource] || 'Chưa có thông tin'}</td>
+            <td>{budget.length ? budget.map(value => formatOrderMoney(value, order.currency)).join(' – ') : '—'}</td>
+            <td className="sc-vendor-order-money">{formatOrderMoney(order.totalAmount, order.currency)}</td>
+            <td>{formatOrderDate(order.neededAt)}</td>
+            <td className="sc-vendor-order-actions">
+              <RecordActionButton type="button" className="sc-button sc-vendor-view-order" aria-label="Xem chi tiết đơn hàng" onClick={() => setOrderId(order.id)} action="view" />
+              {actor && recordSource(order) === 'local' && order.status === 'COMPLETED' && order.paymentStatus === 'UNPAID' && <button type="button" className="sc-button sc-action-button--secondary" onClick={() => { setCollectError(null); setCollecting(order.id) }}>Ghi nhận đã thu</button>}
+            </td>
+          </tr>
+        })}</tbody>
+      </DataTable> : <EmptyPanel title="Chưa có đơn hàng phù hợp" description={filters.status || filters.orderSource || filters.from || filters.to || filters.address || filters.search ? 'Thử thay đổi bộ lọc để xem các đơn hàng khác.' : 'Đơn mới của cửa hàng sẽ xuất hiện tại đây.'} icon="shopping_bag" />}
+      {resource.data.customerLookupIncomplete && <p role="status">Một số tên khách chưa tải được nên kết quả tìm kiếm có thể chưa đầy đủ.</p>}
       <CatalogPagination meta={resource.data.meta} onPage={(page) => setFilters((current) => ({ ...current, page }))} />
     </>}
+    {collecting && <VendorConfirm title="Xác nhận đã thu tiền" label="Ghi nhận đã thu" busy={collectBusy}
+      error={collectError && <ApiErrorMessage error={collectError} />} onClose={() => setCollecting(null)}
+      onConfirm={async () => {
+        setCollectBusy(true); setCollectError(null)
+        try { await businessAction('collect', collecting, actor); setCollecting(null); resource.reload() }
+        catch (error) { setCollectError(error) }
+        finally { setCollectBusy(false) }
+      }}><p>Xác nhận ghi nhận khoản thu của đơn này.</p></VendorConfirm>}
     {orderId && !resource.error && <OrderDetail key={orderId} orderId={orderId} scope="bakery" bakeryId={bakeryId} onChanged={resource.reload} onClose={() => setOrderId('')} />}
   </section>
 }

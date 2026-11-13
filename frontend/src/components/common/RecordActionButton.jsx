@@ -9,5 +9,5 @@ export function RecordActionIcon({ action }) {
 
 export default function RecordActionButton({ action, label, className = '', title, ...props }) {
   const description = label || labels[action]
-  return <button {...props} aria-label={props['aria-label'] || description} title={title || description} className={className + ' sc-record-icon-action'}><RecordActionIcon action={action} /></button>
+  return <button {...props} aria-label={props['aria-label'] || description} title={title || description} className={className + ' sc-record-icon-action sc-record-icon-action--' + action}><RecordActionIcon action={action} /></button>
 }

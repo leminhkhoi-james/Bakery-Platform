@@ -2,13 +2,13 @@
 
 import { displayReference } from '../../../services/displayReference.js'
 import { publicCopy } from '../../../services/uiLabels.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { aiService, loadAiJobs, loadAiJob } from '../../../services/aiService.js'
 import { loadRfq, rfqService } from '../../../services/rfqService.js'
-import { ownsRequest, toLocalInput } from '../../../services/marketplaceModels.js'
+import { ownsRequest, toLocalInput, rfqPayload as validateRfqPayload } from '../../../services/marketplaceModels.js'
 import { runningJob } from '../../../services/aiModels.js'
 import { isCatalogId } from '../../../services/catalogModels.js'
 import MarketplaceState from '../../../components/marketplace/MarketplaceState.jsx'
@@ -585,6 +585,7 @@ function Step4CreateRequestFromAiPanel({
   )
   const [specialNotes, setSpecialNotes] = useState(() => existingRequest?.preference?.decorationNotes || '')
   const [allergyNotes, setAllergyNotes] = useState(() => existingRequest?.preference?.allergyNotes || '')
+  const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -627,6 +628,18 @@ function Step4CreateRequestFromAiPanel({
           quantity: Number(quantity) || 1,
         },
       },
+    }
+  }
+
+  function submitConfirmation(publish) {
+    if (busy || !confirmedSample) return
+    setValidationError('')
+    try {
+      const payload = buildPayload()
+      validateRfqPayload(payload)
+      onSubmitRequest(payload, publish)
+    } catch (error) {
+      setValidationError(error.message)
     }
   }
 
@@ -784,6 +797,13 @@ function Step4CreateRequestFromAiPanel({
                 />
               </label>
               <label className="space-y-1">
+                <span className="text-xs font-semibold text-on-surface">Hạn nhận báo giá</span>
+                <input type="datetime-local" value={offerDeadline} max={neededAt || undefined}
+                  onChange={event => setOfferDeadline(event.target.value)}
+                  className={inputClass + ' w-full text-xs py-2 bg-white'} />
+                <span className="text-xs text-on-surface-variant">Để trống nếu không đặt hạn riêng. Hạn phải ở tương lai và trước thời gian nhận bánh.</span>
+              </label>
+              <label className="space-y-1">
                 <span className="text-xs font-semibold text-on-surface flex items-center gap-1">
                   <Icon name="local_shipping" className="text-sm text-secondary" /> Phương thức nhận
                 </span>
@@ -852,6 +872,7 @@ function Step4CreateRequestFromAiPanel({
           </label>
         </div>
 
+        {validationError && <p role="alert" className="px-5 py-2 text-sm text-red-700">{validationError}</p>}
         {/* Sticky Dialog Footer */}
         <div className="border-t border-outline-variant/20 bg-surface px-5 py-3.5 flex items-center justify-between gap-3 shrink-0">
           <button
@@ -865,7 +886,7 @@ function Step4CreateRequestFromAiPanel({
             <button
               type="button"
               disabled={busy || !confirmedSample}
-              onClick={() => onSubmitRequest(buildPayload(), false)}
+              onClick={() => submitConfirmation(false)}
               className="rounded-xl border border-outline-variant/40 bg-surface px-3.5 py-2 text-xs font-bold text-on-surface hover:bg-surface-container cursor-pointer disabled:opacity-50"
             >
               Lưu nháp
@@ -873,7 +894,7 @@ function Step4CreateRequestFromAiPanel({
             <button
               type="button"
               disabled={busy || !confirmedSample}
-              onClick={() => onSubmitRequest(buildPayload(), true)}
+              onClick={() => submitConfirmation(true)}
               className={buttonClass + ' flex items-center gap-1.5 px-5 py-2 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50'}
             >
               <Icon name="send" className="text-base" />
@@ -1256,6 +1277,8 @@ function CreateForRequest({ id, disabled, onSubmitted, onNavigate, initialMode =
 }
 
 export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
+  const { user } = useAuth()
+  const quickAttempt = useRef(null)
   const query = new URLSearchParams(routeSearch), cakeRequestId = query.get('cakeRequestId'), jobId = query.get('jobId')
   const explicitMode = query.get('mode')
   const [page, setPage] = useState(1), [status, setStatus] = useState('')
@@ -1297,10 +1320,16 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
         deliveryDistrict: 'Quận 1',
         deliveryCity: 'TP. Hồ Chí Minh',
       })
-      const createdRfq = await rfqService.createRfq({
-        ...draftWorkspace,
-        title: `Phác thảo AI: ${cleanPrompt.slice(0, 52)}`,
-      })
+      const signature = JSON.stringify([user?.id, cleanPrompt, quickAspectRatio, quickDesignsCount])
+      if (quickAttempt.current?.signature !== signature) quickAttempt.current = { signature, key: crypto.randomUUID() }
+      const attempt = quickAttempt.current
+      if (!attempt.request) {
+        attempt.request = await rfqService.createRfq({
+          ...draftWorkspace,
+          title: `Phác thảo AI: ${cleanPrompt.slice(0, 52)}`,
+        })
+      }
+      const createdRfq = attempt.request
       const createdJob = await aiService.createGenerationJob(
         {
           cakeRequestId: createdRfq.id,
@@ -1309,8 +1338,9 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
           generationParameters: { aspectRatio: quickAspectRatio, numberOfDesigns: Number(quickDesignsCount) || 2 },
         },
         [],
-        crypto.randomUUID()
+        attempt.key
       )
+      quickAttempt.current = null
       onNavigate('ai-studio?cakeRequestId=' + createdRfq.id + '&jobId=' + createdJob.id)
     })
   }

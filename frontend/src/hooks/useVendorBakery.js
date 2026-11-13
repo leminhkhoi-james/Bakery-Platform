@@ -60,9 +60,9 @@ export function useVendorBakery(routeSearch = '') {
   if (error) state = error.status === 403 ? 'FORBIDDEN' : 'ERROR'
   else if (available.status === 'ready') {
     if (!candidateId) state = 'NO_BAKERY'
-    else if (access.status === 'ready' && access.data) state = access.data.status === 'ACTIVE' ? 'ACTIVE' : ['DRAFT', 'PENDING_APPROVAL'].includes(access.data.status) ? 'PENDING' : 'FORBIDDEN'
+    else if (access.status === 'ready' && access.data) state = access.data.status === 'ACTIVE' ? 'ACTIVE' : ['DRAFT', 'PENDING_APPROVAL'].includes(access.data.status) ? 'PENDING' : ['SUSPENDED', 'CLOSED'].includes(access.data.status) ? 'INACTIVE' : 'FORBIDDEN'
   }
-  const bakery = ['ACTIVE', 'PENDING'].includes(state) ? access.data : null
+  const bakery = ['ACTIVE', 'PENDING', 'INACTIVE'].includes(state) ? access.data : null
   const reload = useCallback(() => { available.reload(); access.reload() }, [available.reload, access.reload])
   return { bakeryId: candidateId || current.id || bakery?.id || '', requestedBakeryId: candidateId, bakery, state, error, reload, selectBakery, user, roles, available }
 }

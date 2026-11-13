@@ -4,9 +4,9 @@ import ModalSurface from './ModalSurface.jsx'
 import { Icon } from './WorkspaceUI.jsx'
 import './vendor-ui.css'
 
-export function VendorImage({ src, alt = '', className = '' }) {
+export function VendorImage({ src, alt = '', className = '', onLoadError }) {
   const [failed, setFailed] = useState(null)
-  return src && failed !== src ? <img className={'sc-vendor-image ' + className} src={src} alt={alt} loading="lazy" onError={() => setFailed(src)} /> : <div className={'sc-vendor-image sc-vendor-image-empty ' + className} role="img" aria-label="Chưa có hình ảnh"><Icon name="cake" /></div>
+  return src && failed !== src ? <img className={'sc-vendor-image ' + className} src={src} alt={alt} loading="lazy" onError={() => { setFailed(src); onLoadError?.() }} /> : <div className={'sc-vendor-image sc-vendor-image-empty ' + className} role="img" aria-label="Chưa có hình ảnh"><Icon name="cake" /></div>
 }
 export function VendorConfirm({ title, children, label = 'Xác nhận', busy, error, onClose, onConfirm, danger = false, disabled = false, guardChanges = false }) {
   const lock = useRef(false)

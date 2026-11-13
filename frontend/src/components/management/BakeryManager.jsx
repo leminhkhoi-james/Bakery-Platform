@@ -55,11 +55,18 @@ export function CreateBakery({ onCreated, footerExternal = false, onBusy }) {
 }
 
 // Private onboarding DTO omits media; active shops expose signed URLs publicly.
-const loadProfileImages = ({ bakeryId, status }, options) => status === 'ACTIVE'
-  ? vendorManagementService.getPublicProfile(bakeryId, options)
-  : Promise.resolve(null)
+async function loadProfileImages({ bakeryId, status }, options) {
+  if (status !== 'ACTIVE') return null
+  try {
+    return await vendorManagementService.getPublicProfile(bakeryId, options)
+  } catch (error) {
+    // The public endpoint also returns 404 for active shops without entitlement.
+    if (error.status === 404) return null
+    throw error
+  }
+}
 
-function BakeryImages({ profile, images, editable = false, busy, onUpload, error, failureTarget }) {
+function BakeryImages({ images, editable = false, busy, onUpload, onImageError, error, failureTarget }) {
   return <section className="sc-owner-profile-section">
     <h3>Hình ảnh cửa hàng</h3>
     <div className="sc-owner-profile-media">
@@ -67,10 +74,11 @@ function BakeryImages({ profile, images, editable = false, busy, onUpload, error
         const label = kind === 'logo' ? 'Logo' : 'Ảnh bìa'
         return <div key={kind}>
           <h4>{label}</h4>
-          <VendorImage src={images[kind]?.url || profile?.[kind + 'Url']} alt={label} />
-          {editable && <label>Chọn ảnh PNG/JPEG/WebP, tối đa 5 MiB
+          {!editable && <VendorImage src={images[kind]} alt={label} onLoadError={() => onImageError(kind)} />}
+          {busy && failureTarget === kind && <p role="status">Đang tải {label.toLowerCase()} lên…</p>}
+          {editable && <label className="sc-bakery-image-picker"><VendorImage src={images[kind]} alt={label} onLoadError={() => onImageError(kind)} /><span>Đổi {label.toLowerCase()}</span>
             <input type="file" aria-label={'Tải ' + label.toLowerCase() + ' tiệm'} accept="image/png,image/jpeg,image/webp"
-              disabled={busy} className={inputClass} onChange={event => {
+              disabled={busy} className="sr-only" onChange={event => {
                 const file = event.target.files[0]
                 event.target.value = ''
                 if (file) onUpload(kind, file)
@@ -83,63 +91,87 @@ function BakeryImages({ profile, images, editable = false, busy, onUpload, error
   </section>
 }
 
-function BakeryEditor({ profile, operations, images, busy, error, failureTarget, notice, onClose, onSaveProfile, onSaveOperations, onUpload }) {
+function BakeryEditor({ profile, operations, locationOptions, images, busy, error, failureTarget, notice, onClose, onSaveProfile, onSaveOperations, onUpload, onImageError }) {
   const [profileVersion, setProfileVersion] = useState(0), [operationsVersion, setOperationsVersion] = useState(0)
   return <DetailDrawer className="sc-vendor-drawer sc-owner-profile-editor" title="Chỉnh sửa hồ sơ tiệm" busy={busy} onClose={onClose} footer={<button type="button" data-modal-close disabled={busy} className={buttonClass}>Đóng</button>}>
     <BakeryProfileForm key={'profile:' + profileVersion} profile={profile} busy={busy} error={failureTarget === 'profile' ? error : null} onSave={async input => { if (await onSaveProfile(input)) setProfileVersion(value => value + 1) }} />
-    {operations ? <BakeryOperationsForm key={'operations:' + operationsVersion} operations={operations} busy={busy} error={failureTarget === 'operations' ? error : null} onSave={async input => { if (await onSaveOperations(input)) setOperationsVersion(value => value + 1) }} /> : <p>Chưa tải được địa chỉ và giờ mở cửa. Vui lòng thử lại.</p>}
-    <BakeryImages profile={profile} images={images} editable busy={busy} onUpload={onUpload} error={error} failureTarget={failureTarget} />
-    {notice && <p role="status">{notice}</p>}
+    {operations ? <BakeryOperationsForm key={'operations:' + operationsVersion} operations={operations} locationOptions={locationOptions} busy={busy} notice={failureTarget === 'operations' ? notice : null} error={failureTarget === 'operations' ? error : null} onSave={async input => { if (await onSaveOperations(input)) setOperationsVersion(value => value + 1) }} /> : <p>Chưa tải được địa chỉ và giờ mở cửa.</p>}
+    <BakeryImages images={images} editable busy={busy} onUpload={onUpload} onImageError={onImageError} error={error} failureTarget={failureTarget} />
+    {notice && failureTarget !== 'operations' && <p role="status">{notice}</p>}
   </DetailDrawer>
 }
 
-export default function BakeryManager({ bakeryId, initialProfile }) {
+export default function BakeryManager({ bakeryId, initialProfile, locationOptions, onChanged }) {
   const { user, roles } = useAuth()
   const membership = useCatalogResource(loadVendorMembership, { bakeryId, userId: user.id })
   const profile = useCatalogResource(loadVendorProfile, { bakeryId, includeOnboarding: roles.includes('CUSTOMER') })
   const [confirmedProfile, setProfile] = useState(initialProfile?.id === bakeryId ? initialProfile : null), [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState(''), [editor, setEditor] = useState(null)
   const [uploadedImages, setImages] = useState({}), [failureTarget, setFailureTarget] = useState('profile')
   const inFlight = useRef(false)
+  const imageRetries = useRef({})
   const canEdit = membership.status === 'ready' && memberCanEdit(membership.data, roles)
   const current = profile.refreshing ? confirmedProfile || profile.data : profile.data || confirmedProfile
   async function mutate(operation, message, target = 'profile') {
     if (busy || inFlight.current || !canEdit) return false
     inFlight.current = true
     setBusy(true); setError(null); setNotice(''); setFailureTarget(target)
-    try { const result = await operation(); if (result?.id === bakeryId) setProfile(result); setNotice(message); profile.reload(); membership.reload(); return true }
+    try { const result = await operation(); if (result?.id === bakeryId) setProfile(result); setNotice(message); profile.reload(); membership.reload(); onChanged?.(); return true }
     catch (failure) { setError(failure); return false } finally { inFlight.current = false; setBusy(false) }
   }
   const media = useCatalogResource(loadProfileImages, { bakeryId, status: current?.status })
-  const images = Object.fromEntries(['logo', 'cover'].map(kind => [kind, uploadedImages.bakeryId === bakeryId && uploadedImages[kind] || { url: media.data?.[kind + 'Url'] }]))
+  const images = Object.fromEntries(['logo', 'cover'].map(kind => {
+    const uploaded = uploadedImages[kind]
+    const publishedUrl = media.data?.[kind + 'Url']
+    const freshUrl = media.data !== uploaded?.previousMedia ? publishedUrl : null
+    return [kind, freshUrl || uploaded?.url || publishedUrl]
+  }))
+  const refreshImage = kind => {
+    if (current?.status !== 'ACTIVE' || imageRetries.current[kind]) return
+    imageRetries.current[kind] = true
+    media.reload()
+  }
   const operations = current?.operations
   const primary = operations?.addresses?.find(row => row.isPrimary)
   const closeEditor = () => setEditor(null)
   const saveOperations = input => mutate(async () => {
     const saved = await vendorManagementService.saveOperations(bakeryId, input)
     setProfile(previous => ({ ...(previous || current), operations: saved })); return null
-  }, 'Đã lưu cấu hình vận hành.', 'operations')
+  }, 'Cấu hình vận hành đã được lưu thành công.', 'operations')
   const upload = (kind, file) => mutate(async () => {
     const uploaded = await vendorManagementService.uploadBakeryImage(bakeryId, kind, file)
-    setImages(previous => ({ ...(previous.bakeryId === bakeryId ? previous : {}), bakeryId, [kind]: uploaded }))
+    imageRetries.current[kind] = false
+    setImages(previous => ({ ...previous, [kind]: { ...uploaded, previousMedia: media.data } }))
     media.reload()
-    return uploaded
+    return null
   }, kind === 'logo' ? 'Đã tải logo tiệm.' : 'Đã tải ảnh bìa tiệm.', kind)
   return <div className="sc-panel sc-owner-profile">
-    <section className="sc-owner-profile-section"><div className="sc-owner-profile-overview"><VendorImage src={images.logo?.url || current?.logoUrl} alt="Logo tiệm" /><div><div className="sc-profile-name-row"><h2>{cleanPresentationLabel(current?.name, 'Thông tin tiệm')}</h2>{canEdit && ['logo', 'cover'].map(kind => <label key={kind} className="sc-profile-photo-button" title={kind === 'logo' ? 'Đổi logo' : 'Đổi ảnh bìa'}><span className="material-symbols-outlined" aria-hidden="true">{kind === 'logo' ? 'add_a_photo' : 'add_photo_alternate'}</span><input className="sr-only" type="file" aria-label={kind === 'logo' ? 'Đổi logo nhanh' : 'Đổi ảnh bìa nhanh'} accept="image/png,image/jpeg,image/webp" disabled={busy} onChange={event => { const file = event.target.files[0]; event.target.value = ''; if (file) upload(kind, file) }} /></label>)}</div><p>{primary ? vendorAddress(primary) : 'Chưa cập nhật địa chỉ chính'}</p>{current?.status && <StatusBadge status={current.status} />}</div>{canEdit && <RecordActionButton className={buttonClass} onClick={() => setEditor('profile')} action="edit" label="Chỉnh sửa hồ sơ" />}</div>
+    <section className="sc-owner-profile-section"><div className="sc-owner-profile-overview"><VendorImage src={images.logo || current?.logoUrl} alt="Logo tiệm" /><div><h2>{cleanPresentationLabel(current?.name, 'Thông tin tiệm')}</h2><p>{primary ? vendorAddress(primary) : 'Chưa cập nhật địa chỉ chính'}</p>{current?.status && <StatusBadge status={current.status} />}</div>{canEdit && <RecordActionButton className={buttonClass} onClick={() => setEditor('profile')} action="edit" label="Chỉnh sửa hồ sơ" />}</div>
     {profile.status === 'loading' ? <p role="status">Đang tải hồ sơ…</p> : profile.error && <ApiErrorMessage error={profile.error} retry={profile.reload} />}
     {membership.error && <ApiErrorMessage error={membership.error} retry={membership.reload} />}
+    {canEdit && current?.status === 'DRAFT' && <div className="sc-toolbar-actions"><p>Hồ sơ đang là bản nháp. Hoàn thiện thông tin, địa chỉ chính và khu vực giao hàng để gửi duyệt.</p><button type="button" className={buttonClass} disabled={busy} onClick={() => setEditor('profile')}>Tiếp tục hồ sơ nháp</button></div>}
+    {current?.status === 'SUSPENDED' && <p role="status" className="sc-note">Tiệm đang tạm ngưng. Vui lòng liên hệ quản trị viên để kích hoạt lại.</p>}
+    {current?.status === 'CLOSED' && <p role="status" className="sc-note">Tiệm đã đóng. Hệ thống hiện chưa hỗ trợ mở lại hồ sơ này.</p>}
     {current?.status === 'DRAFT' && current.reviewDecision?.status === 'RETURNED' && <p className="sc-note">Hồ sơ đã được trả lại: {publicCopy(bakeryReviewText(current.reviewDecision.reason), 'Chưa có lý do được ghi nhận.')}</p>}
   </section>
 
+    <div className="sc-owner-profile-columns"><div className="sc-owner-profile-main">
     {<section className="sc-owner-profile-section"><h3>Thông tin tiệm</h3><dl className="sc-owner-profile-fields">{[['name','Tên tiệm'],['phoneNumber','Số điện thoại'],['email','Email'],['description','Mô tả tiệm']].map(([key,label]) => <div key={key}><dt>{label}</dt><dd>{publicCopy(current?.[key], 'Chưa cập nhật')}</dd></div>)}</dl></section>}
-    {(operations ? <>{['addresses','serviceAreas','businessHours'].map(kind => <section key={kind} className="sc-owner-profile-section"><div className="sc-toolbar-actions"><h3>{{ addresses: 'Địa chỉ tiệm', serviceAreas: 'Khu vực giao hàng', businessHours: 'Giờ mở cửa' }[kind]}</h3></div>{kind === 'businessHours' ? <div className="sc-owner-hours">{['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'].map((day,i) => { const row = operations.businessHours.find(item => Number(item.dayOfWeek) === i+1); return <div key={day}><strong>{day}</strong><span>{!row ? 'Chưa thiết lập' : row.closed ? 'Nghỉ' : row.opensAt && row.closesAt ? row.opensAt.slice(0,5) + ' – ' + row.closesAt.slice(0,5) : 'Chưa cập nhật giờ'}</span></div> })}</div> : operations[kind].length ? <ul className="sc-owner-profile-rows">{operations[kind].map((row,index) => <li key={row.id || index} className="sc-owner-operation-row"><div>{kind === 'addresses' ? <><div className="sc-owner-profile-line"><span className="sc-owner-profile-label">{row.isPrimary ? 'Địa chỉ chính:' : 'Địa chỉ ' + (index + 1) + ':'}</span><strong>{vendorAddress(row)}</strong></div></> : <><div className="sc-owner-profile-line"><span className="sc-owner-profile-label">Khu vực:</span><strong>{[row.district,row.city].filter(Boolean).join(', ')}</strong></div><p>Phí giao: {vendorMoney(row.deliveryFee)} · Đơn tối thiểu: {vendorMoney(row.minimumOrder)}</p><span>{row.active ? 'Đang phục vụ' : 'Ngừng phục vụ'}</span></>}</div></li>)}</ul> : <p>Chưa cập nhật</p>}</section>)}</> : <p>Chưa tải được cấu hình vận hành. Vui lòng tải lại hồ sơ trước khi chỉnh sửa.</p>)}
-    <BakeryImages profile={current} images={images} error={!editor ? error : null} failureTarget={failureTarget} />
+    {(operations ? <>{['addresses','serviceAreas'].map(kind => <section key={kind} className="sc-owner-profile-section"><div className="sc-toolbar-actions"><h3>{{ addresses: 'Địa chỉ tiệm', serviceAreas: 'Khu vực giao hàng', businessHours: 'Giờ mở cửa' }[kind]}</h3></div>{operations[kind].length ? <ul className="sc-owner-profile-rows">{operations[kind].map((row,index) => <li key={row.id || index} className="sc-owner-operation-row"><div>{kind === 'addresses' ? <><div className="sc-owner-profile-line"><span className="sc-owner-profile-label">{row.isPrimary ? 'Địa chỉ chính:' : 'Địa chỉ ' + (index + 1) + ':'}</span><strong>{vendorAddress(row)}</strong></div></> : <><div className="sc-owner-profile-line"><span className="sc-owner-profile-label">Khu vực:</span><strong>{[row.district,row.city].filter(Boolean).join(', ')}</strong></div><p>Phí giao: {vendorMoney(row.deliveryFee)} · Đơn tối thiểu: {vendorMoney(row.minimumOrder)}</p><span>{row.active ? 'Đang phục vụ' : 'Ngừng phục vụ'}</span></>}</div></li>)}</ul> : <p>Chưa cập nhật</p>}</section>)}</> : <p>Chưa tải được cấu hình vận hành.</p>)}
+    </div><div className="sc-owner-profile-aside">
+    <BakeryImages images={images} editable={canEdit} busy={busy} onUpload={upload} onImageError={refreshImage} error={!editor ? error : null} failureTarget={failureTarget} />
     {media.error && <ApiErrorMessage error={media.error} retry={media.reload} />}
+    <section className="sc-owner-profile-section"><h3>Giờ mở cửa</h3>
+      {operations ? <div className="sc-owner-hours">{['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'].map((day,index) => {
+        const row = operations.businessHours.find(item => Number(item.dayOfWeek) === index + 1)
+        return <div key={day}><strong>{day}</strong><span>{!row || row.closed ? 'Nghỉ' : row.opensAt && row.closesAt ? row.opensAt.slice(0,5) + ' – ' + row.closesAt.slice(0,5) : 'Chưa cập nhật giờ'}</span></div>
+      })}</div> : <p>Chưa tải được giờ mở cửa.</p>}
+    </section>
+    </div></div>
     {canEdit && membership.data?.memberRole === 'OWNER' && (!current || current.status === 'DRAFT') && <section className="sc-owner-profile-section"><h3>Gửi tiệm để duyệt</h3><p>Cần địa chỉ chính và khu vực giao hàng đang phục vụ trước khi gửi.</p><EntityActionButtons showHeading={false} status={current?.status} busy={busy} refreshing={profile.refreshing} actions={[{ key:'submit', label:'Gửi yêu cầu duyệt', icon:'send', disabled: Boolean(confirmedProfile?.status && confirmedProfile.status !== 'DRAFT'), description:'Gửi hồ sơ tiệm để quản trị viên kiểm tra. Bạn cần địa chỉ chính và khu vực giao hàng hoạt động.' }]} onConfirm={() => mutate(() => vendorManagementService.submitBakery(bakeryId), 'Đã gửi hồ sơ tiệm để duyệt.')} /></section>}
-    {editor && canEdit && <BakeryEditor profile={current} operations={operations} images={images} busy={busy} error={error} failureTarget={failureTarget} notice={notice} onClose={closeEditor}
+    {editor && canEdit && <BakeryEditor profile={current} operations={operations} locationOptions={locationOptions} images={images} busy={busy} error={error} failureTarget={failureTarget} notice={notice} onClose={closeEditor}
       onSaveProfile={input => mutate(() => vendorManagementService.updateBakery(bakeryId, input), 'Đã lưu thông tin tiệm.')}
       onSaveOperations={saveOperations}
-      onUpload={upload} />}
-    {error && !editor && !['logo', 'cover'].includes(failureTarget) && <ApiErrorMessage error={error} />}{notice && <p role="status">{notice}</p>}
+      onUpload={upload} onImageError={refreshImage} />}
+    {error && !editor && !['logo', 'cover'].includes(failureTarget) && <ApiErrorMessage error={error} />}{notice && !editor && <p role="status">{notice}</p>}
   </div>
 }

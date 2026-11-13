@@ -42,9 +42,16 @@ export function createUserDirectory({ storage, seedUsers, protectedIds = [], lin
       else {
         let allocated
         do { allocated = demoId(next.nextId++) } while (next.users.some((row) => row.id === allocated))
-        result = { id: allocated, name, email, roles: ['CUSTOMER'], status: 'ACTIVE', createdAt: new Date().toISOString() }
+        const role = input.role || 'CUSTOMER'
+        if (!['CUSTOMER', 'BAKERY_OWNER', 'ADMIN'].includes(role)) fail('Vai trò không hợp lệ.')
+        result = { id: allocated, name, email, roles: role === 'BAKERY_OWNER' ? ['CUSTOMER', role] : [role], status: 'ACTIVE', createdAt: new Date().toISOString() }
         next.users.unshift(result)
       }
+    } else if (action === 'roles') {
+      if (!person || !Array.isArray(input.roles) || !input.roles.length ||
+          input.roles.some(role => !['CUSTOMER', 'BAKERY_OWNER', 'ADMIN'].includes(role))) fail('Vai trò không hợp lệ.')
+      person.roles = [...new Set(input.roles)]
+      result = person
     } else if (action === 'status') {
       if (!['ACTIVE', 'SUSPENDED', 'BLOCKED'].includes(person.status)) fail('Trạng thái không cho phép thao tác.', 409)
       if (input.expectedStatus && input.expectedStatus !== person.status) fail('Trạng thái vừa thay đổi. Vui lòng tải lại và xác nhận.', 409)
@@ -59,7 +66,7 @@ export function createUserDirectory({ storage, seedUsers, protectedIds = [], lin
     list(params = {}) {
       reload()
       const search = String(params.email || params.query || '').trim().toLocaleLowerCase('vi')
-      const rows = state.users.filter((person) => (!search || [person.name, person.displayName, person.fullName, person.email].filter(Boolean).join(' ').toLocaleLowerCase('vi').includes(search)) && (!params.role || person.roles.includes(params.role)) && (!params.status || person.status === params.status))
+      const rows = state.users.filter((person) => (!search || [person.name, person.displayName, person.fullName, person.email].filter(Boolean).join(' ').toLocaleLowerCase('vi').includes(search)) && (!params.role || person.roles.includes(params.role)) && (!params.status || person.status === params.status || params.status === 'SUSPENDED' && person.status === 'BLOCKED'))
       const size = Math.min(100, Math.max(1, Number(params.size) || 12)), pages = Math.ceil(rows.length / size)
       const page = Math.min(Math.max(1, Number(params.page) || 1), Math.max(1, pages))
       return { result: structuredClone(rows.slice((page - 1) * size, page * size)), meta: { page, pageSize: size, pages, total: rows.length }, localCrud: true }

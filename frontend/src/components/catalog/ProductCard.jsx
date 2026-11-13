@@ -5,6 +5,7 @@ import { catalogCategoryLabel, isCatalogId, formatCatalogPrice } from '../../ser
 import { ProductDetails } from '../../pages/customer/catalog/ProductDetailPage.jsx'
 import ModalSurface from '../common/ModalSurface.jsx'
 import CatalogImage from './CatalogImage.jsx'
+import { catalogReferenceImage } from '../../services/catalogReferenceImages.js'
 
 function AddProductButton({ product, onAddToCart }) {
   const [adding, setAdding] = useState(false)
@@ -50,7 +51,7 @@ export default function ProductCard({ product, onNavigate, onAddToCart, variant 
   const canAdd = onAddToCart && product.catalogSource === 'backend' && isCatalogId(product.bakeryId) && product.price !== null
   return <article className={variant === 'home' ? 'dome-cake-card group flex h-full flex-col overflow-hidden bg-white' : 'sc-catalog-card group hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between'}>
     <button onClick={open} className="relative mb-4 block aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#faf8f8]" aria-label={'Xem ' + cleanPresentationLabel(product.title, 'mẫu bánh')}>
-      <CatalogImage src={product.image} alt={cleanPresentationLabel(product.title, 'Mẫu bánh')} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+      <CatalogImage src={product.image} fallbackSrc={variant === 'home' ? undefined : catalogReferenceImage(product)} alt={cleanPresentationLabel(product.title, 'Mẫu bánh')} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
     </button>
     <div className={variant === 'home' ? 'flex flex-1 flex-col p-5' : 'flex flex-1 flex-col'}>
 

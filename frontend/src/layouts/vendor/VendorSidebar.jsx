@@ -23,6 +23,7 @@ export default function VendorSidebar({
       onCloseMobile()
     }
   }
+  const ordersBadge = (pendingOrderCount || 0) + rfqCount
 
   const sidebarContent = (
     <aside className="w-72 h-full bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between py-6 px-3 select-none">
@@ -55,14 +56,7 @@ export default function VendorSidebar({
         <nav className="space-y-1">
           {VENDOR_NAV_ITEMS.filter((item) => item.id !== 'revenue').map((item) => {
             const isActive = activeTab === item.id
-            const badgeText =
-              item.id === 'orders'
-                ? pendingOrderCount > 0 ? String(pendingOrderCount) : null
-                : item.badgeKey === 'rfqCount'
-                ? rfqCount > 0
-                  ? `${rfqCount}${item.badgeSuffix || ''}`
-                  : null
-                : item.badge
+            const badgeText = item.id === 'orders' ? ordersBadge || null : showMockBadges ? item.badge : null
 
             return (
               <button
@@ -86,18 +80,16 @@ export default function VendorSidebar({
                     {item.label}
                   </span>
                 </div>
-                {((showMockBadges && badgeText) || (item.id === 'orders' && pendingOrderCount > 0) || (item.badgeKey === 'rfqCount' && rfqCount > 0)) && (
+                {badgeText && (
                   <span
-                    aria-label={item.id === 'orders' ? pendingOrderCount + ' đơn chờ xác nhận' : undefined}
+                    aria-label={item.id === 'orders' ? `${pendingOrderCount || 0} đơn chờ xác nhận, ${rfqCount} yêu cầu chưa báo giá` : undefined}
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1.5 ${
                       isActive
                         ? 'bg-on-primary/20 text-on-primary'
-                        : item.badgeKey === 'rfqCount'
-                        ? 'bg-rose-600 text-white shadow-xs'
                         : 'bg-secondary-fixed text-on-secondary-fixed'
                     }`}
                   >
-                    {item.badgeKey === 'rfqCount' ? rfqCount : badgeText}
+                    {badgeText}
                   </span>
                 )}
               </button>

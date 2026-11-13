@@ -37,6 +37,7 @@ test('Checkout sends gift selection to the existing BE customerNote without paid
   const original = globalThis.fetch, productId = randomUUID(), bakeryId = randomUUID(), addressId = randomUUID(), key = randomUUID(), calls = []
   globalThis.fetch = async (url, options) => {
     calls.push({ url, options })
+    if (url.endsWith('/bakeries/' + bakeryId)) return Response.json({ data: { id: bakeryId, name: 'Tiệm', operations: { businessHours: Array.from({ length: 7 }, (_, index) => ({ dayOfWeek: index + 1, opensAt: '00:00', closesAt: '23:59', closed: false })) } } })
     if (url.endsWith('/products/' + productId)) return Response.json({ data: { bakeryId, product: { id: productId, basePrice: 100000, status: 'PUBLISHED' }, options: { groups: [] }, addOns: [] } })
     if (url.endsWith('/addresses/' + addressId)) return Response.json({ data: { id: addressId, label: 'Nhà', recipientName: 'Khách', recipientPhone: '0901234567', addressLine: '12 Nguyễn Huệ', district: 'Quận 1', city: 'HCM', isDefault: true } })
     return Response.json({ data: { id: randomUUID(), bakeryId, customerId: randomUUID(), items: [], statusHistory: [] } }, { status: 201 })

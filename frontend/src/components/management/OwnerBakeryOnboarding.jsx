@@ -11,10 +11,11 @@ import { StatusBadge } from '../common/WorkspaceUI.jsx'
 import { usePartnerActivation } from '../../hooks/usePartnerActivation.js'
 import { uiLabel } from '../../services/uiLabels.js'
 
-export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, drafts = [] }) {
+export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, drafts = [], parentBakeryId, locationOptions, onDraftReady }) {
   const { roles, user } = useAuth()
   const isOwner = roles.includes('BAKERY_OWNER')
   const [initialDefaults] = useState(defaults)
+  const [parentId] = useState(parentBakeryId)
   const [newRequested, setNewRequested] = useState(false)
   const [profileDraft, setProfileDraft] = useState(null)
   const [editingBasics, setEditingBasics] = useState(true)
@@ -84,16 +85,17 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, dra
   // Step 1: Profile Form
   if (!bakery && editingBasics) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-2">
         <BakeryProfileForm
           create
           error={error}
           busy={busy}
-          profile={profileDraft || { name: initialDefaults?.name || '', email: initialDefaults?.email || user?.email || '', phoneNumber: initialDefaults?.phoneNumber || user?.phoneNumber || user?.phone || '' }}
+          profile={profileDraft || { name: '', email: initialDefaults?.email || user?.email || '', phoneNumber: initialDefaults?.phoneNumber || user?.phoneNumber || user?.phone || '' }}
           onSave={(input) => run(async () => {
             if (isOwner) {
-              const created = await vendorManagementService.createBakery(input)
+              const created = await vendorManagementService.createBakery(input, parentId)
               setBakery(created)
+              onDraftReady?.(created)
             } else {
               setProfileDraft(input)
               setEditingBasics(false)
@@ -124,6 +126,7 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, dra
         </div>
         <BakeryOperationsForm
           error={error}
+          locationOptions={locationOptions}
           operations={defaultOperations}
           busy={busy}
           onSave={(input) => run(async () => {
@@ -153,18 +156,21 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, dra
   // Step 3: Existing Bakery / Owner Operations / Submitting for Approval
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2" hidden={Boolean(onDraftReady)}>
         <p role="status">
           Hồ sơ tiệm: <strong>{bakery.name}</strong> · Mã tiệm:{' '}
           <span className="break-all">{bakery.id}</span>
         </p>
-        {bakery.status && <StatusBadge status={bakery.status} />}
+        {!onDraftReady && bakery.status && <StatusBadge status={bakery.status} />}
       </div>
 
       {bakery.status === 'DRAFT' && (
         <>
           <BakeryOperationsForm
             error={error}
+            locationOptions={locationOptions}
+            onEdited={() => setSaved(false)}
+            notice={saved ? 'Cấu hình vận hành đã được lưu thành công.' : null}
             operations={bakery.operations?.addresses?.length ? bakery.operations : defaultOperations}
             busy={busy}
             onSave={(input) => run(async () => {
@@ -179,7 +185,6 @@ export default function OwnerBakeryOnboarding({ onBusy, onCreated, defaults, dra
               setSaved(true)
             })}
           />
-          {saved && <p role="status" className="text-sm text-green-700 font-medium">Cấu hình vận hành đã được lưu thành công.</p>}
           <button
             type="button"
             disabled={busy || !saved}

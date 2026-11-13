@@ -9,12 +9,13 @@ before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'admin-review-events', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth(){return globalThis.__adminAuth}'
+    if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export function useViewportPageSize(){return {pageSize:12,containerRef(){}}}'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load){return globalThis.__adminResources[load.name]||{status:"loading",data:null,reload(){}}}'
   }, transform(code, id) {
-    if (['AdminUsersPage.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState=(value)=>globalThis.__adminState(value),useRef=(value)=>globalThis.__adminState(()=>({current:value}))[0]")
+    if (['LocalUserDirectory.jsx', 'UserEditor.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace(/import React, \{ (?:useRef, )?useState \} from 'react'/, "import React from 'react'\nconst useState=(value)=>globalThis.__adminState(value),useRef=(value)=>globalThis.__adminState(()=>({current:value}))[0]")
   } }] })
   const module = await vite.ssrLoadModule('/src/pages/admin/users/AdminUsersPage.jsx')
-  Users = module.UserDirectory; RoleForm = module.RoleForm; UserDecision = module.UserDecision
+  Users = (await vite.ssrLoadModule('/src/pages/admin/users/LocalUserDirectory.jsx')).LocalUserDirectory; RoleForm = module.RoleForm; UserDecision = module.UserDecision
   PaymentReview = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPaymentsPage.jsx')).PaymentReview
   service = await vite.ssrLoadModule('/src/services/adminUserService.js')
   ;(await vite.ssrLoadModule('/src/services/apiClient.js')).setAuthToken('fixture')
@@ -30,15 +31,21 @@ function harness(Component, props = {}, resources = {}, roles = ['ADMIN']) {
   globalThis.__adminState = (initial) => { const i = cursor++; if (!(i in state)) state[i] = typeof initial === 'function' ? initial() : initial; return [state[i], (value) => { state[i] = typeof value === 'function' ? value(state[i]) : value }] }
   return () => { cursor = 0; return Component(props) }
 }
+const editButton = render => nodes(render()).find(node => node.props.label === 'Chỉnh sửa người dùng')
+function openDelete(render) {
+  const editor = nodes(render()).find(node => node.type === RoleForm)
+  if (!editor) editButton(render).props.onClick()
+  nodes(render()).find(node => node.type === RoleForm).props.onAction('delete')
+  return nodes(render()).find(node => node.type === UserDecision)
+}
 test('User delete opens a dialog; cancellation sends nothing; confirmation sends status DELETED and refreshes', async () => {
   const calls = []; let reloads = 0
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return Response.json({ data: { ...person, status: 'DELETED' } }) }
   const render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }, () => reloads++) })
-  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick()
-  let dialog = nodes(render()).find((node) => node.type === UserDecision)
+  let dialog = openDelete(render)
   assert.equal(calls.length, 0); assert.equal(dialog.props.person.email, person.email)
   dialog.props.onClose(); assert.equal(calls.length, 0); assert.ok(!nodes(render()).some((node) => node.type === UserDecision))
-  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick(); dialog = nodes(render()).find((node) => node.type === UserDecision)
+  dialog = openDelete(render)
   await dialog.props.onConfirm()
   assert.equal(calls.length, 1); assert.equal(calls[0].options.method, 'PATCH')
   assert.ok(String(calls[0].url).endsWith('/admin/users/' + id + '/status'))
@@ -49,7 +56,7 @@ test('Failed delete keeps the selected person and dialog; double confirm is supp
   let finish, calls = 0
   globalThis.fetch = async () => { calls++; return new Promise((resolve) => { finish = () => resolve(Response.json({ message: 'Không thể xóa.' }, { status: 500 })) }) }
   const render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }) })
-  nodes(render()).find(node => node.type?.name === 'UserRowActions').props.remove.onClick(); const dialog = nodes(render()).find((node) => node.type === UserDecision)
+  const dialog = openDelete(render)
   const pending = dialog.props.onConfirm(); await dialog.props.onConfirm(); assert.equal(calls, 1)
   finish(); await pending
   const retained = nodes(render()).find((node) => node.type === UserDecision)
@@ -61,19 +68,19 @@ test('Role form only saves a changed, non-empty role set and cancel does not wri
   const form = () => nodes(render()).find((node) => node.type === 'form')
   const box = (role) => nodes(render()).find((node) => node.type === 'input' && node.props.value === role)
   form().props.onSubmit({ preventDefault() {} }); assert.equal(saved.length, 0)
-  assert.equal(button(render(), 'Lưu vai trò').props.disabled, true)
+  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
   box('BAKERY_OWNER').props.onChange()
-  assert.equal(button(render(), 'Lưu vai trò').props.disabled, false)
+  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, false)
   form().props.onSubmit({ preventDefault() {} }); assert.deepEqual(saved, [['CUSTOMER', 'BAKERY_OWNER']])
   box('CUSTOMER').props.onChange(); box('BAKERY_OWNER').props.onChange()
-  assert.equal(button(render(), 'Lưu vai trò').props.disabled, true)
+  assert.equal(button(render(), 'Lưu thay đổi').props.disabled, true)
   assert.match(text(render()), /ít nhất một vai trò/)
   form().props.onSubmit({ preventDefault() {} }); assert.equal(saved.length, 1)
   assert.ok(button(render(), 'Hủy').props['data-modal-close'] !== undefined)
 })
 
 test('User confirmation labels identify the operation and protected decisions explain disabled state', () => {
-  for (const [action, status, label] of [['status', 'ACTIVE', 'Khóa tài khoản'], ['status', 'BLOCKED', 'Mở khóa'], ['delete', 'ACTIVE', 'Xác nhận xóa']]) {
+  for (const [action, status, label] of [['status', 'ACTIVE', 'Tạm ngưng'], ['status', 'BLOCKED', 'Kích hoạt lại'], ['delete', 'ACTIVE', 'Xác nhận xóa']]) {
     const tree = UserDecision({ person: { ...person, status }, action, busy: false, disabledReason: 'Hồ sơ được bảo vệ.' })
     const buttons = nodes(tree.props.footer).filter((n) => n.type === 'button')
     assert.equal(text(buttons[0]), 'Hủy'); assert.ok(text(buttons[1]).endsWith(label))
@@ -168,7 +175,7 @@ test('Payment directory enriches from existing order/bakery routes and preserves
 })
 test('Customer cannot open user mutations or payment review decisions', () => {
   let render = harness(Users, {}, { loadUsers: ready({ result: [person], meta: { total: 1 } }) }, ['CUSTOMER'])
-  assert.equal(nodes(render()).find(node => node.type?.name === 'UserRowActions').props.disabled, true)
+  assert.equal(editButton(render).props.disabled, true)
   render = harness(PaymentReview, { payment: { id, subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 199000, currency: 'VND' } }, { loadPaymentContext: ready({ order: { id: orderId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' } }) }, ['CUSTOMER'])
   assert.ok(!button(render(), 'Phê duyệt thanh toán')); assert.ok(!button(render(), 'Từ chối'))
 })

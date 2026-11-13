@@ -38,7 +38,7 @@ export default function AdminSidebar({
       return 'admin-dashboard'
     }
     if (['admin-revenue', 'revenue', 'doanh-thu'].includes(cleanTab)) {
-      return 'admin-revenue'
+      return 'admin-payments'
     }
     if (['admin-vendors', 'vendors', 'tiem-banh', 'duyet-xuong'].includes(cleanTab)) {
       return 'admin-vendors'
@@ -66,12 +66,6 @@ export default function AdminSidebar({
       route: 'admin-dashboard',
       label: 'Tổng quan',
       icon: 'dashboard',
-    },
-    {
-      id: 'admin-revenue',
-      route: 'admin-revenue',
-      label: 'Doanh thu',
-      icon: 'account_balance_wallet',
     },
     {
       id: 'admin-vendors',

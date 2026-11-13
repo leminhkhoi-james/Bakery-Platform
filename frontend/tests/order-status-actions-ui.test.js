@@ -18,18 +18,19 @@ const render = (status, role, props = {}) => {
 }
 for (const role of ['BAKERY_OWNER']) {
   test(`${role}: only the valid next step is prominent, cancellation ends when baking starts`, () => {
-    for (const [status, label] of [['PENDING', 'Xác nhận đơn hàng'], ['CONFIRMED', 'Bắt đầu làm bánh'], ['BAKING', 'Bánh đã sẵn sàng giao'], ['READY', 'Bắt đầu giao hàng'], ['DELIVERING', 'Xác nhận đã giao bánh']]) {
+    for (const [status, label] of [['PENDING', 'Xác nhận đơn hàng'], ['CONFIRMED', 'Bắt đầu làm bánh'], ['BAKING', 'Bánh đã sẵn sàng giao'], ['READY', 'Bắt đầu giao hàng']]) {
       const html = render(status, role)
       assert.match(html, new RegExp(label)); assert.doesNotMatch(html, /<select/)
       if (status === 'PENDING') assert.match(html, /Từ chối đơn hàng/)
       else if (status === 'CONFIRMED') assert.match(html, /Hủy đơn hàng/)
       else assert.doesNotMatch(html, /Hủy đơn hàng/)
     }
-    for (const status of ['COMPLETED', 'CANCELLED']) assert.doesNotMatch(render(status, role), /<button/)
+    for (const status of ['DELIVERING', 'COMPLETED', 'CANCELLED']) assert.doesNotMatch(render(status, role), /<button/)
   })
 }
 test('Customers never see bakery fulfilment actions and controls lock during requests/reloads', () => {
   assert.doesNotMatch(render('PENDING', 'CUSTOMER'), /Xác nhận đơn hàng|Bắt đầu làm bánh/)
+  assert.match(render('DELIVERING', 'CUSTOMER'), /Đã nhận được bánh/)
   for (const props of [{ busy: true }, { refreshing: true }]) {
     const html = render('CONFIRMED', 'BAKERY_OWNER', props)
     assert.equal((html.match(/<button/g) || []).length, (html.match(/disabled=""/g) || []).length)

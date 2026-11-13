@@ -14,7 +14,7 @@ export default function OrderTrackingPage({ onNavigate, routeSearch = '' }) {
               onClick={() => onNavigate('tracking')}
             >
               <span className="material-symbols-outlined text-sm">arrow_back</span>
-              <span>← Lịch sử đơn hàng</span>
+              <span>Lịch sử đơn hàng</span>
             </button>
           ) : (
             <div className="space-y-0.5">

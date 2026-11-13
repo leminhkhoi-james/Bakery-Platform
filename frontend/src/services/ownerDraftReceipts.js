@@ -3,6 +3,22 @@
 const memory = new Map()
 const resumable = ['DRAFT', 'PENDING_APPROVAL', 'ACTIVE']
 const key = userId => 'sweetcake.owner-draft-receipts.v1:' + userId
+const branchParents = new Map()
+const branchKey = (userId, bakeryId) => `sweetcake.owner-branch-parent.v1:${userId}:${bakeryId}`
+
+// Creation provenance is local because the bakery API only records ownership.
+export function rememberBranchParent(userId, bakeryId, parentId) {
+  if (!userId || !bakeryId || !parentId || bakeryId === parentId) return
+  const storageKey = branchKey(userId, bakeryId)
+  try { localStorage.setItem(storageKey, parentId) }
+  catch { branchParents.set(storageKey, parentId) }
+}
+
+export function readBranchParent(userId, bakeryId) {
+  const storageKey = branchKey(userId, bakeryId)
+  try { return localStorage.getItem(storageKey) ?? branchParents.get(storageKey) }
+  catch { return branchParents.get(storageKey) }
+}
 export function ownerDraftReceipts(userId) {
   if (!userId) return []
   if (memory.has(userId)) return memory.get(userId)

@@ -155,7 +155,7 @@ export default function VendorNotificationBell({ openRfqs = [], onNavigate, bake
                 type="button"
                 onClick={() => {
                   setOpen(false)
-                  if (onNavigate) onNavigate('vendor-rfq' + (bakeryId ? '?bakeryId=' + bakeryId : ''))
+                  if (onNavigate) onNavigate('vendor-orders?tab=requests' + (bakeryId ? '&bakeryId=' + encodeURIComponent(bakeryId) : ''))
                 }}
                 className="text-xs font-semibold text-primary hover:underline cursor-pointer"
               >

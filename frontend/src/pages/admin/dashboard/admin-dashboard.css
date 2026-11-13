@@ -177,65 +177,6 @@
   transform: translateY(-2px);
 }
 
-/* KPI Cards Grid */
-.sc-dashboard-kpis {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-}
-
-/* Hàng 3 (Bên dưới): mô tả nhỏ */
-.sc-dashboard .sc-dashboard-kpi-footer {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  margin-top: 0;
-}
-
-.sc-dashboard .sc-dashboard-kpi {
-  justify-content: flex-start;
-  gap: 0.35rem;
-  padding: 0.65rem 0.85rem;
-}
-
-.sc-dashboard .sc-dashboard-kpi > .sc-kpi-header,
-.sc-dashboard .sc-kpi-body,
-.sc-dashboard .sc-metric-value {
-  margin-block: 0;
-}
-
-.sc-dashboard .sc-kpi-sub-text {
-  color: #64748b;
-  line-height: 1.35;
-}
-
-.sc-sub-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.sc-sub-dot--active {
-  background: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-}
-
-.sc-sub-dot--pending {
-  background: #f59e0b;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
-}
-
-.sc-sub-dot--success {
-  background: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
-
-.sc-dashboard-kpi:focus-within {
-  outline: 2px solid var(--color-primary, #6b212e);
-  outline-offset: 2px;
-}
-
 /* Sections */
 .sc-dashboard-section {
   display: grid;
@@ -246,20 +187,42 @@
 /* Distribution Cards (Tình hình hoạt động) */
 .sc-dashboard-statuses {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.15rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
 }
 
-.sc-dashboard .sc-dashboard-distribution {
+:is(.sc-dashboard, .sc-vendor-kpis) .sc-dashboard-distribution {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: .45rem;
   padding: 1.25rem 1.35rem;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 1.15rem;
   box-shadow: 0 4px 18px -2px rgba(107, 33, 46, 0.04);
 }
+
+.sc-activity-heading {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.sc-dashboard-distribution .sc-activity-total {
+  color: var(--sc-color-primary);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.sc-activity-plan-breakdown h4 {
+  margin: 0 0 .65rem;
+  color: var(--sc-color-muted);
+  font-size: .78rem;
+  font-weight: 650;
+}
+.sc-dashboard-distribution .sc-activity-plan-breakdown ul { gap: .55rem; }
 
 .sc-dashboard-distribution h3 {
   font-size: 1rem;
@@ -314,6 +277,15 @@
   padding: 2px 7px;
   border-radius: 9999px;
   margin-left: 0.35rem;
+}
+
+.sc-dashboard .sc-activity-scope-note {
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--sc-color-muted);
+  background: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* Meter Bar Styling */
@@ -523,26 +495,11 @@
   gap: 0.5rem;
 }
 
-/* Responsive Breakpoints */
-@media (min-width: 1024px) {
-  .sc-dashboard-kpis {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.85rem;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .sc-dashboard-kpis {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-  }
+@media (max-width: 1150px) {
+  .sc-dashboard-statuses { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 639px) {
-  .sc-dashboard-kpis {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.65rem;
-  }
   .sc-dashboard-statuses,
   .sc-admin-work-list {
     grid-template-columns: minmax(0, 1fr);

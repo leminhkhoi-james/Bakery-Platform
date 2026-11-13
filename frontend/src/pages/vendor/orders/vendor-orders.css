@@ -1,10 +1,11 @@
-.sc-vendor-orders { display: grid; gap: .85rem; min-width: 0; }
+.sc-vendor-orders { display: grid; gap: .85rem; min-width: 0; container-type: inline-size; }
+.sc-vendor-order-workspace { scroll-margin-top: var(--sc-filter-top, calc(var(--sc-portal-header-height, 5.25rem) + .35rem)); }
 .sc-vendor-orders > .sc-panel, .sc-vendor-orders .sc-vendor-order-list:not(.sc-vendor-order-list--embedded) { padding: 1rem; margin: 0; border: 1px solid #e2e8f0; background: #ffffff; }
 .sc-vendor-orders > .sc-managed-bakery-choice { padding-block: .7rem; gap: .35rem; }
 .sc-vendor-order-list { display: grid; gap: .8rem; min-width: 0; }
 .sc-vendor-order-list--embedded > .sc-business-tabs { margin: 0; }
 .sc-vendor-orders .sc-refresh-button { min-height: 2.25rem; padding: .4rem .65rem; font-size: .78rem; white-space: nowrap; }
-:is(.sc-vendor-orders, .sc-business-report) .sc-vendor-order-filters { display: grid; gap: .7rem; padding: .8rem; margin: 0; }
+:is(.sc-vendor-orders, .sc-business-report) .sc-vendor-order-filters { padding: .8rem; margin: 0; }
 .sc-vendor-order-filter-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
 .sc-vendor-order-filter-row--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .sc-vendor-order-date-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: .75rem; }
@@ -14,13 +15,41 @@
 .sc-vendor-order-table :is(th, td) { padding: .75rem .65rem; vertical-align: middle; overflow-wrap: anywhere; }
 .sc-vendor-order-table td { font-size: .82rem; }
 .sc-vendor-order-table strong { color: #722637; font-weight: 600; }
-.sc-vendor-order-table :is(th, td):nth-child(5) { text-align: right; padding-right: 1rem; }
-.sc-vendor-order-table:not(.sc-vendor-related-table) :is(th, td):nth-child(6) { padding-left: 1rem; }
+.sc-vendor-order-table:not(.sc-vendor-related-table, .sc-vendor-expanded-orders) :is(th, td):nth-child(6) { text-align: right; padding-right: 1rem; }
+.sc-vendor-order-table:not(.sc-vendor-related-table, .sc-vendor-expanded-orders) :is(th, td):nth-child(7) { padding-left: 1rem; }
 .sc-vendor-order-table :is(th, td):last-child { text-align: center; }
-.sc-vendor-related-table :is(th, td):first-child { width: 60px; }
-.sc-vendor-related-table :is(th, td):nth-child(2) { width: 28%; }
+.sc-vendor-related-table:not(.sc-owner-rfq-orders-table) :is(th, td):first-child { width: 60px; }
+.sc-vendor-related-table:not(.sc-owner-rfq-orders-table) :is(th, td):nth-child(2) { width: 28%; }
+.sc-owner-rfq-orders-table { min-width: 76rem; }
+.sc-rfq-orders-col--number { width: 3rem; }
+.sc-rfq-orders-col--customer { width: 9rem; }
+.sc-rfq-orders-col--area { width: 9rem; }
+.sc-rfq-orders-col--status { width: 10rem; }
+.sc-rfq-orders-col--price, .sc-rfq-orders-col--date { width: 8.5rem; }
+.sc-rfq-orders-col--budget { width: 12rem; }
+.sc-rfq-orders-col--action { width: 5.75rem; }
+.sc-owner-rfq-orders-table td.sc-business-value { white-space: normal; overflow-wrap: normal; }
+.sc-rfq-request-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.sc-vendor-expanded-orders { min-width: 76rem; }
+.sc-vendor-order-col--number { width: 3rem; }
+.sc-vendor-order-code { display: block; margin-top: .25rem; color: #64748b; white-space: normal; overflow-wrap: anywhere; }
+.sc-vendor-order-col--customer { width: 9rem; }
+.sc-vendor-order-col--area, .sc-vendor-order-col--status, .sc-vendor-order-col--budget { width: 8rem; }
+.sc-vendor-order-col--source { width: 7.75rem; }
+.sc-vendor-order-col--total { width: 7rem; }
+.sc-vendor-order-col--date { width: 9rem; }
+.sc-vendor-order-col--action { width: 5rem; }
+.sc-vendor-expanded-orders :is(th, td):nth-child(8) { text-align: right; }
+.sc-vendor-order-filter-row--address { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .sc-vendor-order-table .sc-status { white-space: nowrap; }
-.sc-vendor-order-money { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sc-vendor-order-money { color: #0f172a; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sc-vendor-order-customer { display: grid; gap: .2rem; }
+.sc-vendor-order-customer small { color: #64748b; font-size: .75rem; }
 .sc-vendor-order-table .sc-vendor-view-order { display: inline-flex; align-items: center; justify-content: center; gap: .25rem; min-height: 2.1rem; padding: .4rem .5rem; font-size: .73rem; white-space: nowrap; }
 .sc-vendor-view-order .sc-icon { font-size: 1rem; }
 .sc-vendor-order-error { display: flex; align-items: center; gap: .7rem; padding: .9rem; border: 1px solid #fbcfe8; border-radius: .85rem; background: #fdf2f4; color: #842b39; font-size: .85rem; }

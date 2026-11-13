@@ -9,7 +9,7 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
   const filteredBakeries = resource.data?.result || []
 
   return (
-    <section id="cho-tiem-banh" className="snap-section scroll-mt-24 sm:scroll-mt-28 py-8 sm:py-12 bg-[#d9ece8] border-t-3 border-b-3 border-wine relative min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
+    <section id="cho-tiem-banh" className="snap-section scroll-mt-24 sm:scroll-mt-28 py-8 sm:py-12 bg-[#d9ece8] home-partner-decor border-t-3 border-b-3 border-wine relative min-h-[calc(100vh-5.5rem)] flex flex-col justify-center">
       <div className="max-w-[1220px] mx-auto px-6 w-full my-auto">
         {/* TOP PART: Intro Copy & Retro Shop Ticket */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-8">
@@ -42,7 +42,9 @@ export const PartnerBakeriesSection = ({ onNavigate }) => {
           {/* Right Retro Shop Ticket */}
           <div className="lg:col-span-5 flex justify-center">
             <ScrollReveal animation="zoom-in" delay={200}>
-              <div className="retro-shop-ticket py-4 px-6 max-w-sm w-full">
+              <div className="retro-shop-ticket home-store-ticket py-4 px-6 max-w-sm w-full">
+                <span aria-hidden="true" className="home-partner-awning" />
+                <span aria-hidden="true" className="home-store-emblem material-symbols-outlined">storefront</span>
                 <div className="font-savoure italic text-xl font-bold text-wine text-center mb-2">
                   Chào mừng tiệm bánh ♡
                 </div>

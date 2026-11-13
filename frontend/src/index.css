@@ -456,7 +456,7 @@
 }
 
 .striped-hero-bg {
-  background: repeating-linear-gradient(90deg, #ffffff 0, #ffffff 62px, #fff1f5 62px, #fff1f5 124px);
+  background: repeating-linear-gradient(90deg, #ffffff 0, #ffffff 62px, #dceff2 62px, #dceff2 124px);
 }
 
 .striped-idea-bg {
@@ -696,4 +696,102 @@ html:has(.sc-profile-page) { scrollbar-gutter: stable; }
   .sc-profile-nav > * { margin-block: 0; }
   .sc-profile-nav > p, .sc-profile-nav > div { grid-column: 1 / -1; }
   .sc-profile-nav button { padding: .65rem .4rem; }
+}
+
+/* Each home section has its own bakery-paper motif. */
+.home-sprinkle-decor, .home-process-decor, .home-partner-decor {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+:is(.home-sprinkle-decor, .home-process-decor, .home-partner-decor) > div { position: relative; z-index: 1; }
+.home-sprinkle-decor::before, .home-sprinkle-decor::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  width: clamp(4rem, 10vw, 9rem);
+  height: 70%;
+  top: 12%;
+  opacity: .7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='104' viewBox='0 0 88 104'%3E%3Cg fill='none' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='m15 14 7 9m37 40 8-6' stroke='%23a2cbd0'/%3E%3Cpath d='m63 20-3 11M22 77l10 2' stroke='%23e5b7c6'/%3E%3Cpath d='m40 43 7-5m24 51 3 9' stroke='%23fff'/%3E%3C/g%3E%3C/svg%3E");
+}
+.home-sprinkle-decor::before { left: 0; }
+.home-sprinkle-decor::after { right: 0; transform: rotate(180deg); }
+.home-process-decor::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  width: 16rem;
+  height: 10rem;
+  right: -7rem;
+  top: 3rem;
+  border: 2px dashed #a7cbd0;
+  border-radius: 50%;
+  transform: rotate(-25deg);
+}
+.home-process-steps { position: relative; }
+.home-process-steps > * { position: relative; z-index: 1; }
+@media (min-width: 1024px) {
+  .home-process-steps::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    top: 3rem;
+    border-top: 2px dashed #a46a79;
+    opacity: .5;
+  }
+}
+.home-partner-decor::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: 0 0 auto;
+  height: 22px;
+  background: repeating-linear-gradient(90deg, #ffffff99 0 24px, #add2cd99 24px 48px);
+  mask-image: radial-gradient(circle at 12px 8px, #000 13px, transparent 13.5px);
+  mask-size: 24px 24px;
+}
+.home-partner-decor::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: auto 0 12px;
+  height: 8px;
+  border-block: 1px solid #9cbfb766;
+}
+@media (max-width: 640px) {
+  .home-sprinkle-decor::before, .home-sprinkle-decor::after { width: 2rem; opacity: .45; }
+  .home-process-decor::before { opacity: .45; }
+}
+
+
+.home-decorated-title { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.home-cake-stamps { display: inline-flex; align-items: center; padding: .4rem; }
+.home-cake-stamps > span {
+  display: grid; place-items: center; width: 3.5rem; height: 3.5rem;
+  border: 1px solid #b77183; border-radius: 50%; background: #fff8fb;
+  color: #8b3049; font-size: 1.8rem; transform: rotate(-12deg);
+}
+.home-cake-stamps > span + span { margin-left: -.6rem; }
+.home-cake-stamps > span:nth-child(2) { background: #fff; transform: translateY(-.45rem) rotate(8deg); }
+.home-cake-stamps > span:nth-child(3) { background: #edf8f4; transform: rotate(18deg); }
+.home-process-icons { display: flex; align-items: center; justify-content: center; max-width: 22rem; margin: 0 auto 1.75rem; }
+.home-process-icons > .material-symbols-outlined {
+  display: grid; place-items: center; flex: 0 0 3rem; height: 3rem;
+  border: 1px solid #a9c9ce; border-radius: 50%; background: #fff; color: #803047; font-size: 1.6rem;
+}
+.home-process-icons > .material-symbols-outlined:nth-of-type(3) { background: #fcebf0; border-color: #d9a2b1; }
+.home-process-link { flex: 1; height: 0; border-top: 2px dashed #8eafb7; margin-inline: .5rem; }
+.home-store-ticket { position: relative; overflow: hidden; padding-top: 3.25rem; }
+.home-partner-awning {
+  position: absolute; pointer-events: none; top: 0; left: 0; right: 0; height: 1.75rem;
+  border-bottom: 2px solid #a9c9c0; border-radius: 0 0 .7rem .7rem;
+  background: repeating-linear-gradient(90deg, #edf8f3 0 26px, #99c7be 26px 52px);
+}
+.home-store-emblem { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; margin: 0 auto .65rem; border-radius: 50%; background: #e2f1eb; color: #42766b; font-size: 2rem; }
+@media (max-width: 640px) {
+  .home-decorated-title { gap: .65rem; }
+  .home-cake-stamps > span { width: 2.65rem; height: 2.65rem; font-size: 1.4rem; }
+  .home-process-icons { max-width: 17rem; }
 }

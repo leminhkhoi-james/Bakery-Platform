@@ -16,7 +16,7 @@
 .sc-owner-profile .sc-owner-operation-row { padding: .35rem 0; border: 0; border-radius: 0; background: transparent; gap: .5rem; }
 .sc-owner-profile .sc-owner-operation-row > div { min-width: 0; flex: 1; }
 .sc-owner-profile .sc-owner-operation-row strong { font-size: .85rem; font-weight: 500; overflow-wrap: anywhere; }
-.sc-owner-profile .sc-owner-hours { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem 1.25rem; }
+.sc-owner-profile .sc-owner-hours { display: grid; grid-template-columns: minmax(0, 1fr); gap: .25rem; }
 .sc-owner-profile .sc-owner-hours > div { display: flex; justify-content: flex-start; gap: .5rem; padding: .25rem 0; border: 0; background: transparent; font-size: .82rem; }
 .sc-owner-profile .sc-owner-hours strong { min-width: 4.5rem; font-weight: 500; color: var(--sc-color-muted); }
 .sc-owner-profile .sc-owner-hours strong::after { content: ':'; }
@@ -28,13 +28,12 @@
 @media (max-width: 767px) {
   .sc-portal .sc-owner-profile { padding: .85rem; }
   .sc-owner-profile-fields > div, .sc-owner-profile-line { grid-template-columns: 6.5rem minmax(0, 1fr); }
-  .sc-owner-profile .sc-owner-hours { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 479px) {
   .sc-owner-profile-media { grid-template-columns: minmax(0, 1fr); }
   .sc-owner-profile .sc-owner-hours { grid-template-columns: minmax(0, 1fr); }
 }
-.sc-portal .sc-drawer.sc-portal-popup { inset: 0; margin: auto; width: min(64rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1rem; overflow: auto; box-shadow: 0 16px 60px #321b2c30; }
+.sc-portal .sc-drawer.sc-portal-popup { inset: 0; margin: auto; width: min(76rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1rem; overflow: auto; box-shadow: 0 16px 60px #321b2c30; }
 .sc-portal .sc-drawer.sc-portal-popup:is(.sc-plan-action-dialog, .sc-workspace-confirm, .sc-review-dialog--compact) { width: min(34rem, calc(100vw - 2rem)); }
 @media (min-width: 1024px) {
   .sc-portal.sc-portal--admin .sc-table.sc-admin-fixed-table :is(th, td),
@@ -52,19 +51,18 @@
 .sc-role-label--customer { background: #eaf2fb; color: #28557d; }
 .sc-role-label--bakery_owner { background: #fcebdc; color: #824816; }
 .sc-role-label--admin { background: #f8e5eb; color: #80263e; }
-.sc-portal.sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-user-primary-action { background: var(--sc-color-primary, #6b2132); color: #fff; border-color: var(--sc-color-primary, #6b2132); }
-.sc-portal.sc-portal--admin .sc-table.sc-admin-users-table .sc-table-actions .sc-user-primary-action:hover:not(:disabled) { background: var(--sc-color-primary-hover, #541b2b); color: #fff; }
 .sc-portal .sc-user-form .sc-review-fields { display: grid; grid-template-columns: 1fr; }
-.sc-portal .sc-user-form .sc-review-fields dd { border: 1px solid var(--sc-color-border); border-radius: .6rem; padding: .6rem .75rem; background: #f8fafc; }
 .sc-portal .sc-user-form fieldset { display: flex; flex-wrap: wrap; gap: .75rem; }
 .sc-portal .sc-user-form fieldset label:has(input:not([type=checkbox])), .sc-portal .sc-user-form fieldset label:has(select) { flex: 1 1 100%; }
-.sc-portal .sc-drawer.sc-workspace-detail:not(.sc-workspace-confirm) { inset: 0; margin: auto; width: min(64rem, calc(100vw - 2rem)); height: min(48rem, calc(100dvh - 2rem)); max-height: calc(100dvh - 2rem); border-radius: 1rem; box-shadow: 0 16px 60px #321b2c30; }
-.sc-portal .sc-workspace-detail :is(.sc-detail-fields, .sc-review-fields, .sc-bakery-review-fields) dd { padding: .15rem 0; background: transparent; border: 0; border-radius: 0; }
-.sc-portal .sc-workspace-detail :is(.sc-review-section, .sc-detail-section) { border: 0; border-bottom: 1px solid var(--sc-color-border); border-radius: 0; background: transparent; padding: .85rem 0; }
-.sc-portal .sc-workspace-detail .sc-order-tracking-card { box-shadow: none; padding: 1rem; }
+.sc-portal .sc-drawer.sc-workspace-detail:not(.sc-workspace-confirm) { inset: 0; margin: auto; width: min(76rem, calc(100vw - 2rem)); height: fit-content; max-height: calc(100dvh - 2rem); border-radius: 1rem; box-shadow: 0 16px 60px #321b2c30; }
 /* Clip horizontal spill without creating a scroll container above sticky filters. */
 body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 .sc-portal .sc-drawer { --sc-filter-top: 0px; }
+.sc-portal .sc-admin-bakery-filters { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr) minmax(0, 1fr); gap: .75rem; align-items: start; }
+.sc-portal .sc-admin-bakery-filters > label { display: grid; gap: .35rem; min-width: 0; }
+@media (max-width: 640px) {
+  .sc-portal .sc-admin-bakery-filters { grid-template-columns: minmax(0, 1fr); }
+}
 .sc-portal :is(.sc-revenue-filter-panel, .sc-vendor-order-filters, .sc-admin-filter, .sc-user-filters, .sc-sticky-filter, .sc-admin-orders .sc-toolbar) {
   position: sticky;
   top: var(--sc-filter-top, calc(var(--sc-portal-header-height, 5.25rem) + .35rem));
@@ -79,12 +77,12 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
   .sc-portal.sc-portal--admin .sc-table.sc-admin-subscription-orders-table th:first-child { width: 3.5rem; }
   .sc-portal.sc-portal--admin .sc-table.sc-admin-subscription-orders-table th:nth-child(2) { width: 9rem; }
 }
-.sc-portal .sc-admin-orders .sc-toolbar { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: end; gap: .65rem; }
+.sc-portal .sc-admin-orders .sc-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; gap: .65rem; }
 .sc-portal .sc-admin-orders .sc-toolbar label { min-width: 0; display: grid; gap: .3rem; font-size: .78rem; }
 .sc-portal .sc-vendor-order-filters { display: flex; flex-wrap: nowrap; align-items: end; gap: .65rem; }
 .sc-portal .sc-vendor-order-filter-row, .sc-portal .sc-vendor-order-date-row { display: contents; }
 .sc-portal .sc-vendor-order-filters > div > label { flex: 1 1 0; min-width: 0; }
-.sc-portal .sc-vendor-order-search { flex-grow: 1.4; }
+.sc-portal .sc-vendor-order-filters > div > .sc-vendor-order-search { flex-grow: 1.4; }
 .sc-portal :is(.sc-admin-orders, .sc-vendor-order-list) .sc-table-wrap { max-height: min(62dvh, 46rem); overflow: auto; }
 .sc-portal .sc-table thead { position: sticky; top: 0; z-index: 2; background: #f1f5f9; }
 .sc-portal [data-adaptive-pagination="true"] .sc-table-wrap { max-height: none; overflow-y: visible; }
@@ -110,7 +108,7 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 .sc-plan-tier-badge[data-tier="PREMIUM"] { background: #fff0d6; color: #754918; }
 .sc-portal .sc-business-report { margin-top: .75rem; padding: 1rem; }
 .sc-portal .sc-business-kpi-groups { display: flex; flex-direction: column; gap: .75rem; }
-.sc-portal .sc-business-kpi-group .sc-business-totals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .65rem; }
+.sc-portal .sc-business-kpi-group .sc-business-totals { display: grid; grid-template-columns: repeat(var(--sc-metric-columns, 5), minmax(0, 1fr)); gap: .65rem; }
 .sc-portal .sc-business-kpi-group--money .sc-business-totals { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .sc-portal .sc-business-kpi-group { padding: .85rem; }
 .sc-portal .sc-business-totals > div { min-height: 5rem; }
@@ -118,19 +116,17 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 .sc-portal .sc-account-profile-fields { display: grid; gap: 1rem; }
 .sc-portal .sc-account-profile-fields dt { color: var(--sc-color-muted); font-size: .8rem; }
 .sc-portal .sc-account-profile-fields dd { margin-top: .3rem; overflow-wrap: anywhere; }
-.sc-portal .sc-dashboard-kpi-footer .sc-kpi-sub-text { white-space: normal; }
 
 /* Align action headers and controls together, including tables with legacy rules. */
 .sc-portal button.sc-record-icon-action,
-.sc-user-actions-popover button.sc-record-icon-action,
 .sc-portal .sc-table .sc-table-actions button.sc-record-icon-action {
   display: inline-flex; align-items: center; justify-content: center;
   width: 2.75rem; min-width: 2.75rem; max-width: 2.75rem; min-height: 2.75rem;
   padding: .5rem; gap: 0; border-radius: .75rem;
   background: var(--sc-color-primary, #6b2132); border: 1px solid var(--sc-color-primary, #6b2132); color: #fff;
 }
-.sc-portal button.sc-record-icon-action svg, .sc-user-actions-popover button.sc-record-icon-action svg { flex: 0 0 auto; }
-.sc-portal button.sc-record-icon-action:disabled, .sc-user-actions-popover button.sc-record-icon-action:disabled { opacity: .45; }
+.sc-portal button.sc-record-icon-action svg { flex: 0 0 auto; }
+.sc-portal button.sc-record-icon-action:disabled { opacity: .45; }
 .sc-portal .sc-table:has(td.sc-table-actions) :is(th, td).sc-table-actions,
 .sc-portal .sc-table:has(td.sc-vendor-order-actions) :is(th, td):last-child,
 .sc-portal.sc-portal--admin .sc-table.sc-admin-fixed-table :is(th, td).sc-table-actions {
@@ -148,6 +144,20 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-inline: auto;
+}
+.sc-portal .sc-table td:has(.sc-record-icon-action--view),
+.sc-portal .sc-table:has(td:last-child .sc-record-icon-action--view) th:last-child {
+  text-align: center;
+  vertical-align: middle;
+}
+.sc-portal .sc-table td:is(.sc-table-actions, .sc-vendor-order-actions) > div:has(> .sc-record-icon-action--view) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+.sc-portal .sc-table td .sc-record-icon-action--view {
+  float: none;
   margin-inline: auto;
 }
 .sc-portal.sc-portal--admin .sc-table .sc-status,
@@ -168,7 +178,7 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
   .sc-portal :is(.sc-revenue-filter-panel, .sc-vendor-order-filters, .sc-admin-filter, .sc-user-filters, .sc-sticky-filter, .sc-admin-orders .sc-toolbar) { max-height: 45dvh; overflow-y: auto; }
   .sc-portal .sc-admin-orders .sc-toolbar, .sc-portal .sc-vendor-order-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sc-portal .sc-business-kpi-group .sc-business-totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sc-portal .sc-drawer.sc-workspace-detail:not(.sc-workspace-confirm) { width: calc(100vw - 1rem); height: calc(100dvh - 1rem); max-height: calc(100dvh - 1rem); }
+  .sc-portal .sc-drawer.sc-workspace-detail:not(.sc-workspace-confirm) { width: calc(100vw - 1rem); height: fit-content; max-height: calc(100dvh - 1rem); }
 }
 
 .sc-portal .sc-review-fields > div, .sc-account-profile-fields > div { display:flex; align-items:baseline; flex-wrap:wrap; gap:.35rem; min-width:0; }
@@ -176,9 +186,6 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 .sc-portal .sc-review-fields dt::after, .sc-account-profile-fields dt::after { content: ':'; }
 .sc-portal .sc-review-fields dd, .sc-account-profile-fields dd { margin:0; overflow-wrap:anywhere; }
 .sc-account-profile-fields { display:grid; gap:.6rem; }
-.sc-profile-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; }
-.sc-profile-photo-button { display:inline-flex; cursor:pointer; color:var(--sc-color-primary); padding:.35rem; border-radius:.5rem; }
-.sc-profile-photo-button:focus-within { outline:2px solid var(--sc-color-primary); }
 .sc-opening-hours { width:100%; border-collapse:collapse; }
 .sc-opening-hours th, .sc-opening-hours td { padding:.55rem .4rem; text-align:left; border-bottom:1px solid var(--sc-color-border); }
 .sc-opening-hours select { min-width:5.5rem; }
@@ -190,3 +197,249 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 
 .sc-portal .sc-account-profile-fields { gap:.6rem; }
 .sc-portal .sc-account-profile-fields dd { margin:0; }
+.sc-portal .sc-portal-popup > .sc-drawer-body { background: #fff; }
+
+/* A single surface with ruled sections and aligned label/value pairs. */
+.sc-portal .sc-portal-popup :is(.sc-review-section, .sc-detail-section, .sc-bakery-review-section, .sc-plan-form-section, .sc-popup-group, .sc-order-tracking-card, form.sc-panel, .sc-owner-profile-section) {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  padding: .85rem 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.sc-portal .sc-portal-popup :is(.sc-review-section, .sc-detail-section, .sc-bakery-review-section, .sc-plan-form-section, .sc-popup-group, .sc-order-tracking-card, .sc-owner-profile-section) +
+  :is(.sc-review-section, .sc-detail-section, .sc-bakery-review-section, .sc-plan-form-section, .sc-popup-group, .sc-order-tracking-card, .sc-owner-profile-section),
+.sc-portal .sc-owner-profile-editor .sc-drawer-body > form + form,
+.sc-portal .sc-owner-profile-editor .sc-drawer-body > form + .sc-owner-profile-section {
+  margin-top: 0;
+  border-top: 1px solid var(--sc-color-border);
+}
+.sc-portal .sc-portal-popup :is(.sc-bakery-review, .sc-payment-cards) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.sc-portal .sc-portal-popup :is(.sc-review-fields, .sc-detail-fields, .sc-bakery-review-fields, .sc-order-facts, .sc-account-profile-fields, .sc-vendor-summary-grid) {
+  gap: .3rem 1.5rem;
+}
+.sc-portal .sc-portal-popup :is(.sc-review-fields, .sc-detail-fields, .sc-bakery-review-fields, .sc-order-facts, .sc-account-profile-fields, .sc-vendor-summary-grid) > div {
+  display: grid;
+  grid-template-columns: minmax(6rem, .4fr) minmax(0, 1fr);
+  gap: .4rem;
+  align-items: baseline;
+  padding-block: .3rem;
+}
+.sc-portal .sc-portal-popup :is(.sc-review-fields, .sc-detail-fields, .sc-bakery-review-fields, .sc-order-facts, .sc-account-profile-fields, .sc-vendor-summary-grid) :is(dt, dd),
+.sc-portal .sc-portal-popup .sc-detail-value {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow-wrap: anywhere;
+}
+.sc-portal .sc-portal-popup :is(.sc-order-tracking-main, .sc-order-tracking-summary) { gap: 0; align-content: start; }
+.sc-portal .sc-portal-popup .sc-order-tracking-view .sc-order-tracking-card h3 { border: 0; padding-bottom: 0; }
+.sc-portal .sc-portal-popup .sc-order-progress-scroll { padding-inline: 0; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+.sc-portal .sc-portal-popup .sc-payment-amount { padding: .35rem 0; border: 0; background: transparent; }
+.sc-portal .sc-portal-popup .sc-quote-workspace-layout { grid-template-columns: minmax(0, 1fr); }
+.sc-portal .sc-portal-popup .sc-quote-side-request { position: static; }
+.sc-portal .sc-portal-popup .sc-quote-side-form { border-top: 1px solid var(--sc-color-border); padding-top: .85rem; }
+
+@media (min-width: 640px) {
+  .sc-portal .sc-portal-popup .sc-popup-summary > .sc-popup-group + .sc-popup-group {
+    border-top: 0;
+    border-inline-start: 1px solid var(--sc-color-border);
+    padding-inline-start: 1rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .sc-portal .sc-portal-popup :is(.sc-review-fields, .sc-detail-fields, .sc-bakery-review-fields, .sc-order-facts, .sc-vendor-summary-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* Fit short dialogs to their content; long dialogs use the available viewport. */
+.sc-portal .sc-drawer.sc-portal-popup[open] {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  overflow: hidden;
+}
+.sc-portal .sc-portal-popup > :is(.sc-drawer-heading, .sc-drawer-footer) {
+  flex: 0 0 auto;
+}
+.sc-portal .sc-portal-popup > .sc-drawer-body {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Keep bakery review labels close to their values within compact sections. */
+.sc-portal .sc-portal-popup .sc-bakery-review {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem 1.5rem;
+}
+.sc-portal .sc-portal-popup .sc-bakery-review-section {
+  padding-block: .6rem;
+  border-bottom: 1px solid var(--sc-color-border);
+}
+.sc-portal .sc-portal-popup .sc-bakery-review-section + .sc-bakery-review-section {
+  border-top: 0;
+}
+.sc-portal .sc-portal-popup .sc-bakery-review-section-title {
+  margin-bottom: .45rem;
+}
+.sc-portal .sc-portal-popup .sc-bakery-review-fields {
+  grid-template-columns: minmax(0, 1fr);
+  gap: .15rem;
+}
+.sc-portal .sc-portal-popup :is(.sc-bakery-review-fields, .sc-bakery-review-addresses dl) > div {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: .4rem;
+  padding-block: .15rem;
+}
+.sc-portal .sc-portal-popup .sc-bakery-review-subtitle {
+  margin-top: .45rem;
+  margin-bottom: .2rem;
+}
+@media (max-width: 899px) {
+  .sc-portal .sc-portal-popup .sc-bakery-review {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .25rem;
+  }
+}
+@media (max-width: 479px) {
+  .sc-portal .sc-portal-popup :is(.sc-bakery-review-fields, .sc-bakery-review-addresses dl) > div {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+}
+
+.sc-business-metric-note { grid-column: 1 / -1; font-size: .78rem; line-height: 1.5; color: var(--sc-color-muted); }
+
+.sc-plan-basic-description { grid-column: 1 / -1; }
+.sc-plan-basic-description > label { display: grid; gap: .4rem; }
+.sc-portal .sc-subscription-order-detail .sc-review-fields { grid-template-columns: minmax(0, 1fr); }
+.sc-portal .sc-subscription-order-detail .sc-review-fields > div { grid-template-columns: 10rem minmax(0, 1fr); }
+:is(.sc-dashboard, .sc-vendor-kpis) .sc-activity-heading { align-items: center; }
+:is(.sc-dashboard, .sc-vendor-kpis) .sc-activity-heading h3 { flex: 1; min-width: 0; }
+:is(.sc-dashboard, .sc-vendor-kpis) .sc-activity-heading .sc-activity-total {
+  margin-left: auto;
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  white-space: nowrap;
+}
+.sc-dashboard .sc-revenue-filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: .65rem;
+  padding: .75rem;
+}
+.sc-dashboard .sc-revenue-filter-panel > .sc-revenue-search-box {
+  flex: 1 1 10rem;
+  min-width: 9rem;
+  max-width: 16rem;
+  min-height: 2.75rem;
+  padding: 0 .7rem;
+}
+.sc-dashboard .sc-revenue-search-box input { min-width: 0; min-height: 0; padding: 0; }
+.sc-dashboard .sc-revenue-search-box :is(.sc-icon, button) { flex-shrink: 0; }
+.sc-dashboard .sc-dashboard-scope-filter { flex: 0 1 14rem; min-width: 0; }
+.sc-dashboard .sc-dashboard-scope-filter label { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; }
+.sc-dashboard .sc-dashboard-scope-filter label > span:first-child { white-space: nowrap; font-size: .8rem; }
+.sc-dashboard .sc-dashboard-scope-filter select { width: 100%; min-width: 0; min-height: 2.75rem; }
+.sc-dashboard .sc-dashboard-scope-filter [role="alert"] { grid-column: 1 / -1; }
+.sc-dashboard .sc-revenue-filter-col { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.sc-dashboard .sc-revenue-segment-btn { padding: .45rem .5rem; white-space: nowrap; }
+.sc-dashboard .sc-revenue-range-form { flex: 0 1 auto; min-width: 0; max-width: 100%; gap: .3rem; }
+.sc-dashboard .sc-revenue-range-group { min-height: 2.75rem; min-width: 0; padding: 0 .55rem; gap: .25rem; }
+.sc-dashboard .sc-revenue-date-field { min-width: 0; }
+.sc-dashboard .sc-revenue-filter-panel .sc-revenue-date-input { width: 7.25rem; max-width: 100%; min-width: 0; min-height: 0; padding: .25rem 0; }
+.sc-dashboard .sc-revenue-date-label { display: none; }
+.sc-dashboard .sc-revenue-filter-error { flex: 1 0 100%; }
+@media (max-width: 639px) {
+  .sc-dashboard .sc-revenue-filter-panel > :is(.sc-revenue-search-box, .sc-dashboard-scope-filter, .sc-revenue-filter-col, .sc-revenue-range-form) { flex: 1 1 100%; max-width: 100%; }
+  .sc-dashboard .sc-revenue-segmented-control { flex-wrap: wrap; }
+  .sc-dashboard .sc-revenue-range-group { flex: 1 1 15rem; width: auto; }
+  .sc-dashboard .sc-revenue-filter-panel .sc-revenue-date-input { width: 100%; }
+  .sc-portal .sc-subscription-order-detail .sc-review-fields > div { grid-template-columns: 7rem minmax(0, 1fr); }
+}
+
+.sc-portal .sc-drawer::backdrop { background: rgb(255 255 255 / 72%); backdrop-filter: blur(3px); }
+.sc-portal dialog::backdrop { background: rgb(255 255 255 / 72%); backdrop-filter: blur(3px); }
+.sc-portal .sc-drawer > .sc-drawer-heading { padding-block: .55rem; }
+.sc-portal .sc-drawer > .sc-drawer-heading h2 { font-size: 1.08rem; }
+.sc-portal .sc-vendor-product-card { position: relative; }
+.sc-portal .sc-vendor-product-body > .sc-status { align-self: flex-start; width: fit-content; }
+.sc-product-category-tag { position: absolute; top: .65rem; right: .65rem; z-index: 1; max-width: 85%; border-radius: .5rem; padding: .25rem .55rem; background: #fce7ed; color: #722637; font-size: .75rem; font-weight: 650; overflow-wrap: anywhere; }
+.sc-portal .sc-vendor-menu-panel { padding-block-start: .875rem; }
+.sc-vendor-menu-panel .sc-toolbar { flex-basis: 32rem; }
+.sc-vendor-menu-panel .sc-toolbar label { min-width: 0; }
+.sc-vendor-product-editor { display: grid; gap: 1rem; }
+.sc-vendor-product-editor .sc-vendor-product-images {
+  padding-inline: 0;
+  box-shadow: none;
+  border: 0;
+  border-top: 1px solid var(--sc-border, #dfe6ee);
+  border-radius: 0;
+}
+
+.sc-bakery-image-picker { cursor: pointer; width: min(100%, 18rem); }
+.sc-bakery-image-picker:focus-within { outline: 2px solid var(--sc-color-primary); outline-offset: 3px; }
+.sc-bakery-image-picker > span { color: var(--sc-color-primary); font-weight: 600; }
+.sc-operation-location > label { display: grid; gap: .25rem; }
+.sc-opening-hours-list { display: grid; gap: .25rem; max-width: 36rem; }
+.sc-opening-hours-list > li { display: grid; grid-template-columns: 7rem minmax(0, 1fr); align-items: center; gap: .65rem 1.25rem; min-height: 2.4rem; padding-block: .65rem; border-bottom: 1px solid var(--sc-color-border); }
+.sc-opening-hours-list .sc-opening-day { display: inline-flex; align-items: center; gap: .45rem; min-width: 0; white-space: nowrap; }
+.sc-opening-time-range { display: grid; grid-template-columns: repeat(2, minmax(0, 8rem)); align-items: start; gap: 1rem; min-width: 0; }
+.sc-opening-time-range > label { display: grid; gap: .2rem; }
+.sc-opening-time-range .sc-input { width: 100%; min-width: 0; }
+@media (max-width: 480px) {
+  .sc-opening-hours-list > li { grid-template-columns: minmax(0, 1fr); }
+}
+.sc-portal .sc-bakery-create-dialog > .sc-drawer-body { padding: .75rem 1rem; gap: .6rem; }
+.sc-portal .sc-bakery-create-dialog fieldset.space-y-5 > * + * { margin-block-start: .7rem; }
+.sc-portal .sc-owner-rfq .sc-workspace-detail .sc-detail-fields { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
+
+.sc-portal .sc-owner-rfq .sc-workspace-detail .sc-popup-summary { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+
+/* Compact portal dialogs and keep related profile information together. */
+.sc-portal .sc-drawer > .sc-drawer-heading {
+  min-height: 0;
+  padding: .55rem 1rem;
+  gap: .65rem;
+}
+.sc-portal .sc-drawer > .sc-drawer-heading h2 { font-size: 1rem; line-height: 1.4; margin: 0; }
+.sc-portal .sc-drawer-heading > .sc-icon-button { width: 2rem; height: 2rem; min-height: 2rem; }
+.sc-portal .sc-drawer-heading .sc-kicker { display: none; }
+.sc-portal .sc-vendor-confirm > header { padding: .65rem 1rem; }
+.sc-portal .sc-vendor-confirm > header h2 { font-size: 1rem; line-height: 1.4; }
+.sc-portal--vendor .sc-workspace-detail .sc-quote-workspace-layout { gap: .75rem; grid-template-columns: minmax(0, 1fr); }
+.sc-portal--vendor .sc-workspace-detail .sc-quote-side-request { position: static; }
+.sc-portal--vendor .sc-workspace-detail .sc-rfq-specifications { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
+.sc-portal--vendor .sc-workspace-detail .sc-popup-summary { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+.sc-owner-profile-columns { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+.sc-owner-profile-columns .sc-owner-profile-section { padding: .65rem 0; margin: 0; }
+.sc-owner-profile-columns .sc-owner-profile-section + .sc-owner-profile-section { border-top: 1px solid var(--sc-color-border); }
+.sc-owner-profile-aside .sc-owner-profile-media { display: grid; grid-template-columns: repeat(2, minmax(0, 10rem)); gap: .65rem; }
+.sc-owner-profile-aside .sc-vendor-image { width: 100%; height: 6.5rem; object-fit: cover; }
+.sc-order-collection { color: var(--sc-color-muted); font-size: .75rem; }
+@media (max-width: 767px) {
+  .sc-owner-profile-columns { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+}
+.sc-portal .sc-vendor-menu-filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-block: .65rem; }
+.sc-portal .sc-vendor-menu-filterbar .sc-tabs { flex: 0 0 auto; margin: 0; }
+.sc-portal .sc-vendor-menu-filterbar .sc-vendor-product-filters { display: grid; grid-template-columns: minmax(12rem, 1.2fr) repeat(2, minmax(10rem, 1fr)); flex: 1 1 34rem; min-width: 0; gap: .5rem; padding: .6rem; margin: 0; }
+.sc-portal .sc-vendor-product-filters label { display: flex; flex-direction: row; align-items: center; min-width: 0; font-size: .78rem; gap: .5rem; white-space: nowrap; }
+.sc-portal .sc-vendor-product-filters .sc-input { flex: 1; min-width: 0; width: 0; min-height: 2.35rem; height: 2.35rem; padding: .4rem .6rem; font-size: .8rem; }
+.sc-portal .sc-product-category-tag { max-width: calc(100% - 1.5rem); width: fit-content; font-size: .72rem; line-height: 1.4; padding: .3rem .6rem; border-radius: .5rem; background: #e5f1f7; color: #265973; }
+@media (max-width: 640px) {
+  .sc-portal .sc-vendor-menu-filterbar .sc-vendor-product-filters { grid-template-columns: minmax(0, 1fr); flex-basis: 100%; }
+}

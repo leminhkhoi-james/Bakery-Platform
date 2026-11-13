@@ -66,6 +66,16 @@ export function createDisplayTransport({ fetch: realFetch, storage, getSession =
     if (actor !== identity) { actor = identity; sources.clear(); emit() }
     const preview = session.source === 'demo'
     const key = keyFor(path, url.searchParams)
+    // A real AI workspace must not inherit the display-only source of an
+    // empty job history. Keep simulated references inside the local transport.
+    if (!preview && /^\/(?:generation-jobs|generated-designs)(?:\/|$)/.test(path)) {
+      const body = method === 'GET' || method === 'HEAD' ? null : await readBody(options.body)
+      if (![...uuidValues(path + url.search), ...uuidValues(body)].some(isDemoId)) {
+        const upstream = await realFetch(input, options)
+        mark(key, upstream.ok ? 'real' : 'error')
+        return upstream
+      }
+    }
     // A real customer's requests and an owner's offers must share the server's
     // graph, even when the public/demo catalog is empty in this browser.
     if (!preview && (options.allowMockFallback === false || /^\/(?:cake-requests|offers)(?:\/|$)/.test(path))) {

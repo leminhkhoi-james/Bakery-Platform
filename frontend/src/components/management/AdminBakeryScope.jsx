@@ -16,6 +16,6 @@ export default function AdminBakeryScope({ value, onChange }) {
       <option value="">Toàn hệ thống</option>
       {rows.map(shop => <option key={shop.id} value={shop.id}>{cleanPresentationLabel(shop.name, 'Tiệm bánh')}</option>)}
     </select>
-    {bakeries.error && <button type="button" className="underline" aria-label="Tải lại danh sách tiệm" onClick={bakeries.reload}>Thử lại</button>}
+    {bakeries.error && <span role="alert">Chưa tải được danh sách tiệm.</span>}
   </label>
 }

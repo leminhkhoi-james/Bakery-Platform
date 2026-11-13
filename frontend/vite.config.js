@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
     '^/api/v1/(?:generation-jobs|generated-designs)(?:/|\\?|$)': upstream(cakeAi),
     '^/storage(?:/|\\?|$)': upstream(cakeAi),
     '^/api/v1/auth(?:/|\\?|$)': upstream(identity),
-    '^/api/v1/users/me/addresses(?:/|\\?|$)': upstream(identity),
+    '^/api/v1/users/me(?:/|\\?|$)': upstream(identity),
     '^/api/v1/admin/users(?:/|\\?|$)': upstream(identity),
     '^/api/v1/(?:subscription-plans|subscription-orders)(?:/|\\?|$)': upstream(subscription),
     '^/api/v1/(?:bakeries|products)(?:/|\\?|$)': upstream(bakery),

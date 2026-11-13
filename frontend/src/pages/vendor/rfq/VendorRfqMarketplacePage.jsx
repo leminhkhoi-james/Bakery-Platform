@@ -25,7 +25,7 @@ function RfqTable({ resource, sent, onOpen }) {
         <colgroup>
           <col className="sc-rfq-column-number" /><col className="sc-rfq-column-request" />
           <col className="sc-rfq-column-location" /><col className="sc-rfq-column-status" />
-          <col className="sc-rfq-column-value" /><col className="sc-rfq-column-date" />
+          {sent && <col className="sc-rfq-column-value" />}<col className="sc-rfq-column-value" /><col className="sc-rfq-column-date" />
           <col className="sc-rfq-column-actions" />
         </colgroup>
         <thead><tr>
@@ -33,6 +33,7 @@ function RfqTable({ resource, sent, onOpen }) {
           <th scope="col">Yêu cầu bánh</th>
           <th scope="col">Khu vực giao</th>
           <th scope="col">Trạng thái</th>
+          {sent && <th scope="col" className="sc-business-value">Ngân sách</th>}
           <th scope="col" className="sc-business-value">{sent ? 'Giá đã báo' : 'Ngân sách'}</th>
           <th scope="col">{sent ? 'Hiệu lực đến' : 'Cần bánh lúc'}</th>
           <th scope="col" className="sc-table-actions">Thao tác</th>
@@ -47,6 +48,7 @@ function RfqTable({ resource, sent, onOpen }) {
               {row.servingSize ? <small className="block">Khẩu phần: {row.servingSize} người</small> : null}
             </td>
             <td><StatusBadge status={row.status} label={sent ? sentOfferStatusLabel(row.status, row.expiresAt) : rfqStatusLabel(row.status)} /></td>
+            {sent && <td className="sc-business-value">{budget(row)}</td>}
             <td className="sc-business-value">{sent ? formatOrderMoney(row.totalPrice, row.currency || 'VND') : budget(row)}</td>
             <td>{formatOrderDate(sent ? row.expiresAt : row.neededAt)}</td>
             <td className="sc-table-actions"><RecordActionButton type="button" className="sc-button" onClick={() => onOpen(row.id)} action="view" label="Xem chi tiết" /></td>

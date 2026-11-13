@@ -45,7 +45,7 @@ export default function AdminPlansPage() {
   }
   return <>
     <section className={panelClass + ' sc-admin-plans'}>
-      <div className="sc-admin-plans-toolbar"><h2>Cấu hình gói dịch vụ</h2><div><button type="button" disabled={busy || !canManage} className="sc-button" onClick={() => { setError(null); setNotice(''); setAdding(true); setSelected(null) }}><Icon name="add" />Tạo gói mới</button></div></div>
+      <div className="sc-admin-plans-toolbar"><button type="button" disabled={busy || !canManage} className="sc-button" onClick={() => { setError(null); setNotice(''); setAdding(true); setSelected(null) }}><Icon name="add" />Tạo gói mới</button></div>
       <ApiState resource={resource}>{sortedPlans && (sortedPlans.length ? <div className="sc-admin-plans-grid">{sortedPlans.map((plan) => <AdminPlanCard key={plan.id} plan={plan} disabled={locked || !canManage} onEdit={() => { if (!locked && canManage) { setError(null); setNotice(''); setSelected(plan); setAdding(false) } }} onAction={(action) => chooseAction(plan, action)} />)}</div> : <EmptyPanel title="Chưa có gói dịch vụ." description="Tạo gói mới để cấu hình quyền lợi cho tiệm bánh." icon="layers" />)}</ApiState>
       {error && !adding && !selected && !confirmation && <ApiErrorMessage error={planFeedbackError(error)} />}
       {notice && <p role="status" className="sc-feedback">{notice}</p>}

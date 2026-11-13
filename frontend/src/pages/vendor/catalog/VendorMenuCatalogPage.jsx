@@ -11,7 +11,7 @@ export default function VendorMenuCatalogPage({ onNavigate, routeSearch }) {
   const [tab, setTab] = useState('products')
   const navigation = (
     <nav aria-label="Quản lý cửa hàng" className="sc-tabs">
-      {[['products', 'Sản phẩm'], ['categories', 'Danh mục'], ['add-ons', 'Phụ kiện'], ['members', 'Chủ tiệm']].map(([value, label]) => (
+      {[['products', 'Sản phẩm'], ['categories', 'Danh mục'], ['add-ons', 'Phụ kiện']].map(([value, label]) => (
         <button key={value} aria-pressed={tab === value} onClick={() => setTab(value)} className="transition-colors">
           {label}
         </button>
@@ -23,10 +23,12 @@ export default function VendorMenuCatalogPage({ onNavigate, routeSearch }) {
     <VendorFrame owner={owner} title="Quản lý mẫu bánh" activeTab="menu" bakeryId={bakeryId} onNavigate={onNavigate}>
       {showProducts ? (
         <ProductManager key={'products:' + bakeryId} bakeryId={bakeryId} navigation={navigation} bakeryName={bakery?.name} />
+      ) : bakeryId ? (
+        <CatalogEntityManager key={bakeryId + tab} kind={tab} navigation={navigation} bakeryId={bakeryId} bakeryName={bakery?.name} />
       ) : (
         <>
           {navigation}
-          {bakeryId ? <CatalogEntityManager key={bakeryId + tab} kind={tab} bakeryId={bakeryId} bakeryName={bakery?.name} /> : <p>Chọn cửa hàng để quản lý mẫu bánh.</p>}
+          <p>Chọn cửa hàng để quản lý mẫu bánh.</p>
         </>
       )}
     </VendorFrame>

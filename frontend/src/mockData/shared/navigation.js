@@ -115,20 +115,13 @@ export const ADMIN_NAV_ITEMS = [
 ];
 
 export const VENDOR_NAV_ITEMS = [
+  { id: 'dashboard', label: 'Tổng quan', icon: 'dashboard', route: 'vendor-dashboard' },
   {
     id: 'orders',
     label: 'Quản lý đơn hàng',
     icon: 'cake',
     badge: '15 đơn',
     route: 'vendor-orders',
-  },
-  {
-    id: 'rfq',
-    label: 'Yêu cầu báo giá',
-    icon: 'description',
-    badgeKey: 'rfqCount',
-    badgeSuffix: ' mới',
-    route: 'vendor-rfq',
   },
   { id: 'chat', label: 'Tin nhắn', icon: 'chat', route: 'vendor-chat' },
   {

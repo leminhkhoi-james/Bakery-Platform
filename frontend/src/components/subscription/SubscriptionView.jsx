@@ -1,11 +1,13 @@
 import { userFeedback, cleanPresentationLabel, publicCopy } from '../../services/uiLabels.js'
 import React from 'react'
+import { useManualRefresh } from '../../context/ManualRefreshContext.js'
 import '../common/vendor-ui.css'
 import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { canOrderPlan, subscriptionStatusLabel, formatSubscriptionMoney } from '../../services/subscriptionModels.js'
 import { planFeatureRows, planMonthlyPrice, planName, planTierRank, sortPlansByTier } from '../../services/planPresentation.js'
 
 export function SubscriptionError({ error, retry }) {
+  const manualRefresh = useManualRefresh()
   const feedback = userFeedback(error)
   const explanation = error?.message === 'Bakery profile must be approved and active before purchasing a subscription'
     ? 'Hồ sơ tiệm cần được duyệt và ở trạng thái hoạt động trước khi mua hoặc thanh toán gói. Hãy kiểm tra trạng thái hồ sơ.'
@@ -28,7 +30,7 @@ export function SubscriptionError({ error, retry }) {
         <span>Thông báo</span>
       </div>
       <p>{explanation}</p>
-      {retry && <button className="mt-2 underline font-semibold cursor-pointer block" onClick={retry}>Thử lại</button>}
+      {manualRefresh && retry && <button className="mt-2 underline font-semibold cursor-pointer block" onClick={retry}>Thử lại</button>}
     </div>
   )
 }
@@ -88,7 +90,7 @@ export function findMatchingPlan(plans, period) {
   return null
 }
 
-export function PlanCards({ plans, onSelect, canSelect = false, busy = false, currentPlanId = null, currentPlanCode = null, currentPlan = null, scheduledPlanId = null }) {
+export function PlanCards({ plans, onSelect, canSelect = false, busy = false, currentPlanId = null, currentPlanCode = null, currentPlan = null, scheduledPlanId = null, showDescription = true }) {
   if (!plans?.length) return <p className="rounded-2xl border border-outline-variant/30 p-6">Chưa có gói dịch vụ được mở bán.</p>
   const activeCurrentPlan = currentPlan || findMatchingPlan(plans, { planId: currentPlanId, planCode: currentPlanCode })
   // Featured: prefer plan whose code contains PRO/PROFESSIONAL, else middle card in a 3-plan list
@@ -130,8 +132,8 @@ export function PlanCards({ plans, onSelect, canSelect = false, busy = false, cu
           )}
         </div>
         <p className="font-serif text-3xl font-semibold text-primary">{planMonthlyPrice(plan)}<span className="text-sm font-normal"> / tháng</span></p>
-        <p className="text-sm text-on-surface-variant leading-relaxed">{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p>
         <p className="text-sm font-medium">Chu kỳ: {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'Chưa có thông tin'}</p>
+        {showDescription && <p className="text-sm text-on-surface-variant leading-relaxed">{publicCopy(plan.description, 'Xem quyền lợi và mức phí của gói dịch vụ.')}</p>}
         <p><StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} /></p>
         <FeatureList features={plan.features} />
         {onSelect && (

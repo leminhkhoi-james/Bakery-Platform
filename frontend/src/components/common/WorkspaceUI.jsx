@@ -31,10 +31,10 @@ export function EmptyPanel({ title, description, icon = 'inbox', action }) {
 
 // Native dialog provides focus containment, Escape and focus restoration.
 // Used only as a presentation wrapper; mutations remain in the existing children.
-export function DetailDrawer({ title, onClose, busy = false, children, headerContent, footer, className = '', kicker }) {
+export function DetailDrawer({ title, onClose, busy = false, children, headerContent, footer, className = '', kicker, showCloseButton = true }) {
   const heading = useId()
   return <ModalSurface labelledBy={heading} className={'sc-drawer sc-portal-popup' + (className ? ' ' + className : '')} busy={busy} onClose={onClose}>
-    {({ requestClose }) => <><header className="sc-drawer-heading"><div id={headerContent ? heading : undefined}>{headerContent || <><p className="sc-kicker">{kicker || 'Chi tiết'}</p><h2 id={heading}>{title}</h2></>}</div><button type="button" disabled={busy} onClick={requestClose} className="sc-icon-button" aria-label="Đóng bảng chi tiết"><Icon name="close" /></button></header>
+    {({ requestClose }) => <><header className="sc-drawer-heading"><div id={headerContent ? heading : undefined}>{headerContent || <><p className="sc-kicker">{kicker || 'Chi tiết'}</p><h2 id={heading}>{title}</h2></>}</div>{showCloseButton && <button type="button" disabled={busy} onClick={requestClose} className="sc-icon-button" aria-label="Đóng bảng chi tiết"><Icon name="close" /></button>}</header>
     <div className="sc-drawer-body">{children}</div>{footer && <footer className="sc-drawer-footer">{footer}</footer>}</>}
   </ModalSurface>
 }

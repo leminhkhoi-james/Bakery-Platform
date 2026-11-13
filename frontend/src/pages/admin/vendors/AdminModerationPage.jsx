@@ -63,7 +63,7 @@ function ReviewDirectory({ onSelect }) {
     <h2 className="font-bold">Đánh giá đơn hàng</h2>
     <ApiState resource={resource}>
       {resource.status === 'ready' && (reviews.length ? <DataTable label="Đánh giá đơn hàng">
-        <thead><tr><th scope="col">Đơn hàng</th><th scope="col">Điểm</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead>
+        <thead><tr><th scope="col">Đơn hàng</th><th scope="col">Điểm</th><th scope="col">Trạng thái</th><th scope="col" className="sc-table-actions">Thao tác</th></tr></thead>
         <tbody>{rows.map(order => <tr key={order.id}>
           <td>{displayReference(order.id, 'ORD', order.orderNumber)}</td>
           <td>{order.review.rating}/5</td><td>{uiLabel(order.review.status)}</td>

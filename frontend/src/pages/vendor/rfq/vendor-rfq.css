@@ -73,3 +73,34 @@
 .sc-vendor-rfq-table .sc-table-actions button { padding-inline: .65rem; font-size: .78rem; white-space: nowrap; }
 .sc-vendor-rfq-table td strong { color: var(--sc-color-primary); font-weight: 600; }
 .sc-vendor-rfq-table td:nth-child(2) { min-width: 13rem; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0;
+  min-width: 0;
+}
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary > * { margin: 0; min-width: 0; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary > h2 { font-size: 1.15rem; line-height: 1.5; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-popup-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid var(--sc-color-border, #e2e8f0);
+}
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-popup-summary > * { padding: 0; border: 0; margin: 0; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-rfq-specifications { grid-template-columns: minmax(0, 1fr); gap: .5rem; font-size: .875rem; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-rfq-reference { padding: .75rem; background: #f7f9fb; border: 1px solid #e2e8f0; border-radius: .75rem; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-reference img { width: 100%; height: auto; max-height: 15rem; object-fit: contain; margin-top: .5rem; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-rfq-customer-message { padding: .75rem; font-size: .875rem; }
+.sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-quote-unavailable { margin: 0; padding: .85rem 1rem; border-radius: .75rem; background: #f7f9fb; color: #53657c; }
+@media (min-width: 900px) {
+  .sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary--media { grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem); }
+  .sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary--media > :is(div:first-child, h2, .sc-popup-summary) { grid-column: 1 / -1; }
+  .sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary--media > .sc-rfq-reference { grid-column: 2; grid-row: 4 / 6; align-self: start; }
+  .sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary--media > :is(.sc-rfq-specification-group, .sc-rfq-customer-message) { grid-column: 1; }
+}
+@media (max-width: 540px) {
+  .sc-portal.sc-portal--vendor .sc-workspace-detail .sc-rfq-request-summary .sc-popup-summary { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+}

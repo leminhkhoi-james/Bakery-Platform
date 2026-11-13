@@ -1,7 +1,9 @@
 import { userFeedback } from '../../services/uiLabels.js'
 import React from 'react'
+import { useManualRefresh } from '../../context/ManualRefreshContext.js'
 
 export function ApiErrorMessage({ error, retry }) {
+  const manualRefresh = useManualRefresh()
   const feedback = userFeedback(error)
   const isGeneric = !feedback || feedback === 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
   const description = isGeneric
@@ -10,7 +12,7 @@ export function ApiErrorMessage({ error, retry }) {
         401: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
         403: 'Bạn không có quyền thực hiện thao tác này.',
         404: 'Không tìm thấy thông tin yêu cầu.',
-        409: 'Dữ liệu đã có thay đổi. Vui lòng tải lại trang.',
+        409: manualRefresh ? 'Dữ liệu đã có thay đổi. Vui lòng tải lại trang.' : 'Dữ liệu đã thay đổi. Hãy kiểm tra thông tin trước khi tiếp tục.',
         422: 'Vui lòng kiểm tra lại các thông tin bắt buộc.',
         500: 'Hệ thống đang bận. Vui lòng thử lại sau ít phút.',
         0: 'Không thể kết nối máy chủ. Vui lòng kiểm tra đường truyền mạng.',
@@ -24,7 +26,7 @@ export function ApiErrorMessage({ error, retry }) {
         <span>Thông báo</span>
       </div>
       <p className="break-words leading-relaxed">{description}</p>
-      {retry && (
+      {manualRefresh && retry && (
         <button type="button" className="mt-2 text-xs font-semibold underline cursor-pointer block" onClick={retry}>
           Thử lại
         </button>
