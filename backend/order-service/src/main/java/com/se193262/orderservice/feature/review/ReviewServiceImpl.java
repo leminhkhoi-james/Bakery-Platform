@@ -9,7 +9,12 @@ import com.se193262.orderservice.feature.order.OrderNotFoundException;
 import com.se193262.orderservice.feature.order.OrderStatus;
 import com.se193262.orderservice.feature.review.dto.CreateReviewRequest;
 import com.se193262.orderservice.feature.review.dto.ReviewResponse;
+import com.se193262.orderservice.feature.review.dto.PublicBakeryReviewResponse;
 import com.se193262.orderservice.feature.review.dto.UpdateReviewRequest;
+import com.se193262.orderservice.shared.dto.PageResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +87,20 @@ public class ReviewServiceImpl implements ReviewService {
         return toResponse(reviewRepository.saveAndFlush(review));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResult<PublicBakeryReviewResponse> listPublishedByBakery(UUID bakeryId, int page, int size) {
+        if (page < 1 || size < 1 || size > 100) {
+            throw new InvalidOrderRequestException("Pagination values are outside the allowed range");
+        }
+        Page<OrderReview> reviews = reviewRepository.findByCustomerOrderBakeryIdAndStatus(
+                bakeryId, ReviewStatus.PUBLISHED,
+                PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+        return new PageResult<>(
+                new PageResult.Meta(page, size, reviews.getTotalPages(), reviews.getTotalElements()),
+                reviews.getContent().stream().map(this::toPublicBakeryResponse).toList());
+    }
+
     private OrderReview findOwnedReview(UUID orderId, UUID customerId) {
         return reviewRepository.findByCustomerIdAndId(customerId, orderId)
                 .orElseThrow(ReviewNotFoundException::new);
@@ -96,5 +115,13 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewResponse toResponse(OrderReview review) {
         return new ReviewResponse(review.getId(), review.getCustomerId(), review.getRating(),
                 review.getComment(), review.getStatus(), review.getCreatedAt(), review.getUpdatedAt());
+    }
+
+    private PublicBakeryReviewResponse toPublicBakeryResponse(OrderReview review) {
+        CustomerOrder order = review.getCustomerOrder();
+        String customerName = order.getCustomerNameSnapshot();
+        return new PublicBakeryReviewResponse(review.getId(),
+                customerName == null || customerName.isBlank() ? "Khách hàng đã xác thực" : customerName,
+                review.getRating(), review.getComment(), review.getCreatedAt());
     }
 }

@@ -127,7 +127,7 @@ export function routeDemo(store, path, method, body, query, user) {
         }
       }
     } else if (parts[1] === 'reviews' && method === 'PATCH') {
-      const order = find('orders', parts[2]); if (!order.review || !['PUBLISHED', 'HIDDEN'].includes(body.status)) throw new DemoError('Đánh giá/trạng thái không hợp lệ.'); order.review.status = body.status; result = order.review
+      const order = find('orders', parts[2]); if (!order.review || !['PUBLISHED', 'HIDDEN'].includes(body.status)) throw new DemoError('Đánh giá/trạng thái không hợp lệ.'); order.review.status = body.status; order.review.updatedAt = stamp(); result = order.review
     } else if (parts[1] === 'bakery-payments') {
       if (!parts[2] && get) result = page(s.payments)
       else {
@@ -154,6 +154,11 @@ export function routeDemo(store, path, method, body, query, user) {
     }
   } else if (parts[0] === 'products' && get) {
     result = parts[1] ? productDto(find('products', parts[1])) : page(s.products.filter((p) => p.status === 'PUBLISHED').map(productDto).map((dto) => ({ ...dto, id: dto.product.id, name: dto.product.name, basePrice: dto.product.basePrice, categoryId: dto.product.categoryId })))
+  } else if (parts[0] === 'bakery-reviews' && get) {
+    const bakeryId = query.get('bakeryId')
+    if (!s.bakeries.some((bakery) => bakery.id === bakeryId)) throw new DemoError('Không tìm thấy tiệm bánh.', 404)
+    result = page(s.orders.filter((order) => order.bakeryId === bakeryId && order.review?.status === 'PUBLISHED')
+      .map((order) => ({ orderId: order.id, customerName: order.customerName || 'Khách hàng đã xác thực', rating: order.review.rating, comment: order.review.comment, createdAt: order.review.createdAt })))
   } else if (parts[0] === 'bakeries') {
     if (!parts[1]) {
       if (get) {
@@ -345,9 +350,11 @@ export function routeDemo(store, path, method, body, query, user) {
     else if (parts[1] === 'direct' && method === 'POST') result = store.createOrder(user, body)
     else {
       const order = find('orders', parts[1]); if (!has(user, 'ADMIN') && order.customerId !== user.id) bakeryAccess(user, order.bakeryId)
-      if (get) result = order
+      if (get) result = !has(user, 'ADMIN') && order.customerId !== user.id && order.review?.status !== 'PUBLISHED'
+        ? { ...order, review: null }
+        : order
       else if (parts[2] === 'status-transitions' && method === 'POST') result = store.transitionOrder(user, order.id, body.targetStatus, 'bakery', body.reason || '')
-      else if (parts[2] === 'review') { own(user, order); if (method === 'DELETE') { if (order.review) order.review.status = 'DELETED'; result = null } else { if (order.status !== 'COMPLETED' || !Number.isInteger(body.rating) || body.rating < 1 || body.rating > 5) throw new DemoError('Đơn phải hoàn tất và đánh giá từ 1–5 sao.'); order.review = { ...body, orderId: order.id, customerId: user.id, status: 'PUBLISHED', createdAt: stamp(), updatedAt: stamp() }; result = order.review } }
+      else if (parts[2] === 'review') { own(user, order); if (method === 'DELETE') { if (order.review) order.review.status = 'DELETED'; result = null } else { if (order.status !== 'COMPLETED' || !Number.isInteger(body.rating) || body.rating < 1 || body.rating > 5) throw new DemoError('Đơn phải hoàn tất và đánh giá từ 1–5 sao.'); const now = stamp(); order.review = { ...order.review, ...body, orderId: order.id, customerId: user.id, status: 'PENDING', createdAt: order.review?.createdAt || now, updatedAt: now }; result = order.review } }
     }
   } else if (parts[0] === 'conversations') {
     requireUser(user)

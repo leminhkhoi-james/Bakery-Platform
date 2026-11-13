@@ -124,15 +124,21 @@ class OrderServiceApplicationTests {
         HttpResponse<String> createReview = request("POST", "/api/v1/orders/" + orderId + "/review",
             "{\"rating\":5,\"comment\":\"Great cake\"}", "customer-token");
         assertEquals(201, createReview.statusCode(), createReview.body());
+        assertTrue(createReview.body().contains("PENDING"));
+
+        HttpResponse<String> publishReview = request("PATCH", "/api/v1/admin/reviews/" + orderId + "/status",
+            "{\"status\":\"PUBLISHED\"}", "admin-token");
+        assertEquals(200, publishReview.statusCode(), publishReview.body());
 
         HttpResponse<String> updateReview = request("PATCH", "/api/v1/orders/" + orderId + "/review",
             "{\"rating\":4,\"comment\":\"Updated review\"}", "customer-token");
         assertEquals(200, updateReview.statusCode(), updateReview.body());
+        assertTrue(updateReview.body().contains("PENDING"));
 
         HttpResponse<String> hideReview = request("PATCH", "/api/v1/admin/reviews/" + orderId + "/status",
             "{\"status\":\"HIDDEN\"}", "admin-token");
         assertEquals(200, hideReview.statusCode(), hideReview.body());
-        HttpResponse<String> publishReview = request("PATCH", "/api/v1/admin/reviews/" + orderId + "/status",
+        publishReview = request("PATCH", "/api/v1/admin/reviews/" + orderId + "/status",
             "{\"status\":\"PUBLISHED\"}", "admin-token");
         assertEquals(200, publishReview.statusCode(), publishReview.body());
 

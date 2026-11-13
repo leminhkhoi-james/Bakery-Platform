@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.se193262.orderservice.feature.order.OrderAuthenticationRequiredException;
 import com.se193262.orderservice.feature.review.dto.CreateReviewRequest;
 import com.se193262.orderservice.feature.review.dto.ReviewResponse;
+import com.se193262.orderservice.feature.review.dto.PublicBakeryReviewResponse;
 import com.se193262.orderservice.feature.review.dto.UpdateReviewRequest;
 import com.se193262.orderservice.feature.review.dto.UpdateReviewStatusRequest;
 import com.se193262.orderservice.shared.dto.ApiResponse;
+import com.se193262.orderservice.shared.dto.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,14 +17,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @RestController
 @CrossOrigin(origins = "${BACKEND_CORS_ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
@@ -90,6 +96,15 @@ public class ReviewController {
             @PathVariable UUID orderId,
             @Valid @RequestBody UpdateReviewStatusRequest request) {
         return ResponseEntity.ok(ApiResponse.success(reviewService.moderate(orderId, request.status())));
+    }
+
+    @Operation(summary = "List approved public reviews for a bakery")
+    @GetMapping("/bakery-reviews")
+    public ResponseEntity<ApiResponse<PageResult<PublicBakeryReviewResponse>>> listPublishedBakeryReviews(
+            @RequestParam UUID bakeryId,
+            @RequestParam(defaultValue = "1") @Min(1) int page,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size) {
+        return ResponseEntity.ok(ApiResponse.success(reviewService.listPublishedByBakery(bakeryId, page, size)));
     }
 
     private UUID requiredActorId(Jwt jwt) {

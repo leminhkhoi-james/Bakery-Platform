@@ -1109,7 +1109,7 @@ optimistic conflict; `422` actor không được phép thực hiện transition.
 }
 ```
 
-Chỉ order `COMPLETED`, tối đa một review/order; rating 1–5.
+Chỉ order `COMPLETED`, tối đa một review/order; rating 1–5. Review mới ở trạng thái `PENDING`: chỉ tác giả và ADMIN xem được, chỉ trở thành công khai khi ADMIN chuyển sang `PUBLISHED`.
 
 **Success (201):** `ReviewResponse`. **Errors:** `409` review tồn tại; `422`
 order chưa completed.
@@ -1123,7 +1123,7 @@ order chưa completed.
 }
 ```
 
-Chỉ review `PUBLISHED`; không đổi owner/order. **Success (200):** review.
+Chỉ review `PENDING` hoặc `PUBLISHED`; không đổi owner/order. Mỗi lần chỉnh sửa, review trở lại `PENDING` để chờ duyệt lại. **Success (200):** review.
 **Errors:** `404`; `409` hidden/deleted/optimistic conflict.
 
 ### DELETE /orders/{orderId}/review 🔒 CUSTOMER order owner
@@ -1139,8 +1139,18 @@ Soft-delete review thành `DELETED`. **Success (204):** no body. **Errors:**
 }
 ```
 
-Admin chuyển `PUBLISHED↔HIDDEN`; không restore `DELETED`. **Success (200):**
+Admin duyệt `PENDING→PUBLISHED`, và có thể chuyển `PUBLISHED↔HIDDEN`; không restore `DELETED`. **Success (200):**
 `ReviewResponse`. **Errors:** `404`; `409` transition/optimistic conflict.
+
+### GET /bakery-reviews 🌐
+
+**Query:** `bakeryId` (required), `page=1`, `size=20` (maximum 100).
+
+Chỉ trả review `PUBLISHED` của tiệm, sắp xếp mới nhất trước. Review `PENDING`,
+`HIDDEN` và `DELETED` không bao giờ xuất hiện ở endpoint này.
+
+**Success (200):** `PageResult<PublicBakeryReviewResponse>` với `orderId`,
+`customerName`, `rating`, `comment`, `createdAt`.
 
 ---
 
@@ -1780,7 +1790,7 @@ raw error. `X-Correlation-Id` được echo trong response header để tra log.
 | Marketplace | Offer status | `PENDING`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `EXPIRED` |
 | Order | Order source | `DIRECT_CATALOG`, `ACCEPTED_OFFER` |
 | Order | Order status | `PENDING`, `CONFIRMED`, `BAKING`, `READY`, `DELIVERING`, `COMPLETED`, `CANCELLED` |
-| Review | Review status | `PUBLISHED`, `HIDDEN`, `DELETED` |
+| Review | Review status | `PENDING`, `PUBLISHED`, `HIDDEN`, `DELETED` |
 | Chat | Conversation status | `OPEN`, `CLOSED`, `ARCHIVED` |
 | Chat | Message type | `TEXT`, `IMAGE`, `FILE`, `SYSTEM` |
 | Cake AI | Job status | `QUEUED`, `PROCESSING`, `SUCCEEDED`, `FAILED`, `CANCELLED` |

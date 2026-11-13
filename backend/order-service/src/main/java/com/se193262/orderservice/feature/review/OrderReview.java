@@ -62,18 +62,19 @@ public class OrderReview {
         review.customerId = customerId;
         review.rating = rating;
         review.comment = comment;
-        review.status = ReviewStatus.PUBLISHED;
+        review.status = ReviewStatus.PENDING;
         review.createdAt = now;
         review.updatedAt = now;
         return review;
     }
 
     void update(short rating, String comment, Instant now) {
-        if (status != ReviewStatus.PUBLISHED) {
-            throw new OrderConflictException("Only published reviews can be edited");
+        if (status != ReviewStatus.PENDING && status != ReviewStatus.PUBLISHED) {
+            throw new OrderConflictException("Only pending or published reviews can be edited");
         }
         this.rating = rating;
         this.comment = comment;
+        status = ReviewStatus.PENDING;
         updatedAt = now;
     }
 

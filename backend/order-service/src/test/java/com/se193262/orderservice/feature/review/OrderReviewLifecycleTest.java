@@ -15,19 +15,20 @@ class OrderReviewLifecycleTest {
     private static final Instant CREATED_AT = Instant.parse("2026-10-20T00:00:00Z");
 
     @Test
-    void allowsPublishedReviewEditAndHideRestore() {
+    void keepsNewAndEditedReviewsPendingUntilAdminPublishesThem() {
         CustomerOrder order = order();
         UUID customerId = order.getCustomerId();
         OrderReview review = OrderReview.create(order, customerId, (short) 5, "Great", CREATED_AT);
 
-        review.update((short) 4, "Updated", CREATED_AT.plusSeconds(1));
-        review.moderate(ReviewStatus.HIDDEN, CREATED_AT.plusSeconds(2));
-        review.moderate(ReviewStatus.PUBLISHED, CREATED_AT.plusSeconds(3));
+        assertEquals(ReviewStatus.PENDING, review.getStatus());
+
+        review.moderate(ReviewStatus.PUBLISHED, CREATED_AT.plusSeconds(1));
+        review.update((short) 4, "Updated", CREATED_AT.plusSeconds(2));
 
         assertEquals((short) 4, review.getRating());
         assertEquals("Updated", review.getComment());
-        assertEquals(ReviewStatus.PUBLISHED, review.getStatus());
-        assertEquals(CREATED_AT.plusSeconds(3), review.getUpdatedAt());
+        assertEquals(ReviewStatus.PENDING, review.getStatus());
+        assertEquals(CREATED_AT.plusSeconds(2), review.getUpdatedAt());
     }
 
     @Test

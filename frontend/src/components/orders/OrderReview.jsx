@@ -79,6 +79,7 @@ export default function OrderReview({ order, onChanged }) {
         {order.review && (
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
             order.review.status === 'PUBLISHED' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+            order.review.status === 'PENDING' ? 'bg-sky-50 text-sky-700 border border-sky-200' :
             order.review.status === 'HIDDEN' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
             'bg-gray-100 text-gray-600 border border-gray-200'
           }`}>
@@ -168,7 +169,7 @@ export default function OrderReview({ order, onChanged }) {
                   <Icon name={permissions.create ? 'rate_review' : 'edit_note'} className="text-sm text-primary" />
                   {permissions.create ? 'Viết đánh giá của bạn' : 'Chỉnh sửa đánh giá'}
                 </h4>
-                <span className="text-xs text-gray-400">Đánh giá sẽ được hiển thị công khai</span>
+                <span className="text-xs text-gray-400">Đánh giá chỉ công khai sau khi quản trị viên duyệt</span>
               </div>
 
               {/* Interactive Star Picker */}

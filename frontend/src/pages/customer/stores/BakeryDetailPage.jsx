@@ -2,12 +2,12 @@ import { cleanPresentationLabel, publicCopy } from '../../../services/uiLabels.j
 import { useState, useEffect } from 'react'
 import { loadBakery } from '../../../services/vendorService.js'
 import { loadProducts } from '../../../services/cakeService.js'
+import { loadPublishedBakeryReviews } from '../../../services/bakeryReviewService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
 import CatalogState from '../../../components/catalog/CatalogState.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import ProductCard from '../../../components/catalog/ProductCard.jsx'
-import { STORES } from '../../../mockData/customer/stores.js'
 import { Icon } from '../../../components/common/WorkspaceUI.jsx'
 
 const SAMPLE_REVIEWS = {
@@ -259,40 +259,24 @@ function BakeryMenu({ bakeryId, onNavigate }) {
 
 export function BakeryReviews({ bakeryId, bakery }) {
   const [filterRating, setFilterRating] = useState('all')
-  const meta = STORES.find(
-    (s) => s.id === bakeryId || s.name?.toLowerCase().trim() === bakery?.name?.toLowerCase().trim()
-  ) || {}
-
-  // Gather real reviews from demoStore state
-  const demoStore = (typeof window !== 'undefined' && window.__SWEETCAKE_DEMO_STORE__) || null
-  const realReviews = (demoStore?.state?.orders || [])
-    .filter(
-      (o) =>
-        (o.bakeryId === bakeryId || o.bakeryName === bakery?.name) &&
-        o.review &&
-        o.review.status === 'PUBLISHED'
-    )
-    .map((o) => ({
-      id: 'real-' + (o.review.id || o.id),
-      author: o.customerName || 'Khách hàng SweetCake',
-      initials: (o.customerName || 'KH')
+  const resource = useCatalogResource(loadPublishedBakeryReviews, { bakeryId, page: 1, size: 100 })
+  const realReviews = (resource.data?.result || []).map((review) => ({
+      id: review.orderId,
+      author: review.customerName,
+      initials: review.customerName
         .split(' ')
         .map((w) => w[0])
         .join('')
         .slice(0, 2)
         .toUpperCase(),
       initialsBg: 'bg-secondary text-white',
-      stars: Number(o.review.rating) || 5,
-      date: o.review.createdAt ? new Date(o.review.createdAt).toLocaleDateString('vi-VN') : 'Gần đây',
-      comment: o.review.comment,
-      cakeName: o.items?.[0]?.name || 'Bánh đặt làm riêng',
+      stars: review.rating,
+      date: review.createdAt ? new Date(review.createdAt).toLocaleDateString('vi-VN') : 'Gần đây',
+      comment: review.comment,
     }))
-
-  const sampleList =
-    SAMPLE_REVIEWS[bakeryId] || SAMPLE_REVIEWS[meta.id] || (meta.rating ? DEFAULT_SAMPLE_REVIEWS : [])
-  const allReviews = [...realReviews, ...sampleList]
-  const avgRating = meta.rating || (allReviews.length ? (allReviews.reduce((sum, r) => sum + r.stars, 0) / allReviews.length).toFixed(1) : '5.0')
-  const totalCount = meta.reviewsCount ? meta.reviewsCount + realReviews.length : allReviews.length
+  const allReviews = realReviews
+  const avgRating = allReviews.length ? (allReviews.reduce((sum, review) => sum + review.stars, 0) / allReviews.length).toFixed(1) : '0.0'
+  const totalCount = allReviews.length
 
   const filtered =
     filterRating === 'all'
@@ -300,6 +284,14 @@ export function BakeryReviews({ bakeryId, bakery }) {
       : filterRating === '5'
       ? allReviews.filter((r) => r.stars === 5)
       : allReviews.filter((r) => r.stars <= 4)
+
+  if (resource.status === 'loading') {
+    return <section id="bakery-reviews" className="mt-12 rounded-2xl border border-outline-variant/20 bg-white/95 p-8 text-center shadow-xs"><p role="status" className="text-sm text-outline">Đang tải đánh giá đã được duyệt…</p></section>
+  }
+
+  if (resource.status === 'error') {
+    return <section id="bakery-reviews" className="mt-12 rounded-2xl border border-rose-200 bg-rose-50/60 p-8 text-center shadow-xs"><h3 className="text-lg font-bold text-primary">Chưa tải được đánh giá</h3><p className="mt-1 text-sm text-outline">Vui lòng thử lại sau.</p><button type="button" onClick={resource.reload} className="mt-4 text-sm font-bold text-secondary underline underline-offset-4">Tải lại</button></section>
+  }
 
   if (allReviews.length === 0) {
     return (
@@ -345,7 +337,7 @@ export function BakeryReviews({ bakeryId, bakery }) {
             ))}
           </div>
           <p className="mt-2 text-xs font-semibold text-outline">
-            Dựa trên {totalCount}+ lượt đánh giá đã kiểm định
+            Dựa trên {totalCount} lượt đánh giá đã được duyệt
           </p>
         </div>
 

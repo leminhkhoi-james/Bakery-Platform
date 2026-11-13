@@ -200,7 +200,7 @@ dõi thanh toán giữa khách và tiệm.
 - `ACCEPTED_OFFER`: bắt buộc có `cake_request_id` và `offer_id`.
 - Một offer chỉ sinh tối đa một order.
 - Idempotency key duy nhất theo operation, customer và key; payload hash khác nhau trả conflict.
-- Mỗi order có tối đa một review, rating từ 1 đến 5.
+- Mỗi order có tối đa một review, rating từ 1 đến 5. Review mới hoặc vừa chỉnh sửa ở `PENDING`; chỉ `PUBLISHED` được hiển thị công khai. Tác giả và admin vẫn xem được review chưa công khai.
 - Chỉ customer của order `COMPLETED` được tạo review; kiểm tra này nằm ở service.
 
 ---

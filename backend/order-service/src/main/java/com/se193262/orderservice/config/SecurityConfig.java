@@ -108,6 +108,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/v3/api-docs.yaml",
                                 "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bakery-reviews").permitAll()
                         .requestMatchers(HttpMethod.POST, "/internal/v1/orders/from-offer")
                         .access(serviceScope("order:create-from-offer"))
                         .requestMatchers(HttpMethod.GET, "/internal/v1/orders/*/context")

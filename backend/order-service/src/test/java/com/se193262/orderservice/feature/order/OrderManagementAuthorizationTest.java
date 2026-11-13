@@ -1,6 +1,8 @@
 package com.se193262.orderservice.feature.order;
 
 import com.se193262.orderservice.feature.order.dto.OrderResponse;
+import com.se193262.orderservice.feature.review.ReviewStatus;
+import com.se193262.orderservice.feature.review.dto.ReviewResponse;
 import com.se193262.orderservice.infrastructure.client.BakeryClient;
 import com.se193262.orderservice.infrastructure.client.BakeryServiceClient;
 import com.se193262.orderservice.shared.dto.PageResult;
@@ -14,9 +16,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -70,8 +75,9 @@ class OrderManagementAuthorizationTest {
     void customerCanReadOnlyOwnedOrder() {
         when(persistenceService.getAuthorizationContext(ORDER_ID))
                 .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
-        when(persistenceService.getOrder(ORDER_ID)).thenReturn(null);
-        service.getOrder(ORDER_ID, CUSTOMER_ID, Set.of("CUSTOMER"));
+        when(persistenceService.getOrder(ORDER_ID)).thenReturn(orderWithReview(ReviewStatus.PENDING));
+        OrderResponse result = service.getOrder(ORDER_ID, CUSTOMER_ID, Set.of("CUSTOMER"));
+        assertEquals(ReviewStatus.PENDING, result.review().status());
         verify(persistenceService).getOrder(ORDER_ID);
 
         when(persistenceService.getAuthorizationContext(ORDER_ID))
@@ -110,11 +116,12 @@ class OrderManagementAuthorizationTest {
         when(bakeryClient.getMembershipAuthorization(BAKERY_ID, OTHER_CUSTOMER_ID, "OWNER"))
                 .thenReturn(new BakeryClient.MembershipAuthorizationResponse(
                         BAKERY_ID, OTHER_CUSTOMER_ID, true, "OWNER", true));
-        when(persistenceService.getOrder(ORDER_ID)).thenReturn(null);
+        when(persistenceService.getOrder(ORDER_ID)).thenReturn(orderWithReview(ReviewStatus.PENDING));
 
-        service.getOrder(ORDER_ID, OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER"));
+        OrderResponse result = service.getOrder(ORDER_ID, OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER"));
 
         verify(persistenceService).getOrder(ORDER_ID);
+        assertNull(result.review());
     }
 
     @Test
@@ -153,5 +160,14 @@ class OrderManagementAuthorizationTest {
         assertThrows(OrderAccessDeniedException.class,
                 () -> service.transitionOrder(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER")));
         verify(persistenceService, never()).transition(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID);
+    }
+
+    private OrderResponse orderWithReview(ReviewStatus reviewStatus) {
+        return new OrderResponse(
+                ORDER_ID, "ORD-1", CUSTOMER_ID, BAKERY_ID, null, null, null,
+                null, null, null, null, null, null, null, "VND", OrderStatus.COMPLETED,
+                null, null, null, Instant.EPOCH, Instant.EPOCH, List.of(), null, List.of(),
+                new ReviewResponse(ORDER_ID, CUSTOMER_ID, (short) 5, "Review", reviewStatus,
+                        Instant.EPOCH, Instant.EPOCH));
     }
 }

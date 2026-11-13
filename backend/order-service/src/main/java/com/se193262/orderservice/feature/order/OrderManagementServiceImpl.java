@@ -3,6 +3,7 @@ package com.se193262.orderservice.feature.order;
 import com.se193262.orderservice.feature.order.dto.OrderContextResponse;
 import com.se193262.orderservice.feature.order.dto.OrderResponse;
 import com.se193262.orderservice.feature.order.dto.OrderSummaryResponse;
+import com.se193262.orderservice.feature.review.ReviewStatus;
 import com.se193262.orderservice.infrastructure.client.BakeryClient;
 import com.se193262.orderservice.infrastructure.client.BakeryServiceClient;
 import com.se193262.orderservice.shared.dto.PageResult;
@@ -106,7 +107,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         requireActor(actorId);
         OrderAuthorizationContext context = persistenceService.getAuthorizationContext(orderId);
         authorizeRead(context, actorId, roles);
-        return persistenceService.getOrder(orderId);
+        OrderResponse order = persistenceService.getOrder(orderId);
+        return hideUnpublishedReviewForNonOwner(order, actorId, roles);
     }
 
     @Override
@@ -176,6 +178,25 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         if (actorId == null) {
             throw new OrderAuthenticationRequiredException();
         }
+    }
+
+    private OrderResponse hideUnpublishedReviewForNonOwner(
+            OrderResponse order, UUID actorId, Set<String> roles) {
+        if (order == null || order.review() == null || hasRole(roles, ADMIN_ROLE)
+                || order.customerId().equals(actorId)
+                || order.review().status() == ReviewStatus.PUBLISHED) {
+            return order;
+        }
+        return copyWithoutReview(order);
+    }
+
+    private OrderResponse copyWithoutReview(OrderResponse order) {
+        return new OrderResponse(
+                order.id(), order.orderNumber(), order.customerId(), order.bakeryId(), order.cakeRequestId(),
+                order.offerId(), order.orderSource(), order.customerName(), order.customerPhone(), order.bakeryName(),
+                order.customerNote(), order.subtotal(), order.deliveryFee(), order.totalAmount(), order.currency(),
+                order.status(), order.neededAt(), order.acceptedAt(), order.completedAt(), order.createdAt(),
+                order.updatedAt(), order.items(), order.deliveryAddress(), order.statusHistory(), null);
     }
 
     private Sort parseSort(String sort) {

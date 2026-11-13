@@ -27,7 +27,7 @@ test('Review create/patch whitelist rating/comment, map response, DELETE accepts
   handler = () => reply(null, 204)
   await orderService.deleteReview(id); assert.equal(calls.at(-1).options.method, 'DELETE')
 })
-test('Review validation and permission match COMPLETED owner, PUBLISHED edit, HIDDEN delete, DELETED terminal', async () => {
+test('Review validation and permission match COMPLETED owner, PENDING/PUBLISHED edit, HIDDEN delete, DELETED terminal', async () => {
   for (const rating of ['', 0, 6, 1.5]) await assert.rejects(orderService.createReview(id, { rating }), { status: 400 })
   await assert.rejects(orderService.createReview(id, { rating: 5, comment: 'x'.repeat(5001) }), { status: 400 })
   assert.equal(calls.length, 0)
@@ -35,6 +35,7 @@ test('Review validation and permission match COMPLETED owner, PUBLISHED edit, HI
   assert.equal(reviewPermissions(order, owner).create, true)
   assert.equal(reviewPermissions(order, { id: randomUUID(), roles: ['CUSTOMER'] }).create, false)
   assert.equal(reviewPermissions(order, { id: customerId, roles: ['ADMIN'] }).create, false)
+  assert.deepEqual(reviewPermissions({ ...order, review: { ...review, status: 'PENDING' } }, owner), { create: false, edit: true, delete: true })
   assert.deepEqual(reviewPermissions({ ...order, review: { ...review, status: 'HIDDEN' } }, owner), { create: false, edit: false, delete: true })
   assert.deepEqual(reviewPermissions({ ...order, review: { ...review, status: 'DELETED' } }, owner), { create: false, edit: false, delete: false })
 })

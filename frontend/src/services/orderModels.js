@@ -4,7 +4,7 @@ import { requireId, text } from './managementModels.js'
 
 export const ORDER_STATUSES = ['PENDING', 'CONFIRMED', 'BAKING', 'READY', 'DELIVERING', 'COMPLETED', 'CANCELLED']
 export const ORDER_SOURCES = ['DIRECT_CATALOG', 'ACCEPTED_OFFER']
-export const REVIEW_STATUSES = ['PUBLISHED', 'HIDDEN', 'DELETED']
+export const REVIEW_STATUSES = ['PENDING', 'PUBLISHED', 'HIDDEN', 'DELETED']
 export function mapReview(dto) {
   if (!isCatalogId(dto?.orderId) || !isCatalogId(dto?.customerId) || !Number.isInteger(dto.rating) || dto.rating < 1 || dto.rating > 5 || !REVIEW_STATUSES.includes(dto.status)) throw new ApiError('ReviewResponse không hợp lệ.', 502)
   return { orderId: dto.orderId, customerId: dto.customerId, rating: dto.rating, comment: text(dto.comment), status: dto.status, createdAt: text(dto.createdAt), updatedAt: text(dto.updatedAt) }
@@ -16,7 +16,7 @@ export function reviewPayload(input) {
 }
 export function reviewPermissions(order, user) {
   const own = user?.roles?.includes('CUSTOMER') && String(order.customerId || '').toLowerCase() === String(user?.id || '').toLowerCase()
-  return { create: Boolean(own && order.status === 'COMPLETED' && !order.review), edit: Boolean(own && order.review?.status === 'PUBLISHED'), delete: Boolean(own && order.review && order.review.status !== 'DELETED') }
+  return { create: Boolean(own && order.status === 'COMPLETED' && !order.review), edit: Boolean(own && ['PENDING', 'PUBLISHED'].includes(order.review?.status)), delete: Boolean(own && order.review && order.review.status !== 'DELETED') }
 }
 export const orderStatusLabel = (value) => ({ PENDING: 'Chờ xác nhận', CONFIRMED: 'Đã xác nhận', BAKING: 'Đang làm bánh', READY: 'Sẵn sàng giao', DELIVERING: 'Đang giao', COMPLETED: 'Hoàn tất', CANCELLED: 'Đã hủy' }[value] || value || 'Chưa rõ trạng thái')
 const bakeryTransitions = { PENDING: ['CONFIRMED', 'CANCELLED'], CONFIRMED: ['BAKING', 'CANCELLED'], BAKING: ['READY'], READY: ['DELIVERING'], DELIVERING: [], COMPLETED: [], CANCELLED: [] }
