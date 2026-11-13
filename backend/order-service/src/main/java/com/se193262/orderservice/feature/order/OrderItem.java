@@ -45,7 +45,7 @@ public class OrderItem extends com.se193262.platform.persistence.UuidEntity {
     @Column(name = "name_snapshot", nullable = false, length = 180)
     private String nameSnapshot;
 
-    @Column(name = "description_snapshot")
+    @Column(name = "description_snapshot", columnDefinition = "text")
     private String descriptionSnapshot;
 
     @JdbcTypeCode(SqlTypes.JSON)
