@@ -54,6 +54,10 @@ public class CakeRequestReader {
     }
 
     public CakeRequestResponse detail(CakeRequest request) {
+        return detail(request, null);
+    }
+
+    public CakeRequestResponse detail(CakeRequest request, String selectedDesignImageUrl) {
         Actor actor = Actor.current();
         boolean allOffers = actor.admin() || request.getCustomerId().equals(actor.id());
         Set<UUID> ids =
@@ -88,7 +92,7 @@ public class CakeRequestReader {
                 options.findByCakeRequestIdOrderByIdAsc(request.getId()),
                 imageResponses,
                 history.findTop100ByCakeRequestIdOrderByChangedAtDesc(request.getId()),
-                summaries);
+                summaries, selectedDesignImageUrl);
     }
 
     public RequestImageResponse image(RequestImage image) {

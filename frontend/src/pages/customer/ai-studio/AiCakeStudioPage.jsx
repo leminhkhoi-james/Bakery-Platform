@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom'
 import { useAuth } from '../../../context/useAuth.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { aiService, loadAiJobs, loadAiJob } from '../../../services/aiService.js'
+import { ApiError } from '../../../services/apiClient.js'
 import { loadRfq, rfqService } from '../../../services/rfqService.js'
 import { ownsRequest, toLocalInput, rfqPayload as validateRfqPayload } from '../../../services/marketplaceModels.js'
 import { runningJob } from '../../../services/aiModels.js'
@@ -623,7 +624,6 @@ function Step4CreateRequestFromAiPanel({
         allergyNotes: allergyNotes.trim().slice(0, 4000),
         extraOptions: {
           ...(existingRequest?.preference?.extraOptions || {}),
-          selectedAiImageUrl: selectedDesign.imageUrl || null,
           fulfillmentMethod,
           quantity: Number(quantity) || 1,
         },
@@ -1115,7 +1115,7 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
                       Mẫu yêu thích đã lưu ({favorites.length})
                     </span>
                     <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto pr-1">
-                      {favorites.map((fav) => (
+                      {favorites.filter(fav => fav.cakeRequestId === detail.job.cakeRequestId).map((fav) => (
                         <div
                           key={fav.id}
                           className="group relative rounded-xl border border-outline-variant/30 bg-surface-container-low p-1"
@@ -1127,7 +1127,7 @@ function JobDetail({ id, onNavigate, favorites, onToggleFavorite }) {
                           />
                           <button
                             type="button"
-                            onClick={() => setSelectedFavoriteForOrder(fav)}
+                            onClick={() => setSelectedFavoriteForOrder(detail.generatedDesigns.find(design => design.id === fav.id && design.moderationStatus === 'APPROVED') || null)}
                             className="mt-1 w-full rounded-md bg-primary py-0.5 text-[10px] font-bold text-on-primary cursor-pointer"
                           >
                             Chọn đặt
@@ -1345,40 +1345,39 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
     })
   }
 
+  const openSavedFavorite = (favorite) => {
+    quickAction.run(async () => {
+      const detail = await aiService.getGenerationJob(favorite.jobId, user, { allowMockFallback: false })
+      const design = detail.generatedDesigns.find(item => item.id === favorite.id)
+      if (design?.moderationStatus !== 'APPROVED' || !design.imageUrl || detail.job.cakeRequestId !== favorite.cakeRequestId) {
+        throw new ApiError('Mẫu bánh đã lưu hiện không khả dụng.', 422)
+      }
+      const request = await rfqService.getRfqById(detail.job.cakeRequestId)
+      if (!ownsRequest(request, user) || !['DRAFT', 'OPEN'].includes(request.status)) {
+        throw new ApiError('Yêu cầu gốc không còn cho phép chọn mẫu bánh.', 409)
+      }
+      if (request.status === 'OPEN') {
+        await rfqService.selectDesign(request.id, design.id)
+        onNavigate('request-detail?id=' + request.id)
+        return
+      }
+      setSelectedFavoriteForOrder({ ...favorite, imageUrl: design.imageUrl, request })
+    })
+  }
+
   // Step 4 & 5 from a Saved Favorite Design
   const handleCreateRequestFromSavedFavorite = (rfqPayload, publishNow) => {
     if (!selectedFavoriteForOrder || quickAction.busy) return
     quickAction.run(async () => {
-      let targetRequestId = selectedFavoriteForOrder.cakeRequestId
-      if (targetRequestId) {
-        try {
-          const existing = await rfqService.getRfqById(targetRequestId)
-          if (existing && existing.status === 'DRAFT') {
-            await rfqService.updateRfq(targetRequestId, rfqPayload)
-            await rfqService.selectDesign(targetRequestId, selectedFavoriteForOrder.id)
-            if (publishNow) await rfqService.publishRfq(targetRequestId)
-            onNavigate('request-detail?id=' + targetRequestId)
-            return
-          }
-        } catch {
-          // Fall back to creating a fresh CakeRequest with the saved favorite image
-        }
+      const requestId = selectedFavoriteForOrder.cakeRequestId
+      const request = await rfqService.getRfqById(requestId)
+      if (!ownsRequest(request, user) || !['DRAFT', 'OPEN'].includes(request.status)) {
+        throw new ApiError('Yêu cầu gốc không còn cho phép chọn mẫu bánh.', 409)
       }
-      const created = await rfqService.createRfq({
-        ...rfqPayload,
-        preference: {
-          ...(rfqPayload.preference || {}),
-          extraOptions: {
-            ...(rfqPayload.preference?.extraOptions || {}),
-            cake3DSnapshotUrl: selectedFavoriteForOrder.imageUrl,
-            selectedAiImageUrl: selectedFavoriteForOrder.imageUrl,
-          },
-        },
-      })
-      if (publishNow) {
-        await rfqService.publishRfq(created.id)
-      }
-      onNavigate('request-detail?id=' + created.id)
+      if (request.status === 'DRAFT') await rfqService.updateRfq(requestId, rfqPayload)
+      await rfqService.selectDesign(requestId, selectedFavoriteForOrder.id)
+      if (publishNow && request.status === 'DRAFT') await rfqService.publishRfq(requestId)
+      onNavigate('request-detail?id=' + requestId)
     })
   }
 
@@ -1530,7 +1529,8 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
                               <div className="mt-1 flex items-center gap-1">
                                 <button
                                   type="button"
-                                  onClick={() => setSelectedFavoriteForOrder(fav)}
+                                  disabled={quickAction.busy}
+                                  onClick={() => openSavedFavorite(fav)}
                                   className="flex-1 rounded-lg bg-primary px-1.5 py-1 text-[10px] font-bold text-on-primary cursor-pointer"
                                 >
                                   Chọn đặt bánh
@@ -1555,9 +1555,10 @@ export default function AiCakeStudioPage({ onNavigate, routeSearch = '' }) {
 
               {selectedFavoriteForOrder && (
                 <Step4CreateRequestFromAiPanel
+                  key={selectedFavoriteForOrder.id}
                   selectedDesign={selectedFavoriteForOrder}
                   promptText={selectedFavoriteForOrder.prompt}
-                  existingRequest={null}
+                  existingRequest={selectedFavoriteForOrder.request}
                   cakeRequestId={selectedFavoriteForOrder.cakeRequestId}
                   busy={quickAction.busy}
                   onCancel={() => setSelectedFavoriteForOrder(null)}

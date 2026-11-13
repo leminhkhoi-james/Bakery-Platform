@@ -1,4 +1,3 @@
-import { createUnifiedDataService } from '../../services/unifiedDataService.js'
 import { openBusinessPersistence, persistBusinessFile, storageMessage } from './persistence.js'
 import { createDemoStore, DemoError, validSave } from '../store.js'
 import { routeDemo, readBody } from '../router.js'
@@ -63,6 +62,7 @@ export function createBusinessTransport({ fetch: fallbackFetch, realFetch = fall
     const url = new URL(input instanceof Request ? input.url : String(input), origin)
     if (url.origin !== origin || !url.pathname.startsWith('/api/v1/')) return fallbackFetch(input, options)
     const path = url.pathname.slice('/api/v1'.length), method = (options.method || 'GET').toUpperCase()
+    if (options.allowMockFallback === false) return realFetch(input, options)
     if (!businessPath.test(path)) return fallbackFetch(input, options)
     if (!eligible(getSession())) {
       if (/5c000000-0000-4000-8000-/.test(path + url.search + (typeof options.body === 'string' ? options.body : ''))) return reply('Dữ liệu thực hành không được gửi đến Backend.', 422)
@@ -165,10 +165,10 @@ export async function installBusinessSimulation(getSession, realFetch) {
   try { storage = window.localStorage } catch { /* Real APIs remain available without browser persistence. */ }
   let businessStorage, storageError
   try { businessStorage = await openBusinessPersistence(storage) } catch (error) { storageError = error; storageMessage(error) }
-  const legacyFetch = window.fetch.bind(window)
-  const localStorageSettings = { getItem: key => key === BUSINESS_MODE_KEY ? 'on' : storage?.getItem(key), setItem: (key,value) => storage?.setItem(key,value) }
-  const local = createBusinessTransport({ businessStorage, storageError, fetch: legacyFetch, realFetch, getSession, storage: localStorageSettings, origin: window.location.origin, defaultEnabled: true })
-  runtime = createUnifiedDataService({ realFetch, local, getSession, origin: window.location.origin, fallbackFetch: local.fetch })
+  runtime = createBusinessTransport({
+    businessStorage, storageError, fetch: realFetch, realFetch, getSession, storage,
+    origin: window.location.origin, defaultEnabled: true,
+  })
   window.fetch = runtime.fetch
   window.addEventListener('storage', event => { if ([BUSINESS_STORAGE_KEY, BUSINESS_MODE_KEY].includes(event.key)) window.dispatchEvent(new Event('sweetcake:api-mutated')) })
   return runtime

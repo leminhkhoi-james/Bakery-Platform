@@ -17,8 +17,9 @@ public final class DeliveryLocation {
     public static boolean matches(String city, String district, String otherCity, String otherDistrict) {
         String cityKey = cityKey(city);
         String districtKey = districtKey(district);
-        return !cityKey.isEmpty() && !districtKey.isEmpty()
-                && cityKey.equals(cityKey(otherCity)) && districtKey.equals(districtKey(otherDistrict));
+        if (cityKey.isEmpty() || !cityKey.equals(cityKey(otherCity))) return false;
+        if ("*".equals(districtKey) || "toan thanh pho".equals(districtKey) || "tat ca".equals(districtKey)) return true;
+        return !districtKey.isEmpty() && districtKey.equals(districtKey(otherDistrict));
     }
 
     private static String cityKey(String value) {

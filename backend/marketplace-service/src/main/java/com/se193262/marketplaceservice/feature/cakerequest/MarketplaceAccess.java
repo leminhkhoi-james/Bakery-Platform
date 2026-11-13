@@ -81,12 +81,8 @@ public class MarketplaceAccess {
                 for (var area : profile.serviceAreas())
                     areas.add(
                             builder.and(
-                                    builder.equal(
-                                            builder.lower(root.get("deliveryCity")),
-                                            area.city().toLowerCase(Locale.ROOT)),
-                                    builder.equal(
-                                            builder.lower(root.get("deliveryDistrict")),
-                                            area.district().toLowerCase(Locale.ROOT))));
+                                    cityPredicate(builder, root.get("deliveryCity"), area.city()),
+                                    districtPredicate(builder, root.get("deliveryDistrict"), area.district())));
                 var eligible =
                         builder.and(
                                 builder.equal(root.get("status"), RequestStatus.OPEN),
@@ -108,5 +104,63 @@ public class MarketplaceAccess {
             }
             return builder.or(permissions.toArray(Predicate[]::new));
         };
+    }
+
+    private static Predicate cityPredicate(
+            jakarta.persistence.criteria.CriteriaBuilder builder,
+            jakarta.persistence.criteria.Path<String> path,
+            String city) {
+        String raw = city == null ? "" : city.trim().toLowerCase(Locale.ROOT);
+        String ascii =
+                java.text.Normalizer.normalize(raw, java.text.Normalizer.Form.NFD)
+                        .replaceAll("\\p{M}+", "")
+                        .replace('đ', 'd')
+                        .replace('.', ' ')
+                        .replaceAll("\\s+", " ")
+                        .trim()
+                        .replaceFirst("^(?:thanh pho|tp|tinh)\\s+", "")
+                        .replaceFirst("\\s+city$", "");
+        if (Set.of("ho chi minh", "hcm", "tphcm", "tp hcm").contains(ascii)) {
+            return builder.lower(path)
+                    .in(
+                            "tp. hồ chí minh",
+                            "thành phố hồ chí minh",
+                            "hồ chí minh",
+                            "tp hồ chí minh",
+                            "ho chi minh",
+                            "tp. ho chi minh",
+                            "thanh pho ho chi minh",
+                            "tphcm",
+                            "tp hcm",
+                            "hcm",
+                            raw);
+        }
+        return builder.equal(builder.lower(path), raw);
+    }
+
+    private static Predicate districtPredicate(
+            jakarta.persistence.criteria.CriteriaBuilder builder,
+            jakarta.persistence.criteria.Path<String> path,
+            String district) {
+        String raw = district == null ? "" : district.trim().toLowerCase(Locale.ROOT);
+        String ascii =
+                java.text.Normalizer.normalize(raw, java.text.Normalizer.Form.NFD)
+                        .replaceAll("\\p{M}+", "")
+                        .replace('đ', 'd')
+                        .replace('.', ' ')
+                        .replaceAll("\\s+", " ")
+                        .trim();
+        if ("*".equals(ascii) || "toan thanh pho".equals(ascii) || "tat ca".equals(ascii)) {
+            return builder.conjunction();
+        }
+        var matcher =
+                java.util.regex.Pattern.compile("^(?:(?:quan|q|district|d)\\s*)?0*([1-9][0-9]*)$")
+                        .matcher(ascii);
+        if (matcher.matches()) {
+            String n = matcher.group(1);
+            return builder.lower(path)
+                    .in("quận " + n, "quan " + n, "q." + n, "q " + n, "q" + n, n, raw);
+        }
+        return builder.equal(builder.lower(path), raw);
     }
 }

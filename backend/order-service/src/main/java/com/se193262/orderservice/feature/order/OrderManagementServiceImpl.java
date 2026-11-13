@@ -116,10 +116,14 @@ public class OrderManagementServiceImpl implements OrderManagementService {
             UUID orderId, OrderStatus targetStatus, String reason, UUID actorId, Set<String> roles) {
         requireActor(actorId);
         OrderAuthorizationContext context = persistenceService.getAuthorizationContext(orderId);
+        boolean isCustomer = hasRole(roles, "CUSTOMER") && context.customerId().equals(actorId);
+        if (targetStatus == OrderStatus.COMPLETED && !isCustomer) {
+            throw new OrderAccessDeniedException();
+        }
         if (hasRole(roles, ADMIN_ROLE)) {
             return transitionAndRelease(orderId, targetStatus, reason, actorId);
         }
-        if (hasRole(roles, "CUSTOMER") && context.customerId().equals(actorId)) {
+        if (isCustomer) {
             if (targetStatus != OrderStatus.CANCELLED && targetStatus != OrderStatus.COMPLETED) {
                 throw new OrderAccessDeniedException();
             }
@@ -127,9 +131,6 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         }
         requireBakeryRole(roles);
         requireActiveMembership(context.bakeryId(), actorId);
-        if (targetStatus == OrderStatus.COMPLETED) {
-            throw new OrderAccessDeniedException();
-        }
         return transitionAndRelease(orderId, targetStatus, reason, actorId);
     }
 

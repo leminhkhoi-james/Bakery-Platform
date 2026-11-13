@@ -1,5 +1,6 @@
 import { api, ApiError } from './apiClient.js'
-import { recordSource } from './unifiedDataService.js'
+import { simulationEnabled } from '../mockData/business/runtime.js'
+
 import { requireId, validateImage } from './managementModels.js'
 import { mapManagedList, catalogEntityPayload, optionsPayload, mapOptions } from './vendorCatalogModels.js'
 const root = (bakeryId) => '/bakeries/' + requireId(bakeryId)
@@ -29,8 +30,8 @@ export const vendorCatalogService = {
     return data
   },
   async getProductSnapshot(bakeryId, productId, options = {}) {
-    const url = recordSource({ id: productId }) === 'local' ? root(bakeryId) + '/products/' + requireId(productId) : '/products/' + requireId(productId)
-    const dto = await api.get(url, { ...options, allowMockFallback: false })
+    const url = root(bakeryId) + '/products/' + requireId(productId)
+    const dto = await api.get(url, { ...options, allowMockFallback: options.allowMockFallback ?? simulationEnabled() })
     if (dto?.product?.id !== productId || dto.bakeryId !== bakeryId || !Array.isArray(dto.images) || !Array.isArray(dto.options?.groups)) throw new ApiError('Snapshot ảnh/options không khớp sản phẩm.', 502)
     return { images: mapManagedList(dto.images), options: mapOptions(dto.options) }
   },

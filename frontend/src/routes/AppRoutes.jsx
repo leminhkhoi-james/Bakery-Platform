@@ -161,7 +161,7 @@ function PageRoutes({
       ) : currentPage === 'chat' ? (
         <CustomerChatPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'subscription-plans' ? (
-        <SubscriptionPlansPage onNavigate={onNavigate} />
+        <SubscriptionPlansPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'profile' ? (
         <CustomerProfilePage onAddToCart={onAddToCart} onNavigate={onNavigate} />
       ) : currentPage === 'login' ? (

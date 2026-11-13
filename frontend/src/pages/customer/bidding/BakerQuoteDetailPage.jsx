@@ -52,6 +52,7 @@ function QuoteContext({ offer, onNavigate }) {
   const canAccept = acceptableOffer(offer, rfq, user)
   const designPreviewUrl =
     rfq.preference?.extraOptions?.cake3DSnapshotUrl ||
+    rfq.selectedDesignImageUrl ||
     rfq.preference?.extraOptions?.selectedAiImageUrl ||
     rfq.images?.[0]?.url ||
     null
@@ -189,12 +190,31 @@ function QuoteContext({ offer, onNavigate }) {
             </div>
 
             {/* Verified Checkout & Delivery Address Selector */}
-            <VerifiedCheckout
-              offerId={offer.id}
-              disabled={!canAccept}
-              onNavigate={onNavigate}
-              expectedLocation={rfq ? { city: rfq.deliveryCity, district: rfq.deliveryDistrict } : null}
-            />
+            {offer.status === 'ACCEPTED' ? (
+              <div className="space-y-3 rounded-2xl border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-900">
+                <div className="flex items-center gap-2 font-bold text-emerald-800">
+                  <Icon name="check_circle" className="text-lg" />
+                  <span>Bạn đã chấp nhận báo giá này</span>
+                </div>
+                <p className="text-xs text-emerald-800/90 leading-relaxed">
+                  Đơn hàng của bạn đã được khởi tạo thành công và gửi sang tiệm bánh xử lý.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('tracking')}
+                  className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90 cursor-pointer"
+                >
+                  Xem đơn hàng của tôi
+                </button>
+              </div>
+            ) : (
+              <VerifiedCheckout
+                offerId={offer.id}
+                disabled={!canAccept}
+                onNavigate={onNavigate}
+                expectedLocation={rfq ? { city: rfq.deliveryCity, district: rfq.deliveryDistrict } : null}
+              />
+            )}
           </section>
         </div>
       </div>

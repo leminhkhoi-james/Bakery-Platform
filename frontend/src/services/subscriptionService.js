@@ -43,7 +43,7 @@ export const subscriptionService = {
   async getOrder(orderId, bakeryId, options = {}) {
     const order = mapSubscriptionOrder(await api.get('/subscription-orders/' + requireSubscriptionId(orderId, 'Mã đơn'), options))
     if (order.id.toLowerCase() !== orderId.toLowerCase()) throw new ApiError('Response trả về sai đơn mua gói.', 502)
-    if (order.bakeryId !== bakeryId) throw new ApiError('Đơn mua gói không thuộc cửa hàng đã chọn.', 403)
+    if (bakeryId != null && order.bakeryId !== bakeryId) throw new ApiError('Đơn mua gói không thuộc cửa hàng đã chọn.', 403)
     return order
   },
   async createOrder({ bakeryId, planId, key }) {

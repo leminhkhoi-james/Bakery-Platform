@@ -1,5 +1,5 @@
 import { canonicalBakeryId } from '../../../services/unifiedDataService.js'
-import BusinessSimulationReport from '../../../components/management/BusinessSimulationReport.jsx'
+import { RfqList } from '../rfq/VendorRfqMarketplacePage.jsx'
 import React, { useState } from 'react'
 import VendorFrame from '../../../components/management/VendorFrame.jsx'
 import VendorOrderList, { VendorOrderError } from './VendorOrderList.jsx'
@@ -15,10 +15,13 @@ const orderTabs = [
   ['orders', 'Đơn hàng'],
   ['offers', 'Báo giá'],
 ]
+const initialRfqFilters = { page: 1, status: '', city: '', district: '', sort: 'createdAt,desc' }
 
 function VerifiedVendorOrders({ bakeryId, bakery, user, roles, initialOrderId, initialTab, onNavigate }) {
   const [tab, setTab] = useState(initialTab)
   const [detail, setDetail] = useState(null)
+  const [requests, setRequests] = useState(initialRfqFilters)
+  const [offers, setOffers] = useState(initialRfqFilters)
   const access = useCatalogResource(loadDashboardAccess, { bakeryId, userId: user.id })
   if (access.status === 'loading') return <p role="status" className="sc-panel">Đang xác minh quyền quản lý cửa hàng…</p>
   if (access.error) return <VendorOrderError resource={access} />
@@ -45,7 +48,11 @@ function VerifiedVendorOrders({ bakeryId, bakery, user, roles, initialOrderId, i
         <p>Tiệm chưa có khu vực giao hàng để nhận yêu cầu phù hợp.</p>
         <button type="button" className="sc-button sc-action-button--secondary" onClick={() => onNavigate('vendor-settings?bakeryId=' + encodeURIComponent(bakeryId))}>Cấu hình giao hàng</button>
       </div>}
-    {tab !== 'orders' && <BusinessSimulationReport key={tab} bakeryId={bakeryId} bakery={bakery} loadHistory showMetrics={false} activeTab={tab} navigation={navigation} onOpenRecord={openRecord} />}
+    {tab !== 'orders' && <div className="sc-owner-rfq">
+      <RfqList key={tab} bakery={bakery ?? { id: bakeryId }} sent={tab === 'offers'}
+        filters={tab === 'offers' ? offers : requests} setFilters={tab === 'offers' ? setOffers : setRequests}
+        tabs={navigation} onOpen={id => openRecord(tab, id)} />
+    </div>}
     {detail && <DetailDrawer title={detail.has('offerId') ? 'Chi tiết báo giá' : 'Chi tiết yêu cầu'} className="sc-workspace-detail" onClose={() => setDetail(null)}>
       <QuoteWorkspace bakeryId={bakeryId} user={user} roles={roles} query={detail} onNavigate={navigateDetail} />
     </DetailDrawer>}

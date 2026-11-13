@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import SubscriptionOrderDetail from '../../src/pages/vendor/subscription/SubscriptionOrderDetail.jsx'
+import { AuthContext } from '../../src/context/useAuth.js'
 import VnpayReturnPage from '../../src/pages/customer/subscription/VnpayReturnPage.jsx'
 import '../../src/index.css'
 import '../../src/styles/design-system.css'
@@ -33,5 +34,7 @@ const navigate = (route) => { window.__vnpayNavigation = route }
 createRoot(document.getElementById('root')).render(
   ['checkout', 'unconfigured'].includes(scenario)
     ? <main className="mx-auto max-w-3xl px-4 py-10"><SubscriptionOrderDetail orderId={orderId} bakeryId={bakeryId} roles={['CUSTOMER']} onBusy={() => {}} onChanged={() => {}} /></main>
-    : <VnpayReturnPage routeSearch="?vnp_TxnRef=fixture&vnp_SecureHash=fixture" onNavigate={navigate} />,
+    : <AuthContext.Provider value={{ status: 'anonymous', user: null }}>
+        <VnpayReturnPage routeSearch="?vnp_TxnRef=fixture&vnp_SecureHash=fixture" onNavigate={navigate} />
+      </AuthContext.Provider>,
 )

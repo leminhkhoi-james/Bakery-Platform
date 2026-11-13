@@ -120,7 +120,19 @@ public class CakeRequestServiceImpl implements CakeRequestService {
                         access.visible(actor, null)
                                 .and((root, q, b) -> b.equal(root.get("id"), id))))
             throw BusinessException.forbidden();
-        return reader.detail(request);
+        return reader.detail(request, selectedDesignImageUrl(request));
+    }
+
+    private String selectedDesignImageUrl(CakeRequest request) {
+        if (request.getSelectedDesignId() == null) return null;
+        try {
+            var design = ai.validate(request.getSelectedDesignId(), request.getCustomerId(), request.getId(), true);
+            return design == null ? null : design.imageUrl();
+        } catch (BusinessException error) {
+            // The RFQ remains readable when its optional image is unavailable.
+            if (error.status() == 404 || error.status() == 503) return null;
+            throw error;
+        }
     }
 
     @Transactional(readOnly = true)

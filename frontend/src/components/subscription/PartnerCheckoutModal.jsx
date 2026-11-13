@@ -1,6 +1,6 @@
 import { phoneError, emailError } from '../../services/contactValidation.js'
 import { loadAddresses, selectedAddress } from '../../services/addressService.js'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
 import { onboardingService } from '../../services/onboardingService.js'
@@ -57,10 +57,10 @@ function getBakeryStatusBadge(status) {
   }
 }
 
-function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingApproval, subscription, checkedAt }) {
+function PartnerOrders({ bakery, plan, initialOrderId, roles, onBusy, onCheckApproval, checkingApproval, subscription, checkedAt }) {
   const [page, setPage] = useState(1)
   const history = useCatalogResource(loadSubscriptionOrders, { bakeryId: bakery.id, page, size: 10, sort: 'createdAt,desc' })
-  const [selectedOrderId, setOrderId] = useState(null)
+  const [selectedOrderId, setOrderId] = useState(initialOrderId)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [attempt, setAttempt] = useState(null)
@@ -101,12 +101,12 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingA
   const paymentSubmitted = Boolean(orders[0] && ['PAYMENT_REVIEW', 'PAID', 'COMPLETED'].includes(orders[0].status)) || planActive
   const paymentStatus = !bakeryApproved ? 'Chờ hồ sơ được duyệt' : planActive ? 'Gói đang có hiệu lực'
     : subscription?.scheduledSubscription ? 'Đã duyệt, chờ kỳ dịch vụ bắt đầu'
-    : history.status === 'loading' ? 'Đang tải trạng thái thanh toán…'
-    : history.status === 'error' ? 'Chưa tải được trạng thái thanh toán'
-    : orders[0] ? subscriptionStatusLabel(orders[0].status) : 'Chưa tạo đơn mua gói'
+      : history.status === 'loading' ? 'Đang tải trạng thái thanh toán…'
+        : history.status === 'error' ? 'Chưa tải được trạng thái thanh toán'
+          : orders[0] ? subscriptionStatusLabel(orders[0].status) : 'Chưa tạo đơn mua gói'
   const nextStep = !bakeryApproved ? 'Hồ sơ tiệm đang được Ban quản trị thẩm định.'
     : !planActive ? 'Hồ sơ đã được duyệt. Vui lòng hoàn tất thanh toán gói dịch vụ để kích hoạt cửa hàng.'
-    : 'Hồ sơ và gói dịch vụ đã hợp lệ. Đang kích hoạt Kênh Quản Lý Tiệm Bánh.'
+      : 'Hồ sơ và gói dịch vụ đã hợp lệ. Đang kích hoạt Kênh Quản Lý Tiệm Bánh.'
 
   return (
     <div className="space-y-4">
@@ -292,7 +292,7 @@ function PartnerOrders({ bakery, plan, roles, onBusy, onCheckApproval, checkingA
 
 const loadPartnerAddress = ({ enabled }, options) => enabled ? loadAddresses({}, options) : Promise.resolve([])
 
-export default function PartnerCheckoutModal({ plan, tracking = false, onClose, onNavigate }) {
+export default function PartnerCheckoutModal({ plan, tracking = false, initialOrderId, onClose, onNavigate }) {
   const { user, roles } = useAuth()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
@@ -308,8 +308,20 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
     bakeryId: savedBakery?.id,
     enabled: Boolean(savedBakery && savedBakery.status !== 'DRAFT' && !roles.includes('BAKERY_OWNER')),
     paused: busy,
-    onActivated: (activeBakery) => onNavigate?.('vendor-dashboard?bakeryId=' + activeBakery.id),
+    onActivated: (activeBakery) => onNavigate?.('vendor-subscription?' + new URLSearchParams({
+      bakeryId: activeBakery.id,
+      ...(initialOrderId ? { orderId: initialOrderId } : {}),
+    })),
   })
+  useEffect(() => {
+    if (tracking && roles.includes('BAKERY_OWNER')) {
+      const params = new URLSearchParams({
+        ...(savedBakery?.id ? { bakeryId: savedBakery.id } : {}),
+        ...(initialOrderId ? { orderId: initialOrderId } : {}),
+      })
+      onNavigate?.('vendor-subscription' + (params.toString() ? '?' + params.toString() : ''))
+    }
+  }, [tracking, roles, savedBakery?.id, initialOrderId, onNavigate])
   const bakery = activation.bakery || savedBakery
   const addressRows = bakery?.operations?.addresses || []
   const defaultAddress = addressRows.find(row => row.isPrimary) || addressRows[0] || selectedAddress(addresses.data || [], '')
@@ -344,20 +356,34 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
       return
     }
 
+    const normalizedCity = /^(?:tp\.?\s*|thành phố\s*)?hồ chí minh$/i.test(city.trim())
+      ? 'TP. Hồ Chí Minh'
+      : city.trim()
     const address = {
       addressLine,
       ward: ward || null,
       district,
-      city,
+      city: normalizedCity,
       isPrimary: true,
     }
-    const defaultServiceArea = {
-      city,
-      district,
-      deliveryFee: 0,
-      minimumOrder: 0,
-      active: true,
-    }
+    const defaultServiceAreas = [
+      {
+        city: normalizedCity,
+        district,
+        deliveryFee: 0,
+        minimumOrder: 0,
+        active: true,
+      },
+      ...(normalizedCity === 'TP. Hồ Chí Minh' && district.trim().toLowerCase() !== 'quận 1'
+        ? [{
+          city: normalizedCity,
+          district: 'Quận 1',
+          deliveryFee: 0,
+          minimumOrder: 0,
+          active: true,
+        }]
+        : []),
+    ]
     const defaultBusinessHours = [1, 2, 3, 4, 5, 6, 7].map((day) => ({
       dayOfWeek: day,
       closed: false,
@@ -377,7 +403,7 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
         email: email || undefined,
         operations: {
           addresses: [address],
-          serviceAreas: [defaultServiceArea],
+          serviceAreas: defaultServiceAreas,
           businessHours: defaultBusinessHours,
         },
       })
@@ -465,6 +491,7 @@ export default function PartnerCheckoutModal({ plan, tracking = false, onClose, 
             <PartnerOrders
               bakery={bakery}
               plan={plan}
+              initialOrderId={initialOrderId}
               roles={roles}
               onBusy={setBusy}
               onCheckApproval={activation.check}

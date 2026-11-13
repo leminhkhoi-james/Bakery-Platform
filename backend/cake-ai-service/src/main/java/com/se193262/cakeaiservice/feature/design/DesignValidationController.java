@@ -20,8 +20,9 @@ public class DesignValidationController {
     public Map<String, Object> validate(
             @PathVariable UUID id,
             @RequestParam UUID customerId,
-            @RequestParam UUID cakeRequestId) {
-        return service.validate(id, customerId, cakeRequestId);
+            @RequestParam UUID cakeRequestId,
+            @RequestParam(defaultValue = "false") boolean includeImage) {
+        return service.validate(id, customerId, cakeRequestId, includeImage);
     }
 
     @GetMapping("/cake-requests/{id}/generation-context")

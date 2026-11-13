@@ -75,7 +75,7 @@ public class CakeRequestMapper {
             List<RequestOptionSelection> options,
             List<RequestImageResponse> images,
             List<RequestStatusHistory> history,
-            List<CakeRequestResponse.OfferSummary> offerSummaries) {
+            List<CakeRequestResponse.OfferSummary> offerSummaries, String selectedDesignImageUrl) {
         return new CakeRequestResponse(
                 r.getId(),
                 r.getCustomerId(),
@@ -118,7 +118,7 @@ public class CakeRequestMapper {
                         .toList(),
                 r.getSelectedDesignId() == null
                         ? null
-                        : new CakeRequestResponse.SelectedDesignSummary(r.getSelectedDesignId()),
+                        : new CakeRequestResponse.SelectedDesignSummary(r.getSelectedDesignId(), selectedDesignImageUrl),
                 offerSummaries,
                 r.getCreatedAt(),
                 r.getUpdatedAt(),

@@ -2,6 +2,7 @@ package com.se193262.bakeryservice.feature.product.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.se193262.bakeryservice.feature.product.dto.ManagedProductResponse;
 import com.se193262.bakeryservice.feature.product.dto.ProductDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductOptionsDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductImageResponse;
@@ -38,6 +39,12 @@ public class ProductController {
 
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ApiResponse<ManagedProductResponse>> getManagedProduct(
+            @PathVariable UUID bakeryId, @PathVariable UUID productId) {
+        return ResponseEntity.ok(ApiResponse.success(productService.getManagedProduct(bakeryId, productId)));
     }
 
     @GetMapping

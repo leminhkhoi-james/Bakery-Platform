@@ -106,7 +106,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/bakeries/{bakeryId}/categories",
                                 "/api/v1/bakeries/{bakeryId}/add-ons",
-                                "/api/v1/bakeries/{bakeryId}/products")
+                                "/api/v1/bakeries/{bakeryId}/products",
+                                "/api/v1/bakeries/{bakeryId}/products/{productId}")
                         .access(bakeryOwner())
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/v1/bakeries/{bakeryId}",

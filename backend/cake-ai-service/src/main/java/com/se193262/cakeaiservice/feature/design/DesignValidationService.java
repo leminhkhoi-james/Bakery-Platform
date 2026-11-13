@@ -1,6 +1,7 @@
 package com.se193262.cakeaiservice.feature.design;
 
 import com.se193262.platform.exception.BusinessException;
+import com.se193262.cakeaiservice.infrastructure.storage.ImageStorage;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,19 @@ import java.util.*;
 public class DesignValidationService {
     private final JdbcClient jdbc;
 
-    public DesignValidationService(JdbcClient jdbc) {
+    private final ImageStorage storage;
+
+    public DesignValidationService(JdbcClient jdbc, ImageStorage storage) {
         this.jdbc = jdbc;
+        this.storage = storage;
     }
 
-    public Map<String, Object> validate(UUID designId, UUID customerId, UUID cakeRequestId) {
+    public Map<String, Object> validate(UUID designId, UUID customerId, UUID cakeRequestId, boolean includeImage) {
         var row =
                 jdbc
                         .sql(
                                 "select"
-                                    + " d.id,d.moderation_status,j.customer_id,j.cake_request_id,j.status"
+                                    + " d.id,d.image_object_key,d.moderation_status,j.customer_id,j.cake_request_id,j.status"
                                     + " from generated_designs d join generation_jobs j on"
                                     + " j.id=d.generation_job_id where d.id=:id")
                         .param("id", designId)
@@ -31,7 +35,7 @@ public class DesignValidationService {
                         .stream()
                         .findFirst()
                         .orElseThrow(BusinessException::missing);
-        return Map.of(
+        var result = new HashMap<String, Object>(Map.of(
                 "id",
                 designId,
                 "exists",
@@ -43,7 +47,14 @@ public class DesignValidationService {
                 "moderationStatus",
                 row.get("moderation_status"),
                 "jobStatus",
-                row.get("status"));
+                row.get("status")));
+        if (includeImage && Boolean.TRUE.equals(result.get("ownerMatches"))
+                && Boolean.TRUE.equals(result.get("requestMatches"))
+                && "APPROVED".equals(result.get("moderationStatus"))
+                && "SUCCEEDED".equals(result.get("jobStatus"))) {
+            result.put("imageUrl", storage.signedUrl((String) row.get("image_object_key")));
+        }
+        return result;
     }
 
     public Map<String, Boolean> context(UUID requestId) {

@@ -35,7 +35,7 @@ public record CakeRequestResponse(
         Instant createdAt,
         Instant updatedAt,
         long version) {
-    public record SelectedDesignSummary(UUID id) {}
+    public record SelectedDesignSummary(UUID id, String imageUrl) {}
 
     public record OfferSummary(
             UUID id,

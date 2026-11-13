@@ -150,15 +150,14 @@ class OrderManagementAuthorizationTest {
     }
 
     @Test
-    void bakeryCannotTransitionDirectlyToCompleted() {
+    void onlyOrderingCustomerCanCompleteManually() {
         when(persistenceService.getAuthorizationContext(ORDER_ID))
                 .thenReturn(new OrderAuthorizationContext(CUSTOMER_ID, BAKERY_ID));
-        when(bakeryClient.getMembershipAuthorization(BAKERY_ID, OTHER_CUSTOMER_ID, "OWNER"))
-                .thenReturn(new BakeryClient.MembershipAuthorizationResponse(
-                        BAKERY_ID, OTHER_CUSTOMER_ID, true, "OWNER", true));
 
-        assertThrows(OrderAccessDeniedException.class,
-                () -> service.transitionOrder(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID, Set.of("BAKERY_OWNER")));
+        for (String role : List.of("BAKERY_OWNER", "ADMIN", "CUSTOMER")) {
+            assertThrows(OrderAccessDeniedException.class, () -> service.transitionOrder(
+                    ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID, Set.of(role)));
+        }
         verify(persistenceService, never()).transition(ORDER_ID, OrderStatus.COMPLETED, "Done", OTHER_CUSTOMER_ID);
     }
 

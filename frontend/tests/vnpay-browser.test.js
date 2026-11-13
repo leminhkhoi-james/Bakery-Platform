@@ -48,6 +48,7 @@ test('Return polls backend state before announcing success and handles cancellat
     await page.goto(base + '?scenario=poll')
     await page.getByRole('heading', { name: 'Đang chờ xác nhận thanh toán' }).waitFor()
     await page.getByRole('heading', { name: 'Thanh toán thành công', exact: true }).waitFor({ timeout: 12000 })
+    await page.waitForFunction(() => new URLSearchParams(window.__vnpayNavigation?.split('?')[1]).get('returnTo')?.startsWith('/subscription-plans?tracking=1&orderId='))
     for (const [scenario, title] of [['cancelled', 'Bạn đã hủy thanh toán'], ['review', 'Giao dịch cần được đối soát'], ['invalid', 'Chưa xác minh được thanh toán']]) {
       await page.goto(base + '?scenario=' + scenario)
       await page.getByRole('heading', { name: title, exact: true }).waitFor()

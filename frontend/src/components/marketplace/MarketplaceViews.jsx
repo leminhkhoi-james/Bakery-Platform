@@ -105,8 +105,7 @@ export function RequestInfo({ request, compact = false }) {
   const [live3DMode, setLive3DMode] = useState(Boolean(cake3DConfig))
   const [show3DCutaway, setShow3DCutaway] = useState(false)
   const selectedAiImageUrl =
-    request.preference?.extraOptions?.selectedAiImageUrl ||
-    (request.selectedDesignId && request.images?.[0]?.url ? request.images[0].url : null)
+    request.selectedDesignImageUrl || request.preference?.extraOptions?.selectedAiImageUrl || null
   const hasBudget = request.budgetMin != null || request.budgetMax != null
   const extraImages = (request.images || []).filter(
     (img) =>

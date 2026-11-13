@@ -10,12 +10,16 @@ import { authService } from './services/authService.js'
 import { installDisplayData } from './mockData/displayRuntime.js'
 import { installBusinessSimulation } from './mockData/business/runtime.js'
 
-const realFetch = window.fetch.bind(window)
-installDisplayData(authService.getSnapshot)
-installBusinessSimulation(authService.getSnapshot, realFetch).then(() => createRoot(document.getElementById('root')).render(
+if (import.meta.env.DEV && import.meta.env.VITE_ENABLE_BUSINESS_SIMULATION === 'true') {
+  await installBusinessSimulation(authService.getSnapshot, window.fetch.bind(window))
+} else if (import.meta.env.DEV && import.meta.env.VITE_DEMO_EMPTY_DATA === 'true') {
+  installDisplayData(authService.getSnapshot)
+}
+
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
       <App />
     </AuthProvider>
   </StrictMode>,
-))
+)

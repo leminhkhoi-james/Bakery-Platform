@@ -36,8 +36,17 @@ export function usePartnerActivation({ bakeryId, enabled, paused = false, onActi
         if (bakery?.id !== bakeryId) throw new Error('Hồ sơ tiệm đã thay đổi. Vui lòng mở lại trang đăng ký.')
         const checkedAt = Date.now()
         setState({ bakery, subscription, checkedAt, checking: manual, error: null })
-        const activated = bakery.status === 'ACTIVE'
-          ? await onboardingService.syncOwner(userId, options) : null
+        const planActive = subscription?.currentSubscription?.status === 'ACTIVE'
+        let activated = null
+        if (bakery.status === 'ACTIVE' && planActive) {
+          try {
+            activated = await onboardingService.complete(bakeryId)
+          } catch {
+            activated = await onboardingService.syncOwner(userId, options)
+          }
+        } else if (bakery.status === 'ACTIVE') {
+          activated = await onboardingService.syncOwner(userId, options)
+        }
         if (!cancelled && activated) {
           setState({ bakery, subscription, checkedAt, checking: false, error: null })
           onReady.current?.(bakery)

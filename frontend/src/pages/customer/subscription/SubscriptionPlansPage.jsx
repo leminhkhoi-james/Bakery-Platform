@@ -1,6 +1,7 @@
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/useAuth.js'
+import { isCatalogId } from '../../../services/catalogModels.js'
 import { onboardingService } from '../../../services/onboardingService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadSubscriptionPlans, subscriptionService } from '../../../services/subscriptionService.js'
@@ -28,14 +29,16 @@ function PlanDetail({ id }) {
   )
 }
 
-export default function SubscriptionPlansPage({ onNavigate }) {
+export default function SubscriptionPlansPage({ onNavigate, routeSearch = '' }) {
   const { user, roles = [] } = useContext(AuthContext) || {}
   const isOwner = roles.includes('BAKERY_OWNER')
   const registration = useCatalogResource(loadRegistration, { enabled: Boolean(user && roles.includes('CUSTOMER') && !isOwner) })
   const plans = useCatalogResource(loadSubscriptionPlans)
   const [selected, setSelected] = useState(null)
   const [checkoutPlan, setCheckoutPlan] = useState(null)
-  const [trackingRegistration, setTrackingRegistration] = useState(false)
+  const query = new URLSearchParams(routeSearch)
+  const trackingOrderId = query.get('orderId')
+  const [trackingRegistration, setTrackingRegistration] = useState(query.get('tracking') === '1')
 
   const activePlans = plans.data?.filter((p) => p.status === 'ACTIVE') || []
   const minPrice = activePlans.length ? Math.min(...activePlans.map((p) => p.monthlyPrice || 0)) : 49000
@@ -200,8 +203,9 @@ export default function SubscriptionPlansPage({ onNavigate }) {
 
         {(checkoutPlan || trackingRegistration) && (
           <PartnerCheckoutModal
-            plan={checkoutPlan}
+            plan={checkoutPlan || (trackingRegistration ? startPlan : null)}
             tracking={trackingRegistration}
+            initialOrderId={trackingRegistration && isCatalogId(trackingOrderId) ? trackingOrderId : null}
             onClose={() => { setCheckoutPlan(null); setTrackingRegistration(false) }}
             onNavigate={onNavigate}
           />

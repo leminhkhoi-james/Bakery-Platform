@@ -97,7 +97,7 @@ export function VendorRfqWorkspace({ bakery, onNavigate, user, roles }) {
   </section>
 }
 
-function RfqList({ bakery, sent, filters, setFilters, onOpen, tabs, panelId, tabId }) {
+export function RfqList({ bakery, sent, filters, setFilters, onOpen, tabs, panelId, tabId }) {
   const { containerRef, pageSize } = useViewportPageSize(() => setFilters(current => ({ ...current, page: 1 })))
   const resource = useCatalogResource(sent ? loadVendorOffers : loadVendorRequests, sent ? { bakeryId: bakery.id, ...filters, size: pageSize } : { bakery, ...filters, size: pageSize, excludeQuoted: true })
   const locations = useCatalogResource(loadVendorRfqLocations, { bakery })
@@ -112,7 +112,7 @@ function RfqList({ bakery, sent, filters, setFilters, onOpen, tabs, panelId, tab
       <label>Quận/huyện<select className="sc-input" {...field('district')} disabled={locations.status === 'loading'}><option value="">Tất cả quận/huyện</option>{districts.map(district => <option key={district} value={district}>{district}</option>)}</select></label>
     </div></div>
     {locations.error && <p role="alert">Chưa tải được danh sách khu vực. Vui lòng thử lại sau.</p>}
-    <div role="tabpanel" id={panelId} aria-labelledby={tabId}><RfqTable resource={resource} sent={sent} onOpen={onOpen} />{resource.status === 'ready' && !resource.error && !resource.refreshing && resource.data?.meta.pages > 1 && <CatalogPagination meta={resource.data.meta} onPage={(page) => setFilters((current) => ({ ...current, page }))} />}</div>
+    <div role={tabId ? 'tabpanel' : undefined} id={panelId} aria-labelledby={tabId}><RfqTable resource={resource} sent={sent} onOpen={onOpen} />{resource.status === 'ready' && !resource.error && !resource.refreshing && resource.data?.meta.pages > 1 && <CatalogPagination meta={resource.data.meta} onPage={(page) => setFilters((current) => ({ ...current, page }))} />}</div>
   </div>
 }
 

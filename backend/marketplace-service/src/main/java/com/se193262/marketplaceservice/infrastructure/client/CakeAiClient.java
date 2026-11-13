@@ -14,7 +14,13 @@ public class CakeAiClient {
             boolean ownerMatches,
             boolean requestMatches,
             String moderationStatus,
-            String jobStatus) {}
+            String jobStatus,
+            String imageUrl) {
+        public Design(UUID id, boolean exists, boolean ownerMatches, boolean requestMatches,
+                String moderationStatus, String jobStatus) {
+            this(id, exists, ownerMatches, requestMatches, moderationStatus, jobStatus, null);
+        }
+    }
 
     public record GenerationContext(boolean hasJobs) {}
 
@@ -25,6 +31,10 @@ public class CakeAiClient {
     }
 
     public Design validate(UUID design, UUID customer, UUID request) {
+        return validate(design, customer, request, false);
+    }
+
+    public Design validate(UUID design, UUID customer, UUID request, boolean includeImage) {
         return http.get(
                 http.properties().cakeAiUrl(),
                 "/internal/v1/generated-designs/"
@@ -32,7 +42,8 @@ public class CakeAiClient {
                         + "/validation?customerId="
                         + customer
                         + "&cakeRequestId="
-                        + request,
+                        + request
+                        + (includeImage ? "&includeImage=true" : ""),
                 "cake-ai-service",
                 "cake-ai:design:validate",
                 Design.class);

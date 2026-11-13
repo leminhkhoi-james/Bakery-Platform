@@ -85,6 +85,26 @@ class SecurityConfigTest {
     }
 
     @Test
+    void managementProductDetailRequiresActiveOwnerOfBakery() throws Exception {
+        String suffix = "/products/" + UUID.randomUUID();
+        String path = "/api/v1/bakeries/" + BAKERY_ID + suffix;
+        mockMvc.perform(get(path)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+
+        memberFixture.member = new BakeryMember(new Bakery("Test", "0900000000", null),
+                USER_ID, BakeryMemberRole.OWNER);
+        memberFixture.member.update(null, BakeryMemberStatus.ACTIVE);
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-customer"))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/bakeries/" + UUID.randomUUID() + suffix)
+                        .header("Authorization", "Bearer user-owner"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @DisplayName("JWT customer bị từ chối dù có owner membership")
     void catalog_withCustomerToken_isForbidden() throws Exception {
         BakeryMember member = new BakeryMember(new Bakery("Test", "0900000000", null),
@@ -209,7 +229,7 @@ class SecurityConfigTest {
         @PostMapping("/api/v1/bakeries")
         String create() { return "ok"; }
 
-        @GetMapping("/api/v1/bakeries/{bakeryId}/products")
+        @GetMapping({"/api/v1/bakeries/{bakeryId}/products", "/api/v1/bakeries/{bakeryId}/products/{productId}"})
         String products() { return "ok"; }
 
         @PostMapping("/api/v1/bakeries/{bakeryId}/products")

@@ -66,6 +66,7 @@ export function mapRequest(dto, detail = false) {
   if (dto.preference) result.preference = dto.preference
   if (detail) {
     if (!['images', 'statusHistory', 'optionSelections', 'offers'].every((key) => Array.isArray(dto[key]))) throw new ApiError('RFQ detail thiếu danh sách theo DTO.', 502)
+    result.selectedDesignImageUrl = safeUrl(dto.selectedDesign?.imageUrl)
     result.preference = dto.preference ?? null; result.optionSelections = dto.optionSelections; result.offers = dto.offers
     result.images = dto.images.map((image) => ({ ...image, url: safeUrl(image.url) })); result.statusHistory = dto.statusHistory
   } else if (Array.isArray(dto.images)) {

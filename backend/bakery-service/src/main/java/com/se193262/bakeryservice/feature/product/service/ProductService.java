@@ -1,5 +1,6 @@
 package com.se193262.bakeryservice.feature.product.service;
 
+import com.se193262.bakeryservice.feature.product.dto.ManagedProductResponse;
 import com.se193262.bakeryservice.feature.product.dto.ProductDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductOptionsDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductImageResponse;
@@ -11,6 +12,8 @@ import com.se193262.bakeryservice.shared.dto.PageResult;
 import java.util.UUID;
 
 public interface ProductService {
+
+    ManagedProductResponse getManagedProduct(UUID bakeryId, UUID productId);
 
     PageResult<ProductDto> list(UUID bakeryId, ProductStatus status, UUID categoryId,
                                 String query, int page, int size, String sort);

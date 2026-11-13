@@ -5,6 +5,7 @@ import com.se193262.bakeryservice.feature.bakery.entity.Bakery;
 import com.se193262.bakeryservice.feature.bakery.repository.BakeryRepository;
 import com.se193262.bakeryservice.feature.category.entity.ProductCategory;
 import com.se193262.bakeryservice.feature.category.repository.ProductCategoryRepository;
+import com.se193262.bakeryservice.feature.product.dto.ManagedProductResponse;
 import com.se193262.bakeryservice.feature.product.dto.ProductDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductOptionsDto;
 import com.se193262.bakeryservice.feature.product.dto.ProductImageResponse;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -68,6 +70,24 @@ public class ProductServiceImpl implements ProductService {
         this.imageRepository = imageRepository;
         this.imageStorage = imageStorage;
         this.entitlementClient = entitlementClient;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ManagedProductResponse getManagedProduct(UUID bakeryId, UUID productId) {
+        Product product = findProduct(bakeryId, productId);
+        List<ProductImageResponse> images = imageRepository.findAllByProduct_IdOrderByDisplayOrderAsc(productId)
+                .stream().map(image -> new ProductImageResponse(image.getId(),
+                        imageStorage.signedUrl(image.getObjectKey()), Instant.now().plus(imageStorage.urlExpiry()),
+                        image.getMediaType(), image.getDisplayOrder(), image.isPrimary())).toList();
+        Map<UUID, List<ProductOptionValue>> valuesByGroup = valueRepository
+                .findAllByOptionGroup_Product_Id(productId).stream()
+                .collect(Collectors.groupingBy(value -> value.getOptionGroup().getId()));
+        ProductOptionsDto options = new ProductOptionsDto(groupRepository
+                .findAllByProduct_IdOrderByDisplayOrderAsc(productId).stream()
+                .map(group -> ProductOptionsDto.Group.fromEntity(group,
+                        valuesByGroup.getOrDefault(group.getId(), List.of()))).toList());
+        return new ManagedProductResponse(ProductDto.fromEntity(product), bakeryId, images, options);
     }
 
     @Override

@@ -1,8 +1,32 @@
-const locationKey = (value) => typeof value === 'string' ? value.trim().toLocaleLowerCase('vi') : ''
+const normalizeText = (value) => typeof value === 'string'
+  ? value.normalize('NFD').replace(/\p{M}+/gu, '').replace(/[đĐ]/g, 'd').toLowerCase().replace(/\./g, ' ').replace(/\s+/g, ' ').trim()
+  : ''
+
+const HCM_ALIASES = new Set(['ho chi minh', 'hcm', 'tphcm', 'tp hcm'])
+
+export function cityKey(value) {
+  const key = normalizeText(value).replace(/^(?:thanh pho|tp|tinh)\s+/, '').replace(/\s+city$/, '')
+  return HCM_ALIASES.has(key) ? 'ho chi minh' : key
+}
+
+export function districtKey(value) {
+  const key = normalizeText(value)
+  if (key === '*' || key === 'toan thanh pho' || key === 'tat ca') return '*'
+  const numbered = key.match(/^(?:(?:quan|q|district|d)\s*)?0*([1-9][0-9]*)$/)
+  return numbered ? 'quan ' + numbered[1] : key
+}
+
 export function requestMatchesBakery(request, bakery) {
   if (request.status !== 'OPEN' || bakery.status && bakery.status !== 'ACTIVE') return false
   if (request.targetBakeryId) return request.targetBakeryId.toLowerCase() === bakery.id.toLowerCase()
-  return bakery.operations?.serviceAreas?.some((area) => area.active === true && locationKey(area.city) === locationKey(request.deliveryCity) && locationKey(area.district) === locationKey(request.deliveryDistrict)) || false
+  const reqCity = cityKey(request.deliveryCity)
+  const reqDistrict = districtKey(request.deliveryDistrict)
+  return bakery.operations?.serviceAreas?.some((area) => {
+    if (area.active !== true) return false
+    if (cityKey(area.city) !== reqCity) return false
+    const areaDistrict = districtKey(area.district)
+    return areaDistrict === '*' || areaDistrict === reqDistrict
+  }) || false
 }
 export const rfqStatusLabel = (status) => ({ DRAFT: 'Bản nháp', OPEN: 'Đang nhận báo giá', OFFER_SELECTED: 'Đã chọn báo giá', CLOSED: 'Đã đóng', CANCELLED: 'Đã hủy' }[status] || 'Chưa rõ trạng thái')
 export const sentOfferStatusLabel = (status, expiresAt) => status === 'PENDING' && Number.isFinite(Date.parse(expiresAt)) && Date.parse(expiresAt) <= Date.now() ? 'Đã qua hạn phản hồi' : ({ PENDING: 'Chờ khách hàng phản hồi', ACCEPTED: 'Đã chấp nhận', REJECTED: 'Đã từ chối', WITHDRAWN: 'Đã rút', EXPIRED: 'Đã hết hạn' }[status] || 'Chưa rõ trạng thái')

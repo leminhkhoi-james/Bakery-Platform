@@ -5,7 +5,6 @@ import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import CatalogState from '../../../components/catalog/CatalogState.jsx'
 import CatalogImage from '../../../components/catalog/CatalogImage.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
-import { STORES } from '../../../mockData/customer/stores.js'
 
 export const StoreDirectoryPage = ({
   customCake = null,
@@ -20,11 +19,6 @@ export const StoreDirectoryPage = ({
   const [page, setPage] = useState(1)
   const resource = useCatalogResource(loadBakeries, { query: searchQuery, city: selectedCity === 'all' ? '' : selectedCity, district, sort, page, size: 6 })
   const filteredStores = resource.data?.result || []
-
-  const findStoreMeta = (store) => {
-    const norm = store?.name?.toLowerCase().trim()
-    return STORES.find((s) => s.name?.toLowerCase().trim() === norm || s.id === store?.id) || {}
-  }
 
   const handleSelectStoreForCake = (store) => {
     const cakePrice = customCake?.price || 950000
@@ -213,7 +207,6 @@ export const StoreDirectoryPage = ({
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {filteredStores.map((store) => {
-              const meta = findStoreMeta(store)
               return (
                 <div
                   key={store.id}
@@ -225,7 +218,7 @@ export const StoreDirectoryPage = ({
                       {/* Photo Thumbnail with Rating Badge */}
                       <div className="relative shrink-0 w-full sm:w-28 sm:h-28 h-40 rounded-2xl overflow-hidden shadow-sm border border-primary/10 bg-primary-fixed/20">
                         <CatalogImage
-                          src={store.image || meta.image}
+                          src={store.image}
                           alt={cleanPresentationLabel(store.name, 'Tiệm bánh')}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -239,7 +232,7 @@ export const StoreDirectoryPage = ({
                           title="Bấm để xem đánh giá của tiệm bánh"
                         >
                           <span className="text-amber-500 text-xs leading-none">★</span>
-                          <span>{meta.rating || '4.9'}</span>
+                          <span>Đánh giá</span>
                         </button>
                       </div>
 
@@ -247,10 +240,7 @@ export const StoreDirectoryPage = ({
                       <div className="flex-1 min-w-0 w-full">
                         <div className="flex flex-wrap items-center justify-between gap-1.5">
                           <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed/40 text-secondary text-[10px] font-bold uppercase tracking-wider">
-                            {meta.badge || 'Nghệ nhân đối tác'}
-                          </span>
-                          <span className="text-[11px] text-outline font-medium">
-                            {meta.ordersCount ? `${meta.ordersCount}+ đơn` : 'Đã kiểm định'}
+                            Tiệm bánh đối tác
                           </span>
                         </div>
 
@@ -266,7 +256,7 @@ export const StoreDirectoryPage = ({
 
                         {/* Tagline / Specialty */}
                         <p className="text-xs text-on-surface-variant font-medium mt-1 line-clamp-1">
-                          {meta.tagline || store.description || 'Tiệm bánh kem nghệ thuật hảo hạng'}
+                          {store.description}
                         </p>
 
                         {/* Location */}
@@ -285,13 +275,13 @@ export const StoreDirectoryPage = ({
                     <div className="mt-4 pt-3 border-t border-primary/8 flex flex-wrap items-center gap-2 text-[11px]">
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#fafafc] border border-primary/10 text-on-surface-variant font-medium">
                         <span translate="no" className="material-symbols-outlined notranslate text-xs text-secondary shrink-0" aria-hidden="true">local_shipping</span>
-                        <span>{meta.deliverySla ? meta.deliverySla.split('•')[0].trim() : 'Giao hàng chuyên dụng'}</span>
+                        <span>Xem khu vực giao hàng trong hồ sơ tiệm</span>
                       </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#fafafc] border border-primary/10 text-on-surface-variant font-medium">
                         <svg className="w-3.5 h-3.5 text-secondary shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                           <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
                         </svg>
-                        <span>{meta.escrowBadge || 'Thỏa thuận cọc minh bạch • Hỗ trợ đối soát đơn hàng 100%'}</span>
+                        <span>Trao đổi với tiệm về điều kiện đặt bánh</span>
                       </span>
                     </div>
                   </div>

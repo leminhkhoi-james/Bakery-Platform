@@ -1,4 +1,5 @@
 import { useViewportPageSize } from '../../../hooks/useViewportPageSize.js'
+import { isCatalogId } from '../../../services/catalogModels.js'
 import { vendorMoney } from '../../../services/vendorPresentation.js'
 import { displayReference } from '../../../services/displayReference.js'
 import { cleanPresentationLabel } from '../../../services/uiLabels.js'
@@ -42,6 +43,8 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId, initia
     catch (failure) { setError(failure) }
     finally { inFlight.current = false; setBusy(false); onBusy(false) }
   }
+  const orderOutsidePage = isCatalogId(orderId) && history.status === 'ready' &&
+    !history.data.result.some(order => order.id === orderId)
   const locked = busy || detailBusy
   const currentSub = subscription.error || subscription.status !== 'ready' ? null : subscription.data?.currentSubscription
   const currentPlan = plans.data?.find(p => p.id === currentSub?.planId || p.code === currentSub?.planCode)
@@ -108,6 +111,9 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId, initia
     <section ref={containerRef}><div className="mb-4 flex flex-wrap items-center gap-3"><h2 className="mr-auto text-xl font-bold">Lịch sử mua gói</h2><label>Trạng thái <select value={status} disabled={locked} onChange={(event) => { setStatus(event.target.value); setPage(1) }} className="rounded-xl border p-2"><option value="">Tất cả</option>{['PENDING_PAYMENT', 'PAYMENT_REVIEW', 'COMPLETED', 'REJECTED', 'CANCELLED', 'EXPIRED'].map((value) => <option key={value} value={value}>{subscriptionStatusLabel(value)}</option>)}</select></label></div>
       <ResourceState resource={history}>{history.data && <>{history.data.result.length ? <ul className="space-y-3">{history.data.result.map((order) => <li key={order.id}><button disabled={locked} aria-expanded={orderId === order.id} onClick={() => setOrderId(current => current === order.id ? null : order.id)} className="w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4 text-left disabled:opacity-40"><span className="block break-all font-bold">{displayReference(order.id, 'SUB', order.orderNumber)} · {cleanPresentationLabel(order.planNameSnapshot || order.planCodeSnapshot, 'Chưa có tên gói')}</span><span>{formatSubscriptionMoney(order.totalAmount, order.currency)} · {subscriptionStatusLabel(order.status)} · {formatSubscriptionDate(order.createdAt)}</span></button>{orderId === order.id && <div className="mt-3"><SubscriptionOrderDetail key={orderId} orderId={orderId} bakeryId={bakeryId} roles={roles} revision={detailRevision} onChanged={refresh} onBusy={(value) => { setDetailBusy(value); onBusy(value) }} /></div>}</li>)}</ul> : <p>Chưa có đơn mua gói phù hợp.</p>}{history.data.meta.pages > 1 && <CatalogPagination meta={history.data.meta} onPage={(value) => { if (!locked) setPage(value) }} />}</>}</ResourceState>
 
+      {orderOutsidePage && <SubscriptionOrderDetail key={orderId} orderId={orderId} bakeryId={bakeryId}
+        roles={roles} revision={detailRevision} onChanged={refresh}
+        onBusy={(value) => { setDetailBusy(value); onBusy(value) }} />}
     </section><p className="text-sm text-on-surface-variant">Để mua kỳ dịch vụ tiếp theo, tạo đơn mới và chờ xác nhận thanh toán. Liên hệ quản trị viên nếu cần điều chỉnh gói.</p>
   </div>
 }
