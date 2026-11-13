@@ -16,6 +16,8 @@ works for the public REST resources. Subscription's `/bakeries/*/subscription` a
 route. Admin resource groups are dispatched to their owning service, not a shared
 admin backend. Cake AI's public `/storage/**` route is also forwarded unchanged.
 No catch-all `/api/**`, internal route, or direct service Swagger alias is added.
+The exact public `/api/v1/bakery-reviews` list routes to Order, including query
+pagination. The `/orders/api/v1/bakery-reviews` compatibility alias is retained.
 
 Spring Cloud Gateway Server Web MVC routes public requests to seven domain
 services using `/identity`, `/bakery`, `/marketplace`, `/subscription`, `/cake-ai`,
@@ -46,10 +48,17 @@ For unprefixed auth URLs the cookie Path remains `/api/v1/auth`; use the same UR
 style for login, refresh and logout within a session. The compatibility route's
 cookie rewrite remains limited to the prefixed Identity route.
 
-Run `scripts/Start-GatewayStack.ps1` from the repository root to start the
-`bakery-gateway` Docker project with all seven services. The launcher uses root
-`.env` credentials, separate persistent volumes, and disables paid AI execution.
-Run `python scripts/Test-GatewayStack.py` for HTTP smoke verification.
+For native Windows development use `python scripts/native_backend.py start`
+with an explicit state directory. It reads root `.env`, starts the seven business
+services before Gateway, and verifies native readiness. MinIO is managed by
+`scripts/native_minio.py`. Stop owned processes before replacing executable JARs
+on Windows. Container launchers are not part of the native remediation workflow.
+
+`GATEWAY_NATIVE_DUAL_LOOPBACK=true` enables an additional IPv6 `::1` Tomcat
+connector at the same fixed port as the required primary `127.0.0.1` connector.
+This native-only setting avoids localhost address-family ambiguity without
+binding a wildcard or exposing the service to the LAN. Startup must fail if
+either loopback port is already occupied; unrelated processes are never stopped.
 
 springdoc-openapi-starter-webmvc-ui 3.1.0 is already a dependency; Swagger UI is
 /swagger-ui.html or /swagger-ui/index.html, default gateway port 8080.

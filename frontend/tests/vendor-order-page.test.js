@@ -11,6 +11,7 @@ let vite, List, useVendorBakery
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'vendor-order-events', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
+    if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export const useViewportPageSize = () => ({ containerRef() {}, pageSize: 6 })'
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth(){return globalThis.__vendorAuth}'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load,params){globalThis.__vendorQuery=params;return globalThis.__vendorResource}'
   }, transform(code, id) {
@@ -81,13 +82,13 @@ test('An empty real bakery order list stays empty without an unscoped probe or f
 test('List has columns; filters reset pagination and details retain selected order', () => {
   globalThis.__vendorResource = { status: 'ready', data: { result: [{ id: 'order-a', customerName: 'Khách kiểm thử', status: 'PENDING' }], meta: { page: 1, pages: 3, total: 21 } }, reload() {} }
   const render = harness(() => List({ bakeryId: 'shop-a' }))
-  assert.deepEqual(nodes(render()).filter((node) => node.type === 'th').map(text), ['STT', 'Mã đơn', 'Khách hàng', 'Trạng thái', 'Tổng tiền', 'Hẹn giao', 'Thao tác'])
+  assert.deepEqual(nodes(render()).filter((node) => node.type === 'th').map(text), ['STT', 'Nội dung bánh', 'Khách hàng', 'Khu vực giao', 'Trạng thái', 'Nguồn đơn', 'Ngân sách', 'Tổng tiền', 'Hẹn giao', 'Thao tác'])
   assert.equal(nodes(render()).filter((node) => node.type === 'input' && node.props.type === 'date').length, 2)
   nodes(render()).find((node) => typeof node.props.onPage === 'function').props.onPage(3)
   render(); assert.equal(globalThis.__vendorQuery.page, 3)
   nodes(render()).find((node) => node.type === 'select').props.onChange({ target: { value: 'BAKING' } })
   render(); assert.equal(globalThis.__vendorQuery.page, 1); assert.equal(globalThis.__vendorQuery.status, 'BAKING')
-  nodes(render()).find((node) => node.type === 'button' && text(node).includes('Xem chi tiết')).props.onClick()
+  nodes(render()).find((node) => node.type?.name === 'RecordActionButton' && node.props.action === 'view').props.onClick()
   assert.ok(nodes(render()).some((node) => node.props.orderId === 'order-a' && node.props.bakeryId === 'shop-a'))
 })
 

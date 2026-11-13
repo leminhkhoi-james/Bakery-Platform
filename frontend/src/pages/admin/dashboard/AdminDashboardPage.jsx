@@ -39,6 +39,7 @@ export default function AdminDashboardPage({ onNavigate }) {
   const go = (route) => () => onNavigate(route)
   const workGroups = [
     { key: 'bakeries', title: 'Tiệm chờ duyệt', icon: 'storefront', route: 'admin-vendors?status=PENDING_APPROVAL', items: dashboard.pendingBakeries?.map((row) => ({ key: row.id, name: row.name || 'Tiệm bánh', route: 'admin-vendors?bakeryId=' + row.id })) },
+    { key: 'payments', title: 'Gói dịch vụ chờ duyệt', icon: 'receipt_long', route: 'admin-payments', items: dashboard.pendingPayments?.map(row => ({ key: row.id, name: 'Chứng từ mua gói', route: 'admin-payments?paymentId=' + row.id })) },
     { key: 'moderation', title: 'Kiểm duyệt nội dung', icon: 'fact_check', route: 'admin-moderation', items: dashboard.moderation?.map((row) => ({ key: row.kind + row.id, name: row.label, route: 'admin-moderation?kind=' + row.kind + '&id=' + row.id })) },
   ]
 
@@ -66,7 +67,7 @@ export default function AdminDashboardPage({ onNavigate }) {
     <AdminFrame
       activeTab="admin-dashboard"
       onNavigate={onNavigate}
-
+      headerAction={<button type="button" className="sc-button sc-action-button--secondary" disabled={loading || resource.refreshing} onClick={resource.reload}>Làm mới tổng quan</button>}
     >
       <div className="sc-dashboard" aria-busy={loading || resource.refreshing}>
         {failing && (

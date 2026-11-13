@@ -21,7 +21,7 @@ import { AdminReviewDialog, ReviewSection, ReviewField } from '../../../componen
 import { reviewText } from '../../../services/adminPresentation.js'
 import { formatOrderDate } from '../../../services/orderPresentation.js'
 import { ApiState, ApiErrorMessage, inputClass, buttonClass, panelClass } from '../../../components/management/ApiState.jsx'
-const loadModerationDesign = ({ id }, options) => aiService.getDesign(id, options)
+const loadModerationDesign = ({ id }, options) => aiService.getDesign(id, { ...options, adminPreview: true })
 export function DesignModeration({ id }) {
   const { roles } = useAuth(), resource = useCatalogResource(loadModerationDesign, { id })
   const [busy, setBusy] = useState(false), [error, setError] = useState(null), [notice, setNotice] = useState('')

@@ -4,7 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => {
 
-  const env = loadEnv(mode, import.meta.dirname, 'DEV_')
+  const nativeRuntime = process.env.BAKERY_NATIVE_RUNTIME === 'true'
+  // The native launcher reads only root .env and exports an explicit public
+  // allowlist. Vite must not load a second persistent configuration bundle.
+  const env = nativeRuntime ? { DEV_GATEWAY_TARGET: process.env.DEV_GATEWAY_TARGET } : loadEnv(mode, import.meta.dirname, 'DEV_')
+  if (nativeRuntime && !/^http:\/\/(127\.0\.0\.1|localhost|\[::1\]):8080$/.test(env.DEV_GATEWAY_TARGET || '')) {
+    throw new Error('Native Frontend requires an explicit loopback Gateway on port 8080')
+  }
   const upstream = (target) => ({
     target,
     changeOrigin: true,
@@ -29,7 +35,10 @@ export default defineConfig(({ mode }) => {
   const marketplace = env.DEV_MARKETPLACE_TARGET || 'http://localhost:8083'
   const cakeAi = env.DEV_CAKE_AI_TARGET || 'http://localhost:8085'
 
-  const proxy = {
+  const proxy = nativeRuntime ? {
+    '^/api/v1(?:/|\\?|$)': upstream(env.DEV_GATEWAY_TARGET),
+    '^/storage(?:/|\\?|$)': upstream(env.DEV_GATEWAY_TARGET),
+  } : {
     '^/api/v1/bakeries/[^/?]+/(?:subscription|subscription-orders)(?:/|\\?|$)': upstream(subscription),
     '^/api/v1/admin/(?:subscription-plans|subscription-orders|bakery-payments|vnpay-attempts)(?:/|\\?|$)': upstream(subscription),
     '^/api/v1/payments/vnpay/(?:return|ipn)(?:\\?|$)': upstream(subscription),
@@ -45,12 +54,14 @@ export default defineConfig(({ mode }) => {
     '^/api/v1/(?:subscription-plans|subscription-orders)(?:/|\\?|$)': upstream(subscription),
     '^/api/v1/(?:bakeries|products)(?:/|\\?|$)': upstream(bakery),
     '^/api/v1/orders(?:/|\\?|$)': upstream(order),
+    '^/api/v1/bakery-reviews(?:\\?|$)': upstream(order),
     '^/api/v1/conversations(?:/|\\?|$)': upstream(chat),
   }
   const routes = Object.keys(proxy).map((pattern) => new RegExp(pattern))
   const testEntry = process.argv.find((entry) => /\.test\.[cm]?js$/.test(entry))
 
   return {
+    ...(nativeRuntime ? { envDir: false } : {}),
     cacheDir: testEntry ? 'node_modules/.vite-tests/' + testEntry.split(/[\\/]/).at(-1) : 'node_modules/.vite-dev',
     plugins: [
       react(),

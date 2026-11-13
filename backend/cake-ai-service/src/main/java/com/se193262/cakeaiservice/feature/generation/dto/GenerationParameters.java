@@ -2,7 +2,10 @@ package com.se193262.cakeaiservice.feature.generation.dto;
 
 import com.se193262.platform.exception.BusinessException;
 
-public record GenerationParameters(String aspectRatio, Integer numberOfDesigns) {
+public record GenerationParameters(
+        @io.swagger.v3.oas.annotations.media.Schema(allowableValues = {"1:1", "4:3", "3:4"}, defaultValue = "1:1") String aspectRatio,
+        @io.swagger.v3.oas.annotations.media.Schema(minimum = "1", maximum = "4", defaultValue = "1",
+                description = "Also bounded by the configured generation policy") Integer numberOfDesigns) {
     public GenerationParameters normalized() {
         String ratio = aspectRatio == null ? "1:1" : aspectRatio;
         int count = numberOfDesigns == null ? 1 : numberOfDesigns;

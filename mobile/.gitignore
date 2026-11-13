@@ -48,7 +48,9 @@ app.*.map.json
 .widget_preview/
 
 # Local-only testing directories
-/test/
+/test/*
+# Permanent regression coverage for the native remediation campaign.
+!/test/remediation_*.dart
 /integration_test/
 /test_driver/
 

@@ -56,6 +56,7 @@ class GatewayRoutingTest {
             "/api/v1/auth/login,identity", "/api/v1/users/me,identity", "/api/v1/admin/users,identity",
             "/api/v1/cake-requests/request/offers,marketplace", "/api/v1/offers/offer/accept,marketplace",
             "/api/v1/orders/order/review,order", "/api/v1/admin/reviews/order/status,order",
+            "/api/v1/bakery-reviews,order",
             "/api/v1/conversations/conversation/messages,chat",
             "/api/v1/generation-jobs,cake-ai", "/api/v1/generated-designs/design,cake-ai",
             "/api/v1/admin/generated-designs,cake-ai", "/storage/preview/image.png,cake-ai"
@@ -100,6 +101,19 @@ class GatewayRoutingTest {
             assertThat(send(path, "GET").statusCode()).isEqualTo(404);
         }
         assertThat(calls.get()).isEqualTo(before);
+    }
+
+    @Test
+    @DisplayName("Public review list and legacy alias preserve pagination and sorting")
+    void proxy_reviewList_preservesQueryAndAlias() throws Exception {
+        String resource = "/api/v1/bakery-reviews?bakeryId=shop&page=2&size=5&sort=createdAt%2Cdesc";
+        for (String prefix : new String[]{"", "/orders"}) {
+            var response = send(prefix + resource, "GET");
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(response.body()).startsWith("order|GET|" + resource + "|");
+        }
+        assertThat(send("/api/v1/bakery-reviews-unrelated", "GET").statusCode()).isEqualTo(404);
+        assertThat(send("/orders/internal/v1/orders/context", "GET").statusCode()).isEqualTo(404);
     }
 
     private HttpResponse<String> send(String path, String method) throws Exception {

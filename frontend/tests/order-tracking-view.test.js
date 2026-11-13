@@ -46,7 +46,7 @@ test('History is collapsed with real timestamps/notes, and configuration display
   assert.match(html, /Vani nguyên chất/)
   assert.doesNotMatch(html, /<pre|productId|DEMO|backend|dữ liệu mẫu/)
   assert.ok(!html.includes(fixture.id))
-  assert.match(html, /Tổng tiền đơn hàng không phải là xác nhận đã thanh toán/)
+  assert.match(html, /Thanh toán trực tiếp theo thỏa thuận với tiệm/)
 })
 test('The order dialog has one compact order header and Admin cannot fulfil or cancel orders', () => {
   globalThis.__trackingOrder = fixture
@@ -83,7 +83,7 @@ test('Owner actions appear immediately below the progress and before products in
   globalThis.__trackingOrder = fixture
   globalThis.__trackingAuth = { user: { id: 'owner', roles: ['BAKERY_OWNER'] }, roles: ['BAKERY_OWNER'] }
   const html = render(Detail, { orderId: fixture.id, scope: 'bakery', bakeryId: fixture.bakeryId, onClose() {} })
-  const progress = html.indexOf('aria-label="Tiến trình giao nhận"'), actions = html.indexOf('aria-label="Thao tác đơn hàng"'), products = html.indexOf('Sản phẩm trong đơn')
+  const progress = html.indexOf('aria-label="Tiến trình giao nhận"'), actions = html.indexOf('aria-label="Thao tác đơn hàng"'), products = html.indexOf('Thông tin đơn')
   assert.ok(progress >= 0 && actions > progress && products > actions)
   assert.match(html, /Xác nhận đơn hàng/)
   assert.match(html, /Từ chối đơn hàng/)

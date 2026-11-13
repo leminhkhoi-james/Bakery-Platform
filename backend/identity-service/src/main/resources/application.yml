@@ -22,8 +22,10 @@ server:
 
 security:
   jwt:
-    private-key-path: ${IDENTITY_JWT_PRIVATE_KEY_PATH}
-    public-key-path: ${IDENTITY_JWT_PUBLIC_KEY_PATH}
+    private-key-path: ${IDENTITY_JWT_PRIVATE_KEY_PATH:}
+    public-key-path: ${IDENTITY_JWT_PUBLIC_KEY_PATH:}
+    private-key-base64: ${IDENTITY_JWT_PRIVATE_KEY_BASE64:}
+    public-key-base64: ${IDENTITY_JWT_PUBLIC_KEY_BASE64:}
     key-id: ${IDENTITY_JWT_KEY_ID:bakery-identity-rs256-v1}
     issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
     user-audience: ${IDENTITY_JWT_USER_AUDIENCE:bakery-platform-api}

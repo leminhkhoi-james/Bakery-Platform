@@ -61,6 +61,8 @@ public class ConversationController {
 
     @Operation(summary = "Create or retrieve a conversation for an authorized cake request")
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Existing conversation returned", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<ConversationResponse>> create(
             @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody CreateConversationRequest request) {

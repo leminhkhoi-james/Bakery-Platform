@@ -8,6 +8,7 @@ import com.se193262.platform.exception.BusinessException;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +17,14 @@ import java.util.concurrent.TimeUnit;
 @EnableConfigurationProperties(FirebaseProperties.class)
 public class FirebaseStorageAdapter implements ImageStorage {
     private final FirebaseProperties properties;
+    private final String credentialsBase64;
     private volatile Storage storage;
     private String pageToken;
 
-    public FirebaseStorageAdapter(FirebaseProperties properties) {
+    public FirebaseStorageAdapter(FirebaseProperties properties,
+            @Value("${marketplace.firebase.credentials-base64:}") String credentialsBase64) {
         this.properties = properties;
+        this.credentialsBase64 = credentialsBase64;
     }
 
     private synchronized Storage storage() {
@@ -30,7 +34,10 @@ public class FirebaseStorageAdapter implements ImageStorage {
                     || properties.bucket().isBlank()
                     || properties.projectId() == null
                     || properties.projectId().isBlank()) throw BusinessException.unavailable();
-            var credentials = GoogleCredentials.getApplicationDefault();
+            var credentials = credentialsBase64.isBlank()
+                    ? GoogleCredentials.getApplicationDefault()
+                    : GoogleCredentials.fromStream(new java.io.ByteArrayInputStream(
+                            Base64.getDecoder().decode(credentialsBase64)));
             var options =
                     FirebaseOptions.builder()
                             .setCredentials(credentials)

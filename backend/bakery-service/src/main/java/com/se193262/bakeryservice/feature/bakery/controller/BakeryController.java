@@ -38,6 +38,7 @@ public class BakeryController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<BakeryDto>> create(
             @Valid @RequestBody BakeryDto request,
             @AuthenticationPrincipal Jwt jwt) {
@@ -64,6 +65,7 @@ public class BakeryController {
     }
 
     @PostMapping(value = "/{bakeryId}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<MediaResponse>> uploadLogo(@PathVariable UUID bakeryId,
             @RequestPart("file") MultipartFile file) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -71,6 +73,7 @@ public class BakeryController {
     }
 
     @PostMapping(value = "/{bakeryId}/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<MediaResponse>> uploadCover(@PathVariable UUID bakeryId,
             @RequestPart("file") MultipartFile file) {
         return ResponseEntity.status(HttpStatus.CREATED)

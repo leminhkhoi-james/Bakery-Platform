@@ -16,3 +16,10 @@ approved origins may be configured; unconfigured origins are rejected.
 `ResourceSecurityConfiguration` enables `.cors(Customizer.withDefaults())` so
 Spring Security reads MVC controller annotations before authenticating requests.
 Actual requests retain JWT/role checks. See docs/CORS-DEV.md for details.
+
+Correlation IDs are nonsecret ASCII trace identifiers, 1..128 characters matching
+`[A-Za-z0-9][A-Za-z0-9._:-]{0,127}`; UUID is recommended. Filters preserve safe
+IDs in MDC/response and generate safe IDs for missing/invalid public input.
+The original request header is never synthesized: Bakery/Subscription internal
+authorization still requires the caller's valid header as well as the scoped JWT.
+Outbound clients propagate the current safe trace instead of replacing it per hop.

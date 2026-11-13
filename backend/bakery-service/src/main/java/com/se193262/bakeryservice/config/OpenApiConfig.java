@@ -27,8 +27,25 @@ public class OpenApiConfig {
         return openApi -> {
             if (openApi.getPaths() == null) return;
             openApi.getPaths().forEach((path, item) -> item.readOperationsMap().forEach((method, operation) -> {
+                if (path.startsWith("/internal/")) {
+                    operation.addParametersItem(new io.swagger.v3.oas.models.parameters.HeaderParameter()
+                            .name("X-Correlation-Id").required(true)
+                            .description("Nonsecret trace ID; UUID recommended. Missing/invalid header returns 403. A scoped service JWT is still required.")
+                            .schema(new io.swagger.v3.oas.models.media.StringSchema().minLength(1).maxLength(128)
+                                    .pattern(com.se193262.platform.security.CorrelationIds.PATTERN)));
+                }
                 if (method != PathItem.HttpMethod.GET || !PUBLIC_GET_PATHS.contains(path)) {
                     operation.addSecurityItem(new SecurityRequirement().addList(BEARER_AUTH));
+                }
+                if (method == PathItem.HttpMethod.POST
+                        && path.equals("/api/v1/bakeries/{bakeryId}/products")
+                        && operation.getRequestBody() != null) {
+                    var media = operation.getRequestBody().getContent().get("application/json");
+                    if (media != null && media.getSchema() != null) {
+                        media.setSchema(new io.swagger.v3.oas.models.media.ComposedSchema()
+                                .addAllOfItem(media.getSchema())
+                                .addRequiredItem("name").addRequiredItem("slug").addRequiredItem("basePrice"));
+                    }
                 }
             }));
         };

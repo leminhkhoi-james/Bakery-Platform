@@ -1,4 +1,19 @@
-# React + Vite
+# SweetCake Web — native local
+
+From the repository root, install the locked dependency tree with `npm ci --prefix frontend`.
+Run `python scripts/native_clients.py web-start --state-dir docs/mobile/runs/<RUN_ID>/evidence/native-clients`.
+The native launcher reads root `.env` only, passes an explicit public Vite allowlist,
+and proxies every `/api/v1` request to the native Gateway on port 8080.
+Mock fallback, business simulation and demo empty data must all be false.
+Backend credentials are never exported to Node or client bundles.
+
+Use `npm test --prefix frontend -- --test-concurrency=1`, `npm run lint --prefix frontend`,
+and `python scripts/native_clients.py web-build --state-dir docs/mobile/runs/<RUN_ID>/evidence/native-clients`
+for the native verification path. The lockfile supports a clean install including browser tests.
+Browser tests use an installed Edge browser; suite assertions and live UI verification
+are separate evidence. See `../mobile/README.md` for the shared native runtime.
+
+## Vite tooling
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 

@@ -8,14 +8,15 @@ const id = '11111111-1111-4111-8111-111111111111', nativeFetch = globalThis.fetc
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'capability-ui-only', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
+    if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export const useViewportPageSize = () => ({ containerRef() {}, pageSize: 6 })'
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: { id: "11111111-1111-4111-8111-111111111111", roles: ["ADMIN"], displayName: "Capability fixture" }, roles: ["ADMIN"] }; }'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load, params) { globalThis.__capCalls.push({name:load.name,params});return globalThis.__capResources[load.name] || {status:"loading",data:null,error:null,reload(){}}; }'
   }, transform(code, id) {
-    if (['ConfirmAction.jsx', 'AdminVendorsPage.jsx', 'AdminPaymentsPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial), useRef=(initial)=>globalThis.__capState(()=>({current:initial}))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial)")
+    if (['ConfirmAction.jsx', 'AdminVendorsPage.jsx', 'AdminPaymentsPage.jsx', 'AdminSubscriptionOrdersPage.jsx'].some((name) => id.replaceAll('\\', '/').endsWith('/' + name))) return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial), useRef=(initial)=>globalThis.__capState(()=>({current:initial}))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState=(initial)=>globalThis.__capState(initial)")
   } }] })
   Confirm = (await vite.ssrLoadModule('/src/components/common/ConfirmAction.jsx')).default
   Review = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminVendorsPage.jsx')).BakeryReview
-  Payments = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPaymentsPage.jsx')).default
+  Payments = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminSubscriptionOrdersPage.jsx')).default
   Picker = (await vite.ssrLoadModule('/src/components/marketplace/RequestPicker.jsx')).default
   AdminSidebar = (await vite.ssrLoadModule('/src/layouts/admin/AdminSidebar.jsx')).default
   VendorSidebar = (await vite.ssrLoadModule('/src/layouts/vendor/VendorSidebar.jsx')).default
@@ -67,7 +68,7 @@ test('Bakery approval uses only the backend checklist and updates footer status 
   assert.deepEqual(JSON.parse(calls[0].options.body), { status: 'ACTIVE' })
   assert.equal(changed, 1)
   const updated = nodes(render()).find((node) => node.type?.name === 'EntityActionButtons')
-  assert.equal(updated.props.status, 'ACTIVE'); assert.deepEqual(updated.props.actions.map((action) => action.key), ['CLOSED'])
+  assert.equal(updated.props.status, 'ACTIVE'); assert.deepEqual(updated.props.actions.map((action) => action.key), ['SUSPENDED', 'CLOSED'])
 })
 test('Payment form applies valid date range to GET parameters and rejects reversed dates', () => {
   const render = setup(Payments, { onNavigate() {} })
@@ -75,11 +76,11 @@ test('Payment form applies valid date range to GET parameters and rejects revers
   dateInputs()[0].props.onChange({ target: { value: '2099-01-01T10:00' } }); dateInputs()[1].props.onChange({ target: { value: '2099-02-01T10:00' } })
   nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); render()
   const params = globalThis.__capCalls.at(-1).params
-  assert.ok(params.submittedFrom.endsWith('Z')); assert.ok(params.submittedTo.endsWith('Z'))
+  assert.ok(params.createdFrom.endsWith('Z')); assert.ok(params.createdTo.endsWith('Z'))
   dateInputs()[0].props.onChange({ target: { value: '2099-03-01T10:00' } })
   nodes(render()).find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} })
   assert.ok(nodes(render()).some((node) => node.type?.name === 'ApiErrorMessage' && node.props.error.status === 400))
-  assert.equal(globalThis.__capCalls.at(-1).params.submittedFrom, params.submittedFrom)
+  assert.equal(globalThis.__capCalls.at(-1).params.createdFrom, params.createdFrom)
 })
 
 test('Live bakery return keeps the exact status contract and never pretends the reason was saved', async () => {

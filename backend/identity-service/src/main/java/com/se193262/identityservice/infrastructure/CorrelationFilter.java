@@ -17,9 +17,7 @@ public class CorrelationFilter extends OncePerRequestFilter {
             HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String correlation = request.getHeader("X-Correlation-Id");
-        try {
-            correlation = UUID.fromString(correlation).toString();
-        } catch (Exception invalid) {
+        if (!com.se193262.platform.security.CorrelationIds.valid(correlation)) {
             correlation = UUID.randomUUID().toString();
         }
         response.setHeader("X-Correlation-Id", correlation);

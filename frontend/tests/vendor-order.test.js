@@ -31,7 +31,8 @@ test('Product creation rejects blank names/slugs, negative prices and bad number
   assert.equal(calls.length, 0)
 })
 test('Bakery fields reject server id/status/operations, require real name/phone and validate email', () => {
-  assert.deepEqual(bakeryPayload({ id: bakeryId, status: 'ACTIVE', operations: {}, name: '  Tiệm  ', phoneNumber: 'phone', email: '' }, true), { name: 'Tiệm', phoneNumber: 'phone', email: '' })
+  assert.deepEqual(bakeryPayload({ id: bakeryId, status: 'ACTIVE', operations: {}, name: '  Tiệm  ', phoneNumber: '0900000000', email: '' }, true), { name: 'Tiệm', phoneNumber: '0900000000', email: '' })
+  assert.throws(() => bakeryPayload({ name: 'Tiệm', phoneNumber: 'phone' }, true), { status: 400 })
   assert.throws(() => bakeryPayload({ name: 'Tiệm' }, true), { status: 400 })
   assert.throws(() => bakeryPayload({ email: 'bad-email' }), { status: 400 })
 })
@@ -72,8 +73,8 @@ test('Membership is resolved from backend self member and never inferred from pl
 })
 test('Bakery create/patch and product create/patch send writable payloads only', async () => {
   handler = (url) => reply(url.endsWith('/products') || url.includes('/products/') ? managedProduct : { id: bakeryId, status: 'DRAFT' }, 201)
-  await vendor.createBakery({ name: 'Tiệm', phoneNumber: 'phone', ownerUserId: randomUUID(), status: 'ACTIVE' })
-  assert.deepEqual(JSON.parse(calls[0].options.body), { name: 'Tiệm', phoneNumber: 'phone' })
+  await vendor.createBakery({ name: 'Tiệm', phoneNumber: '0900000000', ownerUserId: randomUUID(), status: 'ACTIVE' })
+  assert.deepEqual(JSON.parse(calls[0].options.body), { name: 'Tiệm', phoneNumber: '0900000000' })
   await vendor.updateBakery(bakeryId, { name: 'Tên mới', status: 'ACTIVE' }); assert.equal(calls[1].options.method, 'PATCH')
   await vendor.saveProduct(bakeryId, null, managedProduct); await vendor.saveProduct(bakeryId, productId, managedProduct)
   assert.equal(calls[2].options.method, 'POST'); assert.equal(calls[3].options.method, 'PATCH')

@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { orderStatusLabel } from '../../services/orderModels.js'
 import { uiLabel, cleanPresentationLabel } from '../../services/uiLabels.js'
-import { formatOrderDate, formatOrderMoney, orderDisplayNumber, configurationEntries, orderHistoryEntries, orderHistoryNote } from '../../services/orderPresentation.js'
+import { formatOrderDate, formatOrderMoney, orderDisplayNumber, configurationEntries, orderHistoryEntries, orderHistoryNote, orderHistoryActor } from '../../services/orderPresentation.js'
 import './order-tracking.css'
 
 const stages = [ ['PENDING', 'schedule'], ['CONFIRMED', 'task_alt'], ['BAKING', 'cake'], ['READY', 'inventory_2'], ['DELIVERING', 'local_shipping'], ['COMPLETED', 'check_circle'] ]
@@ -121,5 +121,16 @@ export default function OrderTrackingView({ order, showHeader = true, actionsSlo
         </section>
       </aside>
     </div>
+    <details className="sc-order-history">
+      <summary><Icon name="history" />Lịch sử trạng thái<small>{history.length} lần cập nhật</small><Icon name="expand_more" /></summary>
+      {history.length ? <ol aria-label={`${history.length} bản ghi lịch sử được lưu`}>{history.map((event, index) => {
+        const actor = orderHistoryActor(event), note = orderHistoryNote(event.note)
+        return <li key={`${event.changedAt || 'undated'}-${index}`}>
+          <div><strong>{event.fromStatus ? `${orderStatusLabel(event.fromStatus)} → ` : ''}{orderStatusLabel(event.toStatus)}</strong><time dateTime={event.changedAt || undefined}>{formatOrderDate(event.changedAt)}</time></div>
+          {actor && <p className="sc-order-history-actor">Người thực hiện: <span>{actor}</span></p>}
+          {note && <p>{note}</p>}
+        </li>
+      })}</ol> : <p className="sc-order-history-help">Chưa có lịch sử trạng thái.</p>}
+    </details>
   </div>
 }

@@ -8,6 +8,13 @@ Bakery offers and the idempotent offer-acceptance workflow.
 
 Offer snapshots, entitlement/membership checks, lifecycle and durable acceptance workflow are implemented. See ADR-002 for reservation, leases, idempotency and ambiguous-result recovery.
 
+PATCH uses a flat JSON subset of CreateOfferRequest excluding bakeryId. The
+delegating DTO captures that object in its internal changes map; changes is not
+a wire-level wrapper. OpenAPI documents the flat shape. Omitted fields are kept,
+explicit null clears the optional message, and required values remain validated.
+Entity versioning protects database writes; the public patch does not accept a
+client version or permit changes to server-controlled fields.
+
 Acceptance consumes an owned Identity address UUID through Order's existing internal orchestration. Failed validation keeps the key's definitive failed result; ambiguous outages retain recovery state. A PostgreSQL lock victim is mapped to HTTP 409 by MarketplaceConcurrencyExceptionHandler after transaction rollback, preserving the existing reservation/recovery model rather than returning an unexpected 500.
 
 ## Boundary

@@ -33,12 +33,13 @@ test('Main address and delivery area remain separate; approval requires explicit
   assert.equal(incomplete.actions[0].disabled, false, 'Admin approval checks the primary flag; it does not add address-field requirements')
 })
 
-test('Only pending approval exposes approve/return; only active exposes close with acknowledgement', () => {
+test('Approval, suspension, reactivation and closure follow the Backend bakery transition contract', () => {
   assert.deepEqual(bakeryReviewProfile(detail('PENDING_APPROVAL')).actions.map((action) => action.key), ['ACTIVE', 'DRAFT'])
   const active = bakeryReviewProfile(detail('ACTIVE')).actions
-  assert.deepEqual(active.map((action) => action.key), ['CLOSED'])
-  assert.ok(active[0].confirmText)
-  for (const status of ['DRAFT', 'SUSPENDED', 'CLOSED']) assert.deepEqual(bakeryReviewProfile(detail(status)).actions, [])
+  assert.deepEqual(active.map((action) => action.key), ['SUSPENDED', 'CLOSED'])
+  assert.ok(active.find(action => action.key === 'CLOSED').confirmText)
+  assert.deepEqual(bakeryReviewProfile(detail('SUSPENDED')).actions.map(action => action.key), ['ACTIVE', 'CLOSED'])
+  for (const status of ['DRAFT', 'CLOSED']) assert.deepEqual(bakeryReviewProfile(detail(status)).actions, [])
 })
 
 test('Explicit legacy primary flag is reused; subscription never becomes an approval prerequisite', () => {

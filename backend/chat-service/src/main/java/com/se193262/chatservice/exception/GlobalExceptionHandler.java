@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -24,9 +26,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class,
-            MaxUploadSizeExceededException.class})
+            MaxUploadSizeExceededException.class, MissingServletRequestPartException.class})
     ResponseEntity<ApiResponse<Void>> handleInvalidRequest(Exception exception) {
         return error(HttpStatus.BAD_REQUEST, "Request validation failed");
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    ResponseEntity<ApiResponse<Void>> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException exception) {
+        return error(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Use multipart/form-data with an application/json metadata part");
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class, OptimisticLockingFailureException.class})

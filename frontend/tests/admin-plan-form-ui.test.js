@@ -36,7 +36,7 @@ test('Plan form footer submits its own form and preserves unedited source text a
 
 test('Invalid fields focus the first error, duplicate features cannot save, and busy state guards submission', () => {
   const calls = [], props = { plan: plan(), onSave: (value) => calls.push(value) }, render = harness(props)
-  const field = (key) => nodes(render()).find((n) => n.type === 'input' && n.props.name === key)
+  const field = (key) => nodes(render()).find((n) => (n.type === 'input' || n.type?.name === 'MoneyInput') && n.props.name === key)
   field('name').props.onChange({ target: { value: ' ' } })
   let focused
   const submit = () => nodes(render()).find((n) => n.type === 'form').props.onSubmit({ preventDefault() {}, currentTarget: { elements: { namedItem: (key) => ({ focus: () => { focused = key } }) } } })
@@ -56,10 +56,10 @@ test('New plan follows backend ACTIVE default and marks required fields without 
   const status = nodes(render()).find((n) => n.type?.name === 'ChoiceButtons')
   assert.equal(status.props.value, 'ACTIVE')
   for (const key of ['code', 'name', 'monthlyPrice', 'billingPeriodMonths']) {
-    assert.equal(nodes(render()).find((n) => n.type === 'input' && n.props.name === key).props.required, true)
+    assert.equal(nodes(render()).find((n) => (n.type === 'input' || n.type?.name === 'MoneyInput') && n.props.name === key).props.required, true)
   }
-  for (const [key, value] of [['code', 'NEW_PLAN'], ['name', 'Gói mới'], ['monthlyPrice', '239.000']]) {
-    nodes(render()).find((n) => n.type === 'input' && n.props.name === key).props.onChange({ target: { value } })
+  for (const [key, value] of [['code', 'NEW_PLAN'], ['name', 'Gói mới'], ['monthlyPrice', '239000']]) {
+    nodes(render()).find((n) => (n.type === 'input' || n.type?.name === 'MoneyInput') && n.props.name === key).props.onChange({ target: { value } })
   }
   nodes(render()).find((n) => n.type === 'form').props.onSubmit({ preventDefault() {} })
   assert.equal(calls.length, 1); assert.equal(calls[0].status, 'ACTIVE'); assert.equal(Number(calls[0].monthlyPrice), 239000)

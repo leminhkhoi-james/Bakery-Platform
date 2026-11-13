@@ -20,7 +20,7 @@ test('Default directory includes pending 499k orders; details explain why approv
     await row.waitFor({ timeout: 60000 })
     assert.match(await row.innerText(), /499\.000/)
     assert.equal(await row.getByRole('button', { name: 'Đối chiếu để duyệt' }).isDisabled(), true)
-    await row.getByRole('button', { name: 'Xem đơn', exact: true }).click()
+    await row.getByRole('button', { name: 'Xem chi tiết đơn mua gói', exact: true }).click()
     await page.getByRole('heading', { name: 'Chi tiết đơn mua gói', exact: true }).waitFor()
     await page.getByText('Khách chưa gửi chứng từ và hệ thống chưa ghi nhận thanh toán thành công.').waitFor()
     assert.equal(await page.getByRole('dialog').getByRole('button', { name: 'Đối chiếu để duyệt' }).isDisabled(), true)
@@ -36,7 +36,7 @@ test('Eligibility filter reaches API and opens the existing confirmation flow on
     await page.goto(base, { waitUntil: 'commit', timeout: 20000 })
     await page.getByRole('row').filter({ hasText: 'SUB-10FE239D' }).waitFor({ timeout: 60000 })
     await page.getByLabel('Điều kiện duyệt', { exact: true }).selectOption('ready')
-    await page.getByRole('button', { name: 'Lọc', exact: true }).click()
+    // Selection applies the verified eligibility filter immediately.
     await page.getByText('1 đơn mua gói theo bộ lọc', { exact: true }).waitFor()
     assert.equal(await page.getByRole('row').filter({ hasText: 'SUB-10FE239D' }).count(), 0)
     await page.getByRole('button', { name: 'Đối chiếu để duyệt', exact: true }).click()

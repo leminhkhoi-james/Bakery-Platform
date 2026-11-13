@@ -15,7 +15,9 @@ public class OpenApiConfig {
         return api -> {
             if (api.getPaths() == null) return;
             api.getPaths().forEach((path, item) -> item.readOperations().forEach(operation -> {
-                operation.setSecurity(java.util.List.of(new SecurityRequirement().addList("bearerAuth")));
+                operation.setSecurity(path.equals("/api/v1/bakery-reviews")
+                        && operation == item.getGet() ? java.util.List.of()
+                        : java.util.List.of(new SecurityRequirement().addList("bearerAuth")));
                 if (path.startsWith("/internal/")) {
                     operation.setDescription("Internal service JWT: order-service audience and endpoint-specific scope required.");
                 }

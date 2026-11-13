@@ -25,3 +25,11 @@ REST contracts.
 Platform roles are ADMIN, CUSTOMER and BAKERY_OWNER. Bakery membership only
 supports OWNER. Bakery access requires ownership of the requested bakery;
 only the owner can manage the bakery. See ADR-004.
+
+## Concurrent participant access — 2026-11-14
+
+Authorized owner list/detail requests serialize participant insertion on the
+conversation row within a short transaction. Existing active participants keep
+their join time and read marker; reactivation retains its existing semantics.
+Bakery membership checks still happen before persistence. This prevents two
+first reads from racing on `uq_conversation_participants_user`.

@@ -66,7 +66,7 @@ class ServiceHttpClientTest {
                     assertEquals(
                             "Bearer test-token",
                             exchange.getRequestHeaders().getFirst("Authorization"));
-                    assertNotNull(exchange.getRequestHeaders().getFirst("X-Correlation-Id"));
+                    assertEquals("native-trace-123", exchange.getRequestHeaders().getFirst("X-Correlation-Id"));
                     byte[] body = "{\"active\":true}".getBytes();
                     exchange.getResponseHeaders().add("Content-Type", "application/json");
                     exchange.sendResponseHeaders(200, body.length);
@@ -74,6 +74,7 @@ class ServiceHttpClientTest {
                     exchange.close();
                 });
         var client = client(Duration.ofSeconds(2));
+        org.slf4j.MDC.put("correlationId", "native-trace-123");
         assertEquals(
                 true,
                 client.get(base, "/context", "bakery-service", "read", Map.class).get("active"));

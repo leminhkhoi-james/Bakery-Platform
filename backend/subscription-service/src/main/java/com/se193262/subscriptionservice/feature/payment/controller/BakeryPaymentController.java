@@ -31,6 +31,18 @@ public class BakeryPaymentController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Submit payment evidence for admin review",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "multipart/form-data",
+                            encoding = @io.swagger.v3.oas.annotations.media.Encoding(name = "metadata", contentType = "application/json"))))
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Evidence submitted or idempotently replayed; not payment settlement", useReturnTypeSchema = true),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid metadata, read-only fields or idempotency key"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Order state or idempotency conflict"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", description = "Metadata part must be application/json"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "422", description = "Payment amount, method or evidence is invalid"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Proof storage unavailable")
+    })
     public ResponseEntity<ApiResponse<BakeryPaymentDto>> submit(@PathVariable UUID orderId,
             @AuthenticationPrincipal Jwt jwt,
             @RequestHeader("Idempotency-Key") String idempotencyKey,

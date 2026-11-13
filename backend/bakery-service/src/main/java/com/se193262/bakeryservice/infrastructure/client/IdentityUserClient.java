@@ -47,7 +47,7 @@ public class IdentityUserClient {
             UserProfile user = client.get().uri("/internal/v1/users/{userId}", userId)
                     .headers(headers -> {
                         headers.setBearerAuth(bearer);
-                        headers.set("X-Correlation-Id", UUID.randomUUID().toString());
+                        headers.set("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew());
                     })
                     .retrieve().body(UserProfile.class);
             if (user == null || !userId.equals(user.id())
@@ -75,6 +75,7 @@ public class IdentityUserClient {
         try {
             String bearer = tokenClient.serviceToken("identity-service", "identity:bakery-owner:grant");
             client.put().uri("/internal/v1/users/{userId}/bakery-owner", userId)
+                    .header("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew())
                     .headers(headers -> headers.setBearerAuth(bearer))
                     .retrieve().toBodilessEntity();
         } catch (RestClientException | com.se193262.platform.exception.AppException exception) {

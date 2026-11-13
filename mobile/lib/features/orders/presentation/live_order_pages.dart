@@ -137,13 +137,15 @@ class LiveOrderDetail extends StatelessWidget {
       operational: vendor || admin,
       load: () => w.orders.detail(id),
       builder: (context, o, reload) {
-        final mine = o['customerId'] == w.session.user?['id'];
+        final mine =
+            o['customerId'] == w.session.user?['id'] &&
+            w.session.hasRole('CUSTOMER');
         final actions = orderActions(
           '${o['status']}',
           owner:
               admin && w.session.hasRole('ADMIN') ||
               vendor && w.session.hasRole('BAKERY_OWNER'),
-          customer: mine && !admin,
+          customer: mine,
         );
         return [
           SCStatusBadge('${o['status']}'),
@@ -194,8 +196,25 @@ class LiveOrderDetail extends StatelessWidget {
             ),
           for (final target in actions)
             LiveCommand(
-              statusLabels[target] ?? target,
+              target == 'COMPLETED'
+                  ? 'Xác nhận đã nhận bánh'
+                  : statusLabels[target] ?? target,
+              key: ValueKey('order-transition-$target'),
+              confirm: target == 'COMPLETED'
+                  ? () => confirmLive(
+                      context,
+                      'Bạn đã nhận bánh và muốn hoàn tất đơn?',
+                    )
+                  : null,
               run: () async {
+                if (target == 'COMPLETED') {
+                  await w.orders.transition(
+                    id,
+                    target,
+                    'Khách hàng xác nhận đã nhận bánh',
+                  );
+                  return;
+                }
                 final reason = await liveReason(
                   context,
                   'Chuyển sang ${statusLabels[target] ?? target}',

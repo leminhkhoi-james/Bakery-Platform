@@ -14,6 +14,7 @@ public class InternalAddOnInventoryController {
     public InternalAddOnInventoryController(AddOnInventoryService inventory) { this.inventory = inventory; }
 
     @PostMapping("/allocate")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> allocate(@PathVariable UUID bakeryId, @PathVariable UUID orderId,
             @Valid @RequestBody AllocationRequest request) {
         inventory.allocate(bakeryId, orderId, request);
@@ -21,6 +22,7 @@ public class InternalAddOnInventoryController {
     }
 
     @PostMapping("/release")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> release(@PathVariable UUID bakeryId, @PathVariable UUID orderId) {
         inventory.release(bakeryId, orderId);
         return ResponseEntity.noContent().build();

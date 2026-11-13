@@ -29,9 +29,7 @@ test('Editing hours alone preserves address IDs, coordinates and service areas i
   const original = snapshot(), before = structuredClone(original), saved = []
   const render = editor({ operations: original, sections: ['businessHours'], onSave: value => saved.push(operationsPayload(value)) })
   nodes(render()).find(node => node.type === 'select' && node.props['aria-label'] === 'Giờ mở Thứ Hai').props.onChange({ target: { value: '09:00' } })
-  const confirmationLabel = nodes(render()).find(node => node.type === 'label' && text(node.props.children).includes('Tôi xác nhận thay thế'))
-  const confirmation = nodes(confirmationLabel).find(node => node.type === 'input')
-  confirmation.props.onChange({ target: { checked: true } })
+  assert.equal(saved.length, 0, 'Editing is staged; explicit form submission persists the complete snapshot')
   render().props.onSubmit({ preventDefault() {} })
   assert.deepEqual(saved[0].businessHours, [{ ...before.businessHours[0], opensAt: '09:00' }])
   assert.deepEqual(saved[0].addresses, before.addresses)

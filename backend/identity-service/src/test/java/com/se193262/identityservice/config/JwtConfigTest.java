@@ -29,6 +29,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JwtConfigTest {
 
+    @Test
+    void bindsRootEnvironmentKeysThroughSpring() {
+        var source = new org.springframework.boot.context.properties.source.MapConfigurationPropertySource(
+                java.util.Map.of("security.jwt.private-key-base64", "cHJpdmF0ZQ==",
+                        "security.jwt.public-key-base64", "cHVibGlj",
+                        "security.jwt.key-id", "existing-key",
+                        "security.jwt.access-token-ttl", "15m"));
+        var bound = new org.springframework.boot.context.properties.bind.Binder(source)
+                .bind("security.jwt", JwtProperties.class).get();
+        org.junit.jupiter.api.Assertions.assertEquals("cHJpdmF0ZQ==", bound.privateKeyBase64());
+        org.junit.jupiter.api.Assertions.assertEquals("cHVibGlj", bound.publicKeyBase64());
+        org.junit.jupiter.api.Assertions.assertEquals(Duration.ofMinutes(15), bound.accessTokenTtl());
+    }
+
     private JwtConfig jwtConfig;
     private JwtProperties properties;
     private RSAKey rsaKey;
@@ -103,6 +117,37 @@ class JwtConfigTest {
     @DisplayName("Public JWK không chứa private RSA parameter")
     void publicJwk_neverContainsPrivateExponent() {
         assertFalse(rsaKey.toPublicJWK().toJSONObject().containsKey("d"));
+    }
+
+    @Test
+    @DisplayName("Root base64 PEM takes precedence over obsolete file paths without rotating the key")
+    void rsaKey_base64Material_loadsSameKeyWithoutFiles() throws Exception {
+        String privatePem = "-----BEGIN PRIVATE KEY-----\r\n"
+                + java.util.Base64.getEncoder().encodeToString(rsaKey.toRSAPrivateKey().getEncoded())
+                + "\r\n-----END PRIVATE KEY-----\r\n";
+        String publicPem = "-----BEGIN PUBLIC KEY-----\n"
+                + java.util.Base64.getEncoder().encodeToString(rsaKey.toRSAPublicKey().getEncoded())
+                + "\n-----END PUBLIC KEY-----\n";
+        var configured = new JwtProperties(java.nio.file.Path.of("missing-private.pem"),
+                java.nio.file.Path.of("missing-public.pem"), properties.keyId(), properties.issuer(),
+                properties.userAudience(), properties.serviceAudience(), properties.accessTokenTtl(),
+                java.util.Base64.getEncoder().encodeToString(privatePem.getBytes(java.nio.charset.StandardCharsets.US_ASCII)),
+                java.util.Base64.getEncoder().encodeToString(publicPem.getBytes(java.nio.charset.StandardCharsets.US_ASCII)));
+        RSAKey loaded = jwtConfig.rsaKey(configured);
+        org.junit.jupiter.api.Assertions.assertEquals(rsaKey.getModulus(), loaded.getModulus());
+        String token = encode(jwtConfig.jwtEncoder(loaded), loaded, "user", properties.issuer(),
+                properties.userAudience(), Instant.now().plusSeconds(60));
+        assertDoesNotThrow(() -> jwtConfig.jwtDecoder(loaded, configured).decode(token));
+    }
+
+    @Test
+    @DisplayName("Malformed configured base64 fails closed without file fallback or secret-bearing error")
+    void rsaKey_invalidBase64_rejectsWithoutFallback() {
+        var configured = new JwtProperties(null, null, properties.keyId(), properties.issuer(),
+                properties.userAudience(), properties.serviceAudience(), properties.accessTokenTtl(),
+                "invalid-private-material!", "");
+        var failure = assertThrows(IllegalStateException.class, () -> jwtConfig.rsaKey(configured));
+        assertFalse(failure.getMessage().contains("invalid-private-material"));
     }
 
     private String encode(

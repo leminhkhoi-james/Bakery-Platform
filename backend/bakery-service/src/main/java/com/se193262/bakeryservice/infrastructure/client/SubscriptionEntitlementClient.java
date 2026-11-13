@@ -47,7 +47,7 @@ public class SubscriptionEntitlementClient {
                     .uri("/internal/v1/subscriptions/bakeries/{bakeryId}/entitlement", bakeryId)
                     .headers(headers -> {
                         headers.setBearerAuth(bearer);
-                        headers.set("X-Correlation-Id", UUID.randomUUID().toString());
+                        headers.set("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew());
                     })
                     .retrieve().body(Entitlement.class);
             if (response == null || !bakeryId.equals(response.bakeryId())) {

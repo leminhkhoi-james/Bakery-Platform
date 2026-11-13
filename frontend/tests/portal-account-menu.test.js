@@ -13,6 +13,8 @@ before(async () => {
 })
 after(async () => { await vite?.close(); delete globalThis.__accountAuth; delete globalThis.__accountState })
 const nodes = (tree) => Array.isArray(tree) ? tree.flatMap(nodes) : tree?.props ? [tree, ...nodes(tree.props.children)] : []
+const text = node => typeof node === 'string' ? node : Array.isArray(node) ? node.map(text).join('') : text(node?.props?.children || '')
+const logoutItem = tree => nodes(tree).find(node => node.props.role === 'menuitem' && text(node).includes('Đăng xuất'))
 function harness(props, logout) {
   let cursor = 0; const state = []
   globalThis.__accountAuth = { logout }
@@ -25,7 +27,7 @@ test('Admin and Owner menu calls existing logout once and replaces navigation wi
     let calls = 0, finish; const routes = []
     const render = harness({ user: { id: roleLabel, displayName: 'Tên tài khoản' }, roleLabel, onNavigate: (...args) => routes.push(args) }, () => { calls++; return new Promise((resolve) => { finish = resolve }) })
     nodes(render()).find((node) => node.props['aria-haspopup'] === 'menu').props.onClick()
-    const item = nodes(render()).find((node) => node.props.role === 'menuitem')
+    const item = logoutItem(render())
     const pending = item.props.onClick(); await item.props.onClick()
     assert.equal(calls, 1)
     assert.ok(!nodes(render()).some((node) => node.props.role === 'menu'))
@@ -39,6 +41,6 @@ test('Logout revocation failure still returns to login through existing local si
   const routes = []
   const render = harness({ user: { displayName: 'Chủ tiệm' }, roleLabel: 'Chủ tiệm', onNavigate: (...args) => routes.push(args) }, async () => { throw new Error('offline') })
   nodes(render()).find((node) => node.props['aria-haspopup'] === 'menu').props.onClick()
-  await nodes(render()).find((node) => node.props.role === 'menuitem').props.onClick()
+  await logoutItem(render()).props.onClick()
   assert.deepEqual(routes, [['login', null, { replace: true }]])
 })

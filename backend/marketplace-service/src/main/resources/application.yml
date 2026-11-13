@@ -47,6 +47,7 @@ management:
 
 marketplace:
   firebase:
+    credentials-base64: ${FIREBASE_CREDENTIALS_BASE64:}
     project-id: ${FIREBASE_PROJECT_ID:}
     bucket: ${FIREBASE_STORAGE_BUCKET:}
     connect-timeout: ${FIREBASE_CONNECT_TIMEOUT:2s}

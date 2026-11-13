@@ -60,6 +60,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<ProductDto>> create(@PathVariable UUID bakeryId,
             @Valid @RequestBody ProductDto request) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -80,6 +81,7 @@ public class ProductController {
     }
 
     @PostMapping(value = "/{productId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<List<ProductImageResponse>>> uploadImages(@PathVariable UUID bakeryId,
             @PathVariable UUID productId, @RequestPart("files") List<MultipartFile> files,
             @RequestParam(required = false) Integer primaryIndex,
@@ -89,6 +91,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}/images/{imageId}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> deleteImage(@PathVariable UUID bakeryId, @PathVariable UUID productId,
             @PathVariable UUID imageId) {
         productService.deleteImage(bakeryId, productId, imageId);

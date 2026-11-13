@@ -43,17 +43,16 @@ test('Order list starts loading with actual enum filters and no mock Kanban rows
 test('Product form has real DTO fields, required validation and immutable status guidance', () => {
   const html = render(ProductForm, { product: managedProduct, onSave: () => {}, onClose: () => {} })
   assert.match(html, /Sản phẩm backend/); assert.match(html, /san-pham-backend/); assert.match(html, /min="0"/); assert.match(html, /maxLength="180"/i)
-  assert.match(html, /Ảnh và tùy chọn được lưu riêng/); assert.doesNotMatch(html, /<select[^>]*>[^]*Công khai[^]*Đã ẩn/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
+  assert.match(html, /Giá/); assert.doesNotMatch(html, /<select[^>]*>[^]*Công khai[^]*Đã ẩn/); assert.doesNotMatch(html, /69\.0%|cost|Lợi nhuận|480\.000/)
 })
 test('Bakery form never prefills demo contact/owner and create requires name/phone', () => {
   const html = render(BakeryProfileForm, { create: true, onSave: () => {} })
   assert.match(html, /<input(?=[^>]*name="name")(?=[^>]*required="")[^>]*>/); assert.match(html, /<input(?=[^>]*name="phoneNumber")(?=[^>]*required="")[^>]*>/)
   assert.doesNotMatch(html, /La Crème|0918|ownerUserId|value="ACTIVE"/)
 })
-test('Operations form preserves full server rows and requires confirmation before replace', () => {
+test('Operations form preserves full server rows and uses explicit validated submission', () => {
   const html = render(OperationsForm, { operations, onSave: () => {} })
-  assert.match(html, /Địa chỉ nhập thật/); assert.match(html, /12000\.00/); assert.match(html, /thay thế toàn bộ/)
-  assert.match(html, /disabled=""/)
+  assert.match(html, /Địa chỉ nhập thật/); assert.match(html, /12\.000,00/); assert.match(html, /type="submit"/); assert.match(html, /Lưu cấu hình vận hành/)
 })
 test('Empty cart is empty and checkout is blocked without a verified deliveryAddressId', () => {
   const html = render(Cart, { cartItems: [], onNavigate: () => {} })
@@ -86,7 +85,7 @@ test('Vendor dashboard starts loading real counts and hides shared mock badges',
 })
 test('Vendor settings initializes from actual bakery selector and does not display fake saved settings', () => {
   const html = authenticated(VendorSettings, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
-  assert.match(html, /Đang tải/); assert.match(html, /Tạo tiệm mới/)
+  assert.match(html, /Đang tải/); assert.match(html, /Hồ sơ tiệm bánh/)
   assert.doesNotMatch(html, /La Crème|Jean-Luc|46\.7M|Thông tin đã lưu thành công/)
 })
 test('Vendor product list cannot expose editing controls before membership has been confirmed', () => {

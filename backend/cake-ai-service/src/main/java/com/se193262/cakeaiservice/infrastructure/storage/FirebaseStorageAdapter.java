@@ -6,6 +6,8 @@ import com.google.cloud.http.HttpTransportOptions;
 import com.se193262.cakeaiservice.config.CakeAiProperties;
 import com.se193262.platform.exception.BusinessException;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -14,10 +16,18 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class FirebaseStorageAdapter implements ImageStorage {
     private final CakeAiProperties properties;
+    private final String credentialsBase64;
     private volatile Storage storage;
     private String pageToken;
 
-    public FirebaseStorageAdapter(CakeAiProperties properties) { this.properties = properties; }
+    public FirebaseStorageAdapter(CakeAiProperties properties) { this(properties, ""); }
+
+    @Autowired
+    public FirebaseStorageAdapter(CakeAiProperties properties,
+            @Value("${cake-ai.firebase-credentials-base64:}") String credentialsBase64) {
+        this.properties = properties;
+        this.credentialsBase64 = credentialsBase64;
+    }
 
     private synchronized Storage storage() {
         if (storage != null) return storage;
@@ -25,7 +35,10 @@ public class FirebaseStorageAdapter implements ImageStorage {
             throw new StorageFailureException();
         try {
             storage = StorageOptions.newBuilder().setProjectId(properties.firebaseProjectId())
-                    .setCredentials(GoogleCredentials.getApplicationDefault())
+                    .setCredentials(credentialsBase64.isBlank()
+                            ? GoogleCredentials.getApplicationDefault()
+                            : GoogleCredentials.fromStream(new java.io.ByteArrayInputStream(
+                                    Base64.getDecoder().decode(credentialsBase64))))
                     .setTransportOptions(HttpTransportOptions.newBuilder()
                             .setConnectTimeout(Math.toIntExact(properties.connectTimeout().toMillis()))
                             .setReadTimeout(Math.toIntExact(properties.readTimeout().toMillis())).build())

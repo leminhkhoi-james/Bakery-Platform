@@ -27,13 +27,15 @@ export function mapJobPage(dto) {
   if (!Array.isArray(dto?.content) || !['page', 'size', 'totalElements', 'totalPages'].every((key) => Number.isInteger(dto[key])) || dto.page < 0 || dto.size < 1 || dto.totalElements < 0 || dto.totalPages < 0) throw new ApiError('AI history không đúng content/page/size/totalElements/totalPages.', 502)
   return { result: dto.content.map(mapJobSummary), meta: { page: dto.page + 1, pageSize: dto.size, total: dto.totalElements, pages: dto.totalPages } }
 }
-export function mapDesign(dto) {
+export function mapDesign(dto, { adminPreview = false } = {}) {
   if (!isCatalogId(dto?.id) || !isCatalogId(dto.generationJobId)) throw new ApiError('GeneratedDesign DTO không hợp lệ.', 502)
-  const approved = dto.moderationStatus === 'APPROVED'
-  return { ...dto, imageUrl: approved ? aiUrl(dto.imageUrl) : null, thumbnailUrl: approved ? aiUrl(dto.thumbnailUrl) : null }
+  // The Backend issues PENDING signed media only to ADMIN. Keep that capability
+  // in the moderation view while default/customer mappings remain approved-only.
+  const visible = dto.moderationStatus === 'APPROVED' || (adminPreview === true && dto.moderationStatus === 'PENDING')
+  return { ...dto, imageUrl: visible ? aiUrl(dto.imageUrl) : null, thumbnailUrl: visible ? aiUrl(dto.thumbnailUrl) : null }
 }
 export function mapJobDetail(dto, user) {
   if (!isCatalogId(dto?.job?.id) || !isCatalogId(dto.job.customerId) || !isCatalogId(dto.job.cakeRequestId) || !['promptRevisions', 'sourceImages', 'generatedDesigns'].every((key) => Array.isArray(dto[key]))) throw new ApiError('Job detail nested không hợp lệ.', 502)
   if (user && dto.job.customerId !== user.id && !user.roles?.includes('ADMIN')) throw new ApiError('AI job không thuộc tài khoản hiện tại.', 403)
-  return { job: { ...dto.job }, currentRevision: dto.currentRevision ?? null, promptRevisions: dto.promptRevisions, sourceImages: dto.sourceImages.map((image) => ({ ...image, url: aiUrl(image.url) })), generatedDesigns: dto.generatedDesigns.map(mapDesign) }
+  return { job: { ...dto.job }, currentRevision: dto.currentRevision ?? null, promptRevisions: dto.promptRevisions, sourceImages: dto.sourceImages.map((image) => ({ ...image, url: aiUrl(image.url) })), generatedDesigns: dto.generatedDesigns.map(design => mapDesign(design, { adminPreview: user?.roles?.includes('ADMIN') === true })) }
 }

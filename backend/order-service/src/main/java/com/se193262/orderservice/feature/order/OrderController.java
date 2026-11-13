@@ -47,7 +47,8 @@ public class OrderController {
 
     @Operation(summary = "Create a direct catalog order")
     @io.swagger.v3.oas.annotations.responses.ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Order created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Order created", useReturnTypeSchema = true),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Idempotent replay of the existing order", useReturnTypeSchema = true),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Idempotency conflict"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "422", description = "Order request is invalid"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Required service unavailable")

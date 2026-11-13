@@ -15,10 +15,10 @@ import { formatOrderDate } from '../../../services/orderPresentation.js'
 import { displayReference } from '../../../services/displayReference.js'
 import { planName } from '../../../services/planPresentation.js'
 
-function OrderDetail({ row, onClose }) {
+function OrderDetail({ row, onClose, onReview }) {
   const resource = useCatalogResource(loadAdminSubscriptionOrderDetail, { orderId: row.order.id })
   const order = resource.data || row.order
-  return <AdminReviewDialog title="Chi tiết đơn mua gói" className="sc-subscription-order-detail" onClose={onClose} footer={<button type="button" className={buttonClass} data-modal-close>Đóng</button>}>
+  return <AdminReviewDialog title="Chi tiết đơn mua gói" className="sc-subscription-order-detail" onClose={onClose} footer={<><button type="button" className={buttonClass} data-modal-close>Đóng</button><button type="button" className={buttonClass} disabled={!row.eligibleForApproval} onClick={() => row.eligibleForApproval && onReview(row)}>Đối chiếu để duyệt</button></>}>
     <ReviewSection title="Thông tin đơn mua gói">
       <dl className="sc-review-fields">
         <ReviewField label="Mã đơn" value={displayReference(order.id, 'SUB', order.orderNumber)} />
@@ -36,14 +36,15 @@ function OrderDetail({ row, onClose }) {
           <strong>{payment.paymentMethod === 'VNPAY' ? 'VNPay' : 'Chuyển khoản ngân hàng'} · {subscriptionStatusLabel(payment.status)}</strong>
           <p>{reviewMoney(payment.amount, order.currency)} · {formatOrderDate(payment.submittedAt)}</p>
           {payment.paymentReference && <p className="break-all">Mã giao dịch: {payment.paymentReference}</p>}
-        </li>)}</ul> : <p>Hệ thống chưa ghi nhận giao dịch thanh toán thành công cho đơn này.</p>}
+        </li>)}</ul> : <p>Khách chưa gửi chứng từ và hệ thống chưa ghi nhận thanh toán thành công.</p>}
+        <p className="sc-review-help">{orderApprovalLabel(row)}</p>
         {order.period && <p className="sc-review-help">Kỳ dịch vụ: {formatOrderDate(order.period.periodStart)} – {formatOrderDate(order.period.periodEnd)}</p>}
       </>}</ApiState>
     </ReviewSection>
   </AdminReviewDialog>
 }
 
-export function AdminOrderTable({ rows, meta, onDetail }) {
+export function AdminOrderTable({ rows, meta, onDetail, onReview }) {
   return <DataTable label="Tất cả đơn mua gói" className="sc-admin-record-table sc-admin-subscription-orders-table"><thead><tr>
     <th>STT</th><th>Đơn mua gói</th><th>Tiệm bánh</th><th>Gói dịch vụ</th><th>Thời hạn</th><th>Số tiền</th><th>Mã GD</th><th>Thời gian</th><th>Trạng thái đơn</th><th className="sc-table-actions">Thao tác</th>
   </tr></thead><tbody>{rows.map((row, index) => {
@@ -59,9 +60,10 @@ export function AdminOrderTable({ rows, meta, onDetail }) {
       <td data-label="Số tiền" className="text-emerald-700 font-bold">{reviewMoney(order.totalAmount, order.currency)}</td>
       <td data-label="Mã GD" className="break-all">{transaction?.paymentReference || '—'}</td>
       <td data-label="Thời gian">{formatOrderDate(order.createdAt)}</td>
-      <td data-label="Trạng thái đơn"><StatusBadge status={order.status} label={subscriptionStatusLabel(order.status)} /></td>
+      <td data-label="Trạng thái đơn"><StatusBadge status={order.status} label={subscriptionStatusLabel(order.status)} /><small className="block">{orderApprovalLabel(row)}</small></td>
       <td className="sc-table-actions"><div className="flex flex-wrap gap-2">
         <RecordActionButton type="button" className="sc-button sc-action-button--secondary" aria-label="Xem chi tiết đơn mua gói" onClick={() => onDetail(row)} action="view" />
+        <button type="button" className={buttonClass} disabled={!row.eligibleForApproval} onClick={() => row.eligibleForApproval && onReview(row)}>Đối chiếu để duyệt</button>
       </div></td>
     </tr>
   })}</tbody></DataTable>
@@ -95,7 +97,7 @@ export default function AdminSubscriptionOrdersPage({ routeSearch = '', ReviewCo
   }
   const field = key => ({ value: draft[key], onChange: event => {
     const next = { ...draft, [key]: event.target.value }; setDraft(next)
-    try { setFilters({ status: next.status, query: next.query.trim(), ...adminOrderDateRange(next.from, next.to) }); setPage(1); setError(null) }
+    try { setFilters({ status: next.status, query: next.query.trim(), ...adminOrderDateRange(next.from, next.to), ...(next.eligibility ? { eligibleForApproval: next.eligibility === 'ready' } : {}) }); setPage(1); setError(null) }
     catch (failure) { setError(failure) }
   } })
   return <>
@@ -105,9 +107,11 @@ export default function AdminSubscriptionOrdersPage({ routeSearch = '', ReviewCo
         <label>Trạng thái đơn<select aria-label="Trạng thái đơn" {...field('status')} className={inputClass}><option value="">Tất cả trạng thái</option>{ADMIN_ORDER_STATUSES.map(status => <option key={status} value={status}>{subscriptionStatusLabel(status)}</option>)}</select></label>
         <label>Tạo từ ngày<input type="datetime-local" {...field('from')} className={inputClass} /></label>
         <label>Tạo đến ngày<input type="datetime-local" {...field('to')} className={inputClass} /></label>
+        <label>Điều kiện duyệt<select aria-label="Điều kiện duyệt" {...field('eligibility')} className={inputClass}><option value="">Tất cả</option><option value="ready">Đủ điều kiện đối chiếu</option><option value="blocked">Chưa đủ điều kiện</option></select></label>
       </form>
       {error && <ApiErrorMessage error={error} />}
       <ApiState resource={resource}>{resource.data && <>
+        <p className="sc-review-help">{resource.data.meta.total} đơn mua gói theo bộ lọc</p>
         {resource.data.result.length ? <AdminOrderTable rows={resource.data.result} meta={resource.data.meta} onDetail={setDetail} onReview={review} /> : <EmptyPanel title="Chưa có đơn mua gói phù hợp." icon="receipt_long" />}
         <CatalogPagination meta={resource.data.meta} onPage={setPage} />
       </>}</ApiState>

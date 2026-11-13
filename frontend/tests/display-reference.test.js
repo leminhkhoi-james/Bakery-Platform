@@ -23,6 +23,7 @@ let vite, Vendors
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'display-reference-interaction-fixture', enforce: 'pre', load(path) {
     path = path.replaceAll('\\', '/')
+    if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export const useViewportPageSize = () => ({ containerRef() {}, pageSize: 6 })'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export const useCatalogResource = () => ({ status: "ready", data: { result: [{ id: "de000000-0000-4000-8000-000000000010", name: "Tiệm cần duyệt", status: "PENDING_APPROVAL" }], meta: { page: 1, pageSize: 20, pages: 1, total: 1 } }, reload() {} })'
     if (path.endsWith('/src/context/useAuth.js')) return 'export const useAuth = () => ({ user: { id: "admin", roles: ["ADMIN"] }, roles: ["ADMIN"] })'
   }, transform(code, path) {
@@ -41,7 +42,7 @@ test('Bakery tables show a short code while row identity and detail lookup keep 
   assert.ok(nodes(tree).some((node) => node.type === 'tr' && node.key === id))
   assert.ok(text(tree).includes(displayReference(id, 'SHOP')))
   assert.ok(!text(tree).includes(id))
-  nodes(tree).find((node) => node.type === 'button' && text(node) === 'Xem / duyệt hồ sơ').props.onClick()
+  nodes(tree).find((node) => node.type?.name === 'RecordActionButton' && node.props.action === 'view').props.onClick()
   const detail = nodes(render()).find((node) => node.type?.name === 'BakeryReview')
   assert.equal(detail.props.id, id)
   assert.equal(detail.key, id)

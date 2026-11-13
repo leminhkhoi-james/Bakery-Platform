@@ -26,7 +26,7 @@ test('Populated product card renders mapped backend fields with detail navigatio
   assert.match(html, /Tiệm từ DTO/)
   assert.match(html, /125\.000₫/)
   assert.match(html, /Xem chi tiết/)
-  assert.match(html, /chưa có ảnh/)
+  assert.match(html, /alt="Ảnh minh họa/); assert.equal(product.image, null)
   assert.doesNotMatch(html, />5\.0<|Bán chạy|480\.000/)
 })
 
