@@ -1,0 +1,12 @@
+{
+  "project": "bakery-audit-20261107",
+  "orderServiceTemporaryStop": true,
+  "orderServiceRestored": true,
+  "originalStackTouched": false,
+  "dateFixturesModifiedOnlyInAuditDb": true,
+  "statusesChangedByActualSchedulers": true,
+  "previousScheduledPeriodNowActive": true,
+  "priorDbAssertionsCapturedBeforeTimeFixtureChanges": true,
+  "initialExpiryDateFixtureRejectedByCheckConstraint": true,
+  "recoveryWasNotRepeated": true
+}

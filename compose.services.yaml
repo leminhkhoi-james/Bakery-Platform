@@ -1,0 +1,92 @@
+# Merge after compose.yaml and the Bakery/Subscription, Order and Chat compose files.
+services:
+  identity-service:
+    environment:
+      CAKE_AI_CLIENT_SECRET_HASH: ${CAKE_AI_CLIENT_SECRET_HASH:-}
+  identity-db:
+    image: ${IDENTITY_DB_IMAGE:-postgres:17-alpine}
+  marketplace-db:
+    image: ${MARKETPLACE_DB_IMAGE:-postgres:17-alpine}
+  bakery-service:
+    environment:
+      IDENTITY_JWKS_URI: http://identity-service:8081/.well-known/jwks.json
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+  subscription-service:
+    environment:
+      IDENTITY_JWKS_URI: http://identity-service:8081/.well-known/jwks.json
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+  marketplace-service:
+    environment:
+      BAKERY_SERVICE_BASE_URL: http://bakery-service:8082
+      SUBSCRIPTION_SERVICE_BASE_URL: http://subscription-service:8084
+      ORDER_SERVICE_BASE_URL: http://order-service:8086
+      CAKE_AI_SERVICE_BASE_URL: http://cake-ai-service:8085
+  order-service:
+    ports: !override
+      - "127.0.0.1:8086:8086"
+    environment:
+      IDENTITY_JWK_SET_URI: http://identity-service:8081/.well-known/jwks.json
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+      BAKERY_SERVICE_URL: http://bakery-service:8082
+      MARKETPLACE_SERVICE_URL: http://marketplace-service:8083
+  chat-service:
+    ports: !override
+      - "127.0.0.1:8087:8087"
+    environment:
+      IDENTITY_JWK_SET_URI: http://identity-service:8081/.well-known/jwks.json
+      IDENTITY_SERVICE_URL: http://identity-service:8081
+      BAKERY_SERVICE_URL: http://bakery-service:8082
+      MARKETPLACE_SERVICE_URL: http://marketplace-service:8083
+  cake-ai-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cake_ai_db
+      POSTGRES_USER: ${CAKE_AI_DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+    volumes:
+      - cake-ai-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  cake-ai-service:
+    build:
+      context: .
+      dockerfile: backend/cake-ai-service/Dockerfile
+    depends_on:
+      cake-ai-db:
+        condition: service_healthy
+      identity-service:
+        condition: service_healthy
+      marketplace-service:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8085
+      CAKE_AI_DB_URL: jdbc:postgresql://cake-ai-db:5432/cake_ai_db
+      CAKE_AI_DB_USERNAME: ${CAKE_AI_DB_USERNAME:-postgres}
+      CAKE_AI_DB_PASSWORD: ${CAKE_AI_DB_PASSWORD:?Set CAKE_AI_DB_PASSWORD}
+      CAKE_AI_ENABLED: ${CAKE_AI_ENABLED:-false}
+      CAKE_AI_API_KEY: ${GEMINI_API_KEY:-}
+      CAKE_AI_IMAGE_MODEL: ${GEMINI_IMAGE_MODEL:-gemini-3.1-flash-image}
+      CAKE_AI_MODERATION_MODEL: ${GEMINI_MODERATION_MODEL:-gemini-3.5-flash}
+      CAKE_AI_FIREBASE_PROJECT_ID: ${LOCAL_FIREBASE_PROJECT_ID:-}
+      CAKE_AI_FIREBASE_BUCKET: ${LOCAL_FIREBASE_STORAGE_BUCKET:-}
+      GOOGLE_APPLICATION_CREDENTIALS: ${LOCAL_FIREBASE_ADC_PATH:-}
+      SERVICE_CLIENT_ID: cake-ai-service
+      SERVICE_CLIENT_SECRET: ${CAKE_AI_CLIENT_SECRET:-}
+      CAKE_AI_REQUIRE_ADMIN_REVIEW: ${CAKE_AI_REQUIRE_ADMIN_REVIEW:-false}
+      CAKE_AI_DAILY_PROVIDER_REQUESTS: ${CAKE_AI_DAILY_PROVIDER_REQUESTS:-9}
+      CAKE_AI_MAX_DESIGNS_PER_EXECUTION: ${CAKE_AI_MAX_DESIGNS_PER_EXECUTION:-4}
+      CAKE_AI_SCHEDULER_ENABLED: ${CAKE_AI_SCHEDULER_ENABLED:-true}
+      CAKE_AI_CLEANUP_ENABLED: "false"
+      IDENTITY_JWK_SET_URI: http://identity-service:8081/.well-known/jwks.json
+      IDENTITY_SERVICE_BASE_URL: http://identity-service:8081
+      BAKERY_SERVICE_BASE_URL: http://bakery-service:8082
+      MARKETPLACE_SERVICE_BASE_URL: http://marketplace-service:8083
+      SUBSCRIPTION_SERVICE_BASE_URL: http://subscription-service:8084
+      ORDER_SERVICE_BASE_URL: http://order-service:8086
+    ports:
+      - "127.0.0.1:8085:8085"
+volumes:
+  cake-ai-data:

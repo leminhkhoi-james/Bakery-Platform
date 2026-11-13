@@ -1,0 +1,399 @@
+/*
+ * subscription-plans.css
+ * Compact public plans page. All selectors prefixed scp- or .sc-public-plans
+ * so vendor/admin pages are never affected.
+ */
+
+/* ══════════════════════════════════════════
+   HERO BANNER
+══════════════════════════════════════════ */
+.scp-hero {
+  background: rgba(255, 245, 248, 0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(139, 34, 64, 0.18);
+  box-shadow: 0 2px 12px rgba(114, 38, 55, 0.08);
+}
+
+.scp-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8b2240;
+  letter-spacing: 0.03em;
+}
+
+.scp-title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #5a1a2a;
+  line-height: 1.25;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .scp-title { font-size: 1.75rem; }
+}
+
+.scp-sub {
+  font-size: 0.875rem;
+  color: #3d1218;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+.scp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.75rem;
+  background: #8b2240;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.14s;
+  white-space: nowrap;
+}
+.scp-btn-primary:hover { background: #6e1932; transform: translateY(-1px); }
+.scp-btn-primary:active { transform: translateY(0); }
+
+.scp-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.75rem;
+  background: rgba(255,255,255,0.75);
+  color: #8b2240;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1.5px solid #8b2240;
+  cursor: pointer;
+  transition: background 0.18s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.scp-btn-outline:hover { background: rgba(139, 34, 64, 0.08); }
+
+/* ══════════════════════════════════════════
+   VALUE CHIPS
+══════════════════════════════════════════ */
+.scp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.scp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 245, 248, 0.90);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139, 34, 64, 0.2);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5a1a2a;
+}
+
+.scp-chip .material-symbols-outlined {
+  color: #8b2240;
+  font-size: 0.95rem;
+}
+
+/* ══════════════════════════════════════════
+   SECTION HEADING
+══════════════════════════════════════════ */
+.scp-section-title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #5a1a2a;
+  margin: 0;
+}
+
+.scp-refresh-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8b2240;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ══════════════════════════════════════════
+   PLAN GRID & CARDS
+══════════════════════════════════════════ */
+.sc-public-plans .sc-owner-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .sc-public-plans .sc-owner-plan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .sc-public-plans .sc-owner-plan-grid { grid-template-columns: 1fr; }
+}
+
+.sc-public-plans .sc-owner-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem;
+  min-width: 0;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 3px 14px rgba(114, 38, 55, 0.09), 0 1px 3px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sc-public-plans .sc-owner-plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 7px 24px rgba(114, 38, 55, 0.14), 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Featured */
+.sc-public-plans .sc-owner-plan-card.is-featured {
+  border: 2px solid #8b2240;
+  background: rgba(255, 245, 248, 0.98);
+  box-shadow: 0 6px 26px rgba(114, 38, 55, 0.18);
+  margin-top: -0.6rem;
+  padding-top: 2.2rem;
+}
+
+.sc-public-plans .sc-owner-plan-card.is-featured::before {
+  content: "⭐ Phổ biến nhất";
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: linear-gradient(135deg, #8b2240, #c0485e);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.8rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(114, 38, 55, 0.3);
+}
+
+/* Card content */
+.sc-public-plans .sc-owner-plan-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5a1a2a;
+  margin: 0;
+}
+
+.sc-public-plans .sc-owner-plan-card > p.font-serif {
+  font-size: 1.75rem !important;
+  font-weight: 700;
+  color: #8b2240 !important;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sc-public-plans .sc-owner-plan-card > p.font-serif span {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #7a4555 !important;
+}
+
+.sc-public-plans .sc-owner-plan-card > p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #3d1218;
+  line-height: 1.45;
+}
+
+.sc-public-plans .sc-plan-benefits {
+  font-size: 0.78rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sc-public-plans .sc-plan-benefits li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: #3d1218;
+}
+
+.sc-public-plans .sc-plan-benefits strong { color: #5a1a2a; }
+
+.sc-public-plans .sc-plan-benefits .sc-icon {
+  color: #8b2240;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+/* Select button */
+.sc-public-plans .sc-owner-plan-card > button {
+  margin-top: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 0.65rem;
+  background: #8b2240;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.14s;
+}
+
+.sc-public-plans .sc-owner-plan-card > button:hover:not(:disabled) {
+  background: #6e1932;
+  transform: translateY(-1px);
+}
+
+.sc-public-plans .sc-owner-plan-card > button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sc-public-plans .sc-owner-plan-card.is-featured > button {
+  background: linear-gradient(135deg, #8b2240, #c0485e);
+}
+
+/* Detail toggle buttons */
+.scp-detail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(139, 34, 64, 0.25);
+  background: rgba(255, 245, 248, 0.85);
+  color: #5a1a2a;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.scp-detail-btn.active,
+.scp-detail-btn:hover { background: rgba(139, 34, 64, 0.1); }
+
+/* ══════════════════════════════════════════
+   ACTION BAR
+══════════════════════════════════════════ */
+.scp-action-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: rgba(255, 245, 248, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 34, 64, 0.18);
+}
+
+@media (min-width: 480px) {
+  .scp-action-bar { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+
+/* ══════════════════════════════════════════
+   3 STEPS
+══════════════════════════════════════════ */
+.scp-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+@media (min-width: 640px) {
+  .scp-steps { grid-template-columns: repeat(3, 1fr); }
+}
+
+.scp-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 245, 248, 0.90);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 34, 64, 0.14);
+}
+
+.scp-step-num {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-top: 0.1rem;
+}
+
+/* ══════════════════════════════════════════
+   FAQ
+══════════════════════════════════════════ */
+.scp-faq-wrap {
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scp-faq {
+  border-radius: 0.85rem;
+  background: rgba(255, 245, 248, 0.90);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 34, 64, 0.14);
+  overflow: hidden;
+}
+
+.scp-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #5a1a2a;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.scp-faq-q::-webkit-details-marker { display: none; }
+
+.scp-faq-a {
+  padding: 0 1rem 0.75rem;
+  font-size: 0.78rem;
+  color: #3d1218;
+  line-height: 1.55;
+  border-top: 1px solid rgba(139, 34, 64, 0.1);
+  margin: 0;
+  padding-top: 0.6rem;
+}

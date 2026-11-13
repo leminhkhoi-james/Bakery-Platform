@@ -1,0 +1,38 @@
+services:
+  bakery-db:
+    extends:
+      file: docker-compose.bakery-service.yml
+      service: bakery-db
+  bakery-storage:
+    extends:
+      file: docker-compose.bakery-service.yml
+      service: bakery-storage
+  bakery-service:
+    extends:
+      file: docker-compose.bakery-service.yml
+      service: bakery-service
+    environment:
+      IDENTITY_JWT_SERVICE_AUDIENCE: bakery-service
+      SUBSCRIPTION_SERVICE_URL: http://subscription-service:8084
+
+  subscription-db:
+    extends:
+      file: docker-compose.subscription-service.yml
+      service: subscription-db
+  subscription-storage:
+    extends:
+      file: docker-compose.subscription-service.yml
+      service: subscription-storage
+  subscription-service:
+    extends:
+      file: docker-compose.subscription-service.yml
+      service: subscription-service
+    environment:
+      IDENTITY_JWT_SERVICE_AUDIENCE: subscription-service
+      BAKERY_SERVICE_URL: http://bakery-service:8082
+
+volumes:
+  bakery-db-data:
+  bakery-storage-data:
+  subscription-db-data:
+  subscription-storage-data:

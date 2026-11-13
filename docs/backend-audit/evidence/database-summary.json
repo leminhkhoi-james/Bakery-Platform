@@ -1,0 +1,16 @@
+{
+  "databasePerService": 7,
+  "sourceApplicationTables": 49,
+  "byService": {
+    "bakery-service": 11,
+    "cake-ai-service": 6,
+    "chat-service": 5,
+    "identity-service": 6,
+    "marketplace-service": 9,
+    "order-service": 7,
+    "subscription-service": 5
+  },
+  "migrationFiles": 17,
+  "liveAuditApplicationTables": 43,
+  "schemaOnlyCakeAiTables": 6
+}

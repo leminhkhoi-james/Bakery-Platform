@@ -1,0 +1,9 @@
+stateDiagram-v2
+  [*] --> QUEUED
+  QUEUED --> PROCESSING
+  QUEUED --> CANCELLED
+  PROCESSING --> SUCCEEDED
+  PROCESSING --> FAILED
+  PROCESSING --> CANCELLED
+  SUCCEEDED --> QUEUED: new revision
+  FAILED --> QUEUED: new revision

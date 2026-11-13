@@ -25,7 +25,7 @@ CREATE TABLE bakery_members (
     CONSTRAINT uq_bakery_members_bakery_user UNIQUE (bakery_id, user_id),
     CONSTRAINT fk_bakery_members_bakery
         FOREIGN KEY (bakery_id) REFERENCES bakeries(id) ON DELETE CASCADE,
-    CONSTRAINT ck_bakery_members_role CHECK (member_role IN ('OWNER', 'MANAGER', 'STAFF')),
+    CONSTRAINT ck_bakery_members_role CHECK (member_role IN ('OWNER')),
     CONSTRAINT ck_bakery_members_status CHECK (status IN ('INVITED', 'ACTIVE', 'INACTIVE'))
 );
 

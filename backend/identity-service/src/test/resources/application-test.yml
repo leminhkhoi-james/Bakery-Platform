@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+
+security:
+  jwt:
+    private-key-path: test-unused-private.pem
+    public-key-path: test-unused-public.pem
+  auth:
+    bcrypt-strength: 4
+    refresh-cookie-secure: false

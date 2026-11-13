@@ -1,0 +1,9 @@
+.git
+.vscode
+**/target
+**/.env
+**/.env.*
+**/.keys
+**/*.pem
+**/*.key
+**/node_modules

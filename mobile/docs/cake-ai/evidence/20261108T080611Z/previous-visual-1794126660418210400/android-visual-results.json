@@ -1,0 +1,1 @@
+{"checks":[{"case":"Final UI shows entire Backend image without crop","result":"PASS"},{"case":"Final Admin has no invalid re-moderation action","result":"PASS"}],"originalSettings":{"font_scale":"1.0","rotation":"0","auto":"1"},"settingsRestored":true}

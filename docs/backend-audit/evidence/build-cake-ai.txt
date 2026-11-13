@@ -1,0 +1,176 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Bakery Platform Backend                                            [pom]
+[INFO] platform-support                                                   [jar]
+[INFO] Cake AI Service                                                    [jar]
+[INFO] 
+[INFO] ----------------< com.se193262:bakery-platform-backend >----------------
+[INFO] Building Bakery Platform Backend 0.0.1-SNAPSHOT                    [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] -------------------< com.se193262:platform-support >--------------------
+[INFO] Building platform-support 0.0.1-SNAPSHOT                           [2/3]
+[INFO]   from platform-support\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ platform-support ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\main\resources
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ platform-support ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ platform-support ---
+[INFO] skip non existing resourceDirectory C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\platform-support\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ platform-support ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ platform-support ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ platform-support ---
+[INFO] 
+[INFO] --------------------< com.se193262:cake-ai-service >--------------------
+[INFO] Building Cake AI Service 0.0.1-SNAPSHOT                            [3/3]
+[INFO]   from cake-ai-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ cake-ai-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ cake-ai-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 47 source files with javac [debug parameters release 21] to target\classes
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/client/GeminiClient.java: C:\Users\phuck\AppData\Local\Temp\bakery-backend-audit-20261107\source\backend\cake-ai-service\src\main\java\com\se193262\cakeaiservice\infrastructure\client\GeminiClient.java uses or overrides a deprecated API.
+[INFO] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/client/GeminiClient.java: Recompile with -Xlint:deprecation for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[3,30] package com.google.auth.oauth2 does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[5,29] package com.google.cloud.http does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[15,22] cannot find symbol
+  symbol:   class Storage
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[20,26] cannot find symbol
+  symbol:   class Storage
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[4,1] package com.google.cloud.storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java:[52,58] cannot find symbol
+  symbol:   method accepted(com.se193262.cakeaiservice.feature.generation.dto.GenerationJobResponse)
+  location: class com.se193262.platform.dto.ApiResponse
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[25,23] cannot find symbol
+  symbol:   variable StorageOptions
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[26,37] cannot find symbol
+  symbol:   variable GoogleCredentials
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[27,42] cannot find symbol
+  symbol:   variable HttpTransportOptions
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[39,30] cannot find symbol
+  symbol:   variable BlobInfo
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[40,71] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[41,18] cannot find symbol
+  symbol:   class StorageException
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[46,16] cannot find symbol
+  symbol:   class StorageException
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[51,16] cannot find symbol
+  symbol:   class StorageException
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[56,38] cannot find symbol
+  symbol:   variable BlobInfo
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[57,50] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[63,25] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[64,32] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[65,32] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[66,55] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[67,91] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[70,18] cannot find symbol
+  symbol:   class Blob
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[73,18] cannot find symbol
+  symbol:   class StorageException
+  location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[INFO] 23 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Bakery Platform Backend 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bakery Platform Backend ............................ SUCCESS [  0.003 s]
+[INFO] platform-support ................................... SUCCESS [  2.442 s]
+[INFO] Cake AI Service .................................... FAILURE [  5.707 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.642 s
+[INFO] Finished at: 2026-11-07T12:14:37+07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile (default-compile) on project cake-ai-service: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[3,30] package com.google.auth.oauth2 does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[5,29] package com.google.cloud.http does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[15,22] cannot find symbol
+[ERROR]   symbol:   class Storage
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[20,26] cannot find symbol
+[ERROR]   symbol:   class Storage
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[4,1] package com.google.cloud.storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/feature/generation/GenerationController.java:[52,58] cannot find symbol
+[ERROR]   symbol:   method accepted(com.se193262.cakeaiservice.feature.generation.dto.GenerationJobResponse)
+[ERROR]   location: class com.se193262.platform.dto.ApiResponse
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[25,23] cannot find symbol
+[ERROR]   symbol:   variable StorageOptions
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[26,37] cannot find symbol
+[ERROR]   symbol:   variable GoogleCredentials
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[27,42] cannot find symbol
+[ERROR]   symbol:   variable HttpTransportOptions
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[39,30] cannot find symbol
+[ERROR]   symbol:   variable BlobInfo
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[40,71] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[41,18] cannot find symbol
+[ERROR]   symbol:   class StorageException
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[46,16] cannot find symbol
+[ERROR]   symbol:   class StorageException
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[51,16] cannot find symbol
+[ERROR]   symbol:   class StorageException
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[56,38] cannot find symbol
+[ERROR]   symbol:   variable BlobInfo
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[57,50] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[63,25] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[64,32] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[65,32] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[66,55] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[67,91] package Storage does not exist
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[70,18] cannot find symbol
+[ERROR]   symbol:   class Blob
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] /C:/Users/phuck/AppData/Local/Temp/bakery-backend-audit-20261107/source/backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/infrastructure/storage/FirebaseStorageAdapter.java:[73,18] cannot find symbol
+[ERROR]   symbol:   class StorageException
+[ERROR]   location: class com.se193262.cakeaiservice.infrastructure.storage.FirebaseStorageAdapter
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :cake-ai-service

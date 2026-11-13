@@ -1,0 +1,297 @@
+{
+  "screenshots": [
+    {
+      "path": "previous-visual-1794126660418210400/final-admin-existing-decision.png",
+      "sha256": "4035821dc1cc1e2140751c5a90503e8cbf1482233c129804d33dddc2dfed452a",
+      "bytes": 66116,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:30:13.058401+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": true
+    },
+    {
+      "path": "previous-visual-1794126660418210400/final-landscape-design.png",
+      "sha256": "d82508767c0ca184282dc22e22896d72790394b91d69cf4c323750dfc3e60a80",
+      "bytes": 26004,
+      "width": 1280,
+      "height": 720,
+      "fileWrittenAtUtc": "2026-11-08T08:30:00.661704+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": true
+    },
+    {
+      "path": "previous-visual-1794126660418210400/final-large-text-design.png",
+      "sha256": "a02b7510a7a38ecf7fc5b4b533ff7dec4f118b7b43305c35ddd3decbf27e251a",
+      "bytes": 65589,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:29:51.682749+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": true
+    },
+    {
+      "path": "previous-visual-1794126660418210400/final-mode-and-design.png",
+      "sha256": "600af2136462914a2cefcb9153d39f3a4b6a3ad2803a617c3d96d521d8370b61",
+      "bytes": 63792,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:29:44.160336+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": true
+    },
+    {
+      "path": "previous-visual-1794126660418210400/final-whole-design.png",
+      "sha256": "8ea6e1cc08720c0b733260ae686b42a080fbbd597a521b0fe14cb7c14451e83c",
+      "bytes": 57406,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:29:46.959072+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": true
+    },
+    {
+      "path": "screenshots/01-customer-form-local-mode-reference.png",
+      "sha256": "b7768eca9a15bba95d6750a75328c4ca7711058e1b4b94e5475f7b9871cd24b6",
+      "bytes": 109731,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:30.505868+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/02-customer-submitted-progress.png",
+      "sha256": "7abc75a708c57900d94ed9dff20df0394bed9bfc2135438ec7060a004400e775",
+      "bytes": 209250,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:34.387898+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/03-customer-local-result.png",
+      "sha256": "f0ca5d2f0df370ca045152cd35ab4905a7afb609b2a098feac5ee2a88b784824",
+      "bytes": 342599,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:40.430846+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/04-design-local-mode.png",
+      "sha256": "15b3618e628eba102587c725e9b23c4f1f45922888c4bda01815589090a32879",
+      "bytes": 74973,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:43.220978+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/05-selected-design-handoff.png",
+      "sha256": "da41be14e78c3370e941c0a617988999700907212b18f8a1ce6fab91b7c24b4a",
+      "bytes": 83372,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:48.475354+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/06-revision-form.png",
+      "sha256": "a63e24a2fafd555a5b42af5382abd8dedce2413244d6a392c68cb245c31c0efb",
+      "bytes": 93744,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:52.363984+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/07-revision-history.png",
+      "sha256": "fe073aadd0faf7d6d5c4bcc43dc4a730495711d19390d6b268e6b48c3c473536",
+      "bytes": 94152,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:08.335898+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/08-cancelled.png",
+      "sha256": "5ba4811767910bd81eabe1a5b7ea2d70d3aca755fc549ccad37587614f47273a",
+      "bytes": 99770,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:14.388481+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/09-local-moderation-failure.png",
+      "sha256": "5107b9a5eff07b6c97b54cdbe3b07f0e0b60dcd8426cf01eb31861b5abee702d",
+      "bytes": 98333,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:24.791711+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/10-customer-admin-route-denied.png",
+      "sha256": "adc32b69d0063b9ec3cf279fe571423303ddab2755d9b86e37f66ec6342e59a5",
+      "bytes": 53803,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:28.189945+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/11-other-customer-rfq-denied.png",
+      "sha256": "2aa773758f8161d55016a8452299af1d31c790b5bcb4b591e1f1089f45a51c8f",
+      "bytes": 54006,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:38.832263+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/12-admin-approved-design-readonly.png",
+      "sha256": "677d7df7045edbb09499ef8feadf05453915e1a694e3ab30a89b1894e414d68a",
+      "bytes": 85092,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:48.031459+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/13-admin-job-oversight.png",
+      "sha256": "a854985d2cffcab5dbb4983d697a6f5c3fe8afd657d70fd20d6d91c81097387d",
+      "bytes": 96611,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:50.994552+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/14-public-home-regression.png",
+      "sha256": "269f5dfd2a5b83133c340fcf00355ed274e7dea1322a43b7d58cbd2de8d758f0",
+      "bytes": 113303,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:56.058311+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/15-public-plans-regression.png",
+      "sha256": "5af045e7970da03758829d89c5ef6ecd32b40dc6d2f4db040e4d8fa65472f06f",
+      "bytes": 119941,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:26:59.474359+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/diagnostic-live-screen.png",
+      "sha256": "e3d3ce653981c49cc53d6519fe40c1b5fe3410b7511c6052493dfc0a00b01ee0",
+      "bytes": 113389,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:25:17.841509+00:00",
+      "capture": "ADB framebuffer",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/final-admin-existing-decision.png",
+      "sha256": "4035821dc1cc1e2140751c5a90503e8cbf1482233c129804d33dddc2dfed452a",
+      "bytes": 66116,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:32:25.404944+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/final-landscape-design.png",
+      "sha256": "02c9a6134bd224008faac5035e34f97cbfb03576a283432e648dce97e45d1de0",
+      "bytes": 38345,
+      "width": 1280,
+      "height": 720,
+      "fileWrittenAtUtc": "2026-11-08T08:32:13.339742+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/final-large-text-design.png",
+      "sha256": "a02b7510a7a38ecf7fc5b4b533ff7dec4f118b7b43305c35ddd3decbf27e251a",
+      "bytes": 65589,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:32:04.169174+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/final-mode-and-design.png",
+      "sha256": "600af2136462914a2cefcb9153d39f3a4b6a3ad2803a617c3d96d521d8370b61",
+      "bytes": 63792,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:31:56.649385+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/final-whole-design.png",
+      "sha256": "8ea6e1cc08720c0b733260ae686b42a080fbbd597a521b0fe14cb7c14451e83c",
+      "bytes": 57406,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:31:59.451268+00:00",
+      "capture": "FlutterDriver screenshot on real Android Emulator",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/readme-main-cold-ready.png",
+      "sha256": "5c1c5011f1bab2a1e9892144314b96609a06b9faaf21dd84585dd6aee034fe79",
+      "bytes": 114821,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:37:04.251485+00:00",
+      "capture": "ADB framebuffer",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/readme-main-cold-restart.png",
+      "sha256": "fd269f51dd9d1a17e9b7fe8cdc3e3cf20e2c1fb95b8a34f6c39ed9a444c436a1",
+      "bytes": 21380,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:35:44.142125+00:00",
+      "capture": "ADB framebuffer",
+      "retainedEarlierVisualPass": false
+    },
+    {
+      "path": "screenshots/readme-main-initial.png",
+      "sha256": "ff95500e500fbefc150d3e277be94b78783a8c5f13ca2416936af3179b690e23",
+      "bytes": 114899,
+      "width": 720,
+      "height": 1280,
+      "fileWrittenAtUtc": "2026-11-08T08:34:54.679475+00:00",
+      "capture": "ADB framebuffer",
+      "retainedEarlierVisualPass": false
+    }
+  ],
+  "count": 29,
+  "pixelsEdited": false,
+  "timestampMeaning": "filesystem write time at capture; archived file mtime preserved"
+}

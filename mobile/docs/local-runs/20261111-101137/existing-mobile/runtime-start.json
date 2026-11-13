@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-11T03:11:55.013998+00:00",
+  "checkOnly": false,
+  "actions": [],
+  "services": {},
+  "source": {
+    "identity-service": {
+      "checked": 94,
+      "different": [
+        "backend/identity-service/src/test/java/com/se193262/identityservice/feature/address/AddressApiIntegrationTest.java",
+        "backend/identity-service/src/main/resources/application.yml",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/exception/GlobalExceptionHandler.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressRepository.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressServiceImpl.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/CONTEXT.md",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/AdminUserController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/CustomerProfile.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/PlatformRole.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/User.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserManagementService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserRepository.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/ReplaceUserRolesRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/UpdateMyProfileRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/UpdateUserStatusRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/AddressResponse.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/SaveAddressRequest.java"
+      ]
+    }
+  },
+  "project": "bakery-mobile-20261107",
+  "result": "BLOCKED_BY_ENVIRONMENT",
+  "errorType": "RuntimeError",
+  "reason": "Runtime source copy differs; not rebuilding protected source or rewriting external runtime"
+}

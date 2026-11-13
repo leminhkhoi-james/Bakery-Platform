@@ -1,0 +1,12 @@
+{
+  "overall": "PARTIAL_BLOCKED",
+  "stages": {
+    "maven": "PASS_BUILD_ALREADY_SUCCESSFUL",
+    "docker": "RUNNING_WITH_LIMITATIONS",
+    "api": "PARTIAL_BLOCKED_FOREIGN_RFQ_ACCEPTED",
+    "provider": "LOCAL_FALLBACK_VERIFIED_REAL_PROVIDER_BLOCKED",
+    "flutterAndroid": "VERIFIED_WITH_LIMITATIONS_PENDING_MODERATION_NOT_REACHED"
+  },
+  "screenshots": 29,
+  "providerChargeableRequests": 0
+}

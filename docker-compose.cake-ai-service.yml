@@ -1,0 +1,59 @@
+services:
+  cake-ai-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cake_ai_db
+      POSTGRES_USER: ${CAKE_AI_DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+    ports:
+      - "${CAKE_AI_DB_PORT:-5438}:5432"
+    volumes:
+      - cake-ai-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  cake-ai-service:
+    build:
+      context: .
+      dockerfile: backend/cake-ai-service/Dockerfile
+    depends_on:
+      cake-ai-db:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      CAKE_AI_DB_URL: jdbc:postgresql://cake-ai-db:5432/cake_ai_db
+      CAKE_AI_DB_USERNAME: ${CAKE_AI_DB_USERNAME:-postgres}
+      CAKE_AI_DB_PASSWORD: ${CAKE_AI_DB_PASSWORD:-postgres}
+      CAKE_AI_ENABLED: ${CAKE_AI_ENABLED:-false}
+      CAKE_AI_API_KEY: ${GEMINI_API_KEY:-}
+      SERVICE_CLIENT_ID: cake-ai-service
+      SERVICE_CLIENT_SECRET: ${CAKE_AI_CLIENT_SECRET:-}
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/firebase.json
+      CAKE_AI_REQUIRE_ADMIN_REVIEW: ${CAKE_AI_REQUIRE_ADMIN_REVIEW:-false}
+      CAKE_AI_CLEANUP_ENABLED: "false"
+      CAKE_AI_IMAGE_MODEL: ${GEMINI_IMAGE_MODEL:-gemini-3.1-flash-image}
+      CAKE_AI_MODERATION_MODEL: ${GEMINI_MODERATION_MODEL:-gemini-3.5-flash}
+      CAKE_AI_FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-}
+      CAKE_AI_FIREBASE_BUCKET: ${FIREBASE_STORAGE_BUCKET:-}
+      IDENTITY_JWK_SET_URI: ${IDENTITY_JWKS_URI:-http://host.docker.internal:8081/.well-known/jwks.json}
+      IDENTITY_JWT_ISSUER: ${IDENTITY_JWT_ISSUER:-bakery-platform-identity}
+      IDENTITY_SERVICE_BASE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:8081}
+      MARKETPLACE_SERVICE_BASE_URL: ${MARKETPLACE_SERVICE_URL:-http://host.docker.internal:8083}
+    volumes:
+      - type: bind
+        source: ${FIREBASE_CREDENTIALS_FILE:?Existing Firebase credential required}
+        target: /run/secrets/firebase.json
+        read_only: true
+        bind:
+          create_host_path: false
+    ports:
+      - "127.0.0.1:${CAKE_AI_SERVICE_PORT:-8085}:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  cake-ai-db-data:
+

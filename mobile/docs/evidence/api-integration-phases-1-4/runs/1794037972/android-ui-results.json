@@ -1,0 +1,12 @@
+[
+  {
+    "action": "Public home loads real catalog without fixture",
+    "result": "PASS",
+    "at": "2026-11-07T07:50:31.393493Z"
+  },
+  {
+    "action": "registration",
+    "result": "FAIL_MOBILE_OR_BACKEND",
+    "errorType": "DriverError"
+  }
+]

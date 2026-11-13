@@ -1,0 +1,117 @@
+{
+  "at": "2026-11-11T03:22:26.053989+00:00",
+  "services": {
+    "identity": {
+      "origin": "http://127.0.0.1:18101",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 10,
+      "tokenFields": [
+        "accessToken",
+        "tokenType",
+        "expiresIn"
+      ]
+    },
+    "bakery": {
+      "origin": "http://127.0.0.1:18102",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 34,
+      "hasOnboarding": true
+    },
+    "subscription": {
+      "origin": "http://127.0.0.1:18104",
+      "status": "RUNNING_AND_VERIFIED_OPENAPI",
+      "pathCount": 14,
+      "hasPaymentOptions": true
+    }
+  },
+  "gateway": {
+    "status": "UNAVAILABLE",
+    "errorType": "HTTPError"
+  },
+  "sourceVsExternalBuild": {
+    "identity-service": {
+      "checked": 94,
+      "different": [
+        "backend/identity-service/src/test/java/com/se193262/identityservice/feature/address/AddressApiIntegrationTest.java",
+        "backend/identity-service/src/main/resources/application.yml",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/exception/GlobalExceptionHandler.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressRepository.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/AddressServiceImpl.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/CONTEXT.md",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/AdminUserController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/CustomerProfile.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/PlatformRole.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/User.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserContextService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserController.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserManagementService.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/UserRepository.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/ReplaceUserRolesRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/UpdateMyProfileRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/user/dto/UpdateUserStatusRequest.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/AddressResponse.java",
+        "backend/identity-service/src/main/java/com/se193262/identityservice/feature/address/dto/SaveAddressRequest.java"
+      ]
+    },
+    "bakery-service": {
+      "checked": 126,
+      "different": [
+        "backend/bakery-service/src/test/java/com/se193262/bakeryservice/shared/DeliveryLocationTest.java",
+        "backend/bakery-service/src/test/java/com/se193262/bakeryservice/feature/catalog/CatalogQuoteServiceTest.java",
+        "backend/bakery-service/src/test/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImplTest.java",
+        "backend/bakery-service/src/test/java/com/se193262/bakeryservice/feature/catalog/InternalCatalogRoutingTest.java",
+        "backend/bakery-service/src/main/resources/application.yml",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/config/OpenApiConfig.java",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/exception/DeliveryAreaNotServedException.java",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/exception/GlobalExceptionHandler.java",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/shared/DeliveryLocation.java",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CatalogServiceImpl.java",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/CONTEXT.md",
+        "backend/bakery-service/src/main/java/com/se193262/bakeryservice/feature/catalog/service/CatalogQuoteService.java"
+      ]
+    },
+    "subscription-service": {
+      "checked": 84,
+      "different": [
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/AdminSubscriptionOrderControllerTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/AdminSubscriptionOrderIntegrationTests.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/BakeryApprovalGateTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/SubscriptionDataIntegrationTests.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/VnpayIntegrationTests.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/security/SecurityConfigTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/feature/payment/PaymentReviewTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/feature/payment/VnpayControllerTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/feature/payment/VnpayServiceTest.java",
+        "backend/subscription-service/src/test/java/com/se193262/subscriptionservice/feature/payment/VnpaySignerTest.java",
+        "backend/subscription-service/src/main/resources/application.yml",
+        "backend/subscription-service/src/main/resources/db/migration/V5__vnpay_attempts.sql",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/config/OpenApiConfig.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/config/VnpayProperties.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/security/SecurityConfig.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/infrastructure/client/BakeryAccessClient.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/infrastructure/payment/VnpaySigner.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/CONTEXT.md",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/CONTEXT.md",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/controller/AdminSubscriptionOrderController.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/dto/AdminSubscriptionOrderDto.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/dto/AdminSubscriptionOrderFilter.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/repository/SubscriptionOrderRepository.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/SubscriptionOrderService.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/subscriptionorder/service/impl/SubscriptionOrderServiceImpl.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/controller/VnpayController.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/dto/VnpayAttemptResponse.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/dto/VnpayCheckoutResponse.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/entity/BakeryPayment.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/entity/VnpayAttempt.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/repository/BakeryPaymentRepository.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/repository/VnpayAttemptRepository.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/BakeryPaymentService.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/VnpayService.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/BakeryPaymentServiceImpl.java",
+        "backend/subscription-service/src/main/java/com/se193262/subscriptionservice/feature/payment/service/impl/VnpayServiceImpl.java"
+      ]
+    }
+  }
+}

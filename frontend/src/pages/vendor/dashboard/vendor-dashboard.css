@@ -1,0 +1,32 @@
+@import "../../../styles/dashboard-metrics.css";
+
+.sc-vendor-dashboard { display: grid; gap: 1rem; min-width: 0; container-type: inline-size; }
+.sc-vendor-dashboard .sc-panel { margin: 0; padding: 1rem 1.15rem; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05); }
+.sc-vendor-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.sc-vendor-kpis .sc-dashboard-distribution { min-width: 0; gap: 1rem; }
+.sc-vendor-kpis .sc-record-action { width: 100%; }
+.sc-vendor-recent { display: grid; gap: .85rem; min-width: 0; }
+.sc-vendor-dashboard .sc-section-heading { margin: 0; padding-bottom: .65rem; }
+.sc-vendor-dashboard .sc-section-heading h2 { font-size: 1rem; }
+.sc-vendor-dashboard .sc-empty { min-height: 9rem; padding: 1rem; }
+.sc-vendor-dashboard-error { display: flex; align-items: center; gap: .65rem; padding: .8rem 1rem; background: #fdf2f4; border: 1px solid #e9c6bc; border-radius: .85rem; color: #842b39; font-size: .85rem; }
+.sc-vendor-dashboard-error p { flex: 1; }
+.sc-vendor-table-state { color: #64748b; padding: 1.5rem .25rem; font-size: .85rem; }
+.sc-vendor-tasks { display: grid; gap: .65rem; }
+.sc-vendor-tasks > div:last-child { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.sc-vendor-tasks button { display: flex; align-items: center; gap: .55rem; border-radius: .75rem; padding: .7rem; background: #f8fafc; border: 1px solid #e2e8f0; color: #722637; font-size: .8rem; text-align: left; }
+.sc-vendor-tasks button span:nth-child(2) { flex: 1; }
+.sc-vendor-tasks button:hover { background: #f1f5f9; }
+@media (max-width: 639px) {
+  .sc-vendor-kpis, .sc-vendor-tasks > div:last-child { grid-template-columns: minmax(0, 1fr); }
+  .sc-vendor-dashboard-error { flex-wrap: wrap; }
+  .sc-vendor-dashboard .sc-panel { padding: .85rem; }
+}
+@container (min-width: 25rem) and (max-width: 38rem) {
+  .sc-vendor-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sc-vendor-kpis > :last-child { grid-column: 1 / -1; }
+  .sc-vendor-tasks > div:last-child { grid-template-columns: minmax(0, 1fr); }
+}
+@container (width < 25rem) {
+  .sc-vendor-kpis { grid-template-columns: minmax(0, 1fr); }
+}

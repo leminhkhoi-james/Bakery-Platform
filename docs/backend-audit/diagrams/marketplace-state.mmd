@@ -1,0 +1,16 @@
+stateDiagram-v2
+  state RFQ {
+    [*] --> DRAFT
+    DRAFT --> OPEN
+    DRAFT --> CANCELLED
+    OPEN --> CANCELLED
+    OPEN --> CLOSED
+    OPEN --> OFFER_SELECTED
+  }
+  state Offer {
+    [*] --> PENDING
+    PENDING --> ACCEPTED
+    PENDING --> REJECTED
+    PENDING --> WITHDRAWN
+    PENDING --> EXPIRED
+  }

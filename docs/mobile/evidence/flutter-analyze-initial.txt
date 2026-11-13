@@ -1,0 +1,75 @@
+Analyzing mobile...                                             
+
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\app\router\app_router.dart:33:9 - curly_braces_in_flow_control_structures
+   info - The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart'. Try removing the import directive - lib\app\theme\app_theme.dart:1:8 - unnecessary_import
+   info - The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart'. Try removing the import directive - lib\app\theme\app_theme.dart:1:8 - unnecessary_import
+   info - Parameter 'child' could be a super parameter. Trying converting 'child' to a super parameter - lib\core\demo\demo_workspace.dart:35:3 - use_super_parameters
+   info - Parameter 'child' could be a super parameter. Trying converting 'child' to a super parameter - lib\core\demo\demo_workspace.dart:64:3 - use_super_parameters
+warning - Unused import: '../../app/theme/app_theme.dart'. Try removing the import directive - lib\core\widgets\sweetcake_scaffold.dart:5:8 - unused_import
+warning - Unused import: '../../app/theme/app_theme.dart'. Try removing the import directive - lib\core\widgets\sweetcake_scaffold.dart:6:8 - unused_import
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\core\widgets\sweetcake_scaffold.dart:73:23 - curly_braces_in_flow_control_structures
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre. Try replacing the use of the deprecated member with the replacement - lib\core\widgets\sweetcake_scaffold.dart:95:25 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre. Try replacing the use of the deprecated member with the replacement - lib\core\widgets\sweetcake_scaffold.dart:95:64 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre. Try replacing the use of the deprecated member with the replacement - lib\core\widgets\sweetcake_scaffold.dart:323:15 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre. Try replacing the use of the deprecated member with the replacement - lib\core\widgets\sweetcake_scaffold.dart:324:15 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\admin\domain\admin_repository.dart:48:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\admin\domain\admin_repository.dart:55:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\admin\presentation\admin_pages.dart:167:33 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\admin\presentation\admin_pages.dart:466:25 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\auth\presentation\auth_page.dart:134:21 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\cake_ai\domain\design_repository.dart:38:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\cake_ai\domain\design_repository.dart:46:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\cake_ai\presentation\studio_page.dart:120:21 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\cart\domain\cart_repository.dart:56:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\cart\domain\cart_repository.dart:58:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\domain\catalog_repository.dart:164:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\domain\catalog_repository.dart:166:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\domain\catalog_repository.dart:174:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\domain\catalog_repository.dart:188:7 - curly_braces_in_flow_control_structures
+warning - Unused import: '../../../app/theme/app_colors.dart'. Try removing the import directive - lib\features\catalog\presentation\catalog_pages.dart:4:8 - unused_import
+warning - Unused import: '../../../app/theme/app_colors.dart'. Try removing the import directive - lib\features\catalog\presentation\catalog_pages.dart:5:8 - unused_import
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\catalog_pages.dart:41:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\catalog_pages.dart:43:7 - curly_braces_in_flow_control_structures
+  error - The argument type 'num' can't be assigned to the parameter type 'int'.  - lib\features\catalog\presentation\catalog_pages.dart:66:118 - argument_type_not_assignable
+  error - The argument type 'num' can't be assigned to the parameter type 'int'.  - lib\features\catalog\presentation\catalog_pages.dart:184:27 - argument_type_not_assignable
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\vendor_catalog_page.dart:121:29 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\vendor_catalog_page.dart:163:29 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\vendor_catalog_page.dart:266:15 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\catalog\presentation\vendor_workspace_pages.dart:164:17 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\chat\domain\chat_repository.dart:77:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\chat\presentation\chat_page.dart:207:17 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\chat\presentation\chat_page.dart:222:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:112:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:123:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:136:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:148:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:152:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:157:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:161:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:168:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\domain\marketplace_repository.dart:175:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\presentation\offer_pages.dart:275:19 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\presentation\request_pages.dart:290:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\presentation\request_pages.dart:359:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\marketplace\presentation\request_pages.dart:453:17 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\orders\domain\order_repository.dart:104:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\orders\domain\order_repository.dart:117:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\orders\domain\order_repository.dart:128:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\orders\presentation\order_pages.dart:26:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:80:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:82:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:96:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:98:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:111:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:113:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\subscription\domain\subscription_repository.dart:124:7 - curly_braces_in_flow_control_structures
+warning - The asset file 'assets/fonts/OFL-PlusJakartaSans.txt' doesn't exist. Try creating the file or fixing the path to the file - pubspec.yaml:68:7 - asset_does_not_exist
+warning - The asset file 'assets/fonts/OFL-DancingScript.txt' doesn't exist. Try creating the file or fixing the path to the file - pubspec.yaml:69:7 - asset_does_not_exist
+
+flutter.bat : 65 issues found. (ran in 78.4s)
+At line:4 char:1
++ & 'D:\HomeMind\audit-tools\flutter\bin\flutter.bat' analyze *> ..\doc ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (65 issues found. (ran in 78.4s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

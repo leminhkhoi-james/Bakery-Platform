@@ -1,0 +1,134 @@
+import { displayReference } from '../src/services/displayReference.js'
+import assert from 'node:assert/strict'
+import { before, after, test } from 'node:test'
+import { randomUUID } from 'node:crypto'
+import React from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { createServer } from 'vite'
+
+let vite, Vendors, BakeryReview, Payments, PaymentReview, Dashboard, CategoryForm, ProductManager, BakeryManager
+const bakeryId = randomUUID(), orderId = randomUUID(), userId = randomUUID()
+const ready = (data) => ({ status: 'ready', error: null, data, reload() {} })
+const page = (result) => ({ result, meta: { page: 1, pageSize: 20, pages: result.length ? 1 : 0, total: result.length } })
+const render = (Component, props = {}) => renderToStaticMarkup(React.createElement(Component, { onNavigate() {}, ...props }))
+before(async () => {
+  vite = await createServer({
+    logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false },
+    plugins: [{ name: 'publication-ui-fixture-only', enforce: 'pre', load(id) {
+      const path = id.replaceAll('\\', '/')
+      if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load) { return globalThis.__publicationUiResources[load.name] || { status: "loading", data: null, error: null, reload() {} }; }'
+      if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return globalThis.__publicationUiAuth; }'
+    } }],
+  })
+  const vendors = await vite.ssrLoadModule('/src/pages/admin/vendors/AdminVendorsPage.jsx')
+  Vendors = vendors.default; BakeryReview = vendors.BakeryReview
+  const payments = await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPaymentsPage.jsx')
+  Payments = payments.default; PaymentReview = payments.PaymentReview
+  Dashboard = (await vite.ssrLoadModule('/src/pages/admin/dashboard/AdminDashboardPage.jsx')).default
+  const products = await vite.ssrLoadModule('/src/components/management/ProductManager.jsx')
+  CategoryForm = products.CategoryForm; ProductManager = products.default
+  BakeryManager = (await vite.ssrLoadModule('/src/components/management/BakeryManager.jsx')).default
+})
+after(async () => { await vite?.close(); delete globalThis.__publicationUiResources; delete globalThis.__publicationUiAuth })
+function fixtures(resources = {}, roles = ['ADMIN']) {
+  if (resources.loadAdminPayments) resources.loadPaymentDirectory = resources.loadAdminPayments
+  if (resources.loadAdminOrder) resources.loadPaymentContext = { ...resources.loadAdminOrder, data: { order: resources.loadAdminOrder.data } }
+  globalThis.__publicationUiResources = resources
+  globalThis.__publicationUiAuth = { user: { id: userId, displayName: 'Fixture administrator' }, roles }
+}
+test('Admin bakery and subscription screens render genuine empty states; dashboard counts come from APIs', () => {
+  fixtures({ loadAdminBakeries: ready(page([])), loadAdminPayments: ready(page([])), loadAdminDashboard: ready({ bakeries: { state: 'ready', rows: [] }, payments: { state: 'ready', rows: [] } }) })
+  assert.match(render(Vendors), /Không có tiệm phù hợp/)
+  assert.match(render(Payments), /Chưa có chứng từ phù hợp/)
+  const html = render(Dashboard)
+  assert.match(html, /0 Tiệm chờ duyệt/); assert.match(html, /Chưa tải đủ công việc/)
+  assert.doesNotMatch(html, /class="sc-admin-work-group"/)
+  assert.match(html, /Chưa có số liệu/); assert.match(html, /Công việc quản trị/); assert.match(html, /Doanh thu gói dịch vụ/)
+  assert.doesNotMatch(html, /sc-metric-value">14<|Phê duyệt xưởng bánh thành công/)
+})
+test('Admin list renders backend bakery name/status/ID, not demo rate or specialty', () => {
+  fixtures({ loadAdminBakeries: ready(page([{ id: bakeryId, name: 'Named bakery HTTP fixture', status: 'PENDING_APPROVAL' }])) })
+  const html = render(Vendors)
+  assert.match(html, /Named bakery HTTP fixture/); assert.match(html, /PENDING_APPROVAL/); assert.ok(html.includes(displayReference(bakeryId, 'SHOP'))); assert.ok(!html.includes(bakeryId))
+  assert.doesNotMatch(html, /5.0%|Mời tiệm|Haute Couture/)
+})
+test('Bakery review differentiates missing entitlement from inactive and validates approval checklist', () => {
+  const bakery = { id: bakeryId, name: 'Fixture', status: 'PENDING_APPROVAL', operations: { addresses: [], serviceAreas: [] } }
+  fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: null }) })
+  const unknown = render(BakeryReview, { id: bakeryId })
+  assert.match(unknown, /Chưa tải được thông tin gói dịch vụ/); assert.match(unknown, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Duyệt tiệm/); assert.match(unknown, /Chưa có/)
+  fixtures({ loadAdminBakery: ready({ bakery, members: [], subscription: { active: false } }) })
+  assert.match(render(BakeryReview, { id: bakeryId }), /Duyệt tiệm không tự kích hoạt gói dịch vụ/)
+})
+
+test('Bakery profile renders six separate sections and places Admin actions after the scrolling body', () => {
+  fixtures({ loadAdminBakery: ready({ bakery: { id: bakeryId, name: 'Tiệm kiểm thử', status: 'ACTIVE', phoneNumber: '.', email: '.', operations: { addresses: [], serviceAreas: [] } }, members: [{ userId, displayNameSnapshot: '.', memberRole: 'OWNER', status: 'ACTIVE' }] }) })
+  const html = render(BakeryReview, { id: bakeryId })
+  for (const heading of ['Thông tin tiệm', 'Liên hệ &amp; địa chỉ', 'Thành viên', 'Khu vực giao hàng', 'Gói dịch vụ', 'Trạng thái &amp; xử lý hồ sơ']) assert.ok(html.includes(heading))
+  assert.equal((html.match(/class="sc-bakery-review-section"/g) || []).length, 6)
+  const footer = html.indexOf('<footer class="sc-drawer-footer">')
+  assert.ok(footer > html.indexOf('Trạng thái &amp; xử lý hồ sơ'))
+  assert.doesNotMatch(html.slice(0, footer), /Đóng tiệm<\/button>/)
+  assert.match(html.slice(footer), /Đóng tiệm/)
+  assert.ok(!html.includes(userId)); assert.ok(!html.includes(bakeryId))
+  assert.match(html, /Chưa cung cấp/)
+  assert.match(html, /Đóng tiệm/)
+  assert.doesNotMatch(html, /Trả hồ sơ|Duyệt tiệm<\/button>|Tạm ngưng<\/button>/)
+  fixtures({ loadAdminBakery: ready({ bakery: { id: bakeryId, name: 'Tiệm kiểm thử', status: 'ACTIVE' } }) }, ['CUSTOMER'])
+  assert.doesNotMatch(render(BakeryReview, { id: bakeryId }), /Đóng tiệm/)
+})
+test('Payment review uses backend order/bakery values and blocks amount mismatch', () => {
+  fixtures({ loadAdminOrder: ready({ id: orderId, bakeryId, status: 'PAYMENT_REVIEW', totalAmount: 199000, currency: 'VND' }) })
+  const html = render(PaymentReview, { payment: { id: randomUUID(), subscriptionOrderId: orderId, status: 'SUBMITTED', amount: 1, currency: 'VND' } })
+  assert.ok(!html.includes(bakeryId)); assert.match(html, /Số tiền hoặc tiền tệ không khớp/)
+  assert.match(html, /<button(?=[^>]*disabled="")[^>]*>(?:(?!<\/button>)[\s\S])*Phê duyệt thanh toán/)
+  assert.match(html, /Chưa có chứng từ đính kèm/); assert.doesNotMatch(html, /Thanh toán thành công/)
+  for (const title of ['Thông tin đơn mua', 'Thông tin thanh toán', 'Chứng từ đính kèm']) assert.ok(html.includes(title))
+})
+test('Payment attachment is viewable only for safe URLs and completed reviews cannot be processed again', () => {
+  fixtures({ loadPaymentContext: ready({ order: { id: orderId, bakeryId, status: 'COMPLETED', totalAmount: 199000, currency: 'VND' } }) })
+  const payment = { id: randomUUID(), subscriptionOrderId: orderId, status: 'APPROVED', amount: 199000, currency: 'VND', proofUrl: 'https://storage.example.test/proof.pdf' }
+  const html = render(PaymentReview, { payment })
+  assert.match(html, /href="https:\/\/storage.example.test\/proof.pdf"/); assert.match(html, /Xem chứng từ/)
+  assert.doesNotMatch(html, /Phê duyệt thanh toán<\/button>|Từ chối<\/button>/)
+  const unsafe = render(PaymentReview, { payment: { ...payment, proofUrl: 'javascript:alert(1)' } })
+  assert.doesNotMatch(unsafe, /javascript:/); assert.match(unsafe, /Chưa có chứng từ đính kèm/)
+})
+test('Vendor category form has real DTO fields and no sample category values', () => {
+  fixtures()
+  const html = render(CategoryForm, { onSave() {} })
+  assert.match(html, /maxLength="120"/); assert.match(html, /maxLength="140"/)
+  assert.match(html, /chọn danh mục này khi thêm hoặc sửa sản phẩm/); assert.doesNotMatch(html, /Bánh Cưới|Sinh Nhật/)
+})
+test('New backend-confirmed DRAFT profile can configure operations and submit; unknown profiles cannot overwrite operations', () => {
+  const membership = ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' })
+  fixtures({ loadVendorMembership: membership, loadVendorProfile: { status: 'error', error: { status: 404 }, data: null } }, ['BAKERY_OWNER'])
+  const profile = { id: bakeryId, name: 'Fixture newly created', status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }
+  const html = render(BakeryManager, { bakeryId, initialProfile: profile })
+  assert.match(html, /Địa chỉ &amp; giao hàng/); assert.match(html, /Giờ mở cửa/); assert.match(html, /Gửi yêu cầu duyệt/)
+  assert.doesNotMatch(render(BakeryManager, { bakeryId }), /Lưu cấu hình vận hành/)
+})
+test('Only verified OWNER sees category creation in ProductManager', () => {
+  const resources = { loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadManagedProducts: ready(page([])), loadManagedCategories: ready([]) }
+  fixtures(resources, ['BAKERY_OWNER']); assert.match(render(ProductManager, { bakeryId }), /Thêm danh mục sản phẩm/)
+  fixtures({ ...resources, loadVendorMembership: ready(null) }, ['BAKERY_OWNER']); assert.doesNotMatch(render(ProductManager, { bakeryId }), /Thêm danh mục sản phẩm/)
+})
+for (const status of [401, 403, 404, 500, 503, 0]) test('Admin screens expose HTTP/network ' + status + ' as error with retry, never an empty list', () => {
+  const resource = { status: 'error', error: { status, message: 'Fixture failure' }, data: null, reload() {} }
+  fixtures({ loadAdminBakeries: resource, loadAdminPayments: resource, loadAdminDashboard: resource })
+  for (const Component of [Vendors, Payments, Dashboard]) {
+    const html = render(Component)
+    assert.match(html, /role="alert"/); assert.match(html, Component === Dashboard ? /Làm mới/ : /Thử lại/); assert.doesNotMatch(html, /Không có tiệm phù hợp|Chưa có chứng từ phù hợp|Tổng từ backend: 0/)
+  }
+})
+
+test('Public ACTIVE bakery cannot be submitted again; loading Admin APIs do not display empty or fake counts', () => {
+  fixtures({ loadVendorMembership: ready({ userId, memberRole: 'OWNER', status: 'ACTIVE' }), loadVendorProfile: ready({ id: bakeryId, name: 'Public fixture', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
+  assert.doesNotMatch(render(BakeryManager, { bakeryId }), /Gửi yêu cầu duyệt/)
+  fixtures()
+  for (const Component of [Vendors, Payments, Dashboard]) {
+    const html = render(Component)
+    assert.match(html, Component === Dashboard ? /Đang tải số liệu/ : /Đang tải dữ liệu/)
+    assert.doesNotMatch(html, /Không có tiệm phù hợp|Chưa có chứng từ phù hợp|Tổng từ backend: 0/)
+  }
+})

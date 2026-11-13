@@ -1,0 +1,28 @@
+{
+  "directory": "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4",
+  "project": "bakery-mobile-20261107",
+  "identityDatabaseReused": true,
+  "identityMigrationBytesIdentical": true,
+  "noSqlOrRoleGrant": true,
+  "services": {
+    "identity": {
+      "port": 18101,
+      "status": "RUNNING_AND_VERIFIED_OPENAPI"
+    },
+    "bakery": {
+      "port": 18102,
+      "status": "RUNNING_AND_VERIFIED_OPENAPI"
+    },
+    "subscription": {
+      "port": 18104,
+      "status": "RUNNING_AND_VERIFIED_OPENAPI"
+    }
+  },
+  "jars": {
+    "identity-service": "5b39f85f696f2484266c8eb32ae5f1d55b531adfd7c73a6367caa2f6f293cd3f",
+    "bakery-service": "e7cef3b11832aa69d85e41478d60e12d6f96889aceb7512a9c87f86d4b7e19f1",
+    "subscription-service": "85675e17ae9a47c781a646f415d2dd3dbec5a9af458bba88c0fc99c1adcb16b1"
+  },
+  "storagePort": 19022,
+  "secretValuesReported": false
+}

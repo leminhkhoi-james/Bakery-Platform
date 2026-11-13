@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-08T08:47:26.753670+00:00",
+  "headBefore": "35536f664ffe7db889a623aabc3ff6cfd5bbb75c",
+  "headAfter": "35536f664ffe7db889a623aabc3ff6cfd5bbb75c",
+  "protectedBeforeCount": 3200,
+  "protectedAfterCount": 3200,
+  "protectedChangedOrDeleted": [],
+  "protectedAdded": [],
+  "externalSecretsBeforeCount": 7,
+  "externalSecretsChangedOrDeleted": [],
+  "newExternalSecretFiles": [],
+  "changedOrAddedMobileCount": 123,
+  "changedExistingMobile": [
+    "mobile/README.md",
+    "mobile/lib/core/api/environment.dart",
+    "mobile/lib/core/widgets/live_data.dart",
+    "mobile/lib/features/ai/presentation/live_ai_pages.dart",
+    "mobile/tool/start_mobile.ps1"
+  ],
+  "knownSecretNeedlesCount": 23,
+  "secretMatches": [],
+  "apkSecretMatches": [],
+  "scannedApks": [
+    {
+      "path": "build/app/outputs/flutter-apk/app-debug.apk",
+      "sha256": "029346fc9fd1840d349258099e08100a37de4e4efb6b3900ca3649e7fc16bb8d"
+    },
+    {
+      "path": ".dart_tool/cake-ai-apks/driver.apk",
+      "sha256": "ff0d3106697e8d2cb8e03ce99565ca031b5bdcbfdeea23b76cfced6022c5b1d5"
+    }
+  ],
+  "apkSha256": "029346fc9fd1840d349258099e08100a37de4e4efb6b3900ca3649e7fc16bb8d",
+  "staged": [],
+  "status": " M mobile/README.md\n M mobile/lib/core/api/environment.dart\n M mobile/lib/core/widgets/live_data.dart\n M mobile/lib/features/ai/presentation/live_ai_pages.dart\n M mobile/tool/start_mobile.ps1\n?? mobile/docs/cake-ai/\n?? mobile/test/cake_ai_runtime_widget_test.dart\n?? mobile/tool/cake_ai_api.py\n?? mobile/tool/cake_ai_driver.dart\n?? mobile/tool/cake_ai_evidence.py\n?? mobile/tool/cake_ai_guard.py\n?? mobile/tool/cake_ai_readiness.py\n?? mobile/tool/cake_ai_run_android.py\n?? mobile/tool/cake_ai_runtime.py\n?? mobile/tool/cake_ai_visual_driver.dart\n",
+  "result": "PASS"
+}

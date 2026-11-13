@@ -1,0 +1,19 @@
+{
+  "totalApis": 113,
+  "executedApis": 104,
+  "apisWithAnyPassedCase": 104,
+  "apisWithPassed2xx": 97,
+  "unexecutedApis": 9,
+  "withoutPassed2xx": 16,
+  "testCases": 323,
+  "passedCases": 306,
+  "failedCases": 17,
+  "workflowTotal": 37,
+  "workflowRuntimeCategories": {
+    "VERIFIED": 26,
+    "BLOCKED": 6,
+    "PARTIAL": 2,
+    "DEFECT": 2,
+    "NOT_VERIFIED": 1
+  }
+}

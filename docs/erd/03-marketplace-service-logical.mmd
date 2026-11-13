@@ -23,6 +23,7 @@ erDiagram
     }
 
     REQUEST_IMAGES {
+        bigint size_bytes
         uuid id PK
         uuid cake_request_id FK
         varchar object_key
@@ -109,3 +110,27 @@ erDiagram
     CAKE_REQUESTS ||--o{ OFFERS : receives
     OFFERS ||--o{ OFFER_ITEMS : contains
     OFFERS ||--o{ OFFER_STATUS_HISTORY : tracks
+
+    OFFER_ACCEPTANCE_WORKFLOWS {
+        uuid id PK
+        uuid cake_request_id FK
+        uuid offer_id FK
+        uuid customer_id "External Identity reference"
+        varchar idempotency_key "Unique with customer_id"
+        varchar payload_fingerprint
+        uuid delivery_address_id "External Identity reference"
+        varchar customer_note
+        varchar status
+        int attempt_count
+        timestamptz next_retry_at
+        timestamptz lease_until
+        uuid lease_owner
+        uuid order_id "External Order reference"
+        varchar order_number
+        int error_status
+        timestamptz created_at
+        timestamptz updated_at
+        bigint version
+    }
+    CAKE_REQUESTS ||--o{ OFFER_ACCEPTANCE_WORKFLOWS : reserves
+    OFFERS ||--o{ OFFER_ACCEPTANCE_WORKFLOWS : accepts

@@ -1,0 +1,500 @@
+{
+  "at": "2026-11-09T03:38:23.297995+00:00",
+  "components": [
+    {
+      "component": "identity",
+      "container": "bakery-flow-bc-20261109-identity",
+      "running": true,
+      "health": "healthy",
+      "imageId": "sha256:45faa1d4df00686a1a91b21ca793b7bba16394813939f6a2d1ceb8e030b4da33",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18401"
+          }
+        ]
+      },
+      "envNames": [
+        "BAKERY_CLIENT_SECRET_HASH",
+        "BAKERY_SERVICE_BASE_URL",
+        "BAKERY_SERVICE_URL",
+        "CHAT_SERVICE_CLIENT_SECRET_HASH",
+        "HEALTH_PATH",
+        "IDENTITY_CORS_ALLOWED_ORIGINS",
+        "IDENTITY_DB_PASSWORD",
+        "IDENTITY_DB_URL",
+        "IDENTITY_DB_USERNAME",
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_JWT_PRIVATE_KEY_PATH",
+        "IDENTITY_JWT_PUBLIC_KEY_PATH",
+        "IDENTITY_REFRESH_COOKIE_SECURE",
+        "IDENTITY_SERVICE_BASE_URL",
+        "IDENTITY_SERVICE_URL",
+        "JAVA_HOME",
+        "JAVA_TOOL_OPTIONS",
+        "JAVA_VERSION",
+        "LANG",
+        "LANGUAGE",
+        "LC_ALL",
+        "MARKETPLACE_CLIENT_SECRET_HASH",
+        "ORDER_CLIENT_SECRET_HASH",
+        "PATH",
+        "SERVER_PORT",
+        "SPRING_CONFIG_ADDITIONAL_LOCATION",
+        "SUBSCRIPTION_CLIENT_SECRET_HASH",
+        "SUBSCRIPTION_SERVICE_BASE_URL",
+        "SUBSCRIPTION_SERVICE_URL"
+      ],
+      "mounts": [
+        {
+          "source": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\identity-service\\target\\identity-service-0.0.1-SNAPSHOT-exec.jar",
+          "target": "/app/application.jar",
+          "readOnly": true,
+          "sha256": "d0b853569a343fde12c060bcad5ca959d09c71c65abe90430d0295dccc69a32f"
+        },
+        {
+          "source": "H:/MSS/.runtime/bakery-mobile-phases-1-4/service-clients.yml",
+          "target": "/run/config/service-clients.yml",
+          "readOnly": true
+        },
+        {
+          "source": "H:/MSS/.secrets/bakery-platform/identity-private.pem",
+          "target": "/run/secrets/identity-private.pem",
+          "readOnly": true
+        },
+        {
+          "source": "H:/MSS/.secrets/bakery-platform/identity-public.pem",
+          "target": "/run/secrets/identity-public.pem",
+          "readOnly": true
+        }
+      ],
+      "httpHealth": {
+        "authentication": "anonymous",
+        "status": 200,
+        "body": {
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "containerProbe": {
+        "path": "/.well-known/jwks.json",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "bakery",
+      "container": "bakery-flow-bc-20261109-bakery",
+      "running": true,
+      "health": "healthy",
+      "imageId": "sha256:ba37c990f67fde43764254aec26d3d0d56f7aab403d12f2c840d5f0e59b3f7be",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18402"
+          }
+        ]
+      },
+      "envNames": [
+        "BAKERY_CLIENT_SECRET",
+        "BAKERY_DB_PASSWORD",
+        "BAKERY_DB_URL",
+        "BAKERY_DB_USERNAME",
+        "BAKERY_IDENTITY_SERVICE_TOKEN",
+        "BAKERY_MINIO_ACCESS_KEY",
+        "BAKERY_MINIO_BUCKET",
+        "BAKERY_MINIO_ENDPOINT",
+        "BAKERY_MINIO_PUBLIC_ENDPOINT",
+        "BAKERY_MINIO_SECRET_KEY",
+        "BAKERY_SERVICE_BASE_URL",
+        "BAKERY_SERVICE_URL",
+        "HEALTH_PATH",
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_JWT_ISSUER",
+        "IDENTITY_JWT_SERVICE_AUDIENCE",
+        "IDENTITY_JWT_USER_AUDIENCE",
+        "IDENTITY_SERVICE_BASE_URL",
+        "IDENTITY_SERVICE_URL",
+        "JAVA_HOME",
+        "JAVA_TOOL_OPTIONS",
+        "JAVA_VERSION",
+        "LANG",
+        "LANGUAGE",
+        "LC_ALL",
+        "PATH",
+        "SERVER_PORT",
+        "STORAGE_MINIO_REGION",
+        "SUBSCRIPTION_SERVICE_BASE_URL",
+        "SUBSCRIPTION_SERVICE_TOKEN",
+        "SUBSCRIPTION_SERVICE_URL"
+      ],
+      "mounts": [
+        {
+          "source": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\bakery-service\\target\\bakery-service-0.0.1-SNAPSHOT-exec.jar",
+          "target": "/app/application.jar",
+          "readOnly": true,
+          "sha256": "a4c96f6d580e01527ca617e31eea984ee6fe62bae70939dbcdc27fe97d046bf4"
+        }
+      ],
+      "httpHealth": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:23.966755250Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "marketplace",
+      "container": "bakery-flow-bc-20261109-marketplace",
+      "running": true,
+      "health": "healthy",
+      "imageId": "sha256:e4a0af40a30513dfb2433819234c859c04160e86f4ef02392e52f361caabe6ee",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18403"
+          }
+        ]
+      },
+      "envNames": [
+        "BAKERY_SERVICE_BASE_URL",
+        "CAKE_AI_SERVICE_BASE_URL",
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_STORAGE_BUCKET",
+        "GOOGLE_APPLICATION_CREDENTIALS",
+        "HEALTH_PATH",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_BASE_URL",
+        "JAVA_HOME",
+        "JAVA_TOOL_OPTIONS",
+        "JAVA_VERSION",
+        "LANG",
+        "LANGUAGE",
+        "LC_ALL",
+        "MARKETPLACE_DB_PASSWORD",
+        "MARKETPLACE_DB_URL",
+        "MARKETPLACE_DB_USERNAME",
+        "MARKETPLACE_ORPHAN_CLEANUP_ENABLED",
+        "MARKETPLACE_SERVICE_BASE_URL",
+        "ORDER_SERVICE_BASE_URL",
+        "PATH",
+        "SERVER_PORT",
+        "SERVICE_CLIENT_ID",
+        "SERVICE_CLIENT_SECRET",
+        "SUBSCRIPTION_SERVICE_BASE_URL"
+      ],
+      "mounts": [
+        {
+          "source": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\marketplace-service\\target\\marketplace-service-0.0.1-SNAPSHOT-exec.jar",
+          "target": "/app/application.jar",
+          "readOnly": true,
+          "sha256": "1d7202df49abb67cac4754bc6bf582edd047a9a07ccfe263eefcc6fafeb949a3"
+        },
+        {
+          "source": "H:\\MSS\\.secrets\\bakery-platform\\bakery-platform-mss-15ca53466ff7.json",
+          "target": "/run/secrets/firebase.json",
+          "readOnly": true
+        }
+      ],
+      "httpHealth": {
+        "authentication": "anonymous",
+        "status": 200,
+        "body": {
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "subscription",
+      "container": "bakery-flow-bc-20261109-subscription",
+      "running": true,
+      "health": "healthy",
+      "imageId": "sha256:829431fb61c6c1759ae9468dc619ae4054d0edf95f8b83e4c07608a043a72f0c",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18404"
+          }
+        ]
+      },
+      "envNames": [
+        "BAKERY_SERVICE_BASE_URL",
+        "BAKERY_SERVICE_URL",
+        "HEALTH_PATH",
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_JWT_ISSUER",
+        "IDENTITY_JWT_SERVICE_AUDIENCE",
+        "IDENTITY_JWT_USER_AUDIENCE",
+        "IDENTITY_SERVICE_BASE_URL",
+        "IDENTITY_SERVICE_URL",
+        "JAVA_HOME",
+        "JAVA_TOOL_OPTIONS",
+        "JAVA_VERSION",
+        "LANG",
+        "LANGUAGE",
+        "LC_ALL",
+        "PATH",
+        "SERVER_PORT",
+        "STORAGE_MINIO_REGION",
+        "SUBSCRIPTION_BAKERY_SERVICE_TOKEN",
+        "SUBSCRIPTION_CLIENT_SECRET",
+        "SUBSCRIPTION_DB_PASSWORD",
+        "SUBSCRIPTION_DB_URL",
+        "SUBSCRIPTION_DB_USERNAME",
+        "SUBSCRIPTION_MINIO_ACCESS_KEY",
+        "SUBSCRIPTION_MINIO_BUCKET",
+        "SUBSCRIPTION_MINIO_ENDPOINT",
+        "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT",
+        "SUBSCRIPTION_MINIO_SECRET_KEY",
+        "SUBSCRIPTION_SERVICE_BASE_URL",
+        "SUBSCRIPTION_SERVICE_URL"
+      ],
+      "mounts": [
+        {
+          "source": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\backend\\subscription-service\\target\\subscription-service-0.0.1-SNAPSHOT-exec.jar",
+          "target": "/app/application.jar",
+          "readOnly": true,
+          "sha256": "5eeef7f2e8d774310be9da9b034ac08263fe452483bd3e8cbf8ac15065782f27"
+        }
+      ],
+      "httpHealth": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:24.794765300Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "order",
+      "container": "bakery-flow-bc-20261109-order",
+      "running": true,
+      "health": "healthy",
+      "imageId": "sha256:521c06ea548b704321a043c12005195b279064e407aa3beb75e7427131e4fdf5",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18406"
+          }
+        ]
+      },
+      "envNames": [
+        "BAKERY_SERVICE_URL",
+        "CLIENTS_BAKERY_SCOPE",
+        "HEALTH_PATH",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_URL",
+        "JAVA_HOME",
+        "JAVA_TOOL_OPTIONS",
+        "JAVA_VERSION",
+        "LANG",
+        "LANGUAGE",
+        "LC_ALL",
+        "MARKETPLACE_SERVICE_URL",
+        "ORDER_DB_PASSWORD",
+        "ORDER_DB_URL",
+        "ORDER_DB_USERNAME",
+        "ORDER_SERVICE_CLIENT_ID",
+        "ORDER_SERVICE_CLIENT_SECRET",
+        "PATH",
+        "SERVER_PORT"
+      ],
+      "mounts": [
+        {
+          "source": "H:\\MSS\\.diagnostics\\flow-bc-20261109\\runtime-jars\\order-186a6837fbd29bf6603fd8290aa98754d9d7681835fb5b8eb46fee2e0062ffbd.jar",
+          "target": "/app/application.jar",
+          "readOnly": true,
+          "sha256": "186a6837fbd29bf6603fd8290aa98754d9d7681835fb5b8eb46fee2e0062ffbd"
+        }
+      ],
+      "httpHealth": {
+        "authentication": "anonymous",
+        "status": 401,
+        "body": {
+          "statusCode": 401,
+          "message": "Authentication is required or token is invalid",
+          "data": null,
+          "timestamp": "2026-11-09T03:38:25.080851873Z"
+        }
+      },
+      "containerProbe": {
+        "path": "/v3/api-docs",
+        "http": 200,
+        "isBusinessReadinessProof": false
+      }
+    },
+    {
+      "component": "db",
+      "container": "bakery-flow-bc-20261109-db",
+      "running": true,
+      "health": null,
+      "imageId": "sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac",
+      "ports": {
+        "5432/tcp": null
+      },
+      "envNames": [
+        "DOCKER_PG_LLVM_DEPS",
+        "GOSU_VERSION",
+        "LANG",
+        "PATH",
+        "PGDATA",
+        "PG_MAJOR",
+        "PG_SHA256",
+        "PG_VERSION",
+        "POSTGRES_PASSWORD"
+      ],
+      "mounts": [
+        {
+          "source": "/var/lib/docker/volumes/bakery-flow-bc-20261109-postgres/_data",
+          "target": "/var/lib/postgresql/data",
+          "readOnly": false
+        }
+      ]
+    },
+    {
+      "component": "storage",
+      "container": "bakery-flow-bc-20261109-storage",
+      "running": true,
+      "health": null,
+      "imageId": "sha256:011505b2ecd81c8af5bf5067edf5ee7ea4b6e6dd19c91576e3522dc438945572",
+      "ports": {
+        "9000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18422"
+          }
+        ]
+      },
+      "envNames": [
+        "MINIO_ROOT_PASSWORD",
+        "MINIO_ROOT_USER",
+        "PATH"
+      ],
+      "mounts": [
+        {
+          "source": "/var/lib/docker/volumes/bakery-flow-bc-20261109-storage/_data",
+          "target": "/data",
+          "readOnly": false
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": "41e2efc9-50ed-41cc-b4d3-67764b248638",
+      "offer_id": "67b6433a-655e-4a6d-94d3-7535d802812b",
+      "status": "PENDING",
+      "total_amount": 384000.0,
+      "orders_for_offer": 1
+    },
+    {
+      "id": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57",
+      "offer_id": null,
+      "status": "COMPLETED",
+      "total_amount": 434000.0,
+      "orders_for_offer": 0
+    },
+    {
+      "id": "367943b9-c5fd-4d6d-9679-eb0fe2449d54",
+      "offer_id": "efb9496d-c0c3-4be8-b468-5eee2ecce545",
+      "status": "COMPLETED",
+      "total_amount": 384000.0,
+      "orders_for_offer": 1
+    },
+    {
+      "id": "4cab78f2-d3de-42a2-8854-b81a18247d03",
+      "offer_id": null,
+      "status": "CANCELLED",
+      "total_amount": 215000.0,
+      "orders_for_offer": 0
+    }
+  ],
+  "workflows": [
+    {
+      "offer_id": "67b6433a-655e-4a6d-94d3-7535d802812b",
+      "status": "SUCCEEDED",
+      "attempt_count": 2,
+      "order_id": "41e2efc9-50ed-41cc-b4d3-67764b248638",
+      "error_status": null
+    },
+    {
+      "offer_id": "efb9496d-c0c3-4be8-b468-5eee2ecce545",
+      "status": "FAILED",
+      "attempt_count": 1,
+      "order_id": null,
+      "error_status": 422
+    },
+    {
+      "offer_id": "efb9496d-c0c3-4be8-b468-5eee2ecce545",
+      "status": "FAILED",
+      "attempt_count": 1,
+      "order_id": null,
+      "error_status": 422
+    },
+    {
+      "offer_id": "efb9496d-c0c3-4be8-b468-5eee2ecce545",
+      "status": "FAILED",
+      "attempt_count": 1,
+      "order_id": null,
+      "error_status": 422
+    },
+    {
+      "offer_id": "efb9496d-c0c3-4be8-b468-5eee2ecce545",
+      "status": "SUCCEEDED",
+      "attempt_count": 0,
+      "order_id": "367943b9-c5fd-4d6d-9679-eb0fe2449d54",
+      "error_status": null
+    }
+  ],
+  "acklossIdempotency": [
+    {
+      "operation": "DIRECT_CATALOG",
+      "order_id": "4cab78f2-d3de-42a2-8854-b81a18247d03",
+      "records": 1
+    }
+  ],
+  "versions": {
+    "maven": "Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)\nMaven home: C:\\Program Files\\apache-maven-3.9.11\nJava version: 21.0.8, vendor: Oracle Corporation, runtime: C:\\Program Files\\Java\\jdk-21\nDefault locale: en_US, platform encoding: UTF-8\nOS name: \"windows 11\", version: \"10.0\", arch: \"amd64\", family: \"windows\"",
+    "flutter": "Flutter 3.47.1 \u2022 channel [user-branch] \u2022 https://github.com/flutter/flutter.git\nFramework \u2022 revision 6655482ec0 (3 months ago) \u2022 2026-08-19 10:07:23 -0700\nEngine \u2022 hash 11d79658c444477b06513d32b52c8c4ccb7276b0 (revision 5d53178869) (2 months ago) \u2022 2026-08-18 23:36:01.000Z\nTools \u2022 Dart 3.13.1 \u2022 DevTools 2.60.0",
+    "docker": "29.1.4/29.6.1",
+    "compose": "5.3.0",
+    "android": "36"
+  }
+}

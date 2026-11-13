@@ -1,0 +1,8 @@
+{
+  "jar": "H:\\MSS\\.runtime\\cake-ai-execution-20261108T080611Z\\backend\\cake-ai-service\\target\\cake-ai-service-0.0.1-SNAPSHOT-exec.jar",
+  "sha256": "0e8a49c457adfdf6b9f3f527c255a19c19f994d3001e8ebd2705c84bfc963539",
+  "manifest": "Manifest-Version: 1.0\r\nCreated-By: Maven JAR Plugin 3.5.1\r\nJava-Version: 21\r\nBuild-Jdk-Spec: 21\r\nImplementation-Title: Cake AI Service\r\nImplementation-Version: 0.0.1-SNAPSHOT\r\nMain-Class: org.springframework.boot.loader.launch.JarLauncher\r\nStart-Class: com.se193262.cakeaiservice.CakeAiServiceApplication\r\nSpring-Boot-Version: 4.1.1\r\nSpring-Boot-Classes: BOOT-INF/classes/\r\nSpring-Boot-Lib: BOOT-INF/lib/\r\nSpring-Boot-Classpath-Index: BOOT-INF/classpath.idx\r\nSpring-Boot-Layers-Index: BOOT-INF/layers.idx\r\n\r\n",
+  "nestedLibrary": "BOOT-INF/lib/platform-support-0.0.1-SNAPSHOT.jar",
+  "nestedSha256": "1789005f357be21f64604ee3f56063a007b5468b0366d9c840e246c3109b9ad1",
+  "reactorLibrarySha256": "1789005f357be21f64604ee3f56063a007b5468b0366d9c840e246c3109b9ad1"
+}

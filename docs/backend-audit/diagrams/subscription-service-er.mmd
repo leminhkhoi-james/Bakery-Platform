@@ -1,0 +1,76 @@
+erDiagram
+  bakery_payments {
+    uuid id
+    uuid subscription_order_id
+    uuid submitted_by_user_id
+    varchar payment_method
+    varchar payment_reference
+    varchar proof_object_key
+    numeric amount
+    varchar currency
+    varchar status
+    uuid reviewed_by_admin_id
+    text review_note
+    timestamptz submitted_at
+    timestamptz reviewed_at
+    varchar idempotency_key_hash
+    int8 version
+    varchar review_idempotency_key_hash
+  }
+  bakery_subscriptions {
+    uuid id
+    uuid bakery_id
+    uuid plan_id
+    uuid source_order_id
+    varchar status
+    timestamptz period_start
+    timestamptz period_end
+    timestamptz activated_at
+    timestamptz cancelled_at
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+    jsonb features_snapshot
+  }
+  plan_features {
+    uuid plan_id
+    varchar feature_code
+    varchar feature_value
+  }
+  subscription_orders {
+    uuid id
+    varchar order_number
+    uuid bakery_id
+    uuid plan_id
+    uuid requested_by_user_id
+    varchar plan_name_snapshot
+    int4 billing_period_months
+    numeric total_amount
+    varchar currency
+    varchar status
+    timestamptz expires_at
+    timestamptz completed_at
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+    varchar plan_code_snapshot
+    jsonb features_snapshot
+  }
+  subscription_plans {
+    uuid id
+    varchar code
+    varchar name
+    text description
+    numeric monthly_price
+    varchar currency
+    int4 billing_period_months
+    varchar status
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  subscription_orders ||--o{ bakery_payments : "subscription_order_id"
+  subscription_orders ||--o| bakery_subscriptions : "source_order_id"
+  subscription_plans ||--o{ bakery_subscriptions : "plan_id"
+  subscription_plans ||--o{ plan_features : "plan_id"
+  subscription_plans ||--o{ subscription_orders : "plan_id"

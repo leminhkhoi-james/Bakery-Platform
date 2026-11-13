@@ -1,0 +1,48 @@
+[
+  {
+    "step": "prerequisites",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "Get-Location; Test-Path pubspec.yaml; Get-Command python,flutter,adb,emulator | Select-Object Name,Source; flutter --version; flutter doctor -v; flutter emulators; adb devices -l; docker info --format '{{.ServerVersion}}'; docker compose ls --all"
+    ],
+    "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+    "freshPowerShell": true,
+    "exitCode": 0,
+    "seconds": 12.98
+  },
+  {
+    "step": "canonical",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "H:\\MSS\\Bakery-Platform\\mobile\\tool\\start_mobile.ps1",
+      "-NoResident"
+    ],
+    "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+    "freshPowerShell": true,
+    "exitCode": 1,
+    "seconds": 188.67
+  },
+  {
+    "step": "canonical",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "H:\\MSS\\Bakery-Platform\\mobile\\tool\\start_mobile.ps1",
+      "-NoResident"
+    ],
+    "cwd": "H:\\MSS\\Bakery-Platform\\mobile",
+    "freshPowerShell": true,
+    "exitCode": 0,
+    "seconds": 78.41
+  }
+]

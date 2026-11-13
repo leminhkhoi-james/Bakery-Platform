@@ -26,6 +26,8 @@ erDiagram
         uuid plan_id FK
         uuid requested_by_user_id "External Identity reference"
         varchar plan_name_snapshot
+        varchar plan_code_snapshot
+        jsonb features_snapshot
         int billing_period_months
         decimal total_amount
         varchar currency
@@ -42,7 +44,10 @@ erDiagram
         uuid subscription_order_id FK
         uuid submitted_by_user_id "External Identity reference"
         varchar payment_method
+        varchar verification_source
         varchar payment_reference UK
+        varchar idempotency_key_hash UK "Nullable for legacy rows"
+        varchar review_idempotency_key_hash UK
         varchar proof_object_key
         decimal amount
         varchar currency
@@ -51,6 +56,7 @@ erDiagram
         text review_note
         timestamptz submitted_at
         timestamptz reviewed_at
+        bigint version
     }
 
     BAKERY_SUBSCRIPTIONS {
@@ -61,6 +67,7 @@ erDiagram
         varchar status
         timestamptz period_start
         timestamptz period_end
+        jsonb features_snapshot
         timestamptz activated_at
         timestamptz cancelled_at
         timestamptz created_at
@@ -68,6 +75,23 @@ erDiagram
         bigint version
     }
 
+    VNPAY_ATTEMPTS {
+        uuid id PK
+        uuid subscription_order_id FK
+        uuid submitted_by_user_id "External Identity reference"
+        decimal amount
+        timestamptz created_at
+        timestamptz expires_at
+        varchar ip_address
+        varchar status
+        varchar transaction_no UK
+        varchar response_code
+        varchar transaction_status
+        timestamptz paid_at
+        bigint version
+    }
+
+    SUBSCRIPTION_ORDERS ||--o{ VNPAY_ATTEMPTS : checkout
     SUBSCRIPTION_PLANS ||--o{ PLAN_FEATURES : includes
     SUBSCRIPTION_PLANS ||--o{ SUBSCRIPTION_ORDERS : selected_in
     SUBSCRIPTION_ORDERS ||--o{ BAKERY_PAYMENTS : records

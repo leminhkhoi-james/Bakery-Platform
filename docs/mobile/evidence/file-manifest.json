@@ -1,0 +1,722 @@
+[
+  {
+    "path": "docs/PROJECT-STATUS.md",
+    "bytes": 33549,
+    "sha256": "1a60f6fe22fa7ba0d273c97de7c65c54c4b25240c2aa4e94c6d9a5bd03f9c8c7"
+  },
+  {
+    "path": "mobile/README.md",
+    "bytes": 5078,
+    "sha256": "8ad2af7c71a5a388a40ca2a805003ca8a3fac96dae3b723be6a338f77aaf5add"
+  },
+  {
+    "path": "mobile/lib/main.dart",
+    "bytes": 1436,
+    "sha256": "47f250c2dd408ac537fb6724de5de43e0b2df222b63f61206178c99d2b203741"
+  },
+  {
+    "path": "mobile/pubspec.lock",
+    "bytes": 8394,
+    "sha256": "20f13b10421bcfa12560412bf8e9d972b81844e1226204b619e83b3aedcd1f8b"
+  },
+  {
+    "path": "mobile/pubspec.yaml",
+    "bytes": 4460,
+    "sha256": "2ef626ecfb0845469a92a62bc8c1cd21cd3628765f925b4fe351009d04dfc051"
+  },
+  {
+    "path": "mobile/test/widget_test.dart",
+    "bytes": 382,
+    "sha256": "4488560d90771e878e4160b1bfa156a9bf26ee57d8dce835cd3aaab96187b2d9"
+  },
+  {
+    "path": "docs/mobile/BAKERY_PLATFORM_FLUTTER_MOBILE_UI_IMPLEMENTATION_REPORT_VI.md",
+    "bytes": 21208,
+    "sha256": "fe6d723584f7f285d0579e9015dba6852dce77cd26a2fe031a80f394b552ddf0"
+  },
+  {
+    "path": "docs/mobile/FLUTTER_DESIGN_SYSTEM_VI.md",
+    "bytes": 7334,
+    "sha256": "184c3ffdbd94409c8e524d1daccbd5c5589f5dfef3c81b9d0640b51f872b8b7c"
+  },
+  {
+    "path": "docs/mobile/MOBILE_SCREEN_INVENTORY_VI.md",
+    "bytes": 9713,
+    "sha256": "9b3e34a6914b045e6814d89fbe60cf406d0c351e951772fbc59ef919f78774fc"
+  },
+  {
+    "path": "docs/mobile/MOBILE_UI_ARCHITECTURE_VI.md",
+    "bytes": 8576,
+    "sha256": "15b868ba3c5b489119f6dc2914b337b3962d0ce985a749adfee02fe9acced696"
+  },
+  {
+    "path": "docs/mobile/evidence/android-installed-runtime.json",
+    "bytes": 624,
+    "sha256": "9ebdb3baa95152e63a38f3ff4ceb97f1cbec1112a894607bd306e6abc3c8843c"
+  },
+  {
+    "path": "docs/mobile/evidence/android-integration.txt",
+    "bytes": 12423,
+    "sha256": "09ddaf4ea6f711d341a73f1efa2da4f0964488f10e492ed2ca87190d1f2614c7"
+  },
+  {
+    "path": "docs/mobile/evidence/assets.json",
+    "bytes": 7397,
+    "sha256": "4775c847f9e334ade90d3d0edfba2a0ab4323480669ce5abc75971dc04961335"
+  },
+  {
+    "path": "docs/mobile/evidence/baseline.json",
+    "bytes": 426015,
+    "sha256": "8b689b6c0bbb6cc78ba0178f8dfac40a43234be835935393a3d726bcce99a971"
+  },
+  {
+    "path": "docs/mobile/evidence/commands.json",
+    "bytes": 533,
+    "sha256": "cb702319024eb36a46e8419a35926e197ee664c4cfa24ad562c2886f970a166d"
+  },
+  {
+    "path": "docs/mobile/evidence/dart-fix-final.txt",
+    "bytes": 414,
+    "sha256": "966679dc172df0af586b4e2f6c54a5a14b19b84f851e875b2f43e330fe9710a8"
+  },
+  {
+    "path": "docs/mobile/evidence/dart-fix.txt",
+    "bytes": 2450,
+    "sha256": "c6b096bc807728dbc3f929bfa1881271f3f9618b567dd5a045583f76e9808e49"
+  },
+  {
+    "path": "docs/mobile/evidence/dart-format.txt",
+    "bytes": 646,
+    "sha256": "6755cd3ca73c31190ce5acfa7dc9b0eb8ba2ab9e58f6f36211515c26a2a65849"
+  },
+  {
+    "path": "docs/mobile/evidence/document-links.json",
+    "bytes": 25,
+    "sha256": "6b8a8a6249ea294a76fef0081c34108bd2b14142bbd31e534540617fd92bff16"
+  },
+  {
+    "path": "docs/mobile/evidence/final-analyze.txt",
+    "bytes": 489,
+    "sha256": "3318c695bba84c889039bcfadcb31518e0ae37139fd199ddf4363a7cc7260aee"
+  },
+  {
+    "path": "docs/mobile/evidence/final-build.txt",
+    "bytes": 4019,
+    "sha256": "997d47644825bab8cdade3af2e1e11a62e356295322898e77ab31b9dc4be030f"
+  },
+  {
+    "path": "docs/mobile/evidence/final-format.txt",
+    "bytes": 127,
+    "sha256": "ffffcd512f93f2a3bb06f857936066274dac85c22d7581d863fd34cb6aef9e99"
+  },
+  {
+    "path": "docs/mobile/evidence/final-test.txt",
+    "bytes": 4129,
+    "sha256": "dcbe9973a4e913b8409a09df86aa2706d94e7bfd3aa7c478993b5590991d9078"
+  },
+  {
+    "path": "docs/mobile/evidence/flutter-analyze-initial.txt",
+    "bytes": 13912,
+    "sha256": "69c3080408a5dc5587c8e9f84bbc14c85c4f9318cf5e3d39312cc5c44fee5958"
+  },
+  {
+    "path": "docs/mobile/evidence/flutter-analyze.txt",
+    "bytes": 513,
+    "sha256": "bf06c40a6d9db8bc77273598918bc6b2f8b84b8a4389bc2b70ed179894e73187"
+  },
+  {
+    "path": "docs/mobile/evidence/flutter-build-debug.txt",
+    "bytes": 4736,
+    "sha256": "ff3d2a6d18cbb087e2af0b96691437f03ced00fcdb5cdce02487f907d3c11aa5"
+  },
+  {
+    "path": "docs/mobile/evidence/flutter-test-initial.txt",
+    "bytes": 33146,
+    "sha256": "dc815188411a8c7056811cc841e066c5943d6fe7b5f04a146afa5ca37e5163b2"
+  },
+  {
+    "path": "docs/mobile/evidence/flutter-test.txt",
+    "bytes": 3758,
+    "sha256": "f8d3877eebe3a885366897f45a54b92d1be879b2b0f9176ea3f0ddea370d8b0c"
+  },
+  {
+    "path": "docs/mobile/evidence/mobile-screen-inventory.json",
+    "bytes": 12518,
+    "sha256": "4757445e272f428548d2c82bddda89bcdd96b43971151617aac6e6f48af7a00d"
+  },
+  {
+    "path": "docs/mobile/evidence/reference-reading.json",
+    "bytes": 53669,
+    "sha256": "da55f993d1d82d674395ce0aa3f5ff40016a8a76ef6387bc4a7a5a5be4ecf270"
+  },
+  {
+    "path": "docs/mobile/evidence/repository-integrity.json",
+    "bytes": 499,
+    "sha256": "1c2bbef27aa8fa028dc01f9a086251b55053bf58ddd986377e304484ff842f41"
+  },
+  {
+    "path": "docs/mobile/evidence/screen-tests-pass2.txt",
+    "bytes": 2854,
+    "sha256": "9d892d4c9be4c508fd229bf22ab15a074da27dae5f128e426d69dea5c0b39bfd"
+  },
+  {
+    "path": "docs/mobile/evidence/screenshots.json",
+    "bytes": 7034,
+    "sha256": "d2dc3531d8757521a7d820c383dbe530ffab20fa509c2a3059eb818c89916c97"
+  },
+  {
+    "path": "docs/mobile/evidence/ui-workflows-initial.txt",
+    "bytes": 9187,
+    "sha256": "79309fb2e75c12abf28c2eba40c95ceb28a7bdc5861c974eb70b09c8d5195ea0"
+  },
+  {
+    "path": "docs/mobile/evidence/ui-workflows-pass2.txt",
+    "bytes": 1105,
+    "sha256": "74c09926bd5e450f41e438c027d1a7fddec4789b7778a694041484dd3fcc3a08"
+  },
+  {
+    "path": "docs/mobile/evidence/ui-workflows-pass3.txt",
+    "bytes": 35712,
+    "sha256": "7fb5b4fa15520bda206cf4b16f7835cb9e3799626ec31f17f51ef5b96266dcb5"
+  },
+  {
+    "path": "docs/mobile/evidence/verified-web-routes.json",
+    "bytes": 629,
+    "sha256": "781bf767d2889840ed69f7c579e6aad976e3704ec3f0b05ff5de19e681079511"
+  },
+  {
+    "path": "docs/mobile/evidence/visual-review.json",
+    "bytes": 1617,
+    "sha256": "2201a25e28f271d1859aabe12af00fca87257c4900e32383657e69b01db96751"
+  },
+  {
+    "path": "docs/mobile/evidence/web-runtime-status.json",
+    "bytes": 43,
+    "sha256": "a304e704fb195c2bc23f94abfc59830ab21ebb53e16680381d1daa53c90a1e97"
+  },
+  {
+    "path": "docs/mobile/evidence/web-source-reading.json",
+    "bytes": 107690,
+    "sha256": "d431086d7806f9e86ab8f8e003426328639f2cd92c98ad0f6904b4d62ea3defb"
+  },
+  {
+    "path": "docs/mobile/screenshots/00-home.png",
+    "bytes": 123029,
+    "sha256": "9ffcfc2f3f244d5724fa8002c5c3a73abc29922d9a24e53dabf55fdf1bf16daa"
+  },
+  {
+    "path": "docs/mobile/screenshots/01-explore.png",
+    "bytes": 360569,
+    "sha256": "69a593f6c2fbc3447b972d5c3ae972673134cd5956453edb980e2279bfc08480"
+  },
+  {
+    "path": "docs/mobile/screenshots/02-product.png",
+    "bytes": 510256,
+    "sha256": "7c3384f5c354e7fee0518b0cb849aa4137de010bf0a80e86ee65709ef0007abc"
+  },
+  {
+    "path": "docs/mobile/screenshots/03-stores.png",
+    "bytes": 270278,
+    "sha256": "11530aa028e28279b1b5e0d3b385d05dbf8e52e9fcd55efc6f17ca35146e1aba"
+  },
+  {
+    "path": "docs/mobile/screenshots/04-bakery.png",
+    "bytes": 306647,
+    "sha256": "79218894d8d36bfe06d12f848536a928e36698a7f83cff4a313527ec2cacd3a7"
+  },
+  {
+    "path": "docs/mobile/screenshots/05-plans.png",
+    "bytes": 89582,
+    "sha256": "7823d3ba1f3d0a670e2bf70d1fb232e4e2a7f7f779819a37c26bffd8d070fd0b"
+  },
+  {
+    "path": "docs/mobile/screenshots/06-login.png",
+    "bytes": 96991,
+    "sha256": "b930e8d36ee3cc8ce900f3a2765a299d8bcf4bc4350a598e201fb7a478afc45d"
+  },
+  {
+    "path": "docs/mobile/screenshots/07-cart.png",
+    "bytes": 54089,
+    "sha256": "73b7b2dfc672e430566a7d9acea4130e7461336c331343d84e5cbd654111afbe"
+  },
+  {
+    "path": "docs/mobile/screenshots/08-profile.png",
+    "bytes": 85159,
+    "sha256": "c18d6174b02e79a4cb5989a2d559026b3cdbc508217f2d7921ad027c6f34d405"
+  },
+  {
+    "path": "docs/mobile/screenshots/09-tracking.png",
+    "bytes": 124626,
+    "sha256": "a201bb84f9580582d366916203e17bb4f61b1dc3dedc3cc584f9ac3c223780b8"
+  },
+  {
+    "path": "docs/mobile/screenshots/10-payment.png",
+    "bytes": 126815,
+    "sha256": "ef16a3e371cdc259f3a0c008df476172131429d82b96f531a74bdb18ce9353b0"
+  },
+  {
+    "path": "docs/mobile/screenshots/11-studio.png",
+    "bytes": 436596,
+    "sha256": "b756e3ebe5b88336cb9b0d1ae977763d0c953d9a056fa5ddde0479eb2dd483d9"
+  },
+  {
+    "path": "docs/mobile/screenshots/12-requests.png",
+    "bytes": 94539,
+    "sha256": "011dc53cd1427dadb6dff8379b7d576fbcda879da532a894698c5a36ecdf0f13"
+  },
+  {
+    "path": "docs/mobile/screenshots/13-requestNew.png",
+    "bytes": 76612,
+    "sha256": "02d42a3ad1ed3e223714ae1a494c407eb8e05cb28decf0fb79ebab63bd13f983"
+  },
+  {
+    "path": "docs/mobile/screenshots/14-requestDetail.png",
+    "bytes": 90510,
+    "sha256": "f9f9b35697e672379ef7d8c6159f216a2b5daef01d6c44dfe9e68531bd656dcc"
+  },
+  {
+    "path": "docs/mobile/screenshots/15-comparison.png",
+    "bytes": 108001,
+    "sha256": "97c7e9a7ce630af66fd5296c2803e5606a24c8e0da1b1b6a5ec287aaf254a912"
+  },
+  {
+    "path": "docs/mobile/screenshots/16-offer.png",
+    "bytes": 97914,
+    "sha256": "e0671ee42903f22e5e7b4f4355835f28bd54349b9decb448c8a47766ebf0c37e"
+  },
+  {
+    "path": "docs/mobile/screenshots/17-chat.png",
+    "bytes": 95159,
+    "sha256": "4bd1af6d93784c372148cb2b37e75e263cea26544ccbe614165bec92e8c7f1b9"
+  },
+  {
+    "path": "docs/mobile/screenshots/18-vendorDashboard.png",
+    "bytes": 91107,
+    "sha256": "fdfb8a19a4c9aff510a5e08cf9ff1c919795335fcc464ac89e167a3c9c6352a5"
+  },
+  {
+    "path": "docs/mobile/screenshots/19-vendorCatalog.png",
+    "bytes": 140346,
+    "sha256": "758788d3b52c161878be2909ee57e0b38dac413f5934115256bd98ea2718b7a1"
+  },
+  {
+    "path": "docs/mobile/screenshots/20-vendorOrders.png",
+    "bytes": 128462,
+    "sha256": "34288c7c81706cb090dbe211b9bd2c3f68f2914d1da2c4b73377bd0b020fe5d3"
+  },
+  {
+    "path": "docs/mobile/screenshots/21-vendorRequests.png",
+    "bytes": 101675,
+    "sha256": "eb109f4fc774be62fb435a9a69275d98b6b944e8338bdf47643c54510f43b23b"
+  },
+  {
+    "path": "docs/mobile/screenshots/22-vendorOffer.png",
+    "bytes": 104619,
+    "sha256": "bdafe889d365bff42060b8c9afe01ffc7d54fc17b3b864188c83869dabd92191"
+  },
+  {
+    "path": "docs/mobile/screenshots/23-vendorProfile.png",
+    "bytes": 88108,
+    "sha256": "897e3c511dc463391c30a804686d70037367cf4f036c19333ec483e275f75a7a"
+  },
+  {
+    "path": "docs/mobile/screenshots/24-vendorRevenue.png",
+    "bytes": 102801,
+    "sha256": "beb565e2954f77e0922a3ae0fa168b15e3aa38f8e987cbea5b4ad383b98b2748"
+  },
+  {
+    "path": "docs/mobile/screenshots/25-vendorChat.png",
+    "bytes": 87346,
+    "sha256": "e1a1afa5c1003f09f266348d569f26305e99e5b8fd835c28d43ad746c69b56d5"
+  },
+  {
+    "path": "docs/mobile/screenshots/26-vendorSubscription.png",
+    "bytes": 111004,
+    "sha256": "20998437c1510934fff3a0fdf5247416bd203a164e45868cac1ab1b967002d06"
+  },
+  {
+    "path": "docs/mobile/screenshots/27-adminDashboard.png",
+    "bytes": 87649,
+    "sha256": "8513c5b0ca1aabdccdd797a5884bb4a3a9eaea413fa2ee0db444071915568399"
+  },
+  {
+    "path": "docs/mobile/screenshots/28-adminUsers.png",
+    "bytes": 75106,
+    "sha256": "2c8c49d89fbd689eb0dbad2c925a79b4ff924d74b153481118b9775a9ea98304"
+  },
+  {
+    "path": "docs/mobile/screenshots/29-adminBakeries.png",
+    "bytes": 82371,
+    "sha256": "b04ba5d36d4ba08773cb70cbaba683cfab40171b87a549efea4d1d6694a9d422"
+  },
+  {
+    "path": "docs/mobile/screenshots/30-adminPayments.png",
+    "bytes": 156739,
+    "sha256": "9629de3084b5dd913e97843d26305c1b4bc0da2c202476c72c780fe3684c619e"
+  },
+  {
+    "path": "docs/mobile/screenshots/31-adminPlans.png",
+    "bytes": 81467,
+    "sha256": "3d53cf46b9e805bd7d9cfaa9214c0881be28c53031b453ea733c8aa68801387b"
+  },
+  {
+    "path": "docs/mobile/screenshots/32-adminOrders.png",
+    "bytes": 123299,
+    "sha256": "41561edf2de0987b0c0ada7b7a2795efd7497d6b3c7c04dd7b9ddbb0b755b3e2"
+  },
+  {
+    "path": "docs/mobile/screenshots/33-adminModeration.png",
+    "bytes": 317115,
+    "sha256": "24798b841b85cc6e13bf9c6cc92c43cb6ac2243a496ae4ef0063717d3bf530db"
+  },
+  {
+    "path": "docs/mobile/screenshots/34-adminRevenue.png",
+    "bytes": 78779,
+    "sha256": "d36cdf76aaf8507e6559252e4ef17e26c38bbf0f4e112e4ccad83e8842ce89c8"
+  },
+  {
+    "path": "docs/mobile/screenshots/35-cart-preview.png",
+    "bytes": 124070,
+    "sha256": "aa96806c73f338ceab06f08dcf7257186afac630d7795576747953915407c594"
+  },
+  {
+    "path": "docs/mobile/screenshots/36-chat-thread.png",
+    "bytes": 79554,
+    "sha256": "fa01e8d0cd330630377f1a049b8c668b816b9a6abcb6eef4fb2fd5350dde52ad"
+  },
+  {
+    "path": "docs/mobile/screenshots/37-request-saved.png",
+    "bytes": 84632,
+    "sha256": "9db769b973b72060a21e2b7ac1c81e6685eff2d00a2027ccd4d0354217cda3b2"
+  },
+  {
+    "path": "docs/mobile/screenshots/38-owner-order-detail.png",
+    "bytes": 270963,
+    "sha256": "e584131c790e2f3e2545170fc656f930dd27212270e3dbd054279765ece14018"
+  },
+  {
+    "path": "docs/mobile/screenshots/39-admin-reviewed.png",
+    "bytes": 80281,
+    "sha256": "359e79b02920f5c3a556c55221a3ad701bf54f0085bb2ca6376a337293c9cae0"
+  },
+  {
+    "path": "docs/mobile/screenshots/40-error-retry.png",
+    "bytes": 52622,
+    "sha256": "48040714759cf8e1cc1dcde93d999cf80a99a40a2266120d48345be9e6af233d"
+  },
+  {
+    "path": "docs/mobile/screenshots/README.md",
+    "bytes": 3510,
+    "sha256": "99e459ed598b843abe5fb6a82f57e7345346c90114559c43119da1ddf2a57830"
+  },
+  {
+    "path": "docs/mobile/screenshots/android-installed-home.png",
+    "bytes": 127592,
+    "sha256": "9be6e9430d409b9ba3b52fb7155f663feb227cbe448f74576fe3ff2a8c74d2d9"
+  },
+  {
+    "path": "mobile/DESIGN.md",
+    "bytes": 1463,
+    "sha256": "d390d81bb32f68ec8ad5ec01af2526134ae2cd3b7ea2f5f519ef737fd5cb03f7"
+  },
+  {
+    "path": "mobile/PRODUCT.md",
+    "bytes": 1967,
+    "sha256": "627c4059e0f526d3e398a154564e167ee2e5ce4c6bbbf0697031f9b0825d2731"
+  },
+  {
+    "path": "mobile/assets/demo/cake_01.jpg",
+    "bytes": 42397,
+    "sha256": "20b66c25d2589383403c8febd7760ccebe2fe1d5e10e085aa2e44105ced9d487"
+  },
+  {
+    "path": "mobile/assets/demo/cake_02.jpg",
+    "bytes": 30279,
+    "sha256": "4e389e9e9f88661f2f25808917de8e63b188ac7767886f04d01d4f5c223a5a05"
+  },
+  {
+    "path": "mobile/assets/demo/cake_03.jpg",
+    "bytes": 33748,
+    "sha256": "8c842389f11c2fb46a60fd6a1441f22bf9f9e63e51b7a191089d800333395e39"
+  },
+  {
+    "path": "mobile/assets/demo/cake_04.jpg",
+    "bytes": 30335,
+    "sha256": "20679093f03560536d2256b10d22c7275d508b38f9b1cddc8619e5056ed4ab95"
+  },
+  {
+    "path": "mobile/assets/demo/cake_05.jpg",
+    "bytes": 44377,
+    "sha256": "f39fbb16d2dd6f45ed593915140939edec7a8c5eeb64dff904fd586bab6deb74"
+  },
+  {
+    "path": "mobile/assets/demo/cake_06.jpg",
+    "bytes": 35931,
+    "sha256": "67859844e1f2c94bb4b4fa7bf13b84c44946bf8ba10ebc4a4aaff5de7e897e8a"
+  },
+  {
+    "path": "mobile/assets/demo/cake_07.jpg",
+    "bytes": 35020,
+    "sha256": "cfe459adc29cefffc0780d2877ae876ba26f6bc8c5d9663443f82437e06bc75b"
+  },
+  {
+    "path": "mobile/assets/demo/cake_08.jpg",
+    "bytes": 44559,
+    "sha256": "e2313b9a0f27a69ee83d36a43f06e36b9746899bc63f171e88282265760ad350"
+  },
+  {
+    "path": "mobile/assets/fonts/DancingScript.ttf",
+    "bytes": 133636,
+    "sha256": "21808625578fe8d8cd10cb684be546dca077b27cd03a53a2f1ec11dc743c924c"
+  },
+  {
+    "path": "mobile/assets/fonts/PlusJakartaSans.ttf",
+    "bytes": 176288,
+    "sha256": "89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8"
+  },
+  {
+    "path": "mobile/assets/fonts/dancingscript-OFL.txt",
+    "bytes": 4536,
+    "sha256": "5a296979e49df4e947349fd6afdc3c0b305282d563f7ef2fad5412d2a235d1e8"
+  },
+  {
+    "path": "mobile/assets/fonts/plusjakartasans-OFL.txt",
+    "bytes": 4495,
+    "sha256": "05831cfb0b8fbbb02633f7c8968684f43a3b25cb9ea7e45db10b24078ddb922f"
+  },
+  {
+    "path": "mobile/assets/images/brand_logo.png",
+    "bytes": 122643,
+    "sha256": "ffde63567ff4167032cab59b7c4559d68982604859d9835f3d5fa072a7c41dc0"
+  },
+  {
+    "path": "mobile/assets/images/cat_mascot.png",
+    "bytes": 35521,
+    "sha256": "155a4f028690ca6e420f76af7cfaac9916c906adec32963e21609a8fa7f4374c"
+  },
+  {
+    "path": "mobile/assets/images/fairy_background.jpg",
+    "bytes": 979860,
+    "sha256": "372ed7c84dfecb9d48cadc2740bfb4c9268a6e99c7e8ae9092103e835904a226"
+  },
+  {
+    "path": "mobile/integration_test/mobile_demo_test.dart",
+    "bytes": 5476,
+    "sha256": "d2d6999ff09bc8ea5de5970fe68e2361814f4e76a7f7df934dfb4e114ed100fc"
+  },
+  {
+    "path": "mobile/lib/app/navigation/navigation.dart",
+    "bytes": 469,
+    "sha256": "8d863a42294c343fefc658b96eee91c2bf2809cff88877640edc6174541fcf24"
+  },
+  {
+    "path": "mobile/lib/app/router/app_router.dart",
+    "bytes": 6550,
+    "sha256": "1655df45ba6c852d5ff84b6e38ba7dbed4516b5ad8bbe5a31148c0ae02b114b8"
+  },
+  {
+    "path": "mobile/lib/app/router/screen_id.dart",
+    "bytes": 3283,
+    "sha256": "3571378a563048fb3af15e17f8d9298761fd5e6b2958686f8dd0964012051787"
+  },
+  {
+    "path": "mobile/lib/app/theme/app_colors.dart",
+    "bytes": 1102,
+    "sha256": "9ebf59550ad6212d9a71d23b116117e676ffe63444777b54dc5e55815b1f8d28"
+  },
+  {
+    "path": "mobile/lib/app/theme/app_theme.dart",
+    "bytes": 6081,
+    "sha256": "ffbdfbffe63452c0845f716e03f18ddc39dfc4a3334589903d45ee27eb28ae0d"
+  },
+  {
+    "path": "mobile/lib/core/demo/demo_workspace.dart",
+    "bytes": 2024,
+    "sha256": "504d2115db31af5f89d16476a4a32157a17ff37867f6f983c075a52f99cb340a"
+  },
+  {
+    "path": "mobile/lib/core/widgets/sweetcake_scaffold.dart",
+    "bytes": 17947,
+    "sha256": "0ca26ac99ddd873f73da2e4194161fd2c93889c519b3292dd8a5835dce5d0c7e"
+  },
+  {
+    "path": "mobile/lib/core/widgets/sweetcake_widgets.dart",
+    "bytes": 17955,
+    "sha256": "f31cb86f0867fb92ab25a17c991ab116ac6799d817fb117fa8dc40befc2f4ed8"
+  },
+  {
+    "path": "mobile/lib/core/widgets/unsaved_guard.dart",
+    "bytes": 1165,
+    "sha256": "fccc8e876d1a2ccc1e966050c8f71f43972ae9f059244bdd863c7598d4bc03cf"
+  },
+  {
+    "path": "mobile/lib/features/admin/domain/admin_repository.dart",
+    "bytes": 1378,
+    "sha256": "92b90362b2fba6f5bed1c5172ee09ad0eb6a920c2382e84a495a4a821afa9b5f"
+  },
+  {
+    "path": "mobile/lib/features/admin/presentation/admin_pages.dart",
+    "bytes": 27480,
+    "sha256": "60955c171d98f130d4ac1907bbd967760f5a9955f5f229fcb39d59ee4e24226d"
+  },
+  {
+    "path": "mobile/lib/features/auth/domain/demo_session.dart",
+    "bytes": 1627,
+    "sha256": "4579ec57b1129002c74f1ce47d4c67ae5d7d77729b113415488d66003d64519c"
+  },
+  {
+    "path": "mobile/lib/features/auth/presentation/auth_page.dart",
+    "bytes": 6424,
+    "sha256": "0d62f85fedfdd7cc69bdb4cabdc4fb24948b1a46c9e14b1b3e8e37c6f73b381c"
+  },
+  {
+    "path": "mobile/lib/features/cake_ai/domain/design_repository.dart",
+    "bytes": 1293,
+    "sha256": "be8e4eeca70f12745ce234287bbd2637410c38ca068ee0d4e741eba673c72157"
+  },
+  {
+    "path": "mobile/lib/features/cake_ai/presentation/studio_page.dart",
+    "bytes": 8202,
+    "sha256": "d086b838c3a23d78c3b2f80cbf08afa2569070ed5abc80f0d055359945a2c418"
+  },
+  {
+    "path": "mobile/lib/features/cart/domain/cart_repository.dart",
+    "bytes": 2826,
+    "sha256": "21a3b0344c5265df9d4d47fbc601dfdab0cf073a8a13145e9796cb49d9ac4b4a"
+  },
+  {
+    "path": "mobile/lib/features/cart/presentation/cart_page.dart",
+    "bytes": 8322,
+    "sha256": "6d0c5f768ceb65ee5c96ff36595e831e1c50c3a847f7b8ffba77fe575951fa26"
+  },
+  {
+    "path": "mobile/lib/features/catalog/domain/catalog_repository.dart",
+    "bytes": 6465,
+    "sha256": "4f00b07f1231cd29a73cb5fe4ce526acfd5e417f66108d3a61c99d564d7b8529"
+  },
+  {
+    "path": "mobile/lib/features/catalog/presentation/catalog_pages.dart",
+    "bytes": 15167,
+    "sha256": "3865901f4948de7c89d94a1d6854a8833b8b6db9bb51f37a4e457a9ba4faea8a"
+  },
+  {
+    "path": "mobile/lib/features/catalog/presentation/catalog_widgets.dart",
+    "bytes": 4826,
+    "sha256": "fa451d3188a9107ba87dee8fee4825b51307481b0984f5962be49acb23837d19"
+  },
+  {
+    "path": "mobile/lib/features/catalog/presentation/vendor_catalog_page.dart",
+    "bytes": 17777,
+    "sha256": "60ae1f3540604705797f761f8740c473b46d9a21b61d92f37909ea7a41bf1f7b"
+  },
+  {
+    "path": "mobile/lib/features/catalog/presentation/vendor_workspace_pages.dart",
+    "bytes": 9447,
+    "sha256": "c7be27de16c48a10711947e6a0ca5539bebe3335f5d6792465d0986054c2baac"
+  },
+  {
+    "path": "mobile/lib/features/chat/domain/chat_repository.dart",
+    "bytes": 2678,
+    "sha256": "db1c86ba903644517da91277841ebd46b39bb4b223dc5124eb8f28047ca87ece"
+  },
+  {
+    "path": "mobile/lib/features/chat/presentation/chat_page.dart",
+    "bytes": 9073,
+    "sha256": "bca9f85722581ee9ef832db36536710c0cd6fa660f428b150e1435177141e1ea"
+  },
+  {
+    "path": "mobile/lib/features/customer/presentation/profile_page.dart",
+    "bytes": 4959,
+    "sha256": "bbc2c26dacc0664da085a322d29078a46fc08fdae15a40c19bb65ddbe52c205f"
+  },
+  {
+    "path": "mobile/lib/features/home/presentation/home_page.dart",
+    "bytes": 4811,
+    "sha256": "7426daf4543c17ac4ebd209d676d11dd0d71bc1614a53e7714b035d6e24d0838"
+  },
+  {
+    "path": "mobile/lib/features/marketplace/domain/marketplace_repository.dart",
+    "bytes": 5882,
+    "sha256": "40296796fdf27b6bea96a8eb80978cb94cda7834214363febe5647aa8cd5677a"
+  },
+  {
+    "path": "mobile/lib/features/marketplace/presentation/offer_pages.dart",
+    "bytes": 10650,
+    "sha256": "a8e7f141849c34daba773e220955e221fe932395d3638da8a387646c9b992e2b"
+  },
+  {
+    "path": "mobile/lib/features/marketplace/presentation/request_pages.dart",
+    "bytes": 18801,
+    "sha256": "fbaee038f5097494beaf9866c78827d328a0a96d5e148e2389ad7a7860c5aa6b"
+  },
+  {
+    "path": "mobile/lib/features/orders/domain/order_repository.dart",
+    "bytes": 3858,
+    "sha256": "35a9f1a634feea5d542c98f8c6aeacdbb4e52bd1bc68c42a4503e1f3a7c2dcde"
+  },
+  {
+    "path": "mobile/lib/features/orders/presentation/order_pages.dart",
+    "bytes": 13033,
+    "sha256": "8332f1bf281a3dcd7686ce0ae61acfd2e07a86d4c6388ab1472821598f3bf03b"
+  },
+  {
+    "path": "mobile/lib/features/subscription/domain/subscription_repository.dart",
+    "bytes": 3588,
+    "sha256": "b3f65c7fdec861932af1947359eab382be89c12b33a4931b06ad71821ef9f5e4"
+  },
+  {
+    "path": "mobile/lib/features/subscription/presentation/subscription_pages.dart",
+    "bytes": 8952,
+    "sha256": "a3c2b3c81425e0bf60e29b7ac8af5d95bb8c463b5cab28d9f7bd86dd5942b302"
+  },
+  {
+    "path": "mobile/test/domain_workflows_test.dart",
+    "bytes": 5061,
+    "sha256": "d4a280d3dab38a34cd1895da5dcd3fa7839cfedce531b7baed88429798b52ca7"
+  },
+  {
+    "path": "mobile/test/screen_coverage_test.dart",
+    "bytes": 5179,
+    "sha256": "b281c0e4b021dcaa37cb5990d790dd50f6b855f87a3aceacebb22eafc0f4432a"
+  },
+  {
+    "path": "mobile/test/ui_workflows_test.dart",
+    "bytes": 9050,
+    "sha256": "6d30d7b22f3d0992d17322579fd398417f4da04148c2e8f3dcd0ca033c1d9957"
+  },
+  {
+    "path": "mobile/test_driver/integration_test.dart",
+    "bytes": 391,
+    "sha256": "c6c2e59f7ba0a99dd3c1df88879a44feb026923c4c12eb44cabc8242ac3f47e3"
+  },
+  {
+    "path": "mobile/tool/final_verification.py",
+    "bytes": 3012,
+    "sha256": "662ee3de4379c8e42692011eb98953e171f9606519f8152caa022075a5ef5027"
+  },
+  {
+    "path": "mobile/tool/prepare_assets.py",
+    "bytes": 2837,
+    "sha256": "491dc936d38e1eedb41d662b28d21f437b829e6d03c80f73dee880c968212511"
+  },
+  {
+    "path": "mobile/tool/prepare_references.py",
+    "bytes": 2934,
+    "sha256": "70e222216beea1f50e8f2ce68a01c27f55b3b667f86f1db16740d37761440029"
+  },
+  {
+    "path": "mobile/tool/record_runtime.py",
+    "bytes": 5035,
+    "sha256": "8b17ebbaeeff81c5744b0b8a816f2b16868449d6a97c9c1734a25d6850607a89"
+  },
+  {
+    "path": "mobile/tool/run_checks.py",
+    "bytes": 1480,
+    "sha256": "7cabe27c04d313558618bec9f1d82ad654e2587a4d6a530b1454ad0efc9e5437"
+  },
+  {
+    "path": "mobile/tool/write_inventory.py",
+    "bytes": 7705,
+    "sha256": "ff4cad2ae1aabb99567ffe084d39a28eaba43ab0d0aa77d5ebd0eb999a8f16ea"
+  }
+]

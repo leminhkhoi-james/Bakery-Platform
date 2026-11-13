@@ -1,0 +1,10 @@
+{
+  "command": [
+    "D:/HomeMind/audit-tools/flutter/bin/dart.bat",
+    "format",
+    "lib/core/api/environment.dart",
+    "lib/features/ai/presentation/live_ai_pages.dart"
+  ],
+  "exitCode": 0,
+  "seconds": 1.49
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "action": "Continued registered Customer from preserved external credential file; registration HTTP 201 retained in prior run",
+    "result": "PASS",
+    "at": "2026-11-07T07:54:21.146257Z"
+  },
+  {
+    "action": "Wrong login denied; real login and me succeed",
+    "result": "PASS",
+    "at": "2026-11-07T07:54:28.627294Z"
+  },
+  {
+    "action": "Onboarding submitted and refetched",
+    "result": "PASS",
+    "at": "2026-11-07T07:54:50.768098Z"
+  },
+  {
+    "action": "Customer blocked from Owner catalog by live role guard",
+    "result": "PASS",
+    "at": "2026-11-07T07:54:53.560904Z"
+  },
+  {
+    "action": "Admin plan create through Flutter and list refetch",
+    "result": "PASS",
+    "at": "2026-11-07T07:55:07.087732Z"
+  },
+  {
+    "action": "Admin bakery approval through Flutter",
+    "result": "PASS",
+    "at": "2026-11-07T07:55:11.777490Z"
+  },
+  {
+    "action": "Real subscription order created and server total shown",
+    "result": "PASS",
+    "at": "2026-11-07T07:55:24.372689Z"
+  },
+  {
+    "action": "Manual metadata submitted; stays pending Admin review",
+    "result": "PASS",
+    "at": "2026-11-07T07:55:39.698115Z"
+  },
+  {
+    "action": "Admin rejects with required note",
+    "result": "PASS",
+    "at": "2026-11-07T07:55:53.246405Z"
+  },
+  {
+    "action": "Rejected payment corrected and resubmitted",
+    "result": "PASS",
+    "at": "2026-11-07T07:56:05.523551Z"
+  },
+  {
+    "action": "Admin approval refetches order, subscription and bakery",
+    "result": "PASS",
+    "at": "2026-11-07T07:56:19.900032Z"
+  },
+  {
+    "action": "Legitimate Owner activation and refreshed JWT role",
+    "result": "PASS",
+    "at": "2026-11-07T07:56:35.436895Z"
+  },
+  {
+    "action": "Owner category create and reload",
+    "result": "PASS",
+    "at": "2026-11-07T07:56:40.833763Z"
+  },
+  {
+    "action": "Owner product create with real ID and list refetch",
+    "result": "PASS",
+    "at": "2026-11-07T07:56:45.062204Z"
+  },
+  {
+    "action": "catalog-category",
+    "result": "FAIL_MOBILE_OR_BACKEND",
+    "errorType": "DriverError"
+  }
+]

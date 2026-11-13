@@ -31,3 +31,21 @@ build/
 
 ### VS Code ###
 .vscode/
+.vite/
+/.tmp/
+
+### Local secrets and environment ###
+/.local/
+**/.env
+**/.env.*
+!**/.env.example
+**/.keys/
+**/*.pem
+**/*.key
+
+docs/audit/
+/mobile/docs/full-integration/
+/mobile/docs/evidence/
+
+# Local-only Web/Android acceptance scripts, reports, screenshots and recordings
+/docs/mobile/

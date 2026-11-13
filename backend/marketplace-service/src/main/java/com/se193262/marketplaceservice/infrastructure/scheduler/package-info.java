@@ -1,5 +1,2 @@
-/**
- * Background and cleanup schedulers.
- */
+/** Background and cleanup schedulers. */
 package com.se193262.marketplaceservice.infrastructure.scheduler;
-

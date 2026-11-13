@@ -1,0 +1,103 @@
+[
+  {
+    "asset": "assets/images/brand_logo.png",
+    "source": "frontend/src/assets/brand-logo.png",
+    "rights": "Artwork có sẵn của dự án, dùng lại nội bộ theo yêu cầu; cần xác nhận quyền phát hành trước release.",
+    "bytes": 122643,
+    "sha256": "ffde63567ff4167032cab59b7c4559d68982604859d9835f3d5fa072a7c41dc0"
+  },
+  {
+    "asset": "assets/images/cat_mascot.png",
+    "source": "frontend/public/cat-logo-transparent.png",
+    "rights": "Artwork có sẵn của dự án, dùng lại nội bộ theo yêu cầu; cần xác nhận quyền phát hành trước release.",
+    "bytes": 35521,
+    "sha256": "155a4f028690ca6e420f76af7cfaac9916c906adec32963e21609a8fa7f4374c"
+  },
+  {
+    "asset": "assets/images/fairy_background.jpg",
+    "source": "frontend/public/images/fairy-bg.jpg",
+    "rights": "Artwork có sẵn của dự án, dùng lại nội bộ theo yêu cầu; cần xác nhận quyền phát hành trước release.",
+    "bytes": 979860,
+    "sha256": "372ed7c84dfecb9d48cadc2740bfb4c9268a6e99c7e8ae9092103e835904a226"
+  },
+  {
+    "asset": "assets/fonts/PlusJakartaSans.ttf",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/plusjakartasans/PlusJakartaSans%5Bwght%5D.ttf",
+    "gitBlob": "0cb13a998ed525ba226d911b10d6c4c4f923a961",
+    "rights": "SIL OFL 1.1, license đi kèm, font nguyên bản không chỉnh sửa.",
+    "bytes": 176288,
+    "sha256": "89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8"
+  },
+  {
+    "asset": "assets/fonts/DancingScript.ttf",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/dancingscript/DancingScript%5Bwght%5D.ttf",
+    "gitBlob": "9f521e7fb357ec9ea9820ebd36a9d7b1f72f2935",
+    "rights": "SIL OFL 1.1, license đi kèm, font nguyên bản không chỉnh sửa.",
+    "bytes": 133636,
+    "sha256": "21808625578fe8d8cd10cb684be546dca077b27cd03a53a2f1ec11dc743c924c"
+  },
+  {
+    "asset": "assets/demo/cake_01.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuBqCnNzWb3HUU-YJC5WxTrl2XI81RrUNfbLCXPBMI64sLCXe9g-teVTMYn0z6NK0p1zckyZhHQGiw6WybGMJDQJxgMf_WVPgMhMV8i9G3MgL1L_mMpdZwq-tJYXiQPe3lUIHZJW9PIMN7ekWUc1Dc7DcXGASCWzTeUAfMsN00vLBH0wqr3rE4I8obYgxGylNvtqKuH6vpdIVvdUkwkyV25lhRtwQGAsmrCC5im5QqGJ0ES4ibTm31XI",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 42397,
+    "sha256": "20b66c25d2589383403c8febd7760ccebe2fe1d5e10e085aa2e44105ced9d487"
+  },
+  {
+    "asset": "assets/demo/cake_02.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuAjOhWhuyZbGEjSmPeg5PTPexYpZ064fzF_uYGuFAmhpvpPz_baP7qY1Da767bAqCgx5MZRhcRDtg7bLshylTm85hHXVTDl4cKIu6h5x5MIenkqUlirXPivfGewMh-ewUFi6t4mSNwQS3QZLUe6wj0oD5ZojhGf7LTDAGDSQ3kR4GktJSJUgzhiNcX1y3AnU3R5Uw8ONv43yFrcKSjIbUVpAs05eoDVT_OfBilOBtgZXxs9ArKjAh_j",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 30279,
+    "sha256": "4e389e9e9f88661f2f25808917de8e63b188ac7767886f04d01d4f5c223a5a05"
+  },
+  {
+    "asset": "assets/demo/cake_03.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuD1S6hfurNSZihp7Hg9kUikd1b00L3IMSTfqmX0dd_eKS_DKbRmNfzny_oMdG3SRqSsWMXTRlgjfd1G1iqgfP6m6y_fP2L5JrGPbJivFPXHtQapoWnAkEbs02YmnYI9dT_t1xJ1GZwunPNgl57-TeyMwEVdBq3CCUMwhfQn41jhKp2oFC3hUGMKBUux-a4qhUqI3tXsdY5G578GeTJgAOiYEIsyo_Agjtn08vD2Zb7iEcoSDR7tflfi",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 33748,
+    "sha256": "8c842389f11c2fb46a60fd6a1441f22bf9f9e63e51b7a191089d800333395e39"
+  },
+  {
+    "asset": "assets/demo/cake_04.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuBmsVzjTjx0IXkjIOk52xFfrpv7TjI9az2jX1gpiVBfsVk2CkwVOuzGJu2GoliiJ6a6O9yypqJ83qKQlQVNLqVf9t515O2kFPLLmEAXvtMtSbVcPq6V7SNOBSegKib2_tZYTL4Hdg1kAxjPhT4fH_HLAFVDiK0CBqS360SilhLUzy1_YHqUQy2i8SjUdCIGx7j421dsrFO4NO5DsrTotFAbAPz2m_ZBZvNN0mj7q0WXaAS2__WF23w5",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 30335,
+    "sha256": "20679093f03560536d2256b10d22c7275d508b38f9b1cddc8619e5056ed4ab95"
+  },
+  {
+    "asset": "assets/demo/cake_05.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuCcfE9YSBTHUb99bzqofhGfVJEQW64jE8HJVFnGdD55k9Yg01-B-cQ3ce2DHaGZAyuKhXivzLyb0magKWKG9izSgODiGPQKs2HCj-800Og19xIkV_DOGtgpQwzLqOkxBaNVroLz3H9hFc-tpYqlcCNCQVDqDj6X6L8BUrXWPORrcvzCSYOGtuwBg3XlcyluMCP6wyySl5rGhZ3vJK_4ubOL_sXo0pdp7OcEBSQOmbocaKorPANho-EO",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 44377,
+    "sha256": "f39fbb16d2dd6f45ed593915140939edec7a8c5eeb64dff904fd586bab6deb74"
+  },
+  {
+    "asset": "assets/demo/cake_06.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuB6sr1ww3fZYNJ8fP2QVl7ECqdcrKDwOnqolqWUh-UgHuPUnm67IBf-Ol0LjLpxWrUckcW813lCxabs8m21-PpPSW8aXadmDSk6tIY6eXxKJR1tNu4sRt-ZcofnnbCoFwSAe6eno7ZWdtoekCZIqLdC7upija1gpHG1sIxTccPupZvikAWilcF1apCwjSbG5q9JqUTPZ5YcGlCWmTF2jGXdB0-0h8yfcZ8QeWsPrBt9mvzH21CWQ9ZW",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 35931,
+    "sha256": "67859844e1f2c94bb4b4fa7bf13b84c44946bf8ba10ebc4a4aaff5de7e897e8a"
+  },
+  {
+    "asset": "assets/demo/cake_07.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIAwSAwHZnsaUSzb6wB7KfmhTEurFvDk_5FUeEfdIqbQ2vQvmbnTZPe_7jw6H8sQbN_P3U3I0YqGKDstW0twxfSz48rwlBD9afF5xAksR_Dv8ZUkV7TJFmamDZMRN4iJG6AUZObeHrkO3mdwG2Pg39TxdJotnZ3phQBPOIIyOzH4eOsVA1qgbJ1vfuQJEt9vg7XxpAz3jnVXUDk145wJ2uGcC2lHGFG6vEMTJk9KY14XnKagPwLGlD",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 35020,
+    "sha256": "cfe459adc29cefffc0780d2877ae876ba26f6bc8c5d9663443f82437e06bc75b"
+  },
+  {
+    "asset": "assets/demo/cake_08.jpg",
+    "source": "https://lh3.googleusercontent.com/aida-public/AB6AXuDci2ituE5vjFLdiKOiK4yaQ-iVSnCw1y9QlE3_9KqJU3nOHjf9RPoK5iYq0v9XH6k7qruz5WAX_tw65k5EMJzlVRnFoL9J9MFx6QFhXmSmcPFhmON9_RYj-wQUyP6P_2iic85DvTyB7D0DawHfC1g-cosebCj4GcPUs9Adt8WFiaPsVx09kxA3Xy6D9LCas0RWBvLXRJJ8Mj8xTLqUO0tAFAh8_TyRedo8sG-q_vVTJ6uJfOlTm6SU",
+    "referenceFile": "frontend/src/mockData/customer/cakes.js",
+    "rights": "Cùng ảnh minh họa có sẵn trong Web mock; không coi là sản phẩm thật hay license phát hành đã xác minh.",
+    "bytes": 44559,
+    "sha256": "e2313b9a0f27a69ee83d36a43f06e36b9746899bc63f171e88282265760ad350"
+  }
+]

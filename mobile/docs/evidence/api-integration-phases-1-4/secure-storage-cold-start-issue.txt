@@ -1,0 +1,2 @@
+11-07 15:29:52.222  7330  7359 E FlutterSecureStorage: EncryptedSharedPreferences initialization failed. Falling back to custom ciphers.
+11-07 15:29:52.222  7330  7359 E FlutterSecureStorage: java.lang.IllegalArgumentException: bad base-64

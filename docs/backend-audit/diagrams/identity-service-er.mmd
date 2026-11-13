@@ -1,0 +1,59 @@
+erDiagram
+  customer_profiles {
+    uuid user_id
+    date date_of_birth
+    varchar avatar_object_key
+    varchar preferred_language
+    timestamptz updated_at
+  }
+  refresh_tokens {
+    uuid id
+    uuid user_id
+    varchar token_hash
+    timestamptz expires_at
+    timestamptz revoked_at
+    timestamptz created_at
+  }
+  roles {
+    int2 id
+    varchar code
+    varchar description
+  }
+  user_addresses {
+    uuid id
+    uuid user_id
+    varchar label
+    varchar recipient_name
+    varchar recipient_phone
+    varchar address_line
+    varchar ward
+    varchar district
+    varchar city
+    numeric latitude
+    numeric longitude
+    bool is_default
+    timestamptz created_at
+    timestamptz updated_at
+  }
+  user_roles {
+    uuid user_id
+    int2 role_id
+    timestamptz assigned_at
+  }
+  users {
+    uuid id
+    varchar email
+    varchar password_hash
+    varchar display_name
+    varchar phone_number
+    varchar status
+    bool email_verified
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  users ||--o| customer_profiles : "user_id"
+  users ||--o{ refresh_tokens : "user_id"
+  users ||--o{ user_addresses : "user_id"
+  roles ||--o{ user_roles : "role_id"
+  users ||--o{ user_roles : "user_id"

@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "protectedFiles": 3099,
+  "changedProtectedFiles": [],
+  "changedProtectedDirectories": [],
+  "externalConfigChangesSincePreRehearsal": [],
+  "head": "5ec7a890eb0f19838422042016098920d452d164",
+  "headUnchanged": true,
+  "stagedFiles": [],
+  "gitDiffCheckExitCode": 0,
+  "knownSecretMatchFiles": [],
+  "apkEntriesScanned": 144,
+  "apkSecretMatchEntries": [],
+  "apkSha256": "928315b87ea816f05632d54dd1d0ea44652115dddb0d1f86342eb0df478fc3aa",
+  "missingDocumentationLinks": [],
+  "pythonSyntax": "PASS",
+  "limitations": "Exact known secrets/pattern scan, not universal audit. Does not scan or erase chat/tool outputs. A default flutter-drive cleanup previously uninstalled app; old Android app-data preservation is not claimed."
+}

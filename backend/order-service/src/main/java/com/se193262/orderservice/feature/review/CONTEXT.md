@@ -1,13 +1,21 @@
 # Review feature
 
+Migration numbering fix (2026-11-13): review moderation uses
+`V5__review_moderation_pending.sql`. Version 2 already belongs to order creation
+idempotency; version 4 belongs to accessory inventory. The new review migration
+had not been applied to the local DB; only its filename changed, with matching
+changes in packaged resources and the SQL reference directory.
+
 ## Responsibility
 
 Order-backed customer reviews and moderation.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+Customers can create, update and soft-delete reviews for completed orders. New
+or edited reviews are `PENDING`; only the author and an admin can view them
+until an admin publishes them. Admins can publish or hide a review, while a
+deleted review cannot be restored.
 
 ## Boundary
 

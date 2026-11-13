@@ -1,0 +1,6 @@
+{
+  "java": "java version \"21.0.8\" 2025-07-15 LTS\nJava(TM) SE Runtime Environment (build 21.0.8+12-LTS-250)\nJava HotSpot(TM) 64-Bit Server VM (build 21.0.8+12-LTS-250, mixed mode, sharing)",
+  "maven": "Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)\nMaven home: C:\\Program Files\\apache-maven-3.9.11\nJava version: 21.0.8, vendor: Oracle Corporation, runtime: C:\\Program Files\\Java\\jdk-21\nDefault locale: en_US, platform encoding: UTF-8\nOS name: \"windows 11\", version: \"10.0\", arch: \"amd64\", family: \"windows\"",
+  "flutter": "Flutter 3.47.1 \u2022 channel [user-branch] \u2022 https://github.com/flutter/flutter.git\nFramework \u2022 revision 6655482ec0 (3 months ago) \u2022 2026-08-19 10:07:23 -0700\nEngine \u2022 hash 11d79658c444477b06513d32b52c8c4ccb7276b0 (revision 5d53178869) (2 months ago) \u2022 2026-08-18 23:36:01.000Z\nTools \u2022 Dart 3.13.1 \u2022 DevTools 2.60.0",
+  "docker": "29.6.1"
+}

@@ -1,0 +1,3 @@
+# Cache Python của launcher local.
+__pycache__/
+*.pyc

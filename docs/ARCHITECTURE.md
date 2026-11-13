@@ -8,10 +8,16 @@ thống hỗ trợ mua bánh có sẵn, đặt bánh custom qua yêu cầu và o
 ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thuê nền tảng.
 
 > **Trạng thái hiện tại:** backend đã được scaffold thành Maven multi-module với
-> bảy domain service và một API Gateway độc lập. Mỗi module hiện mới có Spring
-> Boot application, package xương sống, feature context và smoke test; business
-> implementation, persistence, security, gateway routing, frontend và tích hợp
-> ngoài vẫn chưa được triển khai.
+> bảy domain service và một API Gateway độc lập. Identity Service đã triển khai
+> persistence cho authentication, RS256 JWT/JWK và refresh rotation. Order
+> Service và Chat Service đã có JWT resource-server. Chat có runtime
+> PostgreSQL/Flyway, participant-aware REST APIs, MinIO attachment storage,
+> cùng outbound calls được bảo vệ bằng service JWT audience/scope cụ thể.
+> Marketplace chat eligibility và Bakery membership được xác minh qua internal
+> contracts; Identity phát hành và Chat cache service tokens trong thời hạn ngắn.
+> Gateway đã có Spring Cloud Gateway Web MVC routing tới bảy domain service;
+> local runtime và smoke checks được mô tả trong `DOCKER-GATEWAY.md`.
+> Chi tiết kiểm chứng thực tế nằm trong `PROJECT-STATUS.md`.
 
 ---
 
@@ -52,7 +58,7 @@ ngữ cảnh, tạo mẫu bánh bằng AI, cùng quy trình bakery mua gói thu�
                          │ cake_ai_db     │       │ subscription_db      │
                          └────────────────┘       └──────────────────────┘
 
-      Shared infrastructure (planned): PostgreSQL, MinIO/S3, observability
+      Shared infrastructure (planned): PostgreSQL, Firebase Storage (Marketplace); object-storage adapter cho service khác, observability
       External integration (planned): AI image-generation provider
 ```
 
@@ -75,6 +81,12 @@ không có foreign key hay JPA association xuyên service.
 ---
 
 ## Request Flow
+
+Gateway supports public `/api/v1/**` resource routes as well as the existing
+service-prefixed aliases. Both route to the same owning service and preserve its
+authentication/authorization checks. In local development, a direct service API
+URL can use the same path on Gateway by changing only the port to 8080. Nested
+subscription resources are routed before Bakery's general resource prefix.
 
 ### Standard Authenticated Request
 
@@ -179,6 +191,14 @@ Bakery chọn plan
   → Bakery/Marketplace Service gọi entitlement API trước khi publish/send offer
 ```
 
+Từ 2026-11-10, bakery cũng có thể tạo checkout VNPay Sandbox (ADR-006).
+Subscription lưu attempt với giá snapshot VND; IPN hợp lệ kiểm tra HMAC-SHA512,
+merchant, số tiền và hai mã thành công, sau đó ghi payment APPROVED, hoàn tất
+order và tạo kỳ trong cùng transaction. Không giả mạo admin cho xác minh gateway.
+Return URL chỉ đọc kết quả. Notification sang Bakery thực hiện sau commit.
+Callback lặp không tạo kỳ mới; giao dịch trả tiền nhưng xung đột được lưu
+REVIEW_REQUIRED và xuất hiện trong API đối soát chỉ dành cho ADMIN.
+
 Việc duyệt payment và kích hoạt subscription phải idempotent. Mỗi bakery chỉ
 có tối đa một kỳ `ACTIVE` tại một thời điểm. Payment ở đây chỉ là payment giữa
 bakery và nền tảng, không phải payment đơn bánh và không thay thế hóa đơn điện tử.
@@ -189,7 +209,7 @@ bakery và nền tảng, không phải payment đơn bánh và không thay thế
 Client → Cake AI Service tạo GenerationJob(QUEUED)
   → trả job ID ngay, không giữ HTTP request lâu
   → worker chuyển job sang PROCESSING và gọi AI provider
-  → ảnh nguồn/kết quả lưu ở MinIO/S3; database chỉ lưu object key + metadata
+  → ảnh nguồn/kết quả lưu ở Firebase Storage (Marketplace); object-storage adapter cho service khác; database chỉ lưu object key + metadata
   → job chuyển SUCCEEDED hoặc FAILED
   → client polling trạng thái và lấy signed URL có thời hạn ngắn
   → khi customer chọn design, Marketplace Service lưu selectedDesignId
@@ -205,7 +225,7 @@ Client → Chat Service gửi message + clientMessageId
   → xác thực participant và quyền truy cập request/order context
   → unique clientMessageId ngăn tạo trùng khi retry
   → lưu message/attachment metadata vào chat_db
-  → file thực tế lưu ở MinIO/S3
+  → file thực tế lưu ở Firebase Storage (Marketplace); object-storage adapter cho service khác
   → cập nhật delivery/read receipt theo participant
 ```
 
@@ -263,7 +283,7 @@ com.se193262.<service>/
 │           └── <Feature>Response.java
 └── infrastructure/
     ├── client/                         # Typed HTTP clients to other services
-    ├── storage/                        # MinIO/S3 adapter
+    ├── storage/                        # Firebase Storage (Marketplace); object-storage adapter cho service khác adapter
     └── scheduler/                      # Cleanup/background jobs
 ```
 
@@ -303,8 +323,8 @@ Dependency rules:
 
 - Spring Security 7 + OAuth2 Resource Server xác thực JWT; không tự viết filter
   parse JWT nếu framework đã hỗ trợ.
-- Platform roles: `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`, `ADMIN`.
-- Bakery membership roles: `OWNER`, `MANAGER`, `STAFF`; đây là dữ liệu của
+- Platform roles: `CUSTOMER`, `BAKERY_OWNER`, `ADMIN`.
+- Bakery membership roles: `OWNER`; đây là dữ liệu của
   Bakery Service, không thay thế platform role.
 - Authorization kiểm tra cả role và resource ownership. Không tin
   `customerId`/`bakeryId` từ request nếu có thể suy ra từ JWT và membership.
@@ -315,7 +335,7 @@ Dependency rules:
 
 ### Database Ownership and Persistence
 
-- PostgreSQL database-per-service: bảy database, 44 bảng theo thiết kế hiện tại.
+- PostgreSQL database-per-service: bảy database, 46 bảng theo thiết kế hiện tại.
 - Schema được quản lý bằng Flyway; production dùng
   `spring.jpa.hibernate.ddl-auto=validate`, không dùng `update`.
 - UUID cho ID, `BigDecimal`/`NUMERIC` cho tiền, `Instant`/`TIMESTAMPTZ` cho thời
@@ -348,7 +368,7 @@ Dependency rules:
 ### Object Storage
 
 - Product image, request image, attachment, AI image và payment proof lưu ở
-  MinIO/S3; PostgreSQL chỉ lưu object key và metadata.
+  Firebase Storage (Marketplace); object-storage adapter cho service khác; PostgreSQL chỉ lưu object key và metadata.
 - Validate MIME từ nội dung, giới hạn kích thước và để server sinh object key.
 - Signed URL có thời hạn ngắn và không được lưu vào database.
 - Upload và database write không tạo transaction giả; lỗi một phía phải có
@@ -391,11 +411,12 @@ Dependency rules:
   service cùng một API Gateway build/test độc lập.
 - Các module đã có application class, package xương sống, package feature bám
   theo API contract, `CONTEXT.md` và application-context smoke test.
-- Module hiện chỉ có core starter và test starter; JPA, Security, Resource
-  Server, Flyway, PostgreSQL driver và gateway routing dependency chưa được thêm.
+- Identity Service đã có JPA, Flyway, PostgreSQL, Security Resource Server và
+  Testcontainers. Các module còn lại vẫn chỉ có core/test starter; gateway
+  routing dependency chưa được thêm.
 - Chưa có controller, service/repository/entity/DTO nghiệp vụ, frontend hoặc
   integration thực tế.
-- Database design đã có 7 PostgreSQL schema sets, 44 tables, Flyway-compatible
+- Database design đã có 7 PostgreSQL schema sets, 46 tables, Flyway-compatible
   DDL, seed reference data và 8 Mermaid ERD files.
 - API contract mục tiêu nằm tại `docs/API_SPEC.md`; tiến độ được theo dõi trong
   `docs/PROJECT-STATUS.md`. ADR vẫn chưa được tạo.
@@ -407,7 +428,7 @@ Dependency rules:
 - REST đồng bộ; không dùng message broker trong phạm vi kiến trúc hiện tại.
 - Stateless access-token validation cho phép scale ngang service phía sau load
   balancer; refresh-token state chỉ thuộc Identity Service.
-- MinIO/S3 tách binary object khỏi database.
+- Firebase Storage (Marketplace); object-storage adapter cho service khác tách binary object khỏi database.
 - Cake AI dùng asynchronous job state + polling để không giữ request dài.
 
 ### Future Considerations (not implemented)
@@ -432,3 +453,22 @@ Dependency rules:
 - [ERD index](erd/README.md)
 - [PostgreSQL migration guide](../database/postgresql/README.md)
 - [Project rules](../.codex-rules/project-rules.md)
+
+
+## Marketplace implementation update — 2026-10-17
+
+Marketplace now uses Cloud Storage for Firebase via backend service-account IAM, with private objects
+and expiring signed URLs. Its acceptance workflow and Order's local idempotency records recover ambiguous
+REST results without a broker or distributed transaction. Identity provides scoped service JWT issuance.
+The platform-support library shares only technical concerns, never domain persistence. Local Compose
+runs Identity/Marketplace with separate PostgreSQL databases; other dependencies are configured externally.
+See ADR-002 for the complete consistency model and FIREBASE-SETUP.md / DOCKER.md for setup.
+# Approval before subscription — 2026-11-11
+
+ADR-007 replaces the independent onboarding payment order: approve the Bakery
+profile first, then allow subscription order creation/payment initiation.
+Subscription reads the Bakery profile over the existing authenticated internal
+API and requires ACTIVE, in addition to OWNER membership. Existing paid callback
+settlement is preserved. Seller activation/public listing still require both an
+ACTIVE profile and valid entitlement. No database boundary/schema changes.
+

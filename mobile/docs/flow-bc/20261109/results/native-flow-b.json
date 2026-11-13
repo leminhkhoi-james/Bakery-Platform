@@ -1,0 +1,530 @@
+{
+  "orderId": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57",
+  "orderNumber": "ORD-9313E226E65F4E678085",
+  "addressId": "c01c22f5-6c39-463c-8de7-f144060b9643",
+  "creation": {
+    "at": "2026-11-09T02:25:11.007Z",
+    "service": "order",
+    "method": "POST",
+    "path": "/api/v1/orders/direct",
+    "status": 201,
+    "bytes": 1955,
+    "logicalKey": "78bd9ee6-6811-45ad-ab1e-76e3c8349e4b",
+    "actorId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+    "ids": [
+      {
+        "field": "id",
+        "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+      },
+      {
+        "field": "customerId",
+        "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+      },
+      {
+        "field": "bakeryId",
+        "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+      },
+      {
+        "field": "id",
+        "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+      },
+      {
+        "field": "sourceProductId",
+        "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+      },
+      {
+        "field": "groupId",
+        "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+      },
+      {
+        "field": "id",
+        "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+      },
+      {
+        "field": "id",
+        "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+      }
+    ],
+    "states": [
+      {
+        "field": "status",
+        "value": "PENDING"
+      }
+    ]
+  },
+  "order": {
+    "id": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57",
+    "orderNumber": "ORD-9313E226E65F4E678085",
+    "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+    "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+    "cakeRequestId": null,
+    "offerId": null,
+    "orderSource": "DIRECT_CATALOG",
+    "customerName": "QA customerA",
+    "customerPhone": "QA-ONLY",
+    "bakeryName": "QA Flow BC Bakery",
+    "customerNote": "QA ANDROID Flow B; synthetic local lifecycle",
+    "subtotal": 419000.0,
+    "deliveryFee": 15000.0,
+    "totalAmount": 434000.0,
+    "currency": "VND",
+    "status": "PENDING",
+    "neededAt": "2026-11-12T02:23:32.537104Z",
+    "acceptedAt": null,
+    "completedAt": null,
+    "createdAt": "2026-11-09T02:25:09.370302Z",
+    "updatedAt": "2026-11-09T02:25:09.370302Z",
+    "items": [
+      {
+        "id": "4fd3263c-c66f-4413-a3f6-655c3d17b587",
+        "sourceProductId": "f2dbe6f3-d8ba-42d4-95be-78372358b521",
+        "sourceOfferItemId": null,
+        "itemType": "CAKE",
+        "name": "QA Live Address Cake",
+        "description": "Synthetic local order lifecycle verification",
+        "configuration": {
+          "options": [
+            {
+              "values": [
+                {
+                  "id": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451",
+                  "name": "QA Vanilla",
+                  "priceAdjustment": 20000.0
+                }
+              ],
+              "groupId": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84",
+              "groupName": "QA Flavor"
+            }
+          ]
+        },
+        "quantity": 2,
+        "unitPrice": 200000.0,
+        "lineTotal": 400000.0
+      },
+      {
+        "id": "bd1b810e-c19b-424a-a075-d6e14833896d",
+        "sourceProductId": null,
+        "sourceOfferItemId": null,
+        "itemType": "ADD_ON",
+        "name": "QA Candle",
+        "description": "Synthetic accessory",
+        "configuration": {},
+        "quantity": 1,
+        "unitPrice": 19000.0,
+        "lineTotal": 19000.0
+      }
+    ],
+    "deliveryAddress": {
+      "recipientName": "QA Native Recipient",
+      "recipientPhone": "QA-ONLY",
+      "addressLine": "QA NATIVE UPDATED KITCHEN",
+      "ward": "QA Ward",
+      "district": "QA District",
+      "city": "QA City",
+      "latitude": null,
+      "longitude": null,
+      "deliveryNote": null
+    },
+    "statusHistory": [
+      {
+        "fromStatus": null,
+        "toStatus": "PENDING",
+        "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+        "note": "Order created",
+        "changedAt": "2026-11-09T02:25:09.370302Z"
+      }
+    ],
+    "review": null
+  },
+  "createdVia": "ANDROID_UI",
+  "ownerTransitions": [
+    {
+      "target": "CONFIRMED",
+      "event": {
+        "at": "2026-11-09T02:32:11.322Z",
+        "service": "order",
+        "method": "POST",
+        "path": "/api/v1/orders/9bbc4bbd-0309-49ad-9618-23fc3cbbee57/status-transitions",
+        "status": 200,
+        "bytes": 2196,
+        "actorId": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "ids": [
+          {
+            "field": "id",
+            "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+          },
+          {
+            "field": "customerId",
+            "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+          },
+          {
+            "field": "bakeryId",
+            "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+          },
+          {
+            "field": "id",
+            "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+          },
+          {
+            "field": "sourceProductId",
+            "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+          },
+          {
+            "field": "id",
+            "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+          },
+          {
+            "field": "groupId",
+            "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+          },
+          {
+            "field": "id",
+            "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+          }
+        ],
+        "states": [
+          {
+            "field": "status",
+            "value": "CONFIRMED"
+          }
+        ]
+      }
+    },
+    {
+      "target": "BAKING",
+      "event": {
+        "at": "2026-11-09T02:32:18.985Z",
+        "service": "order",
+        "method": "POST",
+        "path": "/api/v1/orders/9bbc4bbd-0309-49ad-9618-23fc3cbbee57/status-transitions",
+        "status": 200,
+        "bytes": 2400,
+        "actorId": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "ids": [
+          {
+            "field": "id",
+            "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+          },
+          {
+            "field": "customerId",
+            "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+          },
+          {
+            "field": "bakeryId",
+            "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+          },
+          {
+            "field": "id",
+            "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+          },
+          {
+            "field": "sourceProductId",
+            "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+          },
+          {
+            "field": "id",
+            "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+          },
+          {
+            "field": "groupId",
+            "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+          },
+          {
+            "field": "id",
+            "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+          }
+        ],
+        "states": [
+          {
+            "field": "status",
+            "value": "BAKING"
+          }
+        ]
+      }
+    },
+    {
+      "target": "READY",
+      "event": {
+        "at": "2026-11-09T02:32:27.905Z",
+        "service": "order",
+        "method": "POST",
+        "path": "/api/v1/orders/9bbc4bbd-0309-49ad-9618-23fc3cbbee57/status-transitions",
+        "status": 200,
+        "bytes": 2604,
+        "actorId": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "ids": [
+          {
+            "field": "id",
+            "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+          },
+          {
+            "field": "customerId",
+            "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+          },
+          {
+            "field": "bakeryId",
+            "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+          },
+          {
+            "field": "id",
+            "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+          },
+          {
+            "field": "sourceProductId",
+            "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+          },
+          {
+            "field": "id",
+            "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+          },
+          {
+            "field": "groupId",
+            "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+          },
+          {
+            "field": "id",
+            "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+          }
+        ],
+        "states": [
+          {
+            "field": "status",
+            "value": "READY"
+          }
+        ]
+      }
+    },
+    {
+      "target": "DELIVERING",
+      "event": {
+        "at": "2026-11-09T02:32:36.456Z",
+        "service": "order",
+        "method": "POST",
+        "path": "/api/v1/orders/9bbc4bbd-0309-49ad-9618-23fc3cbbee57/status-transitions",
+        "status": 200,
+        "bytes": 2823,
+        "actorId": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "ids": [
+          {
+            "field": "id",
+            "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+          },
+          {
+            "field": "customerId",
+            "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+          },
+          {
+            "field": "bakeryId",
+            "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+          },
+          {
+            "field": "id",
+            "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+          },
+          {
+            "field": "sourceProductId",
+            "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+          },
+          {
+            "field": "id",
+            "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+          },
+          {
+            "field": "groupId",
+            "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+          },
+          {
+            "field": "id",
+            "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+          }
+        ],
+        "states": [
+          {
+            "field": "status",
+            "value": "DELIVERING"
+          }
+        ]
+      }
+    },
+    {
+      "target": "COMPLETED",
+      "event": {
+        "at": "2026-11-09T02:32:44.941Z",
+        "service": "order",
+        "method": "POST",
+        "path": "/api/v1/orders/9bbc4bbd-0309-49ad-9618-23fc3cbbee57/status-transitions",
+        "status": 200,
+        "bytes": 3067,
+        "actorId": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "ids": [
+          {
+            "field": "id",
+            "value": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57"
+          },
+          {
+            "field": "customerId",
+            "value": "4a60e11f-0306-4c43-8f01-0c7d902c056e"
+          },
+          {
+            "field": "bakeryId",
+            "value": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121"
+          },
+          {
+            "field": "id",
+            "value": "4fd3263c-c66f-4413-a3f6-655c3d17b587"
+          },
+          {
+            "field": "sourceProductId",
+            "value": "f2dbe6f3-d8ba-42d4-95be-78372358b521"
+          },
+          {
+            "field": "id",
+            "value": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451"
+          },
+          {
+            "field": "groupId",
+            "value": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84"
+          },
+          {
+            "field": "id",
+            "value": "bd1b810e-c19b-424a-a075-d6e14833896d"
+          }
+        ],
+        "states": [
+          {
+            "field": "status",
+            "value": "COMPLETED"
+          }
+        ]
+      }
+    }
+  ],
+  "finalOrder": {
+    "id": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57",
+    "orderNumber": "ORD-9313E226E65F4E678085",
+    "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+    "bakeryId": "ff4a2dfd-8427-4784-bdb0-4a6a82c7f121",
+    "cakeRequestId": null,
+    "offerId": null,
+    "orderSource": "DIRECT_CATALOG",
+    "customerName": "QA customerA",
+    "customerPhone": "QA-ONLY",
+    "bakeryName": "QA Flow BC Bakery",
+    "customerNote": "QA ANDROID Flow B; synthetic local lifecycle",
+    "subtotal": 419000.0,
+    "deliveryFee": 15000.0,
+    "totalAmount": 434000.0,
+    "currency": "VND",
+    "status": "COMPLETED",
+    "neededAt": "2026-11-12T02:23:32.537104Z",
+    "acceptedAt": "2026-11-09T02:32:11.148024Z",
+    "completedAt": "2026-11-09T02:32:44.921859Z",
+    "createdAt": "2026-11-09T02:25:09.370302Z",
+    "updatedAt": "2026-11-09T02:32:44.921859Z",
+    "items": [
+      {
+        "id": "4fd3263c-c66f-4413-a3f6-655c3d17b587",
+        "sourceProductId": "f2dbe6f3-d8ba-42d4-95be-78372358b521",
+        "sourceOfferItemId": null,
+        "itemType": "CAKE",
+        "name": "QA Live Address Cake",
+        "description": "Synthetic local order lifecycle verification",
+        "configuration": {
+          "options": [
+            {
+              "values": [
+                {
+                  "id": "ab7eeace-bd1b-4e1d-9b0b-2f14e0818451",
+                  "name": "QA Vanilla",
+                  "priceAdjustment": 20000.0
+                }
+              ],
+              "groupId": "bd7167fe-c6fd-4f92-a3c7-8c391055cd84",
+              "groupName": "QA Flavor"
+            }
+          ]
+        },
+        "quantity": 2,
+        "unitPrice": 200000.0,
+        "lineTotal": 400000.0
+      },
+      {
+        "id": "bd1b810e-c19b-424a-a075-d6e14833896d",
+        "sourceProductId": null,
+        "sourceOfferItemId": null,
+        "itemType": "ADD_ON",
+        "name": "QA Candle",
+        "description": "Synthetic accessory",
+        "configuration": {},
+        "quantity": 1,
+        "unitPrice": 19000.0,
+        "lineTotal": 19000.0
+      }
+    ],
+    "deliveryAddress": {
+      "recipientName": "QA Native Recipient",
+      "recipientPhone": "QA-ONLY",
+      "addressLine": "QA NATIVE UPDATED KITCHEN",
+      "ward": "QA Ward",
+      "district": "QA District",
+      "city": "QA City",
+      "latitude": null,
+      "longitude": null,
+      "deliveryNote": null
+    },
+    "statusHistory": [
+      {
+        "fromStatus": null,
+        "toStatus": "PENDING",
+        "changedBy": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+        "note": "Order created",
+        "changedAt": "2026-11-09T02:25:09.370302Z"
+      },
+      {
+        "fromStatus": "PENDING",
+        "toStatus": "CONFIRMED",
+        "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "note": "QA b CONFIRMED; synthetic local lifecycle, no physical delivery",
+        "changedAt": "2026-11-09T02:32:11.148024Z"
+      },
+      {
+        "fromStatus": "CONFIRMED",
+        "toStatus": "BAKING",
+        "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "note": "QA b BAKING; synthetic local lifecycle, no physical delivery",
+        "changedAt": "2026-11-09T02:32:18.967018Z"
+      },
+      {
+        "fromStatus": "BAKING",
+        "toStatus": "READY",
+        "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "note": "QA b READY; synthetic local lifecycle, no physical delivery",
+        "changedAt": "2026-11-09T02:32:27.883316Z"
+      },
+      {
+        "fromStatus": "READY",
+        "toStatus": "DELIVERING",
+        "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "note": "QA b DELIVERING; synthetic local lifecycle, no physical delivery",
+        "changedAt": "2026-11-09T02:32:36.431830Z"
+      },
+      {
+        "fromStatus": "DELIVERING",
+        "toStatus": "COMPLETED",
+        "changedBy": "52b31e60-12f0-40dd-81d5-7e00036349a4",
+        "note": "QA b COMPLETED; synthetic local lifecycle, no physical delivery",
+        "changedAt": "2026-11-09T02:32:44.921859Z"
+      }
+    ],
+    "review": {
+      "orderId": "9bbc4bbd-0309-49ad-9618-23fc3cbbee57",
+      "customerId": "4a60e11f-0306-4c43-8f01-0c7d902c056e",
+      "rating": 5,
+      "comment": "QA ANDROID Flow B review; verified synthetic lifecycle",
+      "status": "PUBLISHED",
+      "createdAt": "2026-11-09T02:34:42.232038Z",
+      "updatedAt": "2026-11-09T02:34:42.232038Z"
+    }
+  },
+  "status": "FULLY_RESOLVED_AND_RUNTIME_VERIFIED"
+}

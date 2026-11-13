@@ -1,0 +1,75 @@
+{
+  "originalEvidencePreserved": true,
+  "roles": {
+    "customer": [
+      "CUSTOMER"
+    ],
+    "admin": [
+      "ADMIN",
+      "CUSTOMER"
+    ]
+  },
+  "corrections": [
+    {
+      "label": "Invalid ratio",
+      "originalExpected": [
+        400
+      ],
+      "actual": 422,
+      "correctExpected": [
+        422
+      ],
+      "result": "PASS",
+      "basis": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid source bytes",
+      "originalExpected": [
+        400
+      ],
+      "actual": 422,
+      "correctExpected": [
+        422
+      ],
+      "result": "PASS",
+      "basis": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid pagination",
+      "originalExpected": [
+        400
+      ],
+      "actual": 422,
+      "correctExpected": [
+        422
+      ],
+      "result": "PASS",
+      "basis": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Invalid status filter",
+      "originalExpected": [
+        400
+      ],
+      "actual": 422,
+      "correctExpected": [
+        422
+      ],
+      "result": "PASS",
+      "basis": "BusinessException.invalid returns 422; source and actual response agree"
+    },
+    {
+      "label": "Admin cannot list Customer jobs",
+      "originalExpected": [
+        403
+      ],
+      "actual": 200,
+      "correctExpected": [
+        200
+      ],
+      "result": "PASS",
+      "basis": "Existing Admin has CUSTOMER role; list restricted to its own customerId"
+    }
+  ],
+  "confirmedFailure": "Foreign RFQ accepted with unavailable Cake AI service authentication"
+}

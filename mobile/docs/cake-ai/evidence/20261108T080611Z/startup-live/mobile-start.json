@@ -1,0 +1,33 @@
+﻿{
+    "deviceId":  "emulator-5554",
+    "androidSdk":  "D:\\HomeMind\\audit-tools\\android-sdk",
+    "bootCompleted":  "1",
+    "bootAnimation":  "",
+    "deviceBootComplete":  "1",
+    "packageManagerReady":  true,
+    "ports":  [
+                  18101,
+                  18102,
+                  18103,
+                  18104,
+                  18105,
+                  18106,
+                  18107,
+                  19022
+              ],
+    "publicFlutterArguments":  [
+                                   "run",
+                                   "-d",
+                                   "emulator-5554",
+                                   "--debug",
+                                   "--dart-define=CAKE_AI_URL=http://127.0.0.1:18105",
+                                   "--dart-define=CAKE_AI_MODE=local-fallback",
+                                   "--dart-define=IDENTITY_URL=http://127.0.0.1:18101",
+                                   "--dart-define=BAKERY_URL=http://127.0.0.1:18102",
+                                   "--dart-define=SUBSCRIPTION_URL=http://127.0.0.1:18104",
+                                   "--dart-define=MARKETPLACE_URL=http://127.0.0.1:18103",
+                                   "--dart-define=ORDER_URL=http://127.0.0.1:18106",
+                                   "--dart-define=CHAT_URL=http://127.0.0.1:18107"
+                               ],
+    "prepareOnly":  true
+}

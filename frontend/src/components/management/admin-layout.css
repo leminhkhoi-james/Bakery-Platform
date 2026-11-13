@@ -1,0 +1,40 @@
+/* One surface for management pages; dashboard keeps its independent data cards. */
+.sc-portal--admin { --sc-admin-gap: 1rem; --sc-admin-padding: clamp(.75rem, 1.5vw, 1.25rem); }
+.sc-portal--admin .sc-portal-main > .sc-workspace { width: 100%; max-width: 100rem; }
+.sc-portal--admin .sc-admin-content {
+  padding: var(--sc-admin-padding);
+  border: 1px solid var(--sc-color-border);
+  border-radius: var(--sc-radius-card);
+  background: var(--color-surface-container-lowest, #fff);
+  box-shadow: var(--sc-shadow-card);
+  gap: var(--sc-admin-gap);
+}
+.sc-portal--admin .sc-admin-content > .sc-panel,
+.sc-portal--admin .sc-admin-orders > .sc-panel {
+  padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+}
+.sc-portal--admin .sc-admin-content .sc-panel > :not(:last-child) { margin-bottom: var(--sc-admin-gap); }
+.sc-portal--admin .sc-admin-orders { min-width: 0; }
+.sc-portal--admin .sc-admin-content .sc-toolbar {
+  padding: 0 0 var(--sc-admin-gap); border: 0; border-bottom: 1px solid var(--sc-color-border);
+  border-radius: 0; background: transparent;
+}
+.sc-portal--admin .sc-admin-content :is(form, .grid) > label:not(:has(input[type="checkbox"], input[type="radio"])) { display: grid; align-content: start; gap: .35rem; min-width: 0; }
+.sc-portal--admin .sc-admin-content :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) { width: 100%; min-width: 0; max-width: 100%; }
+.sc-portal--admin .sc-admin-content form > button { align-self: end; justify-self: start; }
+.sc-portal--admin .sc-admin-orders .sc-table td:first-child strong { word-break: normal; overflow-wrap: anywhere; }
+.sc-portal--admin .sc-table-wrap { scrollbar-gutter: auto; }
+.sc-portal--admin .sc-admin-sidebar { width: var(--sc-sidebar); max-width: calc(100vw - 2rem); height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
+.sc-portal--admin .sc-portal-header > .sc-identity { max-width: min(28%, 14rem); }
+.sc-portal--admin .sc-portal-header .sc-identity > div { min-width: 0; }
+.sc-portal--admin .sc-drawer { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+.sc-portal--admin .sc-drawer-heading { gap: .75rem; }
+.sc-portal--admin .sc-drawer-heading > div { min-width: 0; overflow-wrap: anywhere; }
+.sc-portal--admin .sc-drawer-heading > button { flex-shrink: 0; }
+.sc-portal--admin .sc-drawer-body > .sc-panel { padding: 0; border: 0; box-shadow: none; background: transparent; }
+@media (max-width: 767px) {
+  .sc-portal--admin { --sc-page-gutter: .75rem; }
+  .sc-portal--admin .sc-admin-content { border-radius: 1rem; }
+  .sc-portal--admin .sc-portal-header > .sc-identity { max-width: 2.5rem; flex-shrink: 0; }
+  .sc-portal--admin .sc-portal-header .sc-identity > div { display: none; }
+}

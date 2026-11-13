@@ -1,0 +1,21 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "tool/start_mobile.ps1",
+    "-DeviceId",
+    "emulator-5554",
+    "-CakeAiUrl",
+    "http://127.0.0.1:18105",
+    "-CakeAiMode",
+    "local-fallback",
+    "-ReuseRunningServices",
+    "-EvidenceDirectory",
+    "docs/cake-ai/evidence/20261108T080611Z/readme-rehearsal",
+    "-NoResident"
+  ],
+  "exitCode": 0
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "action": "README Phase 1: live public home loaded",
+    "result": "PASS",
+    "at": "2026-11-07T08:23:36.213573Z"
+  },
+  {
+    "action": "README Phase 2: actual Owner login/me after app start",
+    "result": "PASS",
+    "at": "2026-11-07T08:23:47.507165Z"
+  },
+  {
+    "action": "README Phase 3: persisted Owner bakery discovered",
+    "result": "PASS",
+    "at": "2026-11-07T08:23:52.702564Z"
+  },
+  {
+    "action": "README Phase 4: persisted ACTIVE/SCHEDULED periods",
+    "result": "PASS",
+    "at": "2026-11-07T08:23:57.360629Z"
+  },
+  {
+    "action": "README Admin: legitimate protected payment list",
+    "result": "PASS",
+    "at": "2026-11-07T08:24:12.539151Z"
+  }
+]

@@ -1,0 +1,29 @@
+# Explicit E2E overlay used by gateway_e2e_setup.py; no secrets in this file.
+services:
+  identity-service:
+    environment:
+      ORDER_CLIENT_SECRET_HASH: ${ORDER_CLIENT_SECRET_HASH:?Prepare E2E service clients}
+      CHAT_SERVICE_CLIENT_SECRET_HASH: ${CHAT_SERVICE_CLIENT_SECRET_HASH:?Prepare E2E service clients}
+      BAKERY_CLIENT_SECRET_HASH: ${BAKERY_CLIENT_SECRET_HASH:?Prepare E2E service clients}
+      SUBSCRIPTION_CLIENT_SECRET_HASH: ${SUBSCRIPTION_CLIENT_SECRET_HASH:?Prepare E2E service clients}
+  cake-ai-service:
+    environment:
+      CAKE_AI_ENABLED: ${GATEWAY_E2E_AI_ENABLED:-false}
+      CAKE_AI_SCHEDULER_ENABLED: ${GATEWAY_E2E_SCHEDULER_ENABLED:-false}
+      CAKE_AI_API_KEY: ${GEMINI_API_KEY:-}
+      CAKE_AI_IMAGE_MODEL: ${GEMINI_IMAGE_MODEL:-gemini-3.1-flash-image}
+      CAKE_AI_MODERATION_MODEL: ${GEMINI_MODERATION_MODEL:-gemini-3.5-flash}
+      CAKE_AI_FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+      CAKE_AI_FIREBASE_BUCKET: ${FIREBASE_STORAGE_BUCKET}
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/firebase.json
+      CAKE_AI_DAILY_PROVIDER_REQUESTS: "9"
+      CAKE_AI_MAX_DESIGNS_PER_EXECUTION: "1"
+      CAKE_AI_REQUIRE_ADMIN_REVIEW: "true"
+      CAKE_AI_CLEANUP_ENABLED: "false"
+    volumes:
+      - type: bind
+        source: ${FIREBASE_CREDENTIALS_FILE}
+        target: /run/secrets/firebase.json
+        read_only: true
+        bind:
+          create_host_path: false

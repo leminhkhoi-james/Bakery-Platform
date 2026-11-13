@@ -1,0 +1,24 @@
+sequenceDiagram
+  participant C as CUSTOMER
+  participant M as Marketplace
+  participant MDB as Marketplace DB
+  participant O as Order
+  participant ODB as Order DB
+  participant I as Identity
+  participant B as Bakery
+  C->>M: accept + Idempotency-Key + customerNote
+  M->>MDB: reserve PREPARED + fingerprint
+  M->>MDB: claim lease token
+  M->>O: from-offer + accept-offer:offerId
+  O->>M: read order-source
+  O->>I: user and delivery address
+  O->>B: bakery profile
+  O->>ODB: order + snapshots + history + idempotency
+  O-->>M: orderId/orderNumber
+  alt lease still owned
+    M->>MDB: SUCCEEDED, ACCEPTED, OFFER_SELECTED
+    M-->>C: 200 acceptance result
+  else timeout or partial failure
+    M->>MDB: RETRYING or terminal FAILED
+    Note over M,O: Retry uses same key, no XA rollback
+  end

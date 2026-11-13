@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "deleteCount": 0,
+  "addressReloadCount": 0,
+  "successSnackbar": false,
+  "addressStillVisible": true,
+  "capture": {
+    "file": "H:\\MSS\\Bakery-Platform\\mobile\\docs\\flow-bc\\20261109\\review\\phone-delete-cancel-no-success.png",
+    "sha256": "701deef03c60659ea68c585be4297e6a3686e039ccd41283349f3272a8c502b2"
+  },
+  "observedEvents": []
+}

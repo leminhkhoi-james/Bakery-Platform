@@ -1,0 +1,22 @@
+{
+  "command": [
+    "D:/HomeMind/audit-tools/flutter/bin/flutter.bat",
+    "drive",
+    "--keep-app-running",
+    "--driver=tool/cake_ai_driver.dart",
+    "--target=test_driver/full_app.dart",
+    "-d",
+    "emulator-5554",
+    "--dart-define=IDENTITY_URL=http://127.0.0.1:18101",
+    "--dart-define=BAKERY_URL=http://127.0.0.1:18102",
+    "--dart-define=SUBSCRIPTION_URL=http://127.0.0.1:18104",
+    "--dart-define=MARKETPLACE_URL=http://127.0.0.1:18103",
+    "--dart-define=ORDER_URL=http://127.0.0.1:18106",
+    "--dart-define=CHAT_URL=http://127.0.0.1:18107",
+    "--dart-define=CAKE_AI_URL=http://127.0.0.1:18105",
+    "--dart-define=CAKE_AI_MODE=local-fallback"
+  ],
+  "exitCode": 0,
+  "seconds": 269.95,
+  "log": "android-drive-1794126150406719700.log"
+}

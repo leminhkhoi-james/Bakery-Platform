@@ -1,5 +1,10 @@
 # Thiết kế cơ sở dữ liệu
 
+Order review moderation nằm trong `V5__review_moderation_pending.sql`
+(đổi từ tên V2 mới bị trùng idempotency). Nội dung DDL không đổi: review mặc định
+PENDING và constraint nhận PENDING/PUBLISHED/HIDDEN/DELETED. V1–V4 đã áp dụng
+được giữ nguyên; không repair hoặc xóa lịch sử Flyway để xử lý việc trùng tên.
+
 > Logical database design cho MSS Bakery Platform sử dụng PostgreSQL.
 > Cập nhật tài liệu này mỗi khi Mermaid ERD hoặc Flyway migration thay đổi.
 
@@ -14,13 +19,13 @@ liệu của mình và không được đọc trực tiếp database của servi
 |---|---:|---:|---|---|
 | Identity Service | `identity_db` | 6 | [Xem ERD](erd/01-identity-service-logical.mmd) | [V1](../database/postgresql/identity-service/V1__init_schema.sql) |
 | Bakery Service | `bakery_db` | 11 | [Xem ERD](erd/02-bakery-service-logical.mmd) | [V1](../database/postgresql/bakery-service/V1__init_schema.sql) |
-| Marketplace Service | `marketplace_db` | 8 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
-| Order Service | `order_db` | 5 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql) |
+| Marketplace Service | `marketplace_db` | 9 | [Xem ERD](erd/03-marketplace-service-logical.mmd) | [V1](../database/postgresql/marketplace-service/V1__init_schema.sql) |
+| Order Service | `order_db` | 7 | [Xem ERD](erd/04-order-service-logical.mmd) | [V1](../database/postgresql/order-service/V1__init_schema.sql), [V2](../database/postgresql/order-service/V2__order_creation_idempotency.sql), [V3](../database/postgresql/order-service/V3__offer_idempotency.sql) |
 | Chat Service | `chat_db` | 5 | [Xem ERD](erd/05-chat-service-logical.mmd) | [V1](../database/postgresql/chat-service/V1__init_schema.sql) |
 | Cake AI Service | `cake_ai_db` | 4 | [Xem ERD](erd/06-cake-ai-service-logical.mmd) | [V1](../database/postgresql/cake-ai-service/V1__init_schema.sql) |
-| Subscription Service | `subscription_db` | 5 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql) |
+| Subscription Service | `subscription_db` | 6 | [Xem ERD](erd/07-subscription-service-logical.mmd) | [V1](../database/postgresql/subscription-service/V1__init_schema.sql), [V5](../database/postgresql/subscription-service/V5__vnpay_attempts.sql) |
 
-**Tổng cộng: 44 bảng trong 7 database.**
+**Tổng cộng: 47 bảng trong 7 database.**
 
 Conceptual ERD toàn hệ thống: [00-conceptual-overall.mmd](erd/00-conceptual-overall.mmd).
 
@@ -78,7 +83,7 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
 | `bakeries` | `id` | `name`, thông tin liên hệ, ảnh, `status`, timestamps, `version` | Hồ sơ chính của tiệm bánh |
-| `bakery_members` | `id` | `bakery_id`, `user_id`*, `member_role`, `status`, `joined_at` | User tham gia quản lý/vận hành tiệm |
+| `bakery_members` | `id` | `bakery_id`, `user_id`*, `display_name_snapshot`, `member_role`, `status`, `owner_activation_pending`, `joined_at` | Chủ sở hữu tiệm; member_role chỉ nhận OWNER |
 | `bakery_addresses` | `id` | `bakery_id`, địa chỉ, tọa độ, `is_primary`, timestamps | Chi nhánh hoặc địa điểm của tiệm |
 | `service_areas` | `id` | `bakery_id`, `city`, `district`, `delivery_fee`, `minimum_order`, `active` | Khu vực tiệm nhận giao bánh |
 | `business_hours` | `id` | `bakery_id`, `day_of_week`, giờ mở/đóng, `closed` | Lịch hoạt động trong tuần |
@@ -90,6 +95,14 @@ Quản lý tiệm bánh, thành viên, khu vực giao hàng, phụ kiện và ca
 | `product_option_values` | `id` | `option_group_id`, `name`, mô tả, `price_adjustment`, `active` | Giá trị cụ thể trong một nhóm lựa chọn |
 
 `user_id` trong `bakery_members` là external reference tới Identity Service.
+`V2__member_display_snapshot.sql` bổ sung tên hiển thị chụp từ Identity khi tạo
+OWNER. Tên này không đổi theo profile Identity về sau. Danh sách chủ tiệm chỉ
+đọc snapshot đã lưu, không có luồng bổ sung dữ liệu cũ.
+
+`V3__pending_owner_activation.sql` lưu cờ chờ cấp quyền chủ tiệm và partial
+index cho membership đang hoạt động còn chờ. Migration đánh dấu các OWNER
+đang hoạt động trước đó để đối chiếu một lần với Identity. Bakery xóa cờ
+sau khi Identity xác nhận role đã có hoặc cấp role thành công.
 
 ### Relationships
 
@@ -167,11 +180,13 @@ dõi thanh toán giữa khách và tiệm.
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
+| `customer_orders` | `id` | số đơn, external IDs, `order_source`, snapshot hai bên, `customer_note`, số tiền, trạng thái, timestamps, `version` | Aggregate root của đơn bánh |
 | `order_items` | `id` | `order_id`, external source IDs, loại item, snapshot, cấu hình JSONB, giá và số lượng | Các hạng mục trong đơn |
 | `delivery_address_snapshots` | `order_id` | người nhận, địa chỉ, tọa độ, ghi chú | Địa chỉ bất biến tại thời điểm đặt |
 | `order_status_history` | `id` | `order_id`, trạng thái cũ/mới, `changed_by`*, ghi chú, thời gian | Audit tiến độ đơn |
 | `order_reviews` | `order_id` | `customer_id`*, `rating`, `comment`, `status`, timestamps, `version` | Review dựa trên order đã hoàn thành |
+| `order_idempotency_records` | `id` | `operation`, `idempotency_key`, `customer_id`*, `payload_hash`, `order_id`, `created_at` | Đảm bảo retry tạo order không sinh bản ghi trùng |
+| `order_offer_creations` | `idempotency_key` | `offer_id`, `payload_fingerprint`, `created_at` | Đảm bảo accepted offer chỉ tạo một order và replay an toàn |
 
 ### Relationships
 
@@ -181,13 +196,16 @@ dõi thanh toán giữa khách và tiệm.
 | CustomerOrder → DeliveryAddressSnapshot | OneToOne | `delivery_address_snapshots` | `order_id` |
 | CustomerOrder → OrderStatusHistory | OneToMany | `order_status_history` | `order_id` |
 | CustomerOrder → OrderReview | OneToOne tùy chọn | `order_reviews` | `order_id` |
+| CustomerOrder → OrderIdempotencyRecord | OneToMany | `order_idempotency_records` | `order_id` |
+| CustomerOrder → OrderOfferCreation | OneToOne tùy chọn | `order_offer_creations` | `offer_id` |
 
 ### Quy tắc nghiệp vụ
 
 - `DIRECT_CATALOG`: `cake_request_id` và `offer_id` phải `NULL`.
 - `ACCEPTED_OFFER`: bắt buộc có `cake_request_id` và `offer_id`.
 - Một offer chỉ sinh tối đa một order.
-- Mỗi order có tối đa một review, rating từ 1 đến 5.
+- Idempotency key duy nhất theo operation, customer và key; payload hash khác nhau trả conflict.
+- Mỗi order có tối đa một review, rating từ 1 đến 5. Review mới hoặc vừa chỉnh sửa ở `PENDING`; chỉ `PUBLISHED` được hiển thị công khai. Tác giả và admin vẫn xem được review chưa công khai.
 - Chỉ customer của order `COMPLETED` được tạo review; kiểm tra này nằm ở service.
 
 ---
@@ -200,11 +218,14 @@ Quản lý hội thoại, participant, tin nhắn, file đính kèm và trạng 
 
 | Table | Primary key | Columns chính | Mục đích |
 |---|---|---|---|
-| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
+| `conversations` | `id` | external request/order/customer/bakery IDs, trạng thái, lý do đóng, timestamps, `version` | Một cuộc hội thoại khách-tiệm |
 | `conversation_participants` | `id` | `conversation_id`, `user_id`*, loại participant, thời gian tham gia/đọc | Thành viên cuộc hội thoại |
-| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
+| `messages` | `id` | `conversation_id`, `sender_participant_id`, `client_message_id`, payload fingerprint, loại, nội dung, timestamps | Tin nhắn trong cuộc hội thoại |
 | `message_attachments` | `id` | `message_id`, object key, tên file, media type, dung lượng, thứ tự | Metadata file đính kèm |
 | `message_receipts` | `(message_id, participant_id)` | `delivered_at`, `read_at` | Trạng thái nhận và đọc theo participant |
+
+`conversations.close_reason` lưu lý do đóng tùy chọn. `messages.payload_fingerprint`
+lưu SHA-256 payload để phát hiện retry idempotency key với nội dung khác.
 
 ### Relationships
 
@@ -260,9 +281,9 @@ Không sử dụng invoice và không theo dõi tiền mua bánh giữa khách v
 |---|---|---|---|
 | `subscription_plans` | `id` | `code`, tên, giá tháng, chu kỳ, trạng thái, timestamps, `version` | Gói thuê nền tảng |
 | `plan_features` | `(plan_id, feature_code)` | `feature_value` | Quyền lợi/giới hạn linh hoạt của gói |
-| `subscription_orders` | `id` | số đơn, external bakery/user IDs, plan, snapshot, số tiền, trạng thái, timestamps, `version` | Đơn bakery đăng ký hoặc gia hạn gói |
-| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, số tiền, trạng thái, admin duyệt | Ghi nhận payment bakery gửi nền tảng |
-| `bakery_subscriptions` | `id` | bakery*, plan, source order, trạng thái, thời hạn, timestamps, `version` | Một kỳ sử dụng gói đã được cấp |
+| `subscription_orders` | `id` | số đơn, external bakery/user IDs, plan, tên/mã/quyền lợi snapshot, số tiền, trạng thái, timestamps, `version` | Đơn bakery đăng ký hoặc gia hạn gói |
+| `bakery_payments` | `id` | order, người gửi, phương thức, mã/ảnh chứng từ, hash idempotency và approval key, số tiền, trạng thái, admin duyệt, `version` | Ghi nhận payment bakery gửi nền tảng |
+| `bakery_subscriptions` | `id` | bakery*, plan, source order, quyền lợi snapshot, trạng thái, thời hạn, timestamps, `version` | Một kỳ sử dụng gói đã được cấp |
 
 ### Relationships
 
@@ -335,21 +356,78 @@ private Map<String, Object> configurationSnapshot;
 
 ## Sample data
 
-- Identity seed tạo bốn role: `CUSTOMER`, `BAKERY_OWNER`, `BAKERY_STAFF`,
-  `ADMIN`.
+- Identity migrations giữ ba role: `CUSTOMER`, `BAKERY_OWNER`, `ADMIN`.
 - Subscription seed tạo ba gói mẫu: `BASIC`, `PRO`, `PREMIUM` và các feature
   `MAX_PRODUCTS`, `MAX_MONTHLY_OFFERS`, `FEATURED_LISTING`.
 - Không seed user, bakery, order hoặc payment giả vào migration production.
 
 ---
 
+## VNPay Sandbox additions — 2026-11-10
+
+Subscription V5 adds `vnpay_attempts` (UUID PK, local order FK, external payer UUID,
+NUMERIC(12,2) VND snapshot, IP address, created/expiry time, unique nullable VNPay
+transaction number, response/status codes, paid time, version). Status is PENDING,
+SUCCEEDED, FAILED or REVIEW_REQUIRED. Order/time and status/time indexes support
+checkout retries and paginated admin reconciliation. No tokens or secrets stored.
+
+`bakery_payments.verification_source` defaults to MANUAL for existing records.
+The review constraint permits APPROVED VNPAY payments without an admin ID only
+when verification_source and payment_method are both VNPAY. Manual reviewed
+payments still require an admin ID. One source order still creates at most one
+subscription period. Runtime and canonical V5 migrations are identical.
+
 ## Migration notes
 
-- **Tổng số bảng: 44**, chia trong 7 database.
+- **Tổng số bảng: 47**, chia trong 7 database.
 - Schema được quản lý bằng Flyway; production dùng `ddl-auto: validate`.
 - File tạo database: [00_create_databases.sql](../database/postgresql/00_create_databases.sql).
 - Hướng dẫn chạy: [database/postgresql/README.md](../database/postgresql/README.md).
 - `V1__init_schema.sql` chỉ chứa DDL của đúng một service.
 - `V2__seed_reference_data.sql` chỉ seed dữ liệu danh mục ổn định.
+- Subscription Service có `V3__payment_idempotency.sql` thêm hash key duy nhất
+  cho payment mới; cột nullable để tương thích dữ liệu cũ.
+- Subscription Service có `V4__subscription_snapshots.sql` lưu plan code/features
+  tại lúc tạo order và features trên kỳ sử dụng; thêm optimistic version và hash
+  approval key cho payment. Migration backfill các order/period hiện hữu.
+- Identity Service đóng gói bản sao V1/V2 tại
+  `backend/identity-service/src/main/resources/db/migration`; test build kiểm tra
+  bản runtime này luôn khớp byte-content (không tính line ending) với nguồn
+  canonical trong `database/postgresql/identity-service`.
 - Không sửa migration đã chạy ở môi trường dùng chung; tạo `V3`, `V4`, ... cho
   mọi thay đổi tiếp theo.
+
+
+## Marketplace and Order schema additions — 2026-10-17
+
+- Marketplace V2 adds `request_images.size_bytes BIGINT NOT NULL` (nonnegative).
+- `offer_acceptance_workflows`: UUID PK; local request/offer FKs; external customer UUID; customer/key
+  unique; SHA-256 payload fingerprint; delivery-address UUID/note; PREPARED/RETRYING/SUCCEEDED/FAILED;
+  retry count/next time; lease owner/until; order result; error status; timestamps and optimistic version.
+- Partial unique `cake_request_id` for PREPARED/RETRYING/SUCCEEDED reserves at most one successful or
+  unresolved selection per request. Due-time index supports recovery. No new request/offer enum values.
+- Order V2 adds `order_offer_creations`: idempotency key PK, unique offer FK to the local order's unique
+  offer reference, payload fingerprint and created timestamp. It commits atomically with order snapshots.
+- Images are in Firebase Storage; database stores object keys/metadata, never signed URLs or file bytes.
+- `database/dev/` is optional disposable fixture SQL and is not a production migration location.
+
+## Authorization model — 2026-10-28
+
+Identity has three platform roles: ADMIN, CUSTOMER and BAKERY_OWNER.
+Bakery membership accepts OWNER only. Chat participant types are CUSTOMER and
+BAKERY_OWNER. Initial schemas/seeds define these values directly because no real
+data exists. No role-retirement migrations or archive tables are needed.
+# Bổ sung schema tồn kho — 2026-11-13
+
+Bakery migration V4: `add_ons.stock_quantity INTEGER NULL CHECK >= 0`; NULL là
+chưa nhập tồn. `add_on_allocations` có PK order_id (external Order UUID), bakery_id
+FK nội bộ, state ALLOCATED/RELEASED, fingerprint và timestamps. Bảng con
+`add_on_allocation_items` PK(order_id,add_on_id), FK nội bộ tới allocation/add-on,
+quantity > 0. Khóa transaction theo order và khóa hàng phụ kiện theo UUID bảo vệ
+trừ/hoàn nguyên tử. version của add-on tăng khi tồn thay đổi.
+
+Order migration V4: `order_items.source_add_on_id` external UUID Bakery, không FK.
+`order_inventory_intents` PK order_id, bakery_id external UUID, state RESERVING/
+COMMITTED/RELEASE_REQUIRED/RELEASED và timestamps; index(state,updated_at). Intent
+có trước order nên không FK sang customer_orders. Commit intent cùng transaction
+order/idempotency; cancel cùng transaction trạng thái. Xem ADR-008 và ERD 02/04.

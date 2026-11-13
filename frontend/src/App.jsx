@@ -1,0 +1,350 @@
+import { useCheckoutCart } from './hooks/useCheckoutCart.js'
+import { useState, useEffect } from 'react'
+import AppRoutes from './routes/AppRoutes'
+import { catalogUrl, parseAppRoute, shouldHandleAppLink } from './routes/catalogNavigation.js'
+import { catalogCartItem } from './services/catalogCart.js'
+
+function App() {
+  const { cartItems, setCartItems, selectedCartIds, setSelectedCartIds } = useCheckoutCart()
+
+  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
+  const ROUTE_ALIASES = {
+    // AI Studio & Custom Cake
+    'custom-cake': 'ai-studio',
+    'custom-quote': 'ai-studio',
+    'yeu-cau-lam-banh': 'ai-studio',
+    'thiet-ke-banh': 'ai-studio',
+    'yeu-cau-cua-toi': 'ai-studio',
+    'custom-atelier': 'ai-studio',
+
+    // Bidding / RFQ
+    'san-bao-gia-custom': 'bidding',
+    'san-dau-thau': 'bidding',
+    'rfq-detail': 'bidding',
+    'rfq': 'bidding',
+    'chi-tiet-yeu-cau': 'bidding',
+    'bao-gia': 'bidding',
+
+    // Home
+    'trang-chu': 'home',
+    'index': 'home',
+
+    // Explore Cakes
+    'menu': 'explore',
+    'kham-pha': 'explore',
+    'kham-pha-mau-banh': 'explore',
+    'san-pham': 'explore',
+    'tat-ca-banh': 'explore',
+
+    // Product Detail
+    'product-detail': 'product-detail',
+    'product': 'product-detail',
+    'chi-tiet-banh': 'product-detail',
+    'chi-tiet-san-pham': 'product-detail',
+
+    // Store Directory
+    'danh-sach-cua-hang': 'stores',
+    'cua-hang': 'stores',
+    'tiem-banh': 'stores',
+    'tiem-banh-doi-tac': 'stores',
+
+    // Cart & Checkout
+    'checkout': 'cart',
+    'gio-hang': 'cart',
+
+    // Payment Gateway
+    'thanh-toan': 'payment',
+    'checkout-payment': 'payment',
+    'cong-thanh-toan': 'payment',
+
+    // Order Tracking
+    'subscription-plans': 'subscription-plans',
+    'tro-thanh-doi-tac': 'subscription-plans',
+    'doi-tac': 'subscription-plans',
+    'partnership': 'subscription-plans',
+    'goi-dich-vu': 'subscription-plans',
+    'order-tracking': 'tracking',
+    'theo-doi-don-hang': 'tracking',
+    'don-hang': 'tracking',
+
+    // Profile & Account
+    'account': 'profile',
+    'tai-khoan': 'profile',
+    'customer-profile': 'profile',
+
+    // Auth
+    'register': 'login',
+    'auth': 'login',
+    'dang-nhap': 'login',
+
+    // Baker Quote Detail
+    'sweet-bakery-quote': 'baker-quote',
+    'chi-tiet-bao-gia': 'baker-quote',
+    'quote-detail': 'baker-quote',
+
+    // Vendor Portal
+    'vendor': 'vendor-orders',
+    'baker-hub': 'vendor-orders',
+    'kenh-nguoi-ban': 'vendor-orders',
+    'quan-ly-don-hang': 'vendor-orders',
+    'quan-tri-don-hang': 'vendor-orders',
+    'soan-bao-gia': 'vendor-quote-submit',
+    'soan-bao-gia-chi-tiet': 'vendor-quote-submit',
+    'bao-gia-chi-tiet': 'vendor-quote-submit',
+    'baker-quote-submit': 'vendor-quote-submit',
+    'vendor-baker-quote': 'vendor-quote-submit',
+    'rfq-marketplace': 'vendor-rfq',
+    'yeu-cau-bao-gia': 'vendor-rfq',
+    'menu-catalog': 'vendor-menu',
+    'thuc-don-va-mau-banh': 'vendor-menu',
+    'doanh-thu-va-escrow': 'vendor-revenue',
+    'vendor-settings': 'vendor-profile',
+    'vendor-profile': 'vendor-profile',
+    'cai-dat-xuong-banh': 'vendor-profile',
+    'thiet-lap-xuong': 'vendor-profile',
+    'ho-so-tiem': 'vendor-profile',
+    'ho-so-tiem-banh': 'vendor-profile',
+
+    // Admin Portal
+    'admin-revenue': 'admin-payments',
+    'admin': 'admin-dashboard',
+    'master-admin': 'admin-dashboard',
+    'tong-quan-admin-dashboard': 'admin-dashboard',
+    'tong-quan-he-thong': 'admin-dashboard',
+    'don-hang-and-escrow-vault': 'admin-orders',
+    'quan-tri-don-hang-escrow-vault': 'admin-orders',
+    'escrow-vault': 'admin-orders',
+    'tiem-banh-and-duyet-xuong': 'admin-vendors',
+    'quan-tri-tiem-banh-vendors': 'admin-vendors',
+    'vendors-vetting': 'admin-vendors',
+    'quan-tri-nguoi-dung': 'admin-users',
+    'quan-tri-nguoi-dung-users': 'admin-users',
+    'users': 'admin-users',
+  }
+
+  const resolveRouteFromUrl = () => {
+    if (typeof window === 'undefined') return 'home'
+    const rawHash = (window.location.hash || '').replace('#', '').trim()
+    if (rawHash) {
+      const { page: canonical, query } = parseAppRoute(rawHash, ROUTE_ALIASES)
+      const cleanUrl = (canonical === 'home' ? '/' : `/${canonical}`) + (query ? '?' + query : '')
+      window.history.replaceState({ page: canonical }, '', cleanUrl)
+      return canonical
+    }
+    const rawPath = (window.location.pathname || '').replace(/^\/+|\/+$/g, '').trim()
+    if (!rawPath) return 'home'
+    if (rawPath === 'admin-revenue') {
+      window.history.replaceState({ page: 'admin-payments' }, '', '/admin-payments' + window.location.search)
+    }
+    return ROUTE_ALIASES[rawPath] || rawPath
+  }
+
+  const [currentPage, setCurrentPage] = useState(() => resolveRouteFromUrl())
+  const [routeSearch, setRouteSearch] = useState(() => typeof window === 'undefined' ? '' : window.location.search)
+  const [selectedCake, setSelectedCake] = useState(null)
+  const [activeCustomCake, setActiveCustomCake] = useState(null)
+  const [toastMessage, setToastMessage] = useState(null)
+
+  useEffect(() => {
+    if (window.location.hash) {
+      const cleanRoute = resolveRouteFromUrl()
+      setCurrentPage(cleanRoute)
+    }
+
+    const handlePopState = (e) => {
+      const page = (e.state && e.state.page) || resolveRouteFromUrl()
+      setCurrentPage(page || 'home')
+      setRouteSearch(window.location.search)
+    }
+    window.addEventListener('popstate', handlePopState)
+
+    const handleDocumentClick = (e) => {
+      if (e.defaultPrevented) return
+      const anchor = e.target.closest?.('a')
+      if (!anchor || !shouldHandleAppLink(e, anchor)) return
+      const href = anchor.getAttribute('href')
+      if (!href) return
+
+      if (
+        href.startsWith('http://') ||
+        href.startsWith('https://') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+      ) {
+        return
+      }
+
+      if (href.startsWith('#') && document.getElementById(href.slice(1))) {
+        e.preventDefault()
+        document.getElementById(href.slice(1)).scrollIntoView({ behavior: 'smooth' })
+        return
+      }
+
+      if (href.startsWith('#') || href.startsWith('/')) {
+        e.preventDefault()
+        let target = href.replace(/^#\/?/, '').replace(/^\//, '').trim()
+        if (!target) target = 'home'
+        handleNavigate(target)
+      }
+    }
+    document.addEventListener('click', handleDocumentClick)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  }, [])
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 4000)
+  }
+
+  const handleAddToCart = (cake) => {
+    if (cake.catalogSource === 'backend') {
+      const item = catalogCartItem(cake)
+      // Accessories are counts for one order. Separate additions must keep both purchases.
+      if (item.addOns.length) item.id += ':' + crypto.randomUUID()
+      if (cake.buyNow) {
+        item.id += ':buy-now'
+        setSelectedCartIds([item.id])
+      }
+      setCartItems((previous) => {
+        const existing = previous.find((entry) => entry.id === item.id)
+        return existing ? previous.map((entry) => entry.id === item.id ? { ...entry, quantity: cake.buyNow ? item.quantity : Math.min(100, entry.quantity + item.quantity) } : entry) : [item, ...previous]
+      })
+      showToast(`Đã thêm "${cake.title}" vào giỏ hàng!`)
+      return
+    }
+    const qtyToAdd = cake.quantity || 1
+    const targetSize =
+      cake.selectedSize ||
+      cake.sizeSpec ||
+      (cake.size ? `Size ${cake.size}cm` : 'Size tiêu chuẩn')
+    const targetId = cake.id
+      ? `${cake.id}-${targetSize.replace(/[^a-zA-Z0-9]/g, '_')}`
+      : `item-${Date.now()}`
+
+    setCartItems((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) =>
+          item.title === cake.title &&
+          (item.sizeSpec === targetSize ||
+            (cake.selectedSize && item.sizeSpec.includes(cake.selectedSize)))
+      )
+      if (existingIndex > -1) {
+        const updated = [...prev]
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: updated[existingIndex].quantity + qtyToAdd,
+        }
+        return updated
+      } else {
+        const newItem = {
+          id: targetId,
+          title: cake.title || 'Bánh Ngọt Nghệ Thuật',
+          image:
+            cake.image ||
+            (cake.photos && cake.photos[0]) ||
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuDl7eAPfu8ECgjGE4u7J5mfocv80iKgNlY1KhInqVxv-hjR5O1WFAa3x79hXqQhZN3RzfJ33wSPB0UKdouIsRpP13PgfleKx3mCShMDqV2rZVoiWnYGmSN7G4E0-D7CFYm5j5rpDndvQ3n1fV4YZICJJmac5TTLXpW80iIIepS9i-MaUDXTEYbRmI-jbI0Rfv0jZk9NELClAHgLk1Vl7QzP8IxXVqOMm28H2jPrOr_TpdRh8EhWTrhJ',
+          sizeSpec: targetSize,
+          flavor: cake.flavor || cake.selectedFlavor || cake.flavorDescription || '',
+          bakery: cake.bakery || cake.vendor || cake.chef || 'La Crème Pâtisserie',
+          price: cake.price || 450000,
+          quantity: qtyToAdd,
+        }
+        return [newItem, ...prev]
+      }
+    })
+
+    const sizeText = cake.selectedSize
+      ? ` (${cake.selectedSize})`
+      : cake.sizeSpec
+        ? ` (${cake.sizeSpec.split('•')[0].trim()})`
+        : ''
+    showToast(`Đã thêm "${cake.title}${sizeText}" vào giỏ hàng!`)
+  }
+
+  const handleUpdateCartQuantity = (id, delta) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) => {
+          if (item.id === id) {
+            const nextQty = item.quantity + delta
+            return nextQty > 0 ? { ...item, quantity: nextQty } : null
+          }
+          return item
+        })
+        .filter(Boolean)
+    )
+  }
+
+  const handleRemoveFromCart = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id))
+    setSelectedCartIds(ids => ids.filter(value => value !== id))
+    showToast('Đã xóa bánh khỏi giỏ hàng!')
+  }
+
+  const handleClearCart = () => {
+    setCartItems([])
+    setSelectedCartIds([])
+    showToast('Đã làm trống giỏ hàng!')
+  }
+
+  const handleNavigate = (path, cakeData = null, navigation = {}) => {
+    if (cakeData) {
+      setSelectedCake(cakeData)
+    }
+    let { page: resolvedPath, query } = parseAppRoute(path, ROUTE_ALIASES)
+    if (resolvedPath === 'login' && currentPage !== 'login' && !new URLSearchParams(query).has('returnTo')) {
+      const params = new URLSearchParams(query); params.set('returnTo', window.location.pathname + window.location.search); query = params.toString()
+    }
+    setCurrentPage(resolvedPath)
+
+    if (typeof window !== 'undefined') {
+      const targetUrl = query ? (resolvedPath === 'home' ? '/' : '/' + resolvedPath) + '?' + query : resolvedPath === 'home' ? '/' : catalogUrl(resolvedPath, cakeData)
+      setRouteSearch(new URL(targetUrl, window.location.origin).search)
+      if (window.location.pathname + window.location.search !== targetUrl || window.location.hash) {
+        window.history[navigation.replace ? 'replaceState' : 'pushState']({ page: resolvedPath }, '', targetUrl)
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  return (
+    <>
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-primary text-on-primary px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-secondary text-xl">
+            check_circle
+          </span>
+          <span className="text-sm font-medium">{toastMessage}</span>
+        </div>
+      )}
+
+      {/* App Routes Router */}
+      <AppRoutes
+        currentPage={currentPage}
+        routeSearch={routeSearch}
+        onNavigate={handleNavigate}
+        selectedCake={selectedCake}
+        activeCustomCake={activeCustomCake}
+        setActiveCustomCake={setActiveCustomCake}
+        cartItems={cartItems}
+        cartCount={cartCount}
+        selectedCartIds={selectedCartIds}
+        onSelectCartIds={setSelectedCartIds}
+        onAddToCart={handleAddToCart}
+        onUpdateQuantity={handleUpdateCartQuantity}
+        onRemoveItem={handleRemoveFromCart}
+        onClearCart={handleClearCart}
+        showToast={showToast}
+      />
+    </>
+  )
+}
+
+export default App

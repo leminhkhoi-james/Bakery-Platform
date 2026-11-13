@@ -1,0 +1,8 @@
+{
+  "one_order_per_offer": "t",
+  "order_completed": "t",
+  "amount_equals_sum_plus_delivery": "t",
+  "acceptance_succeeded": "t",
+  "owner_role_granted": "t",
+  "scheduled_period_present": "t"
+}

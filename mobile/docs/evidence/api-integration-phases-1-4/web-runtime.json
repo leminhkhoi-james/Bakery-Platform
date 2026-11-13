@@ -1,0 +1,8 @@
+{
+  "url": "http://127.0.0.1:5174",
+  "externalCopy": "H:\\MSS\\.runtime\\bakery-mobile-phases-1-4\\web",
+  "status": "RUNNING_AND_VERIFIED_HTTP",
+  "pid": 31120,
+  "protectedSource": "frontend unchanged; cache/output external",
+  "method": "node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5174 --strictPort"
+}

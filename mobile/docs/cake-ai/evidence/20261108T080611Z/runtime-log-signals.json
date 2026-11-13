@@ -1,0 +1,25 @@
+{
+  "container": "bakery-cake-ai-20261108t080611z-cake-ai-service-1",
+  "filteredOnly": true,
+  "signals": [
+    "2026-11-08T08:13:46.008Z  INFO 1 --- [cake-ai-service] [           main] c.s.c.CakeAiServiceApplication           : No active profile set, falling back to 1 default profile: \"default\"",
+    "2026-11-08T08:13:50.313Z  INFO 1 --- [cake-ai-service] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 2 migrations to schema \"public\", now at version v2 (execution time 00:00.101s)",
+    "2026-11-08T08:13:54.439Z  INFO 1 --- [cake-ai-service] [           main] c.s.c.CakeAiServiceApplication           : Started CakeAiServiceApplication in 9.238 seconds (process running for 10.167)",
+    "2026-11-08T08:16:19.553Z  WARN 1 --- [cake-ai-service] [nio-8080-exec-5] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:19.554Z  INFO 1 --- [cake-ai-service] [nio-8080-exec-5] c.s.c.i.storage.FirebaseStorageAdapter   : Firebase storage credentials not configured. Using local storage adapter.",
+    "2026-11-08T08:16:24.692Z  WARN 1 --- [cake-ai-service] [pool-2-thread-1] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:24.716Z  WARN 1 --- [cake-ai-service] [pool-2-thread-1] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:25.190Z  INFO 1 --- [cake-ai-service] [pool-2-thread-1] c.s.c.f.generation.GenerationWorker      : AI generation completed: jobId=1053ab4d-93b8-4c7f-bceb-55ca7bae34a7, executionId=b84c7256-6cf3-4225-aab8-2b22d1d7f217, published=true",
+    "2026-11-08T08:16:27.216Z  WARN 1 --- [cake-ai-service] [nio-8080-exec-2] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:29.678Z  WARN 1 --- [cake-ai-service] [pool-2-thread-2] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:29.715Z  WARN 1 --- [cake-ai-service] [pool-2-thread-2] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:29.918Z  INFO 1 --- [cake-ai-service] [pool-2-thread-2] c.s.c.f.generation.GenerationWorker      : AI generation completed: jobId=1053ab4d-93b8-4c7f-bceb-55ca7bae34a7, executionId=d55ed8f5-0f07-41e4-a2f9-717141eee1f2, published=true",
+    "2026-11-08T08:16:30.391Z  WARN 1 --- [cake-ai-service] [nio-8080-exec-8] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:30.492Z  WARN 1 --- [cake-ai-service] [nio-8080-exec-2] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:34.687Z  WARN 1 --- [cake-ai-service] [pool-2-thread-1] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=b995da76-d13d-4d07-a249-344b96179887",
+    "2026-11-08T08:16:35.678Z  WARN 1 --- [cake-ai-service] [io-8080-exec-10] c.s.c.i.client.MarketplaceClient         : Marketplace service unavailable (status=503), allowing AI generation in development mode for requestId=2ee2e377-6ce2-4c45-8e2c-8fd05cf9e9da",
+    "2026-11-08T08:20:12.668Z  INFO 1 --- [cake-ai-service] [           main] c.s.c.CakeAiServiceApplication           : No active profile set, falling back to 1 default profile: \"default\"",
+    "2026-11-08T08:20:21.175Z  INFO 1 --- [cake-ai-service] [           main] c.s.c.CakeAiServiceApplication           : Started CakeAiServiceApplication in 9.3 seconds (process running for 10.156)",
+    "2026-11-08T08:20:23.068Z  INFO 1 --- [cake-ai-service] [nio-8080-exec-5] c.s.c.i.storage.FirebaseStorageAdapter   : Firebase storage credentials not configured. Using local storage adapter."
+  ]
+}

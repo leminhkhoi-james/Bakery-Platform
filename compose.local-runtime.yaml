@@ -1,0 +1,167 @@
+# Đọc cùng các Compose gốc; chỉ điều chỉnh cấu hình local, không thay nghiệp vụ.
+name: bakery-local
+x-app: &local-app
+  restart: unless-stopped
+  environment: &java-environment
+    JAVA_TOOL_OPTIONS: -Xms64m -Xmx384m
+    IDENTITY_JWK_SET_URI: http://identity-service:8080/.well-known/jwks.json
+    IDENTITY_JWKS_URI: http://identity-service:8080/.well-known/jwks.json
+    IDENTITY_SERVICE_BASE_URL: http://identity-service:8080
+    IDENTITY_SERVICE_URL: http://identity-service:8080
+    MARKETPLACE_SERVICE_BASE_URL: http://marketplace-service:8080
+    CAKE_AI_SERVICE_BASE_URL: http://cake-ai-service:8080
+    ORDER_SERVICE_BASE_URL: http://order-service:8080
+services:
+  identity-db:
+    restart: unless-stopped
+  marketplace-db:
+    restart: unless-stopped
+  bakery-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  subscription-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  order-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  chat-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports: !reset []
+  bakery-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:${LOCAL_BAKERY_STORAGE_PORT:-19002}:9000"
+      - "127.0.0.1:${LOCAL_BAKERY_STORAGE_CONSOLE_PORT:-19003}:9001"
+  subscription-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:${LOCAL_SUBSCRIPTION_STORAGE_PORT:-19004}:9000"
+      - "127.0.0.1:${LOCAL_SUBSCRIPTION_STORAGE_CONSOLE_PORT:-19005}:9001"
+  chat-storage:
+    restart: unless-stopped
+    ports: !override
+      - "127.0.0.1:${LOCAL_CHAT_STORAGE_PORT:-19006}:9000"
+      - "127.0.0.1:${LOCAL_CHAT_STORAGE_CONSOLE_PORT:-19007}:9001"
+  identity-service:
+    <<: *local-app
+    build:
+      context: ./backend/identity-service/target/docker-runtime
+      dockerfile: Dockerfile
+      args:
+        HEALTH_PATH: /.well-known/jwks.json
+    ports: !override
+      - "127.0.0.1:${LOCAL_IDENTITY_PORT:-18081}:8080"
+    environment:
+      <<: *java-environment
+      SERVER_PORT: 8080
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/run/config/service-clients.yml
+    volumes:
+      - type: bind
+        source: ${LOCAL_SERVICE_CLIENTS_FILE:?Run scripts/start-local-runtime.py prepare}
+        target: /run/config/service-clients.yml
+        read_only: true
+        bind:
+          create_host_path: false
+  bakery-service:
+    <<: *local-app
+    build:
+      context: ./backend/bakery-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:${LOCAL_BAKERY_PORT:-18082}:8082"
+    environment:
+      <<: *java-environment
+      BAKERY_MINIO_PUBLIC_ENDPOINT: http://127.0.0.1:${LOCAL_BAKERY_STORAGE_PORT:-19002}
+  marketplace-service:
+    <<: *local-app
+    build:
+      context: ./backend/marketplace-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:${LOCAL_MARKETPLACE_PORT:-18083}:8080"
+    environment:
+      <<: *java-environment
+      MARKETPLACE_SERVICE_BASE_URL: http://marketplace-service:8080
+      SERVER_PORT: 8080
+      # Only --firebase-sandbox in the launcher injects these opt-in mappings.
+      FIREBASE_PROJECT_ID: ${LOCAL_FIREBASE_PROJECT_ID:-}
+      FIREBASE_STORAGE_BUCKET: ${LOCAL_FIREBASE_STORAGE_BUCKET:-}
+      GOOGLE_APPLICATION_CREDENTIALS: ${LOCAL_FIREBASE_ADC_PATH:-}
+      # A shared sandbox bucket may contain objects owned by another local DB.
+      MARKETPLACE_ORPHAN_CLEANUP_ENABLED: "false"
+  subscription-service:
+    <<: *local-app
+    build:
+      context: ./backend/subscription-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:${LOCAL_SUBSCRIPTION_PORT:-18084}:8084"
+    environment:
+      <<: *java-environment
+      SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT: http://127.0.0.1:${LOCAL_SUBSCRIPTION_STORAGE_PORT:-19004}
+  order-service:
+    <<: *local-app
+    build:
+      context: ./backend/order-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:${LOCAL_ORDER_PORT:-18086}:8080"
+    environment:
+      <<: *java-environment
+      SERVER_PORT: 8080
+      CLIENTS_BAKERY_SCOPE: bakery:profile:read bakery:membership:read bakery:catalog:quote
+      MARKETPLACE_SERVICE_URL: http://marketplace-service:8080
+  chat-service:
+    <<: *local-app
+    build:
+      context: ./backend/chat-service/target/docker-runtime
+      dockerfile: Dockerfile
+    ports: !override
+      - "127.0.0.1:${LOCAL_CHAT_PORT:-18087}:8080"
+    environment:
+      <<: *java-environment
+      CHAT_STORAGE_ENDPOINT: http://chat-storage:9000
+      CHAT_STORAGE_PUBLIC_ENDPOINT: http://127.0.0.1:${LOCAL_CHAT_STORAGE_PORT:-19006}
+      SERVER_PORT: 8080
+      MARKETPLACE_SERVICE_URL: http://marketplace-service:8080
+  cake-ai-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    profiles: [cake-ai]
+  cake-ai-service:
+    <<: *local-app
+    profiles: [cake-ai]
+    build:
+      context: ./backend/cake-ai-service/target/docker-runtime
+      dockerfile: Dockerfile
+      args:
+        HEALTH_PATH: /actuator/health/readiness
+        BUILD_REVISION: ${LOCAL_BUILD_REVISION:-unknown}
+        JAR_SHA256: ${LOCAL_CAKE_AI_JAR_SHA256:-unknown}
+    ports: !override
+      - "127.0.0.1:${LOCAL_CAKE_AI_PORT:-18085}:8080"
+    environment:
+      <<: *java-environment
+      SERVER_PORT: 8080
+      MARKETPLACE_SERVICE_BASE_URL: http://marketplace-service:8080
+    volumes:
+      - type: bind
+        source: ${FIREBASE_CREDENTIALS_FILE:?Existing Firebase credential required}
+        target: /run/secrets/firebase.json
+        read_only: true
+        bind:
+          create_host_path: false
+  api-gateway:
+    profiles: [gateway]
+    build:
+      context: ./backend/api-gateway/target/docker-runtime
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:18080:8080"
+    environment:
+      <<: *java-environment

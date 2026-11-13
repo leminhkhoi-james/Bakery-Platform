@@ -1,0 +1,56 @@
+erDiagram
+  conversation_participants {
+    uuid id
+    uuid conversation_id
+    uuid user_id
+    varchar participant_type
+    timestamptz joined_at
+    timestamptz left_at
+    timestamptz last_read_at
+  }
+  conversations {
+    uuid id
+    uuid cake_request_id
+    uuid order_id
+    uuid customer_id
+    uuid bakery_id
+    varchar status
+    varchar close_reason
+    timestamptz last_message_at
+    timestamptz created_at
+    timestamptz updated_at
+    int8 version
+  }
+  message_attachments {
+    uuid id
+    uuid message_id
+    varchar object_key
+    varchar original_file_name
+    varchar media_type
+    int8 file_size
+    int4 display_order
+  }
+  message_receipts {
+    uuid message_id
+    uuid participant_id
+    timestamptz delivered_at
+    timestamptz read_at
+  }
+  messages {
+    uuid id
+    uuid conversation_id
+    uuid sender_participant_id
+    uuid client_message_id
+    varchar payload_fingerprint
+    varchar message_type
+    text content
+    timestamptz edited_at
+    timestamptz deleted_at
+    timestamptz created_at
+  }
+  conversations ||--o{ conversation_participants : "conversation_id"
+  messages ||--o{ message_attachments : "message_id"
+  messages ||--o{ message_receipts : "message_id"
+  conversation_participants ||--o{ message_receipts : "participant_id"
+  conversations ||--o{ messages : "conversation_id"
+  conversation_participants ||--o{ messages : "sender_participant_id, conversation_id"

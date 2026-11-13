@@ -1,4 +1,61 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: marketplace-service
+  datasource:
+    url: ${MARKETPLACE_DB_URL:jdbc:postgresql://localhost:5432/marketplace}
+    username: ${MARKETPLACE_DB_USERNAME:postgres}
+    password: ${MARKETPLACE_DB_PASSWORD:12345}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 101MB
+platform:
+  security:
+    audience: marketplace-service
+    jwk-set-uri: ${IDENTITY_JWK_SET_URI:http://localhost:8081/.well-known/jwks.json}
+    issuer: ${IDENTITY_JWT_ISSUER:bakery-platform-identity}
+    user-audience: bakery-platform-api
+  remote:
+    identity-url: ${IDENTITY_SERVICE_BASE_URL:http://localhost:8081}
+    bakery-url: ${BAKERY_SERVICE_BASE_URL:http://localhost:8082}
+    subscription-url: ${SUBSCRIPTION_SERVICE_BASE_URL:http://localhost:8084}
+    cake-ai-url: ${CAKE_AI_SERVICE_BASE_URL:http://localhost:8085}
+    order-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8086}
+    marketplace-url: ${MARKETPLACE_SERVICE_BASE_URL:http://localhost:8083}
+    client-id: ${MARKETPLACE_CLIENT_ID:${SERVICE_CLIENT_ID:marketplace-service}}
+    client-secret: ${MARKETPLACE_CLIENT_SECRET:${SERVICE_CLIENT_SECRET:}}
+    connect-timeout: 2s
+    read-timeout: 5s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
 
+marketplace:
+  firebase:
+    project-id: ${FIREBASE_PROJECT_ID:}
+    bucket: ${FIREBASE_STORAGE_BUCKET:}
+    connect-timeout: ${FIREBASE_CONNECT_TIMEOUT:2s}
+    read-timeout: ${FIREBASE_READ_TIMEOUT:30s}
+  scheduler-delay-ms: ${MARKETPLACE_SCHEDULER_DELAY_MS:30000}
+  orphan-cleanup-enabled: ${MARKETPLACE_ORPHAN_CLEANUP_ENABLED:true}
+
+server:
+  forward-headers-strategy: framework
+  port: ${SERVER_PORT:${SERVER_PORT_MARKETPLACE:${MARKETPLACE_SERVER_PORT:8083}}}
+
+management.endpoint.health.group.readiness.include: readinessState,db

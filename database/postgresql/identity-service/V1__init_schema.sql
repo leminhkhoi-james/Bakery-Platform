@@ -47,7 +47,7 @@ CREATE TABLE user_addresses (
 
 CREATE TABLE roles (
     id SMALLINT PRIMARY KEY,
-    code VARCHAR(50) NOT NULL UNIQUE,
+    code VARCHAR(50) NOT NULL UNIQUE CHECK (code IN ('CUSTOMER', 'BAKERY_OWNER', 'ADMIN')),
     description VARCHAR(255)
 );
 

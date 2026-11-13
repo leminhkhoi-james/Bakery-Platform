@@ -1,0 +1,17 @@
+# Used by scripts/Start-BakerySubscription.ps1 -LocalBuild after Maven packages jars.
+# Each context contains only its executable jar and the runtime Dockerfile.
+services:
+  identity-service:
+    build:
+      context: ./backend/identity-service/target/docker-runtime
+      dockerfile: Dockerfile
+      args:
+        HEALTH_PATH: /.well-known/jwks.json
+  bakery-service:
+    build:
+      context: ./backend/bakery-service/target/docker-runtime
+      dockerfile: Dockerfile
+  subscription-service:
+    build:
+      context: ./backend/subscription-service/target/docker-runtime
+      dockerfile: Dockerfile

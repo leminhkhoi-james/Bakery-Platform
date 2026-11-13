@@ -1,0 +1,5 @@
+cake-ai:
+  scheduler-enabled: false
+
+  policy:
+    enabled: true

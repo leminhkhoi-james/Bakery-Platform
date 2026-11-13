@@ -1,0 +1,811 @@
+{
+  "info": {
+    "name": "Bakery — Marketplace + Cake AI + Firebase (manual live test)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Send requests manually in sequence. Choose local files in request 04 and optionally 06. Poll request 07 until SUCCEEDED and an APPROVED design exists. Normal flow creates one real Gemini image. Optional refinement creates another. No API key or real user token is included."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "identity",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "marketplace",
+      "value": "http://localhost:8082",
+      "type": "string"
+    },
+    {
+      "key": "cakeAi",
+      "value": "http://localhost:8085",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "manual-ai-customer-a@example.test",
+      "type": "string"
+    },
+    {
+      "key": "otherEmail",
+      "value": "manual-ai-customer-b@example.test",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "DemoCake123!",
+      "type": "string"
+    },
+    {
+      "key": "cakePrompt",
+      "value": "Banh sinh nhat hai tang mau hong pastel, hoa mau don bang duong, nen kem don gian.",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "otherToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "requestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "jobKey",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "jobId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "designId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "imageUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "thumbnailUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "referenceUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "referenceImageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "initialJobResponse",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "jobStatus",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "neededAt",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "revisionKey",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "A. Main flow — one real image",
+      "item": [
+        {
+          "name": "01 Register customer A",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{identity}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"displayName\": \"Manual Cake AI Customer A\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Login customer A",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{identity}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "pm.collectionVariables.set(\"token\", pm.response.json().data.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Create DRAFT cake request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{marketplace}}/api/v1/cake-requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestType\": \"OPEN_CUSTOM\",\n  \"title\": \"[MANUAL TEST] Pastel birthday cake\",\n  \"description\": \"Banh sinh nhat hai tang, mau hong pastel, hoa mau don.\",\n  \"neededAt\": \"{{neededAt}}\",\n  \"deliveryCity\": \"HCM\",\n  \"deliveryDistrict\": \"D1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"neededAt\", new Date(Date.now() + 7*24*60*60*1000).toISOString());",
+                  "pm.collectionVariables.set(\"jobKey\", \"manual-cake-ai-\" + Date.now());",
+                  "[\"jobId\", \"designId\", \"imageUrl\", \"thumbnailUrl\", \"referenceUrl\"].forEach(k => pm.collectionVariables.set(k, \"\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) {",
+                  "const data = pm.response.json().data;",
+                  "pm.expect(data.status).to.eql(\"DRAFT\");",
+                  "pm.collectionVariables.set(\"requestId\", data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Upload reference to Firebase through Marketplace — choose file",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{marketplace}}/api/v1/cake-requests/{{requestId}}/images",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": "",
+                  "description": "Choose one actual JPEG/PNG/WebP, up to 10 MB."
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) {",
+                  "const image = pm.response.json().data[0];",
+                  "pm.collectionVariables.set(\"referenceUrl\", image.url);",
+                  "pm.collectionVariables.set(\"referenceImageId\", image.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Download signed Firebase reference",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{referenceUrl}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Queue Cake AI — metadata part must be application/json",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{jobKey}}"
+              }
+            ],
+            "url": "{{cakeAi}}/api/v1/generation-jobs",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "metadata",
+                  "value": "{\n  \"cakeRequestId\": \"{{requestId}}\",\n  \"prompt\": \"{{cakePrompt}}\",\n  \"negativePrompt\": \"people, text, watermark\",\n  \"generationParameters\": {\n    \"aspectRatio\": \"1:1\",\n    \"numberOfDesigns\": 1\n  }\n}",
+                  "type": "text",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "sourceImages",
+                  "type": "file",
+                  "src": "",
+                  "disabled": true,
+                  "description": "Optional: enable and choose the reference image; at most five files, 10 MB each."
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "if (pm.response.code === 202) {",
+                  "const data = pm.response.json().data;",
+                  "pm.collectionVariables.set(\"jobId\", data.id);",
+                  "pm.collectionVariables.set(\"initialJobResponse\", JSON.stringify(data));",
+                  "pm.expect(data.status).to.eql(\"QUEUED\");",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Poll job — resend until SUCCEEDED and APPROVED",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{cakeAi}}/api/v1/generation-jobs/{{jobId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "const data = pm.response.json().data;",
+                  "const state = data.job.status;",
+                  "pm.collectionVariables.set(\"jobStatus\", state);",
+                  "pm.test(\"Job has no terminal failure\", () => pm.expect([\"FAILED\", \"CANCELLED\"]).not.to.include(state));",
+                  "const design = data.generatedDesigns.find(d => d.moderationStatus === \"APPROVED\");",
+                  "if (state === \"SUCCEEDED\" && design) {",
+                  "  pm.collectionVariables.set(\"designId\", design.id);",
+                  "  pm.collectionVariables.set(\"imageUrl\", design.imageUrl);",
+                  "  pm.collectionVariables.set(\"thumbnailUrl\", design.thumbnailUrl);",
+                  "}",
+                  "if (state === \"SUCCEEDED\" && !design) console.info(\"No approved design: do not proceed to selection.\");",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Download generated image from Firebase",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{imageUrl}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 Download thumbnail from Firebase",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{thumbnailUrl}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10 Select AI design in Marketplace",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{marketplace}}/api/v1/cake-requests/{{requestId}}/selected-design",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"generatedDesignId\": \"{{designId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "pm.expect(pm.response.json().data.selectedDesignId).to.eql(pm.collectionVariables.get(\"designId\"));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11 Read request and confirm saved design",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{marketplace}}/api/v1/cake-requests/{{requestId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "pm.expect(pm.response.json().data.selectedDesignId).to.eql(pm.collectionVariables.get(\"designId\"));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "B. Idempotency and authorization checks",
+      "item": [
+        {
+          "name": "12 Replay same job — same key, metadata and files as request 06",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{jobKey}}"
+              }
+            ],
+            "url": "{{cakeAi}}/api/v1/generation-jobs",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "metadata",
+                  "value": "{\n  \"cakeRequestId\": \"{{requestId}}\",\n  \"prompt\": \"{{cakePrompt}}\",\n  \"negativePrompt\": \"people, text, watermark\",\n  \"generationParameters\": {\n    \"aspectRatio\": \"1:1\",\n    \"numberOfDesigns\": 1\n  }\n}",
+                  "type": "text",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "sourceImages",
+                  "type": "file",
+                  "src": "",
+                  "disabled": true,
+                  "description": "Optional: enable and choose the reference image; at most five files, 10 MB each."
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "if (pm.response.code === 202) {",
+                  "pm.expect(pm.response.json().data).to.deep.equal(JSON.parse(pm.collectionVariables.get(\"initialJobResponse\")));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13 Same key with changed prompt must conflict",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{jobKey}}"
+              }
+            ],
+            "url": "{{cakeAi}}/api/v1/generation-jobs",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "metadata",
+                  "value": "{\n  \"cakeRequestId\": \"{{requestId}}\",\n  \"prompt\": \"A completely different blue cake\",\n  \"negativePrompt\": \"people, text, watermark\",\n  \"generationParameters\": {\n    \"aspectRatio\": \"1:1\",\n    \"numberOfDesigns\": 1\n  }\n}",
+                  "type": "text",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "sourceImages",
+                  "type": "file",
+                  "src": "",
+                  "disabled": true,
+                  "description": "Optional: enable and choose the reference image; at most five files, 10 MB each."
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14 Anonymous job request must be denied",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{cakeAi}}/api/v1/generation-jobs/{{jobId}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15 Register customer B",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{identity}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{otherEmail}}\",\n  \"password\": \"{{password}}\",\n  \"displayName\": \"Manual Cake AI Customer B\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16 Login customer B",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{identity}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{otherEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "pm.collectionVariables.set(\"otherToken\", pm.response.json().data.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17 Customer B cannot read A job",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{cakeAi}}/api/v1/generation-jobs/{{jobId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18 Customer B cannot read A design",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{cakeAi}}/api/v1/generated-designs/{{designId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19 List own jobs filtered by request",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{cakeAi}}/api/v1/generation-jobs?cakeRequestId={{requestId}}&page=0&size=20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "C. Optional refinement — extra generation",
+      "item": [
+        {
+          "name": "20 OPTIONAL refine — generates one additional image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{revisionKey}}"
+              }
+            ],
+            "url": "{{cakeAi}}/api/v1/generation-jobs/{{jobId}}/prompt-revisions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"Giu kieu banh, doi hoa sang mau xanh pastel.\",\n  \"negativePrompt\": \"people, text, watermark\",\n  \"generationParameters\": {\n    \"aspectRatio\": \"1:1\",\n    \"numberOfDesigns\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get(\"revisionKey\")) pm.collectionVariables.set(\"revisionKey\", \"manual-refine-\" + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

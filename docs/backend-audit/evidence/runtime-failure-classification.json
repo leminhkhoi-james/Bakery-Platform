@@ -1,0 +1,87 @@
+[
+  {
+    "caseId": "TC-0102",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Payment options public matcher; corrected TC-0216."
+  },
+  {
+    "caseId": "TC-0123",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Expected status phải204; corrected TC-0217."
+  },
+  {
+    "caseId": "TC-0131",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Expected status phải204; corrected TC-0218."
+  },
+  {
+    "caseId": "TC-0151",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Fixture thiếu category.slug; corrected TC-0152."
+  },
+  {
+    "caseId": "TC-0154",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Fixture thiếu add-on.category; corrected TC-0155."
+  },
+  {
+    "caseId": "TC-0169",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Fixture requestType sai OPEN thay OPEN_CUSTOM; corrected TC-0170."
+  },
+  {
+    "caseId": "TC-0176",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "RFQ đã OPEN nên409 trước storage; draft đúng TC-0259→503."
+  },
+  {
+    "caseId": "TC-0188",
+    "category": "IMPLEMENTATION_FAILURE",
+    "explanation": "Direct order contract hoặc Chat SQL defect đã tái hiện; giữ nguyên FAIL trong raw metrics."
+  },
+  {
+    "caseId": "TC-0191",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Source cho chính customer close; corrected TC-0255."
+  },
+  {
+    "caseId": "TC-0193",
+    "category": "IMPLEMENTATION_FAILURE",
+    "explanation": "Direct order contract hoặc Chat SQL defect đã tái hiện; giữ nguyên FAIL trong raw metrics."
+  },
+  {
+    "caseId": "TC-0224",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Logout trả200 theo controller; corrected TC-0273."
+  },
+  {
+    "caseId": "TC-0241",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Route {id} chưa được thay đúng, dùng zero UUID; corrected TC-0270."
+  },
+  {
+    "caseId": "TC-0245",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Route {id} chưa được thay đúng; corrected TC-0272."
+  },
+  {
+    "caseId": "TC-0254",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "Replay internal note khác fingerprint; correct null note TC-0281."
+  },
+  {
+    "caseId": "TC-0256",
+    "category": "IMPLEMENTATION_FAILURE",
+    "explanation": "Direct order contract hoặc Chat SQL defect đã tái hiện; giữ nguyên FAIL trong raw metrics."
+  },
+  {
+    "caseId": "TC-0257",
+    "category": "IMPLEMENTATION_FAILURE",
+    "explanation": "Direct order contract hoặc Chat SQL defect đã tái hiện; giữ nguyên FAIL trong raw metrics."
+  },
+  {
+    "caseId": "TC-0264",
+    "category": "HARNESS_ASSUMPTION_CORRECTED",
+    "explanation": "deliveryNote là unknown field; customerNote đúng contract TC-0282→409."
+  }
+]

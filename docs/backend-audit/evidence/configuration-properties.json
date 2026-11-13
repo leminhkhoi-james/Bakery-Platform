@@ -1,0 +1,682 @@
+[
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.api-key",
+    "environmentBinding": "CAKEAI_APIKEY",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 9,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.provider-url",
+    "environmentBinding": "CAKEAI_PROVIDERURL",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 10,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.image-model",
+    "environmentBinding": "CAKEAI_IMAGEMODEL",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 11,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.moderation-model",
+    "environmentBinding": "CAKEAI_MODERATIONMODEL",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 12,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.connect-timeout",
+    "environmentBinding": "CAKEAI_CONNECTTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 13,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.read-timeout",
+    "environmentBinding": "CAKEAI_READTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 14,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.workers",
+    "environmentBinding": "CAKEAI_WORKERS",
+    "type": "int",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 15,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.lease-duration",
+    "environmentBinding": "CAKEAI_LEASEDURATION",
+    "type": "Duration",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 16,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.firebase-project-id",
+    "environmentBinding": "CAKEAI_FIREBASEPROJECTID",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 17,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "cake-ai-service",
+    "property": "cake-ai.firebase-bucket",
+    "environmentBinding": "CAKEAI_FIREBASEBUCKET",
+    "type": "String",
+    "defaultDeclared": true,
+    "source": "backend/cake-ai-service/src/main/java/com/se193262/cakeaiservice/config/CakeAiProperties.java",
+    "line": 18,
+    "verification": "COMPILE_BLOCKED"
+  },
+  {
+    "service": "chat-service",
+    "property": "security.jwt.jwk-set-uri",
+    "environmentBinding": "SECURITY_JWT_JWKSETURI",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/JwtProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "security.jwt.issuer",
+    "environmentBinding": "SECURITY_JWT_ISSUER",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/JwtProperties.java",
+    "line": 8,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "security.jwt.user-audience",
+    "environmentBinding": "SECURITY_JWT_USERAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/JwtProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "security.jwt.service-audience",
+    "environmentBinding": "SECURITY_JWT_SERVICEAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/JwtProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.identity-url",
+    "environmentBinding": "CLIENTS_IDENTITYURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.client-id",
+    "environmentBinding": "CLIENTS_CLIENTID",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.client-secret",
+    "environmentBinding": "CLIENTS_CLIENTSECRET",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.marketplace",
+    "environmentBinding": "CLIENTS_MARKETPLACE",
+    "type": "Service",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.bakery",
+    "environmentBinding": "CLIENTS_BAKERY",
+    "type": "Service",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.connect-timeout",
+    "environmentBinding": "CLIENTS_CONNECTTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 14,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "clients.read-timeout",
+    "environmentBinding": "CLIENTS_READTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/ServiceClientProperties.java",
+    "line": 15,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "storage.minio.endpoint",
+    "environmentBinding": "STORAGE_MINIO_ENDPOINT",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/StorageProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "storage.minio.access-key",
+    "environmentBinding": "STORAGE_MINIO_ACCESSKEY",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/StorageProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "storage.minio.secret-key",
+    "environmentBinding": "STORAGE_MINIO_SECRETKEY",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/StorageProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "storage.minio.bucket",
+    "environmentBinding": "STORAGE_MINIO_BUCKET",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/StorageProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "chat-service",
+    "property": "storage.minio.presigned-url-expiry",
+    "environmentBinding": "STORAGE_MINIO_PRESIGNEDURLEXPIRY",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/chat-service/src/main/java/com/se193262/chatservice/config/StorageProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.refresh-token-ttl",
+    "environmentBinding": "SECURITY_AUTH_REFRESHTOKENTTL",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.refresh-cookie-name",
+    "environmentBinding": "SECURITY_AUTH_REFRESHCOOKIENAME",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.refresh-cookie-path",
+    "environmentBinding": "SECURITY_AUTH_REFRESHCOOKIEPATH",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.refresh-cookie-secure",
+    "environmentBinding": "SECURITY_AUTH_REFRESHCOOKIESECURE",
+    "type": "boolean",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.refresh-cookie-same-site",
+    "environmentBinding": "SECURITY_AUTH_REFRESHCOOKIESAMESITE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.auth.bcrypt-strength",
+    "environmentBinding": "SECURITY_AUTH_BCRYPTSTRENGTH",
+    "type": "int",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/AuthProperties.java",
+    "line": 14,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.cors.allowed-origins",
+    "environmentBinding": "SECURITY_CORS_ALLOWEDORIGINS",
+    "type": "List<String>",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/CorsProperties.java",
+    "line": 8,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.private-key-path",
+    "environmentBinding": "SECURITY_JWT_PRIVATEKEYPATH",
+    "type": "Path",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.public-key-path",
+    "environmentBinding": "SECURITY_JWT_PUBLICKEYPATH",
+    "type": "Path",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.key-id",
+    "environmentBinding": "SECURITY_JWT_KEYID",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.issuer",
+    "environmentBinding": "SECURITY_JWT_ISSUER",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.user-audience",
+    "environmentBinding": "SECURITY_JWT_USERAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 14,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.service-audience",
+    "environmentBinding": "SECURITY_JWT_SERVICEAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 15,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.jwt.access-token-ttl",
+    "environmentBinding": "SECURITY_JWT_ACCESSTOKENTTL",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/config/JwtProperties.java",
+    "line": 16,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "identity-service",
+    "property": "security.service-clients.clients",
+    "environmentBinding": "SECURITY_SERVICECLIENTS_CLIENTS",
+    "type": "Map<String, Client>",
+    "defaultDeclared": false,
+    "source": "backend/identity-service/src/main/java/com/se193262/identityservice/feature/authentication/ServiceClientProperties.java",
+    "line": 8,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "marketplace-service",
+    "property": "marketplace.firebase.project-id",
+    "environmentBinding": "MARKETPLACE_FIREBASE_PROJECTID",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/config/FirebaseProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "marketplace-service",
+    "property": "marketplace.firebase.bucket",
+    "environmentBinding": "MARKETPLACE_FIREBASE_BUCKET",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/config/FirebaseProperties.java",
+    "line": 8,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "marketplace-service",
+    "property": "marketplace.firebase.connect-timeout",
+    "environmentBinding": "MARKETPLACE_FIREBASE_CONNECTTIMEOUT",
+    "type": "java.time.Duration",
+    "defaultDeclared": false,
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/config/FirebaseProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "marketplace-service",
+    "property": "marketplace.firebase.read-timeout",
+    "environmentBinding": "MARKETPLACE_FIREBASE_READTIMEOUT",
+    "type": "java.time.Duration",
+    "defaultDeclared": false,
+    "source": "backend/marketplace-service/src/main/java/com/se193262/marketplaceservice/config/FirebaseProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "security.jwt.jwk-set-uri",
+    "environmentBinding": "SECURITY_JWT_JWKSETURI",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/JwtProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "security.jwt.issuer",
+    "environmentBinding": "SECURITY_JWT_ISSUER",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/JwtProperties.java",
+    "line": 8,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "security.jwt.user-audience",
+    "environmentBinding": "SECURITY_JWT_USERAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/JwtProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "security.jwt.service-audience",
+    "environmentBinding": "SECURITY_JWT_SERVICEAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/JwtProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "clients.identity",
+    "environmentBinding": "CLIENTS_IDENTITY",
+    "type": "Service",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/ServiceClientProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "clients.bakery",
+    "environmentBinding": "CLIENTS_BAKERY",
+    "type": "Service",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/ServiceClientProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "clients.marketplace",
+    "environmentBinding": "CLIENTS_MARKETPLACE",
+    "type": "Service",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/ServiceClientProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "clients.connect-timeout",
+    "environmentBinding": "CLIENTS_CONNECTTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/ServiceClientProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "order-service",
+    "property": "clients.read-timeout",
+    "environmentBinding": "CLIENTS_READTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/order-service/src/main/java/com/se193262/orderservice/config/ServiceClientProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.identity-url",
+    "environmentBinding": "PLATFORM_REMOTE_IDENTITYURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 9,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.bakery-url",
+    "environmentBinding": "PLATFORM_REMOTE_BAKERYURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 10,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.subscription-url",
+    "environmentBinding": "PLATFORM_REMOTE_SUBSCRIPTIONURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 11,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.cake-ai-url",
+    "environmentBinding": "PLATFORM_REMOTE_CAKEAIURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 12,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.order-url",
+    "environmentBinding": "PLATFORM_REMOTE_ORDERURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 13,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.marketplace-url",
+    "environmentBinding": "PLATFORM_REMOTE_MARKETPLACEURL",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 14,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.client-id",
+    "environmentBinding": "PLATFORM_REMOTE_CLIENTID",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 15,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.client-secret",
+    "environmentBinding": "PLATFORM_REMOTE_CLIENTSECRET",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 16,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.connect-timeout",
+    "environmentBinding": "PLATFORM_REMOTE_CONNECTTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 17,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.remote.read-timeout",
+    "environmentBinding": "PLATFORM_REMOTE_READTIMEOUT",
+    "type": "Duration",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/RemoteProperties.java",
+    "line": 18,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.security.audience",
+    "environmentBinding": "PLATFORM_SECURITY_AUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/SecurityProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.security.jwk-set-uri",
+    "environmentBinding": "PLATFORM_SECURITY_JWKSETURI",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/SecurityProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.security.issuer",
+    "environmentBinding": "PLATFORM_SECURITY_ISSUER",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/SecurityProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  },
+  {
+    "service": "platform-support",
+    "property": "platform.security.user-audience",
+    "environmentBinding": "PLATFORM_SECURITY_USERAUDIENCE",
+    "type": "String",
+    "defaultDeclared": false,
+    "source": "backend/platform-support/src/main/java/com/se193262/platform/config/SecurityProperties.java",
+    "line": 7,
+    "verification": "APPLICATION_SCHEMA; SEE_YAML_PLACEHOLDER_MAPPING"
+  }
+]

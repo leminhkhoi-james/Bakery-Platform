@@ -1,0 +1,13 @@
+Computing fixes in mobile...
+Applying fixes...
+
+lib\features\cake_ai\presentation\studio_page.dart
+  curly_braces_in_flow_control_structures - 2 fixes
+
+lib\features\cart\domain\cart_repository.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib\features\subscription\presentation\subscription_pages.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+4 fixes made in 3 files.

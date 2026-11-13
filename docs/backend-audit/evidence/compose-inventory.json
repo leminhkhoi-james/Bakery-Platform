@@ -1,0 +1,541 @@
+[
+  {
+    "source": "compose.bakery-local-build.yaml",
+    "sha256": "c14880b87873f3e2ea138597f931501484eecf782f3358f755ef486a15f70904",
+    "services": [
+      "identity-service",
+      "bakery-service",
+      "subscription-service"
+    ],
+    "networks": [],
+    "volumes": [],
+    "interpolationNames": [],
+    "serviceEnvironmentNames": {
+      "identity-service": [],
+      "bakery-service": [],
+      "subscription-service": []
+    }
+  },
+  {
+    "source": "compose.local-runtime.yaml",
+    "sha256": "5571350fcec938672f101e0d08eecaa34d90acff300a9a80e7763d009ae45c6c",
+    "services": [
+      "identity-db",
+      "marketplace-db",
+      "bakery-db",
+      "subscription-db",
+      "order-db",
+      "chat-db",
+      "bakery-storage",
+      "subscription-storage",
+      "chat-storage",
+      "identity-service",
+      "bakery-service",
+      "marketplace-service",
+      "subscription-service",
+      "order-service",
+      "chat-service",
+      "cake-ai-db",
+      "cake-ai-service",
+      "api-gateway"
+    ],
+    "networks": [],
+    "volumes": [],
+    "interpolationNames": [
+      "LOCAL_SERVICE_CLIENTS_FILE"
+    ],
+    "serviceEnvironmentNames": {
+      "identity-db": [],
+      "marketplace-db": [],
+      "bakery-db": [],
+      "subscription-db": [],
+      "order-db": [],
+      "chat-db": [],
+      "bakery-storage": [],
+      "subscription-storage": [],
+      "chat-storage": [],
+      "identity-service": [
+        "IDENTITY_CORS_ALLOWED_ORIGINS",
+        "JAVA_TOOL_OPTIONS",
+        "SPRING_CONFIG_ADDITIONAL_LOCATION"
+      ],
+      "bakery-service": [
+        "BAKERY_MINIO_PUBLIC_ENDPOINT",
+        "JAVA_TOOL_OPTIONS"
+      ],
+      "marketplace-service": [
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_STORAGE_BUCKET",
+        "JAVA_TOOL_OPTIONS",
+        "MARKETPLACE_SERVICE_BASE_URL"
+      ],
+      "subscription-service": [
+        "JAVA_TOOL_OPTIONS",
+        "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT"
+      ],
+      "order-service": [
+        "CLIENTS_BAKERY_SCOPE",
+        "JAVA_TOOL_OPTIONS"
+      ],
+      "chat-service": [
+        "CHAT_STORAGE_ENDPOINT",
+        "JAVA_TOOL_OPTIONS"
+      ],
+      "cake-ai-db": [],
+      "cake-ai-service": [],
+      "api-gateway": [
+        "JAVA_TOOL_OPTIONS"
+      ]
+    }
+  },
+  {
+    "source": "compose.no-firebase.yaml",
+    "sha256": "47b06a70fd86aec80570ca2b5b744b79c822f252ca31193f815b5ef692a87915",
+    "services": [
+      "marketplace-service"
+    ],
+    "networks": [],
+    "volumes": [],
+    "interpolationNames": [],
+    "serviceEnvironmentNames": {
+      "marketplace-service": [
+        "GOOGLE_APPLICATION_CREDENTIALS"
+      ]
+    }
+  },
+  {
+    "source": "compose.services.yaml",
+    "sha256": "9810dea7354c160c294b3d0cca7bd722b1fd594d37cf9f8e926cbb25fefa190c",
+    "services": [
+      "identity-db",
+      "marketplace-db",
+      "bakery-service",
+      "subscription-service",
+      "marketplace-service",
+      "order-service",
+      "chat-service",
+      "cake-ai-db",
+      "cake-ai-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "cake-ai-data"
+    ],
+    "interpolationNames": [
+      "CAKE_AI_DB_PASSWORD",
+      "CAKE_AI_DB_USERNAME",
+      "IDENTITY_DB_IMAGE",
+      "MARKETPLACE_DB_IMAGE",
+      "POSTGRES_DB",
+      "POSTGRES_USER"
+    ],
+    "serviceEnvironmentNames": {
+      "identity-db": [],
+      "marketplace-db": [],
+      "bakery-service": [
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_SERVICE_URL"
+      ],
+      "subscription-service": [
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_SERVICE_URL"
+      ],
+      "marketplace-service": [
+        "BAKERY_SERVICE_BASE_URL",
+        "CAKE_AI_SERVICE_BASE_URL",
+        "ORDER_SERVICE_BASE_URL",
+        "SUBSCRIPTION_SERVICE_BASE_URL"
+      ],
+      "order-service": [
+        "BAKERY_SERVICE_URL",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_URL",
+        "MARKETPLACE_SERVICE_URL"
+      ],
+      "chat-service": [
+        "BAKERY_SERVICE_URL",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_URL",
+        "MARKETPLACE_SERVICE_URL"
+      ],
+      "cake-ai-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "cake-ai-service": [
+        "BAKERY_SERVICE_BASE_URL",
+        "CAKE_AI_DB_PASSWORD",
+        "CAKE_AI_DB_URL",
+        "CAKE_AI_DB_USERNAME",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_BASE_URL",
+        "MARKETPLACE_SERVICE_BASE_URL",
+        "ORDER_SERVICE_BASE_URL",
+        "SERVER_PORT",
+        "SUBSCRIPTION_SERVICE_BASE_URL"
+      ]
+    }
+  },
+  {
+    "source": "compose.yaml",
+    "sha256": "2be3a1d565c9c5f1ad11e3bab884ffde8ee211834cc19947d90cbf4b8891eb94",
+    "services": [
+      "identity-db",
+      "marketplace-db",
+      "identity-service",
+      "marketplace-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "identity-data",
+      "marketplace-data"
+    ],
+    "interpolationNames": [
+      "BAKERY_CLIENT_SECRET_HASH",
+      "BAKERY_SERVICE_BASE_URL",
+      "CAKE_AI_SERVICE_BASE_URL",
+      "CHAT_SERVICE_CLIENT_SECRET_HASH",
+      "FIREBASE_CREDENTIALS_FILE",
+      "FIREBASE_PROJECT_ID",
+      "FIREBASE_STORAGE_BUCKET",
+      "IDENTITY_DB_PASSWORD",
+      "IDENTITY_DB_USERNAME",
+      "IDENTITY_JWT_PRIVATE_KEY_FILE",
+      "IDENTITY_JWT_PUBLIC_KEY_FILE",
+      "MARKETPLACE_CLIENT_SECRET",
+      "MARKETPLACE_CLIENT_SECRET_HASH",
+      "MARKETPLACE_DB_PASSWORD",
+      "MARKETPLACE_DB_USERNAME",
+      "MARKETPLACE_SERVICE_PORT",
+      "ORDER_CLIENT_SECRET_HASH",
+      "ORDER_SERVICE_BASE_URL",
+      "SUBSCRIPTION_CLIENT_SECRET_HASH",
+      "SUBSCRIPTION_SERVICE_BASE_URL"
+    ],
+    "serviceEnvironmentNames": {
+      "identity-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "marketplace-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "identity-service": [
+        "BAKERY_CLIENT_SECRET_HASH",
+        "CHAT_SERVICE_CLIENT_SECRET_HASH",
+        "IDENTITY_DB_PASSWORD",
+        "IDENTITY_DB_URL",
+        "IDENTITY_DB_USERNAME",
+        "IDENTITY_JWT_PRIVATE_KEY_PATH",
+        "IDENTITY_JWT_PUBLIC_KEY_PATH",
+        "IDENTITY_REFRESH_COOKIE_SECURE",
+        "MARKETPLACE_CLIENT_SECRET_HASH",
+        "ORDER_CLIENT_SECRET_HASH",
+        "SUBSCRIPTION_CLIENT_SECRET_HASH"
+      ],
+      "marketplace-service": [
+        "BAKERY_SERVICE_BASE_URL",
+        "CAKE_AI_SERVICE_BASE_URL",
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_STORAGE_BUCKET",
+        "GOOGLE_APPLICATION_CREDENTIALS",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_BASE_URL",
+        "MARKETPLACE_DB_PASSWORD",
+        "MARKETPLACE_DB_URL",
+        "MARKETPLACE_DB_USERNAME",
+        "ORDER_SERVICE_BASE_URL",
+        "SERVICE_CLIENT_ID",
+        "SERVICE_CLIENT_SECRET",
+        "SUBSCRIPTION_SERVICE_BASE_URL"
+      ]
+    }
+  },
+  {
+    "source": "docker-compose.bakery-service.yml",
+    "sha256": "949f057fcb9ab90302171f86e21e9b9cde32ca993c2354be2fcc2af9edd83d31",
+    "services": [
+      "bakery-db",
+      "bakery-storage",
+      "bakery-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "bakery-db-data",
+      "bakery-storage-data"
+    ],
+    "interpolationNames": [
+      "BAKERY_CLIENT_SECRET",
+      "BAKERY_DB_PASSWORD",
+      "BAKERY_DB_PORT",
+      "BAKERY_DB_USERNAME",
+      "BAKERY_IDENTITY_SERVICE_TOKEN",
+      "BAKERY_MINIO_ACCESS_KEY",
+      "BAKERY_MINIO_CONSOLE_PORT",
+      "BAKERY_MINIO_PORT",
+      "BAKERY_MINIO_PUBLIC_ENDPOINT",
+      "BAKERY_MINIO_SECRET_KEY",
+      "BAKERY_SERVICE_PORT",
+      "IDENTITY_JWKS_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "POSTGRES_DB",
+      "POSTGRES_USER",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_SERVICE_TOKEN",
+      "SUBSCRIPTION_SERVICE_URL"
+    ],
+    "serviceEnvironmentNames": {
+      "bakery-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "bakery-storage": [
+        "MINIO_ROOT_PASSWORD",
+        "MINIO_ROOT_USER"
+      ],
+      "bakery-service": [
+        "BAKERY_CLIENT_SECRET",
+        "BAKERY_DB_PASSWORD",
+        "BAKERY_DB_URL",
+        "BAKERY_DB_USERNAME",
+        "BAKERY_IDENTITY_SERVICE_TOKEN",
+        "BAKERY_MINIO_ACCESS_KEY",
+        "BAKERY_MINIO_BUCKET",
+        "BAKERY_MINIO_ENDPOINT",
+        "BAKERY_MINIO_PUBLIC_ENDPOINT",
+        "BAKERY_MINIO_SECRET_KEY",
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_JWT_ISSUER",
+        "IDENTITY_JWT_SERVICE_AUDIENCE",
+        "IDENTITY_JWT_USER_AUDIENCE",
+        "IDENTITY_SERVICE_URL",
+        "SERVER_PORT",
+        "STORAGE_MINIO_REGION",
+        "SUBSCRIPTION_SERVICE_TOKEN",
+        "SUBSCRIPTION_SERVICE_URL"
+      ]
+    }
+  },
+  {
+    "source": "docker-compose.bakery-subscription.yml",
+    "sha256": "06f51b8453be920a6f453c9fedcb96d8a51e9697f03a44a3ec67eb6dfa978b07",
+    "services": [
+      "bakery-db",
+      "bakery-storage",
+      "bakery-service",
+      "subscription-db",
+      "subscription-storage",
+      "subscription-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "bakery-db-data",
+      "bakery-storage-data",
+      "subscription-db-data",
+      "subscription-storage-data"
+    ],
+    "interpolationNames": [],
+    "serviceEnvironmentNames": {
+      "bakery-db": [],
+      "bakery-storage": [],
+      "bakery-service": [
+        "IDENTITY_JWT_SERVICE_AUDIENCE",
+        "SUBSCRIPTION_SERVICE_URL"
+      ],
+      "subscription-db": [],
+      "subscription-storage": [],
+      "subscription-service": [
+        "BAKERY_SERVICE_URL",
+        "IDENTITY_JWT_SERVICE_AUDIENCE"
+      ]
+    }
+  },
+  {
+    "source": "docker-compose.chat-service.yml",
+    "sha256": "b16ca3cff516ccc96175bb733c7999c94c987a4c839c8573edfe13c621e9b54e",
+    "services": [
+      "chat-db",
+      "chat-storage",
+      "chat-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "chat-db-data",
+      "chat-storage-data"
+    ],
+    "interpolationNames": [
+      "BAKERY_SERVICE_URL",
+      "CHAT_DB_PASSWORD",
+      "CHAT_DB_PORT",
+      "CHAT_DB_USERNAME",
+      "CHAT_SERVICE_CLIENT_SECRET",
+      "CHAT_SERVICE_JWT_AUDIENCE",
+      "CHAT_SERVICE_PORT",
+      "CHAT_STORAGE_ACCESS_KEY",
+      "CHAT_STORAGE_BUCKET",
+      "CHAT_STORAGE_CONSOLE_PORT",
+      "CHAT_STORAGE_ENDPOINT",
+      "CHAT_STORAGE_PORT",
+      "CHAT_STORAGE_SECRET_KEY",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "MARKETPLACE_SERVICE_URL",
+      "POSTGRES_DB",
+      "POSTGRES_USER"
+    ],
+    "serviceEnvironmentNames": {
+      "chat-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "chat-storage": [
+        "MINIO_ROOT_PASSWORD",
+        "MINIO_ROOT_USER"
+      ],
+      "chat-service": [
+        "BAKERY_SERVICE_URL",
+        "CHAT_DB_PASSWORD",
+        "CHAT_DB_URL",
+        "CHAT_DB_USERNAME",
+        "CHAT_SERVICE_CLIENT_ID",
+        "CHAT_SERVICE_CLIENT_SECRET",
+        "CHAT_SERVICE_JWT_AUDIENCE",
+        "CHAT_STORAGE_ACCESS_KEY",
+        "CHAT_STORAGE_BUCKET",
+        "CHAT_STORAGE_ENDPOINT",
+        "CHAT_STORAGE_SECRET_KEY",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_JWT_ISSUER",
+        "IDENTITY_JWT_USER_AUDIENCE",
+        "IDENTITY_SERVICE_URL",
+        "MARKETPLACE_SERVICE_URL",
+        "SERVER_PORT"
+      ]
+    }
+  },
+  {
+    "source": "docker-compose.order-service.yml",
+    "sha256": "25b0b78a7ddb899e035bab6c5deb60e0ced4ae0f90079902d2fa1ed4f8889d27",
+    "services": [
+      "order-db",
+      "order-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "order-db-data"
+    ],
+    "interpolationNames": [
+      "BAKERY_SERVICE_URL",
+      "IDENTITY_JWK_SET_URI",
+      "IDENTITY_SERVICE_URL",
+      "MARKETPLACE_SERVICE_URL",
+      "ORDER_DB_PASSWORD",
+      "ORDER_DB_PORT",
+      "ORDER_DB_USERNAME",
+      "ORDER_SERVICE_CLIENT_ID",
+      "ORDER_SERVICE_CLIENT_SECRET",
+      "ORDER_SERVICE_PORT",
+      "POSTGRES_DB",
+      "POSTGRES_USER"
+    ],
+    "serviceEnvironmentNames": {
+      "order-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "order-service": [
+        "BAKERY_SERVICE_URL",
+        "IDENTITY_JWK_SET_URI",
+        "IDENTITY_SERVICE_URL",
+        "MARKETPLACE_SERVICE_URL",
+        "ORDER_DB_PASSWORD",
+        "ORDER_DB_URL",
+        "ORDER_DB_USERNAME",
+        "ORDER_SERVICE_CLIENT_ID",
+        "ORDER_SERVICE_CLIENT_SECRET",
+        "SERVER_PORT"
+      ]
+    }
+  },
+  {
+    "source": "docker-compose.subscription-service.yml",
+    "sha256": "f759c0432a7911cf62b0be83c43b75ac1f8cc82a1617759b69dd69f309a554a2",
+    "services": [
+      "subscription-db",
+      "subscription-storage",
+      "subscription-service"
+    ],
+    "networks": [],
+    "volumes": [
+      "subscription-db-data",
+      "subscription-storage-data"
+    ],
+    "interpolationNames": [
+      "BAKERY_SERVICE_URL",
+      "IDENTITY_JWKS_URI",
+      "IDENTITY_JWT_ISSUER",
+      "IDENTITY_JWT_SERVICE_AUDIENCE",
+      "IDENTITY_JWT_USER_AUDIENCE",
+      "IDENTITY_SERVICE_URL",
+      "POSTGRES_DB",
+      "POSTGRES_USER",
+      "STORAGE_MINIO_REGION",
+      "SUBSCRIPTION_BAKERY_SERVICE_TOKEN",
+      "SUBSCRIPTION_CLIENT_SECRET",
+      "SUBSCRIPTION_DB_PASSWORD",
+      "SUBSCRIPTION_DB_PORT",
+      "SUBSCRIPTION_DB_USERNAME",
+      "SUBSCRIPTION_MINIO_ACCESS_KEY",
+      "SUBSCRIPTION_MINIO_CONSOLE_PORT",
+      "SUBSCRIPTION_MINIO_PORT",
+      "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT",
+      "SUBSCRIPTION_MINIO_SECRET_KEY",
+      "SUBSCRIPTION_PAYMENT_SANDBOX_CODE",
+      "SUBSCRIPTION_SERVICE_PORT"
+    ],
+    "serviceEnvironmentNames": {
+      "subscription-db": [
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER"
+      ],
+      "subscription-storage": [
+        "MINIO_ROOT_PASSWORD",
+        "MINIO_ROOT_USER"
+      ],
+      "subscription-service": [
+        "BAKERY_SERVICE_URL",
+        "IDENTITY_JWKS_URI",
+        "IDENTITY_JWT_ISSUER",
+        "IDENTITY_JWT_SERVICE_AUDIENCE",
+        "IDENTITY_JWT_USER_AUDIENCE",
+        "IDENTITY_SERVICE_URL",
+        "SERVER_PORT",
+        "STORAGE_MINIO_REGION",
+        "SUBSCRIPTION_BAKERY_SERVICE_TOKEN",
+        "SUBSCRIPTION_CLIENT_SECRET",
+        "SUBSCRIPTION_DB_PASSWORD",
+        "SUBSCRIPTION_DB_URL",
+        "SUBSCRIPTION_DB_USERNAME",
+        "SUBSCRIPTION_MINIO_ACCESS_KEY",
+        "SUBSCRIPTION_MINIO_BUCKET",
+        "SUBSCRIPTION_MINIO_ENDPOINT",
+        "SUBSCRIPTION_MINIO_PUBLIC_ENDPOINT",
+        "SUBSCRIPTION_MINIO_SECRET_KEY",
+        "SUBSCRIPTION_PAYMENT_SANDBOX_CODE"
+      ]
+    }
+  }
+]

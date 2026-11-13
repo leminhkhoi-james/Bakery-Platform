@@ -6,8 +6,10 @@ Bakery-owned product categories.
 
 ## Current state
 
-Package skeleton only. Controllers, services, repositories, entities, mappers,
-DTOs and tests will be added when this feature is implemented.
+ProductCategory has list/create/patch/delete endpoints under a bakery. Deleting
+a category clears the category reference on its products. Responses use the
+shared API envelope. Public product catalog can filter by category. JWT
+membership checks protect management routes in every profile.
 
 ## Boundary
 
