@@ -1,6 +1,7 @@
 import { api, ApiError } from './apiClient.js'
 import { catalogQuery } from './catalogModels.js'
 import { requireId } from './managementModels.js'
+import { vendorService } from './vendorService.js'
 import { assertChatAccess, mapConversation, mapConversationPage, mapMessage, mapMessagePage, messageFormData } from './chatModels.js'
 
 const path = (id) => '/conversations/' + requireId(id, 'Hội thoại')
@@ -45,3 +46,30 @@ export const chatService = {
 }
 
 export const loadConversations = ({ viewer, ...params }, options) => chatService.getConversations(params, viewer, options)
+
+async function loadPublicBakeryName(bakeryId, options) {
+  try {
+    const bakery = await vendorService.getVendorById(bakeryId, options)
+    return bakery.id === bakeryId ? bakery.name : null
+  } catch (error) {
+    if (options?.signal?.aborted) throw error
+    return null
+  }
+}
+
+export const loadChatBakeryName = ({ bakeryId }, options) =>
+  bakeryId ? loadPublicBakeryName(bakeryId, options) : Promise.resolve(null)
+
+export async function loadInboxConversations(params, options) {
+  const page = await loadConversations(params, options)
+  if (params.viewer.bakeryId) return page
+  const names = new Map()
+  const result = await Promise.all(page.result.map(async (conversation) => {
+    if (conversation.bakeryName?.trim()) return conversation
+    const { bakeryId } = conversation
+    if (!names.has(bakeryId)) names.set(bakeryId, loadPublicBakeryName(bakeryId, options))
+    const bakeryName = await names.get(bakeryId)
+    return bakeryName ? { ...conversation, bakeryName } : conversation
+  }))
+  return { ...page, result }
+}

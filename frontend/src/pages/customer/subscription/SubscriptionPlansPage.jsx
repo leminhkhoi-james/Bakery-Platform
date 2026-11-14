@@ -1,30 +1,78 @@
 import RefreshButton from '../../../components/common/RefreshButton.jsx'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react'
 import { AuthContext } from '../../../context/useAuth.js'
 import { isCatalogId } from '../../../services/catalogModels.js'
 import { onboardingService } from '../../../services/onboardingService.js'
 import { useCatalogResource } from '../../../hooks/useCatalogResource.js'
 import { loadSubscriptionPlans, subscriptionService } from '../../../services/subscriptionService.js'
 import { PlanCards, ResourceState } from '../../../components/subscription/SubscriptionView.jsx'
+import { StatusBadge } from '../../../components/common/WorkspaceUI.jsx'
+import { canOrderPlan, subscriptionStatusLabel } from '../../../services/subscriptionModels.js'
+import { planFeatureRows, planMonthlyPrice, planName } from '../../../services/planPresentation.js'
+import { publicCopy } from '../../../services/uiLabels.js'
 import PartnerCheckoutModal from '../../../components/subscription/PartnerCheckoutModal.jsx'
 import './subscription-plans.css'
 
 const loadPlan = ({ id }, options) => subscriptionService.getPlan(id, options)
 const loadRegistration = ({ enabled }, options) => enabled ? onboardingService.get(null, options) : Promise.resolve(null)
 
-function PlanDetail({ id }) {
+const benefitDescriptions = {
+  MAX_PRODUCTS: 'Số mẫu bánh tối đa tiệm có thể đăng trong danh mục.',
+  MAX_MONTHLY_OFFERS: 'Số báo giá tối đa tiệm có thể gửi cho các yêu cầu đặt bánh trong một tháng.',
+  FEATURED_LISTING: 'Cho biết gói có quyền ưu tiên hiển thị tiệm trên nền tảng hay không.',
+}
+
+function PlanDetail({ id, onSelect, reveal }) {
   const resource = useCatalogResource(loadPlan, { id })
+  const heading = useRef(null)
+  const plan = resource.data
+  const benefits = plan ? planFeatureRows(plan.features) : []
+  useLayoutEffect(() => {
+    if (!reveal) return
+    heading.current?.focus({ preventScroll: true })
+    heading.current?.scrollIntoView({ block: 'start' })
+  }, [id, reveal])
   return (
-    <section className="mt-8 space-y-4 rounded-3xl border border-primary/20 bg-surface/80 backdrop-blur-md p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="font-serif text-xl font-bold text-primary">Chi tiết gói dịch vụ</h2>
-        <RefreshButton className="text-secondary text-sm font-semibold underline hover:text-secondary-hover cursor-pointer" onClick={resource.reload}>
+    <section id="subscription-plan-detail" aria-labelledby="subscription-plan-detail-title"
+      className="mt-5 w-full overflow-hidden rounded-2xl border border-primary/20 bg-surface">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/10 bg-surface-container-low px-4 py-2 sm:px-6">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h2 ref={heading} tabIndex={-1} id="subscription-plan-detail-title" className="scroll-mt-40 text-lg font-bold text-primary">Chi tiết {plan ? 'gói ' + planName(plan) : 'gói dịch vụ'}</h2>
+          {plan && <StatusBadge status={plan.status} label={plan.status === 'ACTIVE' ? 'Đang mở bán' : subscriptionStatusLabel(plan.status)} />}
+        </div>
+        <RefreshButton className="text-sm font-semibold text-primary" onClick={resource.reload}>
           Tải lại chi tiết gói
         </RefreshButton>
       </div>
-      <ResourceState resource={resource}>
-        {resource.data && <PlanCards plans={[resource.data]} />}
-      </ResourceState>
+      <div className="px-4 py-3 sm:px-6">
+        <ResourceState resource={resource}>
+          {plan && <>
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p className="text-xl font-bold text-primary">{planMonthlyPrice(plan)} <span className="text-sm font-normal">/ tháng</span></p>
+                  <p className="text-sm text-on-surface-variant">Chu kỳ thanh toán {plan.billingPeriodMonths ? plan.billingPeriodMonths + ' tháng' : 'chưa xác định'}</p>
+                </div>
+                {publicCopy(plan.description) && <p className="break-words text-sm leading-relaxed text-on-surface-variant">{publicCopy(plan.description)}</p>}
+              </div>
+              <button type="button" disabled={!canOrderPlan(plan)} onClick={() => onSelect(plan)}
+                className="sc-button w-full sm:w-auto">Chọn gói này</button>
+            </div>
+            <h3 className="mb-2 mt-3 border-t border-primary/10 pt-3 text-sm font-bold text-primary">Quyền lợi của gói</h3>
+            {benefits.length ? <dl className="grid gap-2 md:grid-cols-3 md:gap-3">
+              {benefits.map(benefit => (
+                <div key={benefit.code} className="rounded-xl border border-primary/10 bg-surface-container-low px-3 py-2.5 text-sm">
+                  <dt className="break-words font-medium text-on-surface">{benefit.label}</dt>
+                  <dd className="mt-0.5 break-words text-base font-bold text-primary">{benefit.value}</dd>
+                  {benefitDescriptions[benefit.code] && (
+                    <dd className="mt-1 leading-snug text-on-surface-variant">{benefitDescriptions[benefit.code]}</dd>
+                  )}
+                </div>
+              ))}
+            </dl> : <p className="py-3 text-sm text-on-surface-variant">Chưa có thông tin quyền lợi.</p>}
+          </>}
+        </ResourceState>
+      </div>
     </section>
   )
 }
@@ -35,10 +83,17 @@ export default function SubscriptionPlansPage({ onNavigate, routeSearch = '' }) 
   const registration = useCatalogResource(loadRegistration, { enabled: Boolean(user && roles.includes('CUSTOMER') && !isOwner) })
   const plans = useCatalogResource(loadSubscriptionPlans)
   const [selected, setSelected] = useState(null)
+  const [revealDetail, setRevealDetail] = useState(false)
   const [checkoutPlan, setCheckoutPlan] = useState(null)
   const query = new URLSearchParams(routeSearch)
   const trackingOrderId = query.get('orderId')
   const [trackingRegistration, setTrackingRegistration] = useState(query.get('tracking') === '1')
+  const selectPlan = plan => {
+    setRevealDetail(false)
+    setTrackingRegistration(false)
+    setSelected(plan.id)
+    setCheckoutPlan(plan)
+  }
 
   const activePlans = plans.data?.filter((p) => p.status === 'ACTIVE') || []
   const minPrice = activePlans.length ? Math.min(...activePlans.map((p) => p.monthlyPrice || 0)) : 49000
@@ -110,11 +165,7 @@ export default function SubscriptionPlansPage({ onNavigate, routeSearch = '' }) 
             <PlanCards
               plans={plans.data}
               canSelect={true}
-              onSelect={(plan) => {
-                setTrackingRegistration(false)
-                setSelected(plan.id)
-                setCheckoutPlan(plan)
-              }}
+              onSelect={selectPlan}
             />
 
             {/* Detail toggle buttons */}
@@ -123,8 +174,14 @@ export default function SubscriptionPlansPage({ onNavigate, routeSearch = '' }) 
                 {plans.data.map((plan) => (
                   <button
                     key={plan.id}
+                    type="button"
+                    aria-expanded={selected === plan.id}
+                    aria-controls={selected === plan.id ? 'subscription-plan-detail' : undefined}
                     className={`scp-detail-btn ${selected === plan.id ? 'active' : ''}`}
-                    onClick={() => setSelected(selected === plan.id ? null : plan.id)}
+                    onClick={() => {
+                      setRevealDetail(selected !== plan.id)
+                      setSelected(selected === plan.id ? null : plan.id)
+                    }}
                   >
                     {selected === plan.id
                       ? <><span className="material-symbols-outlined text-sm">expand_less</span> Ẩn chi tiết</>
@@ -136,7 +193,7 @@ export default function SubscriptionPlansPage({ onNavigate, routeSearch = '' }) 
             )}
           </ResourceState>
 
-          {selected && <PlanDetail key={selected} id={selected} />}
+          {selected && <PlanDetail key={selected} id={selected} onSelect={selectPlan} reveal={revealDetail} />}
         </section>
 
         {/* Existing partners manage plans; applicants resume their actual registration. */}

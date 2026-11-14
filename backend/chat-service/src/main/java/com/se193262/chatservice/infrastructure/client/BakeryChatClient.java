@@ -10,6 +10,11 @@ import java.util.UUID;
 @HttpExchange("/internal/v1")
 public interface BakeryChatClient {
 
+    @GetExchange("/bakeries/{id}")
+    BakeryProfile profile(@PathVariable UUID id);
+
+    record BakeryProfile(UUID id, String name, UUID ownerUserId) { }
+
     @GetExchange("/bakeries/{bakeryId}/members/{userId}/authorization")
     MembershipAuthorizationResponse authorizeMember(
             @PathVariable UUID bakeryId,

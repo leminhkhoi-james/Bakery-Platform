@@ -8,13 +8,15 @@ import com.se193262.chatservice.feature.message.ChatMessage;
 import com.se193262.chatservice.feature.message.ChatMessageRepository;
 import com.se193262.chatservice.infrastructure.client.BakeryChatClient;
 import com.se193262.chatservice.infrastructure.client.ChatContextService;
-import org.springframework.dao.DataIntegrityViolationException;
+import com.se193262.chatservice.infrastructure.client.ChatProfileService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,18 +28,20 @@ public class ConversationService {
     private final ConversationPersistenceService persistenceService;
     private final ChatMessageRepository messageRepository;
     private final ChatContextService contextService;
+    private final ChatProfileService profiles;
 
     public ConversationService(
             ConversationRepository conversationRepository,
             ConversationParticipantRepository participantRepository,
             ConversationPersistenceService persistenceService,
             ChatMessageRepository messageRepository,
-            ChatContextService contextService) {
+            ChatContextService contextService, ChatProfileService profiles) {
         this.conversationRepository = conversationRepository;
         this.participantRepository = participantRepository;
         this.persistenceService = persistenceService;
         this.messageRepository = messageRepository;
         this.contextService = contextService;
+        this.profiles = profiles;
     }
 
     public ConversationCreation create(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
@@ -48,11 +52,10 @@ public class ConversationService {
             if (!existing.getCustomerId().equals(customerId)) {
                 throw invalidContext();
             }
-            ensureCustomerParticipant(existing, customerId);
-            return new ConversationCreation(existing, true);
+        } else {
+            contextService.authorizeConversation(cakeRequestId, customerId, bakeryId);
         }
-        contextService.authorizeConversation(cakeRequestId, customerId, bakeryId);
-        return createNew(cakeRequestId, customerId, bakeryId);
+        return persistenceService.findOrCreate(cakeRequestId, customerId, bakeryId);
     }
 
     public ConversationResponse get(UUID conversationId, UUID userId, Set<String> roles) {
@@ -77,6 +80,8 @@ public class ConversationService {
     public ConversationPage list(
             UUID userId, Set<String> roles, ConversationStatus status, UUID bakeryId, int page, int size) {
         Page<Conversation> conversations = findPage(userId, roles, status, bakeryId, page, size);
+        var customerNames = new HashMap<UUID, Optional<String>>();
+        var bakeryNames = new HashMap<UUID, ChatProfileService.BakeryNames>();
         List<ConversationSummaryResponse> results = conversations.getContent().stream()
                 .map(conversation -> {
                     ConversationParticipant participant =
@@ -90,6 +95,7 @@ public class ConversationService {
                             .stream().findFirst().map(ConversationService::preview).orElse(null);
                     long unread = messageRepository.countUnread(
                             conversation.getId(), participant.getId(), participant.getJoinedAt());
+                    var names = bakeryNames.computeIfAbsent(conversation.getBakeryId(), profiles::bakeryNames);
                     return new ConversationSummaryResponse(
                             conversation.getId(),
                             conversation.getCakeRequestId(),
@@ -99,7 +105,10 @@ public class ConversationService {
                             conversation.getStatus(),
                             conversation.getLastMessageAt(),
                             unread,
-                            preview);
+                            preview,
+                            customerNames.computeIfAbsent(conversation.getCustomerId(),
+                                    id -> Optional.ofNullable(profiles.name(id))).orElse(null),
+                            names.bakeryName(), names.ownerName());
                 })
                 .toList();
         return new ConversationPage(
@@ -142,21 +151,6 @@ public class ConversationService {
 
     public Conversation getConversation(UUID conversationId) {
         return conversationRepository.findById(conversationId).orElseThrow(ConversationService::notFound);
-    }
-
-    private ConversationCreation createNew(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
-        try {
-            return new ConversationCreation(
-                    persistenceService.create(cakeRequestId, customerId, bakeryId), false);
-        } catch (DataIntegrityViolationException exception) {
-            Conversation existing = conversationRepository
-                    .findByCakeRequestIdAndBakeryId(cakeRequestId, bakeryId)
-                    .orElseThrow(() -> exception);
-            if (!existing.getCustomerId().equals(customerId)) {
-                throw invalidContext();
-            }
-            return new ConversationCreation(existing, true);
-        }
     }
 
     private Page<Conversation> findPage(
@@ -221,6 +215,7 @@ public class ConversationService {
                         participant.getJoinedAt(),
                         participant.getLastReadAt()))
                 .toList();
+        var names = profiles.bakeryNames(conversation.getBakeryId());
         return new ConversationResponse(
                 conversation.getId(),
                 conversation.getCakeRequestId(),
@@ -232,7 +227,7 @@ public class ConversationService {
                 conversation.getLastMessageAt(),
                 conversation.getCreatedAt(),
                 current.getLastReadAt(),
-                participants);
+                participants, profiles.name(conversation.getCustomerId()), names.bakeryName(), names.ownerName());
     }
 
     private static String preview(ChatMessage message) {

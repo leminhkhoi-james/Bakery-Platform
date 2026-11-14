@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import BrandLogo from '../../components/common/BrandLogo'
 import { CUSTOMER_NAV_LINKS } from '../../mockData/shared/navigation.js'
 import { useAuth } from '../../context/useAuth.js'
+import { useCustomerNotifications } from '../../hooks/useCustomerNotifications.js'
 
 export const Header = ({
   cartCount = 2,
@@ -10,6 +11,8 @@ export const Header = ({
   onNavigate,
 }) => {
   const { user, roles, logout } = useAuth()
+  const notifications = useCustomerNotifications(user)
+  const unread = notifications.items.filter(item => item.unread).length
   const [searchValue, setSearchValue] = useState('')
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isNotifOpen, setIsNotifOpen] = useState(false)
@@ -321,21 +324,37 @@ export const Header = ({
           <div className="relative">
             <button
               type="button"
-              aria-label="Thông báo đơn hàng và báo giá"
+              aria-label={unread ? `Thông báo, ${unread} chưa đọc` : 'Thông báo đơn hàng và báo giá'}
               aria-expanded={isNotifOpen}
+              aria-controls={isNotifOpen ? 'customer-notifications' : undefined}
               className="p-1.5 sm:p-2 rounded-full bg-surface hover:bg-primary-fixed-dim text-primary border border-primary/30 transition-colors relative cursor-pointer shrink-0"
               onClick={() => { setIsNotifOpen(!isNotifOpen); setIsProfileMenuOpen(false) }}
             >
               <span className="material-symbols-outlined text-xl">notifications</span>
+              {unread > 0 && <span aria-hidden="true" className="absolute -right-1 -top-1 min-w-5 rounded-full bg-primary px-1 text-center text-xs font-bold text-on-primary">{unread}</span>}
             </button>
 
             {isNotifOpen && (
-              <div className="absolute right-0 mt-3 w-80 rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
+              <div id="customer-notifications" className="absolute right-0 mt-3 w-80 max-w-[calc(100vw-4rem)] rounded-2xl bg-surface-container-low shadow-xl border-2 border-primary py-2 z-50">
                 <div className="px-4 py-2.5 border-b border-primary/20 flex items-center justify-between">
                   <h4 className="font-savoure text-sm font-bold text-primary">Thông báo của bạn</h4>
+                  {unread > 0 && <button type="button" className="text-xs font-semibold text-primary underline" onClick={() => notifications.markRead(notifications.items.map(item => item.id))}>Đánh dấu đã đọc</button>}
                 </div>
                 <div className="px-4 py-4 space-y-3">
-                  <p className="text-sm text-primary">{user ? 'Thông báo tự động hiện chưa khả dụng.' : 'Đăng nhập để theo dõi đơn hàng và báo giá của bạn.'}</p>
+                  {!user && <p className="text-sm text-primary">Đăng nhập để theo dõi đơn hàng và báo giá của bạn.</p>}
+                  {user && notifications.status === 'loading' && <p role="status" className="text-sm">Đang tải thông báo…</p>}
+                  {user && (notifications.error || notifications.data?.incomplete) && <p role="status" className="text-sm">Một số thông báo chưa tải được. <button type="button" className="underline" onClick={notifications.reload}>Thử lại</button></p>}
+                  {user && notifications.status === 'ready' && !notifications.items.length && !notifications.data?.incomplete && <p className="text-sm">Chưa có thông báo.</p>}
+                  {notifications.items.length > 0 && <ul className="max-h-64 divide-y divide-primary/15 overflow-y-auto">
+                    {notifications.items.map(item => <li key={item.id}>
+                      <button type="button" className={`w-full rounded-lg px-2 py-2.5 text-left text-sm text-primary hover:bg-primary-fixed ${item.unread ? 'font-bold' : ''}`} onClick={event => {
+                        notifications.markRead([item.id]); setIsNotifOpen(false); handleNav(event, item.route)
+                      }}>
+                        {item.title}
+                        {Number.isFinite(Date.parse(item.date)) && <time dateTime={item.date} className="mt-1 block text-xs font-normal text-on-surface-variant">{new Date(item.date).toLocaleString('vi-VN')}</time>}
+                      </button>
+                    </li>)}
+                  </ul>}
                   {user ? <div className="flex flex-col gap-2">
                     <button type="button" className="sc-button sc-action-button--secondary" onClick={event => { setIsNotifOpen(false); handleNav(event, 'tracking') }}>Xem đơn hàng của tôi</button>
                     <button type="button" className="sc-button sc-action-button--secondary" onClick={event => { setIsNotifOpen(false); handleNav(event, 'rfqs') }}>Xem yêu cầu bánh của tôi</button>
@@ -376,6 +395,18 @@ export const Header = ({
                     <span className="material-symbols-outlined text-lg text-primary">person</span>
                     <span>Hồ sơ &amp; Đơn hàng của tôi</span>
                   </button>
+
+                  {user && roles.includes('CUSTOMER') && <button
+                    type="button"
+                    onClick={(event) => {
+                      setIsProfileMenuOpen(false)
+                      handleNav(event, 'chat')
+                    }}
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary font-bold hover:bg-primary-fixed-dim flex items-center gap-2 cursor-pointer"
+                  >
+                    <span aria-hidden="true" className="material-symbols-outlined text-lg">forum</span>
+                    <span>Tin nhắn</span>
+                  </button>}
 
                   <button
                     onClick={(e) => {

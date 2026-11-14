@@ -129,7 +129,7 @@ function PageRoutes({
     return (
       <VendorLayout activeTab={currentPage} onNavigate={onNavigate}>
         {currentPage === 'vendor-chat' ? (
-          <VendorChatPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+          <VendorChatPage routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-subscription' ? (
           <VendorSubscriptionPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-orders' ? (
@@ -159,7 +159,7 @@ function PageRoutes({
       ) : currentPage === 'request-detail' ? (
         <CustomerRequestDetail key={routeSearch} id={new URLSearchParams(routeSearch).get('id')} onNavigate={onNavigate} />
       ) : currentPage === 'chat' ? (
-        <CustomerChatPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+        <CustomerChatPage routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'subscription-plans' ? (
         <SubscriptionPlansPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
       ) : currentPage === 'profile' ? (

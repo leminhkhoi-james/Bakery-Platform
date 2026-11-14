@@ -6,7 +6,7 @@ import './portal-account-menu.css'
 import PortalProfileForm from './PortalProfileForm.jsx'
 import { AdminReviewDialog } from '../management/AdminReviewUI.jsx'
 
-export default function PortalAccountMenu({ user, roleLabel, onNavigate }) {
+export default function PortalAccountMenu({ user, roleLabel, onNavigate, profileRoute }) {
   const { logout } = useAuth()
   const [open, setOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -18,6 +18,16 @@ export default function PortalAccountMenu({ user, roleLabel, onNavigate }) {
   const root = useRef(null), trigger = useRef(null), item = useRef(null), inFlight = useRef(false)
   const menuId = useId()
   const name = cleanPresentationLabel(user?.displayName || user?.fullName || user?.name || user?.email, 'Tài khoản')
+  const openProfile = () => {
+    closeMenu()
+    if (profileRoute) {
+      onNavigate(profileRoute)
+      return
+    }
+    setEditingProfile(false)
+    setProfileNotice('')
+    setProfileOpen(true)
+  }
   useEffect(() => {
     if (!open) return
     item.current?.focus()
@@ -51,7 +61,7 @@ export default function PortalAccountMenu({ user, roleLabel, onNavigate }) {
     }}><span className="sc-avatar" aria-hidden="true">{user?.avatarUrl ? <img src={user.avatarUrl} alt="" className="h-full w-full rounded-full object-cover" /> : name.slice(0, 1).toUpperCase()}</span><div className="sc-account-trigger-copy"><strong>{name}</strong><span>{roleLabel}</span></div><span className="material-symbols-outlined sc-account-chevron" aria-hidden="true">expand_more</span></button>
     {open && <div id={menuId} className="sc-account-dropdown" role="menu" aria-label="Tài khoản đang đăng nhập">
       <div className="sc-account-summary" role="presentation"><strong>{name}</strong><span>{roleLabel}</span></div>
-      <button type="button" role="menuitem" onClick={() => { closeMenu(); setEditingProfile(false); setProfileNotice(''); setProfileOpen(true) }}><span className="material-symbols-outlined" aria-hidden="true">person</span>Hồ sơ cá nhân</button>
+      <button type="button" role="menuitem" onClick={openProfile}><span className="material-symbols-outlined" aria-hidden="true">{profileRoute ? 'storefront' : 'person'}</span>{profileRoute ? 'Hồ sơ tiệm bánh' : 'Hồ sơ cá nhân'}</button>
       <button ref={item} type="button" role="menuitem" disabled={busy} onClick={signOut}><span className="material-symbols-outlined" aria-hidden="true">logout</span>Đăng xuất</button>
       {simulationFailure() && <p role="alert" className="sc-account-mode-error">{simulationFailure()}</p>}
     </div>}

@@ -1,6 +1,7 @@
 package com.se193262.chatservice;
 
 import com.se193262.chatservice.infrastructure.client.BakeryChatClient;
+import com.se193262.chatservice.infrastructure.client.IdentityChatClient;
 import com.se193262.chatservice.infrastructure.client.MarketplaceChatClient;
 import com.se193262.chatservice.infrastructure.storage.AttachmentStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,6 +64,9 @@ class ChatServiceApplicationTests {
     private BakeryChatClient bakeryClient;
 
     @MockitoBean
+    private IdentityChatClient identityClient;
+
+    @MockitoBean
     private AttachmentStorage attachmentStorage;
 
     @BeforeEach
@@ -89,6 +93,29 @@ class ChatServiceApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("bearerAuth")))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("/api/v1/conversations")));
+    }
+
+    @Test
+    @DisplayName("Another authorized cake request reuses the open conversation for the same customer and bakery")
+    void createConversation_withAnotherRequestForSamePair_reusesOpenConversation() throws Exception {
+        UUID bakeryId = UUID.randomUUID();
+        when(bakeryClient.profile(bakeryId))
+                .thenReturn(new BakeryChatClient.BakeryProfile(bakeryId, "Anna Bakery", BAKERY_USER_ID));
+        when(identityClient.profile(CUSTOMER_ID))
+                .thenReturn(new IdentityChatClient.UserProfile(CUSTOMER_ID, "Khánh Linh"));
+        when(identityClient.profile(BAKERY_USER_ID))
+                .thenReturn(new IdentityChatClient.UserProfile(BAKERY_USER_ID, "Ngọc Anh"));
+        String conversationId = createConversation(UUID.randomUUID(), bakeryId);
+        UUID nextRequest = UUID.randomUUID();
+        mockMvc.perform(post("/api/v1/conversations")
+                        .with(jwtToken(CUSTOMER_ID, "ROLE_CUSTOMER"))
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                        .content("{\"cakeRequestId\":\"" + nextRequest + "\",\"bakeryId\":\"" + bakeryId + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(conversationId))
+                .andExpect(jsonPath("$.data.customerName").value("Khánh Linh"))
+                .andExpect(jsonPath("$.data.ownerName").value("Ngọc Anh"))
+                .andExpect(jsonPath("$.data.bakeryName").value("Anna Bakery"));
     }
 
     @Test

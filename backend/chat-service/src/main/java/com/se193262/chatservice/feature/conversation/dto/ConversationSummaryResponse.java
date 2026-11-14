@@ -14,6 +14,9 @@ public record ConversationSummaryResponse(
         ConversationStatus status,
         Instant lastMessageAt,
         long unreadCount,
-        String lastMessagePreview
+        String lastMessagePreview,
+        String customerName,
+        String bakeryName,
+        String ownerName
 ) {
 }

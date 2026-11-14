@@ -211,11 +211,68 @@ body:has(.sc-portal), #root:has(.sc-portal) { overflow-x: clip; }
 }
 .sc-portal .sc-portal-popup :is(.sc-review-section, .sc-detail-section, .sc-bakery-review-section, .sc-plan-form-section, .sc-popup-group, .sc-order-tracking-card, .sc-owner-profile-section) +
   :is(.sc-review-section, .sc-detail-section, .sc-bakery-review-section, .sc-plan-form-section, .sc-popup-group, .sc-order-tracking-card, .sc-owner-profile-section),
-.sc-portal .sc-owner-profile-editor .sc-drawer-body > form + form,
-.sc-portal .sc-owner-profile-editor .sc-drawer-body > form + .sc-owner-profile-section {
+.sc-portal .sc-owner-profile-editor .sc-drawer-body > form + form {
   margin-top: 0;
   border-top: 1px solid var(--sc-color-border);
 }
+
+.sc-portal dialog.sc-owner-profile-editor { width: min(100% - 1rem, 60rem); }
+.sc-portal .sc-drawer.sc-owner-profile-editor > .sc-drawer-heading {
+  align-items: flex-start;
+  padding-block: .9rem;
+}
+.sc-owner-editor-heading { display: grid; gap: .2rem; }
+.sc-owner-editor-heading p { color: var(--color-on-surface-variant); font-size: .875rem; }
+.sc-owner-editor-layout { display: grid; grid-template-columns: 11.5rem minmax(0, 1fr); gap: 1.5rem; }
+.sc-owner-editor-sidebar {
+  display: grid;
+  align-self: start;
+  gap: .25rem;
+  padding: .6rem 1rem .6rem 0;
+  border-inline-end: 1px solid var(--sc-color-border);
+}
+.sc-owner-editor-sidebar button {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  min-height: 2.75rem;
+  padding: .5rem .65rem;
+  border-radius: .6rem;
+  color: var(--color-on-surface-variant);
+  font-size: .875rem;
+  font-weight: 600;
+  text-align: start;
+}
+.sc-owner-editor-sidebar button:hover { background: var(--color-surface-container-low); }
+.sc-owner-editor-sidebar button[aria-pressed="true"] { background: var(--color-primary-fixed); color: var(--color-primary); }
+.sc-owner-editor-sidebar button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.sc-owner-editor-sidebar small { display: block; font-size: .75rem; font-weight: 500; }
+.sc-owner-editor-content { min-width: 0; }
+@media (max-width: 639px) {
+  .sc-owner-editor-layout { grid-template-columns: minmax(0, 1fr); gap: .65rem; }
+  .sc-owner-editor-sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 0 .65rem;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--sc-color-border);
+  }
+}
+.sc-owner-editor-nav { display: flex; flex-wrap: wrap; gap: .65rem; }
+.sc-owner-editor-nav button {
+  min-height: 2.5rem;
+  padding: .35rem .7rem;
+  border: 1px solid var(--sc-color-border);
+  border-radius: .6rem;
+  background: white;
+  color: var(--color-primary);
+  font-size: .875rem;
+  font-weight: 600;
+  text-align: left;
+}
+.sc-owner-editor-nav button[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); }
+.sc-owner-editor-nav button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.sc-owner-editor-notice { margin-inline-end: auto; color: #166534; font-size: .875rem; }
 .sc-portal .sc-portal-popup :is(.sc-bakery-review, .sc-payment-cards) {
   grid-template-columns: minmax(0, 1fr);
   gap: 0;

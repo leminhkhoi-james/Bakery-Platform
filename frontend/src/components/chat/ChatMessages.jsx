@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { dateTime } from '../../services/managementModels.js'
 import { formatOrderDate } from '../../services/orderPresentation.js'
+import { cleanPresentationLabel } from '../../services/uiLabels.js'
 
 const participantLabel = (type) => ({ CUSTOMER: 'Khách hàng', BAKERY_OWNER: 'Chủ tiệm', BAKERY: 'Chủ tiệm' }[type] || 'Thành viên hội thoại')
 function Attachment({ attachment, compact }) {
@@ -16,8 +17,14 @@ export function ChatMessages({ items, conversation, user, busy, onDelete, compac
   return <ol aria-label="Tin nhắn" className="space-y-5">{items.toReversed().map((message) => {
     const own = message.senderId === user.id
     const participant = conversation.participants.find((item) => item.userId === message.senderId)
+    const senderName = participant?.participantType === 'CUSTOMER'
+      ? conversation.customerName
+      : participant?.participantType === 'BAKERY_OWNER' ? conversation.ownerName : null
     return <li key={message.id} className={'flex flex-col ' + (own ? 'items-end' : 'items-start')}>
-      <p className="max-w-full break-all text-xs text-on-surface-variant">{own ? 'Bạn' : message.messageType === 'SYSTEM' && !message.senderId ? 'Hệ thống' : participantLabel(participant?.participantType)}</p>
+      <p className="max-w-full break-words text-xs text-on-surface-variant">{own
+        ? (cleanPresentationLabel(user.displayName) ? cleanPresentationLabel(user.displayName) + ' (Bạn)' : 'Bạn')
+        : message.messageType === 'SYSTEM' && !message.senderId ? 'Hệ thống'
+          : cleanPresentationLabel(senderName) || participantLabel(participant?.participantType)}</p>
       <div className={'mt-1 max-w-[95%] break-words rounded-2xl p-4 sm:max-w-[85%] ' + (own ? 'rounded-br-none bg-primary text-on-primary' : 'rounded-bl-none bg-surface-container-high text-on-surface')}>
         {message.deleted ? <p className="italic">Tin nhắn đã được xóa.</p> : <>{message.content && <p className="whitespace-pre-wrap">{message.content}</p>}{!message.content && !message.attachments.length && <p>Chưa thể tải nội dung tin nhắn.</p>}{message.attachments.map((attachment) => <Attachment key={attachment.id + ':' + attachment.url} attachment={attachment} compact={compact} />)}</>}
       </div><p className="mt-1 text-xs text-on-surface-variant">{formatTime(message.createdAt)}{message.editedAt ? ' · Đã sửa: ' + formatTime(message.editedAt) : ''}</p>

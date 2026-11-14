@@ -1,26 +1,80 @@
-import RefreshButton from '../common/RefreshButton.jsx'
-import { uiLabel } from '../../services/uiLabels.js'
 import React, { useState } from 'react'
 import { useAuth } from '../../context/useAuth.js'
 import { useCatalogResource } from '../../hooks/useCatalogResource.js'
-import { loadConversations } from '../../services/chatService.js'
-import { CHAT_STATUSES, CHAT_CONTEXT_GUIDANCE } from '../../services/chatModels.js'
+import { loadInboxConversations } from '../../services/chatService.js'
+import { CHAT_STATUSES } from '../../services/chatModels.js'
+import { chatInboxTitle, searchConversations } from '../../services/chatPresentation.js'
+import { cleanPresentationLabel, uiLabel } from '../../services/uiLabels.js'
+import { formatOrderDate } from '../../services/orderPresentation.js'
 import { isCatalogId } from '../../services/catalogModels.js'
-import { ApiErrorMessage, inputClass, buttonClass, panelClass } from '../management/ApiState.jsx'
-import ConversationList from './ConversationList.jsx'
+import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
+import CatalogPagination from '../catalog/CatalogPagination.jsx'
+import ChatFeedback from './ChatFeedback.jsx'
 import ChatThread from './ChatThread.jsx'
+import './owner-chat.css'
 
-export default function ChatWorkspace({ bakeryId = '', routeSearch = '', baseRoute = 'chat', onNavigate }) {
+export default function ChatWorkspace({ bakeryId, routeSearch, onNavigate }) {
   const { user, roles } = useAuth()
-  const [status, setStatus] = useState(''), [page, setPage] = useState(1)
-  const [selectedId, setSelected] = useState(new URLSearchParams(routeSearch).get('conversationId') || '')
+  const [status, setStatus] = useState('')
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
+  const query = new URLSearchParams(routeSearch)
+  const selectedId = !bakeryId || !query.get('bakeryId') || query.get('bakeryId') === bakeryId
+    ? query.get('conversationId') || '' : ''
   const viewer = { userId: user.id, roles, ...(bakeryId ? { bakeryId } : {}) }
-  const conversations = useCatalogResource(loadConversations, { viewer, page, size: 10, status, ...(bakeryId ? { bakeryId } : {}) })
+  const resource = useCatalogResource(loadInboxConversations, { viewer, page, size: 10, status, bakeryId })
   const select = (id) => {
-    setSelected(id)
-    const query = new URLSearchParams({ conversationId: id })
-    if (bakeryId) query.set('bakeryId', bakeryId)
-    onNavigate(baseRoute + '?' + query)
+    const nextQuery = new URLSearchParams()
+    if (bakeryId) nextQuery.set('bakeryId', bakeryId)
+    if (id) nextQuery.set('conversationId', id)
+    const route = bakeryId ? 'vendor-chat' : 'chat'
+    onNavigate(nextQuery.size ? route + '?' + nextQuery : route)
   }
-  return <div className="space-y-5"><section className={panelClass}><h2 className="font-bold">Tin nhắn của bạn</h2><p className="text-sm">{CHAT_CONTEXT_GUIDANCE}</p>{roles.includes('CUSTOMER') && baseRoute === 'chat' ? <button onClick={() => onNavigate('rfqs')} className={buttonClass}>Chọn yêu cầu để nhắn tin</button> : roles.some((role) => ['BAKERY_OWNER'].includes(role)) ? <><p className="text-sm">Khách hàng mở hội thoại từ yêu cầu báo giá; cửa hàng truy cập các hội thoại được phân quyền.</p><button onClick={() => onNavigate('vendor-orders?tab=requests' + (bakeryId ? '&bakeryId=' + encodeURIComponent(bakeryId) : ''))} className={buttonClass}>Xem yêu cầu liên quan</button></> : null}<div className="sc-toolbar-actions"><label className="text-sm">Trạng thái<select value={status} onChange={(event) => { setStatus(event.target.value); setPage(1) }} className={inputClass}><option value="">Tất cả</option>{CHAT_STATUSES.map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}</select></label><RefreshButton onClick={conversations.reload} className={buttonClass}>Tải lại hộp thư</RefreshButton></div></section><div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"><ConversationList resource={conversations} selectedId={selectedId} onSelect={select} onPage={setPage} />{selectedId ? isCatalogId(selectedId) ? <ChatThread key={JSON.stringify([user.id, roles, bakeryId, selectedId])} conversationId={selectedId} viewer={viewer} onChanged={conversations.reload} /> : <ApiErrorMessage error={{ status: 400, message: 'Mã cuộc trò chuyện không hợp lệ.' }} /> : <section className={panelClass}><p>Chọn hội thoại để tải tin nhắn theo quyền của tài khoản hiện tại.</p></section>}</div></div>
+  const rows = searchConversations(resource.data?.result ?? [], search)
+  const summary = resource.data?.result.find((row) => row.id === selectedId)
+
+  return <div className={'sc-owner-chat-shell' + (selectedId ? ' has-selection' : '')}>
+    <section className="sc-owner-chat-list" aria-label="Danh sách hội thoại">
+      <header>
+        <h2>Hội thoại</h2>
+        <button type="button" className="sc-icon-button" aria-label="Tải lại hộp thư" onClick={resource.reload}><Icon name="refresh" /></button>
+      </header>
+      <div className="sc-owner-chat-filters">
+        <input className="sc-input" type="search" aria-label="Tìm hội thoại trong trang" placeholder="Tìm hội thoại trong trang" value={search} onChange={(event) => setSearch(event.target.value)} />
+        <select className="sc-input" aria-label="Trạng thái hội thoại" value={status} onChange={(event) => { setStatus(event.target.value); setPage(1) }}>
+          <option value="">Tất cả trạng thái</option>
+          {CHAT_STATUSES.map((value) => <option key={value} value={value}>{uiLabel(value)}</option>)}
+        </select>
+      </div>
+      <div className="sc-owner-conversations">
+        {resource.status === 'loading' ? <p role="status" className="sc-chat-state">Đang tải hội thoại…</p>
+          : resource.error ? <ChatFeedback error={resource.error} retry={resource.reload} />
+            : !rows.length ? <p className="sc-chat-state">{search ? 'Không tìm thấy trong trang này.' : 'Chưa có hội thoại phù hợp.'}</p>
+              : <ul>{rows.map((conversation) => (
+                <li key={conversation.id}>
+                  <button type="button" className={'sc-owner-conversation' + (selectedId === conversation.id ? ' is-selected' : '')}
+                    aria-pressed={selectedId === conversation.id} onClick={() => select(conversation.id)}>
+                    <span className="sc-chat-person-icon"><Icon name={bakeryId ? 'person' : 'storefront'} /></span>
+                    <span className="sc-chat-conversation-copy">
+                      <strong>{chatInboxTitle(conversation, Boolean(bakeryId))}</strong>
+                      {!bakeryId && conversation.ownerName && conversation.bakeryName && <small>{conversation.ownerName}</small>}
+                      {conversation.status !== 'OPEN' && <StatusBadge status={conversation.status} />}
+                      <span>{cleanPresentationLabel(conversation.lastMessagePreview, 'Chưa có tin nhắn')}</span>
+                      {conversation.lastMessageAt && <small>{formatOrderDate(conversation.lastMessageAt)}</small>}
+                    </span>
+                    {conversation.unreadCount > 0 && <span className="sc-chat-unread" aria-label={conversation.unreadCount + ' tin chưa đọc'}>{conversation.unreadCount}</span>}
+                  </button>
+                </li>
+              ))}</ul>}
+      </div>
+      {resource.data?.meta.pages > 1 && <footer><CatalogPagination meta={resource.data.meta} onPage={setPage} /></footer>}
+      {!bakeryId && <footer><button type="button" className="sc-chat-context-link" onClick={() => onNavigate('rfqs')}>Xem yêu cầu bánh của tôi</button></footer>}
+    </section>
+    <div className="sc-owner-chat-pane">
+      {!selectedId ? <div className="sc-chat-placeholder"><Icon name="forum" /><p>Chọn hội thoại để xem tin nhắn.</p></div>
+        : isCatalogId(selectedId) ? <ChatThread key={JSON.stringify([user.id, roles, bakeryId, selectedId])} conversationId={selectedId}
+          viewer={viewer} onChanged={resource.reload} summary={summary} onBack={() => select('')} onNavigate={onNavigate} />
+          : <><button className="sc-button" onClick={() => select('')}>Quay lại hội thoại</button><p className="sc-chat-feedback" role="alert">Mã cuộc trò chuyện không hợp lệ.</p></>}
+    </div>
+  </div>
 }

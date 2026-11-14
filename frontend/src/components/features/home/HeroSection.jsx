@@ -9,7 +9,7 @@ export const HeroSection = ({ onNavigate }) => {
 
         {/* ==========================================
             PART 1: KAWAII VINTAGE BAKERY KIOSK STAGE
-            (Sugary Sparks x SweetCake Petit Pâtisserie)
+            (SweetCake Petit Pâtisserie)
            ========================================== */}
         <div className="relative z-20 w-full pt-6 pb-0">
 

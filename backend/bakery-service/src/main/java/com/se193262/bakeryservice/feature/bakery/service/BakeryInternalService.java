@@ -43,7 +43,10 @@ public class BakeryInternalService {
                 .map(area -> new BakeryInternalProfileResponse.Area(area.getDistrict(),
                         area.getCity(), area.getDeliveryFee(), area.isActive())).toList();
         return new BakeryInternalProfileResponse(bakeryId, bakery.getName(), bakery.getStatus(),
-                primaryAddress, areas);
+                primaryAddress, areas, memberRepository.findAllByBakery_IdOrderByJoinedAtAsc(bakeryId).stream()
+                        .filter(member -> member.getStatus() == BakeryMemberStatus.ACTIVE
+                                && member.getMemberRole() == BakeryMemberRole.OWNER)
+                        .map(member -> member.getUserId()).findFirst().orElse(null));
     }
 
     @Transactional(readOnly = true)

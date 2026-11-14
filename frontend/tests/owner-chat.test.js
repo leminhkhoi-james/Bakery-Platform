@@ -17,7 +17,7 @@ before(async () => {
     if (path.endsWith('/src/hooks/useChatThread.js')) return 'export function useChatThread(){return globalThis.__ownerChatThread}'
   } }] })
   AuthContext = (await vite.ssrLoadModule('/src/context/useAuth.js')).AuthContext
-  Workspace = (await vite.ssrLoadModule('/src/components/chat/OwnerChatWorkspace.jsx')).default
+  Workspace = (await vite.ssrLoadModule('/src/components/chat/ChatWorkspace.jsx')).default
   Thread = (await vite.ssrLoadModule('/src/components/chat/ChatThread.jsx')).default
 })
 after(async () => { globalThis.fetch = originalFetch; await vite?.close(); delete globalThis.__ownerChatResource; delete globalThis.__ownerChatThread })

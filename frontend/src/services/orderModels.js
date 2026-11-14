@@ -38,6 +38,7 @@ export function mapOrder(dto, detail = false) {
   if (isCatalogId(dto.cakeRequestId)) order.cakeRequestId = dto.cakeRequestId
   if (isCatalogId(dto.offerId)) order.offerId = dto.offerId
   for (const key of ['orderNumber', 'bakeryName', 'customerName', 'customerPhone', 'customerNote', 'status', 'orderSource', 'currency', 'neededAt', 'createdAt', 'acceptedAt', 'completedAt']) order[key] = text(dto[key])
+  if (typeof dto.updatedAt === 'string') order.updatedAt = dto.updatedAt
   for (const key of ['subtotal', 'deliveryFee', 'totalAmount']) order[key] = catalogMoney(dto[key])
   if (['PAID', 'UNPAID', 'REFUNDED', 'CANCELLED'].includes(dto.paymentStatus)) order.paymentStatus = dto.paymentStatus
   if (detail) {

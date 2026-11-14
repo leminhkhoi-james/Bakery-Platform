@@ -2,6 +2,7 @@ package com.se193262.chatservice.feature.conversation;
 
 import com.se193262.chatservice.exception.ChatException;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,21 +13,36 @@ public class ConversationPersistenceService {
 
     private final ConversationRepository conversationRepository;
     private final ConversationParticipantRepository participantRepository;
+    private final JdbcClient jdbc;
 
     public ConversationPersistenceService(
             ConversationRepository conversationRepository,
-            ConversationParticipantRepository participantRepository) {
+            ConversationParticipantRepository participantRepository, JdbcClient jdbc) {
         this.conversationRepository = conversationRepository;
         this.participantRepository = participantRepository;
+        this.jdbc = jdbc;
     }
 
     @Transactional
-    public Conversation create(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
+    public ConversationService.ConversationCreation findOrCreate(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
+        // Serialize creation for a pair even when requests arrive for different cake requests.
+        jdbc.sql("select pg_advisory_xact_lock(hashtextextended(:pair, 0))")
+                .param("pair", "chat:" + customerId + ":" + bakeryId)
+                .query((row, index) -> Boolean.TRUE).single();
+        var existing = conversationRepository.findFirstByCustomerIdAndBakeryIdAndStatusOrderByCreatedAtAscIdAsc(
+                customerId, bakeryId, ConversationStatus.OPEN)
+                .or(() -> conversationRepository.findByCakeRequestIdAndBakeryId(cakeRequestId, bakeryId));
+        if (existing.isPresent()) {
+            if (!existing.get().getCustomerId().equals(customerId)) {
+                throw new ChatException(HttpStatus.UNPROCESSABLE_ENTITY, "Conversation context is invalid");
+            }
+            return new ConversationService.ConversationCreation(existing.get(), true);
+        }
         Conversation conversation = conversationRepository.saveAndFlush(
                 new Conversation(cakeRequestId, customerId, bakeryId));
         participantRepository.save(new ConversationParticipant(
                 conversation.getId(), customerId, ParticipantType.CUSTOMER));
-        return conversation;
+        return new ConversationService.ConversationCreation(conversation, false);
     }
 
     @Transactional
