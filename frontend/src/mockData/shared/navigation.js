@@ -76,11 +76,6 @@ export const FOOTER_DATA = {
     { label: 'Maison de Gâteaux (Q.3)', route: 'explore' },
     { label: 'Artisan Sweet Atelier (Hoàn Kiếm)', route: 'explore' },
   ],
-  branches: [
-    { city: 'TP. Hồ Chí Minh', address: '31 Tô Vĩnh Diện, P. Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh' },
-    { city: 'TP. Hồ Chí Minh', address: '12 Lê Lợi, P. Bến Nghé, Q.1' },
-
-  ],
 };
 
 export const ADMIN_NAV_ITEMS = [

@@ -39,9 +39,9 @@ export function DetailDrawer({ title, onClose, busy = false, children, headerCon
   </ModalSurface>
 }
 
-export function PortalHeader({ title, user, portal, onMenu, description, showPortalLabel = true, action, onNavigate }) {
+export function PortalHeader({ title, user, portal, onMenu, description, showPortalLabel = true, action, onNavigate, profileRoute }) {
   const name = cleanPresentationLabel(user?.displayName || user?.email || portal)
-  const identity = onNavigate ? <PortalAccountMenu key={user?.id} user={user} roleLabel={portal === 'Quản trị' ? 'Admin' : 'Chủ tiệm'} onNavigate={onNavigate} /> : <div className="sc-identity" aria-label={'Tài khoản ' + name}><span className="sc-avatar" aria-hidden="true">{name.slice(0, 1).toUpperCase()}</span><div className="hidden min-w-0 sm:block"><strong className="block truncate">{name}</strong><span>{portal}</span></div></div>
+  const identity = onNavigate ? <PortalAccountMenu key={user?.id} user={user} roleLabel={portal === 'Quản trị' ? 'Admin' : 'Chủ tiệm'} onNavigate={onNavigate} profileRoute={profileRoute} /> : <div className="sc-identity" aria-label={'Tài khoản ' + name}><span className="sc-avatar" aria-hidden="true">{name.slice(0, 1).toUpperCase()}</span><div className="hidden min-w-0 sm:block"><strong className="block truncate">{name}</strong><span>{portal}</span></div></div>
   return <><a href="#workspace-content" className="sc-skip">Đến nội dung chính</a><header className="sc-portal-header">
     <div className="sc-portal-heading flex min-w-0 items-center gap-3"><button type="button" onClick={onMenu} className="sc-icon-button sc-menu-button md:hidden" aria-label="Mở menu"><Icon name="menu" /></button><div className="min-w-0">{showPortalLabel && <p className="sc-kicker">SweetCake / {portal}</p>}<h1 className="truncate">{title}</h1>{description && <p className="sc-portal-description">{description}</p>}</div></div>
     {action ? <div className="sc-portal-header-tools"><div className="sc-admin-header-action">{action}</div>{identity}</div> : identity}

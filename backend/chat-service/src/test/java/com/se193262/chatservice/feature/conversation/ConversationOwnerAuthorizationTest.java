@@ -4,6 +4,7 @@ import com.se193262.chatservice.exception.ChatException;
 import com.se193262.chatservice.feature.message.ChatMessageRepository;
 import com.se193262.chatservice.infrastructure.client.BakeryChatClient;
 import com.se193262.chatservice.infrastructure.client.ChatContextService;
+import com.se193262.chatservice.infrastructure.client.ChatProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ class ConversationOwnerAuthorizationTest {
     @Mock ConversationPersistenceService persistence;
     @Mock ChatMessageRepository messages;
     @Mock ChatContextService context;
+    @Mock ChatProfileService profiles;
     private ConversationService service;
     private final UUID bakeryId = UUID.randomUUID();
     private final UUID userId = UUID.randomUUID();
@@ -34,7 +36,7 @@ class ConversationOwnerAuthorizationTest {
 
     @BeforeEach
     void setUp() {
-        service = new ConversationService(conversations, participants, persistence, messages, context);
+        service = new ConversationService(conversations, participants, persistence, messages, context, profiles);
         conversation = new Conversation(UUID.randomUUID(), UUID.randomUUID(), bakeryId);
     }
 

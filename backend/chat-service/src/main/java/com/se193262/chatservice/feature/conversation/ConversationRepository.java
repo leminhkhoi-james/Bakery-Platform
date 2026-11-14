@@ -19,6 +19,9 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
     @Query("select c from Conversation c where c.id = :id")
     Optional<Conversation> findByIdForParticipantUpdate(@Param("id") UUID id);
 
+    Optional<Conversation> findFirstByCustomerIdAndBakeryIdAndStatusOrderByCreatedAtAscIdAsc(
+            UUID customerId, UUID bakeryId, ConversationStatus status);
+
     @Query("""
             select c from Conversation c
             where exists (

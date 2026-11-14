@@ -58,17 +58,14 @@ export const Footer = ({ onNavigate }) => {
       </div>
 
       <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 pt-12 pb-10">
-        {/* Evenly Spaced 4-Column Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        {/* Evenly Spaced 3-Column Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-12">
           {/* Brand Column */}
           <div className="space-y-4">
             <BrandLogo onClick={() => onNavigate && onNavigate('home')} />
             <p className="text-sm text-wine/80 font-bold leading-relaxed">
               Nền tảng thương mại điện tử kết nối các tiệm bánh nghệ nhân, mang đến những kiệt tác ngọt ngào cho mọi khoảnh khắc đáng nhớ.
             </p>
-            <div className="inline-flex items-center gap-2 bg-[#ffe2eb]/50 border border-wine/40 rounded-full px-3 py-1 text-xs font-extrabold text-wine">
-              <span>🍓 Sugary Sparks x SweetCake</span>
-            </div>
           </div>
 
           {/* Menu Categories */}
@@ -114,26 +111,11 @@ export const Footer = ({ onNavigate }) => {
               ))}
             </ul>
           </div>
-
-          {/* Branch & Hotline */}
-          <div className="space-y-3">
-            <h3 className="font-savoure text-wine text-lg sm:text-xl font-bold border-b border-wine/20 pb-2">
-              Hệ thống &amp; Trụ sở
-            </h3>
-            <div className="space-y-2.5 text-sm text-wine font-bold">
-              {FOOTER_DATA.branches.map((b, idx) => (
-                <p key={idx} className="leading-relaxed">
-                  <strong className="text-wine font-extrabold">{b.city}:</strong>{' '}
-                  <span className="text-wine/80">{b.address || b.hotline}</span>
-                </p>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Bottom copyright & Legal Links */}
         <div className="pt-6 border-t-2 border-wine/20 flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm text-wine font-bold gap-4">
-          <p>© 2026 SweetCake x Sugary Sparks Platform. All rights reserved.</p>
+          <p>© 2026 SweetCake Platform. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <button
               onClick={() => openPolicy('terms')}

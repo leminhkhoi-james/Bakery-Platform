@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Instant;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.*;
 class ConversationParticipantPersistenceTest {
     @Mock ConversationRepository conversations;
     @Mock ConversationParticipantRepository participants;
+    @Mock JdbcClient jdbc;
     private ConversationPersistenceService service;
     private Conversation conversation;
     private final UUID conversationId = UUID.randomUUID();
@@ -27,7 +29,7 @@ class ConversationParticipantPersistenceTest {
 
     @BeforeEach
     void setUp() {
-        service = new ConversationPersistenceService(conversations, participants);
+        service = new ConversationPersistenceService(conversations, participants, jdbc);
         conversation = new Conversation(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
         ReflectionTestUtils.setField(conversation, "id", conversationId);
     }

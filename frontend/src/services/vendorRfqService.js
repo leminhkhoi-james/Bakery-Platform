@@ -28,7 +28,9 @@ export async function loadVendorRequests({ bakery, page = 1, size = 12, all = fa
   let next = 1, pages = 1
   do {
     options.signal?.throwIfAborted()
-    const data = await rfqService.getRfqs({ ...filters, scope: 'available', page: next, size: 100 }, unifiedEnabled() ? options : { ...options, allowMockFallback: Boolean(isDemoId(bakery.id)) })
+    const data = await rfqService.getRfqs({ ...filters, scope: 'available', page: next, size: 100 }, {
+      ...options, allowMockFallback: options.allowMockFallback ?? (unifiedEnabled() || isDemoId(bakery.id)),
+    })
     if (data.meta.page !== next) throw new ApiError('Trang yêu cầu trả về không khớp.', 502)
     pages = data.meta.pages
     for (const row of data.result) {

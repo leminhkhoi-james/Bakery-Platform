@@ -14,7 +14,7 @@ import { ApiErrorMessage, inputClass, buttonClass, panelClass } from './ApiState
 import BakeryOperationsForm from './BakeryOperationsForm.jsx'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { VendorImage } from '../common/VendorUi.jsx'
-import { DetailDrawer, StatusBadge } from '../common/WorkspaceUI.jsx'
+import { DetailDrawer, Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 
 export function BakeryProfileForm({ profile, create = false, busy, onSave, footerExternal = false, onDirtyChange, error }) {
   const [patch, setPatch] = useState({}), [errors, setErrors] = useState({})
@@ -93,11 +93,62 @@ function BakeryImages({ images, editable = false, busy, onUpload, onImageError, 
 
 function BakeryEditor({ profile, operations, locationOptions, images, busy, error, failureTarget, notice, onClose, onSaveProfile, onSaveOperations, onUpload, onImageError }) {
   const [profileVersion, setProfileVersion] = useState(0), [operationsVersion, setOperationsVersion] = useState(0)
-  return <DetailDrawer className="sc-vendor-drawer sc-owner-profile-editor" title="Chỉnh sửa hồ sơ tiệm" busy={busy} onClose={onClose} footer={<button type="button" data-modal-close disabled={busy} className={buttonClass}>Đóng</button>}>
-    <BakeryProfileForm key={'profile:' + profileVersion} profile={profile} busy={busy} error={failureTarget === 'profile' ? error : null} onSave={async input => { if (await onSaveProfile(input)) setProfileVersion(value => value + 1) }} />
-    {operations ? <BakeryOperationsForm key={'operations:' + operationsVersion} operations={operations} locationOptions={locationOptions} busy={busy} notice={failureTarget === 'operations' ? notice : null} error={failureTarget === 'operations' ? error : null} onSave={async input => { if (await onSaveOperations(input)) setOperationsVersion(value => value + 1) }} /> : <p>Chưa tải được địa chỉ và giờ mở cửa.</p>}
-    <BakeryImages images={images} editable busy={busy} onUpload={onUpload} onImageError={onImageError} error={error} failureTarget={failureTarget} />
-    {notice && failureTarget !== 'operations' && <p role="status">{notice}</p>}
+  const [section, setSection] = useState('profile')
+  const [profileDirty, setProfileDirty] = useState(false)
+  const [operationsDirty, setOperationsDirty] = useState(false)
+  const sections = [
+    ['profile', 'Thông tin tiệm', 'storefront', profileDirty],
+    ['operations', 'Vận hành', 'schedule', operationsDirty],
+    ['images', 'Hình ảnh', 'image', false],
+  ]
+  const save = {
+    profile: ['vendor-profile-form', 'Lưu thông tin tiệm', profileDirty],
+    operations: ['vendor-operations-form', 'Lưu cấu hình vận hành', Boolean(operations && operationsDirty)],
+  }[section]
+
+  return <DetailDrawer className="sc-vendor-drawer sc-owner-profile-editor" busy={busy} onClose={onClose}
+    headerContent={<div className="sc-owner-editor-heading">
+      <h2>Chỉnh sửa hồ sơ tiệm</h2>
+      {profile?.name && <p>{cleanPresentationLabel(profile.name)}</p>}
+    </div>}
+    footer={<>
+      {notice && <p role="status" className="sc-owner-editor-notice">{notice}</p>}
+      <button type="button" data-modal-close disabled={busy} className={buttonClass + ' sc-action-button--secondary'}>Đóng</button>
+      {save && <button type="submit" form={save[0]} disabled={busy || !save[2]} className={buttonClass}>{busy ? 'Đang lưu…' : save[1]}</button>}
+    </>}>
+    <div className="sc-owner-editor-layout">
+      <nav aria-label="Các mục hồ sơ tiệm" className="sc-owner-editor-sidebar">
+        {sections.map(([id, label, icon, dirty]) => (
+          <button key={id} type="button" aria-pressed={section === id} disabled={busy} onClick={event => {
+            setSection(id)
+            const body = event.currentTarget.closest('.sc-drawer-body')
+            if (body) body.scrollTop = 0
+          }}>
+            <Icon name={icon} />
+            <span>{label}{dirty && <small>Chưa lưu</small>}</span>
+          </button>
+        ))}
+      </nav>
+      <div className="sc-owner-editor-content">
+    <div hidden={section !== 'profile'}>
+      <BakeryProfileForm key={profileVersion} profile={profile} busy={busy} footerExternal onDirtyChange={setProfileDirty}
+        error={failureTarget === 'profile' ? error : null} onSave={async input => {
+          if (!Object.keys(input).length) return
+          if (await onSaveProfile(input)) { setProfileVersion(value => value + 1); setProfileDirty(false) }
+        }} />
+    </div>
+    <div hidden={section !== 'operations'}>
+      {operations ? <BakeryOperationsForm key={operationsVersion} operations={operations} locationOptions={locationOptions} busy={busy}
+        footerExternal compact onEdited={() => setOperationsDirty(true)} error={failureTarget === 'operations' ? error : null}
+        onSave={async input => {
+          if (await onSaveOperations(input)) { setOperationsVersion(value => value + 1); setOperationsDirty(false) }
+        }} /> : <p>Chưa tải được địa chỉ và giờ mở cửa.</p>}
+    </div>
+    <div hidden={section !== 'images'}>
+      <BakeryImages images={images} editable busy={busy} onUpload={onUpload} onImageError={onImageError} error={error} failureTarget={failureTarget} />
+    </div>
+      </div>
+    </div>
   </DetailDrawer>
 }
 

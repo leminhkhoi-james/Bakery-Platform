@@ -29,6 +29,13 @@ public class ChatClientConfig {
         return createClient(properties.bakery(), properties, tokenProvider, BakeryChatClient.class);
     }
 
+    @Bean
+    IdentityChatClient identityChatClient(ServiceClientProperties properties, ServiceTokenProvider tokenProvider) {
+        var identity = new ServiceClientProperties.Service(
+                properties.identityUrl(), "identity-service", "identity:user:read");
+        return createClient(identity, properties, tokenProvider, IdentityChatClient.class);
+    }
+
     private <T> T createClient(
             ServiceClientProperties.Service service,
             ServiceClientProperties properties,

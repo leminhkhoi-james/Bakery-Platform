@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import PortalNotificationBell from './PortalNotificationBell.jsx'
 import AdminSidebar from '../../layouts/admin/AdminSidebar.jsx'
-import { useCatalogResource } from '../../hooks/useCatalogResource.js'
-import { loadAdminPending } from '../../services/adminSummaryService.js'
+import { useNotifications } from '../../hooks/useCustomerNotifications.js'
+import { loadAdminNotifications } from '../../services/portalNotifications.js'
 import { useAuth } from '../../context/useAuth.js'
 import { PortalHeader } from '../common/WorkspaceUI.jsx'
 import BackgroundOrnaments from '../common/BackgroundOrnaments.jsx'
@@ -28,21 +29,8 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
   const [mobile, setMobile] = useState(false)
   const { user } = useAuth()
   const heading = ADMIN_PAGE_HEADERS[activeTab] || { title }
-  const [newPaymentNotice, setNewPaymentNotice] = useState(null)
-  const pending = useCatalogResource(loadAdminPending)
-  const lastPayment = useRef(undefined)
-  useEffect(() => {
-    if (!pending.data) return
-    const latest = pending.data.latestPayment
-    if (lastPayment.current !== undefined && latest && latest.id !== lastPayment.current) {
-      setNewPaymentNotice({ id: latest.id, name: latest.submittedByName || 'Tiệm bánh đối tác' })
-    }
-    lastPayment.current = latest?.id || null
-  }, [pending.data])
-  useEffect(() => {
-    const timer = setInterval(pending.reload, 30000)
-    return () => clearInterval(timer)
-  }, [pending.reload])
+  const notifications = useNotifications(loadAdminNotifications, { enabled: Boolean(user?.roles?.includes('ADMIN')) },
+    'admin-notifications.' + user?.id)
   useEffect(() => {
     if (!mobile) return
     const releaseScroll = lockPageScroll(document)
@@ -58,30 +46,8 @@ export default function AdminFrame({ title, activeTab, onNavigate, children, hea
     }
   }, [mobile])
   return <ManualRefreshContext.Provider value={false}><div className="sc-portal sc-portal--admin">
-    <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
-    <PortalHeader title={heading.title} description={headerDescription ?? heading.description} showPortalLabel={false} action={headerAction} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
+    <AdminSidebar activeTab={activeTab} onNavigate={onNavigate} pendingVendorsCount={notifications.data?.pendingBakeries ?? 0} isMobileOpen={mobile} onCloseMobile={() => setMobile(false)} />
+    <PortalHeader title={heading.title} description={headerDescription ?? heading.description} showPortalLabel={false} action={<div className="flex items-center gap-2">{headerAction}<PortalNotificationBell resource={notifications} onNavigate={onNavigate} /></div>} user={user} portal="Quản trị" onMenu={() => setMobile(true)} onNavigate={onNavigate} />
     <main id="workspace-content" className="sc-portal-main"><BackgroundOrnaments variant={activeTab} /><div className={'sc-workspace' + (activeTab === 'admin-dashboard' ? '' : ' sc-admin-content')}>{children}</div></main>
-    {newPaymentNotice && (
-      <aside role="status" aria-live="polite" className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-secondary/30 bg-surface/95 backdrop-blur-md p-4 shadow-xl">
-        <span className="material-symbols-outlined text-secondary text-2xl">notifications_active</span>
-        <div>
-          <p className="text-xs font-bold text-secondary uppercase tracking-wider">Chứng từ mua gói mới</p>
-          <p className="text-sm font-semibold text-primary">{newPaymentNotice.name} vừa nộp chứng từ</p>
-        </div>
-        <button
-          onClick={() => { setNewPaymentNotice(null); onNavigate?.('admin-payments?paymentId=' + newPaymentNotice.id) }}
-          className="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:scale-105 transition-all cursor-pointer"
-        >
-          Duyệt ngay
-        </button>
-        <button
-          onClick={() => setNewPaymentNotice(null)}
-          aria-label="Đóng thông báo"
-          className="p-1 text-outline hover:text-primary rounded-lg cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-sm">close</span>
-        </button>
-      </aside>
-    )}
   </div></ManualRefreshContext.Provider>
 }

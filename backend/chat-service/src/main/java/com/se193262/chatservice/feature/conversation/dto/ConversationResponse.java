@@ -17,6 +17,9 @@ public record ConversationResponse(
         Instant lastMessageAt,
         Instant createdAt,
         Instant currentUserLastReadAt,
-        List<ParticipantResponse> participants
+        List<ParticipantResponse> participants,
+        String customerName,
+        String bakeryName,
+        String ownerName
 ) {
 }

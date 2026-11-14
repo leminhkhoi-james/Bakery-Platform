@@ -138,7 +138,8 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
+  padding-top: 0.75rem;
 }
 
 @media (max-width: 1024px) {
@@ -152,8 +153,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  padding: 1.1rem;
+  gap: 0.8rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
   min-width: 0;
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
@@ -174,8 +175,6 @@
   border: 2px solid #8b2240;
   background: rgba(255, 245, 248, 0.98);
   box-shadow: 0 6px 26px rgba(114, 38, 55, 0.18);
-  margin-top: -0.6rem;
-  padding-top: 2.2rem;
 }
 
 .sc-public-plans .sc-owner-plan-card.is-featured::before {
@@ -221,7 +220,7 @@
   margin: 0;
   font-size: 0.8rem;
   color: #3d1218;
-  line-height: 1.45;
+  line-height: 1.65;
 }
 
 .sc-public-plans .sc-plan-benefits {
@@ -231,13 +230,15 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.55rem;
 }
 
 .sc-public-plans .sc-plan-benefits li {
   display: flex;
   align-items: baseline;
-  gap: 0.35rem;
+  column-gap: 0.55rem;
+  flex-wrap: wrap;
+  line-height: 1.55;
   color: #3d1218;
 }
 
@@ -251,7 +252,7 @@
 
 /* Select button */
 .sc-public-plans .sc-owner-plan-card > button {
-  margin-top: 0.6rem;
+  margin-top: auto;
   width: 100%;
   padding: 0.6rem 1rem;
   border-radius: 0.65rem;
@@ -283,7 +284,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.4rem 0.9rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
   border-radius: 0.6rem;
   font-size: 0.78rem;
   font-weight: 600;
@@ -293,8 +295,8 @@
   cursor: pointer;
   transition: background 0.15s;
 }
-.scp-detail-btn.active,
-.scp-detail-btn:hover { background: rgba(139, 34, 64, 0.1); }
+.scp-detail-btn:hover { background: #fff; }
+.scp-detail-btn.active { background: #8b2240; color: #fff; }
 
 /* ══════════════════════════════════════════
    ACTION BAR

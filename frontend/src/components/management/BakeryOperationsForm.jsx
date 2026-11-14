@@ -1,5 +1,6 @@
 import MoneyInput from '../common/MoneyInput.jsx'
 import { VendorConfirm } from '../common/VendorUi.jsx'
+import { Icon } from '../common/WorkspaceUI.jsx'
 import { ModalFormState } from '../common/ModalSurface.jsx'
 import { operationsPayload } from '../../services/managementModels.js'
 import React, { useState } from 'react'
@@ -44,8 +45,9 @@ function LocationField({ field, value, choices, inputProps, onChange }) {
   </div>
 }
 
-export default function BakeryOperationsForm({ operations, busy, onSave, onEdited, locationOptions = [], sections = Object.keys(labels), footerExternal = false, notice, error }) {
+export default function BakeryOperationsForm({ operations, busy, onSave, onEdited, locationOptions = [], sections = Object.keys(labels), footerExternal = false, compact = false, notice, error }) {
   const [values, setValues] = useState(() => structuredClone(operations))
+  const [activeSection, setActiveSection] = useState(sections[0])
   const [validation, setValidation] = useState(null)
   const [fieldErrors, setFieldErrors] = useState({})
   const [removing, setRemoving] = useState(null)
@@ -103,7 +105,14 @@ export default function BakeryOperationsForm({ operations, busy, onSave, onEdite
     setFieldErrors(invalid)
     setValidation(null)
     if (Object.keys(invalid).length) {
-      event.currentTarget?.elements.namedItem(Object.keys(invalid)[0])?.focus()
+      const firstField = Object.keys(invalid)[0]
+      const input = event.currentTarget.elements.namedItem(firstField)
+      if (compact) {
+        setActiveSection(firstField.split('-')[0])
+        requestAnimationFrame(() => input?.focus())
+      } else {
+        input?.focus()
+      }
       return
     }
     try {
@@ -120,9 +129,13 @@ export default function BakeryOperationsForm({ operations, busy, onSave, onEdite
     <ModalFormState value={values} busy={busy} />
     {!sections.includes('serviceAreas') && values.serviceAreas.some(row => row.minimumOrder === undefined || row.minimumOrder === null || row.minimumOrder === '') &&
       <p role="alert" className="sc-note">Cần cập nhật giá trị đơn tối thiểu tại mục Địa chỉ &amp; giao hàng trước khi lưu cấu hình. Các thông tin chưa chỉnh sửa sẽ được giữ nguyên.</p>}
-    <fieldset disabled={busy} className="space-y-5">
-      {sections.map(kind => kind === 'businessHours' ? <section key={kind}>
-        <h4 className="font-bold">Giờ mở cửa</h4>
+    <fieldset disabled={busy} className={compact ? 'space-y-3' : 'space-y-5'}>
+      {compact && <nav aria-label="Cấu hình vận hành" className="sc-owner-editor-nav">
+        {sections.map(kind => <button key={kind} type="button" aria-pressed={activeSection === kind}
+          onClick={() => setActiveSection(kind)}>{labels[kind]}</button>)}
+      </nav>}
+      {sections.map(kind => kind === 'businessHours' ? <section key={kind} hidden={compact && activeSection !== kind}>
+        {!compact && <h4 className="font-bold">Giờ mở cửa</h4>}
         <ul className="sc-opening-hours-list">{days.map((day, i) => {
             const dayOfWeek = i + 1
             const row = values.businessHours.find(item => Number(item.dayOfWeek) === dayOfWeek)
@@ -146,11 +159,21 @@ export default function BakeryOperationsForm({ operations, busy, onSave, onEdite
               })}</div>}
             </li>
           })}</ul>
-      </section> : <section key={kind} className="space-y-3">
-        <h4 className="font-bold">{labels[kind]}</h4>
+      </section> : <section key={kind} hidden={compact && activeSection !== kind} className="space-y-3">
+        {!compact && <h4 className="font-bold">{labels[kind]}</h4>}
         {values[kind].map((row, index) => {
           const toggle = kind === 'addresses' ? 'isPrimary' : 'active'
+          const rowLabel = (kind === 'addresses' ? 'Địa chỉ ' : 'Khu vực giao hàng ') + (index + 1)
+          const deleteLabel = 'Xóa ' + rowLabel.toLocaleLowerCase('vi')
+          const removeButton = <button type="button" className="sc-icon-button shrink-0" aria-label={deleteLabel}
+            title={deleteLabel} onClick={() => setRemoving({ kind, index, rowLabel })}>
+            <Icon name="delete_outline" />
+          </button>
           return <div key={row.id || index} className="sc-popup-group grid gap-3 rounded-xl border border-outline-variant/30 p-4 sm:grid-cols-2 lg:grid-cols-3">
+            {!compact && <div className="col-span-full flex items-center justify-between gap-3 border-b border-outline-variant/30 pb-2">
+              <span className="text-sm font-semibold text-on-surface-variant">{rowLabel}</span>
+              {removeButton}
+            </div>}
             {fields[kind].map(field => {
               const key = fieldKey(kind, index, field)
               if (locationFields.has(field)) {
@@ -173,11 +196,13 @@ export default function BakeryOperationsForm({ operations, busy, onSave, onEdite
                 {fieldMessage(key)}
               </label>
             })}
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={Boolean(row[toggle])}
-              onChange={event => update(kind, index, toggle, event.target.checked)} />
-              {kind === 'addresses' ? 'Địa chỉ chính' : 'Đang phục vụ'}
-            </label>
-            <button type="button" className="text-left text-sm text-red-700 underline" onClick={() => setRemoving({ kind, index })}>Xóa dòng</button>
+            <div className={compact ? 'col-span-full flex items-center justify-between gap-3' : ''}>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={Boolean(row[toggle])}
+                onChange={event => update(kind, index, toggle, event.target.checked)} />
+                {kind === 'addresses' ? 'Địa chỉ chính' : 'Đang phục vụ'}
+              </label>
+              {compact && removeButton}
+            </div>
           </div>
         })}
         <button type="button" className="text-sm underline" onClick={() => { edited(); setValues(current => ({ ...current, [kind]: [...current[kind], { ...newRow[kind] }] })) }}>Thêm {labels[kind].toLowerCase()}</button>
@@ -188,10 +213,10 @@ export default function BakeryOperationsForm({ operations, busy, onSave, onEdite
         {notice && <p role="status" className="text-sm text-green-700">{notice}</p>}
       </div>
     </fieldset>
-    {removing && <VendorConfirm title="Xóa dòng cấu hình" label="Xóa khỏi cấu hình" danger onClose={() => setRemoving(null)} onConfirm={() => {
+    {removing && <VendorConfirm title={'Xóa ' + removing.rowLabel.toLocaleLowerCase('vi')} label="Xóa khỏi cấu hình" danger onClose={() => setRemoving(null)} onConfirm={() => {
       setValues(current => ({ ...current, [removing.kind]: current[removing.kind].filter((_, index) => index !== removing.index) }))
       edited()
       setRemoving(null)
-    }}><p>Dòng này sẽ được bỏ khỏi cấu hình khi bạn lưu. Các dữ liệu khác được giữ nguyên.</p></VendorConfirm>}
+    }}><p>Thay đổi sẽ được áp dụng khi bạn bấm lưu cấu hình.</p></VendorConfirm>}
   </form>
 }

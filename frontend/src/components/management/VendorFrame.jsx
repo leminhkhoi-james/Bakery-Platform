@@ -8,17 +8,12 @@ import { vendorRoute } from '../../routes/catalogNavigation.js'
 import { PortalHeader } from '../common/WorkspaceUI.jsx'
 import BackgroundOrnaments from '../common/BackgroundOrnaments.jsx'
 import '../common/portal-header.css'
-import { useCatalogResource } from '../../hooks/useCatalogResource.js'
+import { useNotifications } from '../../hooks/useCustomerNotifications.js'
+import { loadVendorNotifications } from '../../services/portalNotifications.js'
+import PortalNotificationBell from './PortalNotificationBell.jsx'
 import { dashboardErrorMessage } from '../../services/vendorDashboardService.js'
 import './business-simulation.css'
 import { buttonClass } from './ApiState.jsx'
-import { loadVendorRequests } from '../../services/vendorRfqService.js'
-import { loadOrders } from '../../services/orderService.js'
-
-const loadNotifications = ({ bakery, enabled }, options) => enabled ? loadVendorRequests({ bakery, status: 'OPEN', all: true, excludeQuoted: true }, options) : Promise.resolve({ result: [] })
-const loadPendingOrders = ({ bakeryId, enabled }, options) => enabled && bakeryId
-  ? loadOrders({ bakeryId, scope: 'bakery', status: 'PENDING', page: 1, size: 1 }, options)
-  : Promise.resolve(null)
 
 
 export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavigate, children, bakerySelectionDisabled = false }) {
@@ -36,11 +31,9 @@ export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavig
     </select>
   ) : bakeryName
 
-  const rfqsResource = useCatalogResource(loadNotifications, { bakery: owner.bakery, enabled: owner.state === 'ACTIVE' })
-  const openRfqs = rfqsResource.data?.result || []
-  const pendingOrders = useCatalogResource(loadPendingOrders, { bakeryId, enabled: owner.state === 'ACTIVE' })
-  const pendingOrderCount = pendingOrders.status === 'ready' ? pendingOrders.data?.meta.total : null
-  const rfqCount = openRfqs.length
+  const notifications = useNotifications(loadVendorNotifications,
+    { bakery: currentBakery, bakeryId, enabled: owner.state === 'ACTIVE' },
+    'vendor-notifications.' + user?.id + '.' + bakeryId)
 
   return (
     <ManualRefreshContext.Provider value={false}><div className="sc-portal sc-portal--vendor">
@@ -50,15 +43,17 @@ export default function VendorFrame({ owner, title, activeTab, bakeryId, onNavig
         isMobileOpen={mobile}
         onCloseMobile={() => setMobile(false)}
         showMockBadges={false}
-        rfqCount={rfqCount}
-        pendingOrderCount={pendingOrderCount}
+        rfqCount={notifications.data?.pendingRequests ?? 0}
+        pendingOrderCount={notifications.data?.pendingOrders ?? null}
       />
       <PortalHeader
         title={title}
         description={bakeryIdentity}
         showPortalLabel={false}
+        action={<PortalNotificationBell key={bakeryId} resource={notifications} onNavigate={navigate} />}
         user={user}
         portal="Đối tác"
+        profileRoute={vendorRoute('vendor-profile', bakeryId)}
         onMenu={() => setMobile(true)}
         onNavigate={onNavigate}
       />

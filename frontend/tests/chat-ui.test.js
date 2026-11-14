@@ -88,7 +88,7 @@ test('Legacy Chat entry explicitly blocks missing Marketplace context and opens 
 })
 test('Customer and Vendor chat pages use protected identity and real loading states without demo data', () => {
   const customer = withUser(CustomerPage, { routeSearch: '?conversationId=' + conversationId, onNavigate: () => {} })
-  assert.match(customer, /Đang tải/); assert.match(customer, /yêu cầu bánh/); assert.match(customer, /Bấm Tải mới nhất/)
+  assert.match(customer, /Đang tải tin nhắn/); assert.match(customer, /yêu cầu bánh/); assert.match(customer, /Lịch sử tin nhắn/)
   const vendor = withUser(VendorPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate: () => {} }, ['BAKERY_OWNER'])
   assert.match(vendor, /Tài khoản thật/); assert.match(vendor, /Đang xác minh quyền quản lý/)
   for (const html of [customer, vendor]) assert.doesNotMatch(html, /46\.7M|15 đơn|Chef Jean|Chào bạn Hân/)

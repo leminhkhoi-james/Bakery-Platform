@@ -70,7 +70,8 @@ security.service-clients:
       secret-hash: ${CHAT_SERVICE_CLIENT_SECRET_HASH:}
       grants:
         marketplace-service: "marketplace:request:chat:authorize"
-        bakery-service: "bakery:membership:read"
+        bakery-service: "bakery:membership:read bakery:profile:read"
+        identity-service: "identity:user:read"
     bakery-service:
       secret-hash: ${BAKERY_CLIENT_SECRET_HASH:}
       grants:
