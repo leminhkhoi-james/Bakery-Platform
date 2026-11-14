@@ -45,6 +45,10 @@ public class ConversationService {
     }
 
     public ConversationCreation create(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
+        if (cakeRequestId == null) {
+            contextService.authorizeDirectConversation(customerId, bakeryId);
+            return persistenceService.findOrCreate(null, customerId, bakeryId);
+        }
         Conversation existing = conversationRepository
                 .findByCakeRequestIdAndBakeryId(cakeRequestId, bakeryId)
                 .orElse(null);

@@ -54,7 +54,7 @@ export default function VendorSidebar({
 
         {/* Navigation Links */}
         <nav className="space-y-1">
-          {VENDOR_NAV_ITEMS.filter((item) => item.id !== 'revenue').map((item) => {
+          {VENDOR_NAV_ITEMS.map((item) => {
             const isActive = activeTab === item.id
             const badgeText = item.id === 'orders' ? ordersBadge || null : showMockBadges ? item.badge : null
 

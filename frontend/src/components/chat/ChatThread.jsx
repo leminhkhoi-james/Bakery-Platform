@@ -77,11 +77,11 @@ export default function ChatThread({ conversationId, viewer, onChanged, summary,
 
   return <section className="sc-owner-thread" aria-label="Nội dung hội thoại">
     <header className="sc-owner-thread-header">
-      <button type="button" className="sc-icon-button sc-chat-back" aria-label="Quay lại danh sách hội thoại" onClick={onBack}><Icon name="arrow_back" /></button>
+      {onBack && <button type="button" className="sc-icon-button sc-chat-back" aria-label="Quay lại danh sách hội thoại" onClick={onBack}><Icon name="arrow_back" /></button>}
       <div className="sc-owner-thread-person">
         <h2>{chatInboxTitle(context, Boolean(viewer.bakeryId))}</h2>
         {!viewer.bakeryId && context.ownerName && context.bakeryName && <p className="text-xs text-on-surface-variant">{context.ownerName}</p>}
-        {conversation && <button type="button" className="sc-chat-context-link" onClick={() => onNavigate(requestRoute)}>
+        {conversation?.cakeRequestId && <button type="button" className="sc-chat-context-link" onClick={() => onNavigate(requestRoute)}>
           {viewer.bakeryId ? chatRequestLabel(context) : 'Xem yêu cầu bánh ban đầu'} <Icon name="open_in_new" />
         </button>}
       </div>

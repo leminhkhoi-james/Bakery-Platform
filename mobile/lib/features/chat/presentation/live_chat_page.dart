@@ -261,7 +261,7 @@ class _LiveChatThreadState extends State<LiveChatThread>
                 ? 'Đang trò chuyện'
                 : 'Đã đóng',
           ),
-          SCButton(
+          if (conversation!['cakeRequestId'] != null) SCButton(
             'Yêu cầu liên quan',
             outlined: true,
             onPressed: () => liveOpen(

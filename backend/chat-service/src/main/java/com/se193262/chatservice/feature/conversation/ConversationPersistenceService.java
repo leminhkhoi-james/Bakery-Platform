@@ -31,7 +31,8 @@ public class ConversationPersistenceService {
                 .query((row, index) -> Boolean.TRUE).single();
         var existing = conversationRepository.findFirstByCustomerIdAndBakeryIdAndStatusOrderByCreatedAtAscIdAsc(
                 customerId, bakeryId, ConversationStatus.OPEN)
-                .or(() -> conversationRepository.findByCakeRequestIdAndBakeryId(cakeRequestId, bakeryId));
+                .or(() -> cakeRequestId == null ? java.util.Optional.empty()
+                        : conversationRepository.findByCakeRequestIdAndBakeryId(cakeRequestId, bakeryId));
         if (existing.isPresent()) {
             if (!existing.get().getCustomerId().equals(customerId)) {
                 throw new ChatException(HttpStatus.UNPROCESSABLE_ENTITY, "Conversation context is invalid");

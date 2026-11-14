@@ -34,7 +34,7 @@ const VendorMenuCatalogPage = lazy(() => import('../pages/vendor/catalog/VendorM
 const VendorBespokeQuoteSubmitPage = lazy(() => import('../pages/vendor/rfq/VendorBespokeQuoteSubmitPage'))
 const VendorOrderManagementPage = lazy(() => import('../pages/vendor/orders/VendorOrderManagementPage'))
 const VendorDashboardPage = lazy(() => import('../pages/vendor/dashboard/VendorDashboardPage'))
-const VendorRevenueEscrowPage = lazy(() => import('../pages/vendor/revenue/VendorRevenueEscrowPage'))
+const VendorRevenuePage = lazy(() => import('../pages/vendor/revenue/VendorRevenuePage'))
 const VendorSettingsPage = lazy(() => import('../pages/vendor/settings/VendorSettingsPage'))
 
 // Admin Pages (Modular Feature Subfolders)
@@ -141,7 +141,7 @@ function PageRoutes({
         ) : currentPage === 'vendor-menu' ? (
           <VendorMenuCatalogPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-revenue' ? (
-          <VendorRevenueEscrowPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
+          <VendorRevenuePage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : currentPage === 'vendor-profile' || currentPage === 'vendor-settings' ? (
           <VendorSettingsPage key={routeSearch} routeSearch={routeSearch} onNavigate={onNavigate} />
         ) : (

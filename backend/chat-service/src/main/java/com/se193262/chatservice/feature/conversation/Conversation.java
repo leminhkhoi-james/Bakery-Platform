@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Conversation extends UuidEntity {
 
 
-    @Column(name = "cake_request_id", nullable = false)
+    @Column(name = "cake_request_id")
     private UUID cakeRequestId;
 
     @Column(name = "order_id")

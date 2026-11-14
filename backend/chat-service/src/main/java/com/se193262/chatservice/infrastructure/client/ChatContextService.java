@@ -19,6 +19,27 @@ public class ChatContextService {
         this.bakeryClient = bakeryClient;
     }
 
+    public void authorizeDirectConversation(UUID customerId, UUID bakeryId) {
+        BakeryChatClient.BakeryProfile profile;
+        try {
+            profile = bakeryClient.profile(bakeryId);
+        } catch (RestClientResponseException exception) {
+            if (exception.getStatusCode().value() == 404) {
+                throw new ChatException(HttpStatus.NOT_FOUND, "Bakery not found");
+            }
+            throw new ChatException(HttpStatus.SERVICE_UNAVAILABLE, "Bakery profile is unavailable");
+        } catch (RestClientException exception) {
+            throw new ChatException(HttpStatus.SERVICE_UNAVAILABLE, "Bakery profile is unavailable");
+        }
+        if (profile == null || !bakeryId.equals(profile.id()) || !"ACTIVE".equals(profile.status())
+                || profile.ownerUserId() == null) {
+            throw new ChatException(HttpStatus.NOT_FOUND, "Bakery not found");
+        }
+        if (customerId.equals(profile.ownerUserId())) {
+            throw new ChatException(HttpStatus.UNPROCESSABLE_ENTITY, "Cannot start a conversation with your own bakery");
+        }
+    }
+
     public void authorizeConversation(UUID cakeRequestId, UUID customerId, UUID bakeryId) {
         try {
             MarketplaceChatClient.ChatAuthorizationResponse authorization =

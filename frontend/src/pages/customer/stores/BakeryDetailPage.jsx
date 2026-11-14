@@ -9,6 +9,13 @@ import CatalogState from '../../../components/catalog/CatalogState.jsx'
 import CatalogPagination from '../../../components/catalog/CatalogPagination.jsx'
 import ProductCard from '../../../components/catalog/ProductCard.jsx'
 import { Icon } from '../../../components/common/WorkspaceUI.jsx'
+import { useAuth } from '../../../context/useAuth.js'
+import { useMarketplaceAction } from '../../../hooks/useMarketplaceAction.js'
+import { openCustomerConversationWithBakery } from '../../../services/chatService.js'
+import ChatFeedback from '../../../components/chat/ChatFeedback.jsx'
+import ChatThread from '../../../components/chat/ChatThread.jsx'
+import ModalSurface from '../../../components/common/ModalSurface.jsx'
+import '../../../components/chat/owner-chat.css'
 
 const SAMPLE_REVIEWS = {
   'la-creme-patisserie': [
@@ -133,10 +140,21 @@ const DEFAULT_SAMPLE_REVIEWS = [
 ]
 
 export default function BakeryDetailPage({ routeSearch = '', onNavigate }) {
+  const { user, roles } = useAuth()
+  const chatAction = useMarketplaceAction()
+  const [chat, setChat] = useState(null)
   const params = new URLSearchParams(routeSearch)
   const id = params.get('id') || ''
   const view = params.get('view') || params.get('tab') || ''
   const resource = useCatalogResource(loadBakery, { id })
+  const openChat = () => {
+    const bakery = resource.data
+    setChat({ bakeryId: bakery.id, bakeryName: bakery.name, userId: user.id })
+    void chatAction.run(async () => {
+      const conversation = await openCustomerConversationWithBakery(bakery.id, { userId: user.id, roles })
+      setChat({ ...conversation, bakeryName: conversation.bakeryName || bakery.name, userId: user.id })
+    })
+  }
 
   useEffect(() => {
     if (view === 'reviews' && resource.status === 'ready') {
@@ -161,6 +179,13 @@ export default function BakeryDetailPage({ routeSearch = '', onNavigate }) {
 
           {/* Quick Section Jump Bar */}
           <div className="mt-8 flex flex-wrap items-center gap-3 border-b border-primary/10 pb-4">
+            {(!user || roles?.includes('CUSTOMER')) && <button type="button" className="sc-button" disabled={chatAction.busy}
+              onClick={() => {
+                if (!user) { onNavigate('login'); return }
+                openChat()
+              }}>
+              <Icon name="forum" /> {chatAction.busy ? 'Đang mở tin nhắn…' : 'Nhắn tin với tiệm'}
+            </button>}
             <button
               type="button"
               onClick={() => document.getElementById('bakery-menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
@@ -178,6 +203,35 @@ export default function BakeryDetailPage({ routeSearch = '', onNavigate }) {
               <span>Đánh giá từ khách hàng</span>
             </button>
           </div>
+          {chat?.bakeryId === resource.data.id && chat.userId === user?.id && (
+            <ModalSurface
+              label={'Nhắn tin với ' + chat.bakeryName}
+              className="sc-chat-entry-dialog sc-bakery-chat-dialog"
+              busy={chatAction.busy}
+              onClose={() => setChat(null)}
+            >
+              {({ requestClose }) => <>
+                <header className="sc-bakery-chat-dialog-header">
+                  <span>Tin nhắn với tiệm</span>
+                  <button type="button" className="sc-icon-button" aria-label="Đóng hộp thoại tin nhắn" onClick={requestClose} disabled={chatAction.busy}>
+                    <Icon name="close" />
+                  </button>
+                </header>
+                {chat.id ? (
+                  <ChatThread key={chat.id} conversationId={chat.id} viewer={{ userId: user.id, roles }}
+                    summary={chat} onNavigate={route => { if (requestClose()) onNavigate(route) }} />
+                ) : (
+                  <div className="sc-chat-placeholder">
+                    <strong>{chat.bakeryName}</strong>
+                    {chatAction.error ? <>
+                      <ChatFeedback error={chatAction.error} />
+                      <button type="button" className="sc-button sc-action-button--secondary" onClick={openChat}>Thử lại</button>
+                    </> : <p role="status">Đang mở hội thoại…</p>}
+                  </div>
+                )}
+              </>}
+            </ModalSurface>
+          )}
 
           <BakeryMenu key={id} bakeryId={id} onNavigate={onNavigate} />
           <BakeryReviews bakeryId={id} bakery={resource.data} />

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record CreateConversationRequest(
-        @NotNull UUID cakeRequestId,
+        UUID cakeRequestId,
         @NotNull UUID bakeryId
 ) {
 }

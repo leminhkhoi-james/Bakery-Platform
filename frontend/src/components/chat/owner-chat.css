@@ -31,6 +31,9 @@
 .sc-chat-placeholder { display: grid; align-content: center; justify-items: center; gap: .7rem; height: 100%; padding: 1rem; color: #64748b; text-align: center; font-size: .85rem; }
 .sc-chat-placeholder .sc-icon { font-size: 2.3rem; color: #94a3b8; }
 .sc-owner-thread { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; }
+.sc-chat-entry-dialog.sc-bakery-chat-dialog { width: min(40rem, calc(100vw - 1.5rem)); height: min(40rem, calc(100dvh - 1.5rem)); padding: 0; overflow: hidden; }
+.sc-bakery-chat-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.sc-bakery-chat-dialog-header { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .4rem .8rem; color: var(--color-primary); border-bottom: 1px solid #e2e8f0; }
 .sc-owner-thread-person { flex: 1; min-width: 0; }
 .sc-owner-thread-person h2 { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .sc-chat-context-link { display: flex; align-items: center; gap: .25rem; max-width: 100%; font-size: .72rem; color: #64748b; text-align: left; overflow: hidden; max-height: 2.3rem; }

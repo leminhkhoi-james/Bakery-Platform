@@ -1,2 +1,2 @@
-export { default as VendorRevenueEscrowPage } from './VendorRevenueEscrowPage'
-export * from './VendorRevenueEscrowPage'
+export { default as VendorRevenuePage } from './VendorRevenuePage'
+export * from './VendorRevenuePage'

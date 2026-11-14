@@ -96,11 +96,31 @@ class ChatServiceApplicationTests {
     }
 
     @Test
+    void directConversationCreatesAndReusesThreadForActiveBakery() throws Exception {
+        UUID bakeryId = UUID.randomUUID();
+        when(bakeryClient.profile(bakeryId))
+                .thenReturn(new BakeryChatClient.BakeryProfile(bakeryId, "Anna Bakery", BAKERY_USER_ID, "ACTIVE"));
+        String body = "{\"bakeryId\":\"" + bakeryId + "\"}";
+        String response = mockMvc.perform(post("/api/v1/conversations")
+                        .with(jwtToken(CUSTOMER_ID, "ROLE_CUSTOMER"))
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.cakeRequestId").doesNotExist())
+                .andReturn().getResponse().getContentAsString();
+        String id = com.jayway.jsonpath.JsonPath.read(response, "$.data.id");
+        mockMvc.perform(post("/api/v1/conversations")
+                        .with(jwtToken(CUSTOMER_ID, "ROLE_CUSTOMER"))
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(id));
+    }
+
+    @Test
     @DisplayName("Another authorized cake request reuses the open conversation for the same customer and bakery")
     void createConversation_withAnotherRequestForSamePair_reusesOpenConversation() throws Exception {
         UUID bakeryId = UUID.randomUUID();
         when(bakeryClient.profile(bakeryId))
-                .thenReturn(new BakeryChatClient.BakeryProfile(bakeryId, "Anna Bakery", BAKERY_USER_ID));
+                .thenReturn(new BakeryChatClient.BakeryProfile(bakeryId, "Anna Bakery", BAKERY_USER_ID, "ACTIVE"));
         when(identityClient.profile(CUSTOMER_ID))
                 .thenReturn(new IdentityChatClient.UserProfile(CUSTOMER_ID, "Khánh Linh"));
         when(identityClient.profile(BAKERY_USER_ID))

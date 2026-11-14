@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { after, beforeEach, test } from 'node:test'
 import { randomUUID } from 'node:crypto'
 import { setAuthToken } from '../src/services/apiClient.js'
-import { chatService as service } from '../src/services/chatService.js'
+import { chatService as service, openCustomerConversationWithBakery } from '../src/services/chatService.js'
 import { assertChatAccess, mapConversation, mapConversationPage, mapMessage, mapMessagePage, mergeOlderMessages, messageRequest, messageFormData, safeChatUrl } from '../src/services/chatModels.js'
 import { canAccess, requiredRoles } from '../src/routes/routeAccess.js'
 import { viewer, customerId, otherUserId, bakeryId, conversationId, conversation, summary, message, olderMessage, messagePage, cursor, conversationPage, pngFile, pdfFile, reply } from './fixtures/chat.js'
@@ -60,6 +60,19 @@ test('Conversation requests use JWT, real result/meta and only supported filters
   const query = new URL(calls[0].url, 'http://fixture').searchParams
   assert.equal(query.get('page'), '2'); assert.equal(query.get('status'), 'OPEN'); assert.equal(query.has('sort'), false)
   assert.equal(calls[0].options.headers.get('Authorization'), 'Bearer chat-fixture-token'); assert.equal(calls[0].options.credentials, 'include')
+})
+test('Bakery chat reuses an open thread and creates a direct thread for a first conversation', async () => {
+  handler = () => reply(conversationPage([{ ...summary, status: 'OPEN' }]))
+  assert.equal((await openCustomerConversationWithBakery(bakeryId, viewer)).id, conversationId)
+  assert.equal(calls.length, 1)
+
+  calls.length = 0
+  handler = (_url, options) => options.method === 'POST'
+    ? reply({ ...conversation, cakeRequestId: null })
+    : reply(conversationPage([]))
+  assert.equal((await openCustomerConversationWithBakery(bakeryId, viewer)).cakeRequestId, null)
+  assert.equal(calls.length, 2)
+  assert.deepEqual(JSON.parse(calls[1].options.body), { bakeryId })
 })
 test('Conversation detail validates ID and participant instead of reading a cached mock', async () => {
   handler = () => reply(conversation); assert.equal((await service.getConversation(conversationId, viewer)).participants.length, 2)

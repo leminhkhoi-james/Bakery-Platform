@@ -33,8 +33,13 @@ export const chatService = {
     return { conversationId: data.conversationId, lastReadAt: data.lastReadAt }
   },
   async createConversation({ cakeRequestId, bakeryId }, viewer) {
-    const request = { cakeRequestId: requireId(cakeRequestId, 'Cake request'), bakeryId: requireId(bakeryId, 'Cửa hàng') }
-    return assertChatAccess(mapConversation(await api.post('/conversations', request), true), viewer)
+    const request = { bakeryId: requireId(bakeryId, 'Cửa hàng') }
+    if (cakeRequestId != null) request.cakeRequestId = requireId(cakeRequestId, 'Yêu cầu đặt bánh')
+    const conversation = assertChatAccess(mapConversation(await api.post('/conversations', request), true), viewer)
+    if (conversation.bakeryId !== request.bakeryId || conversation.customerId !== viewer.userId) {
+      throw new ApiError('Hội thoại trả về không khớp với yêu cầu.', 502)
+    }
+    return conversation
   },
   async closeConversation(conversationId, reason = '') {
     if (typeof reason !== 'string' || reason.length > 500) throw new ApiError('Lý do đóng hội thoại tối đa 500 ký tự.', 400)
@@ -46,6 +51,23 @@ export const chatService = {
 }
 
 export const loadConversations = ({ viewer, ...params }, options) => chatService.getConversations(params, viewer, options)
+
+export async function openCustomerConversationWithBakery(bakeryId, viewer) {
+  const targetId = requireId(bakeryId, 'Cửa hàng')
+  let page = 1
+  let pages
+  do {
+    // Supplying bakeryId to this endpoint selects the owner's inbox.
+    const inbox = await chatService.getConversations({ status: 'OPEN', page, size: 100 }, viewer)
+    const open = inbox.result.find(conversation =>
+      conversation.status === 'OPEN' && conversation.customerId === viewer.userId &&
+      conversation.bakeryId.toLowerCase() === targetId)
+    if (open) return open
+    pages = inbox.meta.pages
+    page += 1
+  } while (page <= pages)
+  return chatService.createConversation({ bakeryId: targetId }, viewer)
+}
 
 async function loadPublicBakeryName(bakeryId, options) {
   try {

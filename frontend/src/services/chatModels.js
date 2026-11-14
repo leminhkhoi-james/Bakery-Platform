@@ -11,8 +11,9 @@ const fail = (message) => { throw new ApiError(message, 502) }
 export const safeChatUrl = (value) => simulationMediaUrl(value) || (typeof value === 'string' && /^https?:\/\//i.test(value) ? value : null)
 
 export function mapConversation(dto, detail = false) {
-  if (!dto || !['id', 'customerId', 'bakeryId', 'cakeRequestId'].every((key) => isCatalogId(dto[key]))) fail('Conversation DTO thiếu ID hợp lệ.')
-  const result = { id: dto.id, customerId: dto.customerId, bakeryId: dto.bakeryId, cakeRequestId: dto.cakeRequestId, orderId: isCatalogId(dto.orderId) ? dto.orderId : null }
+  if (!dto || !['id', 'customerId', 'bakeryId'].every((key) => isCatalogId(dto[key])) ||
+      (dto.cakeRequestId != null && !isCatalogId(dto.cakeRequestId))) fail('Conversation DTO thiếu ID hợp lệ.')
+  const result = { id: dto.id, customerId: dto.customerId, bakeryId: dto.bakeryId, cakeRequestId: dto.cakeRequestId ?? null, orderId: isCatalogId(dto.orderId) ? dto.orderId : null }
   for (const key of ['status', 'lastMessageAt', 'lastMessagePreview', 'createdAt', 'closeReason', 'currentUserLastReadAt']) result[key] = text(dto[key])
   for (const key of ['customerName', 'ownerName', 'bakeryName', 'requestTitle']) if (typeof dto[key] === 'string') result[key] = dto[key]
   result.unreadCount = Number.isSafeInteger(dto.unreadCount) && dto.unreadCount >= 0 ? dto.unreadCount : null

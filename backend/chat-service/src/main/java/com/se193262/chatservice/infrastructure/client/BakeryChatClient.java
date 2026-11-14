@@ -13,7 +13,7 @@ public interface BakeryChatClient {
     @GetExchange("/bakeries/{id}")
     BakeryProfile profile(@PathVariable UUID id);
 
-    record BakeryProfile(UUID id, String name, UUID ownerUserId) { }
+    record BakeryProfile(UUID id, String name, UUID ownerUserId, String status) { }
 
     @GetExchange("/bakeries/{bakeryId}/members/{userId}/authorization")
     MembershipAuthorizationResponse authorizeMember(

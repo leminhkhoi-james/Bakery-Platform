@@ -1182,7 +1182,8 @@ last message preview.
 ```
 
 Request phải thuộc customer; bakery phải được phép trao đổi cho request.
-Unique `(cakeRequestId,bakeryId)` giúp retry trả conversation hiện có.
+Có thể bỏ `cakeRequestId` để khách nhắn trực tiếp với tiệm đang hoạt động.
+Khi khách và tiệm đã có hội thoại đang mở, API trả lại hội thoại đó.
 
 **Success (201 hoặc 200 nếu đã tồn tại):** `ConversationResponse`. **Errors:**
 `422` context invalid; `503` Marketplace/Bakery unavailable.

@@ -23,7 +23,7 @@ before(async () => {
   AdminFrame = (await vite.ssrLoadModule('/src/components/management/AdminFrame.jsx')).default
   Profile = (await vite.ssrLoadModule('/src/pages/customer/profile/CustomerProfilePage.jsx')).default
   Vendors = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminVendorsPage.jsx')).default
-  Revenue = (await vite.ssrLoadModule('/src/pages/vendor/revenue/VendorRevenueEscrowPage.jsx')).default
+  Revenue = (await vite.ssrLoadModule('/src/pages/vendor/revenue/VendorRevenuePage.jsx')).default
   Header = (await vite.ssrLoadModule('/src/layouts/customer/Header.jsx')).default
   AdminPlanForm = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPlansPage.jsx')).AdminPlanForm
   CatalogForm = (await vite.ssrLoadModule('/src/components/management/CatalogEntityManager.jsx')).CatalogEntityForm
@@ -82,11 +82,13 @@ test('Customer profile shows real identity and preserves role-gated portal links
   const privileged = render(Profile, { onNavigate() {} })
   assert.match(privileged, /Quản trị hệ thống/); assert.match(privileged, /Quản lý tiệm bánh/)
 })
-test('Unavailable revenue screen stays honest after visual restoration', () => {
+test('Vendor revenue shows estimated revenue and completed orders with a date filter', () => {
   setup({}, ['BAKERY_OWNER'])
   const html = render(Revenue, { onNavigate() {}, routeSearch: '?bakeryId=' + id })
-  assert.match(html, /Chưa có số liệu doanh thu đã đối soát/); assert.match(html, /giao dịch đã đối soát/)
-  assert.doesNotMatch(html, /Rút tiền|Giải ngân thành công|120.000.000/)
+  assert.match(html, /Doanh thu ước tính/)
+  assert.match(html, /Đơn hàng hoàn tất/)
+  assert.match(html, /Lọc theo ngày hoàn tất/)
+  assert.doesNotMatch(html, /Giá trị trung bình mỗi đơn|Chưa có số liệu doanh thu đã đối soát|Sàn thương mại kết nối|Escrow|Rút tiền|Giải ngân thành công|120.000.000/)
 })
 test('Customer navigation has an accessible mobile toggle and uses initials instead of a sample avatar', () => {
   setup({}, ['CUSTOMER'])

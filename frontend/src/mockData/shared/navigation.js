@@ -127,7 +127,7 @@ export const VENDOR_NAV_ITEMS = [
   },
   {
     id: 'revenue',
-    label: 'Doanh thu & Escrow',
+    label: 'Doanh thu',
     icon: 'account_balance_wallet',
     badge: '46.7M',
     route: 'vendor-revenue',
