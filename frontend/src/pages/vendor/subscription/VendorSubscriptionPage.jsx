@@ -53,6 +53,7 @@ function BakeryWorkspace({ bakeryId, roles, plans, onBusy, initialPlanId, initia
 
     <section className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <button type="button" className="sc-button sc-action-button--secondary" disabled={locked} onClick={refresh}>Làm mới</button>
         <div>
           <h2 className="mb-1 text-xl font-bold text-primary">Các gói đang mở bán</h2>
 

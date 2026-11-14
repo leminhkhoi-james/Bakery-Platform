@@ -30,6 +30,7 @@ public class AddressController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<AddressResponse>> create(@AuthenticationPrincipal Jwt jwt,
             @Validated(SaveAddressRequest.Create.class) @RequestBody SaveAddressRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(service.create(actor(jwt), request)));
@@ -47,6 +48,7 @@ public class AddressController {
     }
 
     @DeleteMapping("/{id}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> delete(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
         service.delete(actor(jwt), id);
         return ResponseEntity.noContent().build();

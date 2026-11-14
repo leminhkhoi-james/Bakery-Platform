@@ -16,7 +16,7 @@ export const aiService = {
   },
   async reviseJob(id, input, key) { return mapJobSummary(await api.post(jobPath(id) + '/prompt-revisions', generationPayload(input, false), { headers: { 'Idempotency-Key': generationKey(key) } })) },
   async cancelJob(id) { return mapJobSummary(await api.post(jobPath(id) + '/cancel')) },
-  async getDesign(id, options = {}) { const design = mapDesign(await api.get('/generated-designs/' + requireId(id), options)); if (design.id !== id.toLowerCase()) throw new ApiError('Backend trả sai thiết kế.', 502); return design },
+  async getDesign(id, options = {}) { const { adminPreview = false, ...requestOptions } = options; const design = mapDesign(await api.get('/generated-designs/' + requireId(id), requestOptions), { adminPreview }); if (design.id !== id.toLowerCase()) throw new ApiError('Backend trả sai thiết kế.', 502); return design },
 }
 export const loadAiJobs = (params, options) => aiService.getJobs(params, options)
 export const loadAiJob = ({ id, user }, options) => aiService.getGenerationJob(id, user, options)

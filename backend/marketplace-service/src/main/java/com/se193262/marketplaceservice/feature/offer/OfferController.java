@@ -35,12 +35,18 @@ public class OfferController {
     }
 
     @PostMapping("/cake-requests/{id}/offers")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<OfferResponse>> create(
             @PathVariable UUID id, @Valid @RequestBody CreateOfferRequest command) {
         return ResponseEntity.status(201).body(ApiResponse.created(service.create(id, command)));
     }
 
     @PatchMapping("/offers/{id}")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Patch editable fields of an owned pending offer",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PatchOfferRequest.Fields.class),
+                            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"cakePrice\":410000,\"message\":\"Updated quotation\"}"))))
     public ApiResponse<OfferResponse> patch(
             @PathVariable UUID id, @Valid @RequestBody PatchOfferRequest command) {
         return ApiResponse.success(service.patch(id, command));

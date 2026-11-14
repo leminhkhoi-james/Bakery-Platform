@@ -54,6 +54,34 @@ class LiveReviewSection extends StatelessWidget {
         save: (j) => review == null
             ? w.reviews.create(id, int.parse(j['rating']), j['comment'] ?? '')
             : w.reviews.update(id, int.parse(j['rating']), j['comment'] ?? ''),
+        recoveryBuilder: (formContext, values, failure) => LiveCommand(
+          'Đọc lại đánh giá',
+          outlined: true,
+          run: () async {
+            final current = await w.orders.detail(id);
+            final confirmed = current['review'];
+            if (current['customerId'] != w.session.user?['id'] ||
+                confirmed == null) {
+              throw const ApiFailure(
+                0,
+                'Chưa tìm thấy đánh giá đã lưu. Quay lại đơn và làm mới trước khi gửi lại.',
+              );
+            }
+            final saved = object(confirmed);
+            if (saved['orderId'] != id ||
+                saved['rating'] != int.tryParse('${values['rating']}') ||
+                (saved['comment'] ?? '') !=
+                    '${values['comment'] ?? ''}'.trim()) {
+              throw const ApiFailure(
+                0,
+                'Nội dung đã lưu chưa khớp lần gửi này. Quay lại đơn để kiểm tra trước khi chỉnh sửa.',
+              );
+            }
+            if (formContext.mounted) {
+              await LiveFormPage.completeRecovery<Json>(formContext, saved);
+            }
+          },
+        ),
       );
       reload();
     }
@@ -70,6 +98,10 @@ class LiveReviewSection extends StatelessWidget {
           ),
         if (review != null) ...[
           SCStatusBadge('${review['status']}'),
+          if (review['status'] == 'PENDING')
+            const SCNotice(
+              'Đánh giá đã được lưu và đang chờ duyệt. Nội dung chưa được công khai.',
+            ),
           if (!deleted) ...[
             Text(
               '${review['rating']} / 5 sao',
@@ -81,7 +113,8 @@ class LiveReviewSection extends StatelessWidget {
         ],
         if (mine &&
             order['status'] == 'COMPLETED' &&
-            (review == null || review['status'] == 'PUBLISHED'))
+            (review == null ||
+                ['PENDING', 'PUBLISHED'].contains(review['status'])))
           SCButton(
             review == null ? 'Viết đánh giá' : 'Sửa đánh giá',
             key: const ValueKey('review-edit'),

@@ -2,3 +2,5 @@
 bcrypt>=4,<6
 requests>=2.32,<3
 PyYAML>=6,<7
+python-dotenv>=1,<2
+minio==7.2.20

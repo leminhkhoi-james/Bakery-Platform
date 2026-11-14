@@ -37,6 +37,7 @@ public class ProductCategoryController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<ProductCategoryDto>> create(@PathVariable UUID bakeryId,
             @Valid @RequestBody ProductCategoryDto request) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,6 +51,7 @@ public class ProductCategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> delete(@PathVariable UUID bakeryId, @PathVariable UUID categoryId) {
         categoryService.delete(bakeryId, categoryId);
         return ResponseEntity.noContent().build();

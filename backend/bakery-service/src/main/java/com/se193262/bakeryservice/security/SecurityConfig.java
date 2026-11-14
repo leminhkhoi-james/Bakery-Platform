@@ -171,7 +171,7 @@ public class SecurityConfig {
             String scopes = token.getToken().getClaimAsString("scope");
             boolean allowed = "service".equals(token.getToken().getClaimAsString("token_type"))
                     && token.getToken().getAudience().contains(serviceAudience)
-                    && correlationId != null && !correlationId.isBlank()
+                    && com.se193262.platform.security.CorrelationIds.valid(correlationId)
                     && scopes != null && Arrays.asList(scopes.split(" ")).contains(scope);
             return new AuthorizationDecision(allowed);
         };

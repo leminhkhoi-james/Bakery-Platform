@@ -36,7 +36,7 @@ public class AddOnInventoryClient {
             client.post().uri(serviceHttp.properties().bakeryUrl() + "/internal/v1/bakeries/" + bakeryId
                             + "/inventory/orders/" + orderId + "/" + action)
                     .headers(headers -> headers.setBearerAuth(serviceHttp.serviceToken("bakery-service", "bakery:catalog:quote")))
-                    .header("X-Correlation-Id", UUID.randomUUID().toString())
+                    .header("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew())
                     .body(body).retrieve().toBodilessEntity();
         } catch (RestClientResponseException error) {
             int status = error.getStatusCode().value();

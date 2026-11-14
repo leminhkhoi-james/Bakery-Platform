@@ -9,12 +9,13 @@ const nativeFetch = globalThis.fetch
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'mutation-event-fixture-only', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
+    if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export const useViewportPageSize = () => ({ containerRef() {}, pageSize: 6 })'
     if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return globalThis.__mutationAuth; }'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load) { return globalThis.__mutationResources[load.name] || { status: "loading", data: null, error: null, reload() {} }; }'
   }, transform(code, id) {
     const path = id.replaceAll('\\', '/').split('?')[0]
     if (['CatalogEntityManager.jsx', 'ProductAssets.jsx', 'OrderReview.jsx', 'AdminPlansPage.jsx', 'AdminModerationPage.jsx', 'ReviewModeration.jsx'].some((name) => path.endsWith('/' + name))) {
-      return code.replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value), useRef = (value) => globalThis.__mutationState(() => ({ current: value }))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value)")
+      return code.replace("import React, { useEffect, useRef, useState } from 'react'", "import React from 'react'\nconst useEffect = () => {}, useState = (value) => globalThis.__mutationState(value), useRef = (value) => globalThis.__mutationState(() => ({ current: value }))[0]").replace("import React, { useRef, useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value), useRef = (value) => globalThis.__mutationState(() => ({ current: value }))[0]").replace("import React, { useState } from 'react'", "import React from 'react'\nconst useState = (value) => globalThis.__mutationState(value)")
     }
   } }] })
   Entity = (await vite.ssrLoadModule('/src/components/management/CatalogEntityManager.jsx')).default
@@ -42,7 +43,7 @@ test('Vendor real edit/delete callbacks issue PATCH/DELETE and reload resources 
   let reloads = 0; const calls = [], row = { id, name: 'Old', slug: 'old', displayOrder: 0, active: true }
   globalThis.fetch = async (url, options) => { calls.push({ url, options }); return options.method === 'DELETE' ? reply(null, 204) : reply({ ...row, name: 'Saved by server' }) }
   const render = harness(Entity, { bakeryId, kind: 'categories' }, { loadCatalogEntities: ready([row], () => reloads++), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
-  nodes(render()).find(node => node.type?.name === 'VendorActionMenu').props.onConfirm('edit')
+  button(render(), 'Chỉnh sửa').props.onClick()
   const form = nodes(render()).find((node) => node.type?.name === 'CatalogEntityForm')
   await form.props.onSave({ ...row, name: 'Changed' })
   assert.equal(calls[0].options.method, 'PATCH'); assert.equal(reloads, 1)
@@ -130,7 +131,7 @@ test('Failed Vendor mutation exposes backend error, never emits success, and ref
   let reloads = 0; globalThis.fetch = async () => reply(null, 409)
   const row = { id, name: 'Category', slug: 'category', displayOrder: 0, active: true }
   const render = harness(Entity, { bakeryId, kind: 'categories' }, { loadCatalogEntities: ready([row], () => reloads++), loadVendorMembership: ready({ memberRole: 'OWNER', status: 'ACTIVE' }) }, ['BAKERY_OWNER'])
-  nodes(render()).find(node => node.type?.name === 'VendorActionMenu').props.onConfirm('edit')
+  button(render(), 'Chỉnh sửa').props.onClick()
   await nodes(render()).find((node) => node.type?.name === 'CatalogEntityForm').props.onSave(row)
   const tree = render()
   // The conflict must reach the still-open form, rather than the inert page behind its dialog.

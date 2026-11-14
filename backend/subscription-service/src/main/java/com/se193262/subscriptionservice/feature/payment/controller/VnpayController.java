@@ -37,6 +37,8 @@ public class VnpayController {
     }
 
     @GetMapping("/api/v1/payments/vnpay/return")
+    @io.swagger.v3.oas.annotations.Operation(summary = "Verify browser return without settling payment",
+            description = "Read-only signature, merchant, reference and amount validation. Status is the persisted attempt status; only verified IPN can settle and grant an entitlement.")
     public ApiResponse<Map<String, String>> result(@RequestParam MultiValueMap<String, String> parameters) {
         if (hasDuplicates(parameters)) throw new AppException(HttpStatus.BAD_REQUEST, "Duplicate VNPay parameters");
         return ApiResponse.success(vnpay.returnResult(parameters.toSingleValueMap()));

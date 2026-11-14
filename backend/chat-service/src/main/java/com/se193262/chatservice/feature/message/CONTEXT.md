@@ -10,6 +10,10 @@ REST APIs, PostgreSQL persistence, cursor paging, SHA-256 payload idempotency,
 attachment validation/storage with short-lived signed URLs, soft deletion and
 delivery/read receipts are implemented.
 
+Swagger sends the required metadata part as application/json. New messages return
+201 and idempotent replays return 200. Missing/malformed metadata returns 400;
+unsupported part MIME returns 415 without an error dispatch masking it as 403.
+
 MinIO I/O uses `CHAT_STORAGE_ENDPOINT`; signatures use
 `CHAT_STORAGE_PUBLIC_ENDPOINT` and explicit `CHAT_STORAGE_REGION`. The public
 origin defaults to the existing endpoint for application compatibility; local

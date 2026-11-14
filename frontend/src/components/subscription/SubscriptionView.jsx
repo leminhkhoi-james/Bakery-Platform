@@ -1,18 +1,19 @@
 import { userFeedback, cleanPresentationLabel, publicCopy } from '../../services/uiLabels.js'
 import React from 'react'
-import { useManualRefresh } from '../../context/ManualRefreshContext.js'
 import '../common/vendor-ui.css'
 import { Icon, StatusBadge } from '../common/WorkspaceUI.jsx'
 import { canOrderPlan, subscriptionStatusLabel, formatSubscriptionMoney } from '../../services/subscriptionModels.js'
 import { planFeatureRows, planMonthlyPrice, planName, planTierRank, sortPlansByTier } from '../../services/planPresentation.js'
 
 export function SubscriptionError({ error, retry }) {
-  const manualRefresh = useManualRefresh()
   const feedback = userFeedback(error)
   const explanation = error?.message === 'Bakery profile must be approved and active before purchasing a subscription'
     ? 'Hồ sơ tiệm cần được duyệt và ở trạng thái hoạt động trước khi mua hoặc thanh toán gói. Hãy kiểm tra trạng thái hồ sơ.'
     : error?.message === 'A VNPay payment is still in progress'
     ? 'Đang có một lượt thanh toán VNPay cho đơn này. Hãy tiếp tục qua VNPay hoặc chờ liên kết hết hạn trước khi gửi biên lai chuyển khoản.'
+    : error?.status === 401 ? 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
+    : error?.status === 403 ? 'Bạn không có quyền thao tác với cửa hàng này.'
+    : error?.status === 404 ? 'Không tìm thấy thông tin được yêu cầu.'
     : feedback && feedback !== 'Không thể xử lý yêu cầu. Vui lòng thử lại.'
     ? feedback
     : {
@@ -30,7 +31,7 @@ export function SubscriptionError({ error, retry }) {
         <span>Thông báo</span>
       </div>
       <p>{explanation}</p>
-      {manualRefresh && retry && <button className="mt-2 underline font-semibold cursor-pointer block" onClick={retry}>Thử lại</button>}
+      {retry && <button type="button" className="mt-2 underline font-semibold cursor-pointer block" onClick={retry}>Thử lại</button>}
     </div>
   )
 }

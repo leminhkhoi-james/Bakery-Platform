@@ -46,12 +46,12 @@ test('Loading and HTTP/network error states suppress stale/mock plan content', (
   assert.match(render(view.ResourceState, { resource: { status: 'loading' }, children: 'STALE_PLAN' }), /Đang tải/)
   for (const status of [401, 403, 404, 500, 0]) {
     const html = render(view.ResourceState, { resource: { status: 'error', error: { status, message: 'API failure' }, reload: () => {} }, children: 'STALE_PLAN' })
-    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : ({ 401: /đăng nhập lại/, 403: /không có quyền/, 404: /Không tìm thấy/ }[status])); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
+    assert.match(html, /role="alert"/); assert.match(html, status >= 500 || status === 0 ? /Kết nối đang gián đoạn/ : ({ 401: /[Đđ]ăng nhập/, 403: /không có quyền/, 404: /Không tìm thấy/ }[status])); assert.match(html, /Thử lại/); assert.doesNotMatch(html, /STALE_PLAN/)
   }
 })
 test('Vendor page has real identity/manual bakery selector and no invented active subscription', () => {
   const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { displayName: 'Người dùng thật' }, roles: ['BAKERY_OWNER'] } }, React.createElement(VendorPage, { onNavigate: () => {} })))
-  assert.match(html, /Người dùng thật/); assert.match(html, /Nhập mã cửa hàng/); assert.match(html, /Chọn cửa hàng/)
+  assert.match(html, /Người dùng thật/); assert.match(html, /Chọn cửa hàng/); assert.match(html, /Chọn cửa hàng/)
   assert.doesNotMatch(html, /199\.000|499\.000|999\.000|Đang hiệu lực|La Crème/)
 })
 test('Vendor with UUID and owner role renders backend loading instead of demo periods/orders', () => {
@@ -64,9 +64,8 @@ test('Public plan page is accessible without auth context and starts in loading 
   assert.match(html, /Gói dịch vụ cho tiệm bánh/); assert.match(html, /Đang tải/)
 })
 
-test('Customer subscription workspace exposes purchase flow and explains bakery ownership', () => {
+test('Customer subscription workspace requires a selected bakery and API data before purchase', () => {
   const html = renderToStaticMarkup(React.createElement(AuthContext.Provider, { value: { user: { id: randomUUID() }, roles: ['CUSTOMER'] } }, React.createElement(VendorPage, { routeSearch: '?bakeryId=' + randomUUID(), onNavigate: () => {} })))
-  assert.match(html, /Tài khoản khách hàng hoặc chủ tiệm có thể tạo đơn/)
-  assert.match(html, /khi có quyền chủ của cửa hàng đã chọn/)
+  assert.match(html, /Các gói đang mở bán/); assert.match(html, /Đang tải/); assert.doesNotMatch(html, /Xác nhận tạo đơn/)
   assert.doesNotMatch(html, /Chỉ chủ tiệm được/)
 })

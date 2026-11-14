@@ -26,7 +26,7 @@ export function ApiErrorMessage({ error, retry }) {
         <span>Thông báo</span>
       </div>
       <p className="break-words leading-relaxed">{description}</p>
-      {manualRefresh && retry && (
+      {retry && (
         <button type="button" className="mt-2 text-xs font-semibold underline cursor-pointer block" onClick={retry}>
           Thử lại
         </button>

@@ -30,6 +30,7 @@ public class InternalBakeryController {
     }
 
     @PutMapping("/{bakeryId}/onboarding/activate")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> activate(@PathVariable UUID bakeryId) {
         onboarding.reconcileActivation(bakeryId);
         return ResponseEntity.noContent().build();

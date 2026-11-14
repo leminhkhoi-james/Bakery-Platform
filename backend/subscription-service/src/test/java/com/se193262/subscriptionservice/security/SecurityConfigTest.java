@@ -137,6 +137,10 @@ class SecurityConfigTest {
         mockMvc.perform(get(path).header("Authorization", "Bearer service-entitlement")
                         .header("X-Correlation-Id", UUID.randomUUID().toString()))
                 .andExpect(status().isOk());
+        for (String invalid : List.of("a".repeat(129), "space id", "")) {
+            mockMvc.perform(get(path).header("Authorization", "Bearer service-entitlement")
+                            .header("X-Correlation-Id", invalid)).andExpect(status().isForbidden());
+        }
     }
 
     @Test

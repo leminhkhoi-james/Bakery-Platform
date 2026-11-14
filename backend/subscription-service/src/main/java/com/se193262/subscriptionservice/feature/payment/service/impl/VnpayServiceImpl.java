@@ -186,10 +186,8 @@ public class VnpayServiceImpl implements VnpayService {
         if (!amount(attempt).equals(parameters.get("vnp_Amount"))) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Invalid VNPay amount");
         }
-        if (attempt.getStatus() == VnpayAttempt.Status.PENDING && parameters.containsKey("vnp_TransactionStatus")) {
-            ipn(parameters);
-            attempt = attempts.findById(attemptId).orElse(attempt);
-        }
+        // ADR-006: a browser-delivered signed return reports provider fields but
+        // cannot substitute for the independently delivered IPN settlement path.
         return Map.of("orderId", attempt.getOrderId().toString(), "attemptId", attempt.getId().toString(),
                 "status", attempt.getStatus().name(), "responseCode", parameters.getOrDefault("vnp_ResponseCode", ""));
     }

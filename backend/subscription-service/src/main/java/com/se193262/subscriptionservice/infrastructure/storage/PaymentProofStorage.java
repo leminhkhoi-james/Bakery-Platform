@@ -51,8 +51,13 @@ public class PaymentProofStorage {
         if (file == null || file.isEmpty() || file.getSize() > MAX_BYTES) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Proof must be between 1 byte and 10 MB");
         }
+        final byte[] bytes;
         try {
-            byte[] bytes = file.getBytes();
+            bytes = file.getBytes();
+        } catch (IOException exception) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Proof could not be read");
+        }
+        try {
             if (bytes.length == 0 || bytes.length > MAX_BYTES) {
                 throw new AppException(HttpStatus.BAD_REQUEST, "Proof must be between 1 byte and 10 MB");
             }
@@ -78,8 +83,6 @@ public class PaymentProofStorage {
             return key;
         } catch (AppException exception) {
             throw exception;
-        } catch (IOException exception) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Proof could not be read");
         } catch (Exception exception) {
             throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Proof storage is unavailable");
         }

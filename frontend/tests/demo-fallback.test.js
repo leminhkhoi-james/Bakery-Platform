@@ -15,7 +15,7 @@ const vendor = { id: 'aa000000-0000-4000-8000-000000000002', roles: ['BAKERY_OWN
 const admin = { id: 'aa000000-0000-4000-8000-000000000003', roles: ['ADMIN'] }
 const empty = { result: [], meta: { page: 1, pageSize: 20, pages: 0, total: 0 } }
 const response = (data = empty, status = 200) => new Response(JSON.stringify({ data }), { status, headers: { 'Content-Type': 'application/json' } })
-function setup(upstream = () => response()) {
+function setup(upstream = (url) => response(String(url).split('?')[0].endsWith('/admin/subscription-plans') ? [] : empty)) {
   let user = customer
   const calls = [], store = createDemoStore()
   const runtime = createDemoTransport({ store, getUser: () => user, fetch: async (...args) => { calls.push(args); return upstream(...args) } })
@@ -177,7 +177,7 @@ test('Customer → Vendor → Admin: RFQ, quote, chat, order, review, subscripti
     app.as(vendor)
     assert.equal((await subscriptionService.getBakerySubscription(demoId(10))).currentSubscription.id, approved.subscription.id)
     app.as(admin)
-    assert.ok((await adminManagementService.getPlans()).every((p) => mapSubscriptionPlan(p)))
+    assert.deepEqual(await adminManagementService.getPlans(), [], 'admin plans honor api-only reads and the real list response shape')
     assert.equal(app.calls.filter(([, opts]) => opts.method !== 'GET').length, 0, 'no DEMO write reaches real transport')
   } finally { globalThis.fetch = original }
 })

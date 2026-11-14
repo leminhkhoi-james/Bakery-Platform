@@ -18,6 +18,19 @@ public class GenerationController {
     public GenerationController(GenerationService service) { this.service = service; }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @io.swagger.v3.oas.annotations.Operation(summary = "Queue an owned RFQ image generation job",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "multipart/form-data",
+                            encoding = @io.swagger.v3.oas.annotations.media.Encoding(name = "metadata", contentType = "application/json"))))
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "Job accepted; generation is asynchronous", useReturnTypeSchema = true),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid metadata or parameters"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "RFQ ownership or role denied"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "RFQ or idempotency conflict"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", description = "Metadata part must be application/json"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "429", description = "Generation quota exceeded"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Generation disabled or dependency unavailable")
+    })
     public ResponseEntity<ApiResponse<GenerationJobResponse>> create(
             @Valid @RequestPart("metadata") CreateGenerationJobRequest request,
             @RequestPart(value = "sourceImages", required = false) List<MultipartFile> images,
@@ -39,6 +52,7 @@ public class GenerationController {
     }
 
     @PostMapping("/{id}/prompt-revisions")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "Prompt revision accepted for asynchronous processing", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<GenerationJobResponse>> revise(@PathVariable UUID id,
             @Valid @RequestBody CreatePromptRevisionRequest request, @RequestHeader("Idempotency-Key") String key) {
         return accepted(service.revise(id, request, key));

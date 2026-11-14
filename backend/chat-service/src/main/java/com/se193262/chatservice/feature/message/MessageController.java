@@ -54,7 +54,17 @@ public class MessageController {
                 conversationId, actorId(jwt), roles(jwt), before, limit)));
     }
 
-    @Operation(summary = "Send an idempotent text, image, or file message")
+    @Operation(summary = "Send an idempotent text, image, or file message",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "multipart/form-data",
+                            encoding = @io.swagger.v3.oas.annotations.media.Encoding(name = "metadata", contentType = "application/json"))))
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Message created", useReturnTypeSchema = true),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Idempotent replay", useReturnTypeSchema = true),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Missing metadata, malformed JSON or validation failure"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "415", description = "Metadata part must be application/json"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Attachment storage unavailable")
+    })
     @PostMapping(value = "/messages", consumes = "multipart/form-data")
     public ResponseEntity<ApiResponse<MessageResponse>> send(
             @PathVariable UUID conversationId,
@@ -82,6 +92,7 @@ public class MessageController {
 
     @Operation(summary = "Delete the current user's message while preserving a tombstone")
     @DeleteMapping("/messages/{messageId}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> delete(
             @PathVariable UUID conversationId,
             @PathVariable UUID messageId,

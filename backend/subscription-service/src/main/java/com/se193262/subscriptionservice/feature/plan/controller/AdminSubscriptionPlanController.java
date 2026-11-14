@@ -35,6 +35,7 @@ public class AdminSubscriptionPlanController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<SubscriptionPlanDto>> create(@Valid @RequestBody SubscriptionPlanDto request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.created(planService.create(request)));

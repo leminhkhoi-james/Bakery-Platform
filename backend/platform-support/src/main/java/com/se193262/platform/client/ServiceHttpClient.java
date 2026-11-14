@@ -65,10 +65,9 @@ public class ServiceHttpClient {
             var request =
                     body == null ? client.get().uri(base + path) : client.post().uri(base + path);
             request.header("Authorization", "Bearer " + token(audience, scope));
-            String correlation = org.slf4j.MDC.get("correlationId");
             request.header(
                     "X-Correlation-Id",
-                    correlation == null ? UUID.randomUUID().toString() : correlation);
+                    com.se193262.platform.security.CorrelationIds.currentOrNew());
             if (key != null) request.header("Idempotency-Key", key);
             if (body != null) ((RestClient.RequestBodySpec) request).body(body);
             T result = request.retrieve().body(type);
@@ -111,6 +110,7 @@ public class ServiceHttpClient {
             TokenResponse response =
                     client.post()
                             .uri(properties.identityUrl() + "/internal/v1/auth/service-token")
+                            .header("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew())
                             .body(
                                     Map.of(
                                             "clientId",

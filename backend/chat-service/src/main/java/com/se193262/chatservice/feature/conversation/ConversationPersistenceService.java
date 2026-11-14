@@ -1,7 +1,6 @@
 package com.se193262.chatservice.feature.conversation;
 
 import com.se193262.chatservice.exception.ChatException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +31,10 @@ public class ConversationPersistenceService {
 
     @Transactional
     public void addParticipant(Conversation conversation, UUID userId, ParticipantType type) {
+        // List and detail requests can join the same owner concurrently. Lock the
+        // parent before checking membership so the unique pair is inserted once.
+        conversationRepository.findByIdForParticipantUpdate(conversation.getId())
+                .orElseThrow(() -> new ChatException(HttpStatus.NOT_FOUND, "Conversation not found"));
         ConversationParticipant participant = participantRepository
                 .findByConversationIdAndUserId(conversation.getId(), userId)
                 .orElse(null);

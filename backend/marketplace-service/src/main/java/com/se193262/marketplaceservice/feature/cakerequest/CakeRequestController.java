@@ -36,6 +36,7 @@ public class CakeRequestController {
     }
 
     @PostMapping
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<CakeRequestResponse>> create(
             @Valid @RequestBody CreateCakeRequestRequest command) {
         return ResponseEntity.status(201).body(ApiResponse.created(service.create(command)));
@@ -65,6 +66,7 @@ public class CakeRequestController {
     }
 
     @PostMapping(value = "/{id}/images", consumes = "multipart/form-data")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<List<RequestImageResponse>>> upload(
             @PathVariable UUID id,
             @RequestParam("files") List<MultipartFile> files,
@@ -74,6 +76,7 @@ public class CakeRequestController {
     }
 
     @DeleteMapping("/{id}/images/{imageId}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> delete(@PathVariable UUID id, @PathVariable UUID imageId) {
         images.delete(id, imageId);
         return ResponseEntity.noContent().build();

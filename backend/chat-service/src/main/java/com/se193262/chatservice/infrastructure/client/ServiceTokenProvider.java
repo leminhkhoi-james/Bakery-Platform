@@ -63,8 +63,7 @@ public class ServiceTokenProvider {
     }
 
     private String correlationId() {
-        String value = MDC.get("correlationId");
-        return value == null || value.isBlank() ? UUID.randomUUID().toString() : value;
+        return com.se193262.platform.security.CorrelationIds.currentOrNew();
     }
 
     private ChatException unavailable() {

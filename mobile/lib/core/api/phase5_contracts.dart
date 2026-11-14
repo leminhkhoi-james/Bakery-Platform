@@ -104,8 +104,8 @@ List<String> orderActions(
     _ => <String>[],
   };
   return customer
-      ? next.where((v) => v == 'CANCELLED').toList()
+      ? next.where((v) => v == 'CANCELLED' || v == 'COMPLETED').toList()
       : owner
-      ? next
+      ? next.where((v) => v != 'COMPLETED').toList()
       : [];
 }

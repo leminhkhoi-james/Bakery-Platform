@@ -37,7 +37,9 @@ test('User actions stay compact, keyboard accessible and require confirmation be
     await page.getByRole('dialog', { name: 'Xác nhận xóa người dùng' }).getByRole('button', { name: 'Hủy', exact: true }).click()
     await editor.getByRole('button', { name: 'Hủy', exact: true }).click()
     await page.setViewportSize({ width: 390, height: 844 })
-    await trigger.scrollIntoViewIfNeeded(); await trigger.click()
+    // Adaptive pagination remounts rows after resize; locator.click retries that
+    // transition and performs the scrolling without retaining a detached node.
+    await trigger.click()
     const bounds = await editor.boundingBox()
     assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 390)
     assert.ok(bounds.y >= 0 && bounds.y + bounds.height <= 844)

@@ -178,6 +178,7 @@ Future<T?> openLiveForm<T>(
   String action = 'Lưu thay đổi',
   Widget? extra,
   Json Function(Json)? transform,
+  Widget Function(BuildContext, Json, ApiFailure)? recoveryBuilder,
 }) => Navigator.of(context).push<T>(
   MaterialPageRoute(
     builder: (_) => LiveFormPage<T>(
@@ -188,11 +189,21 @@ Future<T?> openLiveForm<T>(
       action: action,
       extra: extra,
       transform: transform,
+      recoveryBuilder: recoveryBuilder,
     ),
   ),
 );
 
 class LiveFormPage<T> extends StatefulWidget {
+  /// Close only after a caller has read back the persisted result.
+  static Future<void> completeRecovery<T>(
+    BuildContext context,
+    T result,
+  ) async {
+    final form = context.findAncestorStateOfType<_LiveFormPageState<T>>();
+    if (form != null) await form.complete(result);
+  }
+
   const LiveFormPage({
     super.key,
     required this.title,
@@ -229,6 +240,21 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
   int? epoch;
   String? error;
   ApiFailure? failure;
+  Future<void> complete(T result) async {
+    if (!mounted) return;
+    setState(() {
+      dirty = false;
+      busy = false;
+    });
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    if (widget.onSuccess != null) {
+      widget.onSuccess!(context, result);
+    } else {
+      Navigator.pop(context, result);
+    }
+  }
+
   @override
   void dispose() {
     for (final field in widget.fields.where(
@@ -328,20 +354,7 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
                             final result = await widget.save(
                               widget.transform?.call(payload) ?? payload,
                             );
-                            if (mounted) {
-                              setState(() {
-                                dirty = false;
-                                busy = false;
-                              });
-                              await WidgetsBinding.instance.endOfFrame;
-                              if (context.mounted) {
-                                if (widget.onSuccess != null) {
-                                  widget.onSuccess!(context, result);
-                                } else {
-                                  Navigator.pop(context, result);
-                                }
-                              }
-                            }
+                            await complete(result);
                           } on Object catch (e) {
                             if (mounted) {
                               setState(() {
@@ -359,10 +372,12 @@ class _LiveFormPageState<T> extends State<LiveFormPage<T>> {
                 if (failure != null &&
                     (uncertain || failure!.status == 409) &&
                     widget.recoveryBuilder != null)
-                  widget.recoveryBuilder!(
-                    context,
-                    Map.unmodifiable(values),
-                    failure!,
+                  Builder(
+                    builder: (recoveryContext) => widget.recoveryBuilder!(
+                      recoveryContext,
+                      Map.unmodifiable(values),
+                      failure!,
+                    ),
                   ),
               ],
             ),

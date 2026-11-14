@@ -174,12 +174,14 @@ class VnpayServiceTest {
         verifyNoInteractions(payments);
     }
 
-    @Test @DisplayName("Browser return settles verified pending callback immediately")
-    void returnResult_signedSuccess_settlesPendingAttempt() {
-        existingAttempt();
-        when(orders.findById(order.getId())).thenReturn(Optional.of(order));
-        assertThat(service.returnResult(callback()).get("status")).isEqualTo("SUCCEEDED");
-        verify(payments).settleVnpay(order.getId(), attempt.getUserId(), "12345678", attempt.getId());
+    @Test @DisplayName("Verified browser return is read-only until provider IPN settles")
+    void returnResult_signedSuccess_doesNotSettlePendingAttempt() {
+        when(attempts.findById(attempt.getId())).thenReturn(Optional.of(attempt));
+        assertThat(service.returnResult(callback()).get("status")).isEqualTo("PENDING");
+        assertThat(attempt.getStatus()).isEqualTo(VnpayAttempt.Status.PENDING);
+        assertThat(service.returnResult(callback()).get("status")).isEqualTo("PENDING");
+        verifyNoInteractions(payments,orders,transactions);
+        verify(attempts,never()).save(any());
     }
 
     @Test @DisplayName("Retrying checkout reuses its active persisted attempt and checks bakery ownership")

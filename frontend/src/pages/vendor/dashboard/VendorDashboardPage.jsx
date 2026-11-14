@@ -39,7 +39,7 @@ async function loadDashboardBreakdown({ bakeryId }, options) {
 const statusItems = (counts, labels) => counts && Object.entries(labels).map(([status, label]) => ({
   status, label, count: counts[status],
 }))
-const isLoading = resource => resource?.status === 'loading'
+const isLoading = resource => resource?.status === 'loading' || resource?.refreshing
 const totalLabel = resource => dashboardNumber(resource?.error ? null : resource?.data?.meta?.total)
 
 export function DashboardOverview({ bakeryId, products, orders, completedOrders, breakdown, onNavigate, onViewOrders }) {

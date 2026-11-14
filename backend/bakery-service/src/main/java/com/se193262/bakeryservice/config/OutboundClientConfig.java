@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableConfigurationProperties(RemoteProperties.class)
-@Import(ServiceHttpClient.class)
+@Import({ServiceHttpClient.class, com.se193262.platform.security.CorrelationFilter.class})
 public class OutboundClientConfig { }

@@ -1,6 +1,6 @@
 # Order live
 
-Public API: list/detail/direct/status-transitions và Review/Admin Review. Review gắn với `orderId`, không có `id` riêng; xem `../reviews/CONTEXT.md`. Admin khám phá Order qua scope=all rồi detail.review, không có global review queue. Order state/action được đối chiếu `CustomerOrder.transitionTo` và authorization ở service. Customer chỉ cancellation đúng trạng thái; Owner cần membership; Admin có state machine từ source. Server quyết định cuối.
+Public API: list/detail/direct/status-transitions và Review/Admin Review. Review gắn với `orderId`, không có `id` riêng; xem `../reviews/CONTEXT.md`. Admin khám phá Order qua scope=all rồi detail.review, không có global review queue. Customer sở hữu đơn và có role CUSTOMER được hủy đúng trạng thái hoặc xác nhận DELIVERING → COMPLETED; cần xác nhận nhận bánh, khóa nút trong khi gửi và đọc lại trạng thái. Owner/Admin không hoàn tất thay Customer; Owner cần membership cho các bước giao bánh. Server quyết định cuối.
 
 Direct contract chỉ có một product nên giỏ có một dòng sản phẩm, quantity/options/add-ons thật và một bakery. Tạm tính dùng BigInt cents, đọc lại catalog và báo giá thay đổi; không có public quote API riêng. Snapshot hiển thị tên, số lượng, tiền và trường cấu hình đã biết, không dump JSON nội bộ.
 

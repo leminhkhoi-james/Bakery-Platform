@@ -34,6 +34,7 @@ public class SubscriptionOrderController {
     }
 
     @PostMapping("/bakeries/{bakeryId}/subscription-orders")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Resource created", useReturnTypeSchema = true)
     public ResponseEntity<ApiResponse<SubscriptionOrderDto>> create(@PathVariable UUID bakeryId,
             @AuthenticationPrincipal Jwt jwt,
             @RequestHeader("Idempotency-Key") String idempotencyKey,

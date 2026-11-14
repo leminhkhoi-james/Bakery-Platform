@@ -116,7 +116,6 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
   const [attempt, setAttempt] = useState(null)
   const [selectedFile, setSelectedFile] = useState(null)
   const [paymentReference, setPaymentReference] = useState('')
-  const [qrFailed, setQrFailed] = useState(false)
   const form = useRef(null), inFlight = useRef(false)
   const order = resource.data
   const candidateBank = paymentOptions.data?.bankTransfer
@@ -124,11 +123,6 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
     ? candidateBank : null
 
   const shortOrderRef = displayReference(order?.id, 'SUB', order?.orderNumber)
-  const transferContent = shortOrderRef !== '—' ? shortOrderRef : (order?.orderNumber || order?.id || '')
-  const bankCode = bankTransfer?.bankCode
-  const vietQrUrl = order?.totalAmount && bankTransfer && bankCode
-    ? `https://img.vietqr.io/image/${encodeURIComponent(bankCode)}-${encodeURIComponent(bankTransfer.accountNumber)}-compact2.png?amount=${encodeURIComponent(order.totalAmount)}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(bankTransfer.accountName)}`
-    : null
 
   async function submit(event) {
     event.preventDefault()
@@ -158,7 +152,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
       setAttempt(null)
       setSelectedFile(null)
       setPaymentReference('')
-      setMessage('Đã gửi xác nhận thanh toán thành công. Bộ phận kế toán đang đối soát giao dịch của bạn.')
+      setMessage('Đã gửi chứng từ và đang chờ đối chiếu. Gói dịch vụ chưa được xác nhận thanh toán.')
       resource.reload()
       onChanged()
     } catch (failure) {
@@ -180,6 +174,7 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
             Mã hóa đơn: <span className="font-mono font-bold text-primary">#{shortOrderRef}</span>
           </p>
         </div>
+        <button type="button" className="sc-button sc-action-button--secondary" disabled={busy} onClick={resource.reload}>Tải lại chi tiết đơn</button>
       </div>
 
       <ResourceState resource={resource}>
@@ -227,7 +222,24 @@ export default function SubscriptionOrderDetail({ orderId, bakeryId, roles, onCh
               <div className="space-y-4">
                 {order.currency === 'VND' && <VnpayCheckout order={order} bakeryId={bakeryId} disabled={busy || Boolean(attempt)}
                   onBusy={(value) => { setBusy(value); onBusy(value) }} />}
-                <form ref={form} onSubmit={submit} className="hidden" aria-hidden="true" />
+                <details className="rounded-xl border border-primary/20 p-4">
+                  <summary className="cursor-pointer font-bold text-primary">Gửi chứng từ chuyển khoản</summary>
+                  <form ref={form} onSubmit={submit} className="mt-4 space-y-4">
+                    {bankTransfer ? <dl className="space-y-2 text-sm">
+                      <div><dt>Ngân hàng</dt><dd>{bankTransfer.bankName}</dd></div>
+                      <div><dt>Chủ tài khoản</dt><dd>{bankTransfer.accountName}</dd></div>
+                      <div><dt>Số tài khoản</dt><dd>{bankTransfer.accountNumber} <CopyButton text={bankTransfer.accountNumber} /></dd></div>
+                    </dl> : <p>Chưa có thông tin tài khoản nhận tiền. Liên hệ quản trị viên trước khi chuyển khoản.</p>}
+                    <input type="hidden" name="paymentMethod" value="BANK_TRANSFER" />
+                    <label className="block text-sm">Mã giao dịch
+                      <input className="sc-input" name="paymentReference" maxLength={255} value={paymentReference} disabled={busy || Boolean(attempt)} onChange={event => setPaymentReference(event.target.value)} />
+                    </label>
+                    <ReceiptUploader file={selectedFile} onChange={setSelectedFile} disabled={busy || Boolean(attempt)} />
+                    <p className="text-sm">Cần mã giao dịch hoặc chứng từ. Gửi chứng từ chưa đồng nghĩa đã thanh toán hoặc kích hoạt gói.</p>
+                    {attempt && <p role="status">Kết quả lần gửi trước chưa được xác nhận. Thử lại cùng nội dung để tránh gửi trùng.</p>}
+                    <button type="submit" className="sc-button" disabled={busy || !attempt && !selectedFile && !paymentReference.trim()}>{busy ? 'Đang gửi…' : attempt ? 'Thử lại yêu cầu' : 'Gửi chứng từ'}</button>
+                  </form>
+                </details>
               </div>
             )}
           </div>

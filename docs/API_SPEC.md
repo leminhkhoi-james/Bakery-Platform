@@ -166,7 +166,7 @@ the result set is empty. Sorting occurs before pagination/filtering by entitleme
 |---|---|---|
 | `Authorization` | Protected endpoint | Access token của user/service |
 | `Idempotency-Key` | Endpoint được đánh dấu | UUID do caller sinh; cùng key + payload trả cùng kết quả |
-| `X-Correlation-Id` | Optional public, required internal | UUID theo dõi request xuyên service |
+| `X-Correlation-Id` | Optional public; required trên internal Bakery/Subscription | Trace ID không bí mật; UUID khuyến nghị, 1–128 ký tự theo `^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$`; thiếu/sai tại hai service này trả 403, JWT/scope vẫn bắt buộc |
 | `Content-Type: multipart/form-data` | Upload | Gửi metadata và file theo đúng parts được mô tả |
 
 ### Data Conventions
@@ -971,6 +971,10 @@ request; `422` request không open/offer expired/ineligible/inactive entitlement
 **Request:** subset của offer create body, trừ `bakeryId`; chỉ offer `PENDING`
 chưa hết hạn được sửa. Giá/totals được tính lại.
 
+JSON phẳng, ví dụ `{"cakePrice":410000,"message":"Updated quotation"}`;
+không bọc trong `changes`. Field bỏ qua giữ nguyên; `message:null` xóa lời nhắn.
+Không nhận `version`, IDs, ownership hoặc totals do server quản lý.
+
 **Success (200):** `OfferResponse`. **Errors:** `409` wrong state/optimistic
 conflict; `422` invariant.
 
@@ -1227,7 +1231,7 @@ Deleted message chỉ trả tombstone, không trả content/attachment URL.
 
 | Part | Type | Required | Description |
 |---|---|---|---|
-| `metadata` | JSON | yes | `clientMessageId`, `messageType`, optional `content` |
+| `metadata` | JSON (`application/json`) | yes | `clientMessageId`, `messageType`, optional `content` |
 | `files` | file[] | conditional | 1–5 files cho `IMAGE`/`FILE`, tối đa 10 MB/file |
 
 `metadata` example:
@@ -1276,7 +1280,7 @@ conversation; `403` message thuộc participant khác.
 
 | Part | Type | Required | Description |
 |---|---|---|---|
-| `metadata` | JSON | yes | Request ID, prompt và generation parameters |
+| `metadata` | JSON (`application/json`) | yes | Request ID, prompt và generation parameters |
 | `sourceImages` | file[] | no | Tối đa 5 images, 10 MB/file |
 
 ```json
@@ -1415,7 +1419,7 @@ proof URL chỉ trả cho submitting bakery owner và admin. **Errors:** `403`; 
 
 | Part | Type | Required | Description |
 |---|---|---|---|
-| `metadata` | JSON | yes | method, optional reference, amount, currency |
+| `metadata` | JSON (`application/json`) | yes | method, optional reference, amount, currency |
 | `proof` | file | conditional | JPEG/PNG/WebP/PDF, tối đa 10 MB |
 
 ```json

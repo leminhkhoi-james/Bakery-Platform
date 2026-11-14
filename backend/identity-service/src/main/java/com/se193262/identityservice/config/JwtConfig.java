@@ -103,7 +103,7 @@ public class JwtConfig {
     }
 
     private RSAPrivateKey readPrivateKey(JwtProperties properties) {
-        String pem = readPem(properties.privateKeyPath(), "security.jwt.private-key-path");
+        String pem = readPem(properties.privateKeyBase64(), properties.privateKeyPath(), "security.jwt.private-key");
         byte[] encoded = decodePem(pem, "PRIVATE KEY");
         try {
             return (RSAPrivateKey) KeyFactory.getInstance("RSA")
@@ -114,7 +114,7 @@ public class JwtConfig {
     }
 
     private RSAPublicKey readPublicKey(JwtProperties properties) {
-        String pem = readPem(properties.publicKeyPath(), "security.jwt.public-key-path");
+        String pem = readPem(properties.publicKeyBase64(), properties.publicKeyPath(), "security.jwt.public-key");
         byte[] encoded = decodePem(pem, "PUBLIC KEY");
         try {
             return (RSAPublicKey) KeyFactory.getInstance("RSA")
@@ -124,7 +124,14 @@ public class JwtConfig {
         }
     }
 
-    private String readPem(java.nio.file.Path path, String propertyName) {
+    private String readPem(String base64, java.nio.file.Path path, String propertyName) {
+        if (base64 != null && !base64.isBlank()) {
+            try {
+                return new String(Base64.getDecoder().decode(base64), StandardCharsets.US_ASCII);
+            } catch (IllegalArgumentException exception) {
+                throw new IllegalStateException("Invalid base64 for " + propertyName);
+            }
+        }
         if (path == null) {
             throw new IllegalStateException(propertyName + " must be configured");
         }

@@ -39,7 +39,9 @@ test('Errors remain errors, use natural copy and retain retry instead of reveali
 test('Refresh controls preserve their callback, accessible icon, label and disabled state', () => {
   let calls = 0
   const props = { onClick: () => calls++, children: 'Tải lại danh sách' }
-  const tree = RefreshButton(props)
+  let tree
+  const Capture = () => { tree = RefreshButton(props); return null }
+  render(Capture)
   tree.props.onClick(); assert.equal(calls, 1)
   const html = render(RefreshButton, { ...props, disabled: true })
   assert.match(html, /type="button"/)

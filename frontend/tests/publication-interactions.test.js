@@ -19,13 +19,14 @@ before(async () => {
     name: 'publication-interaction-fixture-only', enforce: 'pre',
     load(id) {
       const path = id.replaceAll('\\', '/')
-      if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: { id: "' + userId + '" }, roles: ["BAKERY_OWNER"] }; }'
+      if (path.endsWith('/src/hooks/useViewportPageSize.js')) return 'export const useViewportPageSize = () => ({ containerRef() {}, pageSize: 6 })'
+    if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: { id: "' + userId + '" }, roles: ["BAKERY_OWNER"] }; }'
       if (path.endsWith('/src/hooks/useVendorBakery.js')) return 'export function useVendorBakery(search = "") { const [bakeryId, selectBakery] = globalThis.__flowUseState(() => new URLSearchParams(search).get("bakeryId") || ""); return { bakeryId, selectBakery }; }'
       if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load, params) { globalThis.__flowResourceCalls.push({ name: load.name, params }); return globalThis.__flowResources[load.name] || { status: "loading", data: null, error: null, reload() {} }; }'
     },
     transform(code, id) {
       const path = id.replaceAll('\\', '/').split('?')[0]
-      if (['ProductManager.jsx', 'VendorSubscriptionPage.jsx', 'VendorFrame.jsx', 'SubscriptionOrderDetail.jsx', 'AdminPaymentsPage.jsx', 'BakeryManager.jsx'].some((name) => path.endsWith('/' + name))) {
+      if (['ProductManager.jsx', 'VendorSubscriptionPage.jsx', 'VendorFrame.jsx', 'SubscriptionOrderDetail.jsx', 'AdminPaymentsPage.jsx', 'AdminSubscriptionOrdersPage.jsx', 'BakeryManager.jsx'].some((name) => path.endsWith('/' + name))) {
         return code.replace(/import React, \{ ([^}]+) \} from 'react'/, (_, hooks) => "import React from 'react'\n" + hooks.split(',').map((hook) => hook.trim() === 'useRef' ? 'const useRef = (value) => globalThis.__flowUseState({ current: value })[0]' : 'const useState = (value) => globalThis.__flowUseState(value)').join('\n'))
       }
     },
@@ -33,7 +34,7 @@ before(async () => {
   ProductManager = (await vite.ssrLoadModule('/src/components/management/ProductManager.jsx')).default
   VendorPage = (await vite.ssrLoadModule('/src/pages/vendor/subscription/VendorSubscriptionPage.jsx')).default
   OrderDetail = (await vite.ssrLoadModule('/src/pages/vendor/subscription/SubscriptionOrderDetail.jsx')).default
-  PaymentsPage = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminPaymentsPage.jsx')).default
+  PaymentsPage = (await vite.ssrLoadModule('/src/pages/admin/vendors/AdminSubscriptionOrdersPage.jsx')).default
   CreateBakery = (await vite.ssrLoadModule('/src/components/management/BakeryManager.jsx')).CreateBakery
   vendor = (await vite.ssrLoadModule('/src/services/vendorManagementService.js')).vendorManagementService
   subscription = (await vite.ssrLoadModule('/src/services/subscriptionService.js')).subscriptionService
@@ -104,7 +105,7 @@ test('Successful bakery creation stops the original form from resubmitting the s
 test('Admin payment navigation query is applied to actual API loader filters', () => {
   const render = harness(PaymentsPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate() {} })
   render()
-  assert.equal(globalThis.__flowResourceCalls.find((call) => call.name === 'loadPaymentDirectory').params.bakeryId, bakeryId)
+  assert.equal(globalThis.__flowResourceCalls.find((call) => call.name === 'loadAdminSubscriptionOrders').params.bakeryId, bakeryId)
 })
 test('Subscription refresh reloads current order details as well as periods/history', () => {
   const page = harness(VendorPage, { routeSearch: '?bakeryId=' + bakeryId, onNavigate() {} })()

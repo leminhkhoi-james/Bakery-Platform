@@ -120,7 +120,7 @@ class _LiveDataState<T> extends State<LiveData<T>> {
 }
 
 String safeError(Object? e) => e is ApiFailure
-    ? '${e.message}${e.status == 0 || e.kind == ApiFailureKind.configuration ? '' : ' (HTTP ${e.status})'}'
+    ? '${e.message}${e.status == 0 || e.kind == ApiFailureKind.configuration || e.kind == ApiFailureKind.invalidResponse ? '' : ' (HTTP ${e.status})'}'
     : e is FormatException
     ? 'Dữ liệu dịch vụ không đúng contract. Vui lòng thử lại.'
     : 'Không thể hoàn tất. Kiểm tra kết nối và thử lại.';

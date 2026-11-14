@@ -63,15 +63,15 @@ test('Loading and errors conceal stale children and retain retry rather than sho
 test('Admin metrics use complete source collections, preserve counts and remove dashboard guidance', () => {
   setup({ loadAdminDashboard: ready({ bakeries: { state: 'ready', rows: Array.from({ length: 37 }, (_, i) => ({ id: 'b' + i, name: 'Tiệm ' + i, status: 'PENDING_APPROVAL' })) }, payments: { state: 'ready', rows: Array.from({ length: 12 }, (_, i) => ({ id: 'p' + i, subscriptionOrderId: 's' + i, status: 'SUBMITTED' })) } }) })
   const html = render(Dashboard, { onNavigate() {} })
-  assert.match(html, /sc-metric-value">37<\/strong>/); assert.match(html, /Số công việc: 12/)
-  assert.match(html, /37 Tiệm chờ duyệt/); assert.match(html, /Gói dịch vụ chờ duyệt/)
-  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend|Hoạt động gần đây/); assert.equal((html.match(/sc-dashboard-kpi-footer/g) || []).length, 4); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/)
+  assert.match(html, /sc-activity-total">37<\/strong>/); assert.match(html, /Số công việc: 12/)
+  assert.match(html, /Số công việc: 37/); assert.match(html, /Gói dịch vụ chờ duyệt/)
+  assert.doesNotMatch(html, /Điều kiện xuất hiện|Phạm vi dữ liệu|Giải ngân|DEMO|backend|Hoạt động gần đây/); assert.equal((html.match(/sc-panel sc-dashboard-distribution/g) || []).length, 4); assert.match(html, /Tình hình hoạt động/); assert.match(html, /Việc cần xử lý/)
 })
 test('Restored Admin table displays backend records with status, ID and original review action', () => {
   setup({ loadAdminBakeries: ready(page([{ id, name: 'Fixture API bakery', status: 'PENDING_APPROVAL' }])) })
   const html = render(Vendors, { onNavigate() {} })
   assert.match(html, /<table/); assert.match(html, /Fixture API bakery/); assert.match(html, /PENDING_APPROVAL/)
-  assert.match(html, /Xem \/ duyệt hồ sơ/); assert.ok(html.includes(displayReference(id, 'SHOP'))); assert.ok(!html.includes(id))
+  assert.match(html, /aria-label="Xem chi tiết"/); assert.ok(html.includes(displayReference(id, 'SHOP'))); assert.ok(!html.includes(id))
 })
 test('Customer profile shows real identity and preserves role-gated portal links', () => {
   setup({ loadOrders: ready(page([])) }, ['CUSTOMER'])
@@ -84,7 +84,7 @@ test('Customer profile shows real identity and preserves role-gated portal links
 })
 test('Unavailable revenue screen stays honest after visual restoration', () => {
   setup({}, ['BAKERY_OWNER'])
-  const html = render(Revenue, { onNavigate() {}, routeSearch: '' })
+  const html = render(Revenue, { onNavigate() {}, routeSearch: '?bakeryId=' + id })
   assert.match(html, /Chưa có số liệu doanh thu đã đối soát/); assert.match(html, /giao dịch đã đối soát/)
   assert.doesNotMatch(html, /Rút tiền|Giải ngân thành công|120.000.000/)
 })
@@ -104,16 +104,16 @@ test('Admin plan and Vendor catalog errors remain visible inside the modal form'
   }
 })
 
-test('Dashboard shows three status cards with counts and progress, without timeline charts or raw UUIDs', () => {
+test('Dashboard shows four current activity cards with real counts, filter controls and no raw UUIDs', () => {
   const today = new Date().toISOString()
   setup({ loadAdminDashboard: ready({ orders: { state: 'ready', rows: [{ id, orderNumber: 'ORD-101', bakeryName: 'Tiệm đang hoạt động', status: 'CONFIRMED', totalAmount: 400000, currency: 'VND', createdAt: today, neededAt: today }] }, payments: { state: 'ready', rows: [] } }) })
   const html = render(Dashboard, { onNavigate() {} })
-  assert.equal((html.match(/sc-panel sc-dashboard-distribution/g) || []).length, 3)
+  assert.equal((html.match(/sc-panel sc-dashboard-distribution/g) || []).length, 4)
   assert.match(html, /<meter[^>]*value="1"/)
-  assert.match(html, /100%/ )
-  for (const label of ['Trạng thái đơn hàng', 'Trạng thái tiệm bánh', 'Trạng thái người dùng', 'Xem đơn hàng', 'Xem tiệm bánh', 'Xem người dùng']) assert.ok(html.includes(label))
+  assert.match(html, /aria-label="Đã xác nhận: 1"/)
+  for (const label of ['Đơn hàng', 'Tiệm bánh', 'Người dùng', 'Xem đơn hàng', 'Xem tiệm bánh', 'Xem người dùng']) assert.ok(html.includes(label))
   assert.doesNotMatch(html, /ORD-101/)
-  assert.doesNotMatch(html, /<svg|Khoảng thời gian|Đơn hàng theo thời gian|Xu hướng hoạt động|7 ngày|30 ngày|90 ngày/)
+  assert.doesNotMatch(html, /Đơn hàng theo thời gian|Xu hướng hoạt động|90 ngày/)
   assert.doesNotMatch(html, /Xem chi tiết ORD-101/)
   assert.ok(!html.includes(id))
 })
@@ -133,10 +133,12 @@ test('Admin task cards prioritize pending groups, hide empty or unknown groups a
   assert.doesNotMatch(html, /Chưa có số liệu/)
   assert.equal((html.match(/>Xem tất cả</g) || []).length, 2)
   let destination
-  const tree = WorkQueue({ groups: [groups[2]], onNavigate: (route) => { destination = route } })
+  let tree
+  const Capture = () => { tree = WorkQueue({ groups: [groups[2]], onNavigate: route => { destination = route } }); return null }
+  render(Capture)
   const nodes = (node) => Array.isArray(node) ? node.flatMap(nodes) : node && typeof node === 'object' ? [node, ...nodes(node.props?.children)] : []
-  nodes(tree).find((node) => node.type === 'button' && node.props['aria-label'] === 'Xem Tiệm cần duyệt').props.onClick()
-  assert.equal(destination, 'admin-vendors?bakeryId=b1')
+  nodes(tree).find((node) => node.type === 'button' && node.props.children === 'Xem tất cả').props.onClick()
+  assert.equal(destination, 'admin-vendors?status=PENDING_APPROVAL')
   assert.match(render(WorkQueue, { groups: [groups[0]], onNavigate() {} }), /Không có công việc đang chờ xử lý/)
 })
 

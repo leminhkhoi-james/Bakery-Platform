@@ -30,14 +30,21 @@ class LiveReviewRepository {
         502,
         'Chưa đọc được kết quả đánh giá. Làm mới đơn trước khi thử lại.',
         uncertain: true,
+        kind: ApiFailureKind.invalidResponse,
       );
     }
     if (value['orderId'] != id ||
-        !['PUBLISHED', 'HIDDEN', 'DELETED'].contains(value['status'])) {
+        ![
+          'PENDING',
+          'PUBLISHED',
+          'HIDDEN',
+          'DELETED',
+        ].contains(value['status'])) {
       throw const ApiFailure(
         502,
         'Chưa xác nhận đánh giá. Làm mới đơn để đối chiếu.',
         uncertain: true,
+        kind: ApiFailureKind.invalidResponse,
       );
     }
     return value;

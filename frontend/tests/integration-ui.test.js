@@ -10,7 +10,7 @@ const userId = randomUUID(), bakeryId = randomUUID(), id = randomUUID(), ready =
 before(async () => {
   vite = await createServer({ logLevel: 'error', server: { middlewareMode: true, hmr: false, ws: false }, plugins: [{ name: 'integration-ui-fixture-only', enforce: 'pre', load(id) {
     const path = id.replaceAll('\\', '/')
-    if (path.endsWith('/src/context/useAuth.js')) return 'export function useAuth() { return { user: globalThis.__integrationUser, roles: globalThis.__integrationUser.roles }; }'
+    if (path.endsWith('/src/context/useAuth.js')) return 'import { createContext } from "react"; export const AuthContext = createContext(null); export function useAuth() { return { user: globalThis.__integrationUser, roles: globalThis.__integrationUser.roles }; }'
     if (path.endsWith('/src/hooks/useCatalogResource.js')) return 'export function useCatalogResource(load, params) { globalThis.__integrationCalls.push({ name: load.name, params }); return globalThis.__integrationResources[load.name] || { status: "loading", data: null, error: null, reload() {} }; }'
   } }] })
   Review = (await vite.ssrLoadModule('/src/components/orders/OrderReview.jsx')).default
@@ -101,7 +101,7 @@ test('Owner listing has no membership mutation controls; add-on form retains req
   assert.match(members, /Chủ tiệm/)
   assert.doesNotMatch(members, /Thêm Chủ tiệm|Xác nhận xóa|>Sửa</)
   const addon = render(EntityForm, { kind: 'add-ons', onSave() {}, onClose() {} })
-  assert.match(addon, /Nhóm phụ kiện/); assert.match(addon, /maxLength="80"/)
+  assert.match(addon, /Nhóm phụ kiện/); assert.match(addon, /<select(?=[^>]*required="")[^>]*>/)
 })
 test('Draft asset resume with no snapshot shows BLOCKED and never renders replace-options form', () => {
   setup({ loadProductSnapshot: { status: 'error', error: { status: 404 }, data: null, reload() {} } }, ['BAKERY_OWNER'])
@@ -131,7 +131,7 @@ test('Admin plan cards show readable benefits and monthly prices, with archive c
   const html = render(AdminPlans)
   assert.match(html, /199\.000 đ/); assert.match(html, /\/tháng/); assert.match(html, /3 tháng/)
   assert.match(html, /Số sản phẩm tối đa/); assert.match(html, /Hỗ trợ đối tác/)
-  assert.match(html, /aria-haspopup="menu"/)
+  assert.match(html, /Sửa gói/); assert.match(html, /Lưu trữ/)
   assert.doesNotMatch(html, /DEMO_0|>0 ·|>products<|>support<|type="checkbox"/)
   const plan = { id, code: 'STANDARD', name: 'Gói tiêu chuẩn · DEMO', description: 'Quyền lợi tiêu chuẩn · DEMO', status: 'ACTIVE', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, features: { products: '20' } }
   const form = render(AdminPlanForm, { plan, onSave() {}, onClose() {} })
@@ -139,19 +139,19 @@ test('Admin plan cards show readable benefits and monthly prices, with archive c
   assert.equal(plan.name, 'Gói tiêu chuẩn · DEMO')
 })
 test('Admin Orders page loads all scope, contains no mock escrow statistics and supports review details', () => {
-  setup({ loadOrders: ready({ result: [], meta: { page: 1, pageSize: 10, total: 0, pages: 0 } }) }, ['ADMIN'])
+  setup({ loadAdminSearchOrders: ready({ result: [], meta: { page: 1, pageSize: 10, total: 0, pages: 0 } }) }, ['ADMIN'])
   const html = render(AdminOrders)
   assert.match(html, /Chưa có đơn hàng phù hợp/); assert.doesNotMatch(html, /Giải ngân|Khóa cọc|1.250.000/)
-  assert.equal(globalThis.__integrationCalls.find((call) => call.name === 'loadOrders').params.scope, 'all')
+  assert.equal(globalThis.__integrationCalls.find((call) => call.name === 'loadAdminSearchOrders').params.scope, 'all')
 })
 
 test('Populated Admin order table keeps Vietnamese statuses and an accessible detail action', () => {
-  setup({ loadOrders: ready({ result: [{ id, orderNumber: 'ORD-HTTP-FIXTURE', bakeryName: 'Fixture bakery', status: 'CONFIRMED', totalAmount: 350000, currency: 'VND' }], meta: { page: 1, pageSize: 10, total: 1, pages: 1 } }) }, ['ADMIN'])
+  setup({ loadAdminSearchOrders: ready({ result: [{ id, orderNumber: 'ORD-HTTP-FIXTURE', bakeryName: 'Fixture bakery', status: 'CONFIRMED', totalAmount: 350000, currency: 'VND' }], meta: { page: 1, pageSize: 10, total: 1, pages: 1 } }) }, ['ADMIN'])
   const html = render(AdminOrders)
   assert.match(html, /ORD-HTTP-FIXTURE/)
   assert.match(html, /Đã xác nhận/)
   assert.match(html, /<table class="sc-table sc-admin-fixed-table sc-admin-orders-table"/)
-  assert.match(html, /Xem đơn<\/button>/)
+  assert.match(html, /aria-label="Xem chi tiết đơn hàng"/)
   assert.doesNotMatch(html, />CONFIRMED</)
 })
 test('Moderation UI operates by real UUID only, no fake queue, states and role gates are explicit', () => {
@@ -169,7 +169,7 @@ test('Dashboard order shortcut applies a valid status to the existing Admin list
   for (const [query, expected] of [['?status=PENDING', 'PENDING'], ['?status=invalid', ''], ['', '']]) {
     setup({}, ['ADMIN'])
     const html = render(AdminOrders, { routeSearch: query })
-    const call = globalThis.__integrationCalls.find((entry) => entry.name === 'loadOrders')
+    const call = globalThis.__integrationCalls.find((entry) => entry.name === 'loadAdminSearchOrders')
     assert.equal(call.params.scope, 'all')
     assert.equal(call.params.status, expected)
     if (expected) assert.match(html, /value="PENDING" selected=""/)

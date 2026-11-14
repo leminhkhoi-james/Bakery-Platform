@@ -41,6 +41,7 @@ public class BakeryOnboardingController {
     }
 
     @PostMapping("/{bakeryId}/onboarding/complete")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content", content = @io.swagger.v3.oas.annotations.media.Content)
     public ResponseEntity<Void> complete(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID bakeryId) {
         onboarding.complete(UUID.fromString(jwt.getSubject()), bakeryId);
         return ResponseEntity.noContent().build();

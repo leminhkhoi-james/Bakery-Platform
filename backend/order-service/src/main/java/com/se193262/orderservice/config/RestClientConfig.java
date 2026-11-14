@@ -71,11 +71,8 @@ public class RestClientConfig {
                 .baseUrl(service.baseUrl())
                 .requestFactory(requestFactory)
                 .requestInterceptor((request, body, execution) -> {
-                    String correlationId = MDC.get("correlationId");
                     request.getHeaders().set("X-Correlation-Id",
-                            correlationId == null || correlationId.isBlank()
-                                    ? UUID.randomUUID().toString()
-                                    : correlationId);
+                            com.se193262.platform.security.CorrelationIds.currentOrNew());
                     request.getHeaders().setBearerAuth(
                             serviceHttpClient.serviceToken(service.audience(), service.scope()));
                     return execution.execute(request, body);

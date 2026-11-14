@@ -17,7 +17,7 @@ const reply = (data, status = 200) => Response.json({ statusCode: status, data, 
 const page = (result) => ({ result, meta: { page: 1, pageSize: 20, pages: result.length ? 1 : 0, total: result.length } })
 test('Entire publication chain sends actual frontend DTOs across Vendor/Admin sessions, then reads public mapped data (HTTP fixture)', async () => {
   const ownerId = randomUUID(), adminId = randomUUID(), bakeryId = randomUUID(), productId = randomUUID(), categoryId = randomUUID(), orderId = randomUUID(), paymentId = randomUUID()
-  const bakery = { id: bakeryId, name: 'Bakery fixture only', phoneNumber: 'fixture contact', status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }
+  const bakery = { id: bakeryId, name: 'Bakery fixture only', phoneNumber: '0900000000', status: 'DRAFT', operations: { addresses: [], serviceAreas: [], businessHours: [] } }
   const product = { id: productId, name: 'Product fixture only', slug: 'fixture-product', basePrice: 150000, status: 'DRAFT', categoryId }
   const category = { id: categoryId, name: 'Fixture category', slug: 'fixture-category', displayOrder: 0, active: true }
   const plan = { id: randomUUID(), name: 'Plan fixture', code: 'FIXTURE', monthlyPrice: 199000, currency: 'VND', billingPeriodMonths: 1, status: 'ACTIVE', features: {} }

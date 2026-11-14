@@ -32,7 +32,7 @@ test('Unpaid 499k order remains visible with a reason and a disabled review acti
   assert.match(html, /499\.000/)
   assert.match(html, /SUB-50FE239D/)
   assert.match(html, /Chờ khách thanh toán/)
-  assert.match(html, /Xem đơn/)
+  assert.match(html, /Xem chi tiết đơn mua gói/)
   assert.match(html, /disabled=""/)
 })
 

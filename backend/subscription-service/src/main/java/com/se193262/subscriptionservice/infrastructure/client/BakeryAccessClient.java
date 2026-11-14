@@ -58,7 +58,7 @@ public class BakeryAccessClient {
             client.put().uri("/internal/v1/bakeries/{bakeryId}/onboarding/activate", bakeryId)
                     .headers(headers -> {
                         headers.setBearerAuth(bearer);
-                        headers.set("X-Correlation-Id", UUID.randomUUID().toString());
+                        headers.set("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew());
                     })
                     .retrieve().toBodilessEntity();
         } catch (RestClientException | com.se193262.platform.exception.AppException failure) {
@@ -88,7 +88,7 @@ public class BakeryAccessClient {
                     "bakery:profile:read bakery:membership:read") : serviceToken;
             T response = client.get().uri(path, variables).headers(headers -> {
                 headers.setBearerAuth(bearer);
-                headers.set("X-Correlation-Id", UUID.randomUUID().toString());
+                headers.set("X-Correlation-Id", com.se193262.platform.security.CorrelationIds.currentOrNew());
             }).retrieve().body(type);
             if (response == null) {
                 throw new AppException(HttpStatus.SERVICE_UNAVAILABLE, "Empty Bakery service response");
